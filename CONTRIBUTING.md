@@ -10,7 +10,7 @@ Thanks for your interest in improving the AI Agents Course. Contributions of all
 - Unclear explanations
 - Missing topics you'd like to see covered
 
-Open an [issue](../../issues) with a clear description of the problem and which lesson it affects.
+Open an [issue](https://github.com/shurankain/agentic-ai-course/issues) with a clear description of the problem and which lesson it affects.
 
 ### Fix Errors
 - Typos, grammar, formatting
@@ -53,4 +53,4 @@ Open an [issue](../../issues) with a clear description of the problem and which 
 
 ## Questions?
 
-Open a [discussion](../../discussions) or an issue. Happy to help.
+Open a [discussion](https://github.com/shurankain/agentic-ai-course/discussions) or an issue. Happy to help.
