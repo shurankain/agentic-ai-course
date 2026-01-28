@@ -1,0 +1,18 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Private/temporary files (delete before publishing)
+cv-master-document.md
+ai-course-content-plan.md
+
+# Misc
+*.bak
+*.tmp
