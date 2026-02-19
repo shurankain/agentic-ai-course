@@ -87,7 +87,7 @@ Copilot (launched in 2021) became the first mass-market AI coding assistant:
 **Limitations:**
 - Does not understand full project context
 - Hallucinates non-existent APIs
-- Generates insecure code in ~40% of cases (Stanford study)
+- A 2022 Stanford study found earlier Copilot versions generated insecure code in ~40% of security-relevant scenarios; later versions have improved through better filters and model upgrades
 - Cannot run code or tests
 
 ### Cursor: The Next Generation

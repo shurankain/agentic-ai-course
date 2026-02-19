@@ -170,7 +170,7 @@ Special attention should be paid to injection protection. If parameters are used
 
 ### Authorization and Authentication
 
-MCP does not define a standard authentication mechanism, leaving this to the implementation. The server may use tokens, certificates, or other mechanisms.
+The MCP specification now includes an OAuth 2.1 authorization framework with PKCE, Protected Resource Metadata (RFC 9728), and support for enterprise-managed authorization. For simpler deployments, the server may also use tokens, certificates, or other mechanisms.
 
 Authorization determines which operations are permitted for the client. The server can restrict access to specific resources or tools based on client identity.
 

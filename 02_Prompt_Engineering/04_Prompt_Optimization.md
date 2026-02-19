@@ -168,7 +168,7 @@ Automatic Prompt Optimization (APO) uses algorithms to systematically improve pr
 
 A paradoxical idea: using an LLM to optimize prompts for an LLM. It works thanks to the **metacognitive capabilities** of modern models — they can reason about how they reason.
 
-**Automatic Prompt Engineer (APE)** from DeepMind: take a set of example inputs and expected outputs → ask the LLM to generate instructions → obtain multiple candidates → evaluate each on a validation set → select the best one.
+**Automatic Prompt Engineer (APE)** from Zhou et al. (2022, University of Toronto): take a set of example inputs and expected outputs → ask the LLM to generate instructions → obtain multiple candidates → evaluate each on a validation set → select the best one.
 
 APE results are impressive: on many tasks it outperforms human-written prompts, and is especially effective when the human does not know the optimal formulation.
 

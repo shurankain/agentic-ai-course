@@ -60,7 +60,7 @@ With Top-K routing and a capacity factor, the maximum tokens per expert is defin
 
 ### Mixtral: The Modern Standard
 
-Mixtral 8x7B (2024) from Mistral AI became the benchmark for open-source MoE:
+Mixtral 8x7B (December 2023) from Mistral AI became the benchmark for open-source MoE:
 
 Architecture: 8 experts per MoE layer, Top-2 routing (each token is routed to 2 experts), 32 transformer layers each with an MoE FFN, 47B total params but only approximately 13B active params.
 

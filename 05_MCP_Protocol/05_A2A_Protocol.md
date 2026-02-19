@@ -146,7 +146,7 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 | **Discovery** | Well-known URLs | Registry API | DF (Directory Facilitator) | Service mesh |
 | **Task model** | Async + streaming | Sync only | Performatives | Depends |
 | **Schema** | JSON Schema | OpenAPI | FIPA-SL | Protobuf |
-| **Adoption** | 150+ partners | Emerging | Academic | Custom |
+| **Adoption** | 150+ announced partners | Emerging | Academic | Custom |
 | **LLM focus** | Native | Yes | No | No |
 
 **Why Google chose a new protocol:**
@@ -154,13 +154,13 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 2. **Agent Protocol from AI21 is too simple** — lacks async, streaming, and rich capabilities support
 3. **Direct use of gRPC/REST requires ad-hoc coordination** — no standard patterns
 
-**Path to adoption:** 2024-Q4 — draft specification, 2025-Q1 — beta with key partners, 2025-Q2 — GA release with 150+ partners, 2025-H2 — industry working group creation and standardization expected.
+**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, and Block — establishing AAIF as the primary governance body for agent protocol standardization. While A2A attracted partner announcements, MCP has seen broader real-world adoption with 10,000+ servers and 97M+ monthly SDK downloads.
 
 **Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium).
 
 ### A2A Partners
 
-By April 2025, A2A was supported by 150+ partners:
+At its April 2025 announcement, A2A listed 150+ partners (primarily announcements of intent rather than production implementations):
 
 **Cloud Providers:**
 - AWS

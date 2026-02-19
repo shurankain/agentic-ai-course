@@ -327,7 +327,7 @@ The safety monitoring architecture consists of several stages. Production Infere
 
 Despite progress, interpretability is far from solving safety problems:
 
-**Scale**: current techniques work on models up to ~10B parameters. Scaling to 100B+ is an open problem.
+**Scale**: early techniques were limited to models up to ~10B parameters. Anthropic's "Scaling Monosemanticity" (2024) applied SAEs to Claude 3 Sonnet, demonstrating feasibility at much larger scales, but routine interpretability of 100B+ models remains an open challenge.
 
 **Completeness**: we find individual circuits but do not understand the full picture. This is like understanding a few circuits in a processor without understanding the architecture as a whole.
 

@@ -12,7 +12,7 @@
 
 JAX is a library from Google used by DeepMind and Anthropic for their flagship models. If you are targeting positions at these companies or want to understand the cutting edge of ML research, familiarity with JAX is essential.
 
-**Who uses JAX**: DeepMind builds AlphaFold and Gemini on JAX. Anthropic uses JAX for the Claude training infrastructure. Google Research develops PaLM and Gemma. Many research labs such as Stanford, Berkeley, and partially OpenAI use JAX for research.
+**Who uses JAX**: DeepMind builds AlphaFold and Gemini on JAX. Anthropic uses JAX for the Claude training infrastructure. Google Research develops PaLM and Gemma. Many research labs such as Stanford and Berkeley use JAX for research.
 
 JAX is not a replacement for PyTorch in all cases but rather a specialized tool for research-heavy workflows.
 
