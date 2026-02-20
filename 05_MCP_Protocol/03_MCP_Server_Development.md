@@ -92,21 +92,17 @@ This mechanism is simple to implement and does not require network infrastructur
 
 The limitation of stdio is the inability to provide remote access. The server must be installed on the same machine as the client.
 
-### Server-Sent Events (SSE)
+### Streamable HTTP
 
-For remote access, MCP supports HTTP-based transport with Server-Sent Events. The client connects to the server via HTTP and receives events in real time.
+For remote access, MCP uses Streamable HTTP transport (introduced March 2025). Unlike the earlier SSE transport, Streamable HTTP supports bidirectional communication over a single HTTP connection. The client sends JSON-RPC requests via HTTP POST, and the server can respond with either a single JSON response or an SSE stream for progressive results.
 
-SSE provides a unidirectional data flow from server to client. To send requests, the client uses separate HTTP calls. This makes SSE compatible with most proxies and firewalls.
+Streamable HTTP is compatible with standard HTTP infrastructure — proxies, load balancers, CDNs — without requiring persistent connections. It supports session management through the `Mcp-Session-Id` header for stateful interactions.
 
-### WebSocket
-
-A full-duplex WebSocket connection provides bidirectional data exchange with minimal overhead. This is the optimal choice for intensive interaction with frequent requests and responses.
-
-WebSocket requires infrastructure support but provides better performance for complex scenarios.
+**Note:** The earlier SSE-based HTTP transport (two endpoints: one for SSE events, one for POST requests) was deprecated in March 2025. Existing servers using SSE should migrate to Streamable HTTP. The WebSocket transport that appeared in some implementations was never standardized in the official MCP specification.
 
 ### Choosing a Transport
 
-The choice of transport depends on the use case. For local tools, stdio is the obvious choice. For cloud services, SSE or WebSocket depending on interactivity requirements.
+The choice of transport depends on the use case. For local tools and IDE integrations, stdio is the obvious choice — simple, no network setup required. For remote servers, cloud services, and multi-user deployments, Streamable HTTP is the standard choice.
 
 A well-designed server abstracts the transport layer, allowing the same code to be used with different transports.
 
@@ -246,13 +242,13 @@ Inspector provides viewing of the complete list of registered tools, resources, 
 ### Current Ecosystem State
 
 **Official SDKs:**
-For Python, the `mcp` package is available via PyPI version 1.25.0 and above. For TypeScript, the `@modelcontextprotocol/sdk` package version 1.0.0 and above. For Kotlin, `mcp-kotlin-sdk` version 0.5.0 exists, though it is less mature.
+Python (`mcp` on PyPI), TypeScript (`@modelcontextprotocol/sdk`), Java/Kotlin (`mcp-kotlin-sdk`), C#/.NET (`ModelContextProtocol` on NuGet), Go (`github.com/mark3labs/mcp-go`), Swift, and Rust. The Python and TypeScript SDKs are the most mature with the broadest adoption, while the Java/Kotlin and C#/.NET SDKs have reached production readiness. Total SDK downloads exceed 97M per month.
 
 **Supporting Clients:**
-Claude Desktop is in production and is the first official client. VS Code received native MCP support starting from version 1.102. Cursor, a popular AI editor, also supports MCP in production. ChatGPT added support in beta mode in late 2024. The minimalist editor Zed supports MCP in production.
+Claude Desktop and Claude Code (production, first official clients), VS Code (native MCP support since version 1.102), Cursor (production), ChatGPT (production since mid-2025), Gemini (production), Microsoft Copilot (production), JetBrains IDEs (production), Windsurf (production), Amazon Q Developer (production), Zed (production), and many others. Most major AI-powered development tools now support MCP natively.
 
 **Key Ecosystem Events:**
-In November 2024, Anthropic launched MCP in production. In December 2024, the protocol was transferred to the Linux Foundation under the governance of the AI Alliance Infrastructure Forum to ensure independence and openness. That same month, OpenAI, Microsoft, and Google announced plans to support MCP. In 2025, MCP is expected to become a cross-industry standard for AI agent integration.
+In November 2024, Anthropic launched MCP. Throughout 2025, all major AI providers adopted MCP as the standard for tool integration. The official MCP Registry launched in September 2025, cataloging approximately 2,000 verified servers. In December 2025, MCP governance was transferred to the Agentic AI Foundation (AAIF), co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon, operating under the Linux Foundation. By early 2026, the ecosystem includes 10,000+ community servers and MCP has become the cross-industry standard for AI agent integration.
 
 ### Security Considerations
 
@@ -289,7 +285,7 @@ MCP server development is a balance between functionality, security, and usabili
 
 The server lifecycle includes initialization, capability negotiation, request processing, and graceful shutdown. Each stage requires attention to detail and error handling.
 
-The choice of transport depends on the use case. Stdio is suitable for local tools; SSE and WebSocket are suitable for remote access.
+The choice of transport depends on the use case. Stdio is suitable for local tools; Streamable HTTP is the standard for remote access.
 
 Security is not an option but a mandatory requirement. Input validation, authorization, and isolation protect the system from abuse.
 

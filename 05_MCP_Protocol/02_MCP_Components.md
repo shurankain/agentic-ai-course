@@ -10,9 +10,9 @@
 
 ## Introduction to the MCP Component Model
 
-Model Context Protocol defines three types of primitives for client-server interaction. Each primitive — Resources, Tools, and Prompts — addresses a specific task.
+Model Context Protocol defines a set of primitives for client-server interaction. The three original primitives — Resources, Tools, and Prompts — form the foundation, while Sampling, Elicitation, and Tasks extend the protocol's capabilities.
 
-Resources answer the question "what can be read?", Tools — "what can be done?", Prompts — "how to formulate a request?". This architecture separates concerns between components, similar to the MVC pattern.
+Resources answer the question "what can be read?", Tools — "what can be done?", Prompts — "how to formulate a request?", Elicitation — "how to ask the user?", Tasks — "how to track long-running work?". This architecture separates concerns between components, similar to the MVC pattern.
 
 ## Resources: Data and Content Access
 
@@ -200,6 +200,68 @@ Uncontrolled invocations are prevented by the client's ability to require explic
 
 **Important:** The server never has direct access to the model. The client is the sole intermediary controlling all aspects of the call. This is the fundamental security principle of MCP, ensuring that the user retains full control over the use of AI capabilities.
 
+## Elicitation: Requesting User Input
+
+### The Need for User Interaction
+
+Elicitation, introduced in the June 2025 MCP specification update, addresses a fundamental gap: servers sometimes need information that only the user can provide. Before Elicitation, a server had no standard way to ask the user a question at runtime.
+
+Consider an MCP server connecting to a database. During the connection process, it may need the user to select a specific schema, confirm a destructive migration, or provide a one-time password. Without Elicitation, the server would either have to require all such information upfront in configuration or fail with an error asking the user to restart with additional parameters.
+
+### How Elicitation Works
+
+The server sends an `elicitation/create` request to the client, specifying a message (the question to present to the user) and a JSON Schema describing the expected response format. The client displays this to the user and returns their input.
+
+The response schema supports text input, numeric input, boolean (yes/no) confirmations, and enumerated choices. The client has full control over the user experience — it can present the elicitation as a dialog, inline prompt, or any appropriate UI element.
+
+**Security considerations:** The client can reject elicitation requests, modify the presentation, or require user approval before showing them. Servers must not assume elicitation will always succeed — the user may dismiss the request, the client may not support it, or the host policy may prohibit it.
+
+### Elicitation vs. Sampling
+
+Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response — it is a machine-to-machine interaction. Elicitation asks the human user for input — it is a machine-to-human interaction. Both "reverse" the typical request flow (server initiates instead of client), but they address different needs. Elicitation is for decisions that require human judgment, while Sampling is for tasks that require AI reasoning.
+
+## Tasks: Long-Running Operations
+
+### The Problem of Asynchronous Work
+
+Tasks, introduced in the November 2025 MCP specification update, address long-running operations that cannot return results within a single request-response cycle. Before Tasks, MCP tool calls were synchronous — the client waited for the server to complete the operation and return a result.
+
+Many real-world operations take significant time: running a CI/CD pipeline, processing a large dataset, training a model, generating a complex report, or waiting for external approval. Forcing these into a synchronous model either required long timeouts or artificial workarounds.
+
+### Task Lifecycle
+
+A Task goes through a defined lifecycle: the server creates a task when a long-running operation begins, providing a unique task ID. The client can poll for status or subscribe to updates. The server sends progress notifications with percentage complete, status messages, and partial results.
+
+Task states include: `pending` (created but not started), `running` (in progress), `completed` (finished successfully), `failed` (finished with error), and `cancelled` (aborted by client request).
+
+### Task Capabilities
+
+Tasks support cancellation — the client can request that a running task be stopped. They support progress reporting — the server sends structured updates about completion percentage and current step. They support partial results — intermediate outputs can be returned before the task completes.
+
+This primitive is especially valuable for agentic systems where an agent may launch multiple long-running operations in parallel and needs to monitor their progress, cancel them if the strategy changes, or collect partial results to inform subsequent decisions.
+
+## OAuth 2.1 Authorization
+
+### Authentication and Authorization in MCP
+
+The MCP specification includes an OAuth 2.1 authorization framework as a standard mechanism for securing remote server connections. This is particularly important for Streamable HTTP transport, where servers are accessible over the network.
+
+### Key Components
+
+**Protected Resource Metadata (RFC 9728):** Remote MCP servers advertise their authorization requirements through a standardized metadata endpoint. Clients discover what authorization server to use and what scopes are required.
+
+**PKCE (Proof Key for Code Exchange):** All authorization code flows require PKCE, preventing authorization code interception attacks. This is mandatory, not optional.
+
+**Dynamic Client Registration (RFC 7591):** Clients can register with the authorization server dynamically, without pre-registration. This is essential for the MCP ecosystem where new clients frequently appear.
+
+**Third-Party Authorization:** MCP supports delegated authorization where the authorization server is separate from the MCP server. This allows enterprises to use their existing identity providers (Okta, Auth0, Azure AD) for MCP server access control.
+
+### Authorization Flow
+
+The client discovers the server's authorization requirements via Protected Resource Metadata. It then performs the OAuth 2.1 authorization code flow with PKCE against the designated authorization server. Upon receiving tokens, the client includes the access token in subsequent MCP requests. Token refresh happens transparently when tokens expire.
+
+This standardized approach replaces the ad-hoc authentication patterns (API keys in environment variables, custom token headers) that characterized early MCP deployments.
+
 ## Component Interaction
 
 ### Composability
@@ -234,47 +296,27 @@ MCP supports dynamic component discovery. The client can request a list of avail
 
 Moreover, the server can notify about changes to the component list. If the server adds a new tool or removes an outdated resource, the client receives a notification and can update its representation.
 
-### MCP Registry and Discovery Patterns
+### MCP Registry and Discovery
 
-As the MCP ecosystem grows, the need for centralized server discovery arises. Although at the time of writing MCP does not have an official registry, patterns and best practices are forming.
+The MCP ecosystem has matured rapidly. The official MCP Registry launched in September 2025, providing a centralized catalog of approximately 2,000 verified servers. By early 2026, over 10,000 community MCP servers exist across GitHub, npm, and PyPI.
 
 **Server Discovery Models:**
 
-The first model is static configuration. The client (for example, Claude Desktop) uses a configuration file such as `claude_desktop_config.json`, where available servers are manually listed with their launch paths and parameters. This is the simplest approach requiring minimal infrastructure but inconvenient for dynamic environments.
+The first model is static configuration. The client (for example, Claude Desktop or Claude Code) uses a configuration file such as `claude_desktop_config.json`, where available servers are manually listed with their launch paths and parameters. This remains the most common approach for local stdio servers.
 
-The second approach is a local registry through package managers. MCP servers are distributed as npm packages or pip packages with special metadata. The client scans installed packages and automatically discovers MCP servers by their manifests. This approach integrates well with existing development ecosystems.
+The second model is the MCP Registry. The official registry provides a searchable catalog with server metadata: descriptions, capabilities, versions, dependencies, licenses, and verification status. Clients can query the registry API to discover servers by capability, category, or keyword.
 
-The third model is network discovery through protocols such as mDNS or DNS-SD. Servers on the local network announce their presence through broadcast messages. The client listens for these announcements and dynamically discovers available servers. This approach is useful for corporate environments with many local services.
+The third approach is package manager distribution. MCP servers are distributed as npm or pip packages with standardized manifests. The `npx` and `uvx` runners allow launching servers without local installation, simplifying adoption.
 
-The fourth model is a centralized registry, analogous to the npm registry or Docker Hub. Servers are published to a central catalog, and clients search for and download needed servers through an API. This approach provides the best user experience but requires infrastructure and governance.
+The fourth model is enterprise registries. Organizations deploy private registries for internal MCP servers, with optional federation to the public registry. This addresses corporate security, compliance, and governance requirements.
 
-**Components of a Future MCP Registry:**
+**Registry Components:**
 
-Catalog — a central database of available servers with detailed metadata: descriptions, capabilities, versions, dependencies, licenses. Similar to npm or crates.io for Rust.
-
-Search — a powerful search system enabling server discovery by capabilities (tools, resources, prompts), categories (database, filesystem, API), tags, and keywords. Support for filters and sorting by popularity or rating.
-
-Verification — a mechanism for verifying server authenticity and security. May include code signing, community audits, and automated security analysis. Servers can have statuses: verified (checked by the publisher), community (verified by the community), unknown (not verified).
-
-Versioning — management of server versions and their compatibility with different MCP protocol versions. Semantic versioning, backward compatibility policies, migration guides.
-
-Rating — a user review and rating system. Helps evaluate server quality, reliability, and usefulness before installation.
-
-**Open Ecosystem Questions:**
-
-How to verify MCP servers? Possible approaches: cryptographic signatures from trusted publishers, community code audits, automated static analysis, sandboxes for testing.
-
-How to manage trust levels? A gradation is needed: verified publishers (official publishers), community trusted (approved by the community), experimental (not verified). Each level with corresponding warnings and restrictions.
-
-How to handle name conflicts between servers? Use namespaces such as `@vendor/server-name`, similar to npm scoped packages. Or centralized name registration with uniqueness checks.
-
-How to organize federated discovery? Corporations may want private registries for internal servers, but users should also have access to public ones. A priority system and source aggregation are needed.
-
-The community is already creating unofficial catalogs: awesome-mcp-servers on GitHub, integrations into package managers. Anthropic or the community will likely propose an official solution as the ecosystem matures.
+Catalog — the central database of servers with metadata, search, and categorization. Verification — a tiered trust system with verified publishers (official, audited), community trusted (reviewed by the community), and unverified (new, experimental). Versioning — semantic versioning with MCP protocol compatibility tracking. Security — automated static analysis, vulnerability scanning, and code signing by trusted publishers.
 
 ## Key Takeaways
 
-The MCP component model is a carefully designed architecture for integrating AI systems with the external world. The three main primitives — Resources, Tools, and Prompts — cover different aspects of interaction: data access, action execution, and request templating.
+The MCP component model is a carefully designed architecture for integrating AI systems with the external world. The core primitives — Resources, Tools, and Prompts — cover the fundamental aspects of interaction: data access, action execution, and request templating.
 
 Resources embody the philosophy of passive information access. They are safe, predictable, and ideally suited for providing context to the language model. URI addressing and template support ensure flexibility in data organization.
 
@@ -282,7 +324,9 @@ Tools represent active interaction with side effects. Strict typing through JSON
 
 Prompts standardize typical scenarios, lowering the entry barrier for users and ensuring interaction quality.
 
-Sampling adds a unique reverse model invocation capability, allowing servers to delegate intellectual operations to the client.
+Sampling adds a reverse model invocation capability, allowing servers to delegate intellectual operations to the client. Elicitation enables servers to request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
+
+OAuth 2.1 authorization provides a standardized security framework for remote MCP connections, replacing ad-hoc authentication patterns.
 
 Understanding these components and their proper use is the key to building effective MCP servers that elegantly integrate into the AI ecosystem.
 

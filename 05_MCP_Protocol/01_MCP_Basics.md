@@ -56,7 +56,7 @@ It is interesting to compare MCP with another successful standardization protoco
 |--------|-----|-----|
 | **Problem** | Each IDE × each language | Each AI client × each service |
 | **Solution** | Language Server as middleware | MCP Server as middleware |
-| **Transport** | JSON-RPC over stdio/TCP | JSON-RPC over stdio/HTTP+SSE |
+| **Transport** | JSON-RPC over stdio/TCP | JSON-RPC over stdio/Streamable HTTP |
 | **Initialization** | Capability negotiation | Capability negotiation |
 | **Dynamics** | Workspace events, file changes | Resource subscriptions |
 
@@ -70,7 +70,7 @@ It is interesting to compare MCP with another successful standardization protoco
 - MCP is oriented toward AI interaction (tools, prompts, sampling)
 - LSP focuses on language semantics (completions, diagnostics, symbols)
 - MCP supports Sampling — callbacks to the model
-- LSP is more mature (since 2016), MCP is new (2024)
+- LSP is more mature (since 2016); MCP launched in 2024 and has rapidly matured with AAIF governance and broad industry adoption
 
 ### Protocol Design Principles
 
@@ -98,7 +98,7 @@ MCP is built around several key concepts.
 
 **Host** — the application in which the client runs. The host manages the client's lifecycle and can define security policies. For example, Claude Desktop is the host for an MCP client.
 
-**Transport** — the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and HTTP with Server-Sent Events (for remote servers).
+**Transport** — the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and Streamable HTTP (for remote servers). The earlier SSE-based HTTP transport was deprecated in March 2025 in favor of Streamable HTTP, which supports bidirectional communication over a single HTTP connection.
 
 ## MCP Architecture
 
