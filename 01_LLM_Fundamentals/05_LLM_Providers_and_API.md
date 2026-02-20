@@ -8,224 +8,266 @@
 
 ---
 
-Consider the cloud computing market in the early 2010s: AWS dominated, Azure and Google Cloud were emerging, each offering their services with different APIs, pricing, and capabilities. Today we observe a similar landscape in the world of large language models. OpenAI, Anthropic, Google, Mistral, and dozens of other providers offer their models through APIs, and choosing the right provider becomes a strategic decision for any project involving AI agents.
+Consider the cloud computing market in the early 2010s: AWS dominated, Azure and Google Cloud were emerging, each offering their services with different APIs, pricing, and capabilities. Today we observe a similar — but far more dynamic — landscape in the world of large language models. OpenAI, Anthropic, Google, Meta, DeepSeek, xAI, and dozens of other providers offer their models through APIs, and choosing the right provider becomes a strategic decision for any project involving AI agents.
 
-Understanding the LLM provider landscape is not simply a matter of picking the "best model." It is a question of balancing quality, cost, speed, reliability, and compliance with security requirements. For agent developers, this knowledge shapes system architecture, fallback strategy, and project budget.
+Understanding the LLM provider landscape is not simply a matter of picking the "best model." It is a question of balancing quality, cost, speed, reliability, and compliance with security requirements. The market has also split into two paradigms: **standard models** (optimized for speed and general tasks) and **reasoning models** (optimized for complex problem-solving via extended thinking). For agent developers, this knowledge shapes system architecture, fallback strategy, and project budget.
 
 ---
 
 ## Major Providers and Their Models
 
-### OpenAI: Pioneer and Market Leader
+### OpenAI
 
-OpenAI is the company that popularized LLMs through ChatGPT and remains one of the key market players. Their API has become the de facto standard that other providers emulate.
+OpenAI popularized LLMs through ChatGPT and continues to set the pace of the industry. Their API remains the de facto standard that other providers emulate.
 
-**Flagship models:**
-- **GPT-4o** — multimodal model (text, images, audio). Faster and cheaper than previous GPT-4 versions, with comparable quality.
-- **GPT-4 Turbo** — extended context up to 128K tokens, optimized for long documents.
-- **o1** — model with a "reasoning mode," specialized for complex logical tasks.
+**Frontier models:**
+- **GPT-5** — the latest flagship, natively multimodal (text, images, audio). Unified standard and reasoning capabilities. 128K–1M context.
+- **GPT-4o** — the previous-generation flagship. Remains widely deployed due to its strong cost/quality ratio. 128K context.
+- **GPT-4.1** — optimized specifically for coding and instruction following (released April 2025).
 
-**Budget options:**
-- **GPT-4o-mini** — lightweight version, significantly cheaper with good quality for simple tasks.
-- **GPT-3.5 Turbo** — legacy but very inexpensive model for straightforward tasks.
+**Reasoning models:**
+- **o3** — frontier reasoning model. Generates internal "thinking tokens" before the final answer. Excels on math, science, and complex multi-step problems.
+- **o4-mini** — cost-efficient reasoning model. Strong on STEM tasks at a fraction of o3's cost.
+
+**Budget models:**
+- **GPT-4o-mini** — lightweight and inexpensive, ideal for classification, extraction, and simple Q&A.
+- GPT-3.5 Turbo is fully deprecated.
 
 **OpenAI highlights:**
 - Most mature ecosystem and documentation
 - Broad support across SDKs and frameworks
-- Native support for function calling / tool use
+- Native function calling / tool use with parallel calls and strict mode
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
+- Responses API (successor to Assistants API) and Agents SDK for multi-agent orchestration
 
-### Anthropic: Focus on Safety
+### Anthropic
 
-Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following and long context.
+Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following, strong code generation, and long context capabilities.
 
-**Claude model family:**
-- **Claude 3.5 Sonnet** — the primary workhorse, excellent balance of quality and speed. Leader in code generation benchmarks.
-- **Claude 3 Opus** — flagship for the most complex tasks.
-- **Claude 3.5 Haiku** — fast and cost-effective model for simple tasks.
+**Claude model family (latest generation):**
+- **Claude Opus 4** — most powerful model for the hardest tasks. Deep reasoning, complex analysis, extended autonomous workflows.
+- **Claude Sonnet 4** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Benchmark leader in code generation.
+- **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
+
+**Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
 **Anthropic highlights:**
-- Massive context window — up to 200K tokens
+- Context window — 200K tokens (1M in beta)
 - "Constitutional AI" — models trained to follow ethical principles
-- Excellent performance in long document analysis
-- Less prone to hallucinations in certain scenarios
+- Excellent performance in long document analysis and code generation
+- **MCP (Model Context Protocol)** — Anthropic-created open standard for tool integration, now an industry standard governed by AAIF
 - Tool use API compatible with the OpenAI format
-- Particularly strong for code generation and analysis
+- Computer use capability — Claude can interact with desktop applications via screenshots
 
-### Google: Multimodality and Scale
+### Google
 
 Google offers models through Vertex AI (enterprise) and Google AI Studio (for developers).
 
 **Gemini family:**
-- **Gemini 1.5 Pro** — multimodal model with a record context of up to 1M+ tokens
-- **Gemini 1.5 Flash** — optimized for speed and cost, ideal for real-time applications
-- **Gemini Ultra** — the most powerful model for complex reasoning
+- **Gemini 2.5 Pro** — multimodal model with 1M token context and built-in thinking capabilities. Strong across reasoning, coding, and multimodal tasks.
+- **Gemini 2.5 Flash** — optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
+- **Gemini 2.0 Flash** — budget model for high-volume workloads.
+
+The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 
 **Google advantages:**
-- Record context sizes — entire books can be loaded
-- Native integration with Google Cloud services
-- Strong multimodality (video, audio, images)
+- Record context sizes — 1M tokens standard, 2M in preview
+- Native multimodal understanding and generation (text, images, audio, video)
 - Grounding with Google Search for up-to-date information
-- Competitive pricing
+- Native integration with Google Cloud services
+- Competitive pricing, especially for Flash models
 
-### Mistral AI: The European Alternative
+### xAI
 
-A French startup offering efficient open-weight models. Attractive for European companies due to GDPR compliance.
+Founded by Elon Musk, xAI emerged as a significant provider with competitive models and aggressive pricing.
 
 **Models:**
-- **Mistral Large** — flagship model, GPT-4 competitor
-- **Mistral Medium** — balance of performance and cost
-- **Mistral Small / Ministral** — compact models for simple tasks
-- **Codestral** — specialized for code generation
+- **Grok 3** — frontier model with strong reasoning capabilities
+- **Grok 3 Mini** — efficient model for standard tasks
+
+**xAI highlights:**
+- Competitive pricing aimed at undercutting incumbents
+- Real-time access to X (Twitter) data
+- OpenAI-compatible API format
+
+### Mistral AI
+
+A French company offering efficient open-weight models. Attractive for European companies due to GDPR compliance.
+
+**Models:**
+- **Mistral Large 3** — flagship model, competitive with frontier proprietary models
+- **Mistral Small 3** — compact and efficient for simpler tasks
+- **Magistral** — reasoning-focused models
+- **Devstral 2** — specialized for code generation
+- **Ministral** — edge-friendly compact models
 
 **Mistral highlights:**
-- Models can be run locally (open weights)
+- Models available with open weights (can be self-hosted)
 - Competitive pricing with good quality
 - GDPR compliance out of the box (EU company)
-- Sliding window attention for efficient handling of long contexts
+- Strong multilingual support for European languages
 
 ### Other Notable Providers
 
-**Cohere** — specializes in enterprise search and RAG. Embed models for embeddings, Command for generation, Rerank for re-ranking search results.
-
-**Meta (Llama)** — fully open-source models that can be self-hosted. Llama 3 70B/405B competes with proprietary models on quality.
-
-**Amazon Bedrock** — access to models from multiple providers (Anthropic, Meta, Mistral) through a unified AWS API with enterprise guarantees.
+**Amazon Bedrock** — access to models from multiple providers (Anthropic, Meta, Mistral, Cohere) through a unified AWS API with enterprise guarantees.
 
 **Azure OpenAI** — OpenAI models with enterprise SLA, compliance, and integration with the Azure ecosystem.
+
+**Cohere** — specializes in enterprise search and RAG. Embed models for embeddings, Command for generation, Rerank for re-ranking search results.
+
+---
+
+## Reasoning Models: A New API Paradigm
+
+### What Are Reasoning Models?
+
+Starting with OpenAI's o1 (September 2024) and rapidly expanding through o3, o4-mini, DeepSeek-R1, Claude extended thinking, and Gemini thinking modes, reasoning models represent a fundamentally new API paradigm.
+
+Unlike standard models that generate responses token by token, reasoning models produce **thinking tokens** — an internal chain of reasoning — before generating the visible response. This dramatically improves performance on complex tasks: math, science, multi-step planning, and code.
+
+### How the API Differs
+
+**Thinking tokens:**
+- Invisible to the user (in most implementations) but billed as output tokens
+- Can represent 80-90% of total output for complex queries
+- Controlled via parameters like `reasoning_effort` (OpenAI) or `budget_tokens` (Anthropic)
+
+**Parameter restrictions:**
+- Temperature is typically fixed at 1.0 (OpenAI reasoning models) or has limited ranges
+- System prompts may be handled differently (some models use "developer" messages)
+- Streaming behavior differs — thinking tokens may not stream
+
+**Cost structure:**
+- Thinking tokens are billed at the output token rate
+- A simple question might cost 10x more through a reasoning model due to thinking overhead
+- The `reasoning_effort` parameter lets you trade quality for cost (low/medium/high)
+
+### When to Use Reasoning Models
+
+**Use reasoning models for:** complex math and logic, multi-step planning, scientific analysis, hard coding problems, tasks where accuracy matters more than speed.
+
+**Use standard models for:** simple Q&A, classification, extraction, creative writing, real-time chat, high-volume tasks where cost and latency matter.
+
+**The hybrid approach is optimal:** route simple tasks to standard models, escalate complex ones to reasoning models. This can cut costs by 70%+ while maintaining quality where it matters.
 
 ---
 
 ## Open-Source Models: In-Depth Comparison
 
-In 2024-2025, open-source models reached parity with proprietary ones. DeepSeek V3, Llama 3.3, and Qwen 2.5 are the three flagships, each with its own strengths.
+The open-source landscape has transformed. In 2025, open-source models achieved parity with — and in some domains surpassed — proprietary ones. DeepSeek R1, Llama 4, and Qwen 3 are the three flagship families.
 
-### DeepSeek V3
+### DeepSeek
 
-A Chinese model that revolutionized training efficiency. 671B parameters, but only 37B active (Mixture of Experts).
+A Chinese lab that has twice disrupted the industry — first with V3's training efficiency, then with R1's reasoning breakthrough.
+
+**DeepSeek V3** — 671B parameters, 37B active (Mixture of Experts). Revolutionized training economics.
 
 **Key innovations:**
 - **Multi-head Latent Attention (MLA)**: KV-cache compression via low-rank projections — 93% memory savings
 - **Multi-Token Prediction (MTP)**: Predicting 2 tokens per step — 1.8x inference speedup
 - **FP8 Training**: Full training in 8-bit floating point — the first successful example at this scale
-- **Auxiliary-loss-free Load Balancing**: Even load distribution across experts without additional loss terms
+- **Training cost**: $5.5M — an order of magnitude cheaper than competitors
 
-**Training cost**: $5.5M — an order of magnitude cheaper than competitors (GPT-4 is estimated at $100M+).
+**DeepSeek R1** — the reasoning breakthrough. Achieved frontier-level reasoning through pure reinforcement learning (GRPO — Group Relative Policy Optimization), without supervised fine-tuning on reasoning traces. R1-Zero showed that reasoning can emerge from RL alone.
 
-**Performance (benchmarks):**
-| Benchmark | DeepSeek V3 | GPT-4o | Claude 3.5 Sonnet |
-|-----------|-------------|--------|-------------------|
-| MMLU | 88.5 | 88.7 | 88.7 |
-| HumanEval | 82.6 | 90.2 | 92.0 |
-| MATH-500 | 90.2 | 74.6 | 78.3 |
-| Codeforces | 51.6% | 23.0% | 20.3% |
+- Open-weight with MIT-like license
+- Distilled versions available from 1.5B to 70B parameters
+- Competitive with o3 on math and science benchmarks
+- R1-0528: improved version with better instruction following
 
-**When to choose DeepSeek V3:**
+**When to choose DeepSeek:**
 - Mathematical and algorithmic tasks (leader)
 - Self-hosting with a limited GPU budget (MoE efficiency)
-- Tasks in Chinese
-- Research on MoE architectures
+- Reasoning tasks where cost matters (R1 distilled variants)
+- Research on MoE architectures and RL-based reasoning
 
-### Llama 3.3 70B
+### Meta Llama 4
 
-The latest model from Meta, optimized for accessibility. A single 70B model matches the quality of the previous generation's 405B.
+Meta's latest generation represents a fundamental architectural shift from dense models to Mixture of Experts with native multimodality.
 
-**Features:**
-- **Dense architecture**: Traditional architecture, simpler for deployment
-- **128K context window**: Long context out of the box
-- **Optimized inference**: Carefully tuned for popular inference frameworks
-- **Strong multilingual**: 8 major languages with high quality
+**Models:**
+- **Llama 4 Scout** — 16 experts, 10M token context window (the largest of any production model). Designed for long-context tasks.
+- **Llama 4 Maverick** — 128 experts, ~400B total parameters with 17B active. The performance flagship.
+- **Llama 4 Behemoth** — ~2T parameters, the largest open model. Teacher model for distillation.
 
-**Performance:**
-| Benchmark | Llama 3.3 70B | Llama 3.1 405B | GPT-4o-mini |
-|-----------|---------------|----------------|-------------|
-| MMLU | 86.0 | 87.3 | 82.0 |
-| HumanEval | 88.4 | 89.0 | 87.2 |
-| GSM8K | 91.1 | 96.8 | 87.0 |
-| MGSM | 91.1 | 91.6 | 86.5 |
+**Key changes from Llama 3:**
+- **MoE architecture** (previously dense) — dramatically better inference efficiency
+- **Native multimodality** — trained from scratch on text, images, and video (not bolt-on adapters)
+- **Massive context** — 10M tokens in Scout, far beyond any predecessor
+- **Interleaved attention** — architectural innovation for efficiency
 
-**When to choose Llama 3.3:**
-- Production self-hosting (mature ecosystem)
-- When predictability and stability matter
-- European multilingual deployment
-- Integration with existing Meta AI infrastructure
+**When to choose Llama 4:**
+- Production self-hosting (strongest ecosystem, mature tooling)
+- Extremely long context requirements (Scout 10M)
+- Multimodal applications
+- When a permissive license matters (Llama license allows broad commercial use)
 
-### Qwen 2.5
+### Qwen 3
 
-A model series from Alibaba, leading many benchmarks in its size class.
+Alibaba's latest series, leading many benchmarks and offering the broadest size range.
 
-**Size range:**
-- **Qwen 2.5 72B** — flagship, GPT-4 competitor
-- **Qwen 2.5 32B** — sweet spot for a single GPU
-- **Qwen 2.5 14B** — efficient for edge deployment
-- **Qwen 2.5-Coder** — specialized for code
+**Models:**
+- **Qwen 3 235B** — MoE flagship (22B active parameters), 119 languages
+- **Qwen 3 72B** — dense flagship
+- **Qwen 3 32B / 14B / 8B** — range of dense models for different GPU budgets
+- **Qwen 3 0.6B / 1.7B / 4B** — edge and mobile-friendly
 
-**Features:**
-- **Long context**: Up to 128K tokens
-- **Strong reasoning**: Improved chain-of-thought capabilities
-- **Best in code among open-source** (Qwen-Coder variants)
-- **Excellent multilingual**: Particularly strong in Asian languages
+**Key innovations:**
+- **Hybrid reasoning**: can switch between "thinking mode" (extended reasoning) and "non-thinking mode" (fast) within the same model, controlled via system prompt
+- **119 language support** — the most multilingual open model
+- **Apache 2.0 license** — fully permissive
 
-**Qwen 2.5 72B performance:**
-| Benchmark | Qwen 2.5 72B | Llama 3.1 70B | GPT-4o |
-|-----------|--------------|---------------|--------|
-| MMLU | 86.1 | 83.6 | 88.7 |
-| HumanEval | 86.6 | 80.5 | 90.2 |
-| MATH | 83.1 | 68.0 | 76.6 |
-| GPQA | 49.0 | 46.7 | 53.6 |
+**When to choose Qwen 3:**
+- Multilingual applications (broadest language coverage)
+- When you need a single model with both reasoning and fast modes
+- Asian language markets
+- Edge deployment (strong small models down to 0.6B)
 
-**When to choose Qwen 2.5:**
-- Coding tasks (Qwen-Coder leads)
-- Asian languages and markets
-- When a full size range matters (from 0.5B to 72B)
-- Research and experimentation
+### Open-Source Comparison Table
 
-### Comparison Table
-
-| Criterion | DeepSeek V3 | Llama 3.3 70B | Qwen 2.5 72B |
-|----------|-------------|---------------|--------------|
-| **Architecture** | MoE (671B/37B) | Dense | Dense |
-| **Context** | 128K | 128K | 128K |
-| **Licensing** | MIT-like | Llama 3.3 License | Apache 2.0 |
+| Criterion | DeepSeek R1 | Llama 4 Maverick | Qwen 3 235B |
+|----------|-------------|------------------|-------------|
+| **Architecture** | MoE (671B/37B) | MoE (400B/17B) | MoE (235B/22B) |
+| **Context** | 128K | 1M+ | 128K |
+| **Licensing** | MIT-like | Llama License | Apache 2.0 |
 | **Commercial use** | ✅ | ✅ (with restrictions) | ✅ |
-| **GPU for 16-bit** | 8x80GB | 2x80GB | 2x80GB |
-| **GPU for 4-bit** | 2x80GB | 1x80GB | 1x80GB |
-| **Inference speed** | Fast (MoE) | Medium | Medium |
-| **Reasoning** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| **Coding** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| **Math** | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| **Multilingual** | ⭐⭐ (CN focus) | ⭐⭐⭐ | ⭐⭐⭐ |
+| **Reasoning** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ (hybrid) |
+| **Coding** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Math** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Multilingual** | ⭐⭐ (CN focus) | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ (119 langs) |
+| **Multimodal** | Text only (V3) | ✅ Native | ✅ |
 
 ### Practical Recommendations
 
-**For a startup with a limited budget:** start with Qwen 2.5 in a 14B or 32B parameter configuration — this provides a good balance between quality and resources. As the project grows, you can gradually migrate to the 72B version. For compute-intensive mathematical tasks, consider DeepSeek V3, which shows leading results in this area.
+**For a startup with a limited budget:** start with Qwen 3 in a 14B or 32B configuration — good balance between quality and resources. Use hybrid reasoning mode to avoid needing separate models. For pure reasoning tasks, DeepSeek R1 distilled variants (7B-70B) deliver outstanding performance.
 
-**For enterprise self-hosting:** the optimal choice is Llama 3.3 70B thanks to its mature ecosystem and clear licensing. For inference, use specialized solutions such as vLLM or Text Generation Inference (TGI) that deliver high performance. For specific code generation tasks, apply Qwen-Coder variants optimized for this workload.
+**For enterprise self-hosting:** Llama 4 Maverick or Scout are the optimal choices thanks to the mature ecosystem, strong tooling (vLLM, TGI), and clear licensing. Scout's 10M context window eliminates many RAG complexity needs. For reasoning-heavy workloads, pair with R1 distilled models.
 
-**For research:** DeepSeek V3 is of particular interest for studying Mixture of Experts (MoE), Multi-head Latent Attention (MLA), and Multi-Token Prediction (MTP) architectures. The Qwen 2.5 series is well suited for experiments across different model sizes. For comparative analysis, working with all three families simultaneously provides a complete understanding of their strengths and weaknesses.
+**For research:** DeepSeek R1 is of particular interest for studying GRPO and RL-based reasoning emergence. Qwen 3's hybrid reasoning mode offers insights into mode-switching architectures. All three families provide full model weights for analysis.
 
 ### Interview Questions: Open-Source Models
 
-1. **Compare the architectures of DeepSeek V3 and Llama 3.3. What are the trade-offs?**
-   - DeepSeek: MoE — fewer active parameters, faster inference, more complex deployment
-   - Llama: Dense — predictable, simple deployment, requires more memory per parameter
-   - MoE wins when there is sufficient memory to load all experts
+1. **Compare MoE architectures across DeepSeek V3, Llama 4, and Qwen 3. What are the trade-offs?**
+   - All three use MoE, but with different expert counts and routing strategies
+   - DeepSeek: 256 experts, auxiliary-loss-free balancing, MLA for KV-cache efficiency
+   - Llama 4: 16-128 experts, interleaved attention, native multimodality
+   - Qwen 3: traditional MoE with hybrid reasoning mode
+   - More experts = finer specialization but more complex routing
 
 2. **When is an open-source model preferable to a proprietary one?**
    - Data privacy requirements (healthcare, finance)
    - Predictable costs at high volume
-   - Need for fine-tuning
+   - Need for fine-tuning (especially RL-based, like GRPO)
    - Offline/edge deployment
    - Vendor independence
 
-3. **How would you choose a model for a multilingual RAG system?**
-   - Analyze the language distribution in the corpus
-   - For European languages: Llama 3.3
-   - For Asian languages: Qwen 2.5
-   - For mixed: benchmarks on the target languages
-   - Consider tokenizer efficiency for different languages
+3. **What made DeepSeek R1 significant for the field?**
+   - Demonstrated reasoning can emerge from pure RL (GRPO) without supervised reasoning traces
+   - R1-Zero showed reasoning emergence without any SFT
+   - Open-weight release enabled distillation into smaller models
+   - Training cost transparency challenged industry assumptions
 
 ---
 
@@ -237,7 +279,7 @@ Despite differences between providers, most LLM APIs follow similar principles. 
 
 Virtually all modern APIs use a "messages" format — an array of messages with roles:
 
-- **system** — instructions for the model defining its behavior, style, and constraints
+- **system** (or **developer** in some reasoning model APIs) — instructions for the model defining its behavior, style, and constraints
 - **user** — user messages
 - **assistant** — previous model responses
 - **tool** — results of tool invocations
@@ -247,19 +289,20 @@ This format reflects the conversation structure and allows the model to understa
 ### Core Request Parameters
 
 A typical API request includes:
-- **model** — model identifier ("gpt-4o", "claude-3-5-sonnet-20241022")
+- **model** — model identifier (e.g., "gpt-4o", "claude-sonnet-4-20250514", "gemini-2.5-pro")
 - **messages** — array of messages
-- **temperature** — degree of randomness in responses (0-2)
+- **temperature** — degree of randomness in responses (0-2; note: some reasoning models fix this)
 - **max_tokens** — maximum response length
 - **top_p** — nucleus sampling
 - **stop** — character sequences that trigger generation stop
 - **tools** — descriptions of available tools (for agents)
+- **reasoning_effort** — for reasoning models: low/medium/high (OpenAI) or budget_tokens (Anthropic)
 
 ### Response Format
 
 The response typically contains:
 - **content** — generated text
-- **usage** — token usage statistics (input, output, total)
+- **usage** — token usage statistics (input, output, total; reasoning models also report thinking tokens)
 - **finish_reason** — reason for stopping (stop, length, tool_calls, content_filter)
 - **tool_calls** — requested tool invocations (if the model decided to use a tool)
 
@@ -267,34 +310,48 @@ The response typically contains:
 
 ## Pricing Comparison
 
-Cost is a critical factor when choosing a provider and model. All providers charge by token count, with input and output tokens priced differently.
+Cost is a critical factor when choosing a provider and model. All providers charge by token count, with input and output tokens priced differently. Prices are quoted **per 1M tokens** (the industry convention since 2025).
 
-### Pricing Tiers (approximate prices per 1M tokens, end of 2024)
+### Pricing Tiers (approximate, early 2026)
 
-**Premium models:**
+**Reasoning models:**
+
+| Model | Input | Output | Notes |
+|--------|-------|--------|-------|
+| o3 | $10.00 | $40.00 | Thinking tokens billed at output rate |
+| o4-mini | $1.10 | $4.40 | Cost-efficient reasoning |
+| Claude Opus 4 (extended thinking) | $15.00 | $75.00 | Thinking via budget_tokens |
+| Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Configurable thinking budget |
+
+**Standard models:**
 
 | Model | Input | Output |
 |--------|-------|--------|
+| GPT-5 | ~$2.00-5.00 | ~$8.00-15.00 |
 | GPT-4o | $2.50 | $10.00 |
-| Claude 3.5 Sonnet | $3.00 | $15.00 |
-| Claude 3 Opus | $15.00 | $75.00 |
-| Gemini 1.5 Pro | $1.25 | $5.00 |
-| Mistral Large | $2.00 | $6.00 |
+| Claude Sonnet 4 | $3.00 | $15.00 |
+| Gemini 2.5 Pro | $1.25 | $10.00 |
+| Mistral Large 3 | $2.00 | $6.00 |
+| Grok 3 | $3.00 | $15.00 |
 
 **Budget models:**
 
 | Model | Input | Output |
 |--------|-------|--------|
 | GPT-4o-mini | $0.15 | $0.60 |
-| Claude 3.5 Haiku | $0.25 | $1.25 |
-| Gemini 1.5 Flash | $0.075 | $0.30 |
-| Mistral Small | $0.10 | $0.30 |
+| Claude Haiku 4.5 | $0.80 | $4.00 |
+| Gemini 2.0 Flash | $0.10 | $0.40 |
+| Mistral Small 3 | $0.10 | $0.30 |
+
+**Note:** Reasoning model costs can be deceptive. A query that costs $0.01 with a standard model might cost $0.10-0.50 with a reasoning model due to thinking tokens. Always account for thinking token overhead in cost estimates.
 
 ### Factors Affecting Actual Cost
 
 **Input/output ratio:** Output tokens are typically 3-5x more expensive than input tokens. For tasks with long prompts and short responses (classification, data extraction), this works in your favor. For generating long texts, output becomes the primary expense.
 
-**Prompt caching:** OpenAI, Anthropic, and others offer discounts when the same prefixes are reused. An agent's system prompt repeats in every request — caching can save 50-90% on its cost.
+**Thinking token overhead:** Reasoning models may generate 5-50x more thinking tokens than visible output tokens. A 100-token answer might require 5,000 thinking tokens. The `reasoning_effort` parameter helps control this.
+
+**Prompt caching:** OpenAI, Anthropic, and Google offer discounts when the same prefixes are reused. An agent's system prompt repeats in every request — caching can save 50-90% on its cost.
 
 ### Prompt Caching: How It Works
 
@@ -368,50 +425,51 @@ A proper client-side batching implementation follows a specific pattern. First, 
 
 ## Choosing a Model for Different Tasks
 
-Different tasks require different models. Using GPT-4 for simple classification wastes money and adds latency. Using GPT-3.5 for complex reasoning produces unreliable results and wastes time correcting errors.
+Different tasks require different models. Using a reasoning model for simple classification wastes money and adds latency. Using a budget model for complex reasoning produces unreliable results.
 
 ### Complex Reasoning and Analysis
 
 **Recommended models:**
-- Claude 3 Opus / Claude 3.5 Sonnet
-- GPT-4o / o1
-- Gemini 1.5 Pro
+- o3 / o4-mini (OpenAI reasoning)
+- Claude Opus 4 or Sonnet 4 with extended thinking (Anthropic)
+- Gemini 2.5 Pro with thinking (Google)
 
-**Typical tasks:** multi-step planning, complex document analysis, code review, architectural decisions, research tasks.
+**Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
 
 ### Code Generation
 
 **Recommended models:**
-- Claude 3.5 Sonnet (benchmark leader)
+- Claude Sonnet 4 (consistently strong on coding benchmarks)
+- GPT-4.1 (optimized specifically for code)
 - GPT-4o
-- Codestral (Mistral)
+- Devstral 2 (Mistral, open-weight)
 
-**Typical tasks:** writing new code, refactoring, debugging, writing tests, documentation.
+**Typical tasks:** writing new code, refactoring, debugging, writing tests, code review, documentation.
 
 ### Simple Tasks and Classification
 
 **Recommended models:**
 - GPT-4o-mini
-- Claude 3.5 Haiku
-- Gemini 1.5 Flash
+- Claude Haiku 4.5
+- Gemini 2.0 Flash
 
 **Typical tasks:** text categorization, entity extraction, sentiment analysis, simple format conversions, filtering.
 
 ### Long Documents
 
 **Recommended models:**
-- Gemini 1.5 Pro (1M+ token context)
-- Claude 3.5 Sonnet (200K tokens)
-- GPT-4 Turbo (128K tokens)
+- Gemini 2.5 Pro (1M+ token context)
+- Claude Sonnet 4 (200K tokens, 1M beta)
+- GPT-5 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
 
 ### Real-Time Applications
 
 **Recommended models:**
-- Gemini 1.5 Flash
+- Gemini 2.5 Flash
 - GPT-4o-mini
-- Claude 3.5 Haiku
+- Claude Haiku 4.5
 
 **Typical tasks:** chatbots with instant responses, autocomplete, interactive assistants.
 
@@ -433,7 +491,7 @@ The ability to invoke external functions is a key capability for AI agents. It t
 
 **OpenAI:** The most mature implementation. Support for parallel calls (multiple tools at once), strict mode with guaranteed JSON schema, excellent documentation.
 
-**Anthropic:** Compatible format, high reliability in selecting the correct tool. Claude is particularly strong in complex scenarios with many tools.
+**Anthropic:** Compatible format, high reliability in selecting the correct tool. Claude is particularly strong in complex scenarios with many tools. MCP (Model Context Protocol) provides a standardized way to expose tools.
 
 **Google:** Full-featured function calling support, integration with Google Cloud Functions for serverless execution.
 
@@ -441,7 +499,7 @@ The ability to invoke external functions is a key capability for AI agents. It t
 
 ### Structured Outputs
 
-An important newer capability — guaranteed conformance of the response to a JSON schema. OpenAI implemented this through constrained decoding: at the token generation level, the model is physically unable to produce invalid JSON.
+An important capability — guaranteed conformance of the response to a JSON schema. OpenAI implemented this through constrained decoding: at the token generation level, the model is physically unable to produce invalid JSON. Anthropic and Google offer similar capabilities.
 
 This is critical for agents, where parsing reliability must be 100%. Previously, you had to handle parsing errors and retry — now that is unnecessary.
 
@@ -455,8 +513,8 @@ Production systems cannot depend on a single provider. APIs go down, rate limits
 
 A good practice is to have a fallback to an alternative provider:
 
-1. **Primary request** to the preferred provider (e.g., OpenAI)
-2. **On failure** — automatic switch to the fallback (Anthropic)
+1. **Primary request** to the preferred provider (e.g., Anthropic)
+2. **On failure** — automatic switch to the fallback (OpenAI)
 3. **Monitoring** of success rates for each provider
 4. **Automatic rotation** when the primary degrades
 
@@ -473,9 +531,9 @@ All providers have limits on requests per minute and tokens per minute. Working 
 
 ### Timeouts and Retries
 
-LLM requests can take from one second to a minute. Rules:
+LLM requests can take from one second to a minute (reasoning models can take several minutes). Rules:
 
-- **Reasonable timeouts:** 30-60 seconds for generation, 10-20 seconds for classification
+- **Reasonable timeouts:** 30-60 seconds for standard generation, 10-20 seconds for classification, 2-5 minutes for reasoning models
 - **Retry with exponential backoff:** start at 1 second, double up to a maximum
 - **Jitter:** add randomness to the delay to avoid thundering herd
 - **Circuit breaker:** after N consecutive errors, stop trying and return an error immediately
@@ -489,8 +547,8 @@ When designing production systems, understanding the actual provider guarantees 
 | Metric | Description | Typical Values |
 |---------|----------|-------------------|
 | **Availability** | Service uptime | 99.9% - 99.99% |
-| **Latency P50** | Median response time | 1-3 sec |
-| **Latency P95** | 95th percentile | 5-15 sec |
+| **Latency P50** | Median response time | 1-3 sec (standard), 5-30 sec (reasoning) |
+| **Latency P95** | 95th percentile | 5-15 sec (standard), 30-120 sec (reasoning) |
 | **Latency P99** | 99th percentile | 15-60 sec |
 | **Error rate** | Percentage of 5xx errors | <0.1% |
 
@@ -511,6 +569,7 @@ What to track:
 2. **Error rate by type** — 429 (rate limit), 500 (server), 503 (overload)
 3. **Token throughput** — tokens/second for capacity planning
 4. **Cost per request** — for budget alerting
+5. **Thinking token ratio** — for reasoning models, monitor thinking-to-output ratio
 
 **Degradation strategies:**
 
@@ -570,47 +629,52 @@ Cloud providers are not always the right choice. In some cases, data cannot be s
 - **Strict data privacy:** medical data, financial documents, government secrets
 - **Predictable cost:** fixed infrastructure expenses instead of per-token billing
 - **Offline scenarios:** edge computing, working without internet
-- **Customization:** fine-tuning on proprietary data
+- **Customization:** full fine-tuning (including RL-based methods like GRPO) on proprietary data
 - **Independence:** avoiding vendor lock-in and dependency on external services
 
 ### Popular Solutions for Self-Hosting
 
-**Ollama** — the simplest way to run models locally. One-command installation, support for Llama, Mistral, and other open-weight models. Ideal for development and testing.
+**Ollama** — the simplest way to run models locally. One-command installation, support for Llama, Mistral, Qwen, DeepSeek, and other open-weight models. Ideal for development and testing.
 
-**vLLM** — a high-performance inference server for production. Continuous batching, speculative decoding, PagedAttention for efficient GPU memory utilization.
+**vLLM** — a high-performance inference server for production. Continuous batching, speculative decoding, PagedAttention for efficient GPU memory utilization. OpenAI-compatible API.
 
-**Text Generation Inference (TGI)** — a solution from Hugging Face. Production-ready, supports many models, good documentation.
+**SGLang** — optimized for multi-turn conversations via RadixAttention. Excellent for chatbots and agents. Strong structured output support.
 
-**LocalAI** — an OpenAI-compatible API for local models. Drop-in replacement for the OpenAI SDK.
+**Text Generation Inference (TGI)** — a production-ready solution from Hugging Face. Good documentation, enterprise features, native HF ecosystem integration.
 
 ### Hardware Requirements
 
 Modern LLMs require significant resources:
 
-| Model Size | GPU RAM | Examples |
-|---------------|---------|---------|
-| 7B | 8-16 GB | Mistral 7B, Llama 3 8B |
-| 13B | 16-24 GB | Llama 2 13B |
-| 34B | 40-48 GB | CodeLlama 34B |
-| 70B | 80+ GB | Llama 3 70B (requires 2+ GPUs) |
+| Model Size | GPU RAM (FP16) | GPU RAM (INT4) | Examples |
+|---------------|---------|---------|---------|
+| 7-8B | 16 GB | 4-6 GB | Llama 4 8B, Qwen 3 8B, Mistral 7B |
+| 14B | 28 GB | 8-10 GB | Qwen 3 14B |
+| 32B | 64 GB | 16-20 GB | Qwen 3 32B |
+| 70B | 140 GB | 35-40 GB | Llama 3.3 70B, Qwen 3 72B, DeepSeek R1 70B distill |
+| MoE 100B+ active | 200+ GB | 80+ GB | Llama 4 Maverick, Qwen 3 235B |
 
-**Quantization** reduces requirements by 2-4x with a small quality loss. 4-bit quantization allows running a 70B model on a single 24GB GPU.
+**Quantization** reduces requirements by 2-4x with a small quality loss. 4-bit quantization (GPTQ, AWQ, GGUF) allows running a 70B model on a single 24GB GPU.
 
 ---
 
 ## Key Takeaways
 
-1. **The LLM provider market is diverse.** OpenAI, Anthropic, Google, Mistral — each has its own strengths. There is no universally "best" provider.
+1. **The LLM provider market is diverse and fast-moving.** OpenAI, Anthropic, Google, xAI, Mistral, DeepSeek, Meta — each has its own strengths. There is no universally "best" provider.
 
-2. **Model choice depends on the task.** Complex reasoning requires powerful models; simple tasks require economical ones. The right choice saves money and time.
+2. **Reasoning models are a new paradigm.** o3, Claude extended thinking, Gemini thinking — they trade latency and cost for dramatically better performance on complex tasks. Use them selectively.
 
-3. **Cost is determined by tokens.** Output tokens are 3-5x more expensive than input. Caching, batching, and prompt optimization can reduce costs by several times.
+3. **Model choice depends on the task.** Complex reasoning requires reasoning models; standard tasks require standard models; simple tasks require budget models. The right routing strategy saves 70%+ on costs.
 
-4. **Tool use / function calling** is the standard for agents. All major providers support this capability with compatible formats.
+4. **Cost is determined by tokens.** Output tokens are 3-5x more expensive than input. Thinking tokens in reasoning models can dominate costs. Caching, batching, and routing can reduce costs by several times.
 
-5. **Reliability requires a multi-provider approach.** Fallback, retry with backoff, circuit breakers — mandatory elements of a production system.
+5. **Open-source models have reached parity.** DeepSeek R1, Llama 4, and Qwen 3 compete with proprietary models. MoE architecture dominates the frontier.
 
-6. **Local models** are suitable for specific requirements: privacy, predictable cost, offline operation. They require infrastructure investment.
+6. **Tool use / function calling** is the standard for agents. All major providers support this capability with compatible formats.
+
+7. **Reliability requires a multi-provider approach.** Fallback, retry with backoff, circuit breakers — mandatory elements of a production system.
+
+8. **Local models** are suitable for specific requirements: privacy, predictable cost, offline operation, full fine-tuning control. They require infrastructure investment.
 
 ---
 
@@ -618,17 +682,17 @@ Modern LLMs require significant resources:
 
 ### Basic Integration via LangChain4j
 
-Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-4o"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-3-5-sonnet-20241022", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-1.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama3:70b".
+Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-4o"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-sonnet-4-20250514", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-2.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama4:maverick".
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 
-**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku are used. For complex reasoning and analysis, powerful models like GPT-4o or Claude Sonnet are applied. Code generation works best with Claude 3.5 Sonnet, which leads coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku or Gemini Flash are selected.
+**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4 with extended thinking are applied. Code generation works best with Claude Sonnet 4 or GPT-4.1, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
 
 **Tool Use via AI Services:** LangChain4j provides a declarative way to create agents with tools. Tools are defined as regular Java methods annotated with `@Tool`, which contains the function description. Method parameters are annotated with `@P` including a description for the model. Then an agent interface is created with a `chat(String message)` method, and `AiServices.builder()` is used to automatically generate the implementation. The model independently analyzes the user's request, decides which tools are needed, invokes them with the correct parameters, and forms the final response based on the results.
 
 **Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON, providing 100% parsing reliability.
 
-**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) × inputPrice + (outputTokens / 1,000,000) × outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-4o would cost approximately $600/month, whereas GPT-4o-mini would be only about $27/month — a 22x difference with comparable quality for simple tasks.
+**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) × inputPrice + (outputTokens / 1,000,000) × outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) × outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-4o would cost approximately $600/month, whereas GPT-4o-mini would be only about $27/month — a 22x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request — making selective routing essential.
 
 ---
 
