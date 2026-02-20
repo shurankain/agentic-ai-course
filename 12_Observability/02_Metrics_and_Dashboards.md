@@ -28,9 +28,9 @@ Tokenization algorithms create uneven splitting. English text: ~4 characters or 
 
 A support system operating in a non-Latin-script language consumes 30-50% more tokens than an English-language one. RAG with multilingual documents requires different chunking strategies.
 
-Cost is calculated as: input tokens × input price + output tokens × output price, all divided by 1000.
+Cost is calculated as: input tokens × input price + output tokens × output price (prices are quoted per 1M tokens by most providers).
 
-For GPT-4o, input tokens cost $0.0025/1K, output — $0.01/1K. The 1:4 ratio makes limiting generation length for brief responses especially important.
+For GPT-4o, input tokens cost $2.50/1M, output — $10/1M. The 1:4 ratio makes limiting generation length for brief responses especially important.
 
 **Optimization Strategies:**
 

@@ -287,7 +287,7 @@ For agents, this is particularly beneficial: the system prompt and tool descript
 
 ### Complexity-Based Routing
 
-Not all queries require a powerful model. A simple question like "How many days are in a week?" does not need GPT-4 — GPT-4o-mini handles it just as well, but at 15x lower cost.
+Not all queries require a powerful model. A simple question like "How many days are in a week?" does not need GPT-5 — GPT-4o-mini handles it just as well, at a fraction of the cost.
 
 Model Router pattern:
 1. Classify query complexity (using a cheap model)

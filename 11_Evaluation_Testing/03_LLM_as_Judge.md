@@ -12,7 +12,7 @@
 
 Human evaluation is reliable but expensive and slow. Automated metrics are fast but do not correlate with quality. LLM-as-a-Judge is an intermediate approach that combines the advantages of both.
 
-Use a powerful language model (GPT-4, Claude 3 Opus) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors — all beyond the reach of simple text metrics.
+Use a powerful language model (GPT-4o, Claude Opus 4) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors — all beyond the reach of simple text metrics.
 
 **Advantages:** scalability (thousands of evaluations in minutes), reproducibility (consistent scores), explainability (the model justifies its score), accessibility (no experts required).
 
@@ -34,7 +34,7 @@ A formalized framework for LLM-as-Judge through chain-of-thought reasoning. Thre
 
 **Evaluation criteria** define what to evaluate: overall quality or specific dimensions (correctness, completeness, relevance). More specific criteria yield more reliable scores.
 
-**Judge model** is typically the most powerful available model. A weaker model cannot reliably evaluate a stronger one. Typical choices: GPT-4, Claude 3 Opus.
+**Judge model** is typically the most powerful available model. A weaker model cannot reliably evaluate a stronger one. Typical choices: GPT-4o, Claude Opus 4.
 
 **Output format:** numerical rating, quality category, or structured evaluation across dimensions. Structured output (JSON) simplifies parsing.
 
@@ -85,7 +85,7 @@ Example structure: "Evaluate the following response. Question: [question]. Respo
 
 ## Strategies for Improving Reliability
 
-**Multi-judge** — using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-4 + Claude 3 Opus + Gemini Pro, then take the median score or weighted average.
+**Multi-judge** — using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-4o + Claude Opus 4 + Gemini 2.5 Pro, then take the median score or weighted average.
 
 **Chain-of-thought** — requiring reasoning before the score. Improves quality through "thinking it through." Prompt: "First explain your considerations for each criterion, then provide the score."
 

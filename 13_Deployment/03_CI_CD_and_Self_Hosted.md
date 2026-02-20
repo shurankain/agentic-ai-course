@@ -22,7 +22,7 @@ Prompt versioning deserves special attention. A prompt is an artifact like code 
 
 **Second stage** — unit tests. Executed with mocked LLM clients, no API keys required. Tests cover request and response processing logic, prompt construction, result parsing, and error handling. High coverage is critically important.
 
-**Third stage** — integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, use cheaper models (GPT-3.5 instead of GPT-4).
+**Third stage** — integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, use cheaper models (GPT-4o-mini instead of GPT-4o).
 
 **Fourth stage** — building and publishing the Docker image. Tagged with commit SHA for unique identification. The latest tag is updated only for the main branch. Parallel execution of independent stages accelerates the pipeline. Integration tests wait for unit test success.
 
@@ -66,9 +66,9 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Latency and throughput** for high-load systems. At very high volumes, self-hosted is more economical than cloud APIs. Network latency to the provider is eliminated.
 
-**Economics:** OpenAI API costs $0.002 per 1K tokens for GPT-3.5, $0.01 for GPT-4. At a million requests per day with an average of 500 tokens — thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($5000/month for an A100) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
+**Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-4o. At a million requests per day with an average of 500 tokens — hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($5000/month for an A100) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
 
-**Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are significantly better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform GPT-4 on domain-specific tasks at a smaller size. OpenAI does not allow full fine-tuning of GPT-4. Self-hosted Llama, Mistral, and Qwen can be fully fine-tuned.
+**Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are significantly better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-4o, but with limited control over the process. Self-hosted Llama, Mistral, and Qwen can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 
 **Control over availability.** Dependence on an external provider is a risk. An OpenAI outage means an outage of your service. Historical examples: an OpenAI outage in November 2023 lasting several hours, Anthropic rate limiting during peak loads. For critical systems (emergency response, financial trading, production control), such dependence is unacceptable. A self-hosted model with proper redundancy guarantees availability under your control.
 
@@ -120,7 +120,7 @@ Dynamic batching parameters affect the latency-throughput trade-off. A small bat
 
 The optimal architecture often combines self-hosted and cloud models. Self-hosted for high-frequency operations and privacy-critical data. Cloud APIs for complex tasks requiring frontier models.
 
-A router determines where to direct a request. Criteria include: task complexity, data sensitivity, required model, and current load. Simple classifications go to the local Llama; complex reasoning tasks go to GPT-4.
+A router determines where to direct a request. Criteria include: task complexity, data sensitivity, required model, and current load. Simple classifications go to the local Llama; complex reasoning tasks go to GPT-4o or o3.
 
 **Router logic:** A privacy flag in the metadata immediately routes to self-hosted. Complexity estimation is based on heuristics: prompt length, required capabilities (code generation, complex reasoning), and expected output length. Scoring system: prompt > 4000 chars (+2), code generation (+2), reasoning (+3), output > 2000 tokens (+1). Score 0-1 = simple (self-hosted), 2-3 = medium (self-hosted if available), 4+ = complex (cloud).
 
@@ -128,7 +128,7 @@ A circuit breaker monitors self-hosted health. When the error rate or latency is
 
 Fallback between local and cloud models improves availability. API unification is achieved through OpenAI-compatible endpoints: vLLM exports the OpenAI API, and the client works identically. Differences in capabilities are handled through a capability registry: before sending, it checks whether the target model supports the required features; otherwise, fallback or error.
 
-Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially GPT-3.5 ($0.002). 5% are complex tasks, GPT-4 ($0.03). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid) — 70% savings.
+Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially GPT-4o-mini ($0.0005). 5% are complex tasks, GPT-4o ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid) — 70% savings.
 
 ## Monitoring Inference Servers
 

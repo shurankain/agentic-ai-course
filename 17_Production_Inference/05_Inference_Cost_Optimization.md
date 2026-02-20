@@ -14,12 +14,14 @@ Inference requires significant expenditure. A single GPT-4 request with long con
 
 **Cost Structure:**
 
-GPU compute is the primary expense. Cloud service prices:
+GPU compute is the primary expense. Cloud service prices (approximate, vary by provider and region):
+- T4: $0.50-1.00/hour
+- L4: $0.70-1.20/hour
 - A100 40GB: $2.50-4.00/hour
 - A100 80GB: $3.50-5.00/hour
 - H100: $4.50-8.00/hour
-- T4: $0.50-1.00/hour
-- L4: $0.70-1.20/hour
+- H200: $6.00-10.00/hour
+- B200 (Blackwell): $8.00-12.00/hour (limited availability, 2025+)
 
 Llama 70B on A100-80GB: ~$0.001-0.002 per 1000 tokens. At 100M tokens per day: $3000-6000 per month (compute only).
 

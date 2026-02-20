@@ -84,9 +84,9 @@ Cost and licensing are practical considerations. Cloud APIs charge per thousand 
 
 ### Popular Solutions and Their Niches
 
-OpenAI text-embedding-3-small and text-embedding-3-large are the industry standard for cloud-based solutions. Advantages: excellent quality on diverse tasks, simple integration via API, reliability and scalability of OpenAI. Disadvantages: dependency on an external service, variable cost, network latency.
+OpenAI text-embedding-3-small and text-embedding-3-large remain a strong cloud-based choice. Advantages: excellent quality on diverse tasks, simple integration via API, reliability and scalability of OpenAI. Disadvantages: dependency on an external service, variable cost, network latency.
 
-Models from the Sentence Transformers family (all-MiniLM-L6, all-mpnet-base-v2, e5-large, bge-large) are the choice for self-hosted solutions. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
+Open-source models have significantly closed the gap. The latest generation — bge-m3 (multilingual, hybrid retrieval), GTE-Qwen2 (strong MTEB scores), NV-Embed-v2 (NVIDIA, top MTEB at launch), and Jina Embeddings v3 (late interaction, multilingual) — rivals or exceeds commercial options on many benchmarks. Classic Sentence Transformers (all-MiniLM-L6, all-mpnet-base-v2) remain useful for lightweight, low-latency scenarios. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
 
 Cohere Embed is an alternative to OpenAI with emphasis on multilingual support and enterprise features. Particularly strong in tasks requiring support for dozens of languages simultaneously.
 

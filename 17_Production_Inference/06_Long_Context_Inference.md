@@ -10,7 +10,7 @@
 
 ## The Problem
 
-Modern LLMs strive for enormous contexts: Claude 200K, GPT-4 Turbo 128K, Gemini up to 1M. The problem: classical attention is quadratic in complexity.
+Modern LLMs strive for enormous contexts: Claude 4 200K (1M beta), GPT-4o/GPT-5 128K–1M, Gemini 2.5 Pro up to 1M, Llama 4 Scout up to 10M. The problem: classical attention is quadratic in complexity.
 
 For a sequence of length N:
 - Time: O(N²) operations

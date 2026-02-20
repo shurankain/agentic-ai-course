@@ -32,7 +32,7 @@ A typical architecture consists of several layers. The API Gateway provides auth
 
 **Circuit Breaker** prevents cascading failures. When the error threshold is reached (50% over 10 calls), the circuit opens, and subsequent requests immediately return an error. After 30 seconds — a probe call; on success, the circuit closes again.
 
-**Fallback strategies**: switching to an alternative provider (GPT-4 → Claude), degrading to a cheaper model (GPT-4 → GPT-3.5), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
+**Fallback strategies**: switching to an alternative provider (GPT-4o → Claude), degrading to a cheaper model (GPT-4o → GPT-4o-mini), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
 
 **Timeouts** are differentiated by endpoint: Completion 30 seconds, Chat 60 seconds, Agent 5 minutes. At the LLM call level, expected generation length is taken into account. Retry logic considers idempotency: completion is safe, agent workflows are riskier due to side effects. Exponential backoff with jitter: second attempt after 1 second, third after 2-4 seconds with randomization.
 

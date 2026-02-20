@@ -37,10 +37,10 @@ Practice: critical for production systems that require guaranteed correct format
 
 **Comparison with vLLM:**
 - Prefix Caching: vLLM hash-based, SGLang radix tree (better for chatbots)
-- Constrained Decoding: vLLM limited JSON mode, SGLang full regex/CFG
+- Constrained Decoding: vLLM supports JSON mode and guided decoding (via outlines), SGLang full regex/CFG with GPU-accelerated FSM
 - Throughput chat: SGLang up to 3x
 - Throughput batch: comparable
-- Maturity: vLLM production-ready, SGLang rapidly evolving
+- Maturity: both production-ready; vLLM has broader adoption, SGLang has matured significantly
 
 **When to choose:**
 Ideal: chatbots with long history, applications with frequent similar prefixes, structured output (JSON, code), multi-turn agents. Less suitable: one-off batch, very short prompts, maximum stability required.

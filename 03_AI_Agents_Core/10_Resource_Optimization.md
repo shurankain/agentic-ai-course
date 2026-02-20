@@ -30,9 +30,9 @@ Not all requests require the most powerful model. Smart routing directs requests
 
 | Tier | Models | Cost | Use Case |
 |------|--------|------|----------|
-| Tier 1 (Economy) | GPT-4o-mini, Claude Haiku | $0.15-0.25/1M | Simple tasks, classification |
-| Tier 2 (Standard) | GPT-4o, Claude Sonnet | $2-3/1M | Most tasks |
-| Tier 3 (Premium) | GPT-4, Claude Opus | $15-60/1M | Complex reasoning |
+| Tier 1 (Economy) | GPT-4o-mini, Claude Haiku 4.5 | $0.15-1.00/1M | Simple tasks, classification |
+| Tier 2 (Standard) | GPT-4o, Claude Sonnet 4 | $2.50-10/1M | Most tasks |
+| Tier 3 (Premium) | o3, Claude Opus 4 | $10-75/1M | Complex reasoning |
 
 ### Routing Strategies
 
@@ -330,7 +330,7 @@ The ECONOMY tier uses the gpt-4o-mini model at a cost of $0.00015 per thousand i
 
 The STANDARD tier uses the gpt-4o model at a cost of $0.0025 per thousand input tokens and $0.01 per thousand output tokens. The maximum context is also 128,000 tokens. This is the primary workhorse for the majority of tasks.
 
-The PREMIUM tier uses the gpt-4 model at a cost of $0.03 per thousand input tokens and $0.06 per thousand output tokens. The maximum context is smaller at 8,192 tokens, but reasoning quality is higher. It is used for complex analytical tasks.
+The PREMIUM tier uses a reasoning model such as o3 at a cost of $0.01 per thousand input tokens and $0.04 per thousand output tokens. These models support large contexts (200K tokens) and deliver the highest reasoning quality. They are used for complex analytical tasks.
 
 The CostAwareRouter class implements request routing logic. During initialization, it accepts an optional complexity classifier for more advanced strategies.
 

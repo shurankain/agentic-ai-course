@@ -124,7 +124,7 @@ In 2022, OpenAI introduced **tiktoken** — a new tokenization library written i
 |----------------|---------------|----------|
 | Language | C++ | Rust |
 | Speed | Baseline | 3-6x faster |
-| Models | Llama, T5 | GPT-3.5, GPT-4 |
+| Models | Llama, T5 | GPT-4o, GPT-5, o3 |
 | Algorithms | BPE, Unigram | Byte-level BPE |
 
 For working with OpenAI models, use tiktoken. For Llama and open-source models, use SentencePiece or their specific tokenizers via HuggingFace Transformers.
@@ -331,7 +331,7 @@ For effective context management, accurate token count estimation is critically 
 
 Real-world systems often need to estimate request cost before execution. For this, heuristics based on text language are used. English text is estimated as character length divided by 4. Russian — by 2.5. Chinese and Japanese — by 1.5. Program code typically falls in between with a coefficient of about 3.
 
-**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-4o input tokens cost $2.50 per million, while output tokens cost $10 per million. For Claude 3.5 Sonnet, it is $3 and $15 respectively. Multiplying token counts by prices and summing yields a realistic cost estimate.
+**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-4o input tokens cost $2.50 per 1M, output $10 per 1M. For Claude Sonnet 4 — $3 and $15 per 1M respectively. Newer models like GPT-5 and Claude Opus 4.6 are priced higher; economy models like GPT-4o-mini ($0.15/$0.60 per 1M) and Claude Haiku 3.5 ($0.80/$4 per 1M) are dramatically cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
 
 Such preliminary estimation helps avoid unexpected expenses in production, especially when processing large volumes of text or lengthy conversations.
 

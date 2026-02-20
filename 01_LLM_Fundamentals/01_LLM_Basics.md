@@ -144,9 +144,12 @@ Modern LLMs are staggering in their scale:
 | Model | Parameters | Layers | Dimension | Attention Heads |
 |-------|-----------|--------|-----------|-----------------|
 | GPT-3 | 175B | 96 | 12288 | 96 |
-| GPT-4 | ~1.7T (estimated) | - | - | - |
-| Claude 3 Opus | ~137B (estimated) | - | - | - |
-| Llama 3 70B | 70B | 80 | 8192 | 64 |
+| GPT-4 | ~1.7T (estimated MoE) | - | - | - |
+| GPT-5 | undisclosed (MoE) | - | - | - |
+| Claude Opus 4.6 | undisclosed | - | - | - |
+| Gemini 2.5 Pro | undisclosed (MoE) | - | - | - |
+| Llama 4 Maverick | 400B (17B active, 128 experts) | - | - | - |
+| DeepSeek V3 | 671B (37B active) | 61 | 7168 | 128 |
 
 Simply increasing model size does not guarantee improved quality. There are "scaling laws" that determine the optimal ratio between model size, data volume, and compute budget. A model with fewer parameters trained on more data can outperform a much larger model that was insufficiently trained.
 
