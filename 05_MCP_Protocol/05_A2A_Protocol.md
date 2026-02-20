@@ -136,6 +136,14 @@ A multi-level structure with delegation. Travel Planner Agent coordinates domain
 
 ## Adoption and Ecosystem
 
+### Honest Adoption Assessment
+
+As of early 2026, A2A adoption remains largely at the announcement stage. While 150+ partners expressed intent at the April 2025 launch, production implementations are limited. Most real-world multi-agent systems use direct API calls, framework-native patterns (LangGraph handoffs, CrewAI delegation), or MCP for tool integration rather than A2A for agent-to-agent communication.
+
+MCP, by contrast, has seen massive real-world adoption: 10,000+ servers, 97M+ monthly SDK downloads, and integration into every major AI development tool. The practical reality is that most "agent-to-agent" coordination happens within a single framework or orchestrator, not across independent agents from different providers — which is A2A's primary use case.
+
+A2A's value proposition strengthens as the industry moves toward truly autonomous, independently deployed agents that need to discover and coordinate with each other across organizational boundaries. This use case is emerging but not yet widespread.
+
 ### A2A Compared to Alternatives
 
 A2A is not the only approach to inter-agent communication. Understanding the alternatives helps evaluate its positioning:
@@ -154,7 +162,7 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 2. **Agent Protocol from AI21 is too simple** — lacks async, streaming, and rich capabilities support
 3. **Direct use of gRPC/REST requires ad-hoc coordination** — no standard patterns
 
-**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, and Block — establishing AAIF as the primary governance body for agent protocol standardization. While A2A attracted partner announcements, MCP has seen broader real-world adoption with 10,000+ servers and 97M+ monthly SDK downloads.
+**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon — establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 10,000+ servers and 97M+ monthly SDK downloads, while A2A adoption remains mostly at the announcement stage.
 
 **Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium).
 
@@ -209,10 +217,10 @@ This is critical for enterprise deployments with compliance requirements — it 
 |--------|-----|-----|
 | **Purpose** | Agent → Tools/Data | Agent → Agent |
 | **Pattern** | Client-Server | Peer-to-Peer / Orchestration |
-| **Tasks** | Synchronous (primarily) | Sync + Async + Streaming |
+| **Tasks** | Sync + Async (Tasks primitive, Nov 2025) | Sync + Async + Streaming |
 | **Discovery** | Client configuration | Agent Cards + Well-Known URLs |
 | **State** | Stateless | Stateful (task lifecycle) |
-| **Transport** | stdio, HTTP+SSE | HTTP, WebSocket, gRPC |
+| **Transport** | stdio, Streamable HTTP | HTTP, WebSocket, gRPC |
 | **Author** | Anthropic | Google |
 | **Focus** | Tools | Coordination |
 

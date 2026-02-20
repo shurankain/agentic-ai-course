@@ -40,11 +40,11 @@ Framework Score is calculated as the sum of products of criterion weight and fra
 
 ### Decision Tree
 
-Start with the question: is precise coordination with checkpoints needed? If yes, choose LangGraph. If no, check whether the agents are conversational. If yes, choose AutoGen. If no, check whether the roles are simple. If yes, choose CrewAI. If no, choose Semantic Kernel.
+Start with the question: is precise coordination with checkpoints needed? If yes, choose LangGraph. If no, check whether simple handoff-based routing is sufficient. If yes, choose OpenAI Agents SDK. If no, check whether the roles are simple. If yes, choose CrewAI. If no, choose Google ADK or Microsoft Agent Framework.
 
 ## LangGraph: Graph-Oriented Orchestration
 
-LangGraph is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them.
+LangGraph (now at version 1.0) is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them. LangGraph Platform provides managed deployment with persistence, streaming, and a studio UI for debugging.
 
 ### Graph Philosophy
 
@@ -72,7 +72,9 @@ Checkpointing advantages: Resume after crash (the system automatically continues
 
 LangGraph is particularly well-suited for systems where precise coordination between agents and result reproducibility matter. If you need to build an agent with a clearly defined process (for example, step-by-step document analysis), LangGraph provides tools for explicitly describing this process. The framework also integrates well with LangSmith for observability, which is important in production systems.
 
-## AutoGen: Multi-Agent Dialogue from Microsoft
+## AutoGen: Multi-Agent Dialogue from Microsoft (Maintenance Mode)
+
+> **Note (February 2026):** AutoGen has entered maintenance mode. Microsoft's strategic investment has shifted to Microsoft Agent Framework, which unifies concepts from AutoGen and Semantic Kernel. Existing AutoGen deployments continue to work and receive security updates, but new projects should evaluate Microsoft Agent Framework, OpenAI Agents SDK, or LangGraph instead.
 
 AutoGen is a framework from Microsoft Research that focuses on conversational agents -- agents that interact with each other through natural dialogue.
 
@@ -92,9 +94,9 @@ This simplifies development -- there is no need to manually program each transit
 
 AutoGen provides good support for including a human in the process. You can configure an agent to request human confirmation before critical actions. A human can intervene at any point by adding their message to the dialogue.
 
-### AutoGen 0.4: New Architecture
+### AutoGen 0.4: Final Major Architecture
 
-In late 2024, AutoGen introduced version 0.4 with a completely redesigned architecture. Key changes:
+AutoGen 0.4 introduced a completely redesigned architecture that was the last major version before maintenance mode. Key features:
 
 **Event-Driven Architecture:** the old model used direct synchronous interaction between agents. The new model introduces an event-driven architecture with a central event bus: Agent A publishes an event, the Runtime receives it, analyzes it, and routes it to Agent B asynchronously. This makes the system more scalable and allows easier isolated testing of components.
 
@@ -104,11 +106,11 @@ In late 2024, AutoGen introduced version 0.4 with a completely redesigned archit
 
 **Improved Testability:** the new architecture significantly simplifies testing. Mock runtimes allow writing isolated unit tests for agents. Deterministic execution mode guarantees reproducible results. Replay capabilities allow recording real interactions and replaying them for debugging.
 
-AutoGen 0.4 is incompatible with version 0.2 -- a full code rewrite is required.
+AutoGen 0.4 is incompatible with version 0.2 -- a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
 
 ## CrewAI: Role-Based Collaboration
 
-CrewAI offers the metaphor of a crew -- a group of specialists, each with their own role, working toward a common goal.
+CrewAI (now at version 1.9+) offers the metaphor of a crew -- a group of specialists, each with their own role, working toward a common goal.
 
 ### Roles and Tasks
 
@@ -116,17 +118,21 @@ In CrewAI, you define agents through their roles: researcher, writer, editor, an
 
 The framework automatically assigns tasks to agents based on role matching. Research tasks go to the researcher, writing tasks go to the writer. This creates an intuitive structure similar to how work is organized in real teams.
 
-### Sequential and Parallel Processes
+### Sequential, Parallel, and Flows
 
-CrewAI supports two main execution modes. In sequential mode, tasks execute one after another, with each subsequent task receiving the result of the previous one. In hierarchical mode, one agent (the manager) coordinates the work of the others.
+CrewAI supports multiple execution modes. In sequential mode, tasks execute one after another, with each subsequent task receiving the result of the previous one. In hierarchical mode, one agent (the manager) coordinates the work of the others.
 
-The simplicity of the model is both a strength and a limitation of CrewAI. It is easy to get started and create a working system. But for complex scenarios with nonlinear flows, the expressiveness may be insufficient.
+**Flows** (introduced in CrewAI 1.0+) add event-driven orchestration beyond simple sequential/hierarchical patterns. Flows allow defining conditional routing, parallel execution branches, and state management — addressing the earlier limitation of insufficient expressiveness for complex scenarios.
+
+CrewAI also added enterprise features including CrewAI Enterprise for managed deployment, built-in memory across crew executions, and integration with major LLM providers.
 
 ### Ideal Scenarios
 
 CrewAI is well-suited for content-generation workflows: topic research, article writing, editing, fact-checking. It also works well for analytical tasks where data needs to be collected from different sources and synthesized into a report.
 
-## Semantic Kernel: Enterprise Orchestration from Microsoft
+## Semantic Kernel: Enterprise Orchestration from Microsoft (Transitioning)
+
+> **Note (February 2026):** Semantic Kernel is transitioning to maintenance mode as Microsoft consolidates its agent framework strategy into Microsoft Agent Framework. Existing SK applications continue to work, and the plugin/function model carries forward into the new framework. See the dedicated [[../07_Frameworks/03_Semantic_Kernel|Semantic Kernel]] lesson for migration guidance.
 
 Semantic Kernel is an SDK from Microsoft for integrating AI into enterprise applications. Unlike more experimental frameworks, Semantic Kernel is oriented toward production-ready use in enterprise environments.
 
@@ -146,51 +152,89 @@ This is a powerful mechanism, but it requires careful tuning. An LLM may compose
 
 Semantic Kernel is developed with enterprise requirements in mind: security, regulatory compliance, Azure integration. For organizations already using the Microsoft stack, it is a natural choice.
 
-## OpenAI Swarm: Experimental Simplicity
+## OpenAI Agents SDK: Production Handoffs
 
-OpenAI Swarm is an experimental framework from OpenAI demonstrating a minimalist approach to multi-agent systems.
+OpenAI Agents SDK (released March 2025) is the production successor to the experimental Swarm framework. It preserves Swarm's core philosophy of simplicity — agents as instructions + tools + handoffs — while adding production-grade features.
 
-### Minimalism Philosophy
+### From Swarm to Agents SDK
 
-Swarm is intentionally simple. An agent is just a set of instructions and functions. Interaction between agents is accomplished through handoff -- transferring control from one agent to another.
+Swarm (October 2024) was an experimental framework demonstrating a minimalist approach: an agent is just a set of instructions and functions, interaction between agents is accomplished through handoff — transferring control from one agent to another. The Agents SDK takes this proven pattern and makes it production-ready.
 
-There are no complex orchestration mechanisms, no state persistence, no built-in monitoring. Swarm is more of a pattern or reference implementation than a full-fledged production framework.
+### Key Capabilities
+
+**Handoffs** remain the core interaction pattern. An agent can transfer control to another agent along with the conversation context. This creates a natural routing model: a triage agent determines intent and hands off to a specialist agent.
+
+**Guardrails** run in parallel with the agent, validating inputs and outputs. If a guardrail detects a violation (off-topic request, PII in output), it can interrupt execution before the response reaches the user.
+
+**Tracing** provides built-in observability for every agent run. Each handoff, tool call, and LLM invocation is recorded in a trace that can be visualized in the OpenAI dashboard or exported to external systems.
+
+**Context management** with typed context objects shared across agents in a run. Unlike Swarm's implicit context passing, the Agents SDK uses typed Python dataclasses for type-safe state sharing.
 
 ### When to Use
 
-Swarm is suitable for prototyping and experimentation. If you want to quickly validate a multi-agent system idea without diving into complex frameworks, Swarm provides enough structure with minimal overhead.
+The Agents SDK is well-suited for multi-agent systems built on OpenAI models with handoff-based routing. Its simplicity makes it excellent for customer service flows, triage systems, and workflows where agents specialize by domain. The main limitation is tight coupling to the OpenAI API — it does not support non-OpenAI models natively.
 
-For production systems, you will need to either significantly extend Swarm or switch to a more full-featured framework.
+## Microsoft Agent Framework: Unified Microsoft Platform
+
+Microsoft Agent Framework is the consolidated agent platform from Microsoft, unifying concepts from AutoGen and Semantic Kernel into a single production-grade framework.
+
+### Architecture
+
+The framework combines AutoGen's event-driven multi-agent patterns with Semantic Kernel's plugin/function model and enterprise integrations. It provides a unified API for building agents that can be deployed on Azure AI Agent Service.
+
+### Key Features
+
+**Multi-runtime support:** agents can run locally, on Azure, or in hybrid configurations. **Plugin compatibility:** existing Semantic Kernel plugins work with minimal changes. **Enterprise governance:** built-in audit trail, compliance controls, and Azure AD integration. **Multi-model support:** works with Azure OpenAI, OpenAI, and other providers through a unified interface.
+
+### When to Use
+
+Microsoft Agent Framework is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration as the framework matures.
+
+## Google Agent Development Kit (ADK)
+
+Google ADK is a unified toolkit for building agents in the Google Cloud ecosystem, with deep integration with Gemini models and Vertex AI.
+
+### Key Features
+
+**Gemini integration:** native access to Gemini 2.5 Pro/Flash capabilities including long context (1M+ tokens), multimodal input, and grounding through Google Search. **A2A support:** built-in support for the Agent-to-Agent protocol for inter-agent communication. **Vertex AI deployment:** managed deployment with auto-scaling, monitoring, and enterprise SLA.
+
+### When to Use
+
+ADK is the natural choice for organizations in the GCP ecosystem, especially when leveraging Gemini models and Google Search grounding. Over 7 million ADK downloads indicate strong adoption within the Google ecosystem.
 
 ## Comparison and Selection
 
 Each framework occupies its own niche. The choice depends on the specific requirements of the project.
 
-**LangGraph** -- choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage.
+**LangGraph** -- choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.0 with managed deployment via LangGraph Platform.
 
-**AutoGen** -- suitable for conversational scenarios where agents naturally interact through dialogue. Particularly strong when human inclusion in the process is needed.
+**OpenAI Agents SDK** -- for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
 
-**CrewAI** -- a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly.
+**CrewAI** -- a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly. Flows add event-driven orchestration for complex scenarios.
 
-**Semantic Kernel** -- for enterprise applications, especially within the Microsoft ecosystem. The plugin architecture facilitates integration with existing systems.
+**Microsoft Agent Framework** -- for enterprise applications in the Microsoft ecosystem. Replaces both AutoGen and Semantic Kernel as the unified agent platform with Azure integration.
 
-**Swarm** -- for rapid prototyping and experimentation, when simplicity matters more than feature completeness.
+**Google ADK** -- for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
+
+**AutoGen / Semantic Kernel** -- in maintenance mode. Existing deployments continue to work, but new projects should evaluate the alternatives above.
 
 ## Key Takeaways
 
-Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks.
+Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated significantly in 2025, with clear winners emerging.
 
-LangGraph offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility.
+LangGraph 1.0 offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility. LangGraph Platform adds managed deployment.
 
-AutoGen focuses on conversational interaction between agents. The intuitive group chat model simplifies development but requires attention to preventing infinite loops.
+OpenAI Agents SDK provides a production-grade handoff-based model evolved from Swarm. Ideal for multi-agent routing on OpenAI models with built-in guardrails and tracing.
 
-CrewAI uses the metaphor of a crew with roles and tasks. The simplicity of the model makes it accessible for quick starts but limits flexibility for complex scenarios.
+CrewAI 1.9+ uses the metaphor of a crew with roles and tasks. Flows add event-driven orchestration beyond simple sequential/hierarchical patterns, addressing earlier flexibility limitations.
 
-Semantic Kernel is oriented toward enterprise with a plugin architecture and planners. A good choice for gradually introducing AI into existing enterprise systems.
+Microsoft Agent Framework unifies AutoGen and Semantic Kernel into a single enterprise platform. The recommended path for new Microsoft ecosystem projects.
 
-Swarm demonstrates a minimalist pattern. Useful for prototyping but requires further development for production.
+Google ADK integrates deeply with Gemini models and the GCP ecosystem, with native A2A protocol support.
 
-When choosing a framework, consider not only current requirements but also the system's growth prospects. Starting with a simple framework and migrating later is a reasonable strategy, provided that migration is technically feasible.
+AutoGen and Semantic Kernel have entered maintenance mode. Existing systems continue to work, but new projects should use their successors.
+
+When choosing a framework, consider not only current requirements but also the ecosystem alignment. The trend is toward provider-aligned SDKs (OpenAI Agents SDK, Google ADK, Microsoft Agent Framework) alongside provider-agnostic options (LangGraph, CrewAI).
 
 ---
 

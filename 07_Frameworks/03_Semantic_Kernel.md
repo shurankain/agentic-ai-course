@@ -10,6 +10,8 @@
 
 ## Introduction to Semantic Kernel
 
+> **Status (February 2026): Transitioning to Maintenance Mode.** Microsoft has consolidated its agent framework strategy into **Microsoft Agent Framework**, which unifies concepts from Semantic Kernel and AutoGen. Semantic Kernel continues to receive security updates and bug fixes, and its core abstractions (plugins, functions, kernel) carry forward into the new framework. Existing SK applications remain fully functional. For **new projects**, Microsoft recommends evaluating Microsoft Agent Framework, which provides the same plugin/function model plus multi-agent orchestration, event-driven architecture, and deeper Azure AI Agent Service integration.
+
 Semantic Kernel is an SDK from Microsoft for integrating language models into applications. The project positions itself as a lightweight and extensible framework that provides primitives for building AI systems of any complexity.
 
 The name "Semantic Kernel" reflects the central idea: a kernel that unifies the semantic capabilities of AI with traditional software components. The model is not an isolated service but an integral part of the application, capable of invoking functions, working with memory, and orchestrating complex workflows.
@@ -86,7 +88,7 @@ Composition can be explicit (the developer defines the sequence) or automatic (t
 
 ### Azure OpenAI
 
-Semantic Kernel is deeply integrated with Azure OpenAI Service. Configuration requires an endpoint, deployment name, and key. All Azure models are supported: GPT-4, GPT-3.5, and embedding models.
+Semantic Kernel is deeply integrated with Azure OpenAI Service. Configuration requires an endpoint, deployment name, and key. All Azure models are supported: GPT-4o, GPT-4.1, o3, and embedding models.
 
 Azure meets enterprise requirements: compliance, regionalization, and private endpoints. For enterprise applications, Azure is often the preferred choice.
 
@@ -165,6 +167,8 @@ Semantic Kernel is a powerful and flexible framework for building AI application
 Planners automate goal achievement, transforming a set of functions into an intelligent system. Deep integration with Azure makes Semantic Kernel a natural choice for the Microsoft ecosystem.
 
 Support for multiple programming languages and model providers ensures flexibility. Observability through OpenTelemetry prepares the system for production use.
+
+**Migration path:** Semantic Kernel's plugin/function model is preserved in Microsoft Agent Framework. Existing plugins require minimal changes. The main additions are multi-agent orchestration, event-driven architecture, and Azure AI Agent Service deployment. Organizations should plan gradual migration: new agent features through Microsoft Agent Framework, existing SK integrations continue as-is until a natural migration point.
 
 ## Navigation
 

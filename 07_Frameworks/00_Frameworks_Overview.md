@@ -40,7 +40,7 @@ Frameworks are organized by abstraction level from high to low:
 
 **CrewAI** is growing rapidly, reaching 30,000 stars and attracting $18 million in investment (Series A). The role-based approach to agents and easy onboarding attract developers, but less flexibility compared to LangGraph limits its use in complex scenarios.
 
-**Microsoft AutoGen** with 25,000 stars focuses on multi-agent conversations and code execution. A key development is the planned merger with Microsoft Agent Framework in Q1 2026. For new projects, the roadmap for this merger should be tracked.
+**Microsoft AutoGen** with 25,000 stars focused on multi-agent conversations and code execution. Now in maintenance mode — Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
 
 **LlamaIndex** with 35,000 stars is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, but its focus on information retrieval means fewer capabilities for agent workflows.
 
@@ -116,15 +116,17 @@ CrewAI offers a declarative approach: agents as a "team" with roles. Instead of 
 
 ### OpenAI Agents SDK
 
-OpenAI provides the Assistants API for creating agents based on GPT-4 and o1 models. The API is updated regularly, adding new capabilities with each version.
+OpenAI has transitioned from the Assistants API to a new architecture. The Assistants API was deprecated in mid-2025, replaced by the **Responses API** (stateless, single-turn successor to Chat Completions with built-in tool use) and the **Agents SDK** (production multi-agent framework).
 
-**Key capabilities**: Assistants API v2 serves as the foundation, providing stateful conversations. Code Interpreter allows the model to execute Python code for computations. File Search provides built-in RAG for document search. Function calling enables integration with external systems. Threads manage multi-turn dialogues, automatically preserving history.
+**Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design — state management is handled by the application or the Agents SDK.
 
-### Claude SDK and Tool Use
+**Agents SDK** (released March 2025): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features.
 
-Anthropic does not provide a separate "Agents API." Instead, the Claude API with tool use capabilities is used for building agents. Developers use a combination of the Claude API, tool calling, and custom orchestration to create agent systems.
+### Claude SDK and Claude Code
 
-**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. Computer Use is a unique capability for browser and desktop automation where the model controls the computer. Extended context of 200,000 tokens allows processing vast amounts of information in a single request.
+Anthropic provides the Claude API with tool use capabilities and the Claude Code CLI as its agent platform. Rather than a separate agent framework, Anthropic's approach emphasizes the model's native tool use ability combined with MCP for extensibility.
+
+**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. Computer Use enables browser and desktop automation where the model controls the computer. Extended thinking provides transparent chain-of-thought reasoning. Extended context of 200,000 tokens (1M in beta) allows processing vast amounts of information. **Claude Code** is a CLI-based coding agent that demonstrates the agentic pattern using Claude's native capabilities — it reads files, writes code, runs commands, and uses MCP servers for extensibility.
 
 ### Google Vertex AI and ADK
 
@@ -134,13 +136,13 @@ Google Agent Development Kit is a unified toolkit for building agents in the Goo
 
 ---
 
-## AutoGen: Evolution and Future
+## AutoGen and Microsoft Agent Framework
 
-Microsoft AutoGen has long been a leader in multi-agent conversations. The project is actively developing and integrating with the Microsoft AI ecosystem.
+Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its agent strategy.
 
-**Current state**: AutoGen 0.4+ introduces a new architecture focused on extensibility. Integration with Azure AI Services is deepening, providing enterprise capabilities.
+**Current state**: AutoGen 0.4 was the last major release. The project continues to receive security updates but no new features. Microsoft's strategic investment has shifted to **Microsoft Agent Framework**, which unifies concepts from AutoGen (event-driven multi-agent patterns) and Semantic Kernel (plugin/function model, enterprise integrations).
 
-**Considerations for new projects**: AutoGen continues active development with regular updates. For production systems, it is recommended to follow the official project roadmap to understand the development direction and plan version migrations.
+**For new projects**: use Microsoft Agent Framework for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments can continue operating but should plan migration to Microsoft Agent Framework.
 
 ---
 
@@ -188,13 +190,13 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 
 2. **CrewAI** — the best choice for role-based multi-agent systems when declarativeness matters more than granular control.
 
-3. **AutoGen** — an actively developing framework with regular updates; follow the official roadmap for migration planning.
+3. **AutoGen** — now in maintenance mode; new projects should use **Microsoft Agent Framework** (unified successor combining AutoGen + Semantic Kernel).
 
 4. **Cloud providers** (AWS, GCP, Azure) — production-ready solutions with enterprise SLA, but vendor lock-in limits flexibility.
 
 5. **n8n** — the leader in low-code AI automation with a unique combination of a visual interface and MCP support.
 
-6. **Anthropic's approach to agents** — use the Claude API with tool calling directly, combining it with custom orchestration for agent systems.
+6. **Anthropic's approach to agents** — use the Claude API with tool calling and MCP for extensibility; Claude Code demonstrates the pattern of a production coding agent built on native capabilities.
 
 7. **Choose by task, not by hype** — a simple RAG does not require complex agent frameworks, and a complex multi-agent system cannot be built on basic chains.
 
