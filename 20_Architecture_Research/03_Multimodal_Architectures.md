@@ -12,9 +12,9 @@
 
 Human understanding of the world is multimodal. We read text, see images, hear sounds — and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
 
-GPT-4V, Claude 3, Gemini Pro — modern frontier models can "see." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance.
+GPT-4o, Claude Sonnet 4, Gemini 2.5 Pro, Llama 4 — modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
 
-But how do you teach a language model to see? Simply combining a vision encoder and an LLM does not work — a proper alignment architecture between modalities is needed. This chapter covers the architectural solutions that make multimodal AI possible.
+The field has shifted from "adapter-based" multimodality (bolting vision onto text models) to **native multimodality** (processing all modalities from the start in a unified architecture). This chapter covers the architectural solutions that make multimodal AI possible, from the foundational adapter approaches to the latest native multimodal designs.
 
 ## Vision Encoders: How to Extract Meaning from Pixels
 
@@ -196,6 +196,52 @@ Challenges: Memory for long videos, temporal grounding (where in the video is th
 
 "At what moment does the dog catch the ball?" — requires understanding the question, localizing in time, answering with a timestamp. This is harder than image Q&A — reasoning about time is needed.
 
+## Native Multimodal Architectures (2024-2025)
+
+The field has undergone a fundamental shift from adapter-based to native multimodal models.
+
+### From Adapters to Native Multimodality
+
+**The adapter era (2023-2024):** Models like LLaVA, BLIP-2, and InstructBLIP used a pretrained text LLM as the backbone, added a pretrained vision encoder (CLIP/SigLIP), and connected them with a trainable adapter (projection layer, Q-Former). The LLM itself was primarily a text model with vision "bolted on."
+
+**The native era (2024-2025):** Modern frontier models are trained from the start to process multiple modalities in a unified architecture:
+
+**GPT-4o (May 2024):** The "o" stands for "omni." Processes text, images, and audio natively in a single model. Audio is not transcribed to text first — the model processes raw audio tokens alongside text and image tokens. This enables real-time voice conversations with natural prosody, emotion detection, and voice style control. GPT-4o generates audio responses directly, not through a TTS system.
+
+**Gemini 2.5 (2025):** Natively multimodal from training — text, images, video, and audio are all first-class input modalities. Gemini can process hours of video (leveraging 1M+ token context), understand audio/speech directly, and reason across modalities simultaneously. The native training enables capabilities impossible with adapters, such as understanding the relationship between a spoken question and a visual scene.
+
+**Llama 4 Early Fusion (April 2025):** Meta's approach to native multimodality. Images, text, and video are tokenized into a shared representation space from the very first layer. The MoE routing operates over unified multimodal tokens — the same experts can specialize in visual or textual patterns. This is a departure from the "frozen encoder + adapter" pattern.
+
+**Claude Sonnet 4 (2025):** Strong vision understanding with native image processing. Excels at document understanding, chart analysis, and visual reasoning. Extended thinking applies to multimodal inputs — the model can "think" about visual content in the same chain of reasoning as text.
+
+### Audio and Speech Capabilities
+
+A major development in 2024-2025 is the integration of audio/speech as a first-class modality:
+
+**Real-time voice conversation:** GPT-4o and Gemini enable real-time spoken dialogue without the traditional pipeline of ASR → LLM → TTS. The model processes audio tokens directly, enabling natural turn-taking, emotion understanding, and voice style control.
+
+**Audio understanding:** Models can transcribe, translate, analyze audio content (music, environmental sounds), and reason about audio events. Gemini 2.5 Pro can process hours of audio input.
+
+**Voice generation:** GPT-4o generates speech directly as audio tokens, not through a separate TTS system. This enables natural prosody, emotional expression, and consistent voice identity.
+
+### Image and Video Generation Architectures
+
+The line between "understanding" and "generation" models is blurring:
+
+**Diffusion models (Stable Diffusion, DALL-E 3, Midjourney):** Remain the dominant approach for high-quality image generation. DALL-E 3 integrates with GPT-4 for prompt understanding — the LLM rewrites user prompts into detailed image descriptions, then the diffusion model generates from the refined prompt.
+
+**Autoregressive generation:** Some models generate images as sequences of discrete tokens (VQ-VAE codes), similar to text generation. This enables unified architectures where the same model can both understand and generate images. Gemini and GPT-4o can generate images as part of their multimodal output.
+
+**Video generation:** Sora (OpenAI, 2024), Veo 2 (Google, 2025), and others demonstrated that diffusion transformer architectures can generate coherent video clips. These models treat video as sequences of spatial-temporal patches processed by transformer layers with temporal attention.
+
+### Architectural Implications
+
+**Unified tokenization:** The trend is toward representing all modalities (text, images, audio, video) as tokens in a shared vocabulary. This simplifies the architecture but requires careful balancing of token budgets across modalities.
+
+**Scaling advantages of native multimodality:** Native multimodal models show emergent cross-modal capabilities that adapter-based models struggle with — such as understanding visual humor, reasoning about the relationship between audio and video, or generating images that precisely match complex textual descriptions.
+
+**Cost implications:** Native multimodal models are more expensive to train (multimodal data is harder to curate, training is more complex) but enable capabilities impossible with the adapter approach.
+
 ## Connections to Other Course Topics
 
 Scaling (section 01): Multimodal models show emergence at large scale. GPT-4V capabilities appeared at sufficient size.
@@ -224,9 +270,13 @@ Video is exponentially harder. Temporal dimension, memory requirements, long-ran
 
 Resolution matters. High resolution equals more detail but more tokens. Trade-off quality vs compute.
 
-Modular architectures dominate. Frozen pretrained encoders plus trainable adapters are more efficient than end-to-end training.
+Modular architectures are giving way to native multimodality. The "frozen encoder + adapter" pattern dominated 2023-2024, but GPT-4o, Gemini 2.5, and Llama 4 demonstrate that native multimodal training from scratch enables superior cross-modal capabilities.
 
-This is a rapidly evolving field. GPT-4o, Gemini 1.5, Claude 3 — new capabilities emerge every few months.
+Audio/speech is now a first-class modality. Real-time voice conversation (GPT-4o, Gemini) processes audio tokens directly, bypassing the ASR → LLM → TTS pipeline.
+
+Image/video generation is converging with understanding. Unified architectures that both understand and generate images (and video) are emerging, blurring the line between "understanding" and "generation" models.
+
+This is a rapidly evolving field. GPT-4o, Gemini 2.5, Claude Sonnet 4, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
 
 ---
 

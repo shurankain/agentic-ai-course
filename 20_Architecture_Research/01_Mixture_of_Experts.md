@@ -226,6 +226,48 @@ Specialization emerges: Experts specialize even without explicit supervision.
 
 Redundancy: Several experts may learn similar functions (potential for pruning).
 
+## MoE as the Dominant Frontier Architecture (2025)
+
+By 2025, MoE has transitioned from a promising approach to the dominant architecture for frontier models. Every major lab now uses MoE for their largest models.
+
+### DeepSeek R1: MoE + Reasoning via GRPO
+
+DeepSeek R1 (January 2025) combined the MoE architecture of DeepSeek V3 (671B total, 37B active) with GRPO (Group Relative Policy Optimization) to create a reasoning model that competes with OpenAI o1.
+
+**Key insight:** MoE provides the capacity (671B parameters of knowledge), while GRPO provides the reasoning capability through pure RL training. R1 demonstrated that MoE models can reason at the frontier level — MoE is not just about efficiency but also about enabling new capabilities.
+
+**R1-Zero:** Applying GRPO to the base MoE model without SFT on reasoning traces led to spontaneous emergence of chain-of-thought reasoning. The MoE architecture's large parameter count (knowledge capacity) combined with RL incentives produced reasoning without explicit teaching.
+
+**Distillation:** R1's reasoning was distilled into smaller models (1.5B to 70B), showing that MoE-trained reasoning transfers effectively to dense architectures.
+
+### Llama 4: MoE with Native Multimodal Fusion
+
+Meta's Llama 4 (April 2025) advanced MoE architecture significantly:
+
+**Scout** (109B total, 17B active): 16 experts per MoE layer. Achieves a 10M token context window through an interleaved attention pattern that alternates between local and global attention. Uses a shared expert (always active for base capabilities) plus routed experts.
+
+**Maverick** (400B total, 17B active): 128 experts per MoE layer. Quality-competitive with GPT-4o and Claude Sonnet 4 on general benchmarks.
+
+**Native multimodal early fusion:** Unlike previous approaches that bolt vision onto text models via adapters, Llama 4 tokenizes images, text, and video into a shared representation space from the start. The MoE routing operates over unified multimodal tokens — the same experts can specialize in visual or textual patterns.
+
+### Other Notable MoE Models
+
+**DBRX** (Databricks, 2024): 132B total, 36B active, 16 experts. Focused on enterprise use cases with strong instruction following. Demonstrated that MoE works well for fine-grained enterprise tasks, not just general language modeling.
+
+**Qwen 3 235B** (Alibaba, 2025): 235B total MoE variant alongside dense models. Hybrid thinking mode — can dynamically switch between fast (no thinking) and reasoning (extended thinking) modes. Uses a GRPO-inspired training approach for reasoning.
+
+**Gemini 2.5 Pro** (Google, 2025): While architectural details are not fully public, it uses MoE with native multimodal processing and 1M+ token context. Demonstrates that MoE scales effectively to very long contexts.
+
+### MoE Design Patterns in 2025
+
+The frontier models converge on several patterns:
+
+**Shared + routed experts:** DeepSeek V3, Llama 4, and Qwen 3 all use one or more "shared" experts that are always active (providing base capabilities) alongside routed experts. This prevents information loss from routing failures.
+
+**Fine-grained experts:** The trend is toward more, smaller experts (DeepSeek V3: 256 experts, Llama 4 Maverick: 128) rather than fewer, larger experts (Mixtral: 8). Finer granularity enables more specialized routing.
+
+**Auxiliary-loss-free balancing:** DeepSeek V3's approach of using expert bias terms instead of auxiliary loss is being adopted more broadly, as it avoids the conflict between balance loss and the main optimization objective.
+
 ## Connections to Other Course Topics
 
 Distributed Training (section 16): Expert parallelism is a specific type of model parallelism. AllToAll communication requires optimization just like AllReduce.
@@ -252,11 +294,15 @@ Specialization is emergent. Experts automatically specialize on different aspect
 
 Top-K selects precision vs efficiency. K=1 is maximally efficient, K=2 provides a safety margin, K greater than 2 is rarely justified.
 
-MoE is not for every scenario. Small models, homogeneous data, strict latency — dense may be better.
+MoE is the dominant frontier architecture (2025). DeepSeek V3/R1, Llama 4, Qwen 3 235B, Gemini 2.5 Pro — all frontier models use MoE. The debate is no longer "MoE vs Dense" but "which MoE design."
+
+MoE is not for every scenario. Small models (<10B), homogeneous data, strict latency — dense may be better.
 
 Memory footprint remains high. All experts must reside in memory, even if only a small fraction is active. This limits inference on edge devices.
 
-This is an active research area. Soft MoE, Expert Choice, hierarchical routing — new approaches emerge regularly.
+MoE + reasoning is a powerful combination. DeepSeek R1 showed that MoE's large parameter count (knowledge capacity) combined with GRPO-style RL training produces strong reasoning models.
+
+Design patterns are converging. Shared + routed experts, fine-grained expert counts, auxiliary-loss-free balancing, and native multimodal fusion (Llama 4) represent the emerging standard.
 
 ---
 

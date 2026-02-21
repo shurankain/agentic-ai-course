@@ -154,6 +154,48 @@ Complex reasoning: Math word problems, multi-hop reasoning.
 
 Long document summarization — SSM/Hybrid. Code generation — Transformer. Conversational AI — Hybrid. DNA sequence modeling — SSM. Mathematical reasoning — Transformer. Audio transcription — SSM. In-context learning — Transformer. Real-time inference — SSM.
 
+## Beyond Mamba: The Broader Landscape of Efficient Architectures
+
+### xLSTM: Extended Long Short-Term Memory
+
+xLSTM (2024), from Sepp Hochreiter (the original LSTM inventor), revisits recurrent architectures with modern techniques.
+
+**sLSTM (scalar LSTM):** Introduces exponential gating — the forget gate uses an exponential function instead of sigmoid, enabling more aggressive memory management. A new memory mixing mechanism allows separate memory cells to interact.
+
+**mLSTM (matrix LSTM):** Replaces the scalar memory cell with a matrix, dramatically increasing state capacity. The update rule resembles a form of linear attention: C_t = f_t · C_{t-1} + i_t · v_t · k_t^T. This creates a connection between LSTMs and linear attention models.
+
+**Results:** xLSTM-7B is competitive with Mamba-7B and Transformer-7B on language modeling benchmarks. The matrix memory provides better retrieval capabilities than standard SSMs while maintaining linear complexity.
+
+### Griffin and Hawk: Google's Hybrid Models
+
+Google Research introduced Griffin and Hawk (2024) as hybrid architectures that combine recurrent layers with local attention.
+
+**Hawk** uses a simple recurrent layer (real-gated linear recurrence) — essentially a simplified SSM without the structured state space formulation. Each layer processes tokens with O(1) cost per token.
+
+**Griffin** adds local attention windows (typically 1024 tokens) to the recurrent backbone. This addresses the retrieval weakness of pure recurrent models while keeping the overall complexity sub-quadratic.
+
+**Key finding:** Griffin matches Transformer quality on language modeling benchmarks up to 7B parameters while being significantly more efficient on long sequences. The local attention windows are sufficient for most retrieval needs — global attention is rarely necessary.
+
+### RWKV-6: Evolution and Community
+
+RWKV-6 (2024) brought significant improvements over RWKV-5:
+
+**Data-dependent decay:** The "forgetting" mechanism adapts based on input content, similar to Mamba's selective mechanism. Important information is retained longer, irrelevant information decays faster.
+
+**Eagle and Finch variants:** Expanded state capacity and added multi-scale processing — different parts of the state operate at different temporal resolutions.
+
+**Community strength:** RWKV has a highly active open-source community (RWKV Foundation), with models trained in many languages. RWKV-6 models are available from 0.1B to 14B parameters with strong multilingual support, especially for Asian languages.
+
+### The "Hybrid Wins" Conclusion
+
+By 2025, a clear consensus has emerged: **pure SSMs will not replace Transformers, but hybrid architectures are the practical future.**
+
+**Evidence:** No pure SSM has matched Transformer quality on broad benchmarks at scale. But hybrids (Jamba, Griffin, NVIDIA Bamba, IBM Granite 4.0) consistently demonstrate 70-90% of Transformer quality at significantly lower compute cost on long sequences.
+
+**Why pure SSMs fall short:** The fundamental limitation is fixed state size. No matter how sophisticated the selection mechanism, compressing an arbitrarily long history into a fixed-size state inevitably loses information. Periodic attention layers act as "checkpoints" that preserve critical information.
+
+**The practical pattern:** SSM/recurrent layers handle the bulk of processing (efficient, linear complexity), while attention layers (inserted every 4-8 SSM layers) handle precise retrieval and complex reasoning. This ratio can be tuned per use case — more attention for retrieval-heavy tasks, more SSM for streaming/long-context.
+
 ## Current Limitations of SSM
 
 Limitation 1 Fixed state size: The state h has a fixed size. The entire history is compressed into N numbers. For a sufficiently long history, any compression loses information. The Attention alternative: KV cache grows with context but preserves everything.
@@ -184,17 +226,17 @@ Mamba made SSMs competitive thanks to input-dependent parameters (selectivity). 
 
 Linear attention is another path. It removes softmax, replacing it with feature maps. Simpler, but often lower quality.
 
-Hybrids are a practical trade-off. Jamba, StripedHyena combine SSM and attention, gaining SSM efficiency and attention capability.
+The landscape has broadened beyond Mamba. xLSTM revives recurrent architectures with exponential gating, Griffin/Hawk combine simple recurrence with local attention, RWKV-6 adds adaptive forgetting. Each offers a different efficiency-quality trade-off.
 
-SSM is not a universal replacement. In-context learning, precise retrieval, complex reasoning — Transformer still performs better.
+Hybrids are the practical path forward. Pure SSMs have not replaced Transformers on broad benchmarks. But hybrids (Jamba, Griffin, Bamba, Granite 4.0) deliver Transformer-competitive quality with better efficiency on long sequences.
 
-Hardware efficiency still lags. SSMs are theoretically more efficient, but optimizations are not as mature as for Transformer.
+SSM is not a universal replacement. In-context learning, precise retrieval, complex reasoning — Transformer attention is still needed, which is why hybrids insert periodic attention layers.
 
-This is an active area. Mamba2, Linear Attention variants, new hybrids — progress is rapid.
+Hardware efficiency is improving. Mamba-2's SSD formulation enables better GPU tensor core utilization. Custom CUDA kernels are maturing. But the Transformer ecosystem (Flash Attention, etc.) still has a significant lead.
 
-The choice depends on the task. Long context streaming — SSM. Few-shot reasoning — Transformer. General purpose — Hybrid.
+The choice depends on the task. Long context streaming — SSM/Hybrid. Few-shot reasoning — Transformer. General purpose — Hybrid with tunable SSM/Attention ratio.
 
-State size is the fundamental trade-off. Fixed memory vs growing KV cache. Compression vs exact storage.
+State size is the fundamental trade-off. Fixed memory vs growing KV cache. Compression vs exact storage. Periodic attention layers in hybrids mitigate this limitation.
 
 ---
 

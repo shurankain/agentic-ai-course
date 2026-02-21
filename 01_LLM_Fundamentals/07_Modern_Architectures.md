@@ -28,7 +28,7 @@ This is fundamentally inefficient. The human brain does not work this way: when 
 
 In response to these limitations, the research community pursued two fundamentally different paths:
 
-**The first path — sparse computation (MoE):** If the entire model is not needed for every request, create multiple specialized "experts" and dynamically select the relevant ones. This idea is not new — the first MoE models appeared in 1991. But only in 2024, with the release of Mixtral and GPT-4, did MoE prove its viability in production systems at scale.
+**The first path — sparse computation (MoE):** If the entire model is not needed for every request, create multiple specialized "experts" and dynamically select the relevant ones. This idea is not new — the first MoE models appeared in 1991. But only in 2023-2024, with Mixtral and GPT-4, did MoE prove its viability. By 2025, MoE became the dominant architecture for frontier models: DeepSeek V3/R1 (671B total, 37B active), Llama 4 Scout/Maverick, Qwen 3 235B, and GPT-5 all use MoE.
 
 **The second path — alternative sequence processing (SSM):** If attention with quadratic complexity is the bottleneck, replace it with a mechanism that has linear complexity. State Space Models borrow ideas from control theory: instead of storing the entire history, compress it into a fixed-size state that updates with each new token. Mamba (December 2023) demonstrated that this approach can compete with Transformers.
 
@@ -66,7 +66,7 @@ MoE is not a new idea. The concept appeared in 1991, long before the deep learni
 
 **Inference infrastructure:** Efficient MoE deployment requires expert parallelism — placing different experts on different GPUs. This differs from standard tensor parallelism and requires all-to-all communication patterns. Frameworks like DeepSpeed and Megatron-LM learned to do this efficiently only recently.
 
-**Production validation:** Before Mixtral (December 2023), there was no widely available open-source MoE model demonstrating production-ready quality. GPT-4 (presumably MoE with ~1.8T parameters) was a proof of concept, but closed-source. Mixtral changed this, showing that MoE works beyond closed labs.
+**Production validation:** Before Mixtral (December 2023), there was no widely available open-source MoE model demonstrating production-ready quality. Mixtral opened the door, and by 2025, MoE is the default for frontier models. DeepSeek V3 (December 2024) proved that MoE + architectural innovations can match GPT-4o quality at $5.5M training cost. Llama 4 (April 2025) demonstrated MoE with native multimodal early fusion and 10M token context (Scout variant). Every major frontier model now uses some form of sparse computation.
 
 ### MoE Architecture: How It Works
 
@@ -125,7 +125,7 @@ The self-attention mechanism computes relationships between all pairs of tokens:
 
 This is not merely a memory problem — even with Flash Attention, which optimizes memory access patterns, the computational complexity remains O(n²).
 
-**Why is this critical in 2024?** Because the context window has become a competitive advantage. Gemini 1.5 Pro with 2M token context, Claude 3 with 200K, GPT-4 Turbo with 128K — long context has shifted from a desirable feature to a necessity for enterprise use cases. But quadratic complexity makes this prohibitively expensive with classic attention.
+**Why is this critical?** Because the context window has become a competitive advantage. Gemini 2.5 Pro with 1M+ token context, Claude Sonnet 4 with 200K, Llama 4 Scout with 10M tokens — long context has shifted from a desirable feature to a necessity for enterprise use cases. But quadratic complexity makes this prohibitively expensive with classic attention.
 
 **Attempts to solve through attention modifications** proceeded in parallel: Sparse Attention (process not all token pairs), Linear Attention (approximate softmax), Flash Attention (optimize memory access). All of these improved constants but did not change the fundamental O(n²) complexity.
 
@@ -354,15 +354,17 @@ Debugging MoE routing issues or SSM state corruption requires deep understanding
 
 **When hybrids are justified:** Enterprise scenarios with diverse workloads where neither quality nor efficiency can be sacrificed, and engineering resources exist for custom optimization.
 
-### Development Trends: What Lies Ahead in 2025
+### Architecture Landscape in 2025: Confirmed Trends
 
-**MoE is becoming the standard for flagship models:** GPT-4, Gemini 1.5, Claude 3 (presumably) use MoE. Why? Because at scales >500B parameters, dense inference becomes economically impractical. Expect all models >100B to use some form of sparse computation.
+**MoE is the dominant frontier architecture:** What was a prediction is now reality. DeepSeek V3/R1 (671B total, 37B active), Llama 4 Scout and Maverick, Qwen 3 235B, Gemini 2.5 Pro, and GPT-5 all use MoE. At scales >100B parameters, dense inference is economically impractical. MoE is no longer experimental — it is the default.
 
-**SSMs are finding their niche:** Mamba and RWKV demonstrate competitive quality on specific tasks but have not yet surpassed Transformers on broad benchmarks. Likely scenario: SSMs will become the primary choice for long context and edge deployment but will not replace Transformers entirely.
+**Llama 4 architecture (April 2025)** deserves special attention. Meta's Llama 4 introduced MoE with native multimodal early fusion — images, text, and video are tokenized into a shared space from the start, not bolted on via adapters. **Scout** (109B total, 17B active, 16 experts) achieves a 10M token context window through an interleaved attention pattern. **Maverick** (400B total, 17B active, 128 experts) targets quality-competitive performance with GPT-4o and Claude Sonnet 4. The MoE routing uses a shared expert (always active) plus routed experts, similar to DeepSeek's approach.
 
-**Hybrid architectures are spreading:** Expect an explosion of experiments with hybrid designs. Jamba proved the concept; now the exploration of the design space begins. By the end of 2025, we will see dozens of hybrid architectures with different SSM/Attention ratios.
+**SSMs found their niche but did not replace Transformers:** Mamba-2 (May 2024) proved SSM-attention duality and improved GPU utilization 2-8x. RWKV-6 added adaptive forgetting. But pure SSMs have not surpassed Transformers on broad benchmarks. The practical outcome: SSMs excel at long context and edge deployment, but the main event is hybrid architectures.
 
-**Co-evolution with hardware:** NVIDIA Blackwell (2024) and future GPUs will be optimized for sparse computation and SSM operations. This will change the economics — today's trade-offs may become irrelevant within a year.
+**Hybrid architectures are the practical path:** Jamba proved the concept in early 2024. By 2025, hybrid designs are mainstream: NVIDIA Bamba (optimized for TensorRT-LLM), IBM Granite 4.0, Google's Griffin and Hawk models. The typical pattern is SSM layers for efficiency with periodic attention layers for retrieval precision.
+
+**Hardware co-evolution is real:** NVIDIA Blackwell GPUs (2024) and the H200 are optimized for sparse computation patterns. FP8 training (pioneered by DeepSeek V3) is now standard practice, delivering ~2x compute efficiency. The hardware-software co-design cycle is accelerating.
 
 ---
 

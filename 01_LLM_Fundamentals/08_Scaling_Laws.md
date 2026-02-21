@@ -357,22 +357,23 @@ Example: you additionally spent 5 million dollars on overtraining 7B instead of 
 
 ## Scaling Laws 2.0: Modern Developments
 
-### Test-Time Compute Scaling: A New Paradigm
+### Test-Time Compute Scaling: An Established Paradigm
 
-OpenAI o1/o3 models in 2024-2025 demonstrated an entirely new dimension of scaling — compute during inference. This fundamentally changes the optimization equation.
+Test-time compute (TTC) emerged in 2024 with OpenAI o1 and is now an established scaling dimension, adopted by all major providers. Every frontier lab offers reasoning models that trade inference compute for quality.
 
 **Traditional scaling:** Model quality was determined by three factors — number of parameters N, data volume D, and compute during training C_train. Formula: Quality = f(N, D, C_train). Inference was simply applying the model, with no additional "thinking."
 
-**Test-time scaling (new paradigm):** Quality now also depends on compute during inference C_inference. Formula: Quality = f(N, D, C_train, C_inference). The model can "think longer" on complex tasks, generating intermediate reasoning, testing hypotheses, correcting errors.
+**Test-time scaling:** Quality now also depends on compute during inference C_inference. Formula: Quality = f(N, D, C_train, C_inference). The model can "think longer" on complex tasks, generating intermediate reasoning, testing hypotheses, correcting errors. This is no longer experimental — it is the default for complex tasks.
 
-**The practical results are striking:**
-- o1 outperforms GPT-4 on math reasoning, using 10-100x more inference compute per task
-- o3 achieves 87.5% on the ARC-AGI benchmark (GPT-4: ~5%, GPT-4o: ~10%) — a test previously considered unsolvable for LLMs
-- DeepSeek-R1 demonstrates 4x efficiency improvement through optimized test-time compute — o1 quality at lower cost
+**All major providers now offer TTC:**
+- **OpenAI o3** (January 2025 GA) and **o4-mini** (April 2025): `reasoning_effort` parameter (low/medium/high). o3 achieves 96.7% on AIME 2024, 87.7% on GPQA Diamond
+- **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Sonnet 4 with extended thinking competes with o3 on reasoning benchmarks
+- **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5 Pro with thinking leverages 1M+ token context for reasoning
+- **DeepSeek-R1** (January 2025): open-weight reasoning model achieving o1-level performance at lower cost, trained via GRPO
 
-### Train-Time vs Test-Time Compute Trade-off: New Optimization
+### Train-Time vs Test-Time Compute Trade-off
 
-This opens a fundamentally new dimension of optimization that has not yet been fully explored.
+This dimension of optimization is now well-understood and actively exploited in production.
 
 **Formalizing the trade-off:** Total compute now equals C_train (one-time) plus C_inference multiplied by N_requests. The key innovation: C_inference is now a variable that can be chosen for each request.
 
@@ -382,16 +383,16 @@ For a simple request ("Translate 'hello' to French"), you can use C_inference = 
 
 | Strategy | C_train | C_inference | Use Case | Example |
 |-----------|---------|-------------|----------|--------|
-| Traditional LLM | High | Fixed (low) | General tasks | GPT-4, Claude |
-| o1/o3 style | Medium | Variable (high) | Reasoning tasks | OpenAI o1, o3 |
-| Small + TTC | Low | Very high | Quality-critical | Small model with extended thinking |
+| Traditional LLM | High | Fixed (low) | General tasks | GPT-4o, Claude Sonnet 4 |
+| Reasoning model | Medium | Variable (high) | Reasoning tasks | o3, Claude extended thinking |
+| Small + TTC | Low | Very high | Quality-critical | o4-mini, R1-distill-7B |
 | Large + minimal | Very high | Low | Latency-critical | Large model, instant responses |
 
 **When test-time compute is economically advantageous:**
 
 Condition: Cost_TTC must be less than Cost_larger_model. This holds with: low request volume (not billions of requests per day), variable task complexity (some requests are simple, some complex — compute can be allocated adaptively), quality prioritized over latency, ability to "think" asynchronously (the user is willing to wait).
 
-A concrete economics example: o1-mini with 10x thinking delivers quality approximately matching o1-full. Cost: $0.03 × 10 = $0.30 versus $3.00 for o1-full. A 10x savings. Break-even at medium volume — if you have 1-10 million requests per day, test-time compute is more cost-effective than simply a larger model.
+**Smaller models + TTC vs larger models:** o4-mini with sufficient reasoning outperforms GPT-4o on math and coding at a fraction of the cost. DeepSeek R1-distill-7B competes with much larger standard models. This democratizes reasoning capabilities — even small models can achieve strong reasoning with sufficient TTC.
 
 **Architectural implications:**
 
@@ -411,13 +412,23 @@ Reasoning tasks have distinct scaling laws, different from general tasks:
 
 **Optimal strategy:** A balance between model size and the number of CoT samples/thinking time. Sometimes a 13B model with 10 samples is better than a 70B model with 1 sample — cheaper and higher quality for certain tasks.
 
+### GRPO: A New Scaling Paradigm for Reasoning
+
+GRPO (Group Relative Policy Optimization), introduced with DeepSeek R1 (January 2025), represents a new scaling paradigm that changes how reasoning capabilities emerge during training.
+
+**How it scales:** For each prompt, GRPO samples K outputs (K=8-64) from the current policy, computes rewards via a verifier, and normalizes advantages within the group. This replaces both the reward model and value model from PPO with simple group statistics. Training scales with the number of samples per prompt and the quality of the verifier.
+
+**R1-Zero: Reasoning emergence from pure RL.** Applying GRPO with only rule-based rewards (correctness, format compliance) to a base model — without any SFT on reasoning traces — led to spontaneous emergence of chain-of-thought reasoning. This is a fundamental scaling result: the capacity for structured reasoning is latent in pretrained models and scales with RL training.
+
+**Distillation scaling:** DeepSeek distilled R1's reasoning into smaller models (1.5B, 7B, 8B, 14B, 32B, 70B variants). Distillation follows its own scaling law: smaller distilled models retain a surprising fraction of the teacher's reasoning capability. R1-distill-32B outperforms many larger standard models on reasoning benchmarks, demonstrating that reasoning can be efficiently compressed.
+
 ### Implications for System Architecture
 
-**Reasoning models can be smaller:** It is not necessary to train a gigantic model for reasoning tasks. A 13B model with effective test-time compute can outperform a 70B model with minimal thinking. This opens the possibility of reasoning on edge devices.
+**Reasoning models can be smaller:** It is not necessary to train a gigantic model for reasoning tasks. A small model with effective test-time compute can outperform a large model with minimal thinking. o4-mini competes with much larger models. DeepSeek R1-distill-7B demonstrates strong reasoning at minimal cost.
 
-**Adaptive compute by task type:** Different tasks require radically different inference budgets. The architecture should determine the task type and allocate corresponding compute. Classification — 1x, summarization — 2-5x, reasoning — 10-100x.
+**Adaptive compute by task type:** Different tasks require radically different inference budgets. The architecture should determine the task type and allocate corresponding compute. Classification — 1x, summarization — 2-5x, reasoning — 10-100x. Budget control APIs (`reasoning_effort`, `budget_tokens`, `thinkingBudget`) enable per-request optimization.
 
-**Cost modeling becomes more complex:** You cannot simply multiply the cost per request by the number of requests. You need to model the distribution of task complexity, adaptive compute allocation, and the latency-quality trade-off for each request type.
+**Cost modeling becomes more complex:** You cannot simply multiply the cost per request by the number of requests. Thinking tokens add variable inference cost. You need to model the distribution of task complexity, adaptive compute allocation, and the latency-quality trade-off for each request type.
 
 ---
 
@@ -431,7 +442,7 @@ Reasoning tasks have distinct scaling laws, different from general tasks:
 
 **Overtraining is economically justified for inference efficiency** — if your model will handle billions of requests, it is worth overpaying on training to get a smaller, faster model. Inference cost dominates for high-volume services. LLaMA 2 7B was overtrained 14x relative to Chinchilla optimal precisely for this reason.
 
-**Test-time compute is a new dimension of scaling** — o1/o3 models demonstrated that inference compute can be scaled, not just training. The model can "think longer" on complex tasks, achieving quality significantly exceeding traditional models. This opens new trade-offs between latency and quality.
+**Test-time compute is an established scaling dimension** — all major providers now offer reasoning models (o3, o4-mini, Claude extended thinking, Gemini thinking, DeepSeek R1). GRPO demonstrated that reasoning can emerge from pure RL. Distillation enables efficient transfer of reasoning capabilities to smaller models. Budget control APIs enable per-request cost-quality optimization.
 
 **Scaling is not universal** — there are tasks where simply increasing the model is ineffective: factual knowledge after the cut-off date, exact retrieval from memory, domain-specific knowledge without corresponding data. For these cases, specialized solutions are needed (RAG, fine-tuning, external tools).
 
