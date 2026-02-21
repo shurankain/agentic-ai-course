@@ -53,15 +53,18 @@ The core loop of a Computer Use agent is built on continuous interaction between
 ### Benchmark Results
 
 **OSWorld benchmark** (complex multi-step tasks):
-- Claude Computer Use: 14.9%
-- GPT-4V: 7.7%
+- Claude Computer Use (October 2024 launch): 14.9%
+- Claude Computer Use (2025, with Claude Sonnet 4): 61.4%
+- GPT-4V (2024): 7.7%
 - Human performance: ~70-75%
 
-**WebArena** (web navigation):
-- Significantly better than previous approaches
-- But still far from human level
+The jump from 14.9% to 61.4% in under a year represents one of the most rapid capability improvements in AI. Claude Computer Use now approaches human-level performance on many task categories.
 
-**Interpretation:** Computer Use works, but is not yet ready for mission-critical tasks without human oversight.
+**WebArena** (web navigation):
+- Claude-based agents achieve 40%+ on WebArena, up from single-digit scores in 2024
+- Browser-specialized agents (Browser Use, Nova Act) perform even better on web-specific tasks
+
+**Interpretation:** Computer Use has moved from "impressive demo" to "production-viable for supervised workflows." Human oversight remains important for consequential actions, but reliability has improved dramatically.
 
 ---
 
@@ -153,15 +156,15 @@ OSWorld includes a diverse set of tasks reflecting real computer usage:
 - **Error Recovery Rate**: The agent's ability to recover from errors and continue task execution
 - **Grounding Accuracy**: Precision of visual recognition and identification of UI elements
 
-**Results by Category (Claude 3.5 Sonnet):**
+**Results by Category (Claude Sonnet 4, 2025):**
 
-| Category | Success Rate | Note |
-|----------|--------------|------|
-| OS Tasks | ~12% | Complex multi-step |
-| Browser | ~18% | Better on familiar sites |
-| Productivity | ~14% | Office apps are complex |
-| Dev Tools | ~16% | Terminal better than GUI |
-| Multimedia | ~8% | Most difficult category |
+| Category | Success Rate (2024) | Success Rate (2025) | Note |
+|----------|---------------------|---------------------|------|
+| OS Tasks | ~12% | ~55% | Dramatic improvement |
+| Browser | ~18% | ~70% | Near human-level |
+| Productivity | ~14% | ~60% | Office apps much better |
+| Dev Tools | ~16% | ~65% | Terminal + GUI both strong |
+| Multimedia | ~8% | ~40% | Still most difficult |
 
 ### Alternative: Accessibility APIs
 
@@ -327,6 +330,43 @@ The agent can automatically create tutorials and how-to guides by performing act
 
 ---
 
+## Computer Use Ecosystem (2025)
+
+The computer use landscape has expanded significantly beyond Claude's initial launch, with multiple providers and specialized tools.
+
+### Claude Computer Use: Evolution
+
+Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4) and the computer use infrastructure pushed scores to 61.4%.
+
+**Claude for Chrome** — a browser extension providing computer use capabilities directly in the browser, without requiring a full desktop environment. Optimized for web workflows with access to the DOM and accessibility tree alongside visual understanding.
+
+**Cowork** — Anthropic's hosted computer use environment where Claude operates in a managed virtual machine accessible via the web. Users can watch Claude work in real-time, intervene when needed, and take over at any point. Designed for supervised workflows like research, data entry, and application testing.
+
+### Amazon Nova Act
+
+Amazon's browser automation agent, designed specifically for web tasks. Nova Act uses a combination of visual understanding and DOM access for reliable web interaction. Key features: deterministic action replay (record once, replay reliably), integration with AWS services, and a focus on e-commerce and business workflows. Available through AWS Bedrock.
+
+### Google Project Mariner
+
+Google's computer use research project, leveraging Gemini's multimodal capabilities for desktop and browser automation. Uses Gemini's native long-context vision (up to 1M tokens of visual history) for maintaining context across complex multi-step tasks.
+
+### Browser Use (Open Source)
+
+An open-source Python framework for building browser automation agents. Browser Use provides a high-level API for controlling browsers programmatically through AI, supporting multiple LLM backends (Claude, GPT-4o, Gemini, local models). Key advantages: fully open source (MIT license), self-hosted, supports custom LLMs, and provides both visual and DOM-based interaction modes. Popular for building custom browser automation workflows.
+
+### Comparison of Computer Use Platforms
+
+| Platform | Environment | Strengths | Model |
+|----------|-------------|-----------|-------|
+| Claude Computer Use | Full desktop | Most capable, 61.4% OSWorld | Claude Sonnet/Opus 4 |
+| Claude for Chrome | Browser only | Low-latency web tasks | Claude |
+| Cowork | Hosted VM | Supervised workflows, real-time observation | Claude |
+| Nova Act | Browser only | Deterministic replay, AWS integration | Amazon Nova |
+| Project Mariner | Desktop/Browser | Long visual context | Gemini |
+| Browser Use | Browser only | Open source, multi-model | Any LLM |
+
+---
+
 ## Computer Use Agent Architecture
 
 ### High-Level Architecture
@@ -388,19 +428,19 @@ A Computer Use agent consists of several interconnected components:
 
 ## Key Takeaways
 
-1. **Computer Use is an emerging capability** with impressive demonstrations but limited reliability
+1. **Computer Use has matured rapidly** — from 14.9% to 61.4% on OSWorld in under a year, approaching human-level on many task categories
 
 2. **Security requires a dedicated environment** — never run on production systems without isolation
 
-3. **Human-in-the-loop is critical** for any consequential actions
+3. **Human-in-the-loop remains important** for consequential actions, though reliability has improved enough for supervised production use
 
-4. **Use cases today:** legacy integration, testing, data entry, documentation
+4. **Multiple platforms now compete** — Claude Computer Use (most capable), Cowork (hosted/supervised), Nova Act (AWS/web), Browser Use (open source), Project Mariner (Gemini)
 
-5. **Speed is still a problem** — 10-100x slower than a human
+5. **Browser-specific agents** (Browser Use, Nova Act, Claude for Chrome) offer better reliability for web tasks by combining visual and DOM-based approaches
 
-6. **Prompt injection through UI** — a new attack vector that demands attention
+6. **Prompt injection through UI** — remains a critical attack vector as these agents become more capable
 
-7. **The future: hybrid approaches** — Computer Use for flexibility, traditional APIs for reliability
+7. **Hybrid approaches are standard** — Computer Use for flexibility and legacy systems, traditional APIs for reliability and speed
 
 ---
 

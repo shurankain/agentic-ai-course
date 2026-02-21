@@ -79,16 +79,18 @@ Copilot (launched in 2021) became the first mass-market AI coding assistant:
 
 **Architecture:** Works through a simple pipeline — the user writes code/comments, the system gathers context (current file, open tabs), sends it to a cloud-based model (Codex/GPT), receives suggestions, and displays them as ghost text in the editor.
 
-**Statistics (2024):**
+**Statistics (2025):**
 - 55% of code is written with Copilot assistance (per GitHub data)
-- 1.3M+ paying subscribers
-- Available in Business and Enterprise editions
+- 1.8M+ paying subscribers
+- Available in Individual, Business, and Enterprise editions
 
-**Limitations:**
-- Does not understand full project context
+**Copilot Agent Mode (2025):**
+GitHub Copilot added an agent mode in VS Code that goes beyond inline suggestions. In agent mode, Copilot can autonomously plan changes across multiple files, run terminal commands, execute tests, and iterate on failures. This brings Copilot closer to Cursor and Claude Code in capability, though it remains more tightly integrated with the VS Code/GitHub ecosystem.
+
+**Limitations (standard mode):**
+- Does not understand full project context (agent mode partially addresses this)
 - Hallucinates non-existent APIs
 - A 2022 Stanford study found earlier Copilot versions generated insecure code in ~40% of security-relevant scenarios; later versions have improved through better filters and model upgrades
-- Cannot run code or tests
 
 ### Cursor: The Next Generation
 
@@ -106,13 +108,13 @@ Cursor went further by building an IDE around AI:
 
 **Composer mode:** For complex multi-file tasks — for example, "Add authentication to all API endpoints". Cursor analyzes the codebase, creates a plan ("I'll modify these 5 files..."), generates changes for each file, and the user reviews and applies.
 
-### Codeium, Tabnine, Amazon Q
+### Windsurf (formerly Codeium), Tabnine, Amazon Q
 
-**Codeium:**
-- Free tier (unlimited)
-- Self-hosted option for enterprise
-- Proprietary models (not OpenAI)
-- Lower latency than Copilot
+**Windsurf** (rebranded from Codeium in late 2024):
+- Full agentic IDE with Cascade engine
+- Free tier available
+- Multi-model support (Claude, GPT, custom)
+- See the Autonomous Coding Agents section for details
 
 **Tabnine:**
 - Privacy-first (option for fully local operation)
@@ -126,21 +128,22 @@ Cursor went further by building an IDE around AI:
 
 ### IDE Tools Comparison
 
-| Feature | Copilot | Cursor | Codeium | Tabnine |
-|---------|---------|--------|---------|---------|
-| Multi-file edit | ✗ | ✓ | ✗ | ✗ |
+| Feature | Copilot | Cursor | Windsurf | Tabnine |
+|---------|---------|--------|----------|---------|
+| Multi-file edit | Agent mode | ✓ | ✓ (Cascade) | ✗ |
 | Codebase RAG | Limited | ✓ | ✓ | ✓ |
-| Self-hosted | Enterprise | ✗ | ✓ | ✓ |
-| Custom models | ✗ | ✓ | ✗ | Limited |
-| Price/month | $10-39 | $20 | Free-$12 | $12 |
+| Agent mode | ✓ (2025) | ✓ (Composer) | ✓ (Cascade) | ✗ |
+| Terminal integration | Agent mode | ✓ | ✓ | ✗ |
+| Custom models | Limited | ✓ | ✓ | Limited |
+| Price/month | $10-39 | $20 | Free-$15 | $12 |
 
 ---
 
 ## Autonomous Coding Agents
 
-### Devin: The First AI Software Engineer
+### Devin (Cognition): The First AI Software Engineer
 
-Cognition introduced Devin (March 2024) as the "first AI software engineer":
+Cognition introduced Devin (March 2024) as the "first AI software engineer," marking the beginning of the autonomous coding agent category:
 
 **Capabilities:**
 - Understands tasks from descriptions
@@ -153,9 +156,10 @@ Cognition introduced Devin (March 2024) as the "first AI software engineer":
 **Devin Architecture:** A hierarchical system with a central Task Manager that decomposes goals and tracks progress. Below it operate three specialized agents — Planner (subtask planning), Coder (code writing), and Tester (correctness verification). All agents interact through a shared Execution Environment providing Browser, Terminal, Editor, and Git tools for executing real actions.
 
 **SWE-bench Results:**
-- Devin: 13.86% (resolved issues)
-- This was a breakthrough at the time of announcement
-- Claude 3.5 Sonnet later achieved ~50%+
+- Devin at launch (March 2024): 13.86% — a breakthrough at announcement time
+- By late 2025, Claude-based agents surpassed 72% on SWE-bench Verified
+
+**Context:** Devin pioneered the category but faced scrutiny over marketing claims. The initial 13.86% SWE-bench score, impressive at launch, was quickly surpassed by open-source alternatives and model-native coding agents. Devin's value proposition shifted toward being an "AI teammate" that works asynchronously on tasks via Slack integration, rather than competing purely on benchmark scores.
 
 **Pricing:**
 - $500/month for teams
@@ -177,16 +181,55 @@ Open-source alternative to Devin:
 
 ### Claude Code (Anthropic)
 
-Anthropic's CLI-based coding assistant:
+Anthropic's CLI-based coding agent, one of the most capable autonomous coding tools available:
 
 **Capabilities:**
-- Agentic workflow in the terminal
-- Understands the codebase through file reading
-- Can edit files
-- Runs commands
-- Git integration
+- Full agentic workflow in the terminal with autonomous multi-step task execution
+- Deep codebase understanding through file reading, grep, glob, and semantic search
+- Multi-file editing with surgical precision (edit specific lines, not whole files)
+- Runs commands, tests, and build tools with output analysis
+- Git integration (commits, PRs, branch management)
+- MCP server support for extensibility (connect to databases, APIs, custom tools)
+- Sub-agent architecture (spawns specialized agents for parallel subtasks)
+- Extended thinking for complex reasoning before acting
+- Hooks system for custom automation (pre/post tool execution)
+- Project memory (CLAUDE.md files for persistent project context)
 
-**Workflow:** An interactive conversational model — the user assigns a task ("Add unit tests for UserService"), the agent analyzes code, creates a plan, generates files, runs tests, and reports results. Differs from IDE tools in that it operates in a terminal environment, has full access to system commands, and can execute complex multi-step tasks autonomously.
+**Architecture:** Claude Code operates as an agentic loop: the user provides a task, the agent reads relevant files, forms a plan, executes edits and commands, verifies results (runs tests, checks compilation), and iterates until success. Unlike IDE-integrated tools, it has full system access — it can install dependencies, run Docker containers, interact with APIs, and manage infrastructure.
+
+**Key differentiators:**
+- **No IDE required** — works in any terminal, making it accessible for server-side development, CI/CD integration, and headless environments
+- **MCP extensibility** — connects to any MCP server, giving it access to databases, APIs, and custom tools beyond file/terminal operations
+- **Spec-driven development** — excels at implementing features from detailed specifications, making it effective for the "write spec → agent implements" workflow pattern
+
+**SWE-bench performance:** Claude Code with Claude Sonnet 4 achieves 72.7% on SWE-bench Verified, among the highest scores for any coding agent.
+
+### OpenAI Codex (2025)
+
+OpenAI's cloud-based autonomous coding agent, released mid-2025:
+
+**Capabilities:**
+- Runs in a cloud sandbox environment (not local)
+- Works on GitHub repositories — reads code, writes implementations, creates PRs
+- Parallel task execution — can work on multiple tasks simultaneously
+- Powered by codex-1 (specialized model derived from o3)
+- Integrated into ChatGPT Pro and Team plans
+
+**Architecture:** Codex operates asynchronously in cloud sandboxes. The user assigns a task (e.g., "Implement the login endpoint based on this spec"), Codex clones the repo, works autonomously, and produces a PR with changes. Multiple tasks can run in parallel. The sandbox provides isolation but limits interaction — no real-time collaboration like Claude Code.
+
+**Trade-offs:** Excellent for batch-style development (assign multiple tasks, review PRs later), but less suitable for interactive, iterative development where real-time feedback is important.
+
+### Windsurf (formerly Codeium)
+
+Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE:
+
+**Key features:**
+- **Cascade** — an agentic coding engine that can reason across multiple files, run terminal commands, and iterate on solutions
+- **Flows** — persistent context that tracks what you're working on across sessions
+- Multi-model support (Claude, GPT, custom models)
+- Free tier with generous limits
+
+**Positioning:** Competes directly with Cursor as an AI-native IDE, with a focus on the agentic "flow" experience rather than individual completions.
 
 ---
 
@@ -240,15 +283,15 @@ A more realistic version:
 - Function-level generation
 - Automated test verification
 
-**Results (2024):**
-- GPT-4: 67%
-- Claude 3 Opus: 84.9%
-- Claude 3.5 Sonnet: 92%
+**Results (2025):**
+- GPT-4o: 90.2%
+- Claude Sonnet 4: 93.7%
+- o3: 96.7%
 
 **Limitations:**
-- Tasks are too simple
+- Tasks are too simple — frontier models have nearly saturated this benchmark
 - Does not reflect real-world work
-- Saturating benchmark
+- SWE-bench has largely replaced HumanEval as the meaningful coding benchmark
 
 ### MBPP (Mostly Basic Python Problems)
 
@@ -441,23 +484,48 @@ This is still in the future, but understanding the connection between neural gen
 
 ---
 
+## Spec-Driven Development: A New Workflow Pattern
+
+The rise of capable coding agents has enabled a new development workflow: **spec-driven development**, where the human writes a detailed specification and the agent implements it.
+
+### The Pattern
+
+1. **Human writes spec** — a detailed description of what to build: requirements, API contracts, data models, edge cases, acceptance criteria
+2. **Agent implements** — the coding agent reads the spec and autonomously writes the code, tests, and documentation
+3. **Human reviews** — reviews the implementation against the spec, provides feedback
+4. **Agent iterates** — refines based on feedback until the spec is satisfied
+
+### Why This Works Now
+
+Coding agents like Claude Code and Codex excel when given clear, detailed specifications. The spec provides unambiguous context that eliminates the interpretation problems inherent in natural language. The agent's ability to read the entire codebase, run tests, and iterate means it can handle implementation details autonomously.
+
+### Practical Considerations
+
+**Good specs include:** API contracts (request/response schemas), data models with field descriptions, error handling requirements, edge cases enumerated explicitly, acceptance criteria that map to testable conditions.
+
+**The spec is the new bottleneck.** Writing a good spec takes significant thought — arguably the hardest part of software engineering. But the spec is also the most valuable artifact: it serves as documentation, test criteria, and implementation guide simultaneously.
+
+**Tools supporting this pattern:** Claude Code (reads spec files, implements across codebase), Codex (takes specs as task descriptions, produces PRs), Cursor Composer (reads spec in context, generates multi-file changes).
+
+---
+
 ## Key Takeaways
 
-1. **IDE tools (Copilot, Cursor) augment the developer** — increase productivity but require human oversight
+1. **IDE tools (Copilot, Cursor, Windsurf) augment the developer** — agent modes now enable multi-file autonomous editing alongside traditional autocomplete
 
-2. **Autonomous agents (Devin, OpenHands) solve tasks end-to-end** — but accuracy is currently insufficient for unsupervised use
+2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 72%+ on SWE-bench Verified, they are approaching human-level on real GitHub issues
 
-3. **SWE-bench is the gold standard** for measurement; top models achieve ~72%, humans ~75-90%
+3. **SWE-bench is the gold standard** for measurement; top agents achieve ~72%, humans ~75-90%
 
 4. **Context management is critical** — the agent must understand the codebase, not just the current file
 
-5. **Human-in-the-loop is necessary** for production use
+5. **Spec-driven development** is emerging as a powerful workflow: human writes spec, agent implements
 
-6. **Security concerns:** code injection, secrets, dependencies
+6. **Security concerns remain:** code injection, secrets, dependencies
 
-7. **Trend: agent-native IDEs** — Cursor shows the direction
+7. **Trend: convergence toward agent-native tools** — Cursor, Windsurf, and Copilot agent mode all moving toward autonomous multi-file editing
 
-8. **Open source and accessible tools catching up** — OpenHands democratizes open-source access, Claude Code broadens availability
+8. **CLI agents (Claude Code) and cloud agents (Codex)** represent two complementary paradigms: interactive vs. asynchronous
 
 ---
 
