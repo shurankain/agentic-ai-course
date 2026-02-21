@@ -88,6 +88,10 @@ DPO is less flexible than RLHF with an explicit Reward Model.
 
 **SimPO** removes the reference model, adding length normalization and margin-based loss.
 
+**GRPO (Group Relative Policy Optimization)** — introduced by DeepSeek in the R1 paper (January 2025), arguably the most important alignment innovation since DPO. GRPO eliminates both the reward model and the value model from PPO. For each prompt, GRPO samples K outputs from the current policy, computes rewards using a verifier (rule-based for math, format checks, or an LLM judge), then normalizes advantages within the group: Advantage_i = (reward_i - mean(rewards)) / std(rewards). The group statistics replace the critic/value function in PPO, dramatically simplifying training.
+
+GRPO's significance extends beyond simplification. DeepSeek's **R1-Zero** experiment demonstrated that applying GRPO with only rule-based rewards (correctness, format compliance) to a base language model — without any SFT on reasoning traces — leads to spontaneous emergence of chain-of-thought reasoning, self-verification, and even "aha moments" of insight. This is a fundamental result: reasoning capabilities can emerge purely from proper RL incentives, without needing to be taught through demonstrations. R1-Zero showed that the capacity for structured reasoning is latent in pretrained language models and can be unlocked through appropriately designed reward signals.
+
 ## RLAIF: AI as Annotator
 
 RLAIF replaces human annotators with an AI model. Instead of people, a powerful LLM compares responses.
@@ -106,7 +110,9 @@ Failure modes are critically important: reward hacking, Goodhart's Law, mode col
 
 DPO simplifies RLHF by eliminating the need for a separate RM and RL.
 
-DPO alternatives expand the toolkit: ORPO, KTO, IPO, SimPO.
+DPO alternatives expand the toolkit: ORPO, KTO, IPO, SimPO, GRPO.
+
+GRPO (DeepSeek R1) eliminated the reward and value models from RL training, and demonstrated that reasoning can emerge from pure RL without supervised reasoning demonstrations.
 
 RLAIF scales the process by replacing humans with AI.
 

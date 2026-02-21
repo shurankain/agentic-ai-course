@@ -16,20 +16,48 @@ Test-Time Compute (TTC) represents a new optimization axis. Instead of a fixed a
 
 This changes the economics of AI systems. For complex tasks, it is cheaper to use more inference compute than to train a larger model.
 
-## OpenAI o1: A Breakthrough in Reasoning
+## OpenAI o-Series: The Reasoning Model Family
 
 o1 (September 2024) demonstrated results that seemed impossible:
 
-| Benchmark | GPT-4o | o1-preview | o1 (full) |
-|-----------|--------|------------|-----------|
-| AIME 2024 | 13.4% | 74.4% | 83.3% |
-| Codeforces | 11th percentile | 89th | 93rd |
+| Benchmark | GPT-4o | o1 | o3 | o4-mini |
+|-----------|--------|-----|-----|---------|
+| AIME 2024 | 13.4% | 83.3% | 96.7% | 93.4% |
+| Codeforces | 11th % | 93rd % | 99th % | 93rd % |
+| GPQA Diamond | 53.6% | 78.0% | 87.7% | 81.4% |
 
 Architecture: user prompt → hidden chain of reasoning (hundreds/thousands of tokens) → final answer.
 
 Key features: extended thinking, self-correction, verification, backtracking.
 
-o3 (December 2024) went further. o4-mini demonstrates that even small models with sufficient TTC outperform larger ones.
+**o3** (January 2025, general availability) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small models with sufficient TTC outperform larger standard models, at a fraction of the cost.
+
+API parameters: `reasoning_effort` ("low", "medium", "high") controls thinking depth. Higher effort = more thinking tokens = better quality but higher cost and latency.
+
+## Claude Extended Thinking
+
+Anthropic introduced extended thinking with Claude 3.5 Sonnet (late 2024), maturing with the Claude 4 family (2025). Unlike OpenAI's hidden reasoning, Claude's thinking is transparent.
+
+**How it works:** The model generates explicit chain-of-thought in `<thinking>` blocks before producing the final answer. These thinking tokens are visible to the developer (though not always shown to end users by default).
+
+**API control:** The `budget_tokens` parameter sets the maximum number of thinking tokens the model can use. Higher budgets allow more thorough reasoning. Thinking tokens are billed at a reduced rate.
+
+**Key differences from o1/o3:**
+- **Transparent thinking** — developers can see the full reasoning chain, aiding debugging and trust
+- **Explicit budget control** — `budget_tokens` gives fine-grained control (vs. o-series `reasoning_effort` which is coarse: low/medium/high)
+- **Same model architecture** — extended thinking is a capability of the same Claude models, not a separate model family
+
+**Results:** Claude Sonnet 4 with extended thinking achieves competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
+
+## Gemini Thinking
+
+Google introduced thinking capabilities with Gemini 2.0 Flash Thinking (late 2024), expanding to Gemini 2.5 Pro and Flash (2025).
+
+**Approach:** Gemini models generate explicit reasoning in "thought" blocks, similar to Claude's extended thinking. The thinking process is visible in the API response.
+
+**API control:** The `thinking` configuration in the generation config enables thinking mode. Budget control is available through `thinkingBudget` parameter.
+
+**Gemini 2.5 Pro with thinking** achieves strong results on reasoning benchmarks, leveraging Google's long-context capabilities (1M+ tokens) for reasoning over large inputs.
 
 ## Scaling Laws for Test-Time Compute
 
@@ -58,17 +86,23 @@ The optimum depends on task complexity, number of requests, and the current mode
 
 **Tree Search** — build a tree of reasoning paths, explore intelligently via beam search, MCTS, or best-first. Advantages over Best-of-N: uses compute more efficiently, can recover from mistakes. Disadvantages: harder to implement, requires a quality value function.
 
-**Budget Forcing** — the model adapts reasoning depth based on compute budget. OpenAI o1 API: reasoning_effort ("low", "medium", "high"). With "low" — minimal tokens (fast, cheap); with "high" — thousands of reasoning tokens (slow, high quality).
+**Budget Forcing** — the model adapts reasoning depth based on compute budget. OpenAI o-series API: `reasoning_effort` ("low", "medium", "high"). Claude API: `budget_tokens` (explicit token limit for thinking). Gemini API: `thinkingBudget` (similar explicit control). With low budget — minimal tokens (fast, cheap); with high budget — thousands of reasoning tokens (slow, high quality).
 
-## DeepSeek-R1: Open-Source Reasoning
+## DeepSeek-R1: Open-Source Reasoning via GRPO
 
 DeepSeek-R1 (January 2025) demonstrated that reasoning can be achieved through pure RL without supervised fine-tuning on reasoning traces.
 
-Results: AIME 15.6% → 71.0%, competitive with o1 at lower cost.
+Results: AIME 15.6% → 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
 
-**R1-Zero** — the model independently "discovered" chain-of-thought reasoning without demonstrations. A fundamental result: reasoning emergence through proper incentives.
+**GRPO (Group Relative Policy Optimization)** is the training method that made R1 possible. For each prompt, GRPO samples K outputs from the current policy, scores them with a verifier, then computes group-relative advantages (reward_i - group_mean) / group_std. This replaces PPO's separate value model with simple group statistics. The clipped policy gradient update with KL penalty to the reference policy completes the algorithm.
 
-**Distillation** — reasoning capabilities can be distilled into smaller models. Even a 7B model shows impressive reasoning.
+**R1-Zero** — applying GRPO with only rule-based rewards (correctness for math, format compliance) to the DeepSeek-V3-Base model. Without any SFT on reasoning traces, the model independently "discovered" chain-of-thought reasoning, self-verification, and even "aha moments." A fundamental result: reasoning emergence through proper RL incentives, not supervised demonstrations.
+
+**R1 (full)** — R1-Zero followed by SFT on curated reasoning traces and a second round of GRPO. This produces cleaner, more readable reasoning while maintaining the emergent capabilities.
+
+**Distillation** — reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants, demonstrating that even small models can reason impressively when distilled from a strong reasoning teacher.
+
+**Impact on the field:** GRPO has been widely adopted for training reasoning models. Qwen 3 (hybrid reasoning, 2025) uses a similar approach. The key insight — that reasoning emerges from proper reward signals without needing reasoning demonstrations — has reshaped how labs approach training reasoning models.
 
 ## Compute-Optimal Inference Strategies
 
@@ -111,19 +145,21 @@ TTC follows predictable laws: Quality(C) = a × log(C) + b. Doubling inference c
 
 TTC is a new scaling dimension alongside parameters, data, and training compute.
 
-o1/o3 demonstrate 5-10× improvement on reasoning through TTC.
+o3/o4-mini, Claude extended thinking, and Gemini thinking all demonstrate 5-10× improvement on reasoning through TTC.
 
-DeepSeek-R1: reasoning is emergent through pure RL.
+All major providers now offer reasoning models: OpenAI (o3, o4-mini), Anthropic (Claude with extended thinking), Google (Gemini with thinking), DeepSeek (R1).
+
+DeepSeek-R1 and GRPO: reasoning emerges through pure RL with group-relative rewards — no supervised reasoning demonstrations needed.
+
+Transparent vs. hidden thinking: Claude and Gemini show the reasoning chain; OpenAI hides it. Transparency aids debugging and trust.
 
 4× efficiency gain through optimal TTC strategies.
 
-Smaller models + TTC compete with larger models on complex tasks.
+Smaller models + TTC compete with larger models on complex tasks (o4-mini vs. GPT-4o, R1-distill-7B vs. larger standard models).
 
-Cost modeling becomes more complex — variable inference cost.
+Cost modeling becomes more complex — thinking tokens add variable inference cost.
 
-Architectural implications: routing, caching, async are critical.
-
-Verifiers are critical for TTC quality.
+Architectural implications: routing, caching, async are critical. Budget control (reasoning_effort, budget_tokens) enables cost-quality trade-offs per request.
 
 ---
 
