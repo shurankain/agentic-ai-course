@@ -72,17 +72,48 @@ Overcome the limitations of text metrics through vector representations.
 
 ## Benchmarks
 
-Standardized task sets for comparing models.
+Standardized task sets for comparing models. The benchmark landscape has evolved significantly — many classic benchmarks have saturated, and new, harder benchmarks have emerged.
 
-**GLUE and SuperGLUE** — classic language understanding benchmarks: sentiment analysis, NLI, QA. Modern models have reached saturation.
+### Classic Benchmarks (Saturating)
 
-**MMLU** — 57 subject areas from elementary mathematics to professional law. Tests knowledge and reasoning.
+**GLUE and SuperGLUE** — classic language understanding benchmarks: sentiment analysis, NLI, QA. Modern models have reached saturation — scores are at or above human performance.
 
-**HellaSwag** — commonsense reasoning. Selecting the most likely continuation of a situation.
+**MMLU** — 57 subject areas from elementary mathematics to professional law. Tests knowledge and reasoning. Frontier models now score 88-90%, approaching saturation.
 
-**HumanEval** — 164 programming challenges with unit tests. The pass@k metric indicates whether at least one of k generated candidates passes all tests.
+**HellaSwag** — commonsense reasoning. Selecting the most likely continuation of a situation. Modern models exceed 95%.
+
+**HumanEval** — 164 programming challenges with unit tests. The pass@k metric indicates whether at least one of k generated candidates passes all tests. Now largely saturated: o3 scores 96.7%, Claude Sonnet 4 93.7%, GPT-4o 90.2%.
 
 **MT-Bench** — multi-turn dialogues with evaluation via GPT-4 as a judge.
+
+### Modern Benchmarks (2024-2025)
+
+As classic benchmarks saturate, the community has shifted to harder, more discriminating evaluations:
+
+**MMLU-Pro** — a harder successor to MMLU. 12,032 questions across 14 disciplines with 10 answer choices (instead of MMLU's 4), requiring deeper reasoning. Questions are filtered for difficulty — easy questions are removed. Scores are significantly lower than MMLU: frontier models score 70-80%, making it more discriminating. Chain-of-thought reasoning provides larger benefits on MMLU-Pro than on MMLU.
+
+**GPQA Diamond** — Graduate-level Professional Quality Assurance. 198 extremely difficult questions written by domain experts (PhDs) in physics, chemistry, and biology. Questions are validated to be answerable by experts but not by skilled non-experts. Frontier model scores: o3 87.7%, o4-mini 81.4%, Claude Sonnet 4 ~80%, GPT-4o 53.6%. A critical benchmark for measuring genuine expert-level reasoning.
+
+**SWE-bench Verified** — evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. Scores: Claude Sonnet 4 72.7%, Claude Opus 4 72.0%, o3 69.1%, GPT-4o ~33%. The most practically relevant coding benchmark — measures end-to-end software engineering, not just code generation.
+
+**AIME (American Invitational Mathematics Examination)** — competition-level math problems requiring multi-step reasoning, creative problem-solving, and mathematical insight. Much harder than GSM8K or MATH. Scores on AIME 2024: o3 96.7%, o4-mini 93.4%, o1 83.3%, GPT-4o 13.4%. Demonstrates the dramatic impact of test-time compute on mathematical reasoning.
+
+**ARC-AGI (Abstraction and Reasoning Corpus)** — visual pattern recognition and abstract reasoning tasks. Each task provides a few input-output grid examples, and the model must infer the transformation rule and apply it to a new input. Designed to test genuine generalization ability, not pattern matching on training data. Scores: o3 87.5% (with high compute), GPT-4o ~10%. A key benchmark for measuring progress toward general reasoning.
+
+**Chatbot Arena (LMSYS)** — human preference evaluation at scale. Users submit prompts and compare responses from two anonymous models side-by-side, voting for the better response. Produces Elo ratings from hundreds of thousands of pairwise comparisons. As of 2025, the top of the leaderboard includes Gemini 2.5 Pro, o3, Claude Sonnet 4, and GPT-4o. The most ecologically valid benchmark — measures what users actually prefer in practice. Categories include coding, math, hard prompts, creative writing, and instruction following.
+
+### Benchmark Selection for Production
+
+| What You're Evaluating | Recommended Benchmarks |
+|------------------------|----------------------|
+| General knowledge & reasoning | MMLU-Pro, GPQA Diamond |
+| Mathematical reasoning | AIME, MATH |
+| Coding agents | SWE-bench Verified, HumanEval |
+| Abstract reasoning | ARC-AGI |
+| User preference / overall quality | Chatbot Arena |
+| Your specific use case | Custom eval set (always the most important) |
+
+**Key principle:** Public benchmarks are useful for model selection and comparison, but a custom evaluation set on your actual use case is always the most important metric. Models can be optimized for public benchmarks (Goodhart's Law), and benchmark performance may not correlate with your specific workload.
 
 ## Choosing Metrics
 

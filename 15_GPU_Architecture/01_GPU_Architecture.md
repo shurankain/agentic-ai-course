@@ -24,9 +24,27 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **NVIDIA A100** — the industry workhorse. 80 GB HBM2e, 2 TB/s bandwidth. Third-generation Tensor Cores support TF32 and BFloat16, accelerating training without sacrificing accuracy.
 
-**NVIDIA H100** (Hopper) raised the bar further. Fourth-generation Tensor Cores added FP8 — a format that doubles performance. Transformer Engine dynamically selects the optimal precision for each layer. Fourth-generation NVLink provides 900 GB/s between GPUs.
+**NVIDIA H100** (Hopper, 2023) raised the bar further. Fourth-generation Tensor Cores added FP8 — a format that doubles performance. Transformer Engine dynamically selects the optimal precision for each layer. Fourth-generation NVLink provides 900 GB/s between GPUs.
 
-**Blackwell** (2024) — fifth-generation Tensor Cores, HBM3e memory, improved FP4 support. The main innovation is connecting two GPUs into a single module with shared memory, doubling the available memory without overhead.
+**NVIDIA Grace Hopper (GH200)** — a CPU-GPU superchip combining the Grace ARM CPU with the H100 GPU via NVLink-C2C (900 GB/s CPU-GPU bandwidth). 624 GB unified memory (96 GB HBM3 + 528 GB LPDDR5X) with coherent memory access — the GPU can directly access CPU memory and vice versa without explicit copies. Designed for workloads that exceed GPU memory: very large models, large KV caches, data preprocessing pipelines. The unified memory model simplifies programming for memory-intensive AI workloads.
+
+**NVIDIA Blackwell B200/GB200 (2024-2025)** — a generational leap:
+- **Fifth-generation Tensor Cores** with FP4 support — doubles throughput over FP8, enabling 4-bit inference at near-FP8 quality with proper calibration
+- **HBM3e memory** — 192 GB per GPU (vs H100's 80 GB), 8 TB/s bandwidth (vs 3.35 TB/s)
+- **Second-generation Transformer Engine** — dynamic per-layer precision selection now includes FP4, FP8, BF16
+- **Dual-GPU NVLink module** — two B200 GPUs connected as a single logical GPU with 384 GB shared memory and 1.8 TB/s bisection bandwidth. This is the key innovation: models that previously required multi-GPU tensor parallelism now fit in a single module
+- **Fifth-generation NVLink** — 1.8 TB/s per GPU, NVLink Switch enabling up to 576 GPUs in a single NVLink domain
+- **GB200 NVL72** — a rack-scale system with 72 Blackwell GPUs interconnected as a single compute fabric for training trillion-parameter models
+- DeepSeek V3 was trained using FP8 on Hopper GPUs; Blackwell's FP4 enables even more aggressive quantization during training
+
+**AMD MI300X (2024)** — AMD's competitive entry into AI accelerators:
+- 192 GB HBM3 memory (more than H100's 80 GB, competitive with B200's 192 GB)
+- 5.3 TB/s memory bandwidth
+- CDNA 3 architecture with dedicated matrix cores
+- ROCm software stack (open-source alternative to CUDA)
+- Adopted by several cloud providers and AI labs for inference workloads where the large memory capacity enables serving larger models without multi-GPU setups
+- Key advantage: memory capacity per dollar is competitive with NVIDIA, making it attractive for inference-heavy deployments
+- Key limitation: the ROCm ecosystem is less mature than CUDA — fewer optimized libraries, less community support, and some framework features (Flash Attention, custom kernels) may lag behind
 
 ### Anatomy of a Streaming Multiprocessor
 
@@ -117,7 +135,9 @@ Constraints: matrix dimensions must be multiples of 8 or 16, data must be in spe
 
 **FP16 and BFloat16** — 16-bit formats. FP16 has more mantissa bits (10 vs 7), BFloat16 has a larger range. BFloat16 is better for training due to its range matching FP32.
 
-**FP8** — the newest format in H100 and Blackwell. Doubles performance compared to FP16. Transformer Engine automates calibration.
+**FP8** — introduced in H100, proven at scale by DeepSeek V3's full FP8 training pipeline. Doubles performance compared to FP16. Transformer Engine automates calibration.
+
+**FP4** — new in Blackwell. Doubles performance over FP8 for inference. Requires careful calibration but enables 4-bit inference at near-FP8 quality. DeepSeek V3 demonstrated that aggressive low-precision training is practical; FP4 extends this further.
 
 **INT8** — for inference with quantization. Maximum performance with acceptable quality loss.
 
@@ -155,7 +175,9 @@ Gradient accumulation allows emulating a large batch size: gradients are accumul
 
 **Tensor Cores require proper data formats.** FP16, BF16, TF32, FP8 provide 8-16x speedup compared to FP32, but require proper alignment.
 
-**Model architecture affects hardware efficiency.** Transformers map well onto GPUs. Architectural decisions directly impact hardware utilization.
+**Model architecture affects hardware efficiency.** Transformers map well onto GPUs. Architectural decisions directly impact hardware utilization. MoE models benefit from large memory (B200's 192 GB, MI300X's 192 GB) for hosting all experts.
+
+**The GPU landscape is no longer NVIDIA-only.** AMD MI300X offers competitive memory capacity and bandwidth. Grace Hopper's unified memory simplifies large-model workloads. Blackwell's dual-GPU modules change the multi-GPU boundary. Choose hardware based on workload: training favors NVIDIA (CUDA ecosystem maturity), inference can benefit from AMD's memory advantage.
 
 **Profiling reveals real bottlenecks.** Only profiling shows the true picture. torch.profiler and Nsight are essential tools.
 

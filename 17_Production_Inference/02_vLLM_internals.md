@@ -59,7 +59,9 @@ Static batching is limited by the maximum length in the batch. Continuous batchi
 
 The scheduler balances memory management (whether there are enough blocks, whether to apply preemption), fairness (preventing starvation), and batching efficiency (grouping similar requests).
 
-Chunked prefill splits long prompts into parts to reduce processing time variance. Disaggregated serving separates prefill and decode onto different GPUs.
+Chunked prefill splits long prompts into parts to reduce processing time variance.
+
+**Disaggregated prefill/decode:** A major architectural advancement in vLLM. Prefill (processing the prompt) and decode (generating tokens) have fundamentally different compute characteristics: prefill is compute-bound (parallel processing of many tokens), while decode is memory-bandwidth-bound (sequential token generation). Disaggregated serving separates them onto different GPU pools, each optimized for its workload. Prefill GPUs maximize throughput with large batch sizes; decode GPUs maximize memory efficiency with continuous batching. Communication between pools transfers KV-cache state. This improves overall throughput by 30-60% compared to co-located prefill/decode.
 
 ## Tensor Parallelism
 
@@ -100,6 +102,43 @@ python -m vllm.entrypoints.openai.api_server with model and port parameters.
 
 The gpu-memory-utilization parameter controls the reservation for KV-cache. max-model-len determines allocation planning — a smaller value allows more requests.
 
+## vLLM V1 Engine Architecture (2025)
+
+vLLM has undergone a major internal rewrite with the V1 engine, designed to support the expanding requirements of modern LLM serving.
+
+### Multi-Modal Serving
+
+vLLM V1 natively supports multi-modal models — serving models that accept images, audio, and video alongside text:
+- **Image inputs** are preprocessed, tokenized (via the model's vision encoder), and managed alongside text tokens in the KV-cache
+- **Variable-length visual tokens** — different images produce different numbers of visual tokens, requiring dynamic memory management (PagedAttention handles this naturally)
+- Supported models include LLaVA, Llama 4 (native multimodal), Qwen-VL, InternVL, and others
+- The OpenAI-compatible API accepts image URLs or base64-encoded images in the messages format
+
+### LoRA Serving
+
+Production systems often need to serve multiple fine-tuned variants of the same base model. vLLM supports **multi-LoRA serving** — loading and serving multiple LoRA adapters simultaneously on a single base model:
+- The base model weights are loaded once and shared across all requests
+- LoRA adapter weights (typically 0.1-1% of base model size) are loaded per-adapter
+- Request-level routing: each request specifies which LoRA adapter to use
+- **S-LoRA optimization:** adapters are dynamically loaded and unloaded from GPU memory based on demand, with a unified memory pool for both base model KV-cache and adapter weights
+- This enables serving hundreds of fine-tuned models on a single GPU cluster without deploying separate instances for each
+
+### Structured Output (Guided Decoding)
+
+vLLM V1 supports guided decoding to constrain model output to valid formats:
+- **JSON schema enforcement** — output conforms to a specified JSON schema
+- **Regex constraints** — output matches a specified regular expression
+- **Grammar-based** — output follows a formal grammar (e.g., for SQL, code)
+- Implementation uses token-level masking: at each step, only tokens consistent with the constraint are allowed
+
+### Performance Improvements
+
+The V1 engine brings significant architectural improvements:
+- **Torch.compile integration** — automatic kernel fusion and optimization for supported models
+- **Improved scheduling** — better handling of mixed prefill/decode batches
+- **Reduced overhead** — lower Python-level overhead for high-throughput serving
+- **Speculative decoding integration** — native support for draft-model-based speculative decoding to reduce latency
+
 ## Alternatives
 
 **SGLang (LMSYS):**
@@ -128,6 +167,8 @@ Prefix caching eliminates redundant computations. Up to 50x prefill speedup for 
 Tensor parallelism makes large models accessible through transparent distribution across GPUs.
 
 Production-ready out of the box with an OpenAI-compatible API.
+
+vLLM V1 extends capabilities: multi-modal serving (images, audio, video), multi-LoRA serving (hundreds of fine-tuned variants on shared base), disaggregated prefill/decode (30-60% throughput gain), structured output enforcement, and speculative decoding integration.
 
 ---
 

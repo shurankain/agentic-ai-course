@@ -212,6 +212,73 @@ Three deployment methods:
 
 ---
 
+## Colang 2.0: The Next Generation (2024-2025)
+
+NeMo Guardrails has evolved with **Colang 2.0**, a major redesign of the DSL that brings Python-like syntax, event-driven programming, and improved expressiveness.
+
+### Key Changes from Colang 1.0 to 2.0
+
+**Python-like syntax:** Colang 2.0 replaces the indentation-based `define` syntax with a more explicit, Python-inspired style. Flows use `flow` keyword, actions use `await`, and pattern matching replaces simple intent definitions.
+
+**Event-driven model:** Instead of linear flow definitions, Colang 2.0 is built around events and event matching. The `match` keyword listens for user utterances, system events, or custom events, enabling reactive programming patterns.
+
+**Decorators for flow properties:** `@active` marks flows that are always listening, `@loop` marks flows that restart after completion. This replaces implicit behavior with explicit annotations.
+
+**Example — Colang 2.0 syntax:**
+```colang
+# Colang 2.0 - event-driven, Python-like
+flow handle harmful input
+  match UtteranceUserAction.Finished(final_transcript=".*hack.*")
+  bot say "I can't help with that."
+  abort
+
+@active
+flow prevent jailbreak
+  $transcript = ...
+  if is_jailbreak($transcript)
+    bot say "This request violates safety policies."
+    abort
+
+flow main
+  match RestartEvent()
+  activate handle harmful input
+  activate prevent jailbreak
+```
+
+**Migration:** NeMo Guardrails supports both Colang 1.0 and 2.0. The 1.0 syntax continues to work, but 2.0 is recommended for new projects. Key migration steps: `define user` → `match` patterns, `define bot` → `bot say`, `define flow` → `flow`, and `execute` → `await`.
+
+## Dedicated Safety Models: Llama Guard and ShieldGemma
+
+Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-4 for safety evaluation), dedicated safety classification models have emerged — purpose-trained for content moderation at lower cost and latency.
+
+### Llama Guard Family (Meta)
+
+**Llama Guard (December 2023):** A 7B model fine-tuned specifically for safety classification. Given a user prompt (or a user-assistant exchange), it classifies the content against a configurable taxonomy of unsafe categories: violence, sexual content, criminal planning, self-harm, etc. Outputs a binary safe/unsafe label plus the violated category.
+
+**Llama Guard 2 (April 2024):** Improved taxonomy alignment with industry standards (MLCommons AI Safety taxonomy). Better multilingual support. Reduced false positive rates.
+
+**Llama Guard 3 (July 2024):** Based on Llama 3.1, with significantly improved quality. Available in 1B and 8B variants. The 1B variant enables on-device safety classification. Supports customizable safety taxonomies — organizations can define their own categories and severity levels. Integrates with Llama's prompt format for seamless use in Llama-based applications.
+
+**Integration with NeMo Guardrails:** Llama Guard models can be used as the LLM for input/output rails, replacing general-purpose models. This is faster (specialized model), cheaper (smaller model), and often more accurate for safety classification.
+
+### ShieldGemma (Google)
+
+**ShieldGemma (July 2024):** A family of safety classifiers built on Google's Gemma architecture (2B, 9B, 27B variants). Evaluates content against four harm categories: sexually explicit, dangerous content, harassment, hate speech.
+
+**Key advantages:** Trained on Google's large-scale safety datasets, available in multiple sizes for different latency/quality trade-offs, integrates natively with Gemini-based applications. The 2B variant is fast enough for real-time input/output filtering in production.
+
+### Choosing a Safety Model
+
+| Model | Size | Latency | Custom Taxonomy | Best For |
+|-------|------|---------|-----------------|----------|
+| Llama Guard 3 1B | 1B | <50ms | Yes | On-device, edge |
+| Llama Guard 3 8B | 8B | ~100ms | Yes | Production API, Llama apps |
+| ShieldGemma 2B | 2B | <50ms | Limited | Real-time filtering, Gemma/Gemini apps |
+| ShieldGemma 27B | 27B | ~200ms | Limited | High-accuracy classification |
+| General LLM (GPT-4) | Large | 200-500ms | Fully flexible | Complex policies, nuanced judgment |
+
+**Recommendation:** Use dedicated safety models (Llama Guard, ShieldGemma) for fast, cheap input/output rails. Reserve general-purpose LLMs for complex semantic checks that require nuanced judgment or custom reasoning.
+
 ## Comparison with Alternatives
 
 ### NeMo Guardrails vs Guardrails AI
@@ -340,7 +407,9 @@ Rails should be tested like any security-critical code:
 
 **Four rail types cover the full request lifecycle:** Input Rails block harmful requests before the LLM, Output Rails filter responses, Dialog Rails manage conversation flow, Retrieval Rails control knowledge access.
 
-**Colang as a safety DSL:** The declarative language separates security policies from code and prompts, simplifying auditing, versioning, and testing. You define user intents, bot responses, and flows independently of implementation.
+**Colang as a safety DSL:** Colang 2.0 (2024) brings Python-like syntax, event-driven programming, and improved expressiveness. The declarative language separates security policies from code and prompts, simplifying auditing, versioning, and testing.
+
+**Dedicated safety models complement guardrails:** Llama Guard 3 (1B/8B) and ShieldGemma (2B/9B/27B) provide fast, cheap, purpose-trained safety classification. Use them for input/output rails instead of expensive general-purpose LLMs. Reserve general LLMs for complex semantic checks.
 
 **Layered defense is critical:** Do not rely on a single protection mechanism. Combine fast regex checks (1-5ms) for obvious patterns, LLM-based semantic checks (200-500ms) for sophisticated attacks, and domain-specific rules for business logic.
 

@@ -46,11 +46,49 @@ Emotional synthesis conveys coloring: sad news sounds empathetic, happy news sou
 
 Prosody — rhythm, stress, and intonation — is critically important. Incorrect stress changes the meaning of a word; incorrect intonation turns a statement into a question. Modern systems learn from large corpora, but complex cases require manual annotation.
 
+## The Native Speech-to-Speech Paradigm Shift (2024-2025)
+
+### From Pipeline to Native Processing
+
+The traditional voice agent architecture — ASR → LLM → TTS — is being disrupted by **native speech-to-speech models** that process and generate audio directly, without text as an intermediary.
+
+**OpenAI Realtime API (October 2024):** The first production API for native speech-to-speech interaction. GPT-4o processes audio tokens directly — speech is not transcribed to text before the model processes it. This enables:
+- **Sub-200ms latency** — no ASR/TTS overhead, the model reasons on audio directly
+- **Natural prosody** — the model perceives and generates intonation, emphasis, emotion, and pauses
+- **Voice style control** — choose from preset voices or define tone characteristics
+- **Interruption handling** — native barge-in detection at the model level
+- **WebSocket-based streaming** — persistent bidirectional connection for real-time conversation
+
+The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems.
+
+**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. Supports long audio input (hours of audio via Gemini's 1M+ token context).
+
+**Anthropic Claude voice:** Claude processes audio input through transcription but excels at understanding the *content* of conversations, meeting recordings, and spoken instructions. While not natively speech-to-speech, Claude's strength is in deep reasoning about audio-derived content.
+
+### Impact on Voice Agent Architecture
+
+The native speech-to-speech approach changes the architecture fundamentally:
+
+**Traditional pipeline (still valid for many use cases):**
+Audio → ASR (Whisper) → Text → LLM → Text → TTS → Audio
+- Latency: 500-2000ms total
+- Each stage adds error and latency
+- But: transparent, debuggable, each component can be swapped
+
+**Native speech-to-speech (2024+):**
+Audio → Multimodal LLM → Audio
+- Latency: 100-300ms
+- Preserves prosody, emotion, speaker characteristics
+- But: less transparent, harder to debug, higher API cost
+
+**Hybrid approach (emerging best practice):**
+Use native speech-to-speech for real-time conversation. Fall back to the pipeline for complex tasks requiring tool use or structured output. Use transcription in parallel for logging, analytics, and compliance.
+
 ## Voice Agent Architecture
 
-### Voice Processing Pipeline
+### Voice Processing Pipeline (Traditional)
 
-A voice agent is a pipeline of components, each contributing to latency and quality:
+The traditional voice agent remains a pipeline of components, each contributing to latency and quality:
 
 1. **Audio capture** — a microphone converts sound waves into a signal that is digitized. Microphone quality, acoustics, echo cancellation, and noise suppression affect the input signal.
 
@@ -83,7 +121,7 @@ Minimization strategies:
 
 ### From Text to Multimodal Understanding
 
-Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-4V, Claude 3 Vision, and Gemini open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
+Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-4o, Claude Sonnet 4, and Gemini 2.5 open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
 
 Typical scenarios: screenshot analysis for technical support, document recognition and processing, product identification from photos, chart and diagram analysis, design assistance.
 
@@ -191,6 +229,8 @@ Accounting for speech diversity is especially important. Accents, dialects, spee
 
 Multimodality is the natural direction of AI agent evolution. Human communication is inherently multimodal; restricting it to text impoverishes the interaction.
 
+Native speech-to-speech is a paradigm shift. OpenAI Realtime API and Gemini Live process audio directly — no ASR/TTS pipeline needed. Sub-200ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
+
 Voice interfaces require a fundamental rethinking of design. Brevity, structure, error tolerance, and natural interruptions distinguish voice interaction from text interaction. Latency is a critical factor: hundreds of milliseconds determine the difference between a natural conversation and an irritating wait.
 
 Vision-language models open new scenarios. Showing instead of describing, seeing context that cannot be conveyed in words, and combining visual and textual information expand agent capabilities.
@@ -209,7 +249,7 @@ Speech recognition integration requires audio preprocessing (volume normalizatio
 
 Speech synthesis converts the text response into natural speech. APIs provide multiple voices with different characteristics. Optimization includes caching frequently used phrases (greetings, confirmations) and streaming synthesis for long texts (splitting into sentences, playback as segments become ready).
 
-Computer vision integration uses a multimodal language model (GPT-4V, Claude 3 Vision) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
+Computer vision integration uses a multimodal language model (GPT-4o, Claude Sonnet 4) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
 
 Multimodal memory stores conversation history including images and their context. Direct storage of all images requires significant memory. Summarization strategy: a VLM creates a text description of the image that is stored instead of the full image, and thumbnails are stored for quick access.
 
