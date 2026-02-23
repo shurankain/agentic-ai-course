@@ -350,6 +350,64 @@ A 70B model in 4-bit (~35GB) fits on a single GPU, eliminating tensor parallelis
 
 ---
 
+## Frontier Quantization Methods (2024-2025)
+
+### FP4 on Blackwell
+
+NVIDIA Blackwell (B200/GB200) introduces native FP4 (4-bit floating point) Tensor Cores — a hardware-level shift from integer to floating-point 4-bit computation.
+
+**FP4 format:** E2M1 (2 exponent bits, 1 mantissa bit) with microscaling (block-level scale factors). Only 8 distinct values per element, but floating-point semantics preserve relative magnitudes better than INT4.
+
+**FP4 vs INT4:**
+- INT4: uniform quantization levels, optimal for symmetric distributions
+- FP4: non-uniform levels (denser near zero), better for the naturally bell-curved weight distributions of LLMs
+- FP4 on Blackwell achieves 2x the throughput of FP8 — making it 4x faster than FP16
+
+**Practical implications:** FP4 on Blackwell provides INT4-level compression with FP8-level quality. Early benchmarks show FP4 models matching INT4 GPTQ quality while running at hardware-native speed (no dequantization overhead). This may make GPTQ/AWQ less necessary on Blackwell hardware.
+
+### KV-Cache Quantization
+
+KV-cache grows with sequence length and batch size, often consuming more memory than model weights in production serving. Quantizing the KV-cache is a high-impact optimization.
+
+**KV-cache memory:** For a 70B model serving 32 concurrent requests with 4K context each, the KV-cache consumes ~40 GB in FP16. At 32K context — ~320 GB.
+
+**Approaches:**
+- **KV-cache INT8:** 2x compression with negligible quality loss. Supported in vLLM and TensorRT-LLM. Per-token or per-head quantization.
+- **KV-cache FP8:** Preferred on H100+ hardware. Native compute support means no dequantization penalty. vLLM supports this out of the box.
+- **KV-cache INT4:** 4x compression, slight quality degradation on long contexts. Research active; KIVI (2024) demonstrates effective 2-bit KV-cache via per-channel quantization with residual compensation.
+
+**Impact:** KV-cache quantization from FP16 to INT8 doubles the number of concurrent users a single GPU can serve, or doubles the supported context length — a direct production cost saving.
+
+### BitNet: 1-bit LLMs
+
+**BitNet b1.58** (Microsoft, 2024) trains models with ternary weights: {-1, 0, +1}. Each weight requires only 1.58 bits.
+
+**Key insight:** BitNet does not quantize a trained model — it trains from scratch with ternary weights. The model learns to represent knowledge within the ternary constraint.
+
+**Results:** BitNet b1.58 at 3B parameters matches FP16 LLaMA-3B on many benchmarks. Memory: 8x reduction vs FP16. Compute: matrix multiplication becomes addition/subtraction (no actual multiplications needed). Energy: 71x less energy per token than FP16 at equivalent scale.
+
+**Limitations:** Requires training from scratch (cannot convert existing models), smaller models show more degradation, ecosystem support is limited (no optimized kernels in major frameworks yet). BitNet represents a research direction rather than a production-ready solution as of 2025.
+
+### AQLM: Additive Quantization
+
+**AQLM** (Additive Quantization for Language Models, 2024) applies multi-codebook quantization to LLM weights.
+
+**Approach:** Instead of scalar quantization (one scale per group), AQLM represents each weight vector as a sum of entries from multiple codebooks. This is vector quantization — a richer representation space at the same bit budget.
+
+**Results at 2-bit:** AQLM at 2 bits per weight significantly outperforms GPTQ and AWQ at the same bitwidth. For LLaMA-2-70B at 2-bit, AQLM achieves perplexity within 0.5 of the 4-bit GPTQ result — remarkable for halving the storage.
+
+**Trade-off:** Codebook lookup adds latency compared to simple dequantization. Best suited for memory-constrained deployment where the 2-bit regime is necessary.
+
+### QuIP#: Incoherence Processing
+
+**QuIP#** (Quantization with Incoherence Processing, 2024) achieves state-of-the-art 2-bit quantization through incoherent weight processing.
+
+**Key idea:** Before quantization, apply random orthogonal transformations (Hadamard rotations) to weight matrices. This spreads outlier values across all dimensions, making the weight distribution more uniform and easier to quantize. After quantization, the inverse transformation is applied during inference.
+
+**Results:** QuIP# at 2-bit matches GPTQ at 3-bit and approaches GPTQ at 4-bit for large models (70B+). Combined with lattice codebooks (E8 lattice), it achieves optimal packing of quantization levels.
+
+**Relationship to FA3:** The "incoherent processing" technique in Flash Attention 3's FP8 mode is directly inspired by QuIP#'s approach — both use random rotations to improve quantization quality.
+
 ## Key Takeaways
 
 1. **Quantization exploits neural network redundancy**. Most weights do not require high precision — patterns matter, not exact values.
@@ -360,13 +418,17 @@ A 70B model in 4-bit (~35GB) fits on a single GPU, eliminating tensor parallelis
 
 4. **Calibration is critical**. 128-512 representative samples is usually sufficient, but data must reflect real-world usage.
 
-5. **The trade-off is nonlinear**. Going from 8-bit to 4-bit yields 2x compression with moderate quality loss. Going from 4-bit to 2-bit yields another 2x compression, but quality degradation is disproportionately larger.
+5. **The trade-off is nonlinear**. Going from 8-bit to 4-bit yields 2x compression with moderate quality loss. Going from 4-bit to 2-bit yields another 2x compression, but quality degradation is disproportionately larger — though AQLM and QuIP# are narrowing this gap.
 
-6. **QAT is better than PTQ at low bitwidth**. But for LLMs, QAT is expensive, so advanced PTQ methods are used instead.
+6. **QAT is better than PTQ at low bitwidth**. But for LLMs, QAT is expensive, so advanced PTQ methods are used instead. BitNet b1.58 shows that training-time ternary weights can match FP16 quality.
 
 7. **Format matters for deployment**. GGUF for CPU (llama.cpp), GPTQ/AWQ for GPU (exllama, vLLM). Format choice is determined by the inference runtime.
 
-8. **Quantization enables democratization**. Thanks to 4-bit quantization, 70B models are accessible for running on consumer GPUs.
+8. **KV-cache quantization is a high-impact production optimization**. INT8/FP8 KV-cache doubles concurrent users or context length with minimal quality loss.
+
+9. **FP4 on Blackwell is the next frontier**. Native hardware FP4 provides INT4 compression with better quality and no dequantization overhead. May reduce the need for GPTQ/AWQ on new hardware.
+
+10. **Quantization enables democratization**. Thanks to 4-bit quantization, 70B models are accessible for running on consumer GPUs.
 
 ---
 

@@ -157,13 +157,50 @@ These optimizations are critical for production LLMs.
 
 Flash Attention 3 (2024) leverages the capabilities of the Hopper architecture (H100):
 
-**Asynchronous execution.** H100 supports asynchronous operation execution. FA3 overlaps loading the next block with computing the current one, hiding memory latency.
+**Asynchronous execution via warp specialization.** FA3 divides warps into producers (data loading via TMA — Tensor Memory Accelerator) and consumers (computation on Tensor Cores). Producers asynchronously prefetch the next block while consumers process the current one. This hides memory latency almost completely.
 
-**FP8 support.** Native FP8 support with automatic scaling, using the H100 Transformer Engine.
+**FP8 support with incoherent processing.** Native FP8 (E4M3) support using the H100 Transformer Engine. The "incoherent processing" technique applies random orthogonal transformations to Q/K before FP8 quantization, reducing quantization error. Result: FP8 attention with quality nearly indistinguishable from FP16.
 
-**Hardware-aware implementation.** FA3 is written specifically for Hopper, using architecture-specific instructions and features.
+**Hardware-specific optimizations:**
+- WGMMA (Warp Group Matrix Multiply-Accumulate) instructions for maximum Tensor Core throughput
+- Ping-pong scheduling between warp groups to minimize pipeline stalls
+- Block quantization for FP8 with per-block scaling factors
 
-Result: FA3 achieves ~75-80% peak H100 performance, approaching the theoretical maximum.
+**FA3 Benchmarks (H100 SXM):**
+
+| Sequence Length | FA2 (TFLOPS) | FA3 FP16 (TFLOPS) | FA3 FP8 (TFLOPS) | FA3 vs FA2 |
+|----------------|-------------|-------------------|------------------|------------|
+| 2K | ~300 | ~420 | ~740 | 1.4-2.5x |
+| 8K | ~350 | ~480 | ~800 | 1.4-2.3x |
+| 16K+ | ~370 | ~510 | ~840 | 1.4-2.3x |
+
+FA3 FP16 achieves ~75% peak H100 TFLOPS. FA3 FP8 reaches ~1.2 PFLOPS, approaching the theoretical maximum of the H100 Transformer Engine.
+
+### FlashDecoding: Optimizing the Decode Phase
+
+Standard Flash Attention is optimized for the prefill phase (long Q sequence). During autoregressive decode, Q has only 1 token — the parallelism strategy must change.
+
+**FlashDecoding** (Meta, 2023) parallelizes across the KV sequence length instead of the batch/head dimensions:
+
+1. Split the KV cache into blocks across SMs
+2. Each SM computes partial attention for its KV block (partial softmax + partial output)
+3. A reduction kernel combines partial results using the online softmax correction
+
+**Why this matters:** During decode, the KV cache can be very long (thousands of tokens) while Q is just 1 token. FlashDecoding exploits this asymmetry by distributing KV across SMs, achieving much higher GPU utilization than FA2's batch/head parallelism alone.
+
+**FlashDecoding++ (2024)** further optimizes the reduction step with a unified maximum for partial softmax, eliminating synchronization overhead.
+
+### Blackwell Adaptation (B200/GB200)
+
+NVIDIA Blackwell (B200, GB200) introduces new capabilities relevant to Flash Attention:
+
+**FP4 Tensor Cores:** Blackwell adds native FP4 compute at 2x the throughput of FP8. Flash Attention kernels will need adaptation for FP4 attention — initial work shows FP4 KV cache with FP8 queries provides a good quality-performance trade-off.
+
+**Fifth-generation NVLink (1.8 TB/s):** Enables faster cross-GPU attention for sequence parallelism. Ring Attention and Ulysses-style sequence splitting benefit directly from the bandwidth increase.
+
+**192 GB HBM3e at 8 TB/s:** Higher bandwidth means the IO-awareness calculus shifts — more operations become compute-bound rather than memory-bound. Block sizes for FA may need retuning for optimal performance on Blackwell.
+
+**Expected FA impact on Blackwell:** FA3 principles (warp specialization, async data movement) carry forward, but kernel implementations will be rewritten to exploit Blackwell-specific instructions and the wider memory bus. The community is actively developing Blackwell-optimized FA kernels as of early 2026.
 
 ---
 

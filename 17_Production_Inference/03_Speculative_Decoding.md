@@ -60,11 +60,24 @@ Optimal K is usually 3-8 tokens. Too large a K reduces acceptance (error accumul
 **Smaller models from the same family:**
 LLaMA-70B + LLaMA-7B. Identical tokenizer (mandatory), similar training, architectural similarity. High acceptance 70-90%, speedup 1.5-2.5×. Trade-off: draft requires GPU memory.
 
-**EAGLE:**
-Draft operates at the feature level, not the token level. Target generates hidden states, a lightweight network predicts subsequent states, and tokens are extracted. Acceptance 85-95%, speedup 2-3×. Requires training for each target model. Adds ~5-10% memory overhead.
+**EAGLE and EAGLE-2:**
+Draft operates at the feature level, not the token level. Target generates hidden states, a lightweight network predicts subsequent states, and tokens are extracted.
+
+EAGLE (2024): Acceptance 85-95%, speedup 2-3×. Requires training a small autoregression head for each target model. Adds ~5-10% memory overhead.
+
+EAGLE-2 (2024): Introduces **context-aware dynamic draft trees**. Instead of a fixed tree structure, EAGLE-2 builds the draft tree adaptively based on the confidence of each draft token. High-confidence tokens branch further; low-confidence tokens are pruned early. Results: ~10-20% higher acceptance rate than EAGLE-1, and ~3-4x speedup on coding tasks. EAGLE-2 topped the Spec-Bench leaderboard in 2024.
 
 **Medusa:**
 Multiple prediction heads in the target model. Head 1 — next token, Head 2 — one token ahead, and so on. All heads are simple MLPs, running in parallel. Tree-based verification checks combinations. Minimal memory overhead (~2-5%), but requires fine-tuning. Acceptance 60-75%.
+
+**Draftless Speculative Decoding (2024):**
+Methods that avoid a separate draft model entirely:
+
+**Jacobi decoding:** Initialize all positions with random tokens, then iteratively refine all positions in parallel using the target model. Each iteration is a single forward pass. When tokens converge (stop changing), generation is complete. No draft model needed, no additional memory. Speedup 1.5-2x for predictable outputs.
+
+**Lookahead decoding (2024):** Combines Jacobi decoding with n-gram caching. During generation, observed n-grams are cached. When the model generates a token matching the start of a cached n-gram, the cached continuation is verified in parallel. Effectively "free" speculation from patterns already seen in the output.
+
+**Token recycling (2024):** Reuses rejected tokens from previous speculation rounds as draft candidates for subsequent rounds. Rejected tokens are not discarded but stored in a pool. When generating the next draft, the pool is consulted first — tokens already computed by the target model are "recycled" as high-quality draft candidates. This is effectively free since the target model's logits for these positions were already computed during verification. Speedup improvement: +10-20% on top of base speculative decoding.
 
 ## When to Use
 
@@ -120,7 +133,9 @@ Python API is transparent — when initializing LLM, specify speculative_model a
 
 Mathematical precision — output is identical to the target model, not an approximation.
 
-Draft model selection is critical — acceptance rate determines speedup.
+Draft model selection is critical — acceptance rate determines speedup. EAGLE-2 leads with context-aware dynamic trees and ~3-4x speedup.
+
+Draftless methods (Jacobi, lookahead decoding) eliminate the draft model entirely. Token recycling reuses rejected tokens as free draft candidates.
 
 Optimal for specific workloads — single-user, long-form. Large batch does not benefit.
 

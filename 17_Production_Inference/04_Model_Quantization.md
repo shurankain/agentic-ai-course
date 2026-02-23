@@ -96,13 +96,57 @@ The quantization parameter at load time: "awq", "gptq", "fp8" (H100+). Automatic
 **TensorRT-LLM:**
 Maximum performance through deep CUDA integration. Checkpoint conversion with specified precision (weight-only INT8, INT8 KV cache, FP8, SmoothQuant). Compilation of an optimized engine via trtllm-build.
 
+## FP4: Next-Generation Quantization (2025)
+
+**FP4 on Blackwell (B200/GB200):** NVIDIA Blackwell introduces native FP4 Tensor Cores — 4-bit floating point with hardware acceleration. FP4 (E2M1 with microscaling) provides 2x throughput over FP8 and 4x over FP16.
+
+**FP4 vs INT4:** FP4 uses non-uniform quantization levels (denser near zero), better matching LLM weight distributions. Early benchmarks show FP4 matching INT4 GPTQ quality while running at native hardware speed — no dequantization overhead.
+
+**Impact on deployment:** FP4 on Blackwell may reduce the need for software-based quantization methods (GPTQ, AWQ). The hardware handles 4-bit inference natively, simplifying the deployment pipeline.
+
+## KV-Cache Quantization
+
+KV-cache memory scales with batch_size × sequence_length × num_layers × hidden_dim. For production serving with many concurrent users and long contexts, the KV-cache often exceeds model weight memory.
+
+**INT8 KV-cache:** 2x compression with negligible quality impact. Supported in vLLM (`--kv-cache-dtype int8`) and TensorRT-LLM. Per-token quantization with per-head scales.
+
+**FP8 KV-cache:** Preferred on H100+. Native hardware support means no dequantization penalty during attention computation. vLLM supports this via `--kv-cache-dtype fp8`.
+
+**Production impact:** Quantizing KV-cache from FP16 to INT8 doubles the number of concurrent users a single GPU can serve (or doubles the maximum context length). This is one of the highest-ROI optimizations for production serving.
+
+## GGUF Importance Quantization (IQ)
+
+GGUF IQ (Importance Quantization) methods in llama.cpp go beyond standard k-quants:
+
+**IQ1, IQ2, IQ3, IQ4:** Use non-uniform quantization with learned codebooks optimized for LLM weight distributions. IQ2_XXS achieves usable quality at 2.06 bits per weight — previously considered impossible for practical use.
+
+**How IQ works:** Weights are vector-quantized using codebooks derived from lattice structures (E8 lattice for IQ2). The codebook entries are optimized for the actual weight distribution rather than being uniformly spaced. Importance weighting ensures that more critical layers receive higher precision.
+
+**Practical impact:** IQ methods enable running 70B models on 16 GB RAM (IQ2), making frontier models accessible on consumer hardware. Quality degrades gracefully: IQ4_XS ≈ Q4_K_M quality at slightly smaller size, IQ3_XXS enables running models that otherwise wouldn't fit.
+
+## Marlin Kernels
+
+**Marlin** (2024) is a specialized CUDA kernel for mixed-precision inference: INT4 weights × FP16 activations.
+
+**Why Marlin matters:** Standard dequantization-based INT4 inference leaves performance on the table. Marlin fuses dequantization into the matrix multiplication kernel, achieving near-ideal (4x) speedup over FP16 inference.
+
+**Technical approach:** Marlin uses an asynchronous global-to-shared memory pipeline, perfectly overlapping data loading with computation. It exploits the Tensor Core pipeline structure to perform INT4→FP16 dequantization "for free" within the existing data movement.
+
+**Benchmarks:** On A100, Marlin achieves ~3.7x speedup over FP16 for batch_size=1 (near the theoretical 4x). At larger batches, the speedup narrows as inference becomes compute-bound rather than memory-bound.
+
+**Integration:** Marlin kernels are integrated into vLLM and GPTQ inference pipelines. When serving AWQ or GPTQ models in vLLM, Marlin kernels are used automatically when available.
+
 ## Key Takeaways
 
 INT4 enables consumer deployment — 70B on a single GPU thanks to 4x compression.
 
-FP8 is the future with native H100 support and minimal quality loss.
+FP8 is the standard on H100 with native support and minimal quality loss. FP4 on Blackwell is the next step — native hardware 4-bit at 2x FP8 throughput.
 
-Method matters — GPTQ, AWQ are significantly better than naive quantization.
+KV-cache quantization (INT8/FP8) doubles concurrent users or context length — one of the highest-ROI production optimizations.
+
+Method matters — GPTQ, AWQ are significantly better than naive quantization. Marlin kernels extract near-ideal speedup from INT4 weights.
+
+GGUF IQ methods push the frontier to 2-bit quantization for consumer hardware. IQ2 enables 70B models on 16 GB RAM.
 
 Test on your task — sensitivity varies, benchmark on your use cases.
 

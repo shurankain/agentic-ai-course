@@ -70,6 +70,22 @@ For sequences of 100K+ tokens. Activations of a single layer exceed GPU memory. 
 
 **Combination with Tensor Parallelism:** two-dimensional splitting — sequence by length, heads by count.
 
+### Context Parallelism (2024-2025)
+
+Context Parallelism (CP) is an evolution of Sequence Parallelism specifically designed for long-context LLM training (100K-10M tokens).
+
+**DeepSpeed Ulysses (2024):** Partitions the sequence across GPUs along the sequence dimension. Each GPU holds a portion of Q, K, V. Before attention computation, AllToAll communication redistributes data so each GPU has full Q, K, V for a subset of attention heads. After attention, another AllToAll restores the sequence partition.
+
+**Key advantage over Ring Attention:** Ulysses uses AllToAll (which is bandwidth-optimal) instead of point-to-point ring communication. On modern interconnects (NVLink 4.0+, NVLink 5.0), AllToAll is significantly faster. Result: 2-4x speedup over Ring Attention for equivalent sequence lengths.
+
+**Llama 4 training context parallelism:** Meta used context parallelism (CP=8-16) for training Llama 4 Scout's 10M token context. Combined with tensor parallelism and data parallelism: TP=8 x CP=16 x DP=N. This configuration was critical — without CP, the activation memory for 10M-token sequences would be prohibitive even with Flash Attention.
+
+**When to use CP:**
+- Sequences > 64K tokens during training
+- When activation memory exceeds GPU capacity even with gradient checkpointing
+- NVLink or high-bandwidth interconnect available (CP is communication-intensive)
+- Combine with TP: TP handles model dimensions, CP handles sequence dimensions
+
 ## Communication Primitives
 
 **AllReduce** — each has a tensor, after the operation each has the reduction of all. Gradient synchronization in DDP.
@@ -107,12 +123,19 @@ Without overlap: 1200ms (1000ms compute + 200ms comm). With overlap: 1000ms. Spe
 
 ### Connectivity Hierarchy
 
-- HBM: 3 TB/s (baseline)
-- NVLink: 900 GB/s (3x slower than HBM)
-- InfiniBand: 50 GB/s (18x slower than NVLink)
-- Ethernet: 12 GB/s (75x slower than NVLink)
+| Interconnect | Bandwidth | Generation | Notes |
+|-------------|-----------|------------|-------|
+| HBM3e | 8 TB/s | Blackwell B200 | Baseline for on-chip |
+| HBM3 | 3.35 TB/s | H100/MI300X | Previous gen |
+| NVLink 5.0 | 1.8 TB/s | Blackwell B200 | 2x over NVLink 4.0 |
+| NVLink 4.0 | 900 GB/s | H100/H200 | Per GPU, bidirectional |
+| NVLink-C2C | 900 GB/s | Grace Hopper GH200 | CPU-GPU coherent link |
+| InfiniBand NDR | 50 GB/s | Current datacenter | 400 Gbps per port |
+| RoCE/Ethernet | 12-50 GB/s | Cloud standard | Cheaper, higher latency |
 
-**Strategy:** Tensor parallelism on NVLink intra-node. Pipeline and Data parallelism on InfiniBand/Ethernet inter-node.
+**NVLink 5.0 (Blackwell, 2025):** Doubles bandwidth to 1.8 TB/s per GPU. The GB200 NVL72 rack connects 72 Blackwell GPUs via NVLink 5.0 into a single domain with 130 TB/s aggregate bisection bandwidth. This enables tensor parallelism across the entire rack — not just within a single node — fundamentally changing the TP/PP/DP decomposition strategy.
+
+**Strategy:** Tensor parallelism on NVLink intra-node (or intra-rack on NVL72). Pipeline and Data parallelism on InfiniBand/Ethernet inter-node.
 
 ### Communication-to-Computation Ratio
 
@@ -186,7 +209,11 @@ Distributed training is a necessity for modern AI.
 
 **Topology determines strategy.** Match parallelism to physical topology. Tensor on Ethernet — anti-pattern.
 
-**Start simple, scale complexity.** DDP → FSDP → Tensor → Pipeline → 3D. Each step adds complexity.
+**Context Parallelism for long sequences.** DeepSpeed Ulysses and CP enable training with 100K-10M token contexts. AllToAll-based CP is faster than Ring Attention on modern interconnects.
+
+**NVLink 5.0 changes the topology calculus.** With 1.8 TB/s per GPU and NVL72 rack-level NVLink domains, tensor parallelism extends beyond single nodes.
+
+**Start simple, scale complexity.** DDP → FSDP → Tensor → Pipeline → 3D → +CP. Each step adds complexity.
 
 **Measure, don't guess.** Profile communication overhead, scaling efficiency, GPU utilization.
 
