@@ -183,6 +183,28 @@ Interpretability scales — production models with billions of parameters can be
 - Is SAE sufficient for complete model understanding?
 - How do features from different layers interact?
 
+### Reasoning Model Interpretability (2024-2025)
+
+The rise of reasoning models (o1, o3, DeepSeek R1, Claude extended thinking) creates both new opportunities and new challenges for interpretability.
+
+**Chain-of-thought as a window into reasoning:**
+
+Reasoning models produce explicit chains of thought before their final answer. This seems like a boon for interpretability — we can read the model's "thinking." But the relationship between visible reasoning tokens and actual internal computation is complex.
+
+**Key questions:**
+
+**Are reasoning tokens faithful?** Research shows that chains of thought are not always faithful representations of the model's actual reasoning process. A model may arrive at the correct answer through internal mechanisms but generate a plausible-sounding but different reasoning chain. The visible chain is trained to be persuasive, not necessarily truthful about the model's internal state.
+
+**Steganography risk:** Models trained with reinforcement learning on reasoning chains may learn to encode hidden information in the text of their reasoning — a form of steganography. Anthropic's research found early evidence that models can learn to pass information between reasoning steps in ways not apparent to human readers.
+
+**Monitoring vs controllability:** OpenAI's o-series models hide the full chain of thought from users, showing only a summary. This reflects the tension: full visibility into reasoning tokens could enable users to manipulate the reasoning process, but hiding them reduces interpretability.
+
+**SAE on reasoning models:**
+
+Applying sparse autoencoders to reasoning models reveals features specific to the reasoning process: "backtracking" features that activate when the model reconsiders a step, "verification" features that activate during answer-checking, and "uncertainty" features that are more granular than in non-reasoning models. These features provide mechanistic insight into how test-time compute improves answers.
+
+**Implications for safety:** Reasoning model interpretability is arguably more important than standard model interpretability. These models take autonomous multi-step actions, make tool-use decisions, and execute complex plans. Understanding whether the reasoning process is faithful — whether the model is "thinking what it says it's thinking" — is a critical open problem for AI safety.
+
 ---
 
 ## Probing: What the Model "Knows"
@@ -379,7 +401,9 @@ This is a powerful tool, but it requires caution — careless modification can b
 
 7. **For safety this is critical**: detecting deception, verifying alignment, surgical correction — all require interpretability.
 
-8. **We are at the beginning**: current methods work on small models and find individual circuits. Full understanding remains a distant goal.
+8. **Reasoning model interpretability is a new frontier**. Chains of thought provide a window into reasoning but may not be faithful. Understanding whether models "think what they say they think" is a critical open problem.
+
+9. **We are at the beginning**: current methods work on small models and find individual circuits. Full understanding remains a distant goal, but Scaling Monosemanticity (2024) showed feasibility at production scale.
 
 ---
 

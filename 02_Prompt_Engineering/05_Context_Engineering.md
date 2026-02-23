@@ -168,12 +168,41 @@ Adaptive context assembly for each query, balance between completeness and relev
 
 ---
 
+## MCP as Context Engineering Infrastructure (2024-2025)
+
+The **Model Context Protocol (MCP)**, introduced by Anthropic in late 2024 and widely adopted through 2025, is fundamentally a context engineering protocol. MCP maps directly to the WSCI framework:
+
+**MCP Resources → SELECT:** MCP resources provide a standardized way for agents to discover and retrieve context from external systems. Instead of custom RAG pipelines for each data source, MCP resources expose databases, file systems, APIs, and knowledge bases through a uniform interface. The agent (or the host application) selects which resources to load into context based on the current task.
+
+**MCP Tools → WRITE:** MCP tools enable agents to write information to external systems — creating files, updating databases, sending messages. This is the WRITE strategy formalized as a protocol: the agent persists important results and decisions outside the context window.
+
+**MCP Prompts → COMPRESS/SELECT:** MCP prompt templates provide pre-structured context for specific tasks. Instead of the agent assembling context from scratch, a prompt template defines what information to include and how to structure it — a form of compression and selection baked into the protocol.
+
+**Why MCP matters for context engineering:** Before MCP, every agent framework implemented its own approach to tool definitions, resource access, and context assembly. MCP standardizes this, enabling interoperable context engineering across tools, IDEs, and agent frameworks. The same MCP server providing access to a Postgres database works identically in Claude Code, Cursor, Windsurf, or any custom agent.
+
+### Agentic Search as Context Engineering
+
+A significant development in 2024-2025 is the emergence of **agentic search** — where the agent itself manages the SELECT strategy dynamically.
+
+Traditional RAG: fixed pipeline (query → embed → retrieve → generate). The SELECT strategy is static — the same retrieval pipeline runs for every query.
+
+Agentic search: the agent reasons about what information it needs, formulates targeted queries, evaluates retrieved results, and iterates if the results are insufficient. The agent applies Chain-of-Thought to the SELECT strategy itself:
+
+1. Analyze the question — what information is needed?
+2. Formulate a search strategy — which sources, what queries?
+3. Execute retrieval — run searches in parallel where possible
+4. Evaluate results — is the retrieved context sufficient?
+5. Iterate if needed — refine queries, try different sources
+
+This is the SELECT strategy elevated from a pipeline component to an agent capability. Examples: Perplexity's search agent, OpenAI's deep research, Claude's web search integration — all implement agentic search patterns.
+
 ## Related Topics
 
 - [[04_Prompt_Optimization|Prompt Optimization]] — foundational prompt techniques
 - [[../06_RAG/01_RAG_Basics|RAG Basics]] — the SELECT strategy in detail
 - [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]] — the ISOLATE strategy
 - [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] — the WRITE strategy
+- [[../05_MCP/01_MCP_Basics|MCP Basics]] — standardized context engineering protocol
 
 ---
 

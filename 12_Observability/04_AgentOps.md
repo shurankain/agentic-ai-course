@@ -60,13 +60,39 @@ Contextual fields: user_id, task_type, model, tokens_in, tokens_out, latency_ms,
 
 ## Tools Ecosystem
 
-**AgentOps.ai:** Specialized tool for agents. 2-line integration, session replay, LLM cost tracking, multi-agent support. Natively built for agents, session-centric view, built-in benchmarking. Freemium pricing.
+### Observability Platforms
 
 **LangSmith (LangChain):** Trace visualization, dataset management, prompt hub, LangChain native. Use if you already use LangChain, need prompt versioning, dataset management. Per-trace pricing.
 
 **Langfuse:** Open-source alternative. Self-hostable, open-source, provider agnostic, cost-effective. Use for data residency requirements, budget constraints, customization. Free/Self pricing.
 
 **Phoenix (Arize):** Enterprise observability. Embedding analysis, LLM evaluation, RAG analysis, production scale. Use for enterprise deployment, RAG-heavy systems, embedding monitoring. Freemium pricing.
+
+**Braintrust:** End-to-end evaluation and observability platform. Logging, evals, prompt playground, dataset management. Growing adoption in 2025 for its unified evaluation-observability approach.
+
+### Framework-Native Observability (2024-2025)
+
+**LangGraph Studio:** LangChain's visual debugging environment for LangGraph agents. Provides: real-time visualization of graph execution (nodes, edges, state transitions), step-through debugging of agent reasoning, state inspection at each node, time-travel debugging (replay from any checkpoint). Particularly valuable for complex multi-step agents where understanding the execution flow is critical.
+
+**CrewAI Observability:** CrewAI added built-in observability features: crew execution traces, agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility — seeing how agents delegate, collaborate, and hand off tasks — fills a gap that general-purpose observability tools miss.
+
+**AG2 (formerly AutoGen):** Microsoft's AutoGen was rebranded as AG2 in late 2024. AG2 includes: conversation logging across agent groups, structured message tracing, cost tracking per agent, and integration with observability backends. The rename reflects the project's evolution from a research framework to a production-ready multi-agent platform.
+
+### AgentOps.ai Evolution
+
+AgentOps.ai (the dedicated agent observability tool) has evolved alongside the broader ecosystem. It now provides: session replay with full tool call visualization, multi-agent session tracking, LLM cost analytics with provider breakdown, benchmark tracking over time, and webhook integrations for alerting. Its 2-line integration remains its key differentiator for rapid adoption.
+
+### Choosing an Observability Tool
+
+| Need | Recommended Tool |
+|------|-----------------|
+| LangChain/LangGraph ecosystem | LangSmith + LangGraph Studio |
+| Open-source / self-hosted | Langfuse |
+| Multi-agent (CrewAI) | CrewAI built-in + Langfuse |
+| Multi-agent (AG2/AutoGen) | AG2 built-in logging |
+| Enterprise RAG | Phoenix (Arize) |
+| Quick agent debugging | AgentOps.ai |
+| Unified eval + observability | Braintrust |
 
 ## Automation Pipeline
 

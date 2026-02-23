@@ -257,6 +257,29 @@ In practice, parameters are often used together. The typical order of applicatio
 
 ## Other Important Parameters
 
+### Reasoning Model Parameters (2024-2025)
+
+Reasoning models (o1, o3, o4-mini, Claude with extended thinking, Gemini with thinking mode, DeepSeek R1) introduce new parameter constraints and capabilities that override standard generation parameters.
+
+**Temperature constraints:**
+
+Reasoning models handle temperature differently from standard models. OpenAI's o-series models (o1, o3, o4-mini) **force temperature=1** — the parameter is accepted by the API but ignored. The reasoning process relies on internal sampling strategies that are not controllable by the user. Setting temperature=0 has no effect. Claude's extended thinking mode similarly fixes the temperature at 1.0 for the thinking phase — the `temperature` parameter applies only to the final output, not to the chain-of-thought reasoning tokens. DeepSeek R1 recommends temperature=0.6 for reasoning tasks, noting that lower values can cause repetitive loops in the thinking process.
+
+**Thinking budget parameter:**
+
+A new parameter unique to reasoning models — controlling how much compute the model spends on reasoning before producing a final answer.
+
+| Provider | Parameter | Values | Default |
+|----------|-----------|--------|---------|
+| **OpenAI** | `reasoning_effort` | `low`, `medium`, `high` | `medium` |
+| **Anthropic** | `budget_tokens` (inside `thinking` block) | 1024 – 128000 | Model-dependent |
+| **Google** | `thinkingBudget` | 0 – 24576 | Dynamic |
+| **DeepSeek** | N/A (not exposed) | — | Internal |
+
+`reasoning_effort: "low"` or a small `budget_tokens` value produces faster, cheaper responses with less thorough reasoning — suitable for simple tasks. `reasoning_effort: "high"` or a large `budget_tokens` enables deep multi-step reasoning — necessary for complex math, code, and analysis tasks.
+
+**Practical implications:** For agentic systems, the thinking budget is a new optimization lever. Simple tool-selection decisions need minimal reasoning budget, while complex planning steps benefit from maximum budget. This creates a new dimension of cost-latency-quality trade-off beyond traditional temperature tuning.
+
 ### max_tokens
 
 The maximum number of tokens in a response. A critically important parameter:
@@ -365,7 +388,9 @@ Generation parameters affect not only quality but also economics:
 
 5. **Different stages of agent operation require different settings**. Tool selection — temperature=0, user response — temperature=0.7.
 
-6. **Experimentation is essential**. Optimal parameters depend on the specific model, task, and user expectations.
+6. **Reasoning models override standard parameters**. o-series forces temperature=1, Claude extended thinking fixes temperature for the thinking phase. A new `thinking budget` parameter (reasoning_effort, budget_tokens) controls the depth of reasoning — a new cost-latency-quality lever.
+
+7. **Experimentation is essential**. Optimal parameters depend on the specific model, task, and user expectations.
 
 ---
 

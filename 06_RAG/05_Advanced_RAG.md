@@ -589,6 +589,43 @@ Examples: Chunk size (small = precision, large = context), Retrieval (hybrid win
 
 ---
 
+## GraphRAG Evolution (2024-2025)
+
+Microsoft's GraphRAG (2024) established the category, but its high indexing cost (many LLM calls for entity extraction and community summarization) spurred significant research into more efficient alternatives.
+
+### LazyGraphRAG (Microsoft, 2024)
+
+**Problem:** Standard GraphRAG requires expensive upfront indexing — extracting entities, building graphs, computing community summaries. For large corpora this can cost thousands of dollars in LLM API calls before a single query is answered.
+
+**Solution:** LazyGraphRAG defers expensive computation to query time. Instead of precomputing the full graph and all community summaries at indexing, it builds a lightweight index (BM25 + minimal entity extraction) and performs graph construction and summarization on-demand, only for the subgraph relevant to the current query.
+
+**Key properties:**
+- Indexing cost reduced by **~100x** compared to standard GraphRAG
+- Query cost scales with query complexity, not corpus size
+- Combines best-of-both-worlds: local search (entity-centric) and global search (community summaries) computed lazily
+- No quality degradation on local queries; slight trade-off on global queries
+
+**When to use:** Large or frequently changing corpora where full GraphRAG indexing is prohibitively expensive; scenarios where queries are diverse (only a small fraction of the graph is relevant to any given query).
+
+### LinearRAG (2025)
+
+**Problem:** GraphRAG's community detection and hierarchical summarization add complexity. For many use cases, the graph structure provides diminishing returns over simpler approaches.
+
+**Solution:** LinearRAG simplifies the pipeline by replacing graph-based community detection with linear document chains. Documents are organized by topical similarity into linear sequences, and summarization follows these chains rather than graph communities.
+
+**Key insight:** For many question-answering tasks, the hierarchical community structure of GraphRAG is over-engineered. A simpler linear organization of documents by topic provides 80-90% of the benefit at a fraction of the complexity.
+
+### GraphRAG Recommendations (2025)
+
+| Approach | Indexing Cost | Query Latency | Best For |
+|----------|--------------|---------------|----------|
+| **Standard GraphRAG** | High (many LLM calls) | Low (precomputed) | Static corpora, frequent queries |
+| **LazyGraphRAG** | Very low | Medium (on-demand) | Large/dynamic corpora, diverse queries |
+| **LinearRAG** | Low | Low | Simpler use cases, cost-sensitive |
+| **No graph (Hybrid RAG)** | Minimal | Low | When entity relationships don't matter |
+
+**Practical guidance:** Start without a graph (Hybrid RAG + Contextual Retrieval). Add GraphRAG only when you have multi-hop questions that require connecting entities across documents. If you add it, start with LazyGraphRAG to avoid upfront indexing costs. Graduate to full GraphRAG only for stable corpora with high query volumes where precomputation amortizes well.
+
 ## Latest Techniques (2024)
 
 RAG continues to evolve. Several techniques from 2024 significantly change the approach to building systems.

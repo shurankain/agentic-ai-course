@@ -209,6 +209,18 @@ Models like o1 use inference-time compute to improve reasoning. Internally, this
 
 PRM can be viewed as an explicit, separate model for what o1-style models do implicitly. The advantage of an explicit PRM is interpretability and controllability.
 
+### Reasoning Models and PRM Training (2024-2025)
+
+The release of o3, o4-mini, and DeepSeek R1 in 2024-2025 confirmed the central role of process-level reward signals in training reasoning models.
+
+**DeepSeek R1 and GRPO:** DeepSeek R1 demonstrated that Group Relative Policy Optimization (GRPO) — which compares multiple reasoning trajectories and rewards those leading to correct outcomes — functions as an implicit form of process reward. The R1-Zero experiment showed that reasoning behaviors (self-verification, backtracking, exploration) emerge purely from outcome-based RL, but the group comparison mechanism provides denser signal than simple ORM. This blurs the boundary between ORM and PRM: GRPO uses outcome rewards but applies them at a trajectory level, providing richer credit assignment than single-score ORM.
+
+**o3 and tool-use integration:** OpenAI's o3 model integrates tool use (code execution, web search) directly into the reasoning chain. This creates a new dimension for process reward: not just "is this reasoning step correct?" but "was this tool call well-chosen and well-timed?" Training models to evaluate tool-use decisions within reasoning chains requires PRM-like signals that understand both logical correctness and tool appropriateness.
+
+**Programmatic verification as PRM:** For domains with verifiable outcomes (math, code, logic), programmatic verifiers serve as automated process reward signals. Instead of training a neural PRM, the system executes the code or checks the proof at each step. DeepSeek R1's training pipeline uses execution-based verification for code and math tasks — the reward signal is dense (per-problem) and perfectly accurate (no reward model bias). This is effectively a "perfect PRM" for verifiable domains.
+
+**Implications:** The 2025 landscape shows convergence: explicit PRMs, implicit process signals (GRPO), and programmatic verifiers are all approaches to the same fundamental problem — providing dense feedback for multi-step reasoning. The choice depends on the domain: programmatic verification where possible, GRPO-style trajectory comparison for general reasoning, and explicit PRM for domains requiring nuanced step evaluation.
+
 ---
 
 ## Verification of Reasoning Steps
@@ -400,9 +412,11 @@ This creates a flywheel effect: better PRM → better search → better data →
 
 6. **PRM is a natural extension of RLHF.** The same principles of preference learning are applied at the level of individual reasoning steps.
 
-7. **O1-style reasoning likely uses an implicit PRM.** Understanding PRM helps explain how modern reasoning models work.
+7. **O1-style reasoning uses implicit PRM.** DeepSeek R1's GRPO provides trajectory-level process signals. o3 integrates tool-use evaluation into the reasoning chain.
 
-8. **PRM calibration is critical.** Uncalibrated scores harm search and complicate interpretation of results.
+8. **Programmatic verifiers are "perfect PRMs" for verifiable domains.** Code execution, math checking, and proof verification provide dense, unbiased reward signals — replacing neural PRMs where possible.
+
+9. **PRM calibration is critical.** Uncalibrated scores harm search and complicate interpretation of results.
 
 ---
 

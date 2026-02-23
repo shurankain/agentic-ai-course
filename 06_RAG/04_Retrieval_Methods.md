@@ -230,15 +230,43 @@ Example: "Who was the finance minister when law X was adopted?" First, search fo
 
 The LLM coordinates the chain, formulating intermediate queries based on the information obtained.
 
+## Reranker Evolution (2024-2025)
+
+The reranker landscape has evolved significantly, with new models and approaches becoming available.
+
+### Modern Reranker Models
+
+**Cohere Rerank v3 (2024):** A hosted reranking API supporting 100+ languages. Optimized for RAG pipelines — accepts a query and a list of documents, returns relevance scores. Low latency (~50ms for 25 documents), easy integration. Trade-off: hosted service, data leaves your infrastructure.
+
+**Jina Reranker v2 (2024):** Open-weight reranker with multilingual support. Available for self-hosting. Competitive with Cohere on benchmarks while allowing on-premise deployment for data-sensitive applications.
+
+**BGE Reranker v2.5 (BAAI, 2024):** Open-source cross-encoder reranker in multiple sizes (small to large). Strong performance on MTEB benchmarks. Popular choice for self-hosted reranking.
+
+**LLM-based rerankers — RankGPT pattern (2024):** Using LLMs (GPT-4, Claude) as listwise rerankers. Instead of scoring documents individually, the LLM receives the full list and returns a ranking. More expensive but captures inter-document relationships. Best used as a final refinement stage for the top 5-10 candidates.
+
+### Speculative Retrieval
+
+**Concept:** Inspired by speculative decoding in LLM inference. A small, fast retriever proposes candidates, and a larger, more accurate model validates them. The key insight: validation is cheaper than generation — checking whether a document is relevant is faster than searching for relevant documents from scratch.
+
+**Two-phase speculative retrieval:**
+1. **Speculate:** A lightweight retriever (BM25, small bi-encoder) quickly proposes top-K candidates
+2. **Verify:** A powerful cross-encoder or LLM verifies each candidate's relevance, potentially triggering a refined search if verification rejects too many
+
+**Adaptive retrieval depth:** Instead of always retrieving a fixed top-K, speculative retrieval adjusts depth dynamically. If the first 5 candidates all pass verification — stop early. If none pass — expand the search or reformulate the query. This reduces average latency while maintaining quality.
+
+**Connection to Agentic RAG:** Speculative retrieval is a building block for agentic search patterns. The agent's reasoning loop naturally implements speculate-verify: retrieve → evaluate relevance → decide whether to search more or proceed with generation.
+
 ## Key Takeaways
 
 High-quality retrieval is the key to a successful RAG system. Numerous techniques allow improving basic vector search.
 
 Hybrid search combines the semantic understanding of dense retrieval with the precision of sparse retrieval. Query transformation (expansion, decomposition, HyDE) improves query formulation.
 
-Reranking refines initial results with more powerful models. Cross-encoders and LLM-based ranking significantly improve the quality of top-K results.
+Reranking refines initial results with more powerful models. Cross-encoders and LLM-based ranking significantly improve the quality of top-K results. Modern rerankers (Cohere v3, Jina v2, BGE v2.5) provide production-ready options for both hosted and self-hosted deployment.
 
 Contextual retrieval addresses the problem of context loss during chunking. Parent documents and sentence windows provide both precision and context.
+
+Speculative retrieval adapts search depth dynamically, reducing latency while maintaining quality. It connects naturally to agentic search patterns.
 
 Metadata and filtering allow incorporating business logic and data structure. Iterative retrieval handles complex multi-step questions.
 

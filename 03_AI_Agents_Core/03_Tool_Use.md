@@ -403,6 +403,71 @@ Integration with Spring Boot is especially convenient — tools can be Spring be
 
 ---
 
+## Model Context Protocol (MCP): Standardized Tool Interface
+
+### The Problem MCP Solves
+
+Before MCP, every agent framework defined tools differently. LangChain had its tool format, OpenAI had function calling schemas, Anthropic had its own tool_use format, and custom agents used bespoke interfaces. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, Windsurf, Zed, custom agents, and more.
+
+### MCP Architecture
+
+MCP follows a client-server architecture:
+
+**MCP Host** — the application running the agent (IDE, CLI tool, custom app). It manages one or more MCP clients.
+
+**MCP Client** — maintains a 1:1 connection with an MCP server. Handles protocol negotiation, capability discovery, and message transport.
+
+**MCP Server** — exposes capabilities to the client through three primitives:
+- **Tools** — executable functions the model can call (equivalent to function calling)
+- **Resources** — data the model can read (files, database records, API responses)
+- **Prompts** — reusable prompt templates for specific tasks
+
+**Transport:** MCP supports two transport mechanisms — **stdio** (for local servers, spawned as child processes) and **Streamable HTTP** (for remote servers, over HTTP with optional SSE streaming).
+
+### MCP Tools vs Native Function Calling
+
+| Aspect | Native Function Calling | MCP Tools |
+|--------|------------------------|-----------|
+| **Definition** | Per-provider JSON schema | Standardized MCP schema |
+| **Discovery** | Static, defined at request time | Dynamic, discovered at runtime |
+| **Reusability** | Framework-specific | Cross-framework, cross-host |
+| **Ecosystem** | Provider-locked | Open ecosystem of servers |
+| **Transport** | In-process | Local (stdio) or remote (HTTP) |
+
+### MCP and Tool Security
+
+MCP introduces specific security considerations (see [[../14_Security_Safety/03_Agent_Security|Agent Security]] for details):
+
+- **Tool descriptions from untrusted MCP servers are a prompt injection vector.** A malicious server can craft tool descriptions that manipulate the agent's behavior.
+- **Trust levels matter:** first-party servers (high trust), verified third-party (medium trust), unverified (low trust, strict sandboxing required).
+- **OAuth 2.1 with PKCE** for credential delegation — agents obtain scoped, short-lived tokens instead of receiving raw user credentials.
+
+### Practical Impact
+
+MCP has become the de facto standard for agent tool integration in 2025. Major adopters include: Anthropic (Claude Code, Claude Desktop), Cursor, Windsurf, Zed, Sourcegraph, and numerous custom agent frameworks. The ecosystem has grown to thousands of community-built MCP servers providing access to databases, APIs, SaaS tools, and local system capabilities.
+
+For tool designers, MCP means: build your tool as an MCP server once, and it works everywhere. For agent architects, MCP means: access to a vast ecosystem of pre-built tools without custom integration work.
+
+## Tool-Integrated Reasoning (2024-2025)
+
+Reasoning models (o1, o3, o4-mini, Claude extended thinking, DeepSeek R1) introduce a new paradigm: **tool use as part of the reasoning process**, not just as an execution step.
+
+### Traditional vs Reasoning-Integrated Tool Use
+
+**Traditional agent loop:** Think → Select tool → Execute → Observe → Think → ... The model alternates between reasoning and tool use in discrete steps.
+
+**Reasoning-integrated tool use:** The model plans multiple tool calls as part of a single extended reasoning chain. It reasons about which tools to call, in what order, how to combine results — all within the thinking phase before producing any output.
+
+OpenAI's o3 and o4-mini can interleave tool calls within their chain-of-thought reasoning. The model might: reason about the problem → call a search tool → reason about the results → call a calculator → reason about the combined information → produce a final answer — all as a single integrated reasoning trace.
+
+### Implications for Tool Design
+
+**Fewer, more powerful tools:** Reasoning models are better at composing simple tools into complex workflows. Instead of creating a specialized `analyze_sales_data` tool, provide `query_database` and `calculate` — the reasoning model will compose them correctly.
+
+**Better error recovery:** When a tool call fails mid-reasoning, the model can adjust its plan within the same reasoning chain rather than requiring a separate retry loop.
+
+**Reduced need for explicit orchestration:** Traditional agents need frameworks (LangGraph, CrewAI) to manage complex multi-tool workflows. Reasoning models can often handle the orchestration internally through extended thinking.
+
 ## Key Takeaways
 
 1. **Tools transform an LLM into an agent** capable of acting in the real world. Without them, the model is a closed system; with them, it is an active participant in external processes.
@@ -418,6 +483,10 @@ Integration with Spring Boot is especially convenient — tools can be Spring be
 6. **Security is a priority**. Least privilege, sandboxing for code, input validation, and auditing of all operations.
 
 7. **Error handling must be graceful**. Retries, alternative tools, strategy adaptation — the agent must be able to handle failures.
+
+8. **MCP is the standard for tool integration (2025)**. Build tools as MCP servers for cross-framework compatibility. Be aware of security implications — tool descriptions from untrusted servers are an attack vector.
+
+9. **Reasoning models change tool use patterns**. Tool-integrated reasoning enables planning and execution within a single thinking chain, reducing the need for explicit orchestration frameworks.
 
 ---
 

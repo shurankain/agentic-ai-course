@@ -259,6 +259,37 @@ Memory grows unboundedly — hundreds of thousands of items within a month. Crit
 
 ---
 
+## Production Memory Patterns (2024-2025)
+
+### Claude Code Memory: File-Based Persistent Memory
+
+Claude Code (Anthropic's CLI agent) implements a pragmatic memory system that has become an influential pattern for production agents.
+
+**CLAUDE.md files** serve as persistent memory across sessions:
+- **Project-level** (`CLAUDE.md` in the project root) — shared across all sessions in the project. Contains: project conventions, architectural decisions, common patterns, known issues.
+- **User-level** (`~/.claude/CLAUDE.md`) — personal preferences and workflow patterns.
+- **Auto-memory** (`~/.claude/projects/<project>/memory/MEMORY.md`) — automatically accumulated insights from working on the project.
+
+**Why this works:** The memory is stored as plain text files in the filesystem — human-readable, version-controllable (via git), and trivially debuggable. The agent reads these files at session start, writes updates during work, and accumulates knowledge over time. No vector database, no embedding model, no complex infrastructure.
+
+**Pattern:** Memory-as-files is effective for developer tools where: memory items are relatively few (hundreds, not millions), human readability matters, version control integration is valuable, and the agent operates in a file-system context.
+
+### MCP as a Memory Interface
+
+The Model Context Protocol provides a standardized interface for memory operations, separating the memory abstraction from storage implementation:
+
+**MCP Resources for memory retrieval:** An MCP server can expose agent memories as resources — the host application or the agent itself can read stored memories through the standard resource interface. This enables memory to come from any backend (vector DB, SQL, files, APIs) through a uniform protocol.
+
+**MCP Tools for memory writes:** Memory storage operations (save a fact, record an episode, update a preference) are exposed as MCP tools. The agent calls these tools during conversations to persist important information.
+
+**Benefits of MCP-based memory:**
+- **Backend-agnostic:** Switch from SQLite to Postgres to Pinecone without changing the agent code
+- **Composable:** Combine multiple memory MCP servers (one for user preferences, one for project knowledge, one for episodic memory)
+- **Shareable:** The same memory server can serve multiple agents in a multi-agent system
+- **Standardized:** Any MCP-compatible agent can use the memory server
+
+This pattern represents the evolution from framework-specific memory implementations (LangChain memory, LlamaIndex storage) to protocol-based memory that is interoperable across the agent ecosystem.
+
 ## Key Takeaways
 
 1. **Memory makes an agent useful**. Without memory, every interaction is isolated. With memory, the agent accumulates context, learns, and personalizes.
@@ -272,6 +303,10 @@ Memory grows unboundedly — hundreds of thousands of items within a month. Crit
 5. **Prioritization is necessary**. Not everything is equally important. A combination of relevance, recency, importance, and frequency determines what enters the context.
 
 6. **Forgetting is a feature, not a bug**. Outdated information is harmful. Decay and active deletion mechanisms keep memory clean and current.
+
+7. **File-based memory works for developer tools**. Claude Code's CLAUDE.md pattern demonstrates that plain text files — human-readable, git-versioned — are an effective memory system when the memory scale is modest.
+
+8. **MCP standardizes memory interfaces**. Exposing memory as MCP resources (read) and tools (write) enables backend-agnostic, composable, and shareable memory across agents.
 
 ---
 

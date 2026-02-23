@@ -108,6 +108,32 @@ Domain-specific documents → QA generation → Edge cases → Expert review →
 **Reasoning:**
 Math/logic problems → Teacher step-by-step solutions → Verification (programmatic/expert) → Only verified correct → Add examples with errors and corrections.
 
+## Synthetic Reasoning Data (2024-2025)
+
+The training of reasoning models (o1, o3, DeepSeek R1, Qwen QwQ) created massive demand for a new category of synthetic data: multi-step reasoning traces with verifiable correctness.
+
+### Reasoning Trace Generation
+
+**Teacher-generated reasoning chains:** A strong reasoning model (o1, Claude with extended thinking) generates detailed step-by-step solutions. These traces are then used to train smaller models. DeepSeek used this approach: R1 (the full reasoning model) generates reasoning traces → distilled into R1-distill models (1.5B to 70B parameters). The distilled models achieve remarkable performance — R1-distill-Qwen-32B matches o1-mini on many benchmarks.
+
+**Self-play and rejection sampling:** Generate many candidate solutions, keep only those that arrive at the correct answer. For math and code, correctness is verifiable programmatically. This produces a dataset of verified correct reasoning chains without human annotation. Scale: DeepSeek R1 training used millions of such verified examples.
+
+### RL from Programmatic Verifiers
+
+A paradigm shift in 2024-2025: instead of training reward models on human preferences, use **programmatic verifiers** as the reward signal.
+
+**For code:** Execute the generated code against test cases. The reward is binary: all tests pass (1.0) or not (0.0). No reward model bias, no reward hacking — the signal is ground truth.
+
+**For math:** Check the final answer against the known correct answer. Optionally, verify intermediate steps using symbolic math engines (SymPy, Lean proof assistant).
+
+**For logic and reasoning:** Formalize the problem and check the solution programmatically. Constraint satisfaction problems, combinatorial optimization — the solution is verifiable even if generating it is hard.
+
+**GRPO with programmatic rewards:** DeepSeek R1's training pipeline combines Group Relative Policy Optimization with programmatic verification. For each problem: generate K candidate solutions → verify each programmatically → compute group-relative rewards → update the policy. This replaces the entire RLHF pipeline (human preferences → reward model → PPO) with a simpler and more scalable loop (programmatic verification → GRPO).
+
+**Implications for synthetic data pipelines:**
+
+The new pipeline for reasoning data: problems (from curated datasets or generated) → candidate solutions (from the model) → programmatic verification → verified solutions as training data. This is a self-improving loop: better models generate better solutions, which produce better training data, which train even better models. The key constraint is the availability of verifiable problems — expanding the range of programmatically verifiable domains is an active research area.
+
 ## Key Takeaways
 
 Synthetic data is a powerful tool when human data is scarce.
@@ -125,6 +151,8 @@ Optimal mix: 60-80% human, 20-40% synthetic.
 Verification where possible — for code/math, verify programmatically.
 
 Diversity matters more than quantity — 10K diverse examples are better than 100K similar ones.
+
+Synthetic reasoning data is a new frontier (2024-2025). Programmatic verifiers replace human annotators for code and math. Distillation from reasoning models (R1 → R1-distill) is remarkably effective. GRPO with programmatic rewards simplifies the RLHF pipeline.
 
 ---
 
