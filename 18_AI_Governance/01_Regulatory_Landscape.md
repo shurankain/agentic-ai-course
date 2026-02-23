@@ -26,12 +26,12 @@ The EU AI Act classifies AI systems into four risk levels:
 
 **MINIMAL RISK** — no special requirements: spam filters, video games, warehouse management.
 
-### Enforcement Timeline
+### Enforcement Timeline (Updated February 2026)
 
-- **August 2024** — the law entered into force
-- **February 2025** — ban on unacceptable risk practices
-- **August 2025** — obligations for GPAI models
-- **August 2026** — full enforcement for high-risk systems
+- **August 2024** — the law entered into force ✓
+- **February 2025** — ban on unacceptable risk practices ✓ (NOW ENFORCED — social scoring, real-time public biometrics, emotion recognition in workplaces/schools are actively prohibited with fines)
+- **August 2025** — obligations for GPAI models ✓ (NOW ENFORCED — all GPAI providers must provide technical documentation, training data summaries, copyright compliance)
+- **August 2026** — full enforcement for high-risk systems (UPCOMING — certification requirements for HR, credit scoring, law enforcement, healthcare AI)
 - **August 2027** — high-risk in Annex I (safety products)
 
 ### Prohibited Practices
@@ -62,13 +62,15 @@ For models exceeding 10^25 FLOPS during training, additional requirements apply:
 
 ### Codes of Practice
 
-The EU AI Office is developing Codes of Practice — industry standards for compliance. The first codes are expected in 2025 with participation from OpenAI, Google, Meta, Mistral.
+The EU AI Office developed the first GPAI Code of Practice (finalized 2025) with participation from OpenAI, Google, Meta, Mistral, and Anthropic. The Code covers: transparency requirements for model capabilities and limitations, safety evaluation procedures (including red teaming protocols), systemic risk assessment methodologies, and incident reporting procedures. Compliance with the Code is considered sufficient to demonstrate adherence to GPAI obligations — it serves as a "safe harbor" for providers.
 
 ## NIST AI Risk Management Framework
 
-### Alternative to a Regulatory Approach
+### The Shifting US Approach
 
-The USA chose a voluntary framework instead of regulation. NIST AI RMF 1.0 (January 2023) — voluntary, practical guidance, flexible, risk-based.
+The US regulatory landscape shifted significantly in 2025. **President Biden's Executive Order on AI (October 2023)** — which established safety standards, reporting requirements for frontier models, and directed federal agencies to develop AI guidelines — was **rescinded by President Trump in January 2025**. This removed federal-level AI safety reporting requirements and shifted the US approach further toward voluntary industry self-regulation.
+
+However, NIST AI RMF 1.0 (January 2023) remains in effect as a voluntary, practical, flexible, risk-based framework.
 
 ### NIST AI RMF Structure
 
@@ -96,7 +98,19 @@ SEC AI Guidance (2024): disclosure requirements for AI-driven trading, risk mana
 
 ### Government: FedRAMP
 
-AI in federal systems: FedRAMP authorization, FISMA compliance, agency requirements. Executive Order on AI (October 2023): safety standards, transparency, civil rights protection, worker support.
+AI in federal systems: FedRAMP authorization, FISMA compliance, agency requirements. Note: The Biden Executive Order on AI (October 2023) was rescinded in January 2025. Federal AI policy is now primarily driven by individual agency guidance and procurement requirements rather than a centralized executive mandate.
+
+### US State-Level AI Regulation
+
+With the federal executive order rescinded, **US states have become the primary source of AI regulation**:
+
+**Colorado AI Act (SB 24-205, signed May 2024):** The first comprehensive US state AI law. Requires deployers of "high-risk AI systems" to use reasonable care to avoid algorithmic discrimination. Mandates risk management policies, impact assessments, and consumer notification when AI is used in consequential decisions (employment, finance, housing, insurance, education). Effective February 2026.
+
+**California SB-1047 (vetoed September 2024):** Would have required safety testing for large AI models (>$100M training cost or >10^26 FLOPS). Though vetoed by Governor Newsom, it influenced national debate and set a template for future legislation. Key provisions that may resurface: mandatory safety evaluations, kill switch requirements, whistleblower protections.
+
+**Other state activity (2024-2025):** Texas, Illinois, Connecticut, and several other states have introduced or passed AI-related legislation focusing on: algorithmic discrimination in employment (Illinois AI Video Interview Act), deepfake disclosure requirements, AI in insurance underwriting. The trend is toward sector-specific state regulation in the absence of federal legislation.
+
+**Implication for AI architects:** Multi-state deployment in the US now requires tracking a patchwork of state laws, similar to how GDPR compliance was needed for EU deployment. The strictest applicable state law effectively sets the floor.
 
 ## Global Differences
 
@@ -104,7 +118,7 @@ AI in federal systems: FedRAMP authorization, FISMA compliance, agency requireme
 
 **EU:** Regulation of all AI, strong enforcement, GPAI rules in place.
 
-**USA:** Voluntary standards plus sector-specific regulations, sector-based enforcement, limited GPAI rules.
+**USA:** Voluntary federal framework (NIST) after Biden EO rescission (Jan 2025), growing state-level regulation (Colorado AI Act), sector-specific federal rules.
 
 **China:** Comprehensive regulation focused on safety and ethics, state enforcement, GPAI rules in place.
 
@@ -142,7 +156,13 @@ When deploying across multiple jurisdictions, a unified approach covering the st
 
 ## Key Takeaways
 
-The EU AI Act is the first comprehensive law with mandatory requirements and significant fines. A risk-based approach with different requirements for different risk levels. GPAI obligations from August 2025 affect all foundation model providers. The USA follows a path of voluntary frameworks, but sector-specific regulations exist. Global differences are significant — a multi-jurisdiction strategy is needed. Compliance requires architectural decisions: logging, human oversight, documentation. The timeline is critical: bans effective from February 2025.
+The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025, high-risk requirements coming August 2026. The GPAI Code of Practice provides a compliance safe harbor.
+
+The US landscape shifted: Biden's AI Executive Order was rescinded (January 2025), making NIST AI RMF the primary federal guidance (voluntary). US states are filling the gap — Colorado AI Act (2026 enforcement), with Texas, Illinois, and others following.
+
+GPAI obligations now affect all foundation model providers: technical documentation, training data summaries, copyright compliance, and (for systemic risk models) adversarial testing and incident reporting.
+
+Global differences are significant — a multi-jurisdiction strategy is needed. The EU is the strictest, the US is fragmented across states, China requires registration and content moderation. Compliance requires architectural decisions: logging, human oversight, documentation.
 
 ## Practical Example: Determining Compliance Requirements
 

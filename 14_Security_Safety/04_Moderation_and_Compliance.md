@@ -76,11 +76,39 @@ Domain restrictions: prohibiting content generation in particularly sensitive ar
 
 ## Compliance Frameworks
 
-Regulatory requirements define minimum standards for data and content processing.
+Regulatory requirements define minimum standards for data and content processing. The landscape has evolved significantly in 2024-2025 with the EU AI Act becoming actively enforced and US states stepping in.
 
-**GDPR (EU)** requires: legal basis for data processing, right to erasure (right to be forgotten), data minimization, purpose limitation, consent management. LLM systems must account for this when storing conversations and training models.
+### EU AI Act — Now Actively Enforced
 
-**CCPA (California)** gives consumers the right to: know what data is collected, data deletion, opt-out of data sale. Applicable to users in California.
+The EU AI Act is no longer future regulation — it is active law with enforcement:
+
+**February 2025 — Prohibited practices ban in force:** Social scoring, real-time biometric identification in public spaces, emotion recognition in workplaces and schools, and manipulative AI targeting vulnerable groups are now prohibited. Fines up to 7% of global turnover.
+
+**August 2025 — GPAI obligations in force:** All General Purpose AI model providers must provide: technical documentation (architecture, training process, data sources), training data summaries, copyright compliance policies, and cooperation with regulators. Models exceeding 10^25 FLOPS (systemic risk) face additional requirements: adversarial testing, incident reporting, cybersecurity measures.
+
+**August 2026 — High-risk system requirements upcoming:** Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure. Requires: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
+
+**Implications for AI architects:** Every production AI system deployed in the EU needs a risk classification. High-risk systems need conformity assessment architecture from the start. GPAI providers must maintain technical documentation as a continuous process, not a one-time effort.
+
+### US Regulatory Landscape — Federal and State
+
+**Federal level:** The Biden Executive Order on AI (October 2023) was rescinded in January 2025, removing federal safety reporting requirements. NIST AI RMF remains as voluntary guidance. Sector-specific regulations continue: SEC/FINRA for finance, FDA for healthcare, FedRAMP for government.
+
+**State level — the new regulatory frontier:**
+
+**Colorado AI Act (SB 24-205):** The first comprehensive US state AI law, effective February 2026. Requires reasonable care to avoid algorithmic discrimination for "high-risk AI systems" in consequential decisions (employment, finance, housing, insurance, education). Mandates impact assessments, risk management policies, and consumer notification.
+
+**California:** SB-1047 was vetoed (September 2024) but set a template. Other California AI bills address deepfakes, AI in hiring, and transparency. California's regulatory direction influences other states.
+
+**Other states:** Illinois (AI Video Interview Act), Texas, Connecticut — sector-specific AI legislation is proliferating. The trend: in the absence of federal legislation, states are creating a patchwork of requirements.
+
+**Implication:** Multi-state US deployment now resembles multi-country EU deployment — track the strictest applicable law.
+
+### Data Protection Regulations
+
+**GDPR (EU)** requires: legal basis for data processing, right to erasure (right to be forgotten), data minimization, purpose limitation, consent management. LLM systems must account for this when storing conversations and training models. The EU AI Act adds AI-specific requirements on top of GDPR.
+
+**CCPA/CPRA (California)** gives consumers the right to: know what data is collected, data deletion, opt-out of data sale, and (under CPRA) opt-out of automated decision-making. Applicable to users in California.
 
 **HIPAA (US healthcare)** requires protection of protected health information (PHI). LLM systems working with medical data must comply with strict requirements for encryption, access control, and audit logging.
 
@@ -138,7 +166,7 @@ Input moderation prevents attacks and resource waste. Output moderation protects
 
 Factual claims and misinformation are especially dangerous in sensitive domains (medicine, finance, law). Disclaimers and domain restrictions reduce risk.
 
-GDPR, CCPA, HIPAA, SOC 2, and industry-specific regulations define minimum standards. Compliance requires a systematic approach.
+The EU AI Act is now actively enforced: prohibited practices banned (Feb 2025), GPAI obligations in force (Aug 2025), high-risk requirements upcoming (Aug 2026). The US landscape is fragmented: federal EO rescinded, but state laws (Colorado AI Act, California) create a compliance patchwork. GDPR, CCPA/CPRA, HIPAA, SOC 2, and industry-specific regulations continue to define data protection standards.
 
 Data retention policies differ for conversation data, audit logs, and training data. Right to be forgotten requires comprehensive deletion.
 
