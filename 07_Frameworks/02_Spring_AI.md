@@ -12,6 +12,8 @@
 
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
 
+**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. Key 1.0 milestones: stable API surface (no more breaking changes between releases), official Spring Boot starter support, comprehensive documentation and migration guides.
+
 Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud streamlined cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
 
 The key value of Spring AI lies in its deep integration with the Spring ecosystem. It is not a standalone library but an organic part of the Spring platform. Auto-configuration, dependency injection, configuration profiles, actuator metrics — all of these work with AI components just as naturally as with any other Spring beans.
@@ -99,6 +101,18 @@ Spring AI provides VectorStore — a vector storage abstraction. Implementations
 A unified interface allows switching stores without changing code. For development, InMemory can be used; for production — a distributed store.
 
 DocumentReader and DocumentTransformer form the document processing pipeline before indexing.
+
+### MCP Support (2025)
+
+Spring AI 1.0 includes MCP (Model Context Protocol) client and server support:
+
+**MCP Client:** Spring AI applications can connect to MCP servers to discover and use external tools and resources. MCP tools are automatically registered as Spring AI function callbacks, making them available to ChatClient without additional wiring.
+
+**MCP Server:** Spring Boot applications can expose their own capabilities as MCP servers. Spring beans annotated with `@Tool` are automatically published as MCP tools. Resources and prompts are similarly exposed through standard Spring patterns.
+
+**Transport:** Supports both stdio (for local integrations like Claude Desktop) and Streamable HTTP (for remote server deployments). Auto-configuration creates the appropriate transport based on application properties.
+
+This means a Spring AI application can simultaneously act as an MCP client (consuming tools from external servers) and an MCP server (exposing its own tools to AI clients like Claude Desktop or Cursor).
 
 ## Configuration and Auto-Configuration
 
@@ -192,11 +206,19 @@ The REST API is implemented using a standard Spring MVC controller. A basic chat
 
 The configuration creates a ChatClient via a builder specifying a VectorStore for RAG. This pattern demonstrates how dependency injection, provider auto-configuration, standard testing through Spring Test, and observability through Micrometer work as a unified ecosystem.
 
+## API Evolution
+
+**Pre-1.0 to 1.0 changes:** The API stabilized significantly for the 1.0 GA release. Key renames: `EmbeddingClient` → `EmbeddingModel` (aligning with the `*Model` naming convention), `AiClient` → `ChatClient` (early alpha rename). The `ChatClient` fluent API became the primary entry point, replacing direct `ChatModel.call()` for most use cases.
+
+**ChatClient vs ChatModel:** `ChatModel` is the low-level interface (provider implementations). `ChatClient` is the high-level fluent API with advisor chains, structured output, and function calling integration. Production code should use `ChatClient`; `ChatModel` is for framework extensions and custom providers.
+
 ## Key Takeaways
+
+Spring AI 1.0 GA (May 2025) marks production readiness — stable APIs, Spring Boot starters, comprehensive documentation.
 
 Spring AI brings modern AI capabilities to the Spring ecosystem in a natural and idiomatic way. Provider portability, deep Spring integration, and production readiness make it a strong choice for enterprise applications.
 
-Key advantages: unified model abstractions, typed prompts and structured output, the advisor pattern for extensibility, full-featured RAG, and deep observability.
+Key advantages: unified model abstractions, typed prompts and structured output, the advisor pattern for extensibility, full-featured RAG, MCP client/server support, and deep observability.
 
 For teams already working with Spring, Spring AI is a natural extension of the platform. Familiar patterns and tools are applied to a new domain with a minimal entry barrier.
 

@@ -38,6 +38,30 @@ Specialized reviewers:
 
 The Synthesizer combines findings, eliminates duplicates, prioritizes issues, and produces the report.
 
+## Framework Selection
+
+This project can be implemented with several modern agent frameworks:
+
+**LangGraph** — graph-driven orchestration with explicit state machines. Best for this use case: the code review workflow is well-defined (parse → route → review → synthesize), making explicit control valuable. LangGraph's checkpointing enables resumable reviews for large PRs.
+
+**CrewAI** — role-based multi-agent coordination with built-in delegation. Natural fit for the specialized reviewer pattern: each agent has a role, goal, and backstory. CrewAI's sequential and hierarchical process types map directly to the orchestrator-reviewer architecture.
+
+**AWS Strands Agents** — model-driven approach with Agents-as-Tools pattern. The orchestrator delegates to specialized reviewer agents exposed as tools. Minimal boilerplate but less explicit control over the review workflow.
+
+**Recommendation:** LangGraph for production (explicit flow control, checkpointing, observability via LangSmith) or CrewAI for rapid prototyping (less code, intuitive role-based design).
+
+## MCP Tool Integration
+
+Specialized review agents benefit from external tools accessed via MCP:
+
+**Code analysis tools:** MCP servers wrapping linters (ESLint, Pylint), static analyzers (SonarQube, Semgrep), and type checkers (mypy, tsc). The Security Reviewer agent connects to a Semgrep MCP server for SAST (Static Application Security Testing) findings.
+
+**Repository context:** An MCP server providing Git history, blame information, related PRs, and issue tracker context. Agents use this to understand the change context and avoid flagging intentional patterns.
+
+**Documentation:** An MCP server exposing project-specific coding standards, architecture decision records (ADRs), and style guides. The Style and Architecture reviewers reference these for project-specific recommendations.
+
+**Configuration:** Each agent declares which MCP servers it requires. The orchestrator initializes the appropriate MCP connections when spawning reviewer agents.
+
 ## Core Infrastructure
 
 ### Agent Base Class
@@ -101,13 +125,15 @@ A dashboard visualizes trends and identifies areas for improvement.
 
 A multi-agent approach outperforms a single agent through specialization and depth of analysis.
 
+Modern frameworks (LangGraph, CrewAI, Strands) provide ready-made multi-agent orchestration patterns — use them instead of building from scratch.
+
+MCP integration gives review agents access to external tools (linters, analyzers, repo context) for deeper analysis than LLM reasoning alone.
+
 Separation of roles ensures comprehensive coverage without cognitive overload.
 
 The Orchestrator coordinates parallel execution and conflict resolution for consistent results.
 
 GitHub integration makes AI review part of the natural workflow.
-
-Structured communication enables requesting clarification and reaching consensus.
 
 A feedback loop and analytics ensure improvement over time, adapting to the codebase and preferences.
 

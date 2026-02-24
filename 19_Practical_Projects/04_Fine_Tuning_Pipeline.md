@@ -78,7 +78,11 @@ Training 80% (gradient updates), Validation 10% (hyperparameter tuning, early st
 
 ### Base Model
 
-Mistral 7B Instruct — balance of size/quality, strong instruction following. Alternatives: Llama 3 8B (newer, better reasoning), Qwen 2.5 7B (excellent multilingual).
+**Recommended (2025):** Llama 3.1 8B Instruct — strong reasoning, 128K context, excellent instruction following. Qwen 2.5 7B Instruct — best multilingual support, competitive on benchmarks. Mistral v0.3 7B Instruct — efficient, good European language support.
+
+**Larger models:** Llama 3.1 70B for maximum quality (requires multi-GPU or quantization for fine-tuning). Qwen 2.5 72B for multilingual enterprise use.
+
+**Smaller models:** Llama 3.2 3B or Qwen 2.5 3B for edge/mobile deployment. Gemma 2 2B for constrained environments. Smaller models fine-tune faster and are easier to deploy but sacrifice capability.
 
 ### LoRA Configuration
 
@@ -91,6 +95,26 @@ Batch size 4 per device, gradient accumulation 4 (effective batch 16). Learning 
 ### Monitoring
 
 Track: Loss (steady decrease), Validation loss (increase = overfitting), Learning rate (schedule visualization), Gradient norm (spikes = instability). Early stopping if validation loss does not improve for N steps.
+
+### Alignment: DPO and ORPO (2024-2025)
+
+Beyond supervised fine-tuning, preference alignment improves response quality:
+
+**DPO (Direct Preference Optimization):** Trains directly on preference pairs (chosen vs rejected responses) without a separate reward model. Simpler than RLHF, stable training, strong results. Pipeline: generate response pairs → collect preferences (human or LLM-as-Judge) → train with DPO loss. Typical setup: SFT first, then DPO on 5K-20K preference pairs.
+
+**ORPO (Odds Ratio Preference Optimization):** Combines SFT and preference alignment into a single training stage. No need for a separate SFT step — ORPO simultaneously teaches the model to generate good responses and avoid bad ones. Simpler pipeline, fewer hyperparameters, competitive results.
+
+**Recommendation:** Start with SFT (LoRA) for the initial model. If quality needs improvement — add DPO on preference data. ORPO when you want a simpler pipeline with fewer training stages.
+
+### Unsloth for Efficient Training
+
+**Unsloth** (2024-2025) provides 2-5x faster LoRA fine-tuning with 60-80% less memory:
+
+Custom CUDA kernels for attention, MLP, and LoRA operations. Automatic mixed-precision optimization. Memory-efficient gradient checkpointing. Supports Llama, Mistral, Qwen, Gemma model families.
+
+**Practical impact:** Fine-tune Llama 3.1 8B on a single RTX 4090 (24GB) instead of requiring an A100. Training that took 4 hours now takes 1-2 hours. Drop-in replacement for HuggingFace Trainer — change the import, keep the same code.
+
+**4-bit QLoRA via Unsloth:** Quantize the base model to 4-bit, train LoRA adapters in FP16. 70B model fine-tuning on a single 48GB GPU. Quality within 1-2% of full-precision LoRA.
 
 ## Evaluation Framework
 
@@ -132,9 +156,13 @@ Latency (P50, P95, P99), Throughput (requests/second), Error rate (failed genera
 
 An end-to-end pipeline requires attention to every stage. Data quality matters more than quantity.
 
+Modern base models (Llama 3.1, Qwen 2.5) provide stronger starting points — fine-tuning yields better results with less data than older models.
+
 Multi-level filtering (basic → quality → diversity) produces better datasets than naive collection.
 
-LoRA efficiently adapts large models on consumer hardware. Rank 16 is a good default.
+LoRA efficiently adapts large models on consumer hardware. Rank 16 is a good default. Unsloth provides 2-5x speedup and 60-80% memory reduction for LoRA training.
+
+Alignment after SFT: DPO for preference-based improvement, ORPO for a simpler single-stage pipeline. Both significantly improve response quality beyond SFT alone.
 
 Evaluation is multi-faceted: automatic metrics (fast iteration), LLM-as-Judge (semantic quality), A/B testing (production validation), human evaluation (ground truth).
 

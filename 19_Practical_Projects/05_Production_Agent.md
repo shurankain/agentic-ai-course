@@ -14,6 +14,20 @@ A production-ready agent is a complex engineering challenge: infrastructure, sca
 
 Knowing the answers is not enough — the agent must operate reliably, handle odd requests correctly, avoid disclosing confidential information, and remain controllable and improvable.
 
+## Framework Choice
+
+Building a production agent from scratch is possible but unnecessary — modern frameworks handle orchestration, state management, and tool execution:
+
+**LangGraph** — recommended for production agents with well-defined workflows. Graph-based state machines provide explicit control, checkpointing for long-running conversations, and LangSmith for observability. Best for: support agents with escalation flows, compliance-critical workflows.
+
+**CrewAI** — role-based multi-agent coordination. Best for: systems where multiple specialized agents collaborate (research + writing + QA). Quick to prototype but less fine-grained control than LangGraph.
+
+**AWS Strands** — model-driven approach with minimal code. Best for: flexible agents where the LLM should decide the workflow. Native MCP support and Bedrock AgentCore for managed deployment.
+
+**Spring AI** — for Java/Spring ecosystems. Advisor pattern provides AOP-like interception for logging, safety, RAG. Best for: enterprise teams already on Spring, when the agent is part of a larger Spring application.
+
+**Framework-agnostic patterns:** Regardless of framework, production agents need the same infrastructure: stateless compute, external state storage, health checks, observability. The sections below apply to any framework choice.
+
 ## Architecture and Infrastructure
 
 ### Principles
@@ -142,6 +156,46 @@ GDPR, HIPAA, SOC 2 require data access logging. An audit log is an immutable jou
 
 Data retention policy — how long data is stored, when it is deleted. Right to erasure (GDPR Article 17) — the ability to delete all user data.
 
+## MCP Integration
+
+### Agent Tools via MCP
+
+Instead of hardcoding tool implementations, expose them as MCP servers:
+
+**Internal tools as MCP servers:** Knowledge base search, ticket creation, user lookup — each becomes an MCP server. The agent connects as an MCP client, discovering available tools at startup. Benefits: tools are reusable across different agents and AI clients, versioned independently, testable in isolation.
+
+**External MCP servers:** Connect to third-party MCP servers for capabilities like file system access, database queries, web search, or Slack integration. The growing MCP ecosystem provides pre-built servers for common integrations.
+
+**Security:** Use OAuth 2.1 for remote MCP servers. Map user permissions to MCP scopes — a support agent gets `tickets:read,write` but not `admin:*`. Audit all MCP tool invocations.
+
+### MCP vs Native Function Calling
+
+For production agents, prefer MCP when: tools are shared across multiple agents or AI clients, tools need independent versioning and deployment, you want to leverage the existing MCP ecosystem. Use native function calling when: tools are tightly coupled to the agent logic, minimal latency is required (MCP adds transport overhead), the tool is a simple computation.
+
+## Cost Management
+
+### Token Economics
+
+LLM costs dominate production agent budgets. Track and optimize:
+
+**Cost per conversation:** Total tokens (input + output) × price per token. Typical support conversation: 2K-10K tokens. At GPT-4o pricing (~$5/M input, ~$15/M output): $0.01-0.10 per conversation.
+
+**Cost drivers:** System prompts (repeated every turn — large system prompts multiply cost), conversation history (grows linearly with turns — summarize or truncate), RAG context (retrieved chunks add input tokens — retrieve only what's needed), tool call overhead (each tool use adds a round trip).
+
+### Optimization Strategies
+
+**Prompt caching:** Anthropic and OpenAI offer prompt caching for repeated prefixes (system prompts, few-shot examples). Reduces cost by 50-90% for the cached portion.
+
+**Model routing:** Use a smaller/cheaper model for simple queries (classification, FAQ lookup), route complex queries to a capable model. A router model or keyword heuristics decides. Typical savings: 40-60%.
+
+**Context management:** Summarize conversation history after N turns instead of sending full history. Limit RAG context to top-K most relevant chunks. Remove tool call details from history after processing.
+
+**Batching:** For non-interactive workloads (ticket analysis, bulk classification), use batch APIs (50% cheaper on Anthropic/OpenAI).
+
+### Budget Controls
+
+Set per-user, per-organization, and global token budgets. Alert on anomalies (sudden spike = prompt injection or loop). Track cost per feature to identify optimization targets.
+
 ## Continuous Improvement
 
 ### A/B Testing
@@ -172,11 +226,17 @@ Blue-green deployment — two identical environments. Blue is active, green is s
 
 A production-ready agent is a complex system:
 
+Use established frameworks (LangGraph, CrewAI, Strands, Spring AI) instead of building orchestration from scratch. They handle state management, tool execution, and provide observability integrations.
+
+MCP standardizes tool integration — expose tools as MCP servers for reuse across agents and AI clients. OAuth 2.1 secures remote MCP connections.
+
 Architecture: stateless components, separation of concerns, horizontal scaling. Kubernetes provides resilience and auto-scaling.
 
 API Design: versioning, rate limiting, idempotency. Asynchronous processing for long-running tasks. Streaming for responsive UX.
 
 Reliability: graceful degradation, circuit breakers, retries with backoff. Health checks for auto-recovery.
+
+Cost management is essential — track token economics, implement model routing (cheap model for simple queries), use prompt caching, set budget controls.
 
 Observability: metrics, logs, traces. AI-specific metrics (quality, token economics, tool usage). Alerting based on SLOs.
 

@@ -38,7 +38,9 @@ JSON-RPC 2.0: jsonrpc (version "2.0"), id (unique request identifier), method (m
 
 **stdio (Standard Input/Output)** — the server runs as a subprocess, reads JSON from stdin, writes to stdout. Secure (no network access), simple, ideal for local servers. Claude Desktop uses stdio.
 
-**HTTP with SSE** — an HTTP service. POST requests with JSON-RPC, SSE for server-initiated notifications. Suitable for remote servers and multiple clients.
+**Streamable HTTP (2025)** — the current recommended HTTP transport, replacing the earlier HTTP+SSE approach. A single HTTP endpoint handles both request-response and streaming. The client sends POST requests with JSON-RPC payloads. The server responds with either a regular JSON response (for simple operations) or an SSE stream (for long-running operations and notifications). This simplifies deployment — one endpoint instead of separate POST and SSE endpoints. Backwards-compatible: servers can support both old SSE and new Streamable HTTP during migration.
+
+**HTTP with SSE (deprecated)** — the original HTTP transport. Separate endpoints for POST requests and SSE streams. Still supported for backwards compatibility but new implementations should use Streamable HTTP.
 
 ### Lifecycle
 
@@ -114,7 +116,19 @@ Caching hints in metadata: maxAge (how many seconds the data remains valid), eta
 
 ### Security
 
-Input validation — parameter and URI checks for tools, JSON Schema validation. Content sanitization — preventing injection and sensitive data leaks. Rate limiting — restricting call frequency. Authentication — for sensitive operations, credentials via metadata. Audit logging — recording mutating operations with timestamp and user context.
+Input validation — parameter and URI checks for tools, JSON Schema validation. Content sanitization — preventing injection and sensitive data leaks. Rate limiting — restricting call frequency. Audit logging — recording mutating operations with timestamp and user context.
+
+### OAuth 2.1 Authorization (2025)
+
+The MCP specification added OAuth 2.1 as the standard authorization mechanism for remote MCP servers:
+
+**Server as Resource Server:** The MCP server validates OAuth 2.1 access tokens on incoming requests. Tokens carry scopes that map to specific tools and resources — a token with scope `kb:read` can access resources but not mutating tools.
+
+**Authorization flow:** The MCP client discovers the server's authorization requirements during the initialize handshake. If authorization is required, the client redirects the user through the standard OAuth 2.1 authorization code flow (with PKCE). The client stores the refresh token for transparent token renewal.
+
+**Scopes and permissions:** Define granular scopes for your knowledge base server: `kb:read` (read resources), `kb:search` (use search tools), `kb:write` (create/update articles), `kb:admin` (statistics, management). Map OAuth scopes to MCP capabilities.
+
+**Why OAuth 2.1 over API keys:** OAuth 2.1 provides token expiration, scope-based access control, token revocation, and audit trails. API keys are static, unscoped, and difficult to rotate. For production MCP servers exposed over the network, OAuth 2.1 is the recommended approach.
 
 ## Key Takeaways
 
@@ -124,7 +138,9 @@ Three capabilities cover most scenarios — Resources for read-only, Tools for a
 
 Metadata quality determines operational quality — good descriptions, detailed schemas, clear names are critical.
 
-Transport flexibility — stdio for local integrations, HTTP for centralized servers.
+Transport evolution — stdio for local integrations, Streamable HTTP (2025) for remote servers. Streamable HTTP replaces the older HTTP+SSE transport with a simpler single-endpoint design.
+
+OAuth 2.1 authorization enables secure multi-tenant MCP servers with scoped access control, token expiration, and revocation.
 
 Production-readiness requires more than a basic implementation — logging, progress reporting, caching, security measures.
 

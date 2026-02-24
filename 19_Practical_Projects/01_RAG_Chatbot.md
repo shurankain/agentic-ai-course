@@ -116,11 +116,41 @@ Tracing: end-to-end request traces, span for each stage, integration with Jaeger
 
 Token bucket algorithm with: per-user limits, global limits, burst allowance for legitimate spikes. Protection against abuse, cost control, resource protection.
 
+## Evaluation (RAGAS and Beyond)
+
+RAG systems require specialized evaluation that measures both retrieval and generation quality.
+
+### RAGAS Framework
+
+RAGAS (Retrieval Augmented Generation Assessment) provides metrics specifically designed for RAG:
+
+**Faithfulness** — does the answer use only information from the retrieved context? Measures hallucination risk. Target: >0.9.
+
+**Answer Relevancy** — does the answer address the actual question? Penalizes off-topic responses. Target: >0.85.
+
+**Context Precision** — are the retrieved documents relevant to the question? Measures retrieval quality. Target: >0.8.
+
+**Context Recall** — does the retrieved context contain all the information needed to answer? Measures retrieval completeness. Target: >0.8.
+
+### Evaluation Pipeline
+
+Automated evaluation: create a test set of 50-100 question-answer-context triples. Run RAGAS metrics on every deployment candidate. Set quality gates — block deployment if faithfulness drops below threshold.
+
+LLM-as-Judge: for nuanced quality assessment, use a strong model (GPT-4, Claude) to evaluate response quality on dimensions like helpfulness, accuracy, and completeness.
+
+Human evaluation: sample 50-100 responses weekly. Domain experts rate correctness and usefulness. Track trends over time.
+
+### Continuous Monitoring
+
+In production, track proxy metrics: user satisfaction (thumbs up/down), follow-up question rate (high = poor answer), escalation rate, retrieval score distribution. Alert on quality degradation before users notice.
+
 ## Key Takeaways
 
 Production RAG requires attention to every layer. Document processing is underestimated — chunking strategy, metadata extraction, and embedding quality affect results more than LLM selection.
 
 Hybrid retrieval (dense + sparse + reranking) significantly outperforms naive semantic search. Query expansion and HyDE further improve quality.
+
+Evaluation is essential — RAGAS provides RAG-specific metrics (faithfulness, relevancy, precision, recall). Automate evaluation as a quality gate in the deployment pipeline.
 
 Conversation context is critical for multi-turn dialogs. Query rewriting handles anaphora resolution.
 
@@ -147,7 +177,7 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.embedding.EmbeddingClient;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
@@ -171,11 +201,11 @@ public class RagChatbotService {
     private ChatClient chatClient;
 
     @Autowired
-    private EmbeddingClient embeddingClient;
+    private EmbeddingModel embeddingModel;
 
     private VectorStore vectorStore;
 
-    public RagChatbotService(EmbeddingClient embeddingClient) {
+    public RagChatbotService(EmbeddingModel embeddingModel) {
         // Initialize in-memory vector store
         this.vectorStore = new SimpleVectorStore(embeddingClient);
     }
@@ -350,7 +380,7 @@ import io.qdrant.client.QdrantGrpcClient;
 import io.qdrant.client.grpc.Collections.*;
 import io.qdrant.client.grpc.Points.*;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.embedding.EmbeddingClient;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -365,15 +395,15 @@ import java.util.concurrent.ExecutionException;
 public class QdrantVectorStore {
 
     private final QdrantClient client;
-    private final EmbeddingClient embeddingClient;
+    private final EmbeddingModel embeddingModel;
     private static final String COLLECTION_NAME = "documents";
 
-    public QdrantVectorStore(EmbeddingClient embeddingClient) {
+    public QdrantVectorStore(EmbeddingModel embeddingModel) {
         // Connect to Qdrant (Docker: localhost:6334)
         this.client = new QdrantClient(
             QdrantGrpcClient.newBuilder("localhost", 6334, false).build()
         );
-        this.embeddingClient = embeddingClient;
+        this.embeddingModel = embeddingClient;
 
         initializeCollection();
     }
@@ -411,7 +441,7 @@ public class QdrantVectorStore {
         documents.forEach(doc -> {
             try {
                 // Generate embedding for the document
-                List<Double> embedding = embeddingClient.embed(doc.getContent());
+                List<Double> embedding = embeddingModel.embed(doc.getContent());
 
                 // Prepare point with metadata for filtering
                 PointStruct point = PointStruct.newBuilder()
@@ -448,7 +478,7 @@ public class QdrantVectorStore {
             throws ExecutionException, InterruptedException {
 
         // Generate embedding for the query
-        List<Double> queryEmbedding = embeddingClient.embed(query);
+        List<Double> queryEmbedding = embeddingModel.embed(query);
 
         // Build metadata filter (if specified)
         Filter.Builder filterBuilder = Filter.newBuilder();

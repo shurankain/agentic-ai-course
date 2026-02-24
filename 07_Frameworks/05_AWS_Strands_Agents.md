@@ -12,6 +12,8 @@
 
 AWS Strands Agents SDK is an open-source framework from AWS for building AI agents. Strands implements a model-driven approach, contrasting with the graph-driven architecture of LangGraph.
 
+**Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption — 5K+ GitHub stars within the first 3 months, active community contributions, and growing ecosystem of MCP-compatible tools.
+
 Key characteristics: the model-driven approach means the LLM makes decisions about which actions to take. Open-source under the Apache 2.0 license. Code size for a basic agent is only 5-10 lines. Native MCP support. For enterprise use, integration with Bedrock AgentCore is available.
 
 ## Model-Driven vs Graph-Driven
@@ -142,7 +144,17 @@ Strict flow requirements. Compliance and audit. Complex state machines. Full con
 
 **Deployment via Bedrock AgentCore**: for production, the BedrockAgent class is used. During creation, a unique agent_id, model, guardrails settings (content filtering, personal data detection), and tracing parameters for monitoring are specified. The agent is invoked through the invoke() method with a session_id for tracking user sessions. All interactions are automatically logged, and traces are available for analysis and debugging.
 
+## Ecosystem and Adoption (2025)
+
+**Community growth:** Active ecosystem of contributed tools and MCP server integrations. AWS published reference architectures for common patterns (customer support, data analysis, code generation).
+
+**Production patterns:** Organizations report success with Strands for internal tooling agents where flexibility matters more than strict workflow control. The combination of Strands + MCP + Bedrock AgentCore provides a full stack from prototype to production within the AWS ecosystem.
+
+**Limitations in practice:** Model-driven agents can be unpredictable for compliance-critical workflows. Teams often start with Strands for prototyping and add graph-based guardrails (or switch to LangGraph) for production workflows requiring auditability.
+
 ## Key Takeaways
+
+Strands reached 1.0 GA in July 2025, establishing itself as a lightweight alternative to graph-driven frameworks.
 
 Model-Driven approach means the LLM makes workflow decisions with minimal code. Three components — Agent, Tools, and Agentic Loop — form the architectural foundation.
 
