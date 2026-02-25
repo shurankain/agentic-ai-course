@@ -220,25 +220,99 @@ Key insight: parametric knowledge (in weights) plus non-parametric (in retrieval
 
 ---
 
+## Recent Papers (2024-2025)
+
+### 15. DeepSeek R1: Incentivizing Reasoning in LLMs via RL (2025)
+
+Problem: training reasoning models typically requires expensive human-annotated chains of thought.
+
+Key idea: pure reinforcement learning with rule-based rewards (no SFT or human annotations) can elicit reasoning behavior. GRPO (Group Relative Policy Optimization) trains directly on verifiable outcomes.
+
+Results: R1-Zero develops chain-of-thought reasoning spontaneously through RL alone. R1 (with a small amount of SFT) matches o1 on math and coding benchmarks. Open-weight release (1.5B to 671B MoE).
+
+Discussion points: emergent reasoning from RL (no explicit CoT supervision), GRPO vs PPO (simpler, no critic model), distillation to smaller models (R1-Distill series), implications for the role of SFT in training pipelines.
+
+### 16. Scaling Monosemanticity (Anthropic, 2024)
+
+Problem: features in neural networks are superposed — one neuron encodes multiple concepts.
+
+Key idea: train large sparse autoencoders on Claude 3 Sonnet to extract millions of interpretable features.
+
+Results: discovered features for abstract concepts (deception, sycophancy, code security), features that causally influence model behavior (clamping a feature changes outputs), scaling to production-size models is feasible.
+
+Discussion points: practical safety applications (monitoring deception features), cost of training SAEs at scale, limitations (not all features are interpretable), connection to alignment (can we steer models via features?).
+
+### 17. The Llama 3 Herd of Models (Meta, 2024)
+
+Problem: open-weight models lagged significantly behind proprietary frontier models.
+
+Key idea: scale open-weight training with massive data (15T tokens) and careful post-training (SFT + DPO + safety fine-tuning).
+
+Results: Llama 3.1 405B competitive with GPT-4 on many benchmarks, 128K context, strong multilingual support. Llama 3.2 added vision and lightweight models (1B, 3B).
+
+Discussion points: data quality vs quantity (15T tokens with aggressive filtering), long-context training methodology, open-weight competitive with closed (implications for the field), safety fine-tuning at scale.
+
+### 18. Llama 4: Native Multimodality and MoE (Meta, 2025)
+
+Problem: extending open-weight models to native multimodality and extreme context lengths.
+
+Key idea: mixture-of-experts architecture with native vision, 10M token context via iRoPE (interleaved RoPE without position encodings in some layers).
+
+Results: Llama 4 Scout (17B active / 109B total, 16 experts), Llama 4 Maverick (17B active / 400B total, 128 experts). Scout achieves 10M context — the longest of any open model. Maverick competitive with GPT-4o and Gemini 2.0 Flash.
+
+Discussion points: MoE trade-offs for open models (memory vs compute), iRoPE for extreme context lengths, distillation from Llama 4 Behemoth (288B active / 2T total), early-fusion multimodality.
+
+### 19. KTO: Model Alignment as Prospect Theoretic Optimization (2024)
+
+Problem: DPO requires paired preference data (chosen + rejected for the same prompt), which is expensive to collect.
+
+Key idea: align models using only binary signal (good/bad) per response, without requiring pairs. Uses prospect theory (humans weigh losses more than gains) to derive a loss function from unpaired data.
+
+Results: competitive with DPO quality while requiring simpler data (just thumbs up/down annotations). Works with heterogeneous data sources.
+
+Discussion points: comparison with DPO (paired vs unpaired data), prospect theory in ML (loss aversion as inductive bias), practical data collection (binary feedback is much cheaper), when to choose KTO vs DPO vs RLHF.
+
+### 20. ORPO: Monolithic Preference Optimization (2024)
+
+Problem: standard alignment pipeline requires separate SFT then DPO/PPO stages.
+
+Key idea: combine supervised fine-tuning and preference alignment into a single training stage using odds ratio-based penalty.
+
+Results: competitive with two-stage SFT+DPO at lower compute cost. Simpler pipeline, fewer hyperparameters.
+
+Discussion points: why single-stage works (SFT objective + preference penalty), comparison with DPO/KTO on quality, efficiency gains in practice, when the two-stage approach is still preferred (very large models, complex alignment).
+
+### 21. Mamba-2 and Hybrid Architectures (2024)
+
+Problem: pure SSM (Mamba) and pure Transformer each have limitations — SSMs struggle with recall, Transformers are quadratic.
+
+Key idea: Mamba-2 connects SSMs to structured masked attention, enabling efficient hardware implementation. Hybrid architectures (Jamba, Zamba) combine Transformer and Mamba layers.
+
+Results: Mamba-2 achieves 2-8x speedup over Mamba-1 with competitive quality. Jamba (AI21, 52B MoE) combines attention layers with Mamba layers — 256K context with linear memory scaling. Zamba (Zyphra) uses similar hybridization for edge deployment.
+
+Discussion points: SSM vs attention trade-offs (recall, in-context learning, efficiency), hybrid layer scheduling (which layers use attention vs SSM), implications for long-context inference, whether hybrids will replace pure Transformers.
+
 ## Safety & Alignment Papers
 
-### 16. Training Language Models to Follow Instructions (InstructGPT)
+### 22. Training Language Models to Follow Instructions (InstructGPT)
 
 Foundation for alignment — see section four above.
 
-### 17. Anthropic's Papers on AI Safety
+### 23. Anthropic's Papers on AI Safety
 
 Red Teaming Language Models (2022): methodology for finding vulnerabilities, crowdsourced attacks.
 
-Sleeper Agents (2024): whether a model can be trained to behave well but activate upon a trigger, deceptive alignment concerns.
+Sleeper Agents (2024): whether a model can be trained to behave well but activate upon a trigger, deceptive alignment concerns. Key finding: safety training (RLHF, SFT) does not remove backdoor behavior — it persists through standard safety fine-tuning.
 
-Discussion points for Anthropic interviews: why alignment matters before creating AGI, the scalable oversight problem, interpretability as a path to safety.
+Scaling Monosemanticity (2024): extracting millions of interpretable features from Claude 3 Sonnet using sparse autoencoders — see paper 16 above.
+
+Discussion points for Anthropic interviews: why alignment matters before creating AGI, the scalable oversight problem, interpretability as a path to safety, RSP (Responsible Scaling Policy) and ASL levels.
 
 ---
 
-## Checklist: Top 10 for Interviews
+## Checklist: Top 15 for Interviews
 
-If time is limited, focus on these: Attention Is All You Need (the foundation of everything), GPT-3 (scaling, in-context learning), InstructGPT (RLHF, alignment), LoRA (efficient fine-tuning), Flash Attention (production optimization), Chain-of-Thought (reasoning), ReAct (agents), RAG (knowledge augmentation), DPO (modern alignment), Constitutional AI (safety).
+If time is limited, focus on these: Attention Is All You Need (the foundation of everything), GPT-3 (scaling, in-context learning), InstructGPT (RLHF, alignment), LoRA (efficient fine-tuning), Flash Attention (production optimization), Chain-of-Thought (reasoning), ReAct (agents), RAG (knowledge augmentation), DPO (modern alignment), Constitutional AI (safety), DeepSeek R1 (reasoning via RL), Scaling Monosemanticity (interpretability at scale), Llama 3/4 (open-weight frontier), KTO/ORPO (efficient alignment), Mamba-2 (alternatives to Transformers).
 
 ---
 

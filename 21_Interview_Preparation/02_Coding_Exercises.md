@@ -218,6 +218,84 @@ Scalability: for millions of documents, brute-force search is inefficient at O(n
 
 ---
 
+## 8. LoRA Forward Pass
+
+### Problem
+
+Implement a LoRA-augmented linear layer forward pass.
+
+### Conceptual Solution
+
+LoRA (Low-Rank Adaptation) adds trainable low-rank matrices to frozen pretrained weights. Instead of updating the full weight matrix W (d_out × d_in), LoRA adds delta_W = B × A, where A is (r × d_in) and B is (d_out × r), with r much less than d_in and d_out.
+
+Forward pass: output = W_frozen × x + (B × A) × x × (alpha / r). The frozen weights W are not updated. Only A and B are trained. The scaling factor alpha/r controls the magnitude of the adaptation.
+
+Initialization: A is initialized with random Gaussian, B is initialized to zeros. This ensures that at the start of training, delta_W = 0 and the model behaves exactly as the pretrained model.
+
+### Key Discussion Points
+
+Why low-rank works: weight updates during fine-tuning have low intrinsic dimensionality — the rank of useful updates is much smaller than the full matrix rank. Empirically, r=4-16 captures most of the adaptation signal.
+
+Parameter efficiency: for a 4096×4096 layer with r=16, LoRA adds 2 × 4096 × 16 = 131K parameters instead of 16.8M — a 128x reduction. Multiple LoRA adapters can be swapped at inference without reloading the base model.
+
+Which layers to adapt: Q and V projections in attention are most important. Adapting all linear layers (Q, K, V, O, gate, up, down) with small r often outperforms adapting fewer layers with large r.
+
+Merging: at inference, delta_W = B × A can be merged into W, eliminating any latency overhead. Un-merging restores the original model for switching adapters.
+
+---
+
+## 9. Rotary Position Embeddings (RoPE)
+
+### Problem
+
+Implement RoPE position encoding for query/key vectors.
+
+### Conceptual Solution
+
+RoPE encodes position by rotating query and key vectors in 2D subspaces. For a vector of dimension d, pairs of adjacent elements (x_0, x_1), (x_2, x_3), etc., are treated as 2D vectors and rotated by position-dependent angles.
+
+The rotation angle for position m and dimension pair i is: theta_i = m / (10000^(2i/d)). Each pair (x_{2i}, x_{2i+1}) is rotated by theta_i: x_{2i}' = x_{2i} × cos(theta_i) - x_{2i+1} × sin(theta_i), x_{2i+1}' = x_{2i} × sin(theta_i) + x_{2i+1} × cos(theta_i).
+
+Implementation: precompute freqs = 1.0 / (10000^(2i/d)) for i in range(d/2). For position m, angles = m × freqs. Apply rotation using complex number multiplication or the cos/sin formulas above.
+
+### Key Discussion Points
+
+Why RoPE works: the dot product between rotated queries and keys depends only on relative position (m-n), not absolute positions. This gives the model translation invariance — the same relative pattern at positions (5,8) and (100,103) produces the same attention score.
+
+Extrapolation: vanilla RoPE degrades beyond training length. Solutions: NTK-aware scaling (modify the base frequency), YaRN (neural tangent kernel interpolation), position interpolation (scale positions to fit training range). These enable models trained on 4K context to work at 32K-128K.
+
+Comparison with learned/sinusoidal: sinusoidal (original Transformer) — fixed, no learned parameters, poor extrapolation. Learned (GPT series) — flexible but no extrapolation. RoPE — no learned parameters, relative position naturally, reasonable extrapolation with scaling.
+
+Efficiency: RoPE is applied per-head to Q and K only (not V), adds negligible compute (element-wise operations), and requires no additional parameters.
+
+---
+
+## 10. Sparse Attention Pattern
+
+### Problem
+
+Implement a sliding window (local) attention mask and compute sparse attention.
+
+### Conceptual Solution
+
+Full attention is O(n²). Sparse attention restricts which positions can attend to each other. Sliding window attention: each token attends only to a local window of size w around it.
+
+Mask construction: for sequence length n and window size w, create an n×n boolean mask where mask[i][j] = True if |i - j| <= w/2. Positions outside the window are masked to negative infinity before softmax.
+
+Forward pass: compute Q×K^T as usual, apply the sparse mask (set masked positions to -inf), apply softmax, multiply by V. Only positions within the window contribute to attention weights.
+
+### Key Discussion Points
+
+Complexity: full attention O(n²d), sparse with window w gives O(nwd) — linear in n for fixed w. Memory: O(nw) instead of O(n²). For w=4096 and n=128K, this is a 32x reduction.
+
+Effective receptive field: with L layers of window w, information can propagate w×L positions. A 32-layer model with w=4096 has an effective receptive field of 128K tokens — full context coverage through stacked layers.
+
+Combination patterns: Mistral uses sliding window in every layer. Longformer combines local window with global tokens (CLS, special tokens). BigBird adds random attention connections. These hybrid patterns balance efficiency and expressiveness.
+
+Connection to modern models: Mistral 7B uses w=4096 sliding window attention. GPT-4 and Claude likely use similar sparse patterns for long contexts. Flash Attention can exploit sparsity patterns for further speedup.
+
+---
+
 ## Interview Tips
 
 ### What Interviewers Expect

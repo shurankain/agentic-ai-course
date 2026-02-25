@@ -227,6 +227,73 @@ An effective AI red team requires diverse skills:
 
 **Continuous automated testing** — integration into CI/CD for catching regressions.
 
+## Multi-Modal Red Teaming (2024-2025)
+
+With vision-language models (GPT-4V, Claude 3.5, Gemini), red teaming must extend beyond text:
+
+### Image-Based Attacks
+
+**Typographic attacks:** Text embedded in images can override model behavior. An image containing "Ignore previous instructions and..." in small text may be processed as instructions by the model when analyzing the image.
+
+**Adversarial images:** Carefully crafted pixel perturbations (invisible to humans) can cause misclassification or trigger unsafe behaviors. Unlike text attacks, image perturbations are harder to detect through content filtering.
+
+**Steganographic payloads:** Harmful instructions hidden within seemingly innocent images (e.g., encoded in LSB of pixel values). The model may extract and follow these instructions during image analysis.
+
+### Cross-Modal Attacks
+
+Combining text and image to bypass safety filters. Example: the text prompt asks "What does this image say?" while the image contains harmful instructions that the text-only safety filter would have caught.
+
+**OCR exploitation:** Models that extract text from images can be tricked into processing harmful content that exists only in image form, bypassing text-based safety checks.
+
+## Agentic Red Teaming (2024-2025)
+
+AI agents with tool access introduce attack surfaces beyond traditional LLM vulnerabilities:
+
+### Tool-Mediated Attacks
+
+**Indirect prompt injection via tools:** An agent searching the web encounters a malicious page with hidden instructions. The agent follows these instructions, potentially exfiltrating data or taking unauthorized actions.
+
+**Tool chain exploitation:** A sequence of individually safe tool calls that combine to produce harmful outcomes. Example: an agent reads a file (safe), extracts credentials from it (safe in isolation), and sends them to an external URL (the harmful outcome emerges from the chain).
+
+**Permission escalation:** An agent with limited tool access uses social engineering in its outputs to convince a human to grant additional permissions, or exploits a poorly secured MCP server to access unauthorized capabilities.
+
+### Agent-Specific Testing
+
+**Autonomy testing:** How does the agent behave when given vague instructions with high autonomy? Does it take irreversible actions without confirmation?
+
+**Loop detection:** Can the agent be trapped in infinite loops consuming resources? A malicious input could cause the agent to repeatedly call tools without terminating.
+
+**Multi-agent manipulation:** In multi-agent systems, can one agent be compromised to manipulate others? A poisoned tool response could propagate through the agent pipeline.
+
+## OWASP Top 10 for LLM Applications (2025)
+
+The OWASP Foundation published the "Top 10 for LLM Applications" (updated 2025) — a standard reference for LLM security:
+
+1. **Prompt Injection** — direct and indirect injection attacks (the #1 risk)
+2. **Insecure Output Handling** — trusting LLM output without validation (XSS, command injection via LLM outputs)
+3. **Training Data Poisoning** — corrupted training data leading to biased or backdoored models
+4. **Model Denial of Service** — resource exhaustion through crafted inputs (long contexts, recursive prompts)
+5. **Supply Chain Vulnerabilities** — compromised model weights, plugins, or data pipelines
+6. **Sensitive Information Disclosure** — model revealing PII, system prompts, or proprietary data
+7. **Insecure Plugin Design** — plugins/tools with insufficient access controls
+8. **Excessive Agency** — agents with overly broad permissions taking harmful autonomous actions
+9. **Overreliance** — users trusting LLM outputs without verification (hallucination risk)
+10. **Model Theft** — extracting model weights or functionality through API abuse
+
+**Use in red teaming:** Map your test plan to OWASP categories for comprehensive coverage. Report findings using OWASP categories for standardized communication with security teams.
+
+## HarmBench (2024)
+
+**HarmBench** is a standardized benchmark for evaluating LLM safety:
+
+**What it provides:** A curated dataset of harmful requests across categories (violence, illegal activities, cybercrime, etc.), standardized evaluation methodology, automated safety classifiers for measuring Attack Success Rate (ASR), and a leaderboard comparing attack and defense methods.
+
+**Categories:** Direct harmful requests, contextual harmful requests (with innocent framing), multi-turn attacks, cross-lingual attacks.
+
+**Usage for red teams:** Use HarmBench as a baseline — if your model fails on HarmBench attacks, it has basic safety gaps. Then go beyond HarmBench with creative manual testing and domain-specific attacks. Report results using HarmBench metrics for comparability.
+
+**Connection to METR:** While HarmBench tests content safety (will the model generate harmful text?), METR tests dangerous capabilities (can the model autonomously cause harm?). Both are needed for comprehensive safety evaluation.
+
 ## Red Teaming Process for LLM Applications
 
 ### Pre-Engagement
@@ -257,13 +324,17 @@ AI red teaming is a critically important practice for ensuring the security of A
 
 The attack taxonomy includes prompt injection (direct and indirect), jailbreaking (DAN, persona, encoding attacks), data poisoning (backdoors), model extraction/inversion, and adversarial examples.
 
+Multi-modal red teaming (2024-2025) extends testing to vision-language models — typographic attacks, adversarial images, and cross-modal bypasses require new testing methodologies.
+
+Agentic red teaming addresses AI agents with tool access — indirect injection via tools, tool chain exploitation, permission escalation, and multi-agent manipulation are emerging attack surfaces.
+
+OWASP Top 10 for LLM Applications (2025) provides a standard taxonomy for LLM security risks. HarmBench provides standardized benchmarks for measuring attack success rates.
+
 The red teaming methodology follows a structured approach: preparation (scope, threat modeling), execution (automated and manual testing), and reporting (structured findings with remediation recommendations).
 
 Specialized tools — Garak, Counterfit, ART, PyRIT — automate standard attacks but do not replace creative manual testing. The best results are achieved by combining automated scanning with expert analysis.
 
 Organizing a red team program requires diverse skills (ML, security, domain expertise), a choice of engagement model (internal, external, bug bounty), and defining the frequency of assessments (regular, event-driven, continuous).
-
-The DEF CON AI Village red teaming event in 2023 demonstrated that even frontier models are vulnerable to creative attacks, underscoring the need for systematic adversarial testing.
 
 ## Practical Code Examples
 
