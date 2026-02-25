@@ -76,8 +76,8 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-4, GPT-4o, GPT-4o-mini)
-  - Anthropic (Claude 3.5 Sonnet, Claude 3 Opus/Haiku)
+  - OpenAI (GPT-5, GPT-4o, o3, GPT-4.1)
+  - Anthropic (Claude Opus 4.6, Sonnet 4.6, Haiku 3.5)
   - Google (Gemini)
   - Meta (Llama)
   - Mistral
@@ -411,7 +411,7 @@
 
 ## 04. Multi-Agent Systems
 
-### 04.1 Multi-Agent System Basics (`01_MAS_Basics.md`)
+### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`)
 - Introduction to the world of multiple agents
 - Why a single agent is not enough
 - What a multi-agent system is
@@ -448,7 +448,7 @@
 - OpenAI Swarm: experimental simplicity
 - Comparison and selection
 
-### 04.5 MAS Consensus and Reliability (`05_MAS_Consensus_and_Reliability.md`)
+### 04.5 Consensus and Reliability of Multi-Agent Systems (`05_MAS_Consensus_and_Reliability.md`)
 - When agents must agree
 - Types of consensus in AI systems
 - Voting mechanisms
@@ -511,7 +511,7 @@
 - User interface
 - Client-side security
 
-### 05.5 A2A Protocol (`05_A2A_Protocol.md`)
+### 05.5 Agent-to-Agent Protocol (A2A) (`05_A2A_Protocol.md`)
 - Introduction: inter-agent communication
 - MCP vs A2A: different levels of abstraction
   - Vertical vs horizontal integration
@@ -699,7 +699,7 @@
 - Migrating from PyTorch
 
 ### 07.5 AWS Strands Agents (`05_AWS_Strands_Agents.md`)
-- AWS Strands: Open-Source SDK for agents (December 2024)
+- AWS Strands: Open-Source SDK for agents (May 2025, GA July 2025)
 - Model-Driven vs Graph-Driven approaches
   - Model-Driven: LLM as orchestrator (Strands, Claude)
   - Graph-Driven: Explicit workflows (LangGraph, Prefect)
@@ -1702,7 +1702,7 @@
   - Prompts: templates for common tasks
 - Transport layer
   - stdio for local integration
-  - HTTP/SSE for remote access
+  - Streamable HTTP for remote access
 - Security
   - Authentication
   - Authorization

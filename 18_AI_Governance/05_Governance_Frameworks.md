@@ -10,7 +10,7 @@
 
 ## Introduction: From Technology to Organizational Maturity
 
-AI technical capabilities outpace organizational readiness to use them. A company can deploy GPT-4 in a day, but building a governance framework for responsible AI use takes years. The gap between technical capability and governance maturity creates risks that materialize in headlines about AI failures, bias scandals, and privacy breaches.
+AI technical capabilities outpace organizational readiness to use them. A company can deploy a frontier model like GPT-4o in a day, but building a governance framework for responsible AI use takes years. The gap between technical capability and governance maturity creates risks that materialize in headlines about AI failures, bias scandals, and privacy breaches.
 
 Governance is not bureaucratic overhead but an enabler. Organizations with mature AI governance ship AI products faster because they know what guardrails are needed. They avoid costly post-hoc remediations because they built safety into the process. They attract talented AI specialists who want to work in an ethical environment.
 

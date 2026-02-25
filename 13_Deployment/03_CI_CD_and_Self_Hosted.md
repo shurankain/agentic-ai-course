@@ -52,7 +52,7 @@ Quality gates define criteria for a successful deployment. Quantitative gates: e
 
 Deterministic checks use test cases with precisely known answers. Math problems, JSON formatting, information extraction — verified programmatically. The regression suite accumulates over time; each bug becomes a test case.
 
-LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-4 evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
+LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-4o evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
 
 Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation — pre-prepared test cases with reference answers.
 

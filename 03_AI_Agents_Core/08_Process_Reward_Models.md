@@ -141,7 +141,7 @@ OpenAI in "Let's Verify Step by Step" (2023) used a three-level evaluation schem
 - Expert review for disagreements
 - Calibration sessions for consistency
 
-**Synthetic labeling** is automatic annotation using a strong model. GPT-4 or Claude evaluate solution steps. This is cheaper but introduces the teacher model's bias.
+**Synthetic labeling** is automatic annotation using a strong model. GPT-4o or Claude evaluate solution steps. This is cheaper but introduces the teacher model's bias.
 
 **Synthetic labeling variants:**
 

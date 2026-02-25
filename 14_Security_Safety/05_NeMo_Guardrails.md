@@ -249,7 +249,7 @@ flow main
 
 ## Dedicated Safety Models: Llama Guard and ShieldGemma
 
-Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-4 for safety evaluation), dedicated safety classification models have emerged — purpose-trained for content moderation at lower cost and latency.
+Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-4o for safety evaluation), dedicated safety classification models have emerged — purpose-trained for content moderation at lower cost and latency.
 
 ### Llama Guard Family (Meta)
 
@@ -512,7 +512,7 @@ rails:
   retrieval:
     flows: [check document access]
 
-self_check_input: {enabled: true, llm: {model: gpt-3.5-turbo, temperature: 0.0}}
+self_check_input: {enabled: true, llm: {model: gpt-4o-mini, temperature: 0.0}}
 jailbreak_detection: {enabled: true, threshold: 0.85}
 ```
 
