@@ -207,7 +207,7 @@ public class RagChatbotService {
 
     public RagChatbotService(EmbeddingModel embeddingModel) {
         // Initialize in-memory vector store
-        this.vectorStore = new SimpleVectorStore(embeddingClient);
+        this.vectorStore = new SimpleVectorStore(embeddingModel);
     }
 
     /**
@@ -341,26 +341,26 @@ public class RagChatbotService {
         }
 
         String context = buildContextWithSources(relevantDocs);
-        String prompt = buildPrompt(context, userQuery);
+
+        // Create prompt with system and user messages (consistent with sync version)
+        Message systemMessage = new org.springframework.ai.chat.messages.SystemMessage(
+            "Answer only based on the context. Cite sources.");
+        Message userMessage = new UserMessage(String.format("""
+            Context:
+            %s
+
+            Question: %s
+            """, context, userQuery));
+
+        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
 
         // Streaming response via callback
-        chatClient.stream(new Prompt(prompt))
+        chatClient.stream(prompt)
             .subscribe(
                 response -> callback.onToken(response.getResult().getOutput().getContent()),
                 error -> callback.onError(error),
                 () -> callback.onComplete()
             );
-    }
-
-    private String buildPrompt(String context, String query) {
-        return String.format("""
-            Answer only based on the context. Cite sources.
-
-            Context:
-            %s
-
-            Question: %s
-            """, context, query);
     }
 
     // Callback interface for streaming
@@ -403,7 +403,7 @@ public class QdrantVectorStore {
         this.client = new QdrantClient(
             QdrantGrpcClient.newBuilder("localhost", 6334, false).build()
         );
-        this.embeddingModel = embeddingClient;
+        this.embeddingModel = embeddingModel;
 
         initializeCollection();
     }
