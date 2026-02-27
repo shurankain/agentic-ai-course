@@ -66,7 +66,7 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Latency and throughput** for high-load systems. At very high volumes, self-hosted is more economical than cloud APIs. Network latency to the provider is eliminated.
 
-**Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-4o. At a million requests per day with an average of 500 tokens — hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($5000/month for an A100) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
+**Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-4o. At a million requests per day with an average of 500 tokens — hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
 
 **Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are significantly better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-4o, but with limited control over the process. Self-hosted Llama, Mistral, and Qwen can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 

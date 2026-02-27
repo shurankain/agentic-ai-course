@@ -202,7 +202,7 @@ Anthropic's CLI-based coding agent, one of the most capable autonomous coding to
 - **MCP extensibility** — connects to any MCP server, giving it access to databases, APIs, and custom tools beyond file/terminal operations
 - **Spec-driven development** — excels at implementing features from detailed specifications, making it effective for the "write spec → agent implements" workflow pattern
 
-**SWE-bench performance:** Claude Code with Claude Sonnet 4 achieves 72.7% on SWE-bench Verified, among the highest scores for any coding agent.
+**SWE-bench performance:** Claude Code achieved 72.7% on SWE-bench Verified with Claude Sonnet 4 (mid-2025). With the latest Claude models, scores have continued to improve, with frontier agents now exceeding 80%.
 
 ### OpenAI Codex (2025)
 
@@ -262,11 +262,14 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | Model/Agent | Score |
 |-------------|-------|
 | Human (estimated) | ~75-90% |
+| Frontier agents (early 2026) | ~80%+ |
 | Claude Opus 4 (2025) | 72.0% |
-| Claude Sonnet 4 | 72.7% |
+| Claude Sonnet 4 (2025) | 72.7% |
 | OpenAI o1 | 48.9% |
 | GPT-4o | 33.2% |
-| Devin | 13.86% |
+| Devin (launch, 2024) | 13.86% |
+
+*Note:* Scores continue to improve rapidly. By early 2026, the best agents exceed 80%, approaching human performance. SWE-bench Pro (a harder variant) was introduced where top agents score ~23%.
 
 ### SWE-bench Pro (2025)
 
@@ -513,9 +516,9 @@ Coding agents like Claude Code and Codex excel when given clear, detailed specif
 
 1. **IDE tools (Copilot, Cursor, Windsurf) augment the developer** — agent modes now enable multi-file autonomous editing alongside traditional autocomplete
 
-2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 72%+ on SWE-bench Verified, they are approaching human-level on real GitHub issues
+2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 80%+ on SWE-bench Verified, they are at or near human-level on real GitHub issues
 
-3. **SWE-bench is the gold standard** for measurement; top agents achieve ~72%, humans ~75-90%
+3. **SWE-bench is the gold standard** for measurement; top agents exceed 80% (early 2026), approaching human-level (~75-90%)
 
 4. **Context management is critical** — the agent must understand the codebase, not just the current file
 

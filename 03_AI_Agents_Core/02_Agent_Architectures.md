@@ -63,11 +63,11 @@ The most influential research papers that shaped modern architectures:
 
 | Pattern | Authors (Year) | Key Idea | Citations |
 |---------|----------------|----------|-----------|
-| **ReAct** | Yao et al. (2022) | Interleaving reasoning and actions | 2000+ |
+| **ReAct** | Yao et al. (2022) | Interleaving reasoning and actions | 5000+ |
 | **Plan-and-Execute** | Wang et al. | Separating planning from execution | 500+ |
-| **Self-Refine** | Madaan et al. (2023) | Iterative improvement through self-feedback | 800+ |
-| **Reflexion** | Shinn et al. (2023) | Verbal reinforcement through self-reflection | 1000+ |
-| **Tree of Thoughts** | Yao et al. (2023) | Exploration of alternative reasoning paths | 1500+ |
+| **Self-Refine** | Madaan et al. (2023) | Iterative improvement through self-feedback | 2500+ |
+| **Reflexion** | Shinn et al. (2023) | Verbal reinforcement through self-reflection | 2000+ |
+| **Tree of Thoughts** | Yao et al. (2023) | Exploration of alternative reasoning paths | 3000+ |
 
 Each of these patterns is examined in detail below.
 

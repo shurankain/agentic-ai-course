@@ -47,14 +47,16 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following, strong code generation, and long context capabilities.
 
 **Claude model family (latest generation):**
-- **Claude Opus 4** — most powerful model for the hardest tasks. Deep reasoning, complex analysis, extended autonomous workflows.
-- **Claude Sonnet 4** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Benchmark leader in code generation.
+- **Claude Opus 4.6** — most powerful model for the hardest tasks. Deep reasoning, complex analysis, extended autonomous workflows. Significantly cheaper than the original Opus 4 ($5/$25 vs $15/$75 per 1M tokens).
+- **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Benchmark leader in code generation.
 - **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
+
+*Note:* Claude Opus 4 / Sonnet 4 remain available but have been superseded by the 4.6 generation (released early 2026).
 
 **Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
 **Anthropic highlights:**
-- Context window — 200K tokens (1M in beta)
+- Context window — 200K tokens standard, 1M available on Opus 4.6
 - "Constitutional AI" — models trained to follow ethical principles
 - Excellent performance in long document analysis and code generation
 - **MCP (Model Context Protocol)** — Anthropic-created open standard for tool integration, now an industry standard governed by AAIF
@@ -84,7 +86,7 @@ The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 Founded by Elon Musk, xAI emerged as a significant provider with competitive models and aggressive pricing.
 
 **Models:**
-- **Grok 3** — frontier model with strong reasoning capabilities
+- **Grok 3** — frontier model competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
 - **Grok 3 Mini** — efficient model for standard tasks
 
 **xAI highlights:**
@@ -318,18 +320,18 @@ Cost is a critical factor when choosing a provider and model. All providers char
 
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
-| o3 | $10.00 | $40.00 | Thinking tokens billed at output rate |
+| o3 | $2.00 | $8.00 | 80% price cut since launch (June 2025) |
 | o4-mini | $1.10 | $4.40 | Cost-efficient reasoning |
-| Claude Opus 4 (extended thinking) | $15.00 | $75.00 | Thinking via budget_tokens |
-| Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Configurable thinking budget |
+| Claude Opus 4.6 (extended thinking) | $5.00 | $25.00 | Thinking via budget_tokens |
+| Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
 **Standard models:**
 
 | Model | Input | Output |
 |--------|-------|--------|
-| GPT-5 | ~$2.00-5.00 | ~$8.00-15.00 |
+| GPT-5 | $1.25 | $10.00 |
 | GPT-4o | $2.50 | $10.00 |
-| Claude Sonnet 4 | $3.00 | $15.00 |
+| Claude Sonnet 4.6 | $3.00 | $15.00 |
 | Gemini 2.5 Pro | $1.25 | $10.00 |
 | Mistral Large 3 | $2.00 | $6.00 |
 | Grok 3 | $3.00 | $15.00 |
@@ -339,7 +341,8 @@ Cost is a critical factor when choosing a provider and model. All providers char
 | Model | Input | Output |
 |--------|-------|--------|
 | GPT-4o-mini | $0.15 | $0.60 |
-| Claude Haiku 4.5 | $0.80 | $4.00 |
+| Claude Haiku 4.5 | $1.00 | $5.00 |
+| Gemini 2.5 Flash | $0.15 | $0.60 |
 | Gemini 2.0 Flash | $0.10 | $0.40 |
 | Mistral Small 3 | $0.10 | $0.30 |
 
@@ -431,7 +434,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - o3 / o4-mini (OpenAI reasoning)
-- Claude Opus 4 or Sonnet 4 with extended thinking (Anthropic)
+- Claude Opus 4.6 or Sonnet 4.6 with extended thinking (Anthropic)
 - Gemini 2.5 Pro with thinking (Google)
 
 **Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
@@ -439,7 +442,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Code Generation
 
 **Recommended models:**
-- Claude Sonnet 4 (consistently strong on coding benchmarks)
+- Claude Sonnet 4.6 (consistently strong on coding benchmarks)
 - GPT-4.1 (optimized specifically for code)
 - GPT-4o
 - Devstral 2 (Mistral, open-weight)
@@ -459,7 +462,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - Gemini 2.5 Pro (1M+ token context)
-- Claude Sonnet 4 (200K tokens, 1M beta)
+- Claude Sonnet 4.6 (200K tokens, 1M available)
 - GPT-5 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
@@ -686,7 +689,7 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 
-**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4 with extended thinking are applied. Code generation works best with Claude Sonnet 4 or GPT-4.1, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
+**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4.6 with extended thinking are applied. Code generation works best with Claude Sonnet 4.6 or GPT-4.1, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
 
 **Tool Use via AI Services:** LangChain4j provides a declarative way to create agents with tools. Tools are defined as regular Java methods annotated with `@Tool`, which contains the function description. Method parameters are annotated with `@P` including a description for the model. Then an agent interface is created with a `chat(String message)` method, and `AiServices.builder()` is used to automatically generate the implementation. The model independently analyzes the user's request, decides which tools are needed, invokes them with the correct parameters, and forms the final response based on the results.
 

@@ -178,7 +178,7 @@ For production agents, prefer MCP when: tools are shared across multiple agents 
 
 LLM costs dominate production agent budgets. Track and optimize:
 
-**Cost per conversation:** Total tokens (input + output) × price per token. Typical support conversation: 2K-10K tokens. At GPT-4o pricing (~$5/M input, ~$15/M output): $0.01-0.10 per conversation.
+**Cost per conversation:** Total tokens (input + output) × price per token. Typical support conversation: 2K-10K tokens. At GPT-4o pricing ($2.50/M input, $10/M output): $0.005-0.05 per conversation.
 
 **Cost drivers:** System prompts (repeated every turn — large system prompts multiply cost), conversation history (grows linearly with turns — summarize or truncate), RAG context (retrieved chunks add input tokens — retrieve only what's needed), tool call overhead (each tool use adds a round trip).
 

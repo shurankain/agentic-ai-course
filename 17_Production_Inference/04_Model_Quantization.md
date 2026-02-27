@@ -68,7 +68,7 @@ Perplexity increase FP16 → INT4: ~2-3%. On most tasks, <1% accuracy drop.
 Low: text generation, classification, simple Q&A. Medium: summarization, translation, complex reasoning. High: mathematical reasoning, code generation, precise factual recall. For high-sensitivity tasks, INT8/FP8 is recommended over INT4.
 
 **Hardware considerations:**
-Consumer GPUs (RTX) — INT4 allows fitting larger models, AWQ/GPTQ optimized, ~50-100 tok/s for 70B INT4. Datacenter (A100/H100) — FP8 on H100 offers the best balance, INT8 on A100 is mature and stable.
+Consumer GPUs (RTX) — INT4 allows fitting larger models, AWQ/GPTQ optimized, ~50-100 tok/s for 70B INT4. Datacenter (A100/H100) — FP8 on H100 offers the best balance, INT8 on A100 is mature and stable. Blackwell (B200/GB200) — native FP4 support enables 4-bit inference with minimal quality loss and ~2x throughput improvement over H100 FP8.
 
 ## Practical Selection
 
