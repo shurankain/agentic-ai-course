@@ -70,9 +70,9 @@ For sequences of 100K+ tokens. Activations of a single layer exceed GPU memory. 
 
 **Combination with Tensor Parallelism:** two-dimensional splitting — sequence by length, heads by count.
 
-### Context Parallelism (2024-2025)
+### Context Parallelism
 
-Context Parallelism (CP) is an evolution of Sequence Parallelism specifically designed for long-context LLM training (100K-10M tokens).
+Context Parallelism (CP) is now the standard approach for long-context LLM training (100K-10M tokens), having evolved from Sequence Parallelism.
 
 **DeepSpeed Ulysses (2024):** Partitions the sequence across GPUs along the sequence dimension. Each GPU holds a portion of Q, K, V. Before attention computation, AllToAll communication redistributes data so each GPU has full Q, K, V for a subset of attention heads. After attention, another AllToAll restores the sequence partition.
 

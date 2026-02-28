@@ -28,7 +28,7 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **NVIDIA Grace Hopper (GH200)** — a CPU-GPU superchip combining the Grace ARM CPU with the H100 GPU via NVLink-C2C (900 GB/s CPU-GPU bandwidth). 624 GB unified memory (96 GB HBM3 + 528 GB LPDDR5X) with coherent memory access — the GPU can directly access CPU memory and vice versa without explicit copies. Designed for workloads that exceed GPU memory: very large models, large KV caches, data preprocessing pipelines. The unified memory model simplifies programming for memory-intensive AI workloads.
 
-**NVIDIA Blackwell B200/GB200 (2024-2025)** — a generational leap:
+**NVIDIA Blackwell B200/GB200 (now in production, 2025-2026)** — a generational leap:
 - **Fifth-generation Tensor Cores** with FP4 support — doubles throughput over FP8, enabling 4-bit inference at near-FP8 quality with proper calibration
 - **HBM3e memory** — 192 GB per GPU (vs H100's 80 GB), 8 TB/s bandwidth (vs 3.35 TB/s)
 - **Second-generation Transformer Engine** — dynamic per-layer precision selection now includes FP4, FP8, BF16

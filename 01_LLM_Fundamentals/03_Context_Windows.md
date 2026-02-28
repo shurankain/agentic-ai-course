@@ -42,7 +42,7 @@ The history of context windows is a story of rapid growth:
 | Claude 3 | 2024 | 200,000 tokens |
 | Gemini 1.5 | 2024 | 1,000,000+ tokens |
 | GPT-5 | 2025 | 128K–1M tokens |
-| Claude 4.6 | 2026 | 200K (1M beta) |
+| Claude 4.6 | 2026 | 200K (1M available) |
 | Gemini 2.5 Pro | 2025 | 1,000,000 tokens |
 | Llama 4 Scout | 2025 | 10,000,000 tokens |
 

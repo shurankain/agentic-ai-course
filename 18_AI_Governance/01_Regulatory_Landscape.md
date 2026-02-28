@@ -31,7 +31,7 @@ The EU AI Act classifies AI systems into four risk levels:
 - **August 2024** — the law entered into force ✓
 - **February 2025** — ban on unacceptable risk practices ✓ (NOW ENFORCED — social scoring, real-time public biometrics, emotion recognition in workplaces/schools are actively prohibited with fines)
 - **August 2025** — obligations for GPAI models ✓ (NOW ENFORCED — all GPAI providers must provide technical documentation, training data summaries, copyright compliance)
-- **August 2026** — full enforcement for high-risk systems (UPCOMING — certification requirements for HR, credit scoring, law enforcement, healthcare AI)
+- **August 2026** — full enforcement for high-risk systems (IMMINENT, 6 months away — certification requirements for HR, credit scoring, law enforcement, healthcare AI)
 - **August 2027** — high-risk in Annex I (safety products)
 
 ### Prohibited Practices

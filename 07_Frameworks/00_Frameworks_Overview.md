@@ -120,7 +120,7 @@ OpenAI has transitioned from the Assistants API to a new architecture. The Assis
 
 **Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design — state management is handled by the application or the Agents SDK.
 
-**Agents SDK** (released March 2025): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features.
+**Agents SDK** (released March 2025, now mature): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features.
 
 ### Claude SDK and Claude Code
 

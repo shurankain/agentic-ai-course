@@ -78,7 +78,7 @@ Standard Multi-Head Attention has a significant drawback: each head requires sep
 | GQA-8  | 32          | 8        | 25%      | ~Baseline |
 | MQA    | 32          | 1        | 3%       | Slightly lower |
 
-GQA has become the de facto standard for production models in 2024. Llama 2 70B, Llama 3, Mistral, Mixtral — all use GQA.
+GQA is the standard attention mechanism for production models. Llama 2 70B, Llama 3, Mistral, Mixtral — all use GQA. Note that frontier models in 2025-2026 increasingly use Mixture of Experts (MoE) architectures (DeepSeek V3, Llama 4, Qwen 3), but GQA remains the standard attention mechanism within each expert.
 
 ### Causal Attention: No Peeking into the Future
 

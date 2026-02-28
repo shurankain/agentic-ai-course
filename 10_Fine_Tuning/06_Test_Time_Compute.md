@@ -30,7 +30,7 @@ Architecture: user prompt → hidden chain of reasoning (hundreds/thousands of t
 
 Key features: extended thinking, self-correction, verification, backtracking.
 
-**o3** (January 2025, general availability) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small models with sufficient TTC outperform larger standard models, at a fraction of the cost.
+**o3** (announced January 2025, initially limited release, broadly available by mid-2025) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small models with sufficient TTC outperform larger standard models, at a fraction of the cost.
 
 API parameters: `reasoning_effort` ("low", "medium", "high") controls thinking depth. Higher effort = more thinking tokens = better quality but higher cost and latency.
 
