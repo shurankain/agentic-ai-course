@@ -395,6 +395,19 @@ The o1-style approach blurs the boundary between "prompt engineering" and "archi
 
 For practitioners, this means: if the model has built-in reasoning (like o1 or Claude with extended thinking), the agent architecture can be simplified. Complex techniques like ToT may be redundant because the model already does something similar internally.
 
+**How internal search differs from explicit ToT/MCTS:** Explicit ToT explores a tree through multiple separate LLM calls — the orchestrator manages the tree structure externally. Reasoning models perform a similar search within a single generation pass — exploring, backtracking, and evaluating paths as part of their extended token output. This is more token-efficient (one context window vs. many parallel calls) but less controllable (the search process is hidden or semi-transparent).
+
+**Choosing the right architecture:**
+
+| Scenario | Recommended Approach | Why |
+|----------|---------------------|-----|
+| Complex reasoning, single question | o3 / Claude extended thinking | Built-in search is sufficient; lower orchestration overhead |
+| Multi-step task with external tools | ReAct with a reasoning model | Tool calls need real execution; reasoning improves tool selection |
+| Long-running task, many tools, human oversight | Plan-and-Execute | Explicit plan provides checkpointing and auditability |
+| Exploration with verifiable outcomes | Explicit ToT/MCTS + PRM | Full control over search with custom evaluation functions |
+
+**Cost consideration:** A reasoning model may use 5,000–20,000 thinking tokens internally on a complex problem — but this is often cheaper and faster than orchestrating 10–50 separate LLM calls in explicit ToT. The trade-off shifts when you need fine-grained control over the search process or domain-specific evaluation at each step.
+
 ### Self-Consistency: The Power of Multiple Opinions
 
 Self-Consistency is an elegant technique for improving reasoning reliability without a complex tree structure. The idea is simple: generate several independent reasoning chains and take the majority answer.

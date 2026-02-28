@@ -468,6 +468,18 @@ OpenAI's o3 and o4-mini can interleave tool calls within their chain-of-thought 
 
 **Reduced need for explicit orchestration:** Traditional agents need frameworks (LangGraph, CrewAI) to manage complex multi-tool workflows. Reasoning models can often handle the orchestration internally through extended thinking.
 
+### When to Use Reasoning-Integrated vs Traditional Tool Use
+
+**Reasoning-integrated tool use works best when:** the task requires combining information from multiple tools in a single coherent analysis, error recovery needs to happen within the reasoning flow, and the number of tool calls is moderate (5-15 per task).
+
+**Traditional ReAct loops work best when:** the task involves many sequential tool calls with unpredictable branching, external state changes between calls matter (e.g., database writes), or fine-grained observability of each step is required for compliance or debugging.
+
+**Token cost comparison:** A traditional ReAct loop over 10 tool calls might require 10 separate LLM calls (each with growing context). A reasoning model can plan and execute the same 10 calls within a single extended reasoning pass — fewer total tokens but higher per-token cost for thinking tokens. For tool-heavy workflows with 20+ calls, the traditional approach with a cheaper model may be more economical.
+
+### Tool Schema Design for Reasoning Models
+
+Reasoning models benefit from **descriptive tool schemas**: detailed parameter descriptions, explicit constraints, and examples of valid inputs. The model uses this information during its reasoning phase to plan tool calls more accurately, reducing failed calls and retries. Invest in schema quality over quantity — fewer well-documented tools outperform many poorly described ones.
+
 ## Key Takeaways
 
 1. **Tools transform an LLM into an agent** capable of acting in the real world. Without them, the model is a closed system; with them, it is an active participant in external processes.

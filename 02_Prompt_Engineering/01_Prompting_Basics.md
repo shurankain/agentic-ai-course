@@ -122,6 +122,8 @@ Why does it work? When the model "thinks out loud," it creates intermediate repr
 
 Effective for: mathematical problems, logic puzzles, multi-step tasks, planning, analysis. Less useful for simple factual questions.
 
+**Note on reasoning models:** Models like o1/o3 and Claude with extended thinking perform CoT automatically as part of their inference process — explicit "think step by step" instructions are unnecessary and may even degrade performance. For these models, focus on clear problem statements and constraints rather than prompting for reasoning steps. Explicit CoT prompting remains valuable for standard (non-reasoning) models.
+
 ---
 
 ## Structuring Prompts

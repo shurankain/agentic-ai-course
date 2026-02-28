@@ -84,6 +84,8 @@ ToT is related to MCTS — an algorithm from game AI (AlphaGo). MCTS operates th
 
 **Limitations**: cost (10-100+ requests), complexity (orchestration, state management), latency (minutes vs seconds).
 
+**Note:** Reasoning models (o3, Claude extended thinking) perform ToT-like internal exploration within a single call — see the section below on "Chain-of-Thought Without Prompting." For most tasks, using a reasoning model eliminates the need for explicit ToT orchestration. Explicit ToT remains valuable when you need custom evaluation functions at each node or domain-specific search strategies.
+
 ---
 
 ## Chain-of-Thought Without Prompting: The o1 Era

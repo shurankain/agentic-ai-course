@@ -273,7 +273,7 @@ A new parameter unique to reasoning models — controlling how much compute the 
 |----------|-----------|--------|---------|
 | **OpenAI** | `reasoning_effort` | `low`, `medium`, `high` | `medium` |
 | **Anthropic** | `budget_tokens` (inside `thinking` block) | 1024 – 128000 | Model-dependent |
-| **Google** | `thinkingBudget` | 0 – 24576 | Dynamic |
+| **Google** | `thinkingBudget` (Gemini 2.5); `thinkingLevel` (Gemini 3) | 0 – 24576 / `low`, `medium`, `high` | Dynamic |
 | **DeepSeek** | N/A (not exposed) | — | Internal |
 
 `reasoning_effort: "low"` or a small `budget_tokens` value produces faster, cheaper responses with less thorough reasoning — suitable for simple tasks. `reasoning_effort: "high"` or a large `budget_tokens` enables deep multi-step reasoning — necessary for complex math, code, and analysis tasks.

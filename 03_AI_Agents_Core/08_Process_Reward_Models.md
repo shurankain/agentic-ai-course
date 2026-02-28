@@ -219,7 +219,15 @@ The release of o3, o4-mini, and DeepSeek R1 in 2024-2025 confirmed the central r
 
 **Programmatic verification as PRM:** For domains with verifiable outcomes (math, code, logic), programmatic verifiers serve as automated process reward signals. Instead of training a neural PRM, the system executes the code or checks the proof at each step. DeepSeek R1's training pipeline uses execution-based verification for code and math tasks — the reward signal is dense (per-problem) and perfectly accurate (no reward model bias). This is effectively a "perfect PRM" for verifiable domains.
 
-**Implications:** The 2025 landscape shows convergence: explicit PRMs, implicit process signals (GRPO), and programmatic verifiers are all approaches to the same fundamental problem — providing dense feedback for multi-step reasoning. The choice depends on the domain: programmatic verification where possible, GRPO-style trajectory comparison for general reasoning, and explicit PRM for domains requiring nuanced step evaluation.
+**Practical decision framework:**
+
+| Approach | Best For | Advantages | Limitations |
+|----------|----------|------------|-------------|
+| **Programmatic verification** | Math, code, logic, formal proofs | Perfect accuracy, no reward bias, scales cheaply | Only works for verifiable domains |
+| **GRPO-style trajectory comparison** | General reasoning, open-ended tasks | No separate reward model needed, captures emergent reasoning patterns | Requires sampling many trajectories per prompt, high training compute |
+| **Explicit neural PRM** | Nuanced domains (legal, medical, scientific reasoning) | Evaluates subjective reasoning quality, fine-grained step feedback | Expensive to train, requires expert step-level annotations |
+
+**Decision rule:** Start with programmatic verification if your domain allows it — it is the cheapest and most reliable option. Use GRPO when you need general reasoning improvement and can afford the training compute. Reserve explicit PRM for domains where reasoning quality is subjective and cannot be verified programmatically.
 
 ---
 

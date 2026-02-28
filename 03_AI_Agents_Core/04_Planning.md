@@ -281,6 +281,16 @@ Sometimes a plan needs refinement not because of errors but because new informat
 
 **Balance between planning and execution:** Too much detail upfront — wasted effort on steps that will change. Too little — chaotic wandering. The optimum: a detailed plan for 2-3 steps ahead, a rough plan for the entire task, refinement as progress is made.
 
+### Reasoning Models and Planning
+
+Reasoning models (o3, Claude with extended thinking) shift the planning landscape. These models can perform multi-step planning, contingency analysis, and replanning internally within a single generation pass — tasks that previously required explicit Plan-and-Execute frameworks.
+
+**What changes:** For moderate-complexity tasks (5-10 steps), a reasoning model can generate and adapt a plan within its thinking phase, eliminating the need for a separate planning agent or LangGraph state machine. The model naturally handles the "plan → encounter obstacle → replan" cycle inside its reasoning tokens.
+
+**What stays the same:** For long-running tasks with dozens of steps, external checkpointing, human-in-the-loop approval, or coordination across multiple specialized agents, explicit planning frameworks remain essential. The reasoning model's context window and token budget impose natural limits on how much planning complexity can be internalized.
+
+**Practical rule of thumb:** If the task can be completed in a single model call (even a long one with many tool calls), let the reasoning model plan internally. If the task spans multiple sessions, requires persistent state, or needs human approval at intermediate steps — use an explicit planning framework.
+
 ---
 
 ## Parallel Execution
