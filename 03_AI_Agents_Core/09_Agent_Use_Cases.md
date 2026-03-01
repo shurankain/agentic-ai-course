@@ -31,6 +31,9 @@ Not all agent applications are at the same maturity level. Some already generate
 | **Computer Use Agents** | Beta | Anthropic, OpenAI Operator | Active development |
 | **Browser Automation** | Emerging | Browser Use, Amazon Nova Act | 27K+ GitHub stars |
 | **Deep Research** | Emerging | Gemini Deep Research, OpenAI | New category 2024-2025 |
+| **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
+| **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
+| **Internal Employee** | Production | Glean, custom RAG agents | Corporate knowledge + tools |
 
 ---
 
@@ -249,6 +252,34 @@ This is not simply "search and summarize" — it is a full research process invo
 | Output | Brief answer | Structured report |
 | Iteration | 1-3 cycles | Many iterations |
 | Scope | Focused | Exploratory |
+
+---
+
+## Internal Enterprise Agents
+
+### Code Review Agents
+
+Specialized multi-agent systems that review pull requests for security vulnerabilities, performance issues, style violations, and architectural concerns. Each agent focuses on a narrow domain (see [[../19_Practical_Projects/02_Multi_Agent_System|Multi-Agent Code Review Project]] for a detailed implementation).
+
+**Maturity:** Production-ready. GitHub, GitLab, and third-party tools (CodeRabbit, Sourcery) offer automated AI code review. Enterprise teams deploy custom agents tuned to their coding standards.
+
+**Key pattern:** Multi-agent specialization — one agent per concern (security, performance, style) — outperforms a single "review everything" agent by avoiding cognitive overload.
+
+### Data Analysis Agents
+
+Agents that accept natural language questions about datasets and autonomously write SQL/Python, execute queries, generate visualizations, and interpret results. The agent iterates: if a query returns unexpected results, it investigates further.
+
+**Key Players:** Julius AI, Code Interpreter (OpenAI), Gemini Code Execution. Enterprise deployments use custom agents connected to internal data warehouses via MCP.
+
+**Why agents work well here:** Data analysis has a natural feedback loop — query results are immediately verifiable, and the agent can self-correct by examining the data. The challenge is ensuring the agent does not hallucinate insights from statistical noise.
+
+### Internal Employee Agents
+
+AI assistants embedded in corporate workflows: answering HR policy questions, helping with expense reports, onboarding new employees, searching internal documentation, and routing requests to the right team.
+
+**Architecture:** Typically agentic RAG over internal knowledge bases (Confluence, SharePoint, Notion) with tool access to corporate systems (HRIS, ticketing, calendar). MCP servers provide standardized access to each corporate system.
+
+**Key difference from customer-facing agents:** Higher trust level (employees understand limitations), access to sensitive internal data (requires strict authorization), and integration with SSO/identity systems for audit trails.
 
 ---
 

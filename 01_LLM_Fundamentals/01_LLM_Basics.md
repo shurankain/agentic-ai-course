@@ -62,7 +62,7 @@ A single attention mechanism is useful, but what if a word needs to be analyzed 
 
 Multi-Head Attention solves this problem by running multiple attention mechanisms in parallel. Each "head" can learn to focus on different aspects: one on syntactic relationships, another on semantic ones, a third on proximity relationships in the text. The results from all heads are concatenated and projected back into a unified representation.
 
-Modern models use dozens or even hundreds of attention heads. GPT-4 reportedly uses 96 heads in each of its 96 layers.
+Modern models use dozens or even hundreds of attention heads. GPT-4 is estimated to use 96 heads in each of its 96 layers (based on community analysis — OpenAI has not officially disclosed GPT-4's architecture).
 
 ### Multi-Head Attention Optimizations: MQA and GQA
 

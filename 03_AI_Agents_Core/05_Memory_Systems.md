@@ -98,60 +98,35 @@ Consolidation is the process of stabilizing memory after encoding. Three types w
 
 ---
 
-## MemGPT: Virtual Context Management
+## MemGPT: Virtual Context Management (Historical Reference)
 
-### The MemGPT Concept
+MemGPT (UC Berkeley, 2023) introduced an influential concept: giving an LLM the illusion of "infinite" memory through context virtualization, inspired by virtual memory in operating systems.
 
-MemGPT (UC Berkeley, 2023) is an architecture that gives an LLM the illusion of "infinite" memory through context virtualization. Inspired by virtual memory in operating systems.
+**Core idea:** The model's context window is "RAM" (fast but limited), and external storage (vector DB) is "disk" (slower but unlimited). A Memory Manager dynamically "swaps" information between context and storage — loading relevant data in, offloading stale data out.
 
-**OS Analogy**
+**Architecture:** Main Context (system prompt + working context + recent messages) and External Storage (archival memory via vector DB + recall memory for key facts). The LLM calls memory_read/memory_write functions to manage its own memory — self-directed rather than developer-programmed.
 
-In operating systems, virtual memory solves a fundamental problem: programs need more memory than the physical RAM available. The solution is an illusion: the program "sees" a large address space, but the OS dynamically moves data between fast RAM and slow disk.
+**Key innovations:** Self-directed memory management (the LLM decides what to save and retrieve via tool calls), a heartbeat mechanism for proactive background consolidation, and the separation of archival vs. recall memory tiers.
 
-MemGPT applies the same idea to LLMs. The model's context window (e.g., 128K tokens) is the "RAM": fast but limited. External storage (vector DB) is the "disk": slower but practically unlimited.
+**Legacy:** While MemGPT as a specific system saw limited production adoption (the Letta project that grew out of it pivoted to a broader agent platform), its core ideas — self-directed memory, tiered storage, and tool-based memory operations — became foundational patterns. Modern production memory systems (Claude Code's file-based memory, MCP-based memory servers) are simpler but embody the same principles: the agent manages its own persistence through explicit operations rather than hoping the context window is large enough.
 
-The Memory Manager acts as the OS virtual memory: it dynamically "swaps" information between context and storage. Important and relevant data is loaded into context. Stale or unused data is offloaded to external storage. The LLM operates under the full illusion that all information is available.
+---
 
-### MemGPT Architecture
+## Memory Storage Decision Guide
 
-MemGPT divides memory into two levels:
+Choosing the right storage backend depends on scale, access patterns, and infrastructure constraints:
 
-**Main Context** — the limited window visible to the LLM. Consists of three parts:
-- System Prompt (fixed) — instructions and operating rules
-- Working Context (dynamic) — current state and active data
-- FIFO Messages (recent) — latest conversation messages
+| Scenario | Recommended Storage | Why |
+|----------|-------------------|-----|
+| Developer tools, CLI agents (hundreds of items, human-readable) | **File-based** (CLAUDE.md pattern) | Git-versioned, debuggable, zero infrastructure, works offline |
+| Enterprise agent with 10K-100K memories, existing PostgreSQL | **PostgreSQL + pgvector** | Single database for relational + vector data, ACID transactions, familiar tooling |
+| High-scale production, 100K+ memories, sub-10ms latency required | **Dedicated vector DB** (Qdrant, Weaviate, Pinecone) | Purpose-built ANN indexes, horizontal scaling, managed SaaS options |
+| Structured data (user profiles, preferences, config) | **SQL database** (PostgreSQL, SQLite) | Schema enforcement, complex queries, joins, aggregations |
+| Multi-agent system, backend-agnostic | **MCP-exposed memory** | Any backend behind a standard protocol, composable, shareable across agents |
+| Embedded / edge / local-first agents | **LanceDB** or **SQLite + vector extension** | No server, file-based, embeddable, good for desktop/mobile agents |
+| Prototype / proof-of-concept | **JSON files** or **in-memory** | Zero setup, iterate fast, migrate later |
 
-**External Storage** — unlimited storage outside the context. Divided into two types:
-- Archival Memory (vector DB) — everything ever saved: past conversations, learned facts, user preferences. Unlimited volume, search via embeddings.
-- Recall Memory (structured) — key memories about the user and important facts. Smaller in volume but always readily accessible.
-
-The connection between levels is made through memory_read and memory_write functions, which the LLM calls as needed. The agent itself decides when to load information from External Storage into Main Context and when to save new information.
-
-### Key MemGPT Functions
-
-**Self-directed memory management**
-
-The main innovation of MemGPT is that the LLM itself decides when and what to save or retrieve. The model is provided a set of functions for working with memory: archival_memory_insert (save important data), archival_memory_search (find archived memories), core_memory_append (add to core knowledge about the user), core_memory_replace (update existing knowledge).
-
-The agent does not passively save everything. It analyzes the conversation and decides: "This is an important fact — I'll save it," "I need additional information — I'll search the archive," "This is a preference update — I'll replace the old one." This removes the burden from the developer: no need to manually program saving rules.
-
-**Heartbeat mechanism**
-
-A traditional agent works reactively: receives a message → processes → responds → waits. MemGPT adds proactivity: the agent continues to "think" even without incoming messages.
-
-The heartbeat mechanism is a periodic internal call, even when the user is silent. The agent checks: do recent memories need consolidation? Is there relevant context that should be preloaded? Is it time to update working memory?
-
-This internal activity is invisible to the user but critical for quality. The agent does not wait for a problem to manifest ("I forgot the context") but prevents it in advance.
-
-**Practical advantages**
-
-Without MemGPT, long conversations quickly lose context: after 20-30 messages, information from the beginning of the dialog falls out of the window. With MemGPT, it is automatically saved to archival storage and can be retrieved when needed.
-
-Personalization without MemGPT is limited to the current session: the agent "knows" about the user only what was said in this conversation. With MemGPT, knowledge accumulates across sessions: the agent remembers preferences, work style, past tasks.
-
-Relevant context without MemGPT requires manual RAG setup: the developer must explicitly program when and what to retrieve. MemGPT makes this self-directed: the agent itself decides what information is needed.
-
-Context usage changes from "all or nothing" to "intelligent loading": instead of passing the entire dialog history, the agent loads only relevant parts, saving tokens and focusing the model's attention.
+**Decision flow:** Start with the simplest option that meets your scale. File-based or SQLite for prototypes → pgvector when you need SQL + vectors → dedicated vector DB when you hit scale limits. Use MCP as the interface layer so storage can be swapped without changing agent code.
 
 ---
 
@@ -229,9 +204,11 @@ However, decay should not be uniform for all memory types. Semantic facts (gener
 
 **Vector DBs** (Pinecone, Weaviate, Milvus, Qdrant) — specialized for ANN search, scale to millions of items. Cost: additional infrastructure, paid SaaS, complex metadata filtering. For production with 100k+ items.
 
-**PostgreSQL + pgvector** — a hybrid: ACID transactions, complex queries, plus vector search. Unifying memory in a single database. Limitation: performance up to ~100k vectors. For medium volumes with integration into existing infrastructure.
+**PostgreSQL + pgvector** — a hybrid: ACID transactions, complex queries, plus vector search. Unifying memory in a single database. Widely adopted (pgvector has 15K+ GitHub stars) and often the simplest production choice when PostgreSQL is already in the stack. Performance is adequate for most workloads up to ~100K-500K vectors with HNSW indexes.
 
-**SQLite** — a file-based DB with no server. For prototypes, local agents, embedded systems. Limited by performance and concurrent writes.
+**LanceDB** — an embedded vector database (no server). Stores data in Lance columnar format, supports hybrid search (vector + full-text), and runs in-process. Ideal for desktop agents, edge deployment, and local-first applications where running a database server is impractical.
+
+**SQLite** — a file-based DB with no server. For prototypes, local agents, embedded systems. Limited by performance and concurrent writes. With sqlite-vec extension, basic vector search is also possible.
 
 **MongoDB/Elasticsearch** — schema flexibility, full-text search. Trade-off: heavyweight systems, overkill for simple cases. For complex heterogeneous structures.
 

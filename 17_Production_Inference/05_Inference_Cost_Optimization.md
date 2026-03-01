@@ -171,6 +171,26 @@ Soft limits: warning at 70%, degraded service at 85%, queue prioritization.
 
 Graceful degradation: Normal → 70% warnings → 85% aggressive cascading → 95% queue/rate limiting → 100% free tier disabled.
 
+## Serving MoE Models
+
+Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtral 8x22B, and Llama 4 Maverick require specialized serving strategies because their total parameter count far exceeds what's needed per inference.
+
+**Memory vs. compute tradeoff:** An MoE model's full weights must fit in memory (DeepSeek V3: ~670GB in INT8), but only a fraction activates per token (37B for DeepSeek V3). This means high memory requirements but lower per-token compute than a dense model of the same total size.
+
+**Serving strategies:**
+
+**Tensor parallelism across GPUs:** Distribute the full model across multiple GPUs. For DeepSeek V3 in INT8: 8-9x A100 80GB or 4x H100. Expert layers are distributed so each GPU holds a subset of experts, with all-to-all communication during expert routing.
+
+**Expert offloading:** Keep inactive experts on CPU/NVMe and load them on demand. Dramatically reduces GPU memory (serve DeepSeek V3 on 2x A100 instead of 8), but adds latency per token. Viable for batch or latency-tolerant workloads. Implementations: llama.cpp, ExLlamaV2.
+
+**Quantization is highly effective for MoE:** Since most parameters are expert weights that activate sparsely, aggressive quantization (INT4, even INT2 for inactive experts) has less impact on quality than for dense models. DeepSeek V3 in INT4 fits on 4x A100 80GB with minimal quality loss.
+
+**KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache significantly — 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
+
+**vLLM and SGLang support:** Both support MoE model serving with tensor parallelism. vLLM's V1 engine added optimized MoE routing kernels. SGLang supports expert parallelism (EP) for distributing experts across GPUs independently of tensor parallelism.
+
+**Practical guidance:** For models <100B total params (Mixtral 8x7B): standard serving, 1-2 GPUs. For 100B-700B total (Mixtral 8x22B, DeepSeek V3): multi-GPU tensor parallelism + quantization. For cost optimization: expert offloading trades latency for 2-4x memory reduction.
+
 ## Key Takeaways
 
 Spot instances — low-hanging fruit. 60-90% savings for eligible workloads. Combine with on-demand for resilience.

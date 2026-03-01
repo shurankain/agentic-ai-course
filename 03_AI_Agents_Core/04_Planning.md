@@ -358,7 +358,7 @@ Parallelism is not free. Limitations:
 
 ## Practical Example: LLM Planner with Adaptation
 
-This section examines a practical implementation of a planner that combines plan generation, validation, and adaptive execution.
+This section describes the architecture of a planner that combines plan generation, validation, and adaptive execution. The description focuses on design patterns rather than runnable code — for working implementations, see LangGraph's [Plan-and-Execute](https://langchain-ai.github.io/langgraph/tutorials/plan-and-execute/plan-and-execute/) tutorial or the [Strands Agents](https://github.com/strands-agents/sdk-python) open-source framework, both of which implement these patterns with full test suites.
 
 ### Prompt Structure for Plan Generation
 

@@ -68,6 +68,24 @@ ML example: we needed to choose between fine-tuning and training from scratch, a
 
 ML specifics: ML projects are difficult for non-technical people because the outcome is uncertain, metrics are abstract, and timelines are unpredictable. My approach: start with business outcome rather than technology, show examples rather than metrics (here are ten real cases), provide milestone-based updates rather than "we are still training," explicitly communicate uncertainty ranges.
 
+### Technical Vision & Strategy
+
+"Tell me about a time you set the technical direction for a project or team" — demonstrate long-term thinking, evaluation of alternatives, stakeholder alignment, and measurable outcomes.
+
+ML example: our team was building five separate ML services, each with its own training pipeline, serving infrastructure, and monitoring. I proposed a unified ML platform: shared feature store, centralized model registry, standardized serving via vLLM. I mapped the current costs (duplicated compute, inconsistent evaluation, each team re-solving the same problems), projected 18-month savings, and built a prototype with one team. After the prototype succeeded (deployment time reduced from 2 weeks to 2 days), I presented to engineering leadership. Result: adopted as the org-wide standard, three teams migrated in the first quarter, infrastructure costs reduced by 40%. Learning: a working prototype convinces more than a slide deck.
+
+### Ethical Decision in AI
+
+"Tell me about a time you had to make a difficult ethical decision in an AI project" — demonstrate awareness of AI risks, proactive action, and balancing business and ethical concerns.
+
+ML example: our recommendation system was highly effective at engagement (session time up 25%), but I noticed it was disproportionately recommending content in English to multilingual users. Investigating the data, I found the training set was 80% English. I raised this with the product team — the initial response was "metrics are great, why change it?" I framed it as a business risk: we were effectively degrading experience for 40% of our users. I proposed a two-week fix: stratified sampling by language, a diversity metric added to the evaluation suite, and A/B testing the balanced model. Result: engagement stayed within 2% of the original model, but non-English user retention improved by 15%. Learning: framing ethical issues in terms of business impact gets faster buy-in than abstract fairness arguments.
+
+### Scaling Under Pressure
+
+"Tell me about a time you had to scale a system quickly under pressure" — demonstrate calm under pressure, pragmatic prioritization, and technical execution.
+
+ML example: our RAG-based customer support system suddenly saw 10x traffic after a product launch was featured on a major tech blog. Response latency jumped from 200ms to 8 seconds, and the vector DB started timing out. Within two hours, I did three things: added aggressive caching for the top 50 most common queries (covering 35% of traffic), switched overflow traffic to a smaller model (Haiku instead of Sonnet — slightly lower quality but 5x faster), and added a queue with rate limiting to prevent database overload. Over the next week, I properly horizontal-scaled the vector DB and added autoscaling rules. Result: system stabilized within 3 hours of the incident, no customer-facing outage. Learning: have a "break glass" plan for 10x scenarios — know which knobs to turn before you need them.
+
 ---
 
 ## Amazon Leadership Principles for AI/ML
