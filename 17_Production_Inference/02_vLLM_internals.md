@@ -10,7 +10,7 @@
 
 ## Why vLLM Became the Standard
 
-vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention — an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase.
+vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention — an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of early 2026, vLLM is at v0.16+.
 
 Advantages:
 - Memory efficiency through fragmentation elimination

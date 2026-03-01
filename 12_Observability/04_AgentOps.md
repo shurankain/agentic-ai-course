@@ -76,7 +76,7 @@ Contextual fields: user_id, task_type, model, tokens_in, tokens_out, latency_ms,
 
 **CrewAI Observability:** CrewAI added built-in observability features: crew execution traces, agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility — seeing how agents delegate, collaborate, and hand off tasks — fills a gap that general-purpose observability tools miss.
 
-**AG2 (formerly AutoGen):** Microsoft's AutoGen was rebranded as AG2 in late 2024. AG2 includes: conversation logging across agent groups, structured message tracing, cost tracking per agent, and integration with observability backends. The rename reflects the project's evolution from a research framework to a production-ready multi-agent platform.
+**AG2 (formerly AutoGen):** Microsoft's AutoGen was forked and rebranded as AG2 in late 2024 by the original AutoGen team, who continued development independently. AG2 includes: conversation logging across agent groups, structured message tracing, cost tracking per agent, and integration with observability backends. Note the distinction: **AutoGen** (the Microsoft repo) is now in maintenance mode with Microsoft's investment shifting to Microsoft Agent Framework, while **AG2** (the community fork at ag2ai/ag2) continues active development as an independent project. For observability purposes, both share similar tracing patterns inherited from AutoGen 0.4.
 
 ### AgentOps.ai Evolution
 

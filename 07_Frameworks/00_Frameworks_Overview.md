@@ -36,13 +36,13 @@ Frameworks are organized by abstraction level from high to low:
 
 ### Leaders in Agent-Oriented Development
 
-**LangChain and LangGraph** remain the de facto standard with over 80,000 GitHub stars and 4.2 million downloads per month. A vast integration ecosystem and LangSmith for monitoring make them the first choice for Python development. Complexity and a steep learning curve are the main barriers for newcomers.
+**LangChain and LangGraph** remain the de facto standard with over 100,000 GitHub stars (as of early 2026) and tens of millions of monthly package downloads across their ecosystem (langchain-core, langchain-openai, langchain-community). A vast integration ecosystem and LangSmith for monitoring make them the first choice for Python development. Complexity and a steep learning curve are the main barriers for newcomers.
 
-**CrewAI** is growing rapidly, reaching 30,000 stars and attracting $18 million in investment (Series A). The role-based approach to agents and easy onboarding attract developers, but less flexibility compared to LangGraph limits its use in complex scenarios.
+**CrewAI** is growing rapidly, reaching 45,000+ stars (as of early 2026) and attracting $18 million in investment (Series A). The role-based approach to agents and easy onboarding attract developers, but less flexibility compared to LangGraph limits its use in complex scenarios.
 
-**Microsoft AutoGen** with 25,000 stars focused on multi-agent conversations and code execution. Now in maintenance mode — Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
+**Microsoft AutoGen** with 55,000+ stars (reflecting historical interest) focused on multi-agent conversations and code execution. Now in maintenance mode — Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
 
-**LlamaIndex** with 35,000 stars is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, but its focus on information retrieval means fewer capabilities for agent workflows.
+**LlamaIndex** with 47,000+ stars (as of early 2026) is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, but its focus on information retrieval means fewer capabilities for agent workflows.
 
 ### Cloud Provider Solutions
 
@@ -126,7 +126,7 @@ OpenAI has transitioned from the Assistants API to a new architecture. The Assis
 
 Anthropic provides the Claude API with tool use capabilities and the Claude Code CLI as its agent platform. Rather than a separate agent framework, Anthropic's approach emphasizes the model's native tool use ability combined with MCP for extensibility.
 
-**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. Computer Use enables browser and desktop automation where the model controls the computer. Extended thinking provides transparent chain-of-thought reasoning. Extended context of 200,000 tokens (1M in beta) allows processing vast amounts of information. **Claude Code** is a CLI-based coding agent that demonstrates the agentic pattern using Claude's native capabilities — it reads files, writes code, runs commands, and uses MCP servers for extensibility.
+**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. **Computer Use** enables browser and desktop automation where the model controls the computer — clicking, typing, navigating, and reading screen content. This is a major agent capability for automating workflows that require interacting with web applications and desktop software that lack APIs. Extended thinking provides transparent chain-of-thought reasoning with developer-visible `<thinking>` blocks and explicit `budget_tokens` control. Extended context of 200,000 tokens (1M available on Opus 4.6) allows processing vast amounts of information. **Claude Code** is a CLI-based coding agent that demonstrates the agentic pattern using Claude's native capabilities — it reads files, writes code, runs commands, and uses MCP servers for extensibility. **Claude Code SDK** allows building custom agents using Claude Code as a subprocess, inheriting its tool use and MCP capabilities.
 
 ### Google Vertex AI and ADK
 

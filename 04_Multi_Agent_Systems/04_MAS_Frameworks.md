@@ -190,6 +190,16 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 Microsoft Agent Framework is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration as the framework matures.
 
+### Migration from AutoGen / Semantic Kernel
+
+| Source | What Carries Over | What Changes | Migration Effort |
+|--------|------------------|--------------|-----------------|
+| **AutoGen 0.4** | Event-driven patterns, typed messages, agent group concepts | Runtime API, message routing, deployment model | Moderate — architectural concepts map well, but API surface differs |
+| **Semantic Kernel** | Plugins, functions (native + semantic), planner concepts | Kernel API replaced by Agent Framework API, SK plugins require adapter wrapping | Low-moderate — plugin model is preserved with minimal changes |
+| **AutoGen 0.2** | High-level concepts only | Everything — 0.2 → 0.4 was already a full rewrite | High — treat as a greenfield migration |
+
+**Practical advice:** For existing AutoGen 0.4 deployments, migration is straightforward — the event-driven and typed message patterns carry over directly. For Semantic Kernel, existing plugins can be wrapped with minimal effort. For AutoGen 0.2 systems, consider this a rewrite and evaluate all framework options (LangGraph, OpenAI Agents SDK) rather than defaulting to Microsoft Agent Framework.
+
 ## Google Agent Development Kit (ADK)
 
 Google ADK is a unified toolkit for building agents in the Google Cloud ecosystem, with deep integration with Gemini models and Vertex AI.
@@ -217,6 +227,18 @@ Each framework occupies its own niche. The choice depends on the specific requir
 **Google ADK** -- for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
 
 **AutoGen / Semantic Kernel** -- in maintenance mode. Existing deployments continue to work, but new projects should evaluate the alternatives above.
+
+### Reasoning Model Support
+
+| Framework | Reasoning Model Support | Notes |
+|-----------|------------------------|-------|
+| **LangGraph** | Full — any model via LangChain integrations | Extended thinking tokens flow through the graph naturally; budget control at node level |
+| **OpenAI Agents SDK** | Native — o3/o4-mini with `reasoning_effort` | Built-in support; reasoning and tool calls interleave within agent runs |
+| **CrewAI** | Via provider — works with any reasoning model | No special reasoning-aware features; model handles reasoning internally |
+| **Microsoft Agent Framework** | Azure OpenAI reasoning models supported | Integrates with Azure o-series deployments |
+| **Google ADK** | Native — Gemini with `thinkingBudget` | Deep integration with Gemini thinking capabilities |
+
+**Practical note:** Reasoning models reduce the need for complex multi-agent orchestration on moderate tasks. A single agent with o3 or Claude extended thinking can often replace a 3-4 agent pipeline that was needed with standard models. When evaluating frameworks, consider whether your use case truly needs multi-agent coordination or whether a single reasoning-capable agent suffices.
 
 ## Key Takeaways
 

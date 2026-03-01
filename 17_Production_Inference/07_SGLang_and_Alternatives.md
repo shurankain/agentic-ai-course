@@ -71,6 +71,8 @@ Production-grade platform from NVIDIA. Accepts requests, routes them to the Tens
 - Flexibility: vLLM high, TensorRT limited
 - FP8: vLLM via parameter, TensorRT native
 
+**Simplification in 2025:** TensorRT-LLM has progressively improved its developer experience. The high-level Python `LLM` API (introduced in late 2024, stabilized in 2025) reduces the model conversion and deployment process from dozens of steps to a few lines of code, with automatic quantization and engine building. The API now explicitly labels stable vs. unstable components, making it clearer what is production-ready. While still more complex than vLLM, the gap has narrowed significantly.
+
 **When to choose:**
 Ideal: maximum performance is critical, NVIDIA GPUs (especially Hopper+), stable production model, cost optimization at scale. Less suitable: rapid prototyping, frequent model changes, limited DevOps resources.
 

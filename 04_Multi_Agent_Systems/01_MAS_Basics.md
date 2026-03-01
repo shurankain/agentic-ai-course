@@ -70,9 +70,9 @@ Shared memory (blackboard) where agents write to and read from. Advantages: publ
 
 ### Formalization
 
-**FIPA-ACL** - a standard for message structure: sender, recipient, communicative act (inform, request, query, propose, accept/reject), content, metadata.
+**FIPA-ACL** — a standard for agent message structure from the 1990s (Foundation for Intelligent Physical Agents): sender, recipient, communicative act (inform, request, query, propose, accept/reject), content, metadata. While historically important for establishing the vocabulary of agent communication, FIPA-ACL saw limited adoption in practice. Modern LLM agent systems use lighter-weight protocols: **MCP (Model Context Protocol)** for tool integration and **A2A (Agent-to-Agent)** for inter-agent communication, both designed for the specific needs of LLM-based agents.
 
-**Blackboard Architecture** - a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order.
+**Blackboard Architecture** — a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order.
 
 ## Roles and Specialization
 
