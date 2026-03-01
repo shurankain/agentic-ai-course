@@ -12,7 +12,9 @@
 
 Every application, service, and database uses its own API. Integrating an AI assistant with a calendar requires one integration code, email requires another, and the file system requires a third. Developers create unique adapters for each tool.
 
-Model Context Protocol (MCP) is an open standard from Anthropic that defines a universal way for AI models to interact with external systems. Instead of N×M integrations (N applications × M services), only N + M implementations are needed (N clients + M servers).
+Model Context Protocol (MCP) is an open standard — originally created by Anthropic (November 2024) and now governed by the Agentic AI Foundation (AAIF) under the Linux Foundation — that defines a universal way for AI models to interact with external systems. Instead of N×M integrations (N applications × M services), only N + M implementations are needed (N clients + M servers).
+
+MCP has rapidly become the cross-industry standard for AI tool integration. As of early 2026, the ecosystem includes 97M+ monthly SDK downloads, 10,000+ community servers, and native support from all major AI platforms (Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, and many others). The official MCP Registry catalogs approximately 2,000 verified servers.
 
 This chapter covers MCP architecture, the problems it solves, and its impact on AI application development.
 
@@ -98,7 +100,7 @@ MCP is built around several key concepts.
 
 **Host** — the application in which the client runs. The host manages the client's lifecycle and can define security policies. For example, Claude Desktop is the host for an MCP client.
 
-**Transport** — the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and Streamable HTTP (for remote servers). The earlier SSE-based HTTP transport was deprecated in March 2025 in favor of Streamable HTTP, which supports bidirectional communication over a single HTTP connection.
+**Transport** — the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and Streamable HTTP (for remote servers). The earlier SSE-based HTTP transport was deprecated in March 2025 in favor of Streamable HTTP. The reason: SSE is unidirectional (server → client only), requiring a separate HTTP endpoint for client → server messages. Streamable HTTP provides true bidirectional communication over a single HTTP connection, simplifying deployment and enabling server-initiated messages (Sampling, Elicitation) to flow naturally.
 
 ## MCP Architecture
 
@@ -174,7 +176,7 @@ MCP allows connecting multiple servers simultaneously. The agent sees a combined
 
 ## Key Takeaways
 
-Model Context Protocol represents an important step toward standardizing the AI tooling ecosystem. Instead of chaotic individual integrations, MCP offers a common language for interaction between AI applications and external services.
+Model Context Protocol has become the industry standard for AI tool integration. Instead of chaotic individual integrations, MCP provides a common language for interaction between AI applications and external services — now adopted by all major AI platforms and backed by cross-industry governance under the AAIF.
 
 MCP architecture follows proven principles: separation of clients and servers, a standard message protocol (JSON-RPC 2.0), and a capability negotiation mechanism for compatibility.
 
@@ -182,7 +184,7 @@ Key benefits of standardization: a radical reduction in integration costs (N + M
 
 For agentic systems, MCP is particularly valuable, providing unified access to data (resources) and the ability to execute actions (tools) through a standard interface.
 
-MCP is not just a technical standard — it is an investment in a future where AI tools freely combine and interact, much like USB devices work with any computer.
+MCP is no longer an emerging standard — it is the established foundation on which AI tools freely combine and interact, much like USB devices work with any computer.
 
 
 ---

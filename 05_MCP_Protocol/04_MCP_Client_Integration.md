@@ -162,11 +162,15 @@ The client can filter or modify Sampling requests according to security policies
 
 ### Context Limitations
 
-Language models have context size limitations. With a large number of tools, their descriptions can occupy a significant portion of the context window.
+Language models have context size limitations. With a large number of tools, their descriptions can occupy a significant portion of the context window. A typical tool definition consumes 200–500 tokens (name, description, JSON Schema for parameters). With 100 connected tools, this alone can consume 20,000–50,000 tokens — a significant portion of even a 200K context window, leaving less room for conversation history and resource content.
 
-The client can optimize context usage through dynamic tool filtering. Based on the current conversation, the most relevant tools are selected.
+**Dynamic tool filtering:** The client selects a subset of relevant tools based on the current conversation. Approaches include: keyword matching (the user mentions "database" → include SQL tools), semantic similarity (embed the user message and tool descriptions, select top-K matches), or LLM-based routing (a fast, cheap model classifies the query and selects a tool category).
 
-Another approach is hierarchical representation. Instead of showing hundreds of tools, the model is shown several categories, and it first selects a category, then a specific tool.
+**Hierarchical representation:** Instead of exposing hundreds of tools directly, the client presents a meta-tool like `select_toolset(category)` that returns the tools for that category. The model first selects "database tools" or "file tools," then sees only the 5–10 tools in that category. This reduces initial context usage to a few hundred tokens regardless of total tool count.
+
+**Description truncation:** For tools with verbose descriptions, the client can truncate to essential information (name, one-line summary, required parameters) during initial presentation, expanding the full description only when the model selects a tool.
+
+**Tool count budgeting:** A practical guideline — keep active tool definitions under 10% of the total context window. For a 128K context model, this means ~12,800 tokens for tools, accommodating roughly 25–60 tools at full detail or 100+ tools with truncated descriptions.
 
 ## User Interface
 

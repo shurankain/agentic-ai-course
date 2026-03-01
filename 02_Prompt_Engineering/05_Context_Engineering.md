@@ -180,6 +180,19 @@ The **Model Context Protocol (MCP)**, introduced by Anthropic in late 2024 and w
 
 **Why MCP matters for context engineering:** Before MCP, every agent framework implemented its own approach to tool definitions, resource access, and context assembly. MCP standardizes this, enabling interoperable context engineering across tools, IDEs, and agent frameworks. The same MCP server providing access to a Postgres database works identically in Claude Code, Cursor, Windsurf, or any custom agent.
 
+**MCP's context engineering impact by the numbers (early 2026):** 97M+ monthly SDK downloads, 10,000+ community servers, native support in all major AI platforms. MCP is no longer emerging infrastructure — it is the industry-standard context engineering protocol, governed by the Agentic AI Foundation under the Linux Foundation.
+
+**MCP primitives as WSCI enablers:**
+
+| WSCI Strategy | MCP Primitive | Example |
+|---------------|---------------|---------|
+| **WRITE** | Tools | Agent writes analysis results to a database via `db_insert` tool |
+| **SELECT** | Resources + Resource Templates | Agent discovers and reads relevant documents via `docs://project/{topic}` |
+| **COMPRESS** | Prompts | Server provides pre-structured prompt templates that include only essential context |
+| **ISOLATE** | Tasks + Sampling | Long-running operations run asynchronously (Tasks); sub-agents delegate reasoning via Sampling |
+
+The WSCI framework and MCP are complementary: WSCI describes *what* to do with context (write, select, compress, isolate), while MCP provides the *how* — standardized protocol primitives that implement these strategies across any AI platform.
+
 ### Agentic Search as Context Engineering
 
 A significant development in 2024-2025 is the emergence of **agentic search** — where the agent itself manages the SELECT strategy dynamically.

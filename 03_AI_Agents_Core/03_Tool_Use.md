@@ -444,9 +444,9 @@ MCP introduces specific security considerations (see [[../14_Security_Safety/03_
 
 ### Practical Impact
 
-MCP has become the de facto standard for agent tool integration in 2025. Major adopters include: Anthropic (Claude Code, Claude Desktop), Cursor, Windsurf, Zed, Sourcegraph, and numerous custom agent frameworks. The ecosystem has grown to thousands of community-built MCP servers providing access to databases, APIs, SaaS tools, and local system capabilities.
+MCP has become the industry standard for agent tool integration, replacing custom JSON schema definitions as the primary way agents connect to external systems. By early 2026: 97M+ monthly SDK downloads, 10,000+ community servers, an official MCP Registry with ~2,000 verified servers, and governance under the Agentic AI Foundation (AAIF, Linux Foundation). Major adopters include all leading AI platforms: Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, JetBrains IDEs, and many others.
 
-For tool designers, MCP means: build your tool as an MCP server once, and it works everywhere. For agent architects, MCP means: access to a vast ecosystem of pre-built tools without custom integration work.
+For tool designers, MCP means: build your tool as an MCP server once, and it works everywhere. For agent architects, MCP means: access to a vast ecosystem of pre-built tools without custom integration work. The shift from per-framework tool definitions to MCP is analogous to the shift from per-IDE language support to LSP — a one-time industry standardization that benefits everyone.
 
 ## Tool-Integrated Reasoning (2024-2025)
 

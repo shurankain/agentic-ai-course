@@ -216,6 +216,17 @@ The response schema supports text input, numeric input, boolean (yes/no) confirm
 
 **Security considerations:** The client can reject elicitation requests, modify the presentation, or require user approval before showing them. Servers must not assume elicitation will always succeed — the user may dismiss the request, the client may not support it, or the host policy may prohibit it.
 
+### Practical Elicitation Scenarios
+
+Elicitation is critical for production MCP servers that need to handle ambiguous or sensitive situations:
+
+- **Authentication flows:** A database server needs a one-time password or MFA confirmation before executing a query
+- **Destructive operations:** A file management server asks "Delete 47 files matching *.log? [yes/no]" before proceeding
+- **Disambiguation:** A search server finds multiple matching entities and asks the user to select the correct one
+- **Configuration at runtime:** A deployment server asks which environment (staging/production) to target
+
+Without Elicitation, servers either fail with an error requiring restart with new configuration, or make assumptions that may be wrong. Elicitation keeps the human in the loop for decisions that should not be automated.
+
 ### Elicitation vs. Sampling
 
 Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response — it is a machine-to-machine interaction. Elicitation asks the human user for input — it is a machine-to-human interaction. Both "reverse" the typical request flow (server initiates instead of client), but they address different needs. Elicitation is for decisions that require human judgment, while Sampling is for tasks that require AI reasoning.
@@ -240,6 +251,17 @@ Tasks support cancellation — the client can request that a running task be sto
 
 This primitive is especially valuable for agentic systems where an agent may launch multiple long-running operations in parallel and needs to monitor their progress, cancel them if the strategy changes, or collect partial results to inform subsequent decisions.
 
+### Tasks and Multi-Agent Coordination
+
+Tasks transform MCP from a synchronous request-response protocol into an asynchronous coordination layer. In multi-agent systems, this enables patterns that were previously difficult:
+
+- **Parallel execution with progress:** An orchestrator agent launches CI builds, test suites, and deployment checks via different MCP servers simultaneously, monitoring each task's progress and making decisions as results arrive
+- **Adaptive cancellation:** If an early task reveals a critical error, the agent cancels remaining tasks rather than wasting compute on doomed work
+- **Human-in-the-loop for long operations:** Tasks can pause for approval at critical checkpoints (e.g., before deploying to production), resuming when the human approves via Elicitation
+- **Partial result streaming:** A data processing task returns intermediate results (e.g., rows processed so far), allowing the agent to start analysis before the full dataset is ready
+
+Tasks, combined with Elicitation for human checkpoints and Sampling for AI-driven decisions, give MCP servers the building blocks for sophisticated autonomous workflows.
+
 ## OAuth 2.1 Authorization
 
 ### Authentication and Authorization in MCP
@@ -261,6 +283,18 @@ The MCP specification includes an OAuth 2.1 authorization framework as a standar
 The client discovers the server's authorization requirements via Protected Resource Metadata. It then performs the OAuth 2.1 authorization code flow with PKCE against the designated authorization server. Upon receiving tokens, the client includes the access token in subsequent MCP requests. Token refresh happens transparently when tokens expire.
 
 This standardized approach replaces the ad-hoc authentication patterns (API keys in environment variables, custom token headers) that characterized early MCP deployments.
+
+### Choosing an Authentication Approach
+
+| Scenario | Recommended | Why |
+|----------|-------------|-----|
+| Local stdio server (same machine) | No auth / filesystem permissions | The server runs as a local process; OS-level access control is sufficient |
+| Internal remote server (corporate network) | API keys via environment variables | Simple, sufficient when network is trusted; rotate keys regularly |
+| Public remote server (SaaS integration) | OAuth 2.1 with PKCE | Standard, user-delegated authorization; tokens are scoped and short-lived |
+| Server-to-server (backend services) | OAuth 2.1 client credentials or mTLS | No user interaction; mutual authentication ensures both parties are verified |
+| Enterprise with existing IdP | OAuth 2.1 + third-party authorization server | Reuse Okta/Auth0/Azure AD; centralized policy enforcement |
+
+**Practical rule:** Start with the simplest approach that meets your security requirements. Local development servers do not need OAuth. Production remote servers should always use OAuth 2.1. Reserve mTLS for high-security server-to-server scenarios where certificate management infrastructure already exists.
 
 ## Component Interaction
 
