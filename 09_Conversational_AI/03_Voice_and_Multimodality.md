@@ -52,16 +52,19 @@ Prosody — rhythm, stress, and intonation — is critically important. Incorrec
 
 The traditional voice agent architecture — ASR → LLM → TTS — is being disrupted by **native speech-to-speech models** that process and generate audio directly, without text as an intermediary.
 
-**OpenAI Realtime API (October 2024):** The first production API for native speech-to-speech interaction. GPT-4o processes audio tokens directly — speech is not transcribed to text before the model processes it. This enables:
-- **Sub-200ms latency** — no ASR/TTS overhead, the model reasons on audio directly
+**OpenAI Realtime API (launched October 2024, GA August 2025):** The first production API for native speech-to-speech interaction. Originally built on GPT-4o, it evolved into purpose-built audio models: `gpt-realtime` (August 2025) and `gpt-realtime-1.5` (February 2026) with improved instruction following, multilingual support, and tool calling. The model processes audio tokens directly — speech is not transcribed to text before processing. This enables:
+- **~200-300ms latency** — no ASR/TTS overhead, the model reasons on audio directly
 - **Natural prosody** — the model perceives and generates intonation, emphasis, emotion, and pauses
 - **Voice style control** — choose from preset voices or define tone characteristics
 - **Interruption handling** — native barge-in detection at the model level
 - **WebSocket-based streaming** — persistent bidirectional connection for real-time conversation
+- **MCP server support and image input** — added post-launch, enabling richer agent workflows
 
-The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems.
+The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems. Async tool calls allow long-running functions without blocking the conversation.
 
-**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. Supports long audio input (hours of audio via Gemini's 1M+ token context).
+**Pricing (as of early 2026):** `gpt-realtime-1.5`: ~$0.04/min audio input, ~$0.08/min audio output ($32/$64 per 1M audio tokens). A cheaper `gpt-4o-mini-realtime-preview` variant is also available at ~$10/$20 per 1M tokens. The GA launch brought a ~20% price reduction over the original preview pricing. No waitlist — available to all developers.
+
+**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
 
 **Anthropic Claude voice:** Claude processes audio input through transcription but excels at understanding the *content* of conversations, meeting recordings, and spoken instructions. While not natively speech-to-speech, Claude's strength is in deep reasoning about audio-derived content.
 
@@ -71,13 +74,13 @@ The native speech-to-speech approach changes the architecture fundamentally:
 
 **Traditional pipeline (still valid for many use cases):**
 Audio → ASR (Whisper) → Text → LLM → Text → TTS → Audio
-- Latency: 500-2000ms total
+- Latency: 600-2000ms total (optimized stacks with Deepgram STT + fast LLM + streaming TTS can approach sub-1s)
 - Each stage adds error and latency
 - But: transparent, debuggable, each component can be swapped
 
 **Native speech-to-speech (2024+):**
 Audio → Multimodal LLM → Audio
-- Latency: 100-300ms
+- Latency: 200-350ms (OpenAI Realtime ~250-300ms, Gemini Live ~280ms)
 - Preserves prosody, emotion, speaker characteristics
 - But: less transparent, harder to debug, higher API cost
 
@@ -165,6 +168,18 @@ Efficient compression: images are replaced with descriptions, retaining only key
 
 Preserving connections between modalities is important. "That photo I showed yesterday" — the agent must understand which image is being referenced, even if it has been removed from the immediate context.
 
+## MCP Integration for Voice Agents
+
+Voice agents that perform real-world actions — booking appointments, querying databases, controlling smart devices — need tool access. MCP (Model Context Protocol) provides the standard interface for connecting voice agents to external capabilities.
+
+**Architecture pattern:** The voice model (OpenAI Realtime, Gemini Live) receives audio, determines intent, and invokes MCP tools via function calling. Results flow back as audio responses. OpenAI's Realtime API added MCP server support directly, enabling voice-driven tool use without a separate orchestration layer.
+
+**Voice-specific considerations for MCP tools:**
+- **Latency budget:** Tool calls add latency to voice responses. Fast tools (local lookups, cached data) work well; slow tools (multi-step API chains) should use async patterns where the model continues speaking ("Let me look that up...") while the tool executes in the background.
+- **Confirmation design:** Destructive actions triggered by voice require explicit spoken confirmation. The MCP tool should return a confirmation prompt rather than executing immediately: "I'll cancel your order for $150. Should I proceed?"
+- **Result formatting:** MCP tool responses are typically structured data (JSON). The voice model must convert these into natural speech. Tools should return concise, speech-friendly summaries alongside structured data.
+- **Error recovery:** When a tool fails, the voice agent cannot show an error dialog. Design MCP tools to return human-readable error explanations suitable for spoken delivery.
+
 ## Voice Interface Design Specifics
 
 ### Conversational Design for Voice
@@ -231,7 +246,7 @@ Accounting for speech diversity is especially important. Accents, dialects, spee
 
 Multimodality is the natural direction of AI agent evolution. Human communication is inherently multimodal; restricting it to text impoverishes the interaction.
 
-Native speech-to-speech is a paradigm shift. OpenAI Realtime API and Gemini Live process audio directly — no ASR/TTS pipeline needed. Sub-200ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
+Native speech-to-speech is a paradigm shift. OpenAI Realtime API (now GA with purpose-built `gpt-realtime` models) and Gemini Live process audio directly — no ASR/TTS pipeline needed. 200-350ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
 
 Voice interfaces require a fundamental rethinking of design. Brevity, structure, error tolerance, and natural interruptions distinguish voice interaction from text interaction. Latency is a critical factor: hundreds of milliseconds determine the difference between a natural conversation and an irritating wait.
 

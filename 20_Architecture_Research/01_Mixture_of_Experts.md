@@ -86,7 +86,7 @@ Specifications: 671B total parameters, 37B activated per token, training cost of
 
 **Comparison with Competitors:**
 
-GPT-4o: approximately 1.8T total/unknown active params, $100M+ training cost, 128K context, 88.7 MMLU.
+GPT-4o: approximately 1.8T total/unknown active params (unconfirmed estimate based on industry speculation — OpenAI has not disclosed architecture details), estimated $100M+ training cost (no official source), 128K context, 88.7 MMLU.
 Claude 3.5: unknown params, unknown cost, 200K context, 88.7 MMLU.
 LLaMA 3.1 405B: 405B total/405B active, approximately $50M cost, 128K context, 88.6 MMLU.
 DeepSeek V3: 671B total/37B active, $5.5M cost, 128K context, 88.5 MMLU.
