@@ -128,6 +128,12 @@ The MCP specification added OAuth 2.1 as the standard authorization mechanism fo
 
 **Scopes and permissions:** Define granular scopes for your knowledge base server: `kb:read` (read resources), `kb:search` (use search tools), `kb:write` (create/update articles), `kb:admin` (statistics, management). Map OAuth scopes to MCP capabilities.
 
+**Token validation in practice:** Every incoming MCP request over Streamable HTTP must carry a Bearer token. The server validates the token before processing the request — verifying the signature (JWT) or introspecting with the authorization server (opaque tokens), checking expiration, and confirming that the token's scopes match the requested operation.
+
+The validation flow for a tool call: extract the Bearer token from the Authorization header → validate the token (signature, expiration, issuer) → extract scopes from the token claims → check that the required scope for the requested tool is present (e.g., `kb:write` for `create_article`) → if valid, execute the tool; if not, return a JSON-RPC error with code `-32001` and message "Insufficient permissions."
+
+**Scope-to-capability mapping example:** `kb:read` permits `resources/read` and `resources/list`. `kb:search` permits `tools/call` for `search_articles`. `kb:write` permits `tools/call` for `create_article` and `update_article`. `kb:admin` permits `tools/call` for `get_stats` and management operations. Unmapped operations are denied by default.
+
 **Why OAuth 2.1 over API keys:** OAuth 2.1 provides token expiration, scope-based access control, token revocation, and audit trails. API keys are static, unscoped, and difficult to rotate. For production MCP servers exposed over the network, OAuth 2.1 is the recommended approach.
 
 ## Key Takeaways

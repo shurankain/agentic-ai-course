@@ -56,7 +56,7 @@ Overlap avoids information loss at boundaries — a split sentence is fully pres
 
 ### Embeddings
 
-text-embedding-3-small provides a balance of quality and cost. Best practices: batch processing (grouping chunks), rate limiting (respecting API limits), retry logic (handling transient failures), caching (avoiding redundant generation).
+text-embedding-3-small provides a balance of quality and cost. Alternatives worth evaluating: text-embedding-3-large (higher quality, higher cost), Jina Embeddings v3 (strong multilingual support, task-specific adapters), BGE-M3 (open-source, hybrid dense+sparse embeddings in one model — useful for combining with BM25 retrieval). Best practices: batch processing (grouping chunks), rate limiting (respecting API limits), retry logic (handling transient failures), caching (avoiding redundant generation).
 
 ## Vector Store and Retrieval
 
@@ -185,6 +185,9 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -196,6 +199,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RagChatbotService {
+
+    private static final Logger log = LoggerFactory.getLogger(RagChatbotService.class);
 
     @Autowired
     private ChatClient chatClient;
@@ -238,12 +243,11 @@ public class RagChatbotService {
                 // Generate embeddings and save to vector store
                 vectorStore.add(chunks);
 
-                System.out.println("Indexed: " + path.getFileName() +
-                                 " (" + chunks.size() + " chunks)");
+                log.info("Indexed: {} ({} chunks)", path.getFileName(), chunks.size());
 
             } catch (Exception e) {
                 // Graceful error handling - continue with other documents
-                System.err.println("Error indexing " + path + ": " + e.getMessage());
+                log.error("Error indexing {}: {}", path, e.getMessage(), e);
             }
         }
     }
@@ -332,6 +336,7 @@ public class RagChatbotService {
      * @return stream of response tokens
      */
     public void streamAnswer(String userQuery, StreamCallback callback) {
+        Objects.requireNonNull(callback, "StreamCallback must not be null");
         List<Document> relevantDocs = retrieveRelevantDocuments(userQuery, 5);
 
         if (relevantDocs.isEmpty()) {
@@ -382,6 +387,8 @@ import io.qdrant.client.grpc.Points.*;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
@@ -393,6 +400,8 @@ import java.util.concurrent.ExecutionException;
  */
 @Component
 public class QdrantVectorStore {
+
+    private static final Logger log = LoggerFactory.getLogger(QdrantVectorStore.class);
 
     private final QdrantClient client;
     private final EmbeddingModel embeddingModel;
@@ -427,10 +436,10 @@ public class QdrantVectorStore {
                 .build();
 
             client.createCollectionAsync(createCollection).get();
-            System.out.println("Qdrant collection created: " + COLLECTION_NAME);
+            log.info("Qdrant collection created: {}", COLLECTION_NAME);
 
         } catch (ExecutionException | InterruptedException e) {
-            System.out.println("Collection already exists or error: " + e.getMessage());
+            log.info("Collection already exists or error: {}", e.getMessage());
         }
     }
 
@@ -462,7 +471,7 @@ public class QdrantVectorStore {
                 client.upsertAsync(COLLECTION_NAME, List.of(point)).get();
 
             } catch (Exception e) {
-                System.err.println("Error adding to Qdrant: " + e.getMessage());
+                log.error("Error adding to Qdrant: {}", e.getMessage(), e);
             }
         });
     }

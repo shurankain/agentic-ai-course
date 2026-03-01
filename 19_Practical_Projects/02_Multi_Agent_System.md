@@ -42,13 +42,13 @@ The Synthesizer combines findings, eliminates duplicates, prioritizes issues, an
 
 This project can be implemented with several modern agent frameworks:
 
-**LangGraph** — graph-driven orchestration with explicit state machines. Best for this use case: the code review workflow is well-defined (parse → route → review → synthesize), making explicit control valuable. LangGraph's checkpointing enables resumable reviews for large PRs.
+**LangGraph** — graph-driven orchestration with explicit state machines. The code review workflow is well-defined (parse → route → review → synthesize), making explicit control valuable. LangGraph's checkpointing enables resumable reviews for large PRs. Best when: you need fine-grained control over the execution flow, custom error handling per step, or observability via LangSmith.
 
-**CrewAI** — role-based multi-agent coordination with built-in delegation. Natural fit for the specialized reviewer pattern: each agent has a role, goal, and backstory. CrewAI's sequential and hierarchical process types map directly to the orchestrator-reviewer architecture.
+**CrewAI** — role-based multi-agent coordination with built-in delegation. The specialized reviewer pattern maps naturally to CrewAI's role/goal/backstory model. CrewAI's sequential and hierarchical process types match the orchestrator-reviewer architecture. Best when: you want to get a working prototype quickly with minimal boilerplate, and the workflow is straightforward enough that implicit orchestration suffices.
 
-**AWS Strands Agents** — model-driven approach with Agents-as-Tools pattern. The orchestrator delegates to specialized reviewer agents exposed as tools. Minimal boilerplate but less explicit control over the review workflow.
+**AWS Strands Agents** — model-driven approach with Agents-as-Tools pattern. The orchestrator delegates to specialized reviewer agents exposed as tools. Minimal boilerplate but less explicit control over the review workflow. Best when: you are already in the AWS ecosystem and want deep integration with AWS services.
 
-**Recommendation:** LangGraph for production (explicit flow control, checkpointing, observability via LangSmith) or CrewAI for rapid prototyping (less code, intuitive role-based design).
+**Recommendation:** Use LangGraph when the workflow has complex branching, error recovery, or requires production observability (checkpointing, LangSmith tracing). Use CrewAI when the agent roles are the primary abstraction and you want faster development with less code — it works well for production with straightforward multi-agent workflows. Both are production-viable; the choice depends on whether you need explicit flow control (LangGraph) or role-based simplicity (CrewAI).
 
 ## MCP Tool Integration
 

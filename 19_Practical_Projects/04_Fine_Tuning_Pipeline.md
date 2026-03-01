@@ -78,7 +78,7 @@ Training 80% (gradient updates), Validation 10% (hyperparameter tuning, early st
 
 ### Base Model
 
-**Recommended (2025):** Llama 3.1 8B Instruct — strong reasoning, 128K context, excellent instruction following. Qwen 2.5 7B Instruct — best multilingual support, competitive on benchmarks. Mistral v0.3 7B Instruct — efficient, good European language support.
+**Recommended (2025):** Llama 3.1 8B Instruct — strong reasoning, 128K context, excellent instruction following. Qwen 2.5 7B Instruct — strong multilingual support (trained on data in 29+ languages including CJK, Arabic, and European languages), competitive on benchmarks. Mistral v0.3 7B Instruct — efficient, good European language support.
 
 **Larger models:** Llama 3.1 70B for maximum quality (requires multi-GPU or quantization for fine-tuning). Qwen 2.5 72B for multilingual enterprise use.
 
