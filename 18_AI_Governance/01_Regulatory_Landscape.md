@@ -34,6 +34,10 @@ The EU AI Act classifies AI systems into four risk levels:
 - **August 2026** — full enforcement for high-risk systems (IMMINENT, 6 months away — certification requirements for HR, credit scoring, law enforcement, healthcare AI)
 - **August 2027** — high-risk in Annex I (safety products)
 
+### Enforcement Reality (as of early 2026)
+
+No fines have been issued yet under the EU AI Act. The first enforcement wave (prohibited practices, February 2025) is being monitored, but national market surveillance authorities are still building enforcement capacity. The GPAI Code of Practice (finalized 2025) provides a "safe harbor" — signatories receive a presumption of compliance and face fewer enforcement investigations. The practical reality: organizations have a narrow window (through August 2026) to prepare for high-risk system requirements, which will be the first large-scale enforcement milestone with real teeth.
+
 ### Prohibited Practices
 
 As of February 2025, the following are fully prohibited: evaluating people based on social behavior, manipulation of vulnerable groups, facial recognition in public spaces (with exceptions for terrorism, missing persons, serious crimes), emotion recognition in the workplace and educational institutions, biometric categorization by race or political views, building facial recognition databases from the internet or CCTV.
@@ -106,7 +110,7 @@ With the federal executive order rescinded, **US states have become the primary 
 
 **Colorado AI Act (SB 24-205, signed May 2024):** The first comprehensive US state AI law. Requires deployers of "high-risk AI systems" to use reasonable care to avoid algorithmic discrimination. Mandates risk management policies, impact assessments, and consumer notification when AI is used in consequential decisions (employment, finance, housing, insurance, education). Effective February 2026.
 
-**California SB-1047 (vetoed September 2024):** Would have required safety testing for large AI models (>$100M training cost or >10^26 FLOPS). Though vetoed by Governor Newsom, it influenced national debate and set a template for future legislation. Key provisions that may resurface: mandatory safety evaluations, kill switch requirements, whistleblower protections.
+**California SB-1047 (vetoed September 2024):** Would have required safety testing for large AI models (>$100M training cost or >10^26 FLOPS). Though vetoed by Governor Newsom, it influenced national debate. California subsequently passed **SB-53** (signed September 2024) — a narrower alternative requiring frontier model developers to publish transparency reports about safety testing. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking, making it the most active US state on AI regulation.
 
 **Other state activity (2024-2025):** Texas, Illinois, Connecticut, and several other states have introduced or passed AI-related legislation focusing on: algorithmic discrimination in employment (Illinois AI Video Interview Act), deepfake disclosure requirements, AI in insurance underwriting. The trend is toward sector-specific state regulation in the absence of federal legislation.
 

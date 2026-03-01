@@ -366,6 +366,35 @@ Model versioning and change management are critical for production AI. Semantic 
 
 Governance metrics — process, compliance, risk, culture — allow tracking effectiveness and continuous improvement. Executive dashboards provide visibility for the C-suite.
 
+## Practical Enforcement Reality (2025-2026)
+
+### What Has Actually Happened
+
+As of early 2026, the EU AI Act's enforcement is in its early stages. No fines have been issued yet, but the regulatory infrastructure is building:
+
+- **Prohibited practices (Feb 2025):** Active monitoring has begun, but national authorities are still developing enforcement procedures and technical expertise. No public enforcement actions yet
+- **GPAI obligations (Aug 2025):** Major providers (OpenAI, Google, Meta, Anthropic, Mistral) signed the GPAI Code of Practice, gaining presumption of compliance. Non-signatories face more scrutiny and must independently demonstrate compliance
+- **Models placed on market before Aug 2025** have a grace period until August 2027 for full compliance
+
+### Common Compliance Failure Patterns
+
+Organizations preparing for compliance encounter recurring challenges:
+
+**Training data documentation:** The requirement to publish a "sufficiently detailed summary" of training data is vague. Organizations struggle with what level of detail is sufficient. Web-scraped data is particularly difficult to document comprehensively.
+
+**Continuous compliance:** The EU AI Act requires ongoing compliance, not a one-time assessment. Model updates, capability changes, and new deployment contexts can change risk classifications. Organizations without continuous monitoring processes discover compliance gaps too late.
+
+**Risk classification ambiguity:** Determining whether a system is "high-risk" is not always straightforward. An internal productivity tool may become high-risk when used for HR decisions. Organizations need clear internal policies for risk classification at design time.
+
+**Cross-border complexity:** EU-based teams deploying globally face overlapping requirements (EU AI Act + US state laws + sector regulations). The lack of mutual recognition between jurisdictions means separate compliance processes.
+
+### Practical Advice for AI Architects
+
+1. **Sign the GPAI Code of Practice** if you are a model provider — the presumption of compliance is worth the effort
+2. **Build documentation into the development process** — retrofitting is 10x harder than building it in
+3. **Classify risk at design time** — before building, not after deploying
+4. **Treat August 2026 as a hard deadline** — high-risk system requirements will be the first enforcement actions with real penalties
+
 ## Practical Code Examples
 
 ### AI Governance Platform

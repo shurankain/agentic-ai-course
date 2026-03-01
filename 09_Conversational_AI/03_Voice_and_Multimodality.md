@@ -211,9 +211,11 @@ On-device processing where possible. Processing voice and images on the device m
 
 ### Countering Misuse
 
-Voice cloning opens opportunities for fraud: social engineering, spoofing voice authentication, and creating compromising content.
+Voice cloning opens opportunities for fraud: social engineering, spoofing voice authentication, and creating compromising content. The risk is not hypothetical — documented cases of CEO voice cloning for wire transfer fraud have caused millions in losses.
 
-Watermarking and detection of synthesized speech are actively developing fields. Invisible markers in synthesized audio allow origin determination. Deepfake detectors analyze audio for signs of artificial origin.
+**EU AI Act implications (effective February 2025):** Under the EU AI Act, AI-generated audio (including cloned voices) must be clearly labeled as artificially generated. Systems performing emotion recognition through voice are prohibited in workplaces and schools. Failure to label synthetic audio can result in fines. This means any production voice agent must include disclosure mechanisms: watermarking, explicit announcement ("This is an AI-generated voice"), and metadata tagging.
+
+**Detection techniques:** Watermarking embeds invisible markers in synthesized audio that allow origin determination and provenance tracking — emerging standards include C2PA (Coalition for Content Provenance and Authenticity) for media authenticity. Deepfake audio detectors analyze spectral features, prosody patterns, and artifact signatures that distinguish synthetic speech from natural speech. Production approaches combine both: watermark-based detection (fast, reliable for known generators) and neural classifiers (slower, but detect unknown generators). Liveness detection in voice authentication systems uses challenge-response techniques (asking the user to repeat a random phrase) to defeat replay attacks with cloned audio.
 
 Visual content moderation prevents generation and processing of unwanted material. Input filters block problematic content before processing. Output filters verify generated images.
 

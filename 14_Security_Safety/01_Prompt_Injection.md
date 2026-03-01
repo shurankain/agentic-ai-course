@@ -126,6 +126,8 @@ Leak detection: comparing the response against the system prompt. High similarit
 
 ## Real-World CVEs 2024-2025
 
+> **Note:** The following are real, documented security incidents with assigned CVE identifiers — not hypothetical examples. They demonstrate that prompt injection attacks have moved from theoretical research to real-world exploitation of production systems.
+
 ### CVE-2025-32711 (EchoLeak) — Microsoft 365 Copilot
 
 **CVSS 9.3 (Critical), February 2025**
