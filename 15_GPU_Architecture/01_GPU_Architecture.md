@@ -24,11 +24,11 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **NVIDIA A100** — the industry workhorse. 80 GB HBM2e, 2 TB/s bandwidth. Third-generation Tensor Cores support TF32 and BFloat16, accelerating training without sacrificing accuracy.
 
-**NVIDIA H100** (Hopper, 2023) raised the bar further. Fourth-generation Tensor Cores added FP8 — a format that doubles performance. Transformer Engine dynamically selects the optimal precision for each layer. Fourth-generation NVLink provides 900 GB/s between GPUs.
+**NVIDIA H100** (Hopper architecture, announced 2022, GA 2023) raised the bar further. Fourth-generation Tensor Cores added FP8 — a format that doubles performance. Transformer Engine dynamically selects the optimal precision for each layer. Fourth-generation NVLink provides 900 GB/s between GPUs.
 
 **NVIDIA Grace Hopper (GH200)** — a CPU-GPU superchip combining the Grace ARM CPU with the H100 GPU via NVLink-C2C (900 GB/s CPU-GPU bandwidth). 624 GB unified memory (96 GB HBM3 + 528 GB LPDDR5X) with coherent memory access — the GPU can directly access CPU memory and vice versa without explicit copies. Designed for workloads that exceed GPU memory: very large models, large KV caches, data preprocessing pipelines. The unified memory model simplifies programming for memory-intensive AI workloads.
 
-**NVIDIA Blackwell B200/GB200 (now in production, 2025-2026)** — a generational leap:
+**NVIDIA Blackwell B200/GB200 (in production, 2025+)** — a generational leap:
 - **Fifth-generation Tensor Cores** with FP4 support — doubles throughput over FP8, enabling 4-bit inference at near-FP8 quality with proper calibration
 - **HBM3e memory** — 192 GB per GPU (vs H100's 80 GB), 8 TB/s bandwidth (vs 3.35 TB/s)
 - **Second-generation Transformer Engine** — dynamic per-layer precision selection now includes FP4, FP8, BF16
@@ -45,6 +45,14 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 - Adopted by several cloud providers and AI labs for inference workloads where the large memory capacity enables serving larger models without multi-GPU setups
 - Key advantage: memory capacity per dollar is competitive with NVIDIA, making it attractive for inference-heavy deployments
 - Key limitation: the ROCm ecosystem is less mature than CUDA — fewer optimized libraries, less community support, and some framework features (Flash Attention, custom kernels) may lag behind
+
+**AMD MI325X (Q4 2024)** — 256 GB HBM3e (vs MI300X's 192 GB), improved memory bandwidth. Drop-in replacement for MI300X in existing deployments.
+
+**AMD MI350 (Q3 2025)** — CDNA 4 architecture, significant compute uplift over MI300X. Positioned to compete directly with Blackwell B200.
+
+**AMD MI400 (expected 2026)** — next-generation with HBM4, 432 GB memory. AMD's answer to NVIDIA's Vera Rubin platform.
+
+**NVIDIA Vera Rubin (announced CES 2026, expected H2 2026)** — the next-generation platform after Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell), HBM4 memory, designed for multi-trillion parameter models. Signals that the GPU performance race continues to accelerate.
 
 ### Anatomy of a Streaming Multiprocessor
 

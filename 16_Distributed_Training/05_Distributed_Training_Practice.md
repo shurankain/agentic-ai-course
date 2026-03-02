@@ -28,7 +28,7 @@ Key principle: start simple, add complexity as needed. The path: single GPU → 
 
 ### Hardware Verification
 
-A simple nvidia-smi command shows available GPUs. For distributed training, inter-GPU connectivity is critical: NVLink provides 600 GB/s, PCIe only 32 GB/s. The command nvidia-smi topo -m shows the topology.
+A simple nvidia-smi command shows available GPUs. For distributed training, inter-GPU connectivity is critical: NVLink provides 600-1800 GB/s (generation-dependent: NVLink 3.0/4.0/5.0), PCIe Gen 4/5 provides 32-64 GB/s. The command nvidia-smi topo -m shows the topology.
 
 Verify PyTorch sees all GPUs: torch.cuda.device_count().
 
@@ -175,12 +175,12 @@ In practice: combine on-demand (1-2 coordinator nodes) + spot (workers). If a sp
 
 ### Right-Sizing
 
-A100-80GB costs $3-4/hour. T4 costs $0.50/hour. For many tasks, T4 is sufficient.
+A100-80GB costs $3-4/hour. H100-80GB costs $2-4/hour. B200 (Blackwell) costs $8-12/hour. T4 costs $0.50/hour. For many tasks, T4 is sufficient.
 
 **Heuristics:**
 - <1B parameters: T4/L4
 - 1-10B: A100-40GB
-- 10-70B: A100-80GB or multiple with FSDP
+- 10-70B: A100-80GB / H100-80GB, or multiple with FSDP
 - 70B+: H100 or A100 cluster with 3D parallelism
 
 More GPUs does not always mean faster. Communication overhead grows. For a 1B model, 8xT4 can be slower and more expensive than 2xA100.

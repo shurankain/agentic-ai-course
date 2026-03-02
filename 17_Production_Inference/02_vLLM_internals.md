@@ -71,7 +71,7 @@ LLaMA-70B requires ~140 GB for weights alone in FP16. The H100 has 80 GB — not
 
 **Implementation:**
 
-The --tensor-parallel-size parameter specifies the number of GPUs. Attention layers are split by heads: 64 heads across 4 GPUs = 16 heads per GPU. FFN layers are split by intermediate dimension. Communication via AllReduce after each layer. NVLink provides 600-900 GB/s bandwidth.
+The --tensor-parallel-size parameter specifies the number of GPUs. Attention layers are split by heads: 64 heads across 4 GPUs = 16 heads per GPU. FFN layers are split by intermediate dimension. Communication via AllReduce after each layer. NVLink provides 600-1800 GB/s bandwidth (NVLink 4.0: 900, 5.0: 1800 GB/s on Blackwell).
 
 Pipeline parallelism splits the model by layers for even larger models or multi-node setups. These can be combined: tensor-parallel-size 4 + pipeline-parallel-size 2 for 8 GPUs.
 

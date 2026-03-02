@@ -36,7 +36,7 @@ Splitting individual operations across GPUs. A Linear layer with a 4096x16384 ma
 
 For Transformers, this splits naturally: attention by heads, FFN by hidden dimension.
 
-**Requirements:** tight NVLink coupling at 600+ GB/s. Communication on every layer.
+**Requirements:** tight NVLink coupling at 600-1800 GB/s (NVLink 3.0: 600, 4.0: 900, 5.0: 1800 GB/s). Communication on every layer.
 
 **Use case:** model does not fit even with checkpointing, NVLink intra-node available, TP=2-8 within a node.
 

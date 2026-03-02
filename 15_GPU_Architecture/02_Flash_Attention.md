@@ -233,8 +233,9 @@ Flash Attention uses these WMMA instructions for the matrix multiplications Q×K
 - Turing (T4) 2018: 65 TFLOPS, FP16, INT8, INT4
 - Ampere (A100) 2020: 312 TFLOPS, FP16, BF16, TF32, INT8
 - Hopper (H100) 2022: 989 TFLOPS, FP8, FP16, BF16, TF32, INT8
+- Blackwell (B200) 2024: ~2500 FP8 TFLOPS, adds FP4 — doubles throughput over FP8
 
-Each generation expanded format support and increased performance. The H100 with FP8 achieves nearly a petaflop on a single GPU.
+Each generation expanded format support and increased performance. The H100 with FP8 achieves nearly a petaflop on a single GPU. Blackwell's FP4 support enables 4-bit inference at near-FP8 quality with proper calibration.
 
 ---
 

@@ -386,7 +386,7 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **Results:** BitNet b1.58 at 3B parameters matches FP16 LLaMA-3B on many benchmarks. Memory: 8x reduction vs FP16. Compute: matrix multiplication becomes addition/subtraction (no actual multiplications needed). Energy: 71x less energy per token than FP16 at equivalent scale.
 
-**Limitations:** Requires training from scratch (cannot convert existing models), smaller models show more degradation, ecosystem support is limited (no optimized kernels in major frameworks yet). BitNet represents a research direction rather than a production-ready solution as of 2025.
+**Limitations:** Requires training from scratch (cannot convert existing models), smaller models show more degradation, ecosystem tooling is improving — Microsoft released BitNet.cpp v2 (February 2025) for CPU inference and published BitNet b1.58 2B4T (April 2025) as a reference model. However, BitNet remains a research direction rather than a production-recommended solution — major inference frameworks (vLLM, TGI) do not yet support ternary weights natively.
 
 ### AQLM: Additive Quantization
 
