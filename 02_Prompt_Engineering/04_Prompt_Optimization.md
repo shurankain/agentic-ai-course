@@ -80,7 +80,7 @@ Without statistical rigor, you risk accepting random fluctuations as real improv
 
 Every token costs money. At scale this is critical:
 - 1,000 tokens per prompt × 1M requests per day = 1B tokens per day
-- At $3 per 1M input tokens (e.g., Claude Sonnet 4) = $3,000 per day = $90,000 per month
+- At $3 per 1M input tokens (e.g., Claude Sonnet 4.6) = $3,000 per day = $90,000 per month
 - Using a cheaper model like GPT-4o-mini ($0.15 per 1M) = $150 per day
 
 Reducing the prompt by 30% yields proportional savings regardless of model tier.

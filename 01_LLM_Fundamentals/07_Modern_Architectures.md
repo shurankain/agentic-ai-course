@@ -125,7 +125,7 @@ The self-attention mechanism computes relationships between all pairs of tokens:
 
 This is not merely a memory problem — even with Flash Attention, which optimizes memory access patterns, the computational complexity remains O(n²).
 
-**Why is this critical?** Because the context window has become a competitive advantage. Gemini 2.5 Pro with 1M+ token context, Claude Sonnet 4 with 200K, Llama 4 Scout with 10M tokens — long context has shifted from a desirable feature to a necessity for enterprise use cases. But quadratic complexity makes this prohibitively expensive with classic attention.
+**Why is this critical?** Because the context window has become a competitive advantage. Gemini 2.5 Pro with 1M+ token context, Claude Sonnet 4.6 with 200K, Llama 4 Scout with 10M tokens — long context has shifted from a desirable feature to a necessity for enterprise use cases. But quadratic complexity makes this prohibitively expensive with classic attention.
 
 **Attempts to solve through attention modifications** proceeded in parallel: Sparse Attention (process not all token pairs), Linear Attention (approximate softmax), Flash Attention (optimize memory access). All of these improved constants but did not change the fundamental O(n²) complexity.
 

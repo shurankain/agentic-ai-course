@@ -10,7 +10,7 @@
 
 ## The Role of Retrieval in RAG
 
-Retrieval is the heart of a RAG system. No matter how powerful the generative model is, it is helpless without high-quality context. The "garbage in, garbage out" principle applies here in full: if the retriever finds irrelevant documents, even GPT-4 cannot produce a useful answer.
+Retrieval is the heart of a RAG system. No matter how powerful the generative model is, it is helpless without high-quality context. The "garbage in, garbage out" principle applies here in full: if the retriever finds irrelevant documents, even GPT-4o cannot produce a useful answer.
 
 The task of retrieval seems simple at first glance: find documents most relevant to the user's query. In practice, this is a complex multifaceted problem. Relevance is subjective and context-dependent. The same document may be relevant to one aspect of a question and irrelevant to another. The user may be looking for a specific fact or a general understanding of a topic.
 

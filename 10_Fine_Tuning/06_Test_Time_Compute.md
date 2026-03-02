@@ -47,7 +47,7 @@ Anthropic introduced extended thinking with Claude 3.7 Sonnet (February 2025), m
 - **Explicit budget control** — `budget_tokens` gives fine-grained control (vs. o-series `reasoning_effort` which is coarse: low/medium/high)
 - **Same model architecture** — extended thinking is a capability of the same Claude models, not a separate model family
 
-**Results:** Claude Sonnet 4 with extended thinking achieves competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
+**Results:** Claude Opus 4 / 4.6 with extended thinking achieves competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
 
 ## Gemini Thinking
 

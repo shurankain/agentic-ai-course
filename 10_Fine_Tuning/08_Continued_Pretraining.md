@@ -91,7 +91,7 @@ Data mixing with English helps preserve multilingual capabilities.
 
 **Data preparation:** quality over quantity, deduplication, filtering, source balance. Long documents are better than short ones, diversity of styles and sources.
 
-**Base model selection:** 7B models are often optimal for domain-specific tasks. Modern architectures (Llama, Mistral) are preferred.
+**Base model selection:** 7B models are often optimal for domain-specific tasks. Modern architectures (Llama 3.x/4, Mistral, Qwen 2.5/3) are preferred.
 
 **Training monitoring:**
 - Domain perplexity (should decrease)

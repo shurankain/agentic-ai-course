@@ -124,7 +124,7 @@ Minimization strategies:
 
 ### From Text to Multimodal Understanding
 
-Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-4o, Claude Sonnet 4, and Gemini 2.5 open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
+Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-4o, Claude Sonnet 4.6, and Gemini 2.5/3 open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
 
 Typical scenarios: screenshot analysis for technical support, document recognition and processing, product identification from photos, chart and diagram analysis, design assistance.
 
@@ -266,7 +266,7 @@ Speech recognition integration requires audio preprocessing (volume normalizatio
 
 Speech synthesis converts the text response into natural speech. APIs provide multiple voices with different characteristics. Optimization includes caching frequently used phrases (greetings, confirmations) and streaming synthesis for long texts (splitting into sentences, playback as segments become ready).
 
-Computer vision integration uses a multimodal language model (GPT-4o, Claude Sonnet 4) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
+Computer vision integration uses a multimodal language model (GPT-4o, Claude Sonnet 4.6) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
 
 Multimodal memory stores conversation history including images and their context. Direct storage of all images requires significant memory. Summarization strategy: a VLM creates a text description of the image that is stored instead of the full image, and thumbnails are stored for quick access.
 
