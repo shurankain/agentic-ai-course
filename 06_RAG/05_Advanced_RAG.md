@@ -386,7 +386,7 @@ Benchmarks on ViDoRe (Visual Document Retrieval):
 
 **Integration into RAG pipeline:**
 
-ColPali integrates into the RAG pipeline as follows: the user query goes to the ColPali Retriever, which finds relevant document pages as images. These page images are passed directly to a Vision-LLM (GPT-4V, Claude 3, Gemini), which generates the final answer by visually "reading" the images without intermediate text representation. This allows the model to see the document just as a human would — with all visual structure, formatting, and graphical elements.
+ColPali integrates into the RAG pipeline as follows: the user query goes to the ColPali Retriever, which finds relevant document pages as images. These page images are passed directly to a Vision-LLM (GPT-4o/5, Claude Sonnet 4.6, Gemini 2.5/3), which generates the final answer by visually "reading" the images without intermediate text representation. This allows the model to see the document just as a human would — with all visual structure, formatting, and graphical elements.
 
 ## Temporal RAG
 

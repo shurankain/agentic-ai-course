@@ -21,16 +21,20 @@ Understanding the LLM provider landscape is not simply a matter of picking the "
 OpenAI popularized LLMs through ChatGPT and continues to set the pace of the industry. Their API remains the de facto standard that other providers emulate.
 
 **Frontier models:**
-- **GPT-5** — the latest flagship, natively multimodal (text, images, audio). Unified standard and reasoning capabilities. 128K–1M context.
-- **GPT-4o** — the previous-generation flagship. Remains widely deployed due to its strong cost/quality ratio. 128K context.
-- **GPT-4.1** — optimized specifically for coding and instruction following (released April 2025).
+- **GPT-5.2** — the current flagship (late 2025/early 2026), natively multimodal (text, images, audio). Unified standard and reasoning capabilities. 128K–1M context.
+- **GPT-5** — previous flagship. Still widely deployed. 128K–1M context.
+- **GPT-5.2-Codex / GPT-5.3-Codex** — specialized agentic coding models optimized for autonomous multi-step code generation and tool use.
+- **GPT-4o** — deprecated from ChatGPT (February 13, 2026). API still available but being phased out. 128K context.
+- **GPT-4.1** — deprecated from ChatGPT (February 13, 2026) and API (February 16, 2026). Previously optimized for coding and instruction following.
 
 **Reasoning models:**
 - **o3** — frontier reasoning model. Generates internal "thinking tokens" before the final answer. Excels on math, science, and complex multi-step problems.
 - **o4-mini** — cost-efficient reasoning model. Strong on STEM tasks at a fraction of o3's cost.
 
 **Budget models:**
-- **GPT-4o-mini** — lightweight and inexpensive, ideal for classification, extraction, and simple Q&A.
+- **GPT-5-mini** — next-generation budget model ($0.25/$2.00 per 1M tokens).
+- **GPT-5-nano** — ultra-light model for high-volume simple tasks ($0.05/$0.40 per 1M tokens).
+- **GPT-4o-mini** — previous-gen budget model, still widely available.
 - GPT-3.5 Turbo is fully deprecated.
 
 **OpenAI highlights:**
@@ -40,7 +44,7 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
-- Responses API (successor to Assistants API) and Agents SDK for multi-agent orchestration
+- Responses API (successor to Assistants API — deprecated August 2025, sunset August 2026) and Agents SDK (v0.10.2, provider-agnostic — supports 100+ LLMs) for multi-agent orchestration
 
 ### Anthropic
 
@@ -68,14 +72,16 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 Google offers models through Vertex AI (enterprise) and Google AI Studio (for developers).
 
 **Gemini family:**
-- **Gemini 2.5 Pro** — multimodal model with 1M token context and built-in thinking capabilities. Strong across reasoning, coding, and multimodal tasks.
+- **Gemini 3.1 Pro Preview** — the most advanced Google model (February 2026). State-of-the-art reasoning and multimodal capabilities.
+- **Gemini 3 Flash** — default Gemini model (December 2025). Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
+- **Gemini 2.5 Pro** — previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
 - **Gemini 2.5 Flash** — optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
-- **Gemini 2.0 Flash** — budget model for high-volume workloads.
+- **Gemini 2.0 Flash** — budget model for high-volume workloads. Retires June 1, 2026.
 
 The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 
 **Google advantages:**
-- Record context sizes — 1M tokens standard, 2M in preview
+- Record context sizes — 1M tokens standard (Gemini 3 Flash/Pro), 2M in preview
 - Native multimodal understanding and generation (text, images, audio, video)
 - Grounding with Google Search for up-to-date information
 - Native integration with Google Cloud services
@@ -86,7 +92,8 @@ The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 Founded by Elon Musk, xAI emerged as a significant provider with competitive models and aggressive pricing.
 
 **Models:**
-- **Grok 3** — frontier model competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
+- **Grok 4.20 Beta** — latest frontier model (February 2026). Routes queries to 4 parallel specialist agents. Trained on 200K GPU Colossus cluster.
+- **Grok 3** — previous flagship, competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
 - **Grok 3 Mini** — efficient model for standard tasks
 
 **xAI highlights:**
@@ -99,7 +106,8 @@ Founded by Elon Musk, xAI emerged as a significant provider with competitive mod
 A French company offering efficient open-weight models. Attractive for European companies due to GDPR compliance.
 
 **Models:**
-- **Mistral Large 3** — flagship model, competitive with frontier proprietary models
+- **Mistral Large 3** — flagship model (675B total, 41B active MoE, Apache 2.0), competitive with frontier proprietary models
+- **Mistral Medium 3** — mid-tier model ($0.40/$2.00 per 1M tokens), strong cost/quality balance
 - **Mistral Small 3** — compact and efficient for simpler tasks
 - **Magistral** — reasoning-focused models
 - **Devstral 2** — specialized for code generation
@@ -179,6 +187,10 @@ A Chinese lab that has twice disrupted the industry — first with V3's training
 - Competitive with o3 on math and science benchmarks
 - R1-0528: improved version with better instruction following
 
+**DeepSeek V3.2** — integrates thinking and tool-use into a unified model, eliminating the need for separate standard and reasoning models.
+
+**DeepSeek R2** — next-generation reasoning model, building on R1's GRPO approach with further improvements.
+
 **When to choose DeepSeek:**
 - Mathematical and algorithmic tasks (leader)
 - Self-hosting with a limited GPU budget (MoE efficiency)
@@ -214,6 +226,7 @@ Alibaba's latest series, leading many benchmarks and offering the broadest size 
 - **Qwen 3 235B** — MoE flagship (22B active parameters), 119 languages
 - **Qwen 3 72B** — dense flagship
 - **Qwen 3 32B / 14B / 8B** — range of dense models for different GPU budgets
+- **Qwen 3.5 Medium** — mid-tier model (February 2026) with improved reasoning
 - **Qwen 3 0.6B / 1.7B / 4B** — edge and mobile-friendly
 
 **Key innovations:**
@@ -323,15 +336,19 @@ Cost is a critical factor when choosing a provider and model. All providers char
 | o3 | $2.00 | $8.00 | 80% price cut since launch (June 2025) |
 | o4-mini | $1.10 | $4.40 | Cost-efficient reasoning |
 | Claude Opus 4.6 (extended thinking) | $5.00 | $25.00 | Thinking via budget_tokens |
+| Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Most advanced Google reasoning |
 | Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
 **Standard models:**
 
 | Model | Input | Output |
 |--------|-------|--------|
+| GPT-5.2 | $1.75 | $14.00 |
 | GPT-5 | $1.25 | $10.00 |
 | GPT-4o | $2.50 | $10.00 |
 | Claude Sonnet 4.6 | $3.00 | $15.00 |
+| Gemini 3.1 Pro Preview | $2.00 | $12.00 |
+| Gemini 3 Flash | $0.50 | $3.00 |
 | Gemini 2.5 Pro | $1.25 | $10.00 |
 | Mistral Large 3 | $2.00 | $6.00 |
 | Grok 3 | $3.00 | $15.00 |
@@ -340,6 +357,8 @@ Cost is a critical factor when choosing a provider and model. All providers char
 
 | Model | Input | Output |
 |--------|-------|--------|
+| GPT-5-mini | $0.25 | $2.00 |
+| GPT-5-nano | $0.05 | $0.40 |
 | GPT-4o-mini | $0.15 | $0.60 |
 | Claude Haiku 4.5 | $1.00 | $5.00 |
 | Gemini 2.5 Flash | $0.15 | $0.60 |
@@ -435,7 +454,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 **Recommended models:**
 - o3 / o4-mini (OpenAI reasoning)
 - Claude Opus 4.6 or Sonnet 4.6 with extended thinking (Anthropic)
-- Gemini 2.5 Pro with thinking (Google)
+- Gemini 3.1 Pro Preview or 2.5 Pro with thinking (Google)
 
 **Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
 
@@ -443,8 +462,8 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - Claude Sonnet 4.6 (consistently strong on coding benchmarks)
-- GPT-4.1 (optimized specifically for code)
-- GPT-4o
+- GPT-5.2-Codex / GPT-5.3-Codex (specialized agentic coding models)
+- GPT-5 / GPT-4o
 - Devstral 2 (Mistral, open-weight)
 
 **Typical tasks:** writing new code, refactoring, debugging, writing tests, code review, documentation.
@@ -452,26 +471,27 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Simple Tasks and Classification
 
 **Recommended models:**
+- GPT-5-mini / GPT-5-nano
 - GPT-4o-mini
 - Claude Haiku 4.5
-- Gemini 2.0 Flash
+- Gemini 2.5 Flash
 
 **Typical tasks:** text categorization, entity extraction, sentiment analysis, simple format conversions, filtering.
 
 ### Long Documents
 
 **Recommended models:**
-- Gemini 2.5 Pro (1M+ token context)
-- Claude Sonnet 4.6 (200K tokens, 1M available)
-- GPT-5 (128K-1M context)
+- Gemini 3.1 Pro Preview / 3 Flash (1M+ token context)
+- Claude Sonnet 4.6 (200K tokens, 1M on Opus 4.6)
+- GPT-5.2 / GPT-5 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
 
 ### Real-Time Applications
 
 **Recommended models:**
-- Gemini 2.5 Flash
-- GPT-4o-mini
+- Gemini 3 Flash / 2.5 Flash
+- GPT-5-mini
 - Claude Haiku 4.5
 
 **Typical tasks:** chatbots with instant responses, autocomplete, interactive assistants.
@@ -689,7 +709,7 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 
-**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4.6 with extended thinking are applied. Code generation works best with Claude Sonnet 4.6 or GPT-4.1, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
+**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4.6 with extended thinking are applied. Code generation works best with Claude Sonnet 4.6 or GPT-5.2-Codex, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
 
 **Tool Use via AI Services:** LangChain4j provides a declarative way to create agents with tools. Tools are defined as regular Java methods annotated with `@Tool`, which contains the function description. Method parameters are annotated with `@P` including a description for the model. Then an agent interface is created with a `chat(String message)` method, and `AiServices.builder()` is used to automatically generate the implementation. The model independently analyzes the user's request, decides which tools are needed, invokes them with the correct parameters, and forms the final response based on the results.
 
