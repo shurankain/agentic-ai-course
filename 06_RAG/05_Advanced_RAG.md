@@ -626,7 +626,7 @@ Microsoft's GraphRAG (2024) established the category, but its high indexing cost
 
 **Practical guidance:** Start without a graph (Hybrid RAG + Contextual Retrieval). Add GraphRAG only when you have multi-hop questions that require connecting entities across documents. If you add it, start with LazyGraphRAG to avoid upfront indexing costs. Graduate to full GraphRAG only for stable corpora with high query volumes where precomputation amortizes well.
 
-## Latest Techniques (2024)
+## Latest Techniques (2024-2025)
 
 RAG continues to evolve. Several techniques from 2024 significantly change the approach to building systems.
 

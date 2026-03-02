@@ -242,8 +242,9 @@
   - Select: choosing what's relevant (RAG, search, filtering)
   - Compress: compressing context (summarization, distillation)
   - Isolate: separating streams (multi-agent delegation)
-- Memory Management: MemGPT, LangMem
+- Memory Management: file-based (CLAUDE.md pattern), MCP memory servers, vector DBs, MemGPT/Letta (historical influence)
 - Context budgets and token economics
+- MCP as Context Engineering Infrastructure (2024-2025)
 - Practical patterns: Router, Memory Manager, Summarizer
 
 ---
@@ -314,6 +315,7 @@
 - Memory prioritization
 - Forgetting mechanisms
 - Persistence and storage
+- **Memory Storage Decision Guide** (file-based → pgvector → vector DB → SQL → MCP → LanceDB → JSON)
 
 ### 03.6 Computer Use Agents (`06_Computer_Use_Agents.md`)
 - Introduction: AI masters the human interface
@@ -385,6 +387,9 @@
 - **Computer Use Agents** — Anthropic, OpenAI Operator (Beta)
 - **Browser Automation** — Browser Use (27K+ stars), Amazon Nova Act
 - **Deep Research** — Gemini Deep Research, OpenAI Deep Research
+- **Code Review Agents** — automated PR review, security scanning
+- **Data Analysis Agents** — natural language to SQL/visualization
+- **Internal Employee Agents** — HR, IT helpdesk, onboarding
 - Criteria for choosing a use case
 
 ### 03.10 Resource Optimization (`10_Resource_Optimization.md`)
@@ -490,7 +495,7 @@
 - Introduction to server development
 - Architectural principles
 - Server lifecycle
-- Transport mechanisms (stdio, HTTP/SSE)
+- Transport mechanisms (stdio, Streamable HTTP)
 - Error handling
 - Security
 - **Modern MCP ecosystem**
@@ -648,8 +653,8 @@
   - Low-level (Building Blocks): LangChain, LlamaIndex
   - Provider SDKs: OpenAI, Anthropic, Google
 - **Key player comparison table**
-  - LangChain/LangGraph: 80K+ stars, 4.2M downloads/month
-  - CrewAI: 30K+ stars, $18M Series A
+  - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month (as of early 2026)
+  - CrewAI: 45K+ stars, $18M Series A (as of early 2026)
   - AutoGen → Microsoft Agent Framework (merge Q1 2026)
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
@@ -787,6 +792,7 @@
 - Voice agent architecture
 - Computer vision in conversational systems
 - Multimodal agents
+- **MCP Integration for Voice Agents** (latency budgets, speech-friendly tool responses)
 - Voice interface design specifics
 - Security and ethics of multimodal systems
 
@@ -1451,6 +1457,7 @@
   - Queue-based scaling
   - Predictive scaling
 - Reserved vs On-demand vs Spot
+- **Serving MoE Models** (tensor parallelism, expert offloading, MLA KV-cache)
 - Cost monitoring and budgeting
 - TCO calculation
 
