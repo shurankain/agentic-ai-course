@@ -384,7 +384,7 @@
 - **Workflow Automation** — the no-code revolution
   - n8n (200K+ businesses, MCP support)
 - **Voice Agents** — latency breakthrough (75ms ElevenLabs)
-- **Computer Use Agents** — Anthropic, OpenAI Operator (Beta)
+- **Computer Use Agents** — Anthropic, ChatGPT agent (formerly Operator) (Beta)
 - **Browser Automation** — Browser Use (27K+ stars), Amazon Nova Act
 - **Deep Research** — Gemini Deep Research, OpenAI Deep Research
 - **Code Review Agents** — automated PR review, security scanning

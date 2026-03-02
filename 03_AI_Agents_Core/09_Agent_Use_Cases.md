@@ -28,7 +28,7 @@ Not all agent applications are at the same maturity level. Some already generate
 | **Agentic RAG** | Production | Perplexity, Glean, You.com | $9B Perplexity valuation, 22M+ users |
 | **Workflow Automation** | Production | n8n, Make, Zapier AI | 200K+ businesses |
 | **Voice Agents** | Production | ElevenLabs, VAPI, Retell | 75ms latency achieved |
-| **Computer Use Agents** | Beta | Anthropic, OpenAI Operator | Active development |
+| **Computer Use Agents** | Beta | Anthropic, ChatGPT agent (formerly Operator) | Active development |
 | **Browser Automation** | Emerging | Browser Use, Amazon Nova Act | 27K+ GitHub stars |
 | **Deep Research** | Emerging | Gemini Deep Research, OpenAI | New category 2024-2025 |
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
@@ -177,7 +177,7 @@ Computer Use Agents interact with a computer the same way a human does: they see
 
 **Anthropic Computer Use** — the category pioneer. Claude can see screenshots and generate actions (clicks, text input). Available in beta since October 2024.
 
-**OpenAI Operator** — a similar approach from OpenAI. Focus on browser automation.
+**ChatGPT agent** (formerly OpenAI Operator, rebranded July 2025) — OpenAI's browser automation capability, now integrated directly into ChatGPT rather than offered as a standalone product.
 
 ### Technical Challenges
 

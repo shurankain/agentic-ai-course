@@ -53,12 +53,13 @@ The core loop of a Computer Use agent is built on continuous interaction between
 ### Benchmark Results
 
 **OSWorld benchmark** (complex multi-step tasks):
-- Claude Computer Use (October 2024 launch): 14.9%
+- AGI OSAgent (early 2026): 76.26% (exceeds 72% human baseline)
 - Claude Computer Use (2025, with Claude Sonnet 4): 61.4%
+- Claude Computer Use (October 2024 launch): 14.9%
 - GPT-4V (2024): 7.7%
-- Human performance: ~70-75%
+- Human baseline: ~72%
 
-The jump from 14.9% to 61.4% in under a year represents one of the most rapid capability improvements in AI. Claude Computer Use now approaches human-level performance on many task categories.
+The progression from 14.9% to 76.26% in under two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies significantly by task category.
 
 **WebArena** (web navigation):
 - Claude-based agents achieve 40%+ on WebArena, up from single-digit scores in 2024
@@ -343,7 +344,7 @@ The computer use landscape has expanded significantly beyond Claude's initial la
 
 ### Claude Computer Use: Evolution
 
-Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4) and the computer use infrastructure pushed scores to 61.4%.
+Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4, and now the 4.6 generation) and the computer use infrastructure pushed scores to 61.4%. In February 2026, Anthropic acquired **Vercept**, a computer vision startup, to accelerate Computer Use capabilities.
 
 **Claude for Chrome** — a browser extension providing computer use capabilities directly in the browser, without requiring a full desktop environment. Optimized for web workflows with access to the DOM and accessibility tree alongside visual understanding.
 
@@ -365,7 +366,7 @@ An open-source Python framework for building browser automation agents. Browser 
 
 | Platform | Environment | Strengths | Model |
 |----------|-------------|-----------|-------|
-| Claude Computer Use | Full desktop | Most capable, 61.4% OSWorld | Claude Sonnet/Opus 4 |
+| Claude Computer Use | Full desktop | Most capable general-purpose, 61.4%+ OSWorld | Claude Sonnet/Opus 4.6 |
 | Claude for Chrome | Browser only | Low-latency web tasks | Claude |
 | Cowork | Hosted VM | Supervised workflows, real-time observation | Claude |
 | Nova Act | Browser only | Deterministic replay, AWS integration | Amazon Nova |
@@ -435,7 +436,7 @@ A Computer Use agent consists of several interconnected components:
 
 ## Key Takeaways
 
-1. **Computer Use has matured rapidly** — from 14.9% to 61.4% on OSWorld in under a year, approaching human-level on many task categories
+1. **Computer Use has matured rapidly** — from 14.9% to 76%+ on OSWorld in under two years, with top agents now exceeding the 72% human baseline
 
 2. **Security requires a dedicated environment** — never run on production systems without isolation
 
