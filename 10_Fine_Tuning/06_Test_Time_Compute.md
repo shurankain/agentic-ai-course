@@ -36,7 +36,7 @@ API parameters: `reasoning_effort` ("low", "medium", "high") controls thinking d
 
 ## Claude Extended Thinking
 
-Anthropic introduced extended thinking with Claude 3.5 Sonnet (late 2024), maturing with the Claude 4 family (2025). Unlike OpenAI's hidden reasoning, Claude's thinking is transparent.
+Anthropic introduced extended thinking with Claude 3.7 Sonnet (February 2025), maturing with the Claude 4 family (2025). Unlike OpenAI's hidden reasoning, Claude's thinking is transparent.
 
 **How it works:** The model generates explicit chain-of-thought in `<thinking>` blocks before producing the final answer. These thinking tokens are visible to the developer (though not always shown to end users by default).
 

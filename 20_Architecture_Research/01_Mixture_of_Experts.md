@@ -12,7 +12,7 @@
 
 Scaling laws demonstrated a direct relationship: more parameters equals better quality. However, dense models, where every parameter participates in every computation, hit a fundamental limitation — compute grows linearly with the number of parameters.
 
-GPT-3 with 175B parameters requires approximately 350 PFLOP per forward pass. GPT-4 with an estimated 1.8T parameters has correspondingly astronomical inference and training costs.
+GPT-3 with 175B parameters requires approximately 350 PFLOP per forward pass. GPT-4 with an estimated 1.8T parameters (unconfirmed) has correspondingly astronomical inference and training costs.
 
 Mixture of Experts offers a revolutionary solution: increase the number of parameters without a proportional increase in compute. Instead of using all parameters for every token, MoE activates only a small subset — specialized "experts."
 

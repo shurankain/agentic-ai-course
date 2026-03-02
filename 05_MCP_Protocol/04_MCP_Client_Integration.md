@@ -46,7 +46,7 @@ Concurrency requires attention to synchronization. Updating shared state — the
 
 An MCP client can connect to servers in various ways. The most common is launching a server as a child process with data exchange via stdio. The client specifies the launch command and arguments, then establishes the connection.
 
-For remote servers, network transports are used — SSE or WebSocket. The client connects to the specified URL and begins message exchange.
+For remote servers, **Streamable HTTP** is the standard network transport (the earlier SSE transport was deprecated in March 2025). The client connects to the specified URL and begins message exchange.
 
 Some implementations support "embedded" servers implemented within the client process. This is useful for simple integrations that do not require a separate process.
 

@@ -10,7 +10,7 @@
 
 ## Introduction
 
-AI Safety is a critically important topic for interviews at frontier AI companies: Anthropic (safety as core mission), OpenAI (alignment research), DeepMind (AI safety team), Meta AI, Google AI Principles.
+AI Safety is a critically important topic for interviews at frontier AI companies: Anthropic (safety as core mission), OpenAI (alignment research), Google DeepMind (AI safety team), Meta AI, Google AI Principles.
 
 Understanding these topics demonstrates maturity of thinking and awareness of the broader implications of your work.
 
@@ -18,7 +18,7 @@ Understanding these topics demonstrates maturity of thinking and awareness of th
 
 ## Why Safety Matters
 
-As capabilities grow, so do risks: more convincing disinformation, more effective cyber attacks, autonomous agents with real-world impact, potential for misuse scales. GPT-2 2019 one and a half billion parameters was considered too dangerous to release, GPT-3 2020 one hundred seventy-five billion parameters received API access, GPT-4 2023 approximately one trillion parameters is widely used, GPT-5 and beyond is unknown.
+As capabilities grow, so do risks: more convincing disinformation, more effective cyber attacks, autonomous agents with real-world impact, potential for misuse scales. GPT-2 2019 one and a half billion parameters was considered too dangerous to release, GPT-3 2020 one hundred seventy-five billion parameters received API access, GPT-4 2023 (rumored ~1T parameters) is widely used, GPT-5 and beyond is unknown.
 
 The alignment problem: how to ensure a system does what we actually want, not what we said? Reward hacking: the task is to maximize user engagement, the model's solution is to show outrage-inducing content — technically correct but not what was intended. Specification gaming: the task is to score maximum points in a game, the agent's solution is to find a bug and exploit it — optimized the proxy not the true objective.
 
@@ -82,7 +82,7 @@ Anthropic's RSP (2023, updated 2024) defines **AI Safety Levels (ASL)** — a fr
 
 **ASL-1:** Systems that pose no meaningful catastrophic risk. Current narrow AI systems.
 
-**ASL-2:** Systems that show early signs of dangerous capabilities but cannot yet cause catastrophic harm. Current frontier models (Claude, GPT-4). Requires: standard safety evaluations, red teaming, usage monitoring.
+**ASL-2:** Systems that show early signs of dangerous capabilities but cannot yet cause catastrophic harm. Current frontier models (Claude, GPT-5). Requires: standard safety evaluations, red teaming, usage monitoring.
 
 **ASL-3:** Systems substantially increase risk above the baseline (e.g., could provide meaningful uplift for bioweapons or cyberattacks). Requires: enhanced containment, robust safety cases, restricted deployment, ongoing monitoring.
 

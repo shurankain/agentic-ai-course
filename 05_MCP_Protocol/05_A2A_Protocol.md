@@ -140,7 +140,7 @@ A multi-level structure with delegation. Travel Planner Agent coordinates domain
 
 ### Honest Adoption Assessment
 
-As of early 2026, A2A adoption remains largely at the announcement stage. While 150+ partners expressed intent at the April 2025 launch, production implementations are limited. Most real-world multi-agent systems use direct API calls, framework-native patterns (LangGraph handoffs, CrewAI delegation), or MCP for tool integration rather than A2A for agent-to-agent communication.
+As of early 2026, A2A adoption has moved beyond announcements to early production use. While 150+ partners expressed intent at the April 2025 launch, real production implementations are now emerging — S&P Global, Tyson Foods, and Twilio have deployed A2A-based agent coordination. The protocol reached v0.3 with improved stability. However, most multi-agent systems still use direct API calls, framework-native patterns (LangGraph handoffs, CrewAI delegation), or MCP for tool integration rather than A2A for agent-to-agent communication.
 
 MCP, by contrast, has seen massive real-world adoption: 10,000+ servers, 97M+ monthly SDK downloads, and integration into every major AI development tool. The practical reality is that most "agent-to-agent" coordination happens within a single framework or orchestrator, not across independent agents from different providers — which is A2A's primary use case.
 

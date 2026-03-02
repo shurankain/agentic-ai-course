@@ -36,10 +36,12 @@ Without caching, each new token would require recomputing attention for all prev
 **Size:**
 Formula: 2 × num_layers × num_heads × head_dim × seq_len × batch_size × bytes_per_element
 
-For LLaMA-70B (80 layers, 64 heads, head_dim=128, FP16):
+For LLaMA-70B with MHA (80 layers, 64 KV heads, head_dim=128, FP16) — worst case without GQA:
 - 1 token = 2.62 MB
 - 4K context = 10.7 GB
 - 128K context = 343 GB (larger than the model itself ~140 GB!)
+
+*Note:* In practice, LLaMA-2-70B and later models use GQA (8 KV heads instead of 64), reducing these numbers by ~8x — see below.
 
 **Grouped-Query Attention (GQA):**
 Heads are grouped, with each group having its own K,V. LLaMA-2 70B uses 8 KV heads with 64 query heads — an eightfold cache reduction. Modern models use GQA as a standard.
