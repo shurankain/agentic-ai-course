@@ -12,7 +12,7 @@
 
 Human evaluation is reliable but expensive and slow. Automated metrics are fast but do not correlate with quality. LLM-as-a-Judge is an intermediate approach that combines the advantages of both.
 
-Use a powerful language model (GPT-4o, Claude Opus 4) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors — all beyond the reach of simple text metrics.
+Use a powerful language model (GPT-4o, Claude Opus 4 / 4.6) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors — all beyond the reach of simple text metrics.
 
 **Advantages:** scalability (thousands of evaluations in minutes), reproducibility (consistent scores), explainability (the model justifies its score), accessibility (no experts required).
 

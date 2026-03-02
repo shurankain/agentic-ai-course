@@ -106,6 +106,8 @@ One of A2A's key features is native support for long-running tasks. Unlike synch
 
 For tasks with intermediate results, A2A supports streaming via Server-Sent Events (SSE). The client establishes an SSE connection when creating a task by specifying the stream=true flag. The agent sends events of several types: progress events with completion percentage and current status, artifact events with partial results (e.g., the first documents found in a research task), and a final complete event with the overall result.
 
+**Note on SSE vs Streamable HTTP:** A2A uses SSE for server-to-client streaming, which is distinct from MCP's transport evolution. MCP deprecated its HTTP+SSE *transport* (separate POST and SSE endpoints) in favor of Streamable HTTP (single endpoint). A2A's use of SSE is for *streaming task results* within its own HTTP-based protocol — a different architectural layer. A2A does not use MCP's transport mechanism; they are complementary protocols (MCP for tool/resource access, A2A for agent-to-agent coordination).
+
 This is critical for user experience in agent systems — the user can see what is happening, receive intermediate results, and can cancel the task if the direction is wrong. For example, a research agent can stream discovered articles as the search progresses rather than waiting for the entire analysis to complete.
 
 ## Multi-Agent Orchestration Patterns

@@ -84,7 +84,7 @@ Use cases: optimization and search in vast, poorly structured spaces. A thousand
 
 Drawback: unpredictability, difficulty debugging emergent bugs.
 
-**OpenAI Swarm** — an experimental framework: lightweight agents, handoffs instead of orchestration, stateless execution. Suited for prototyping with clear domains, not for complex state management.
+**OpenAI Swarm** — originally released as an experimental framework (October 2024) demonstrating lightweight agents with handoffs instead of orchestration and stateless execution. Swarm's core patterns — agent handoffs, routine-based delegation — were incorporated into the production **OpenAI Agents SDK** (March 2025), which adds guardrails, tracing, and MCP tool integration. Swarm itself remains educational; the Agents SDK is the production successor.
 
 ## Mixture of Experts
 

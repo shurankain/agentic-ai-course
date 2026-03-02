@@ -49,15 +49,13 @@ Karpathy and his followers identified four core context management strategies �
 
 **What to persist:** user facts (preferences, history), intermediate work results (drafts), decisions made and their rationale, errors and how they were resolved.
 
-**WRITE Tools:**
+**WRITE Tools (from simplest to most complex):**
 
+- **File-based memory** (e.g., Claude Code's CLAUDE.md) — plain text files the agent reads and writes. Human-readable, git-versioned, zero infrastructure. Effective for developer tools with modest memory scale
 - **Scratchpads** — temporary agent notes for complex computations
-- **MemGPT (Letta)** — automatic paged memory management for long dialogues
-- **LangMem** — persistent LangChain memory for production agents
-- **Vector DBs** — semantic search over memory for RAG systems
-
-**MemGPT Architecture:**
-MemGPT implements the virtual memory concept from operating systems. The context is divided into: Core Memory (always in context: system prompt, active facts), Archival Memory (long-term storage in a vector DB), Recall Memory (dialogue history). The agent automatically moves information between levels depending on relevance.
+- **MCP memory servers** — standardized read/write interface, backend-agnostic (can use files, SQL, or vector DB behind the protocol)
+- **Vector DBs** — semantic search over memory for RAG systems, scales to millions of items
+- **MemGPT / Letta** — one of the early approaches (2023) to automatic paged memory management for long dialogues, inspired by OS virtual memory. The concept (self-directed memory via tool calls, tiered storage) has been broadly influential, though simpler patterns often suffice in production — see [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for a detailed comparison
 
 ---
 
@@ -231,7 +229,7 @@ This is the SELECT strategy elevated from a pipeline component to an agent capab
 
 3. **Context = RAM for an LLM** — a limited resource that requires optimization
 
-4. **2024–2025 Tools:** MemGPT (Letta), LangMem, vector DBs with reranking
+4. **2024–2025 Tools:** File-based memory (CLAUDE.md pattern), MCP memory servers, vector DBs with reranking, MemGPT/Letta (conceptual influence)
 
 ---
 

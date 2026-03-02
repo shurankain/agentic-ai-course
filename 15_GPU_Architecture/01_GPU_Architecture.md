@@ -32,7 +32,7 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 - **Fifth-generation Tensor Cores** with FP4 support — doubles throughput over FP8, enabling 4-bit inference at near-FP8 quality with proper calibration
 - **HBM3e memory** — 192 GB per GPU (vs H100's 80 GB), 8 TB/s bandwidth (vs 3.35 TB/s)
 - **Second-generation Transformer Engine** — dynamic per-layer precision selection now includes FP4, FP8, BF16
-- **Dual-GPU NVLink module** — two B200 GPUs connected as a single logical GPU with 384 GB shared memory and 1.8 TB/s bisection bandwidth. This is the key innovation: models that previously required multi-GPU tensor parallelism now fit in a single module
+- **Dual-GPU NVLink module** — two B200 GPUs connected as a single logical GPU with 384 GB aggregate HBM (192 GB per GPU) and 1.8 TB/s bisection bandwidth. This is the key innovation: models that previously required multi-GPU tensor parallelism now fit in a single module
 - **Fifth-generation NVLink** — 1.8 TB/s per GPU, NVLink Switch enabling up to 576 GPUs in a single NVLink domain
 - **GB200 NVL72** — a rack-scale system with 72 Blackwell GPUs interconnected as a single compute fabric for training trillion-parameter models
 - DeepSeek V3 was trained using FP8 on Hopper GPUs; Blackwell's FP4 enables even more aggressive quantization during training

@@ -682,6 +682,8 @@ In practice, pure architectures are rare. Successful production systems combine 
 
 10. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
 
+**Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles — tool use integration in [[03_Tool_Use|Tool Use]], planning implications in [[04_Planning|Planning]], process reward models and verification in [[08_Process_Reward_Models|Process Reward Models]], and code generation applications in [[07_Code_Generation_Agents|Code Generation Agents]]. For the underlying test-time compute mechanisms, see [[../10_Fine_Tuning/06_Test_Time_Compute|Test-Time Compute]].
+
 ---
 
 ## Practical Code Examples

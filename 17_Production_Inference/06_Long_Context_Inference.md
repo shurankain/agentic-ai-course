@@ -57,9 +57,11 @@ Observation: attention weights on the first tokens ("attention sinks") regardles
 **KV-cache sizing:**
 Formula: 2 × H × D × L × N × sizeof(dtype)
 
-LLaMA-70B (80 heads, dim=128, 80 layers):
+LLaMA-70B (80 KV heads / MHA, dim=128, 80 layers), per request:
 - 4K tokens: 13.4 GB
 - 128K tokens: 419 GB (larger than the model!)
+
+Note: these are per-request figures with full MHA (80 KV heads). With GQA (8 KV heads, as in LLaMA-2-70B), sizes drop ~10x. For batched serving, multiply by concurrent requests — see [[../../15_GPU_Architecture/05_Quantization_Deep_Dive|KV-Cache Quantization]] for production batched calculations.
 
 **Optimizations:**
 
