@@ -21,7 +21,7 @@ GPU compute is the primary expense. Cloud service prices (approximate, vary by p
 - A100 80GB: $3.50-5.00/hour
 - H100: $4.50-8.00/hour
 - H200: $6.00-10.00/hour
-- B200 (Blackwell): $8.00-12.00/hour (limited availability, 2025+)
+- B200 (Blackwell): $8.00-12.00/hour (in production, available from major cloud providers)
 
 Llama 70B on A100-80GB: ~$0.001-0.002 per 1000 tokens. At 100M tokens per day: $3000-6000 per month (compute only).
 

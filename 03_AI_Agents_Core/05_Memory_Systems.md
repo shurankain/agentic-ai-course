@@ -204,7 +204,7 @@ However, decay should not be uniform for all memory types. Semantic facts (gener
 
 **Vector DBs** (Pinecone, Weaviate, Milvus, Qdrant) — specialized for ANN search, scale to millions of items. Cost: additional infrastructure, paid SaaS, complex metadata filtering. For production with 100k+ items.
 
-**PostgreSQL + pgvector** — a hybrid: ACID transactions, complex queries, plus vector search. Unifying memory in a single database. Widely adopted (pgvector has 15K+ GitHub stars) and often the simplest production choice when PostgreSQL is already in the stack. Performance is adequate for most workloads up to ~100K-500K vectors with HNSW indexes.
+**PostgreSQL + pgvector** — a hybrid: ACID transactions, complex queries, plus vector search. Unifying memory in a single database. Widely adopted (pgvector has 15K+ GitHub stars (as of early 2026)) and often the simplest production choice when PostgreSQL is already in the stack. Performance is adequate for most workloads up to ~100K-500K vectors with HNSW indexes.
 
 **LanceDB** — an embedded vector database (no server). Stores data in Lance columnar format, supports hybrid search (vector + full-text), and runs in-process. Ideal for desktop agents, edge deployment, and local-first applications where running a database server is impractical.
 

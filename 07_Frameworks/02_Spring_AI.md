@@ -12,7 +12,7 @@
 
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
 
-**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. Key 1.0 milestones: stable API surface (no more breaking changes between releases), official Spring Boot starter support, comprehensive documentation and migration guides.
+**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations, and **2.0.0-M1** (milestone preview) was released in December 2025. Key 1.0 milestones: stable API surface (no more breaking changes between releases), official Spring Boot starter support, comprehensive documentation and migration guides.
 
 Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud streamlined cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
 

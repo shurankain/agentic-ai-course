@@ -44,7 +44,7 @@ Start with the question: is precise coordination with checkpoints needed? If yes
 
 ## LangGraph: Graph-Oriented Orchestration
 
-LangGraph (now at version 1.0) is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them. LangGraph Platform provides managed deployment with persistence, streaming, and a studio UI for debugging.
+LangGraph (now at version 1.0.x) is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them. LangGraph Platform provides managed deployment with persistence, streaming, and a studio UI for debugging.
 
 ### Graph Philosophy
 
@@ -110,7 +110,7 @@ AutoGen 0.4 is incompatible with version 0.2 -- a full code rewrite is required.
 
 ## CrewAI: Role-Based Collaboration
 
-CrewAI (now at version 1.9+) offers the metaphor of a crew -- a group of specialists, each with their own role, working toward a common goal.
+CrewAI (now at version ~1.10.x) offers the metaphor of a crew -- a group of specialists, each with their own role, working toward a common goal.
 
 ### Roles and Tasks
 
@@ -210,7 +210,7 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 
 ### When to Use
 
-ADK is the natural choice for organizations in the GCP ecosystem, especially when leveraging Gemini models and Google Search grounding. Over 7 million ADK downloads indicate strong adoption within the Google ecosystem.
+ADK is the natural choice for organizations in the GCP ecosystem, especially when leveraging Gemini models and Google Search grounding. Over 7 million ADK downloads (as of early 2026) indicate strong adoption within the Google ecosystem.
 
 ## Comparison and Selection
 
@@ -248,7 +248,7 @@ LangGraph 1.0 offers a graph-oriented approach with explicit state management. W
 
 OpenAI Agents SDK provides a production-grade handoff-based model evolved from Swarm. Ideal for multi-agent routing on OpenAI models with built-in guardrails and tracing.
 
-CrewAI 1.9+ uses the metaphor of a crew with roles and tasks. Flows add event-driven orchestration beyond simple sequential/hierarchical patterns, addressing earlier flexibility limitations.
+CrewAI ~1.10.x uses the metaphor of a crew with roles and tasks. Flows add event-driven orchestration beyond simple sequential/hierarchical patterns, addressing earlier flexibility limitations.
 
 Microsoft Agent Framework unifies AutoGen and Semantic Kernel into a single enterprise platform. The recommended path for new Microsoft ecosystem projects.
 

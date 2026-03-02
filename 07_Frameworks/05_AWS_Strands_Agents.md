@@ -12,7 +12,7 @@
 
 AWS Strands Agents SDK is an open-source framework from AWS for building AI agents. Strands implements a model-driven approach, contrasting with the graph-driven architecture of LangGraph.
 
-**Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption — 5K+ GitHub stars within the first 3 months, active community contributions, and growing ecosystem of MCP-compatible tools.
+**Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption — 5K+ GitHub stars in the first 3 months, 14M+ PyPI downloads (as of early 2026), active community contributions, and growing ecosystem of MCP-compatible tools.
 
 Key characteristics: the model-driven approach means the LLM makes decisions about which actions to take. Open-source under the Apache 2.0 license. Code size for a basic agent is only 5-10 lines. Native MCP support. For enterprise use, integration with Bedrock AgentCore is available.
 

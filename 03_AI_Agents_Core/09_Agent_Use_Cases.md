@@ -24,12 +24,12 @@ Not all agent applications are at the same maturity level. Some already generate
 
 | Category | Maturity | Example Companies | Market Size |
 |-----------|----------|------------------|-------------|
-| **Coding Agents** | Production | Cursor, GitHub Copilot, Devin | Dominant, $4B+ Devin valuation |
-| **Agentic RAG** | Production | Perplexity, Glean, You.com | $9B Perplexity valuation, 22M+ users |
+| **Coding Agents** | Production | Cursor, GitHub Copilot, Devin | Dominant, $4B+ Devin valuation (as of mid-2025) |
+| **Agentic RAG** | Production | Perplexity, Glean, You.com | $9B Perplexity valuation, 22M+ users (as of mid-2025) |
 | **Workflow Automation** | Production | n8n, Make, Zapier AI | 200K+ businesses |
 | **Voice Agents** | Production | ElevenLabs, VAPI, Retell | 75ms latency achieved |
 | **Computer Use Agents** | Beta | Anthropic, ChatGPT agent (formerly Operator) | Active development |
-| **Browser Automation** | Emerging | Browser Use, Amazon Nova Act | 27K+ GitHub stars |
+| **Browser Automation** | Emerging | Browser Use, Amazon Nova Act | 27K+ GitHub stars (as of early 2026) |
 | **Deep Research** | Emerging | Gemini Deep Research, OpenAI | New category 2024-2025 |
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
 | **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
@@ -57,9 +57,9 @@ Coding agents have become the most successful category of AI agents, and this is
 
 **GitHub Copilot** — the category pioneer, integrated into most IDEs. Evolved from autocomplete to a full-featured agent with Copilot Workspace.
 
-**Devin (Cognition)** — an autonomous software engineer valued at $4B+. Operates in its own development environment and can execute tasks end-to-end.
+**Devin (Cognition)** — an autonomous software engineer valued at $4B+ (as of mid-2025). Operates in its own development environment and can execute tasks end-to-end.
 
-**Roo Code (Roo Cline)** — an open-source alternative with 20K+ stars. Runs in VS Code and supports various LLMs.
+**Roo Code (Roo Cline)** — an open-source alternative with 20K+ stars (as of early 2026). Runs in VS Code and supports various LLMs.
 
 **Aider** — a CLI-based coding agent. Minimalist approach with good integration into existing workflows.
 
@@ -91,7 +91,7 @@ Classic RAG (Retrieval-Augmented Generation) is a simple pipeline: find relevant
 
 ### Key Players
 
-**Perplexity** — the category flagship valued at $9B with 22 million users. Combines web search with LLM reasoning. Transparently displays sources.
+**Perplexity** — the category flagship valued at $9B with 22 million users (as of mid-2025). Combines web search with LLM reasoning. Transparently displays sources.
 
 **Glean** — enterprise search with AI. Indexes a company's internal systems (Confluence, Slack, email) and answers employee questions.
 

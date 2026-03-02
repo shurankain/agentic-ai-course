@@ -80,8 +80,8 @@ Copilot (launched in 2021) became the first mass-market AI coding assistant:
 **Architecture:** Works through a simple pipeline — the user writes code/comments, the system gathers context (current file, open tabs), sends it to a cloud-based model (Codex/GPT), receives suggestions, and displays them as ghost text in the editor.
 
 **Statistics (2025):**
-- 55% of code is written with Copilot assistance (per GitHub data)
-- 1.8M+ paying subscribers
+- 55% of code is written with Copilot assistance (per GitHub data, among Copilot users)
+- 4.7M+ paying subscribers (Q2 FY2026)
 - Available in Individual, Business, and Enterprise editions
 
 **Copilot Agent Mode (2025):**

@@ -61,7 +61,7 @@ These patterns are not mutually exclusive — production agents typically combin
 
 The most influential research papers that shaped modern architectures:
 
-| Pattern | Authors (Year) | Key Idea | Citations |
+| Pattern | Authors (Year) | Key Idea | Citations (as of mid-2025) |
 |---------|----------------|----------|-----------|
 | **ReAct** | Yao et al. (2022) | Interleaving reasoning and actions | 5000+ |
 | **Plan-and-Execute** | Wang et al. | Separating planning from execution | 500+ |

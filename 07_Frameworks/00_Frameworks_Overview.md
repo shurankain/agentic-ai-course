@@ -46,9 +46,9 @@ Frameworks are organized by abstraction level from high to low:
 
 ### Cloud Provider Solutions
 
-**AWS Bedrock Agents** are used by over 100,000 organizations, providing enterprise SLA and full integration with the AWS ecosystem. Vendor lock-in remains the main drawback for companies planning a multi-cloud strategy.
+**AWS Bedrock Agents** are used by over 100,000 organizations (as of early 2026), providing enterprise SLA and full integration with the AWS ecosystem. Vendor lock-in remains the main drawback for companies planning a multi-cloud strategy.
 
-**Google Vertex AI Agent Builder** shows growth with over 7 million Agent Development Kit downloads. Integration with Gemini models and the ability to ground through Google Search make it attractive for the GCP ecosystem.
+**Google Vertex AI Agent Builder** shows growth with over 7 million Agent Development Kit downloads (as of early 2026). Integration with Gemini models and the ability to ground through Google Search make it attractive for the GCP ecosystem.
 
 **Azure AI Agent Service** is in preview status, offering integration with the enterprise Microsoft stack. Limited availability currently hinders broad adoption.
 
@@ -120,7 +120,7 @@ OpenAI has transitioned from the Assistants API to a new architecture. The Assis
 
 **Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design — state management is handled by the application or the Agents SDK.
 
-**Agents SDK** (released March 2025, now mature): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features.
+**Agents SDK** (released March 2025, now at v0.10.2): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features.
 
 ### Claude SDK and Claude Code
 

@@ -86,7 +86,7 @@ Tensor Parallelism distributes a single model across multiple GPUs. For models t
 
 ## Infrastructure for GPU Workloads
 
-GPU inference requires specialized infrastructure. NVIDIA GPUs with sufficient VRAM are the primary resource. For 7B parameters, 16GB is sufficient (RTX 4080, A4000). For 70B, 80+ GB is needed (A100-80GB or multiple GPUs).
+GPU inference requires specialized infrastructure. NVIDIA GPUs with sufficient VRAM are the primary resource. For 7B parameters, 16GB is sufficient (RTX 4080, A4000). For 70B, 80+ GB is needed (A100-80GB, H100-80GB, or multiple GPUs). H100 and H200 are the current standard for production inference.
 
 Estimating requirements: a model in FP16 requires 2 bytes per parameter. 7B parameters = 14GB, plus KV-cache and activations — round up to 20GB. Quantized INT8 — 1 byte per parameter, 7B = 7GB. INT4 (GPTQ/AWQ) — 0.5 bytes, 7B = 3.5GB. This allows selecting GPUs to match the budget: an RTX 4090 24GB can run Llama-13B in INT4, an A100 80GB — Llama-70B in INT8.
 

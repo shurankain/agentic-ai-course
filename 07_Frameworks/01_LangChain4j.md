@@ -164,7 +164,7 @@ This pattern demonstrates the core capabilities: declarativeness, memory managem
 
 ## Key Takeaways
 
-LangChain4j (currently at version 1.x, with 1.11+ as of early 2026) is a mature and feature-rich framework that brings modern LLM development capabilities to the Java ecosystem. Unified interfaces abstract providers, declarative AI Services reduce boilerplate code, and Spring integration simplifies adoption.
+LangChain4j (currently at version 1.3.0 (February 2026), which introduced the new `langchain4j-agentic` module for agent workflows) is a mature and feature-rich framework that brings modern LLM development capabilities to the Java ecosystem. Unified interfaces abstract providers, declarative AI Services reduce boilerplate code, and Spring integration simplifies adoption.
 
 Key advantages of the framework: broad provider support, declarative approach through annotations, complete set of RAG components, powerful tool system, and deep integration with Spring Boot.
 

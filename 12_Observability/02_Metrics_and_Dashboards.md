@@ -30,7 +30,7 @@ A support system operating in a non-Latin-script language consumes 30-50% more t
 
 Cost is calculated as: input tokens × input price + output tokens × output price (prices are quoted per 1M tokens by most providers).
 
-For GPT-4o, input tokens cost $2.50/1M, output — $10/1M. The 1:4 ratio makes limiting generation length for brief responses especially important.
+For GPT-4o, input tokens cost $2.50/1M, output — $10/1M (newer GPT-5.2: $1.75/$14; budget GPT-5-mini: $0.25/$2.00). The 1:4 ratio makes limiting generation length for brief responses especially important.
 
 **Optimization Strategies:**
 
