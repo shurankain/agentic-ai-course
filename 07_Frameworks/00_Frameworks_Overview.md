@@ -116,7 +116,7 @@ CrewAI offers a declarative approach: agents as a "team" with roles. Instead of 
 
 ### OpenAI Agents SDK
 
-OpenAI has transitioned from the Assistants API to a new architecture. The Assistants API was deprecated in mid-2025, replaced by the **Responses API** (stateless, single-turn successor to Chat Completions with built-in tool use) and the **Agents SDK** (production multi-agent framework).
+OpenAI has transitioned from the Assistants API to a new architecture. The Assistants API was deprecated on August 26, 2025 (sunset date: August 26, 2026 — after which it will no longer be available), replaced by the **Responses API** (stateless, single-turn successor to Chat Completions with built-in tool use) and the **Agents SDK** (production multi-agent framework).
 
 **Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design — state management is handled by the application or the Agents SDK.
 

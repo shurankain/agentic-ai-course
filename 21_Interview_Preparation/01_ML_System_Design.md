@@ -12,7 +12,7 @@
 
 ML System Design is one of the most challenging stages of interviews for Senior/Staff+ positions. It combines understanding of distributed systems with deep knowledge of ML/AI specifics.
 
-For positions at $300K+, they evaluate the ability to structure an ambiguous problem, make well-reasoned trade-off decisions, think about production concerns from day one, and communicate complex ideas simply.
+For positions at $400K+ (Staff+ at frontier AI companies), they evaluate the ability to structure an ambiguous problem, make well-reasoned trade-off decisions, think about production concerns from day one, and communicate complex ideas simply.
 
 ---
 
@@ -160,7 +160,7 @@ Tenant Preferences: the first level checks tenant configuration. If a client has
 
 Task Classification: prompt analysis to determine the task type — simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
 
-Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-4o-mini, claude-haiku-4.5), providing sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4, gpt-4o) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4, o3), despite high cost.
+Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-4o-mini, claude-haiku-4.5), providing sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4-6, gpt-4o) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-6, o3), despite high cost.
 
 Fallback Chain: if the primary model is unavailable or returns an error, the request is automatically rerouted to a fallback model, ensuring high service availability.
 

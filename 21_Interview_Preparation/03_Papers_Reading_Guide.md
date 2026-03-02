@@ -330,7 +330,7 @@ Open-ended: "What's the most important paper from last year?", "What research di
 
 Where to read papers: arXiv (primary source), Papers With Code (with code), Semantic Scholar (connected papers).
 
-Paper discussions: ML Twitter/X, r/MachineLearning, YouTube (Yannic Kilcher, AI Coffee Break).
+Paper discussions: ML Twitter/X, r/MachineLearning, YouTube (Yannic Kilcher, AI Coffee Break, AI Explained, Dwarkesh Patel).
 
 Reading groups: start your own with colleagues, one paper per week, discussion thirty to sixty minutes.
 

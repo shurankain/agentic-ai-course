@@ -12,6 +12,8 @@
 
 NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection, providing a programmatic control layer on top of probabilistic models.
 
+**Recent capabilities (2025+):** Colang 2.0 is now the recommended standard for new projects (Python-like syntax, event-driven programming). Reasoning-capable safety models (e.g., Llama Guard 3, ShieldGemma) can be used as rail backends for faster, cheaper classification. GLiNER-based PII detection provides entity recognition without external API calls. OpenTelemetry tracing integration enables connecting guardrails telemetry to existing observability stacks.
+
 ### Key Difference from Prompt-Based Approaches
 
 Unlike prompt-based safety (describing rules in prompt text that depends on the LLM's "memory"), NeMo Guardrails implements **deterministic programmatic control**.
@@ -430,6 +432,8 @@ Rails should be tested like any security-critical code:
 ---
 
 ## Practical Colang Examples
+
+> **Note:** The examples below use **Colang 1.0 syntax**. Colang 2.0 (recommended for new projects) uses Python-like syntax with `@flow` decorators, `await`/`send` event patterns, and improved control flow. Colang 1.0 remains supported but Colang 2.0 is the standard for new deployments.
 
 ### User Intents and Bot Responses
 

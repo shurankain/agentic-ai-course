@@ -150,6 +150,20 @@ When multiple agents collaborate (via frameworks like OpenAI Agents SDK, LangGra
 
 **Shared context poisoning:** In multi-agent systems, agents often share context (conversation history, tool results). A compromised agent can inject malicious content into shared context, affecting all downstream agents. Defense: sanitize cross-agent context, mark trust boundaries in shared state.
 
+## MCP Security Incidents (2025-2026)
+
+Real-world incidents demonstrate that MCP security risks are not theoretical:
+
+**mcp-remote RCE (CVE-2025-6514, CVSS 9.6):** OS command injection via OAuth discovery fields in the widely-used mcp-remote package. Hundreds of thousands of installations were affected. An attacker controlling a malicious OAuth server could achieve remote code execution on any machine running the MCP client.
+
+**Anthropic Git MCP Server (January 2026):** Three CVEs (CVE-2025-68145, CVE-2025-68143, CVE-2025-68144) in Anthropic's own first-party Git MCP server. Remote code execution was achievable via prompt injection through crafted repository content — demonstrating that even first-party servers from the protocol creators can be vulnerable.
+
+**8,000+ exposed MCP servers (February 2026):** Security researchers discovered over 8,000 MCP servers deployed without authentication, publicly accessible on the internet.
+
+**Ecosystem-wide findings (as of early 2026):** Security audits reveal systemic issues: 88% of MCP servers require credentials but 53% use insecure static secrets, only 8.5% implement OAuth, and 82% are prone to path traversal attacks. These statistics underscore the gap between the protocol's security framework and real-world deployment practices.
+
+**Lessons:** Always vet MCP servers before connecting (check for known CVEs), prefer OAuth 2.1 over static secrets, never expose MCP servers without authentication, and treat tool descriptions from untrusted servers as potential prompt injection vectors.
+
 ## Agent Security Testing
 
 Security testing for agents requires specific approaches.

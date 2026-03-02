@@ -88,15 +88,15 @@ Advantages: understanding of LLM specifics, built-in visualizations, integration
 
 **LangSmith** — a platform by LangChain with deep integration. Strengths: chain visualization, dataset management, evaluation. Prompt Hub versions prompts as artifacts. Prompt Playground enables A/B testing and cross-model comparison. Datasets — structured collections for evaluation with automatic addition from production traces. User feedback is linked to specific runs for building golden datasets.
 
-**Langfuse** — an open-source alternative with self-hosting. Deployed via Docker Compose or Kubernetes Helm chart. Requires PostgreSQL. Production: minimum 3 replicas, persistent storage 100Gi+, resource limits 2 CPU / 4GB RAM. Python SDK uses decorators for automatic tracing. Supports scores for trace evaluation and batch evaluation.
+**Langfuse** — an open-source alternative with self-hosting. Acquired by ClickHouse in January 2026 and relicensed to fully MIT — ensuring long-term open-source viability with ClickHouse's analytics backend. Deployed via Docker Compose or Kubernetes Helm chart. Requires PostgreSQL. Production: minimum 3 replicas, persistent storage 100Gi+, resource limits 2 CPU / 4GB RAM. Python SDK uses decorators for automatic tracing. Supports scores for trace evaluation and batch evaluation.
 
 **Arize Phoenix** — open-source with a focus on embeddings and drift detection. Embedding Visualization via UMAP shows query clusters. Drift Detection identifies changes in embeddings: PSI > 0.2 indicates significant drift. LLM Evaluation via evaluators: HallucinationEvaluator, RelevanceEvaluator, ToxicityEvaluator. RAG Retrieval Analysis via metrics: MRR@k, NDCG@k, Precision@k.
 
 ## Platform Comparison
 
-**LangSmith**: Cloud only, LangChain integration, prompt hub, advanced datasets, built-in evaluation. Choose if you use LangChain, need full lifecycle management, and are willing to pay for a managed service.
+**LangSmith**: Cloud + self-hosted (Enterprise plan supports deployment on Kubernetes in AWS/GCP/Azure since 2025), LangChain integration, prompt hub, advanced datasets, built-in evaluation. Choose if you use LangChain, need full lifecycle management.
 
-**Langfuse**: Cloud + Self-host, SDK integration, scores, multi-framework. Choose for self-hosting, limited budget, customization.
+**Langfuse**: Cloud + Self-host (fully MIT-licensed after ClickHouse acquisition, Jan 2026), SDK integration, scores, multi-framework. Choose for self-hosting, limited budget, customization.
 
 **Phoenix**: Self-host OSS, drift detection, embeddings visualization, RAG analysis. Choose for ML observability, research, full control.
 

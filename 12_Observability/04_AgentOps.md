@@ -64,7 +64,7 @@ Contextual fields: user_id, task_type, model, tokens_in, tokens_out, latency_ms,
 
 **LangSmith (LangChain):** Trace visualization, dataset management, prompt hub, LangChain native. Use if you already use LangChain, need prompt versioning, dataset management. Per-trace pricing.
 
-**Langfuse:** Open-source alternative. Self-hostable, open-source, provider agnostic, cost-effective. Use for data residency requirements, budget constraints, customization. Free/Self pricing.
+**Langfuse:** Open-source alternative. Acquired by ClickHouse (January 2026), now fully MIT-licensed. Self-hostable, provider agnostic, cost-effective. Use for data residency requirements, budget constraints, customization. Free/Self pricing.
 
 **Phoenix (Arize):** Enterprise observability. Embedding analysis, LLM evaluation, RAG analysis, production scale. Use for enterprise deployment, RAG-heavy systems, embedding monitoring. Freemium pricing.
 

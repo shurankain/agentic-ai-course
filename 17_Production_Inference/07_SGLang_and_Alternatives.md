@@ -40,7 +40,7 @@ Practice: critical for production systems that require guaranteed correct format
 - Constrained Decoding: vLLM supports JSON mode and guided decoding (via outlines), SGLang full regex/CFG with GPU-accelerated FSM
 - Throughput chat: SGLang up to 3x
 - Throughput batch: comparable
-- Maturity: both production-ready; vLLM has broader adoption, SGLang has matured significantly
+- Maturity: both production-ready; vLLM has broader adoption, SGLang (v0.5.9+) has matured significantly and matches vLLM in stability
 
 **When to choose:**
 Ideal: chatbots with long history, applications with frequent similar prefixes, structured output (JSON, code), multi-turn agents. Less suitable: one-off batch, very short prompts, maximum stability required.
@@ -112,7 +112,7 @@ Ideal: already in the HF ecosystem, enterprise features needed, team familiar wi
 | Constrained Gen | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
 | Model Support | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 | FP8 Support | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Maturity | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Maturity | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 
 ## Decision Framework
 
@@ -155,8 +155,10 @@ vLLM is imperative (LLM object, generate method). SGLang is declarative (backend
 **Approach:**
 Production-like mode, standard benchmark_serving scripts, identical load parameters. Vary batch size, prompt length, measure sustained throughput.
 
-**Typical results Llama-2-7B A100:**
+**Reference results Llama-2-7B A100** (historical baseline; current benchmarks typically use Llama-3-8B+ on H100):
 vLLM: 2,500 tok/s, TTFT 45ms, 14.2GB. SGLang single-turn: 2,400 tok/s, multi-turn: 4,200 tok/s. TensorRT-LLM: 2,900 tok/s, TTFT 38ms, less memory. TGI: slightly lower throughput, easier to use.
+
+On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok/s vs vLLM's ~12,500 tok/s in high-throughput scenarios (as of late 2025, SGLang v0.5.9+).
 
 ## Production Considerations
 

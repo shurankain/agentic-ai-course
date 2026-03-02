@@ -72,7 +72,7 @@ An interesting nuance: even if a document fits within the context window, embedd
 
 Choosing an embedding model requires balancing several conflicting factors.
 
-Representation quality is the primary criterion. How accurately does the model capture the semantics of your domain? Benchmarks like MTEB (Massive Text Embedding Benchmark) provide a general picture of a model's capabilities, but real-world testing on your data is irreplaceable. A model leading MTEB may underperform compared to a specialized model on medical texts or source code.
+Representation quality is the primary criterion. How accurately does the model capture the semantics of your domain? Benchmarks like MTEB (Massive Text Embedding Benchmark) and its successor RTEB (Retrieval Text Embedding Benchmark, Hugging Face, October 2025) — which focuses specifically on retrieval performance rather than general embedding quality — provide a picture of a model's capabilities, but real-world testing on your data is irreplaceable. A model leading MTEB/RTEB may underperform compared to a specialized model on medical texts or source code.
 
 Dimensionality affects all other system characteristics. A model with 384 dimensions requires 4 times less memory for vector storage than a model with 1536 dimensions. For one million documents, this is the difference between 1.5 GB and 6 GB of RAM. Search also speeds up proportionally with reduced dimensionality.
 
