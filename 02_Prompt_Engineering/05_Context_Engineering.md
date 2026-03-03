@@ -229,7 +229,7 @@ This is the SELECT strategy elevated from a pipeline component to an agent capab
 
 3. **Context = RAM for an LLM** — a limited resource that requires optimization
 
-4. **2024–2025 Tools:** File-based memory (CLAUDE.md pattern), MCP memory servers, vector DBs with reranking, MemGPT/Letta (conceptual influence)
+4. **Current Tools (2024+):** File-based memory (CLAUDE.md pattern), MCP memory servers, vector DBs with reranking, MemGPT/Letta (conceptual influence)
 
 ---
 

@@ -12,7 +12,7 @@
 
 LoRA revolutionized fine-tuning, but research continues to advance. New methods offer improvements:
 
-- **DoRA:** up to +3.7% on LLaMA-7B (ICML 2024)
+- **DoRA:** up to +3.7% on LLaMA-7B (ICML 2024, paper-reported results)
 - **GaLore:** full-parameter training with LoRA-level memory efficiency
 - **QA-LoRA:** quantization-aware LoRA
 - **LongLoRA:** efficient fine-tuning for long context
@@ -39,13 +39,15 @@ DoRA can better approximate full fine-tuning with the same number of parameters.
 
 ### Results
 
+Paper-reported results on original LLaMA-7B (2023):
+
 | Model | Method | Commonsense | Arithmetic | Avg |
 |-------|--------|-------------|------------|-----|
 | LLaMA-7B | LoRA (r=32) | 68.9 | 55.8 | 62.4 |
 | LLaMA-7B | DoRA (r=32) | 72.1 | 59.9 | 66.0 |
 | LLaMA-7B | Full FT | 73.2 | 61.4 | 67.3 |
 
-+3.7% absolute improvement over LoRA.
++3.7% absolute improvement over LoRA. These results demonstrate the method's advantage; absolute numbers on modern models (Llama 3.x, Qwen 2.5/3) will differ.
 
 **When to use:** there is headroom over LoRA, the task requires precise fine-tuning, you are willing to accept a slight increase in compute.
 
@@ -107,7 +109,7 @@ Reduces complexity from O(L²) to approximately O(L).
 | 32K | LongLoRA | 28GB | 4.52 |
 | 100K | LongLoRA | 48GB | 4.71 |
 
-LongLoRA enables fine-tuning LLaMA-2-7B on 100K context on a single 48GB GPU.
+LongLoRA enables fine-tuning LLaMA-2-7B on 100K context on a single 48GB GPU. Results shown are from the original paper (2023); newer models (Llama 3.x) natively support longer contexts, but the S²-Attn technique remains applicable for extending context beyond native limits.
 
 ## Comparison Table
 

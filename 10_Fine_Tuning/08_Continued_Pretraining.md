@@ -75,7 +75,7 @@ DAPT is CPT specifically optimized for downstream tasks in a domain. Even a rela
 
 Combining DAPT + TAPT often yields the best results.
 
-**Examples:** BioBERT/PubMedBERT (biomedicine), LegalBERT (legal texts), SciBERT (scientific papers).
+**Classic examples:** BioBERT/PubMedBERT (biomedicine), LegalBERT (legal texts), SciBERT (scientific papers). **Modern LLM-era CPT:** BioMistral (biomedical Mistral), Meditron (medical Llama), SaulLM (legal Mistral) — these apply CPT to decoder-only LLMs rather than BERT-class encoders, achieving stronger downstream performance.
 
 ## CPT for Low-Resource Languages
 

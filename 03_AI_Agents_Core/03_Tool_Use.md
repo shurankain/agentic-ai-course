@@ -563,7 +563,7 @@ public class WebSearchTools {
     }
 
     @Tool("Searches for up-to-date information on the internet. Use for fresh news, " +
-          "current prices, events after 2024. Do NOT use for historical facts.")
+          "current prices, events after 2025. Do NOT use for historical facts.")
     public String searchWeb(
             @P("Search query in English, specific and concise")
             String query,

@@ -313,7 +313,7 @@ When truncation is necessary, the least important parts will be affected.
 
 1. **The context window is a hard constraint.** It includes both input data and the model's response. Exceeding it is impossible — the request simply will not execute.
 
-2. **Context size has grown exponentially**, from 1K tokens in 2019 to 1M+ in 2024. But a large context means large computational and monetary costs.
+2. **Context size has grown exponentially**, from 1K tokens in 2019 to 10M+ by 2025 (Llama 4 Scout). But a large context means large computational and monetary costs.
 
 3. **Quality degrades on long contexts.** The "Lost in the Middle" problem means the model utilizes the beginning and end of the context better than the middle.
 

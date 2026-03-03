@@ -10,7 +10,7 @@
 
 ## Introduction: Data as a Bottleneck
 
-By 2024, compute is getting cheaper, models are scaling, but high-quality data is becoming a scarce resource. According to Epoch AI estimates, high-quality text data on the internet will be exhausted by 2026-2028.
+By the mid-2020s, compute is getting cheaper, models are scaling, but high-quality data is becoming a scarce resource. According to Epoch AI estimates, high-quality text data on the internet will be exhausted by 2026-2028.
 
 Synthetic data is the answer to this challenge. Models generate training examples for other (or the same) models.
 
@@ -108,7 +108,7 @@ Domain-specific documents → QA generation → Edge cases → Expert review →
 **Reasoning:**
 Math/logic problems → Teacher step-by-step solutions → Verification (programmatic/expert) → Only verified correct → Add examples with errors and corrections.
 
-## Synthetic Reasoning Data (2024-2025)
+## Synthetic Reasoning Data (2024+)
 
 The training of reasoning models (o1, o3, DeepSeek R1, Qwen QwQ) created massive demand for a new category of synthetic data: multi-step reasoning traces with verifiable correctness.
 

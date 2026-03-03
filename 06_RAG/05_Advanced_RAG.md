@@ -694,7 +694,7 @@ Advanced RAG goes beyond simple "find and answer." Main directions of developmen
 - Performance optimization (caching, streaming, parallelization)
 - Monitoring and observability
 
-**New techniques in 2024:**
+**New techniques (2024-2025):**
 - Contextual Retrieval (Anthropic) — contextual annotation of chunks (-35% errors)
 - Late Chunking (Jina) — embeddings with full document context
 - ColPali — vision-language retrieval without OCR (+15% recall on tables)
