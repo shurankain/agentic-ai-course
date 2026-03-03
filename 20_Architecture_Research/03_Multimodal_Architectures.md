@@ -12,7 +12,7 @@
 
 Human understanding of the world is multimodal. We read text, see images, hear sounds — and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
 
-GPT-4o, Claude Sonnet 4, Gemini 2.5 Pro, Llama 4 — modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
+GPT-4o, Claude Sonnet 4.6, Gemini 2.5/3 Pro, Llama 4 — modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
 
 The field has shifted from "adapter-based" multimodality (bolting vision onto text models) to **native multimodality** (processing all modalities from the start in a unified architecture). This chapter covers the architectural solutions that make multimodal AI possible, from the foundational adapter approaches to the latest native multimodal designs.
 
@@ -212,7 +212,7 @@ The field has undergone a fundamental shift from adapter-based to native multimo
 
 **Llama 4 Early Fusion (April 2025):** Meta's approach to native multimodality. Images, text, and video are tokenized into a shared representation space from the very first layer. The MoE routing operates over unified multimodal tokens — the same experts can specialize in visual or textual patterns. This is a departure from the "frozen encoder + adapter" pattern.
 
-**Claude Sonnet 4 (2025):** Strong vision understanding with native image processing. Excels at document understanding, chart analysis, and visual reasoning. Extended thinking applies to multimodal inputs — the model can "think" about visual content in the same chain of reasoning as text.
+**Claude Sonnet 4 / 4.6 (2025):** Strong vision understanding with native image processing. Excels at document understanding, chart analysis, and visual reasoning. Extended thinking applies to multimodal inputs — the model can "think" about visual content in the same chain of reasoning as text.
 
 ### Audio and Speech Capabilities
 
@@ -276,7 +276,7 @@ Audio/speech is now a first-class modality. Real-time voice conversation (GPT-4o
 
 Image/video generation is converging with understanding. Unified architectures that both understand and generate images (and video) are emerging, blurring the line between "understanding" and "generation" models.
 
-This is a rapidly evolving field. GPT-4o, Gemini 2.5, Claude Sonnet 4, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
+This is a rapidly evolving field. GPT-4o/5, Gemini 2.5/3, Claude Sonnet 4.6, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
 
 ---
 

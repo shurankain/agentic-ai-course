@@ -345,7 +345,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96% → 72.0% (Claude Opus 4)
+  - Evolution: 1.96% → 79.2% (Claude Opus 4.6 Thinking)
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan → Edit → Test → Debug loop
@@ -355,6 +355,10 @@
   - Sandboxed execution
   - Git-based changes
   - Review before commit
+- AI coding agent supply chain security
+  - Hallucinated package attacks
+  - AI-to-AI code review
+  - MCP tool description injection
 
 ### 03.8 Process Reward Models (`08_Process_Reward_Models.md`)
 - Why separate reward models for agents
@@ -379,7 +383,7 @@
   - Cursor, GitHub Copilot, Devin ($4B+)
   - Architectural patterns
 - **Agentic RAG** — intelligent search
-  - Perplexity ($9B, 22M+ users)
+  - Perplexity ($9B, 22M+ users, as of mid-2025)
   - Router and Multi-Agent patterns
 - **Workflow Automation** — the no-code revolution
   - n8n (200K+ businesses, MCP support)
@@ -411,6 +415,8 @@
   - Fallback strategies
 - Rate Limiting and Priority Queues
 - Monitoring and Cost Alerts
+- Agent Distillation: prototype → trace → fine-tune → deploy
+  - Budget control: `budget_tokens`, `reasoning_effort`
 
 ---
 
@@ -993,6 +999,9 @@
   - HellaSwag
   - HumanEval
   - MT-Bench
+- Agent-specific evaluation benchmarks
+  - GAIA, TAU-bench, AgentBench, ToolBench
+  - Agent trajectory evaluation
 - Principles of metric selection
 - Building an evaluation dataset
 

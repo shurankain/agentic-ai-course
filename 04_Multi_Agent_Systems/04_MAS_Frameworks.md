@@ -206,7 +206,7 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 
 ### Key Features
 
-**Gemini integration:** native access to Gemini 2.5 Pro/Flash capabilities including long context (1M+ tokens), multimodal input, and grounding through Google Search. **A2A support:** built-in support for the Agent-to-Agent protocol for inter-agent communication. **Vertex AI deployment:** managed deployment with auto-scaling, monitoring, and enterprise SLA.
+**Gemini integration:** native access to Gemini 2.5/3 Pro/Flash capabilities including long context (1M+ tokens), multimodal input, and grounding through Google Search. **A2A support:** built-in support for the Agent-to-Agent protocol for inter-agent communication. **Vertex AI deployment:** managed deployment with auto-scaling, monitoring, and enterprise SLA.
 
 ### When to Use
 

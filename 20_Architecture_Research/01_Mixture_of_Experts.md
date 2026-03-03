@@ -294,7 +294,7 @@ Specialization is emergent. Experts automatically specialize on different aspect
 
 Top-K selects precision vs efficiency. K=1 is maximally efficient, K=2 provides a safety margin, K greater than 2 is rarely justified.
 
-MoE is the dominant frontier architecture (2025). DeepSeek V3/R1, Llama 4, Qwen 3 235B, Gemini 2.5 Pro — all frontier models use MoE. The debate is no longer "MoE vs Dense" but "which MoE design."
+MoE is the dominant frontier architecture (2025). DeepSeek V3/R1, Llama 4, Qwen 3 235B, Gemini 2.5/3 Pro — all frontier models use MoE. The debate is no longer "MoE vs Dense" but "which MoE design."
 
 MoE is not for every scenario. Small models (<10B), homogeneous data, strict latency — dense may be better.
 

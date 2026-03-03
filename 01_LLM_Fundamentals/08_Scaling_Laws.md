@@ -367,8 +367,8 @@ Test-time compute (TTC) emerged in 2024 with OpenAI o1 and is now an established
 
 **All major providers now offer TTC:**
 - **OpenAI o3** (January 2025 GA) and **o4-mini** (April 2025): `reasoning_effort` parameter (low/medium/high). o3 achieves 96.7% on AIME 2024, 87.7% on GPQA Diamond
-- **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Sonnet 4 with extended thinking competes with o3 on reasoning benchmarks
-- **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5 Pro with thinking leverages 1M+ token context for reasoning
+- **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Opus 4 / 4.6 with extended thinking competes with o3 on reasoning benchmarks
+- **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5/3 Pro with thinking leverages 1M+ token context for reasoning
 - **DeepSeek-R1** (January 2025): open-weight reasoning model achieving o1-level performance at lower cost, trained via GRPO
 
 ### Train-Time vs Test-Time Compute Trade-off
@@ -383,7 +383,7 @@ For a simple request ("Translate 'hello' to French"), you can use C_inference = 
 
 | Strategy | C_train | C_inference | Use Case | Example |
 |-----------|---------|-------------|----------|--------|
-| Traditional LLM | High | Fixed (low) | General tasks | GPT-4o, Claude Sonnet 4 |
+| Traditional LLM | High | Fixed (low) | General tasks | GPT-4o, Claude Sonnet 4.6 |
 | Reasoning model | Medium | Variable (high) | Reasoning tasks | o3, Claude extended thinking |
 | Small + TTC | Low | Very high | Quality-critical | o4-mini, R1-distill-7B |
 | Large + minimal | Very high | Low | Latency-critical | Large model, instant responses |

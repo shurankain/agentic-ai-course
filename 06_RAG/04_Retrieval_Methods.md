@@ -242,7 +242,7 @@ The reranker landscape has evolved significantly, with new models and approaches
 
 **BGE Reranker v2.5 (BAAI, 2024):** Open-source cross-encoder reranker in multiple sizes (small to large). Strong performance on MTEB benchmarks. Popular choice for self-hosted reranking.
 
-**LLM-based rerankers — RankGPT pattern (2024):** Using LLMs (GPT-4, Claude) as listwise rerankers. Instead of scoring documents individually, the LLM receives the full list and returns a ranking. More expensive but captures inter-document relationships. Best used as a final refinement stage for the top 5-10 candidates.
+**LLM-based rerankers — RankGPT pattern (2024):** Using LLMs (GPT-4o, Claude) as listwise rerankers. Instead of scoring documents individually, the LLM receives the full list and returns a ranking. More expensive but captures inter-document relationships. Best used as a final refinement stage for the top 5-10 candidates.
 
 ### Speculative Retrieval
 

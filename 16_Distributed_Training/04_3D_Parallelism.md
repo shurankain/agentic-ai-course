@@ -94,7 +94,7 @@ GPT-3 scale (175B parameters):
 
 A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended for reasonable throughput.
 
-**Topology:** 64 nodes × 8 GPU = 512 GPU. Intra-node NVLink 600 GB/s for TP. Inter-node InfiniBand 200-400 Gb/s for PP and DP.
+**Topology:** 64 nodes × 8 GPU = 512 GPU. Intra-node NVLink 900+ GB/s for TP. Inter-node InfiniBand 200-400 Gb/s for PP and DP.
 
 ### Choosing Parallelism
 
