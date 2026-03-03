@@ -526,11 +526,46 @@ Coding agents like Claude Code and Codex excel when given clear, detailed specif
 
 5. **Spec-driven development** is emerging as a powerful workflow: human writes spec, agent implements
 
-6. **Security concerns remain:** code injection, secrets, dependencies
+6. **Security concerns remain:** code injection, secrets, dependencies, hallucinated packages
+
+7. **Supply chain security is an emerging concern** — AI-generated code introduces new attack vectors (see below)
 
 7. **Trend: convergence toward agent-native tools** — Cursor, Windsurf, and Copilot agent mode all moving toward autonomous multi-file editing
 
 8. **CLI agents (Claude Code) and cloud agents (Codex)** represent two complementary paradigms: interactive vs. asynchronous
+
+---
+
+## AI Coding Agent Supply Chain Security
+
+AI-generated code introduces attack vectors that do not exist in human-written code.
+
+### Hallucinated Package Attacks
+
+LLMs sometimes suggest package names that do not exist. Attackers monitor these hallucinated names, register them on PyPI/npm/RubyGems with malicious payloads, and wait for developers (or agents) to install them. This is a documented and actively exploited supply chain attack vector.
+
+**How it works:**
+1. An LLM generates code with `import acme-utils-pro` — a plausible but non-existent package
+2. Attackers monitor LLM outputs (via public code, forums, research) to identify commonly hallucinated names
+3. They register `acme-utils-pro` on PyPI with malware (credential theft, backdoor, cryptominer)
+4. Developers or automated agents run `pip install acme-utils-pro` — the attack succeeds
+
+**Mitigations:**
+- Verify every dependency against known-good registries before installation
+- Use lockfiles and hash pinning (pip --require-hashes, npm integrity checks)
+- Run agent-generated installs in sandboxed environments
+- Maintain an allow-list of approved packages for automated agents
+- Tools like Socket.dev and Snyk can flag suspicious new packages
+
+### AI-to-AI Code Review
+
+A defense pattern gaining traction: use one AI agent to security-review code produced by another. The reviewer agent operates with a security-focused system prompt and checks for known vulnerability patterns, suspicious dependencies, and unsafe operations. This is not a replacement for human review but adds a fast automated layer.
+
+**Pattern:** Generator agent writes code → Reviewer agent (different model or different prompt) audits for security issues → flagged items require human sign-off.
+
+### MCP Tool Description Injection
+
+Coding agents that use MCP servers to access tools (file systems, databases, APIs) are vulnerable to tool description injection. A malicious MCP server can craft tool descriptions that manipulate the agent into executing unintended operations. The CurXecute attack (CVE-2025-54135) demonstrated this: a malicious VS Code extension used crafted MCP tool descriptions to hijack a coding agent's actions. See [[../../14_Security_Safety/03_Agent_Security|Agent Security]] for MCP security incidents and mitigations.
 
 ---
 

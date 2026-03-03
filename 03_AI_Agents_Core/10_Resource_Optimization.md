@@ -280,6 +280,42 @@ Tracking expenses by:
 
 ---
 
+## Agent Distillation: From Expensive Prototype to Cheap Production
+
+A deployment strategy that connects cost optimization with fine-tuning: use an expensive model to build and validate an agent, then distill its behavior into a cheaper model.
+
+### The Pattern
+
+1. **Prototype with a premium model** (Claude Opus 4.6, o3) — build the agent, iterate on prompts and tool use until quality is satisfactory
+2. **Collect successful traces** — log every successful agent run: input, chain-of-thought, tool calls, outputs. These traces become training data
+3. **Fine-tune a smaller model** (Claude Haiku 4.5, GPT-4o-mini) on the collected traces — the smaller model learns the agent's behavior patterns
+4. **Deploy the distilled model** — same agent logic, 10-50x cheaper per request
+
+### Why This Works
+
+Premium models excel at learning complex behaviors from instructions (zero/few-shot). But once the behavior is well-defined through examples, a fine-tuned smaller model can replicate it at a fraction of the cost. The premium model's role shifts from runtime engine to training data generator.
+
+### Budget Control in Agentic Loops
+
+When agents make 10-20 LLM calls per task, costs with reasoning models spiral quickly. Two key parameters for controlling this:
+
+**`budget_tokens` (Anthropic)** — sets an explicit token cap on extended thinking. In agentic loops, use lower budgets for routine steps (tool selection, formatting) and higher budgets only for genuinely complex reasoning steps.
+
+**`reasoning_effort` (OpenAI)** — coarse control (low/medium/high) over how much thinking o-series models do. Set to "low" for simple agent steps, "high" only for critical decisions.
+
+**Pattern:** Wrap each agent step with cost-appropriate settings rather than using the same expensive configuration for every LLM call in the loop.
+
+### When to Distill
+
+- Agent behavior is stable and well-understood (not still iterating on design)
+- Volume justifies fine-tuning cost (hundreds of requests/day+)
+- Quality requirements can be validated automatically (test suites, eval metrics)
+- Latency matters — smaller models are faster
+
+See [[../../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the technical details of distillation training.
+
+---
+
 ## Related Topics
 
 - [[04_Planning|Planning]] — efficient planning conserves resources
@@ -313,6 +349,10 @@ Tracking expenses by:
    - Priority queues for multi-agent
    - Fair scheduling + priority
    - Rate limiting by user tiers
+
+6. **Agent Distillation:**
+   - Prototype with expensive model, collect traces, fine-tune cheap model
+   - Use `budget_tokens` / `reasoning_effort` to control per-step costs in agentic loops
 
 ---
 

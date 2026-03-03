@@ -102,6 +102,22 @@ As classic benchmarks saturate, the community has shifted to harder, more discri
 
 **Chatbot Arena (LMSYS)** — human preference evaluation at scale. Users submit prompts and compare responses from two anonymous models side-by-side, voting for the better response. Produces Elo ratings from hundreds of thousands of pairwise comparisons. As of early 2026, Claude Opus 4.6 leads the overall rankings, with the top 10 (including Chinese models like GLM-5 and Kimi K2.5) separated by only ~44 Elo points. Open-source models have nearly closed the gap with proprietary ones. The most ecologically valid benchmark — measures what users actually prefer in practice. Categories include coding, math, hard prompts, creative writing, and instruction following.
 
+### Agent-Specific Evaluation Benchmarks
+
+Standard benchmarks measure model capabilities in isolation. Agent benchmarks evaluate the full loop: planning, tool use, multi-step execution, and error recovery.
+
+**GAIA (General AI Assistants)** — a benchmark from Meta requiring agents to answer questions that demand multi-step web browsing, tool use, file manipulation, and reasoning. Questions have unambiguous correct answers but require 5-20 steps to solve. Measures real-world assistant capability rather than isolated skills.
+
+**TAU-bench (Tool-Augmented Understanding)** — evaluates agent performance on tasks requiring correct tool selection and sequencing. Focuses on the tool-use pipeline: understanding when to call tools, interpreting results, and chaining multiple tool calls to reach a goal. Includes retail and airline customer service domains.
+
+**AgentBench** — a comprehensive suite covering 8 environments (OS, database, web browsing, knowledge graph, etc.). Agents must interact with real systems through actions. Measures robustness across diverse environments.
+
+**ToolBench** — evaluates tool use at scale with 16,000+ real-world APIs. Tests API discovery, parameter filling, multi-API orchestration, and error handling. Measures whether agents can navigate large API ecosystems.
+
+**Agent trajectory evaluation** — unlike outcome-only benchmarks, trajectory evaluation assesses the quality of the action sequence: Were the steps efficient? Was backtracking excessive? Were tools used appropriately? This is critical because two agents may reach the same answer through very different paths — one elegant, one wasteful.
+
+**Evaluation frameworks:** UK AISI Inspect AI provides a government-backed framework for agent safety evaluation. Braintrust offers agent evaluation with trace-level scoring. These complement custom eval suites for production use.
+
 ### Benchmark Selection for Production
 
 | What You're Evaluating | Recommended Benchmarks |
@@ -109,6 +125,7 @@ As classic benchmarks saturate, the community has shifted to harder, more discri
 | General knowledge & reasoning | MMLU-Pro, GPQA Diamond |
 | Mathematical reasoning | AIME, MATH |
 | Coding agents | SWE-bench Verified, HumanEval |
+| Tool-using agents | GAIA, TAU-bench, AgentBench |
 | Abstract reasoning | ARC-AGI |
 | User preference / overall quality | Chatbot Arena |
 | Your specific use case | Custom eval set (always the most important) |
