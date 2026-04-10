@@ -277,7 +277,7 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 | Llama Guard 3 8B | 8B | ~100ms | Yes | Production API, Llama apps |
 | ShieldGemma 2B | 2B | <50ms | Limited | Real-time filtering, Gemma/Gemini apps |
 | ShieldGemma 27B | 27B | ~200ms | Limited | High-accuracy classification |
-| General LLM (GPT-4) | Large | 200-500ms | Fully flexible | Complex policies, nuanced judgment |
+| General LLM (GPT-4o) | Large | 200-500ms | Fully flexible | Complex policies, nuanced judgment |
 
 **Recommendation:** Use dedicated safety models (Llama Guard, ShieldGemma) for fast, cheap input/output rails. Reserve general-purpose LLMs for complex semantic checks that require nuanced judgment or custom reasoning.
 

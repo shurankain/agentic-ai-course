@@ -102,7 +102,7 @@ Cursor went further by building an IDE around AI:
 3. **Composer** — natural language → code with full context
 4. **Terminal integration** — AI can see command output
 
-**Cursor Architecture:** Built as a multi-layered system where the base Monaco editor works together with the AI Sidebar (providing Chat and Cmd+K functionality), relying on a local index with embeddings of the entire project. The system can use different LLM APIs (Claude, GPT-4, Custom models) depending on the task and user settings.
+**Cursor Architecture:** Built as a multi-layered system where the base Monaco editor works together with the AI Sidebar (providing Chat and Cmd+K functionality), relying on a local index with embeddings of the entire project. The system can use different LLM APIs (Claude, GPT-4o, Custom models) depending on the task and user settings.
 
 **Cmd+K workflow:** Select code, press Cmd+K, describe the change in natural language, AI generates a diff, you accept/reject/edit.
 

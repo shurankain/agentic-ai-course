@@ -140,7 +140,7 @@ Design a multi-tenant LLM serving infrastructure supporting multiple models, 10K
 
 ### Requirements
 
-Multi-model: GPT-4, Claude, Llama, custom fine-tuned. Multi-tenant: 100+ enterprise customers. Latency: streaming TTFT less than 500 milliseconds. Cost: minimize while meeting SLOs. Isolation: tenant data isolation.
+Multi-model: GPT-4o/5, Claude, Llama, custom fine-tuned. Multi-tenant: 100+ enterprise customers. Latency: streaming TTFT less than 500 milliseconds. Cost: minimize while meeting SLOs. Isolation: tenant data isolation.
 
 ### High-Level Architecture
 

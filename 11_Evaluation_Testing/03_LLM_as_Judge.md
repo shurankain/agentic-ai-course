@@ -85,7 +85,7 @@ Example structure: "Evaluate the following response. Question: [question]. Respo
 
 ## Strategies for Improving Reliability
 
-**Multi-judge** — using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-4o + Claude Opus 4 + Gemini 2.5 Pro, then take the median score or weighted average.
+**Multi-judge** — using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-4o + Claude Opus 4 / 4.6 + Gemini 2.5 Pro, then take the median score or weighted average.
 
 **Chain-of-thought** — requiring reasoning before the score. Improves quality through "thinking it through." Prompt: "First explain your considerations for each criterion, then provide the score."
 
