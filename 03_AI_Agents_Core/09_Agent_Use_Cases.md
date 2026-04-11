@@ -209,7 +209,7 @@ Browser Automation Agents are a subcategory of Computer Use, specialized for web
 
 ### Key Players
 
-**Browser Use** — an open-source framework with 27K+ GitHub stars. Python-based, integrates with various LLMs. Supports headless and headed modes.
+**Browser Use** — an open-source framework with 27K+ GitHub stars (as of early 2026). Python-based, integrates with various LLMs. Supports headless and headed modes.
 
 **Amazon Nova Act** — part of Amazon Nova models. Optimized for web automation in the AWS ecosystem.
 
