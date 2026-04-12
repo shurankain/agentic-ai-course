@@ -144,7 +144,7 @@ For particularly complex prompts, XML tags provide even clearer section separati
 
 Practical recommendations:
 - For Claude: XML tags work especially well
-- For GPT-4: Markdown is preferred
+- For GPT-4o/5: Markdown is preferred
 - For code tasks: Markdown with triple backticks
 - For RAG/context: XML tags for clear separation
 

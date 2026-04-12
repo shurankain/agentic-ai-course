@@ -10,7 +10,7 @@
 
 ## Introduction: When Text Is Not Enough
 
-Consider an automated resume processing system. A candidate uploads a document, and the system must extract the name, contacts, experience, education, skills, and store them in a database for filtering and analysis. GPT-4 returns a response: "John Smith is an experienced developer with 10 years of experience. He worked at Google and Microsoft..." Excellent text for a human. But how do you structure it for programmatic processing?
+Consider an automated resume processing system. A candidate uploads a document, and the system must extract the name, contacts, experience, education, skills, and store them in a database for filtering and analysis. GPT-4o returns a response: "John Smith is an experienced developer with 10 years of experience. He worked at Google and Microsoft..." Excellent text for a human. But how do you structure it for programmatic processing?
 
 This is a fundamental problem of integrating language models into software systems. Models generate natural text — sentences, paragraphs, narratives. Programs operate on structures — objects, arrays, numbers. Structured output is the bridge between these worlds.
 

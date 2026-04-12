@@ -205,7 +205,7 @@ DSPy from Stanford NLP reimagines working with prompts: instead of manually writ
 
 **Why Manual Prompting Does Not Scale**
 
-Traditional prompting suffers from several problems: Brittleness (small changes radically alter results), Non-composability (difficult to combine prompts into pipelines), Model-specificity (a prompt optimized for GPT-4 may perform poorly on Claude), No systematic improvement (iterations are based on intuition, not data).
+Traditional prompting suffers from several problems: Brittleness (small changes radically alter results), Non-composability (difficult to combine prompts into pipelines), Model-specificity (a prompt optimized for GPT-4o may perform poorly on Claude), No systematic improvement (iterations are based on intuition, not data).
 
 DSPy addresses this through a **declarative approach**: you describe *what* needs to be done, and the system determines *how*.
 

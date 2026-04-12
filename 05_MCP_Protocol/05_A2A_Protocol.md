@@ -191,7 +191,7 @@ At its April 2025 announcement, A2A listed 150+ partners (primarily announcement
 
 ### Integration with MCP
 
-Google and Anthropic coordinate protocol development for interoperability. In a typical agent ecosystem, Agent A (on Claude) and Agent B (on GPT-4) communicate with each other via the A2A Protocol. Each uses MCP to access their tools — Agent A to GitHub Server, Agent B to Jira Server.
+Google and Anthropic coordinate protocol development for interoperability. In a typical agent ecosystem, Agent A (on Claude) and Agent B (on GPT-4o) communicate with each other via the A2A Protocol. Each uses MCP to access their tools — Agent A to GitHub Server, Agent B to Jira Server.
 
 A typical scenario: Agent A receives a task via A2A from Agent B, uses MCP to access GitHub (e.g., reads code or creates a PR), and returns the result via A2A back to Agent B. This demonstrates a clean separation: A2A for coordination between agents, MCP for accessing data and tools.
 

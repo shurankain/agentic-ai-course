@@ -52,7 +52,7 @@ Training the main model using the Reward Model as the reward function. The model
 
 RLHF requires significant resources. Human annotation is expensive and slow. RL training is unstable and requires careful tuning.
 
-Full-scale RLHF is typically performed only by major labs for frontier models (GPT-4, Claude, Gemini).
+Full-scale RLHF is typically performed only by major labs for frontier models (GPT-5, Claude, Gemini).
 
 ## DPO: Direct Preference Optimization
 

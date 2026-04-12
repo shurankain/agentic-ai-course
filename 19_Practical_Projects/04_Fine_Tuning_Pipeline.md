@@ -128,7 +128,7 @@ BERTScore — semantic similarity with reference. Better than ROUGE for open-end
 
 ### LLM-as-Judge
 
-A strong model (GPT-4, Claude) evaluates on a 1-5 scale: helpfulness (does it solve the problem), accuracy (correctness), tone (friendly and professional), completeness (thoroughness of the solution). Evaluation with a brief justification. Enables assessment of semantic quality and brand voice.
+A strong model (GPT-4o, Claude) evaluates on a 1-5 scale: helpfulness (does it solve the problem), accuracy (correctness), tone (friendly and professional), completeness (thoroughness of the solution). Evaluation with a brief justification. Enables assessment of semantic quality and brand voice.
 
 ### A/B Testing
 

@@ -136,7 +136,7 @@ RAGAS (Retrieval Augmented Generation Assessment) provides metrics specifically 
 
 Automated evaluation: create a test set of 50-100 question-answer-context triples. Run RAGAS metrics on every deployment candidate. Set quality gates — block deployment if faithfulness drops below threshold.
 
-LLM-as-Judge: for nuanced quality assessment, use a strong model (GPT-4, Claude) to evaluate response quality on dimensions like helpfulness, accuracy, and completeness.
+LLM-as-Judge: for nuanced quality assessment, use a strong model (GPT-4o, Claude) to evaluate response quality on dimensions like helpfulness, accuracy, and completeness.
 
 Human evaluation: sample 50-100 responses weekly. Domain experts rate correctness and usefulness. Track trends over time.
 

@@ -76,9 +76,9 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-5, GPT-4o, o3, GPT-4.1)
+  - OpenAI (GPT-5.2, GPT-5, o3, o4-mini)
   - Anthropic (Claude Opus 4.6, Sonnet 4.6, Haiku 4.5)
-  - Google (Gemini)
+  - Google (Gemini 3.1 Pro, 3 Flash, 2.5 Pro/Flash)
   - Meta (Llama)
   - Mistral
 - API structure: common principles
