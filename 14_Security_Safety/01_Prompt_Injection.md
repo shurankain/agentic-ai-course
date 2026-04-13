@@ -33,6 +33,27 @@ The OWASP Foundation published the **Top 10 for LLM Applications v2.0 (2025)**, 
 
 **Key changes from v1.0 to v2.0:** Added Vector and Embedding Weaknesses (reflecting RAG adoption), split Sensitive Information Disclosure from Prompt Injection, added System Prompt Leakage as a distinct category, renamed "Insecure Output Handling" to "Improper Output Handling" with broader scope, added Unbounded Consumption reflecting real-world cost attacks.
 
+## OWASP Top 10 for Agentic Applications (2026)
+
+In December 2025, OWASP released a separate framework specifically for autonomous agent systems — the **Top 10 for Agentic Applications**. This is distinct from the LLM Top 10 above: while the LLM Top 10 addresses model-level vulnerabilities (what can go wrong with an LLM's inputs and outputs), the Agentic Top 10 addresses emergent risks from autonomous action, tool composition, and delegated authority. An agent can be built on a perfectly secured LLM and still be vulnerable to every item on this list.
+
+| Rank | Risk | Description |
+|------|------|-------------|
+| ASI01 | **Agent Goal Hijacking** | Attackers manipulate an agent's objectives through poisoned inputs (emails, documents, web content). Agents cannot reliably distinguish instructions from data |
+| ASI02 | **Tool Misuse & Exploitation** | Agents misuse or abuse tools through unsafe composition, recursion, or excessive execution, causing harmful side effects despite having valid permissions |
+| ASI03 | **Supply Chain Risks** | Compromised dependencies, malicious MCP servers, poisoned plugins in agent ecosystems (see OpenClaw incident in [[03_Agent_Security|Agent Security]]) |
+| ASI04 | **Unexpected Code Execution** | Agent-generated or agent-invoked code executes with insufficient sandboxing, enabling escape from intended boundaries |
+| ASI05 | **Credential Exposure** | Agents leak, mishandle, or over-share credentials and tokens across tool boundaries or in logs |
+| ASI06 | **Excessive Permissions** | Agents operate with broader privileges than the task requires, amplifying the impact of any compromise |
+| ASI07 | **Inadequate Sandboxing** | Execution environments lack sufficient isolation, enabling agents to affect host systems or other tenants |
+| ASI08 | **Knowledge Poisoning** | Adversarial content in RAG stores, memory systems, or shared context corrupts agent behavior persistently across sessions |
+| ASI09 | **Logging & Monitoring Gaps** | Insufficient visibility into agent decision-making, tool invocations, and multi-step reasoning chains |
+| ASI10 | **Uncontrolled Resource Consumption** | Agents enter infinite loops, spawn unbounded sub-agents, or consume excessive compute/tokens without circuit breakers |
+
+The framework was developed through collaboration with over 100 industry experts, researchers, and practitioners. As of early 2026, 48% of cybersecurity professionals identify agentic AI as the number-one attack vector, yet only 34% of enterprises have AI-specific security controls in place.
+
+Three of the top four risks (ASI01, ASI02, ASI04) revolve around the boundary between what an agent intends to do and what it actually does — a category of risk that simply does not exist for non-agentic LLM applications. Defending against these requires architectural decisions (sandboxing, permission systems, human-in-the-loop) rather than input/output filtering alone. See [[03_Agent_Security|Agent Security]] for implementation patterns.
+
 ## Attack Taxonomy
 
 **Direct Injection** — the attacker directly includes malicious instructions. Override phrases like "Ignore previous instructions", pseudo-system messages "[SYSTEM]: New directive", role hijacking "You are now DAN".
@@ -89,6 +110,8 @@ Defense in depth — a combination of layers:
 **Attack detection:** a classifier (ML model or LLM) analyzes input for injection indicators (instruction overrides, prompt extraction requests, jailbreak patterns).
 
 **Safe prompt construction:** clear separation of system instructions and user input through special delimiters. Explicitly telling the model that text after a certain point is untrusted input.
+
+**Spotlighting:** a technique to isolate untrusted input by marking data with special delimiters or transformations so the model treats it strictly as data, never as instructions. Approaches include encoding untrusted content (base64, XML-escaped), wrapping it in explicit "data-only" blocks, or transforming it into a format the model recognizes as non-executable. Unlike simple delimiters, spotlighting changes the representation of the data itself, making it harder for injected instructions to "escape" into the instruction channel.
 
 **Output validation:** the response contains the system prompt, violates policies, or does not match the expected format — indicators of a successful attack.
 

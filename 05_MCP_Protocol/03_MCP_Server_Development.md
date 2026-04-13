@@ -252,6 +252,8 @@ In November 2024, Anthropic launched MCP. Throughout 2025, all major AI provider
 
 ### Security Considerations
 
+For MCP ecosystem security statistics (88% require credentials but 53% use insecure static secrets, only 8.5% implement OAuth), known incidents (mcp-remote RCE, Anthropic Git MCP CVEs), and the OWASP MCP Top 10 threat taxonomy, see [[../14_Security_Safety/03_Agent_Security|Agent Security]].
+
 When developing MCP servers, consider several critical security aspects:
 
 **Input Validation:**
