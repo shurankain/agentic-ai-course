@@ -38,13 +38,25 @@ Choosing an architecture is a trade-off between complexity and capability. Start
 
 ## Agentic RAG
 
-### From Passive Search to Active Exploration
+### The 2026 Baseline for Complex Queries
 
-Traditional RAG is passive: receive a query, find documents, generate an answer. Agentic RAG transforms the system into an active researcher capable of planning, iterating, and adapting.
+By early 2026, agentic RAG is no longer an advanced option — it is the **production baseline for complex queries**. On multi-hop questions requiring information synthesis from multiple sources, agentic RAG improved accuracy from approximately 34% (static RAG) to 78% (as of early 2026). This is the difference between a system that works sometimes and a system that works most of the time.
 
-The agent analyzes the question and determines a search strategy. It decomposes complex questions into parts. When information is insufficient, it refines the query and searches again. When data is contradictory, it seeks additional sources for resolution.
+Traditional RAG is passive: receive a query, find documents, generate an answer. Agentic RAG transforms the system into an active researcher capable of planning, iterating, and adapting. The agent analyzes the question and determines a search strategy. It decomposes complex questions into parts. When information is insufficient, it refines the query and searches again. When data is contradictory, it seeks additional sources for resolution.
 
 Agentic RAG uses the LLM not only for answer generation but also for managing the search process. The model decides which tools to use, what queries to formulate, and when to stop.
+
+### Five Components of Agentic RAG
+
+What distinguishes a true agentic RAG system from a pipeline with a few extra steps is the presence of five interacting components:
+
+1. **Orchestrator** — a ReAct or CoT-based agent that decides the retrieval strategy for each query. It determines whether to search, which sources to query, and in what order.
+2. **Specialized retriever agents** — different sources require different retrieval strategies. A vector search agent for the knowledge base, a SQL agent for structured data, a web search agent for current information. The orchestrator delegates to the right specialist.
+3. **Short-term memory** — the current workflow state: what has been retrieved so far, which queries have been tried, what gaps remain. This prevents redundant searches and enables the agent to build on previous results.
+4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See [[../../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]].
+5. **Evaluation and refinement loop** — the agent assesses whether retrieved context is sufficient and relevant before generating an answer. If not, it iterates. This fifth component is what creates the accuracy jump: the system does not assume that retrieval always works.
+
+Basic RAG (components 1-2 only) handles simple single-hop queries well. Adding components 3-5 is what enables the 34%→78% improvement on complex queries — and is what makes the system genuinely agentic.
 
 ### Planning and Reasoning
 
@@ -102,6 +114,8 @@ CRAG defines fallback scenarios for various situations:
 5. **Generate** — generate an answer factoring in source quality assessment
 
 The critical difference from basic RAG: the system does not assume that retrieval always works. It verifies the assumption and adjusts strategy when necessary.
+
+The CRAG process can be simplified to a **three-path decision**: **Correct** (high relevance scores → use the documents directly), **Incorrect** (low scores → fall back to web search or another source entirely), **Ambiguous** (moderate scores → combine retrieved documents with a reformulated query for a second retrieval pass). This explicit branching is what distinguishes CRAG from naive pipelines that always use whatever was retrieved. On knowledge-intensive tasks, CRAG outperforms naive RAG by 15-25% in answer quality.
 
 ## Self-RAG
 
@@ -529,7 +543,9 @@ Modern models support contexts of 100K-1M+ tokens. Is RAG still needed?
 
 The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100 → reranker narrows to top-20 → all 20 are loaded into long context (40K tokens) → LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
 
-**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap.
+**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3 Flash/Pro, Claude Opus 4.6), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
+
+**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the Lost-in-the-Middle analysis.
 
 ---
 
@@ -639,6 +655,14 @@ RAG continues to evolve. Several techniques from 2024 significantly change the a
 **When it does not fit:** Large knowledge base (millions of documents), frequent updates, latency is critical (prefill is slow), limited budget.
 
 **Hybrid approach:** RAG filters the corpus (1M docs) down to 100 → CAG loads all 100 into context → LLM synthesizes.
+
+### Context-Aware RAG (Anthropic, 2024)
+
+A deceptively simple technique that reduces retrieval errors by approximately 35%: before embedding each chunk, **prepend a short context explanation** describing where the chunk fits in the original document. Instead of embedding "He was elected in 1860" in isolation, embed "The following is from a biography of Abraham Lincoln, Chapter 3 (Political Career): He was elected in 1860."
+
+The context explanation is generated by an LLM once during indexing (not at query time), adding minimal latency to retrieval. The benefit is substantial because many retrieval failures stem from ambiguous chunks that lack the surrounding context needed to match the right query. A chunk about "the company's Q3 results" is ambiguous without knowing which company — the context prefix resolves this.
+
+**When to apply:** Any RAG system where chunks are extracted from longer documents. The technique is complementary to hybrid search and reranking — it improves the quality of the initial embedding, which benefits all downstream stages.
 
 ### Late Chunking (Jina AI)
 

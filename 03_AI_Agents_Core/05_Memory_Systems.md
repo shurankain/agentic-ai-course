@@ -130,6 +130,51 @@ Choosing the right storage backend depends on scale, access patterns, and infras
 
 ---
 
+## Letta: From MemGPT Concept to Production Memory
+
+The MemGPT concept described above was influential but saw limited direct adoption. **Letta** (15K+ GitHub stars, as of early 2026) is its production evolution — a platform that takes the core ideas (self-directed memory, tiered storage, tool-based operations) and makes them work at scale.
+
+**The LLM-as-Operating-System paradigm:** Letta treats the LLM as a CPU managing its own memory hierarchy. Three tiers of memory map to hardware analogy: **Core Memory** (always loaded in prompt — analogous to CPU registers), **Recall Memory** (searchable conversation history — analogous to RAM), and **Archival Memory** (large-scale vector-indexed storage — analogous to disk). The agent accesses all three tiers through explicit tool calls.
+
+**The key differentiator: agent editability.** Unlike systems where memory is written by the application and read by the agent, Letta agents actively **update, delete, and reorganize** their own memory blocks. The agent decides what is worth remembering, what is outdated, and how to structure its knowledge. This is self-directed context engineering at the memory level — see [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]].
+
+**Core Memory** consists of named blocks (persona, human, goals, preferences) that are version-controlled. The agent modifies these blocks as it learns. For example, after discovering a user prefers concise answers, the agent updates its "human" block. This update persists across sessions and influences all future interactions.
+
+**Production validation:** Letta-based agents ranked #1 among open-source agents on Terminal-Bench and #4 overall (as of early 2026), demonstrating that self-directed memory translates to measurable task performance.
+
+**Alternative approaches to agent memory:**
+
+**Mem0** takes a different path — middleware for automatic fact extraction. Instead of the agent managing its own memory, Mem0 intercepts conversations and automatically extracts facts, preferences, and patterns. This is simpler to integrate (plug-and-play) but gives the agent less control over what gets remembered.
+
+**Amazon Bedrock AgentCore** introduces **episodic memory** — agents remember specific situations, decisions, and outcomes (not just facts). When a similar situation arises, the agent can recall how it handled it before. This goes beyond semantic memory (knowing facts) to experiential memory (knowing what worked).
+
+The three approaches represent different points on the automation-control spectrum: Mem0 (fully automated, no agent control), Letta (agent-directed), and Bedrock episodic memory (experience-based, automated but structured).
+
+---
+
+## Memory Escalation Ladder
+
+Start simple. Add complexity only when the current approach fails. Each step on the ladder addresses a specific failure mode:
+
+| Level | Approach | When to Escalate |
+|-------|----------|-----------------|
+| 1 | **Sliding window** | Default starting point — keep last N messages |
+| 2 | **Conversation summarization** | When conversations exceed context limits → compress older turns |
+| 3 | **Mem0** (auto-fact extraction) | When users complain the system "doesn't remember" across sessions |
+| 4 | **Letta** (agent-editable memory) | When the agent repeats mistakes or fails to learn from experience |
+| 5 | **Agentic RAG** (active research) | When accuracy drops below 50% on complex multi-source queries |
+| 6 | **Graph RAG** (entity relationships) | When users ask about relationships between entities ("how is X connected to Y?") |
+
+**Escalation signals in production:**
+- Users complain "you forgot" or "we already discussed this" → move from Level 1 to Level 3
+- Agent makes the same mistake twice on similar inputs → move to Level 4 (agent needs to learn from experience)
+- Accuracy on multi-hop questions is below 50% → move to Level 5 (retrieval is not adaptive enough)
+- Domain is relationship-heavy (legal, healthcare, finance) → consider Level 6
+
+This is not a hierarchy of quality — it is a hierarchy of complexity. Level 1 is correct for many production agents. Escalate only when you have evidence that the current level is insufficient.
+
+---
+
 ## Retrieval-Augmented Memory
 
 Retrieval-Augmented Memory (RAM) is a pattern where the agent dynamically retrieves relevant memory before each action, instead of keeping everything in context. Analogous to how a person "recalls" what is needed when a task arises.

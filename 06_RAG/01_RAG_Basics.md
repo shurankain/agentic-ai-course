@@ -24,6 +24,8 @@ Moreover, even for events before the cutoff date, the model may have incomplete 
 
 RAG overcomes these limitations by connecting the model to up-to-date data sources. Instead of retraining the model every time documentation is updated, we simply update the knowledge base that the model queries.
 
+**A note on the RAG landscape (2026):** Basic RAG — the "retrieve-and-read" pattern described in this lesson — was the standard approach in 2023-2024 and remains valid for simple, single-hop queries (factual lookups, FAQ-style questions). For complex queries that require synthesis from multiple sources, multi-step reasoning, or iterative refinement, **agentic RAG** has become the production standard. Agentic RAG gives the agent control over the retrieval process: it plans which sources to query, evaluates results, and iterates when context is insufficient. See [[05_Advanced_RAG|Advanced RAG]] for the full taxonomy of RAG architectures, including agentic RAG, Self-RAG, and CRAG.
+
 ### Hallucinations and Reliability
 
 Language models are prone to hallucinations — generating plausible-sounding but factually incorrect information. The model is optimized for producing coherent text, not factual accuracy. It can confidently assert nonexistent facts, confuse dates, and fabricate quotes.
