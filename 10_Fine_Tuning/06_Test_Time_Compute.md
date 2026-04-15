@@ -124,6 +124,25 @@ TTC follows predictable laws: Quality(C) = a × log(C) + b. Doubling inference c
 
 **Smaller Models + TTC vs Larger Models:** A 7B model with optimal TTC can demonstrate quality comparable to 70B in single-pass on reasoning tasks. Cost arbitrage, latency vs quality, democratization of reasoning capabilities.
 
+## The Test-Time Compute Paradox
+
+A counterintuitive finding: **longer chains of reasoning do not guarantee better answers.** Research shows that the average length of correct solutions is often shorter than that of incorrect ones. More thinking tokens can lead to overthinking, self-doubt loops, circular reasoning, and wrong conclusions — the model "talks itself out of" a correct initial intuition.
+
+This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens` (Anthropic: 1,024 to 128,000) parameters exist. They are not merely cost controls — they are quality controls. Setting the budget too high for a straightforward question wastes money and can degrade the answer. The optimal budget varies by task: a factual lookup needs minimal reasoning, while a multi-step mathematical proof benefits from a large budget.
+
+**Practical guideline for agentic systems:** In an agent loop where each step makes an LLM call, use low reasoning effort for routine steps (tool selection, formatting, simple classification) and high effort only for the genuinely complex reasoning steps (planning, debugging, analysis). Wrapping every agent step in maximum reasoning is one of the fastest ways to burn budget without improving outcomes.
+
+## Reasoning for Verification, Not Generation
+
+An emerging cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch — a narrower cognitive task that needs fewer reasoning tokens.
+
+**The pattern:**
+1. A cheap model (Claude Haiku 4.5, GPT-4o-mini) generates N candidate responses
+2. A reasoning model (o3 with low effort, Claude with modest budget_tokens) evaluates each candidate
+3. The best candidate is selected based on the verifier's assessment
+
+This generalizes to any pipeline where "generate many, verify few" applies: code generation (cheap model writes, expensive model reviews), RAG answers (cheap model drafts, expensive model fact-checks), and content production (cheap model creates, expensive model edits). The total cost is often lower than having the expensive model both generate and self-verify, because verification token budgets can be kept small.
+
 ## Practical Implications
 
 **System Architecture:**

@@ -135,6 +135,23 @@ Anthropic and OpenAI offer prompt caching:
 - Up to 90% discount on cached tokens
 - Automatic for long prompts
 
+### KV-Cache Management for Multi-Turn Agents
+
+Prompt caching becomes especially powerful in multi-turn agent sessions where the same system prompt, tool descriptions, and base context repeat across every LLM call. The key architectural principle: **place static content at the start of the context, dynamic content at the end.**
+
+**Why order matters:** Providers cache the KV-cache for the prefix of the prompt (the identical initial portion). If the first 10K tokens are the same system prompt + tool descriptions across all calls in a session, that prefix is computed once and reused. Dynamic content (user message, tool results, conversation turns) goes after the cached prefix.
+
+**Economics by provider (as of early 2026):**
+
+| Provider | Cache Hit Discount | Practical Session Savings |
+|----------|-------------------|--------------------------|
+| Anthropic | 90% off cached input | 50-80% per-turn cost reduction |
+| OpenAI | 50% off cached input | 25-40% per-turn cost reduction |
+
+**Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix acts as a stable foundation, while dynamic content varies naturally.
+
+**Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader WSCI framework.
+
 ---
 
 ## Exception Handling
