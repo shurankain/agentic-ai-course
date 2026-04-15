@@ -16,6 +16,10 @@ Choosing an architecture is more than a technical decision. It determines how th
 
 This chapter covers the evolution of AI agent architectures — from simple reactive systems to complex cognitive architectures inspired by human reasoning.
 
+Simon Willison's definition has become the industry standard for its precision: **"An LLM agent runs tools in a loop to achieve a goal."** LLM, tools, loop, goal — everything else is implementation detail. The architectures below are different strategies for how that loop operates.
+
+A useful framing for why these architectures matter comes from Karpathy's **Software 1.0 / 2.0 / 3.0** taxonomy (2026): Software 1.0 is code written by humans. Software 2.0 is neural network weights — trained, not written. Software 3.0 is agent-orchestrated software — assembled by agents under human direction. Agent architectures are the engineering discipline of Software 3.0: they determine how agents plan, reason, and act when assembling solutions.
+
 ---
 
 ## Academic Foundations of Agent Architectures

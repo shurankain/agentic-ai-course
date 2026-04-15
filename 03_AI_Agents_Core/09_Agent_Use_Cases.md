@@ -24,13 +24,14 @@ Not all agent applications are at the same maturity level. Some already generate
 
 | Category | Maturity | Example Companies | Market Size |
 |-----------|----------|------------------|-------------|
-| **Coding Agents** | Production | Cursor, GitHub Copilot, Devin | Dominant, $4B+ Devin valuation (as of mid-2025) |
+| **Coding Agents** | Production | Cursor, GitHub Copilot, Claude Code, Devin | Dominant: Cursor $2B ARR, Claude Code $500M ARR, Devin $10.2B valuation (as of early 2026). Terminal agents (Claude Code, Codex CLI, Aider) emerged as a new subcategory |
 | **Agentic RAG** | Production | Perplexity, Glean, You.com | $9B Perplexity valuation, 22M+ users (as of mid-2025) |
 | **Workflow Automation** | Production | n8n, Make, Zapier AI | 200K+ businesses |
 | **Voice Agents** | Production | ElevenLabs, VAPI, Retell | 75ms latency achieved |
 | **Computer Use Agents** | Beta | Anthropic, ChatGPT agent (formerly Operator) | Active development |
-| **Browser Automation** | Emerging | Browser Use, Amazon Nova Act | 27K+ GitHub stars (as of early 2026) |
-| **Deep Research** | Emerging | Gemini Deep Research, OpenAI | New category 2024-2025 |
+| **Browser Automation** | Production | Browser Use, Stagehand, Playwright MCP | 50-78K+ stars Browser Use (as of early 2026) |
+| **Automated Research** | Emerging | AutoResearch (Karpathy), custom agents | Universal optimization pattern |
+| **Deep Research** | Production | Gemini Deep Research, OpenAI, OWL | OWL 69.09% on GAIA (#1 open-source, Apache 2.0) |
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
 | **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
 | **Internal Employee** | Production | Glean, custom RAG agents | Corporate knowledge + tools |
@@ -61,7 +62,9 @@ Coding agents have become the most successful category of AI agents, and this is
 
 **Roo Code (Roo Cline)** — an open-source alternative with 20K+ stars (as of early 2026). Runs in VS Code and supports various LLMs.
 
-**Aider** — a CLI-based coding agent. Minimalist approach with good integration into existing workflows.
+**Aider** — a CLI-based coding agent (39-42K stars, as of early 2026). Minimalist approach with good integration into existing workflows. Pioneered the Architect/Editor dual-role pattern.
+
+**Developer cost reality (as of early 2026):** Code review agents cost $0.001-$2.00 per PR. Claude Code averages ~$6/day per developer. Cursor Auto mode adds $50-150/month above the subscription. Claude Code on API billing runs ~$120-180/month for active developers. BYOK tools (Cline, Aider) cost $30-100/month depending on model usage.
 
 ### Architectural Patterns of Coding Agents
 
@@ -209,19 +212,44 @@ Browser Automation Agents are a subcategory of Computer Use, specialized for web
 
 ### Key Players
 
-**Browser Use** — an open-source framework with 27K+ GitHub stars (as of early 2026). Python-based, integrates with various LLMs. Supports headless and headed modes.
+**Browser Use** — open-source (50-78K+ GitHub stars, as of early 2026). Full AI-reasoning on every browser step — the agent re-reasons on every action rather than caching selectors. Model-agnostic (OpenAI, Anthropic, Gemini, Ollama). Best for unpredictable pages and exploratory tasks.
 
-**Amazon Nova Act** — part of Amazon Nova models. Optimized for web automation in the AWS ecosystem.
+**Stagehand 2.0** (Browserbase) — extends Playwright with three AI methods: `act()`, `extract()`, `observe()`. Deterministic-first philosophy: uses standard Playwright selectors when possible, falls back to AI only for dynamic elements. Key innovation: **auto-caching of selectors** — first run is expensive (AI figures out selectors), subsequent runs are near-free (cached selectors).
 
-**Google Project Mariner** — an experimental browser agent from Google. Operates via a Chrome extension.
+**Playwright MCP** (Microsoft) — uses **accessibility snapshots** instead of screenshots, eliminating the need for a vision model entirely. Reduces token usage by 4x (114K→27K tokens via `@playwright/cli`). Acts as a bridge between coding agents (Claude Code, Cursor) and browser automation.
 
-### Technical Approaches
+**Amazon Nova Act** — part of Amazon Nova models. Optimized for web automation in the AWS ecosystem with deterministic action replay.
 
-**DOM-based.** Working directly with the page's DOM tree. Faster, but requires understanding HTML structure.
+### The 80/20 Production Pattern
 
-**Vision-based.** Screenshot analysis. More universal, but slower.
+Production browser automation converges on a pragmatic hybrid: **80% deterministic Playwright** for known, stable UI elements (login forms, navigation, standard buttons) and **20% AI** for dynamic or unpredictable elements (changing layouts, A/B test variants, new UI components). The principle: "Don't use AI for a button with a known ID."
 
-**Hybrid.** Combination of approaches: DOM for navigation, vision for verification.
+**Evolution path:** Prototype (100% Browser Use — fast to build, expensive to run) → MVP (Stagehand — caching reduces cost) → Production (80/20 hybrid — maximum reliability at minimum cost).
+
+---
+
+## Automated Research Agents (The Karpathy Loop)
+
+In April 2026, Andrej Karpathy released **AutoResearch** — 630 lines of Python that launched agents on automated ML experiments. The result: 700 experiments in two days on one GPU, 20 significant optimizations discovered autonomously, 11% training speedup.
+
+The numbers matter less than the pattern they reveal. Karpathy (and subsequently Fortune magazine) coined the term **"The Karpathy Loop"** — a universal optimization pattern with three ingredients:
+
+1. **Agent with file access** — the agent can read and modify code, config files, or any text-based artifact
+2. **One objectively testable metric** — a number that can be measured automatically (training loss, test pass rate, latency, cost)
+3. **Fixed time limit** — the agent runs for N hours, explores the search space, and reports the best result
+
+The agent autonomously modifies code or configuration, measures the result, and iterates. No human in the loop during the search — only at the beginning (define the metric) and end (evaluate the results).
+
+**Beyond ML:** The pattern is universal. Any domain with a measurable metric and an automatable feedback loop is a candidate:
+- **CI/CD optimization** — agent modifies pipeline config, measures build time, iterates
+- **A/B testing** — agent generates page variants, measures conversion, iterates
+- **Infrastructure tuning** — agent adjusts Kubernetes resource limits, measures latency/cost, iterates
+- **SQL query optimization** — agent rewrites queries, measures execution time, iterates
+- **Prompt engineering** — agent modifies prompts, measures eval scores, iterates (this is what DSPy automates)
+
+AutoResearch represents a philosophical shift from "agents that help humans do research" to "agents that conduct research independently." The human role shifts from doing to directing — defining the metric, constraining the search space, and evaluating whether the discovered optimizations are genuinely useful or merely overfitting the metric.
+
+21K GitHub stars within weeks of release (as of April 2026). Vision: SETI@home-style distributed communities where AI agents conduct research across volunteer compute.
 
 ---
 
@@ -241,7 +269,9 @@ This is not simply "search and summarize" — it is a full research process invo
 
 **Gemini Deep Research** (Google) — integrated into Gemini. Creates a research plan, performs multi-step research, and generates structured reports.
 
-**OpenAI Deep Research** — announced in late 2024. Integrated into ChatGPT Pro.
+**OpenAI Deep Research** — integrated into ChatGPT Pro. Now connects to MCP servers, enabling research over private enterprise data. Supports trusted site whitelisting for enterprise deployments.
+
+**OWL** (CAMEL-AI) — the leading open-source research agent. 69.09% on the GAIA benchmark (#1 open-source, surpassing OpenAI Deep Research by 2.34%). Apache 2.0 license, fully self-hostable. Multi-tool architecture for web browsing, file manipulation, and multi-step reasoning.
 
 ### Difference from Agentic RAG
 

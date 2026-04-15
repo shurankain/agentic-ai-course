@@ -14,6 +14,8 @@ The history of AI assistants in programming began with simple autocomplete — s
 
 This chapter examines the spectrum from interactive assistants (Cursor, Copilot) to fully autonomous agents (Devin, OpenHands). Understanding the capabilities and limitations of each approach is critical for an AI architect making tooling decisions for a development team.
 
+As Simon Willison observed in November 2025, "AI coding agents crossed from 'mostly works' to 'actually works'" — a turning point the industry now treats as the commercial inflection for the category. The market data supports this: Cursor reached $2B ARR with 2M+ users (50% of Fortune 500 companies, as of early 2026), GitHub Copilot grew to 4.7M paying subscribers (90% of Fortune 100), and Claude Code hit $500M ARR run rate within its first two months. On SWE-bench Verified, the top agent score reached 82.1% (Sonnet 5 "Fennec"), approaching estimated human performance of 75-90% on the same tasks.
+
 ---
 
 ## Theoretical Foundations: Program Synthesis
@@ -108,13 +110,25 @@ Cursor went further by building an IDE around AI:
 
 **Composer mode:** For complex multi-file tasks — for example, "Add authentication to all API endpoints". Cursor analyzes the codebase, creates a plan ("I'll modify these 5 files..."), generates changes for each file, and the user reviews and applies.
 
-### Windsurf (formerly Codeium), Tabnine, Amazon Q
+### IDE Agents Landscape (2026)
+
+The IDE agent market has expanded significantly beyond the original Copilot/Cursor duopoly:
+
+| Tool | Key Differentiator | Context | Notable |
+|------|-------------------|---------|---------|
+| **Cursor** | AI-first IDE, codebase RAG | ~120K effective context | Background Agent for autonomous tasks |
+| **Windsurf** | Cascade engine, broad IDE support | 40+ IDEs supported | SWE-1.5 model — 13x faster than Claude Sonnet 4.5 |
+| **GitHub Copilot** | Distribution (VS Code, JetBrains, Eclipse, Xcode) | Agent Mode GA | Cloud Coding Agent — assign GitHub issues to Copilot |
+| **Cline** | Full transparency, BYOK | 5M+ VS Code installs | Plan/Act modes, total visibility into agent actions |
+| **Kiro** (Amazon) | Spec-first development | Generates specs before code | Free for students (1000 credits/year) |
+| **Augment Code** | Context Engine over full codebase | #1 on SWE-Bench Pro | Works as MCP server enriching other tools |
+| **Trae** (ByteDance) | Free frontier model access | GPT-4o + Claude included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
 
 **Windsurf** (rebranded from Codeium in late 2024):
 - Full agentic IDE with Cascade engine
-- Free tier available
+- Supports 40+ IDEs including the full JetBrains stack
+- SWE-1.5 model optimized for speed (13x faster than Claude Sonnet 4.5)
 - Multi-model support (Claude, GPT, custom)
-- See the Autonomous Coding Agents section for details
 
 **Tabnine:**
 - Privacy-first (option for fully local operation)
@@ -511,6 +525,63 @@ Coding agents like Claude Code and Codex excel when given clear, detailed specif
 **The spec is the new bottleneck.** Writing a good spec takes significant thought — arguably the hardest part of software engineering. But the spec is also the most valuable artifact: it serves as documentation, test criteria, and implementation guide simultaneously.
 
 **Tools supporting this pattern:** Claude Code (reads spec files, implements across codebase), Codex (takes specs as task descriptions, produces PRs), Cursor Composer (reads spec in context, generates multi-file changes).
+
+---
+
+## Terminal Agents: A New Category
+
+A distinct category emerged in 2025-2026: agents that operate directly in the terminal or shell, outside any IDE. Terminal agents represent a philosophical shift from "AI assists while you code" to "AI codes while you oversee."
+
+**Why terminal agents?** IDE agents are constrained by the editor paradigm — they operate on files the user has open. Terminal agents operate on entire repositories: they can read any file, run any command, execute tests, install dependencies, interact with Git, and iterate autonomously. This makes them closer to "agentic engineering" (Karpathy's term for the successor to vibe coding) than to autocomplete.
+
+**Claude Code** (Anthropic) — the most capable terminal agent (as of early 2026). 1M token context (GA March 2026), 128K output. Key features: Agent Teams (multiple Claude Code instances coordinating on a task), `/loop` (cron-like mechanism for recurring tasks), compaction (automatic context summarization for infinite-length sessions), MCP extensibility. $500M ARR run rate within first two months of availability — one of the fastest B2B product launches in enterprise software history. Average developer cost ~$6/day.
+
+**Codex CLI** (OpenAI) — open-source terminal agent written in Rust. Full-screen terminal UI, multimodal inputs (screenshots, diagrams, Figma mockups), powered by GPT-5.4. Included in existing ChatGPT subscriptions (20M+ paying users get access at no additional cost). Represents OpenAI's bet on distribution — bundling agent capability with the consumer platform.
+
+**Aider** — open-source (39-42K GitHub stars, 15B tokens processed per week). Git-native: every edit is automatically committed, making it easy to review and revert. Pioneered the **Architect/Editor dual-role pattern**: an expensive reasoning model (Opus, o3) handles planning and decision-making (10% of tokens, ~90% of value), while a cheap model handles code edits (90% of tokens, ~10% of value). This yields 3-5x cost savings. The pattern is generalizable — any agent system can split "thinking" and "doing" across model tiers.
+
+**The convergence trend:** IDE agents are adding autonomous features (Cursor Background Agent, Copilot Cloud Coding Agent), while terminal agents are integrating with IDEs (Claude Code in VS Code, Codex in editors). The future split will likely be "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget), rather than IDE vs. terminal.
+
+---
+
+## Multi-Agent Coding
+
+Single-agent coding handles most tasks well, but certain scenarios benefit from multiple agents coordinating:
+
+**Agent Teams** (Anthropic) — multiple Claude Code instances working on different aspects of a task in parallel. For example, one agent refactors the backend API while another updates the frontend components that depend on it. The orchestrator ensures consistency across changes.
+
+**Augment "Intent"** — a multi-agent macOS application that decomposes a coding task into subtasks and assigns each to a specialized sub-agent. The Context Engine (which works as an MCP server) provides each agent with focused, relevant codebase context.
+
+**GitHub Agent HQ** — Claude and Codex are available as alternative agents directly within GitHub, alongside Copilot. Developers can assign issues to the agent best suited for the task.
+
+**When multi-agent coding helps:** Large refactors spanning many files, cross-repository changes, simultaneous frontend + backend + tests, code migration projects. **When single-agent suffices:** Most day-to-day development tasks — adding features, fixing bugs, writing tests for a bounded scope.
+
+---
+
+## Devin Ecosystem Evolution
+
+Devin (Cognition Labs) represented the first "AI software engineer" — a fully autonomous agent that operates in its own development environment. The ecosystem has evolved significantly:
+
+**Price democratization:** Devin's price dropped from $500/month to $20/month — a 25x decrease in one year. At this price point, ROI is obvious even for junior developers. Goldman Sachs piloted Devin with 12,000 developers, reporting +20% efficiency gains. Valuation: $10.2B (as of early 2026).
+
+**Product expansion beyond coding:**
+- **Devin Search** — agentic Q&A over codebases with auto-generated architecture diagrams and wiki pages
+- **Devin Review** — AI code review integrated into PR workflows
+- **Desktop Testing** — end-to-end testing via computer use capabilities
+
+**Architectural distinction:** Devin operates asynchronously — you assign a task and come back later to a completed PR. Cursor and Claude Code are synchronous — you interact in real-time. This makes Devin a "colleague you delegate to" rather than a "tool you use." The distinction matters for team workflows: Devin handles bounded, well-specified tasks; interactive agents handle exploration, debugging, and iterative development.
+
+---
+
+## The "1000x Developer" Reality
+
+The phrase "1000x developer" has entered the discourse, but the reality is more nuanced than the marketing.
+
+**Individual productivity with AI assistants is approximately 2x** at best — developers write code faster, but the thinking, architecture, debugging, and review still require human judgment. The Stanford/GitHub data shows meaningful but not transformative individual productivity gains.
+
+**The real multiplier comes from orchestrating agent fleets.** Instead of one developer using one agent, a developer assigns tasks to multiple autonomous agents running in parallel — each working on a different file, feature, or repository. The output is not "writing code 1000x faster" but "managing systems that write code" — a coordination challenge more than a coding challenge.
+
+This creates a new **"Orchestrator" role** distinct from the traditional "Coder" role. The orchestrator writes specifications, reviews agent output, manages context, and makes architectural decisions. The shift is from "how do I implement this?" to "how do I specify this clearly enough for agents to implement?" — which is, ultimately, a return to the core skill of software engineering: clear thinking about requirements.
 
 ---
 
