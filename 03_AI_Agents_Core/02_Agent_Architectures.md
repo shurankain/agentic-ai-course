@@ -386,6 +386,36 @@ Where Q(i) is the cumulative reward of the node, N(i) is the visit count, c is t
 
 MCTS is particularly effective for tasks with large solution spaces and delayed reward — when reasoning quality can only be evaluated at the end.
 
+### Graph-of-Thought (GoT)
+
+Tree-of-Thought constrains reasoning to a tree structure: each node has exactly one parent. **Graph-of-Thought** (Besta et al., AAAI 2024) removes this constraint, allowing arbitrary graph structures where nodes can have multiple parents and multiple children.
+
+The key capability this unlocks is **merging** — combining partial solutions from different branches into a single refined solution. In ToT, if two branches each discover useful partial insights, those insights remain isolated in separate branches. In GoT, a new node can aggregate the best aspects of both branches.
+
+GoT defines three transformation types:
+- **Generation** — create new thoughts from existing ones (same as ToT expansion)
+- **Aggregation** — merge multiple thoughts into one (the novel capability)
+- **Refinement** — improve a single thought through iteration
+
+**Results:** On sorting and set intersection tasks, GoT achieved 62% quality improvement over ToT with a 31% cost reduction through reuse of intermediate reasoning.
+
+**Trade-off:** GoT requires explicit graph management — the orchestrator must decide when to merge branches and how to handle conflicting partial solutions. This adds complexity compared to the natural tree structure of ToT. GoT is most useful when the solution structure is known in advance (e.g., "we need to combine information from sources A, B, and C") and less useful for open-ended exploration where the optimal structure is unknown.
+
+### ReWOO: Reasoning Without Observation
+
+Most agent architectures (ReAct, Plan-and-Execute, LATS) interleave reasoning with tool execution: the agent reasons, calls a tool, observes the result, reasons again. ReWOO (Xu et al., 2023) takes a radically different approach: **generate the entire plan and all tool calls upfront, then execute all of them without re-calling the LLM.**
+
+The architecture has three components:
+1. **Planner** — generates the full plan with all tool calls in a single LLM pass
+2. **Worker** — executes all planned tool calls sequentially (no LLM involved)
+3. **Solver** — takes the original query, the plan, and all tool results, and generates the final answer in one LLM pass
+
+**Token efficiency:** ReWOO uses approximately 5x fewer tokens than ReAct on the same tasks, because intermediate observations are not fed back into the LLM's context. In ReAct, each tool result is added to the growing prompt; in ReWOO, results are consumed only once at the end. ReWOO also showed 4% accuracy improvement on HotpotQA.
+
+**Trade-off:** ReWOO is fragile when later steps depend on earlier results. If step 3 needs the output of step 1 to formulate its query, ReWOO cannot adapt — the plan was generated before any execution. This makes ReWOO best suited for queries where the plan is predictable: parallel data lookups, information gathering from known sources, batch tool calls where the inputs are all derivable from the original query.
+
+**When to choose ReWOO over ReAct:** When you need to minimize LLM calls and costs, when tool calls are independent of each other, and when the plan structure is predictable. When to choose ReAct: when tool results inform subsequent decisions, when the plan must adapt to intermediate findings.
+
 ### O1-style Reasoning: Inference-time Compute
 
 OpenAI's o1 series models demonstrated a paradigm shift: instead of scaling model size, one can scale computation at inference time. The model "thinks longer" on complex questions.
@@ -438,6 +468,56 @@ Advanced reasoning techniques do not exist in isolation — they combine with ba
 **LATS as integration**: LATS (Language Agent Tree Search) is literally MCTS applied to the agent context. Tree nodes are agent states, actions are tools, rollout is evaluation of the final result.
 
 Practical advice: start simple (ReAct or basic CoT), add Self-Consistency for improved reliability, move to ToT/MCTS only if the task demands deep search.
+
+---
+
+## The Augmented-LLM Progression (Anthropic, 2024)
+
+Anthropic's "Building Effective Agents" guide introduced the most influential framework for deciding how much complexity an agent system actually needs. The core insight: **"Find the simplest solution. Agentic systems often trade latency and cost for better task performance — and this trade-off is only worth making when simpler approaches are insufficient."**
+
+The progression defines three levels:
+
+**Level 1 — Augmented LLM.** A single model with retrieval (RAG), tools (function calling), and memory. No orchestration framework, no multi-step loops. The model processes the request, optionally calls tools, and returns a response. This handles the majority of production use cases: customer support, document analysis, code generation, data extraction.
+
+**Level 2 — Workflows.** Deterministic orchestration of multiple LLM calls. Prompt chaining (output of one LLM call becomes input to the next), routing (a classifier directs to specialized handlers), parallelization (multiple LLM calls run concurrently on different aspects). The key property: the flow is predictable and testable — a developer designs the graph of operations, and the LLM operates within each node. LangGraph's graph model is the canonical implementation.
+
+**Level 3 — Agents.** An autonomous loop where the LLM itself decides the next action at each step. The system is adaptive — it can change strategy based on intermediate results. But it is also less predictable, more expensive, and harder to debug. Use agents only when the task genuinely requires dynamic decision-making that cannot be encoded in a workflow.
+
+Most teams that skip to Level 3 prematurely discover that 80% of their use cases could have been solved at Level 1 or 2, at lower cost and with better reliability. Start at the lowest level that works. Escalate only when you have evidence that the current level is insufficient.
+
+---
+
+## Agent Loop Essentials
+
+Every agent architecture discussed in this chapter — ReAct, Plan-and-Execute, Reflexion, LATS — shares a common foundation: a loop that calls an LLM, executes actions, and iterates. The patterns below are production-critical for any agent loop, regardless of architecture. They are the difference between a demo and a system that runs reliably in production.
+
+**Max iterations — enforced in code, not in the prompt.** A prompt instruction like "stop after 10 steps" is not reliable — the model may ignore it. Set a hard iteration cap in the orchestration code: 10-15 iterations for typical tasks, up to 25 for research/exploration. When the limit is hit, the agent reports its intermediate results rather than failing silently.
+
+**Loop detection.** Track the sequence of (tool, arguments, result) tuples. If the agent calls the same tool with the same arguments three times in a row and gets the same error, it is stuck in a loop. Abort and report the stuck state. Without this, agents can burn through token budgets repeating the same failed action indefinitely.
+
+**Circuit breaker.** Adapted from microservices (Hystrix, Resilience4j): if a tool or external service fails N times in M seconds, stop calling it (OPEN state). After a cooldown period, try once (HALF_OPEN). On success, resume (CLOSED). On failure, re-open. This prevents the agent from wasting iterations on a tool that is temporarily down.
+
+**Checkpointing.** Save the agent's state (plan, completed steps, accumulated context) periodically so that execution can resume from the last checkpoint after a crash, timeout, or manual interruption. LangGraph provides this natively through its persistence layer. For custom agents, save state to a database after each successful tool call.
+
+**Graceful degradation.** When the iteration limit is reached or a circuit breaker trips, the agent should return its best partial result with an explanation of what was completed and what remains. A partial answer is almost always more useful than an error message.
+
+These patterns are mentioned individually across earlier sections (ReAct mentions iteration limits, LATS discusses cost bounds). This consolidation is deliberate — these are universal requirements, not architecture-specific features.
+
+---
+
+## The Karpathy Loop: Universal Optimization Pattern
+
+AutoResearch (Karpathy, April 2026) demonstrated a pattern that extends beyond coding agents into a general-purpose optimization architecture. The **Karpathy Loop** requires three ingredients:
+
+1. **Agent with file access** — the agent can read and modify code, configuration, or any text-based artifact
+2. **One objectively testable metric** — a number that can be measured automatically (training loss, test pass rate, latency, cost per request)
+3. **Fixed time limit** — the agent runs for N hours, explores the search space, and reports the best result
+
+The agent autonomously modifies artifacts, measures the metric, and iterates. No human in the loop during the search. The human role: define the metric, constrain the search space, evaluate whether discovered optimizations are genuinely useful or merely overfitting the metric.
+
+**Architectural view:** The Karpathy Loop is a specialized application of the ReAct pattern where the "observation" is always a numeric metric and the "action" is always a code/config modification. Its power comes from the tight feedback loop: modify → measure → learn → modify — at machine speed.
+
+**Applicability beyond ML:** CI/CD pipeline optimization (metric: build time), infrastructure tuning (metric: cost per request), SQL query optimization (metric: execution time), prompt engineering (metric: eval score). Any domain where a metric can be computed automatically and artifacts can be modified programmatically. See [[09_Agent_Use_Cases|Agent Use Cases]] for the full discussion of AutoResearch.
 
 ---
 
