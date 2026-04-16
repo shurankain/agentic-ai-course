@@ -226,7 +226,13 @@ Each framework occupies its own niche. The choice depends on the specific requir
 
 **Google ADK** -- for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
 
-**AutoGen / Semantic Kernel** -- in maintenance mode. Existing deployments continue to work, but new projects should evaluate the alternatives above.
+**AutoGen / Semantic Kernel** -- in maintenance mode (bugfix-only). Existing deployments continue to work, but **all existing AutoGen projects are legacy requiring migration**. New projects should evaluate the alternatives above.
+
+**Pydantic AI** -- for type-safe Python multi-agent systems with durable execution. From the Pydantic creators. Best when reliability and type checking matter more than ecosystem breadth.
+
+**Agno** (formerly Phidata, 39K+ stars as of early 2026) -- session-based memory and ReasoningTools for multi-agent coordination. Good middle ground between LangGraph's explicit control and CrewAI's simplicity.
+
+**CrewAI ecosystem update (as of early 2026):** CrewAI reached 12M+ daily executions with native MCP and A2A support. This makes it one of the few frameworks natively supporting both protocols — agents can use MCP tools and coordinate with external agents via A2A without custom integration code.
 
 ### Reasoning Model Support
 

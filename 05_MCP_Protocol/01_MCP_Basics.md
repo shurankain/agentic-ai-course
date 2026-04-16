@@ -174,6 +174,32 @@ A real-world task often requires data from multiple sources and actions across m
 
 MCP allows connecting multiple servers simultaneously. The agent sees a combined set of resources and tools from all servers and can combine them to solve complex tasks.
 
+## MCP Apps (January 2026)
+
+An evolution beyond data and actions: MCP tools can now return **interactive UI components** — forms, charts, filtered tables, maps, approval buttons — rendered directly in the conversation. When a tool returns an MCP App, the host application (Claude, an IDE, a custom agent UI) renders the component inline rather than displaying raw data.
+
+This blurs the line between a tool call and an application. An MCP server for a database is no longer limited to returning query results as text — it can return an interactive table with sorting, filtering, and pagination. A monitoring MCP server can return a live chart. A workflow MCP server can return an approval form with Accept/Reject buttons.
+
+MCP Apps represent the evolution of MCP from a data protocol to an **application platform**. The implications for agent UX are significant: agents can provide rich, interactive responses rather than text-only outputs, without requiring custom frontend development for each integration.
+
+## The Protocol Landscape: MCP, A2A, and ANP
+
+MCP exists alongside two complementary protocols at different layers of the agent communication stack:
+
+| Layer | Protocol | Purpose | Analogy | Maturity (early 2026) |
+|-------|----------|---------|---------|----------------------|
+| **Agent → Tool** | **MCP** | Agent accesses external data and actions | USB | Production (97M+ downloads) |
+| **Agent → Agent** | **A2A** | Agents coordinate with each other across organizations | LAN | Early production (150+ orgs, v1.0) |
+| **Agent → Open Network** | **ANP** | Peer-to-peer agent discovery in open networks | Internet | Experimental (watch, don't invest) |
+
+**A2A (Agent-to-Agent Protocol)** — created by Google, now under Linux Foundation governance. Enables agents from different teams, organizations, or frameworks to communicate. Uses Agent Cards (JSON-LD) for capability advertisement and supports long-running tasks (hours/days). See [[05_A2A_Protocol|A2A Protocol]] for full coverage.
+
+**ANP (Agent Network Protocol)** — an early-stage protocol for peer-to-peer agent communication in open, untrusted networks. Uses W3C Decentralized Identifiers (DIDs) for agent identity and discovery. Conceptually important — it addresses how agents will find and trust each other on the open internet — but not yet ready for production investment. Monitor progress; do not build on it today.
+
+The three protocols are complementary: MCP for what an agent can do (tools), A2A for who an agent can work with (other agents in known organizations), and ANP for how agents will discover each other (open network, future). A production agent in 2026 uses MCP (mandatory), may use A2A (if cross-organization coordination is needed), and does not yet need ANP.
+
+---
+
 ## Key Takeaways
 
 Model Context Protocol has become the industry standard for AI tool integration. Instead of chaotic individual integrations, MCP provides a common language for interaction between AI applications and external services — now adopted by all major AI platforms and backed by cross-industry governance under the AAIF.

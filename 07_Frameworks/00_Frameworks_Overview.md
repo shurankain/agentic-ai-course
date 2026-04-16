@@ -146,6 +146,40 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 ---
 
+## Fast-Growing Frameworks (2025-2026)
+
+Beyond the established leaders and cloud providers, several frameworks have gained significant traction:
+
+**Pydantic AI** — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Backed by the same team that made Pydantic the de facto data validation library in the Python ecosystem. Best for: Python teams that value type safety and reliability.
+
+**Mastra** — TypeScript-first agent framework from the team behind Gatsby. 19K+ GitHub stars (as of early 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). Best for: TypeScript/frontend teams building agent-powered web applications.
+
+**Agno** (formerly Phidata) — 39K+ GitHub stars (as of early 2026). Provides ReasoningTools (tools that help the agent think better, not just act), session-based memory, and a batteries-included approach. Good balance of ease-of-use and capability. Best for: Python developers who want a simpler alternative to LangGraph with built-in memory and reasoning support.
+
+**smolagents** (HuggingFace) — 26K GitHub stars. A minimalist framework where the CodingAgent writes Python code directly instead of generating JSON tool calls. This makes agent actions inspectable and debuggable as regular Python. Best for: research and experimentation, teams comfortable with HuggingFace ecosystem.
+
+**Vercel AI SDK** — TypeScript/React framework with 20M+ monthly downloads. Deeply integrated with React for streaming UI updates. Provides the ToolLoopAgent pattern for agent loops in frontend applications. Best for: full-stack TypeScript teams building user-facing agent applications with React.
+
+### Specialized Frameworks
+
+**DSPy** (Stanford) — automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's MIPROv2 optimizer find optimal prompts through automated search. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
+
+**Dify** — 93K+ GitHub stars (as of early 2026), $30M raised at $180M valuation, 1.4M installations. Drag-and-drop low-code platform for building agent workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Best for: teams that need visual workflow building with minimal code.
+
+### JVM Ecosystem: Reaching Parity
+
+The JVM agent ecosystem reached parity with Python in 2025-2026:
+
+**JetBrains Koog** (March 2026) — a new JVM-native agent framework from JetBrains, built with Kotlin. Ships with OpenTelemetry integration for observability out of the box. Represents JetBrains' bet on the agent ecosystem alongside their IDE investments (Kiro).
+
+**MCP Java SDK** (`io.modelcontextprotocol.sdk:mcp`) v1.0.0 GA — the official MCP SDK for Java, co-created with Spring AI. Supports both blocking and reactive programming models (WebFlux), with STDIO and Servlet-based transports. This is the foundation layer — both LangChain4j and Spring AI build on it.
+
+**Spring AI MCP starters** — `spring-ai-starter-mcp-client` and `spring-ai-starter-mcp-server` provide turnkey MCP integration for Spring Boot applications. One dependency in `pom.xml` connects a Spring Boot application to any MCP server.
+
+Java 26 (March 2026) is positioned as an "AI-first platform" with value types, structured concurrency, and other features that benefit agent workloads. Combined with LangChain4j, Spring AI, and now Koog, the JVM ecosystem offers production-grade agent development on par with Python.
+
+---
+
 ## n8n: Low-Code AI Leader
 
 n8n deserves special attention as a bridge between no-code and code approaches. Native MCP support makes it a powerful tool for AI workflows.
@@ -168,7 +202,17 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 
 **No-code with AI**: n8n for self-hosted with MCP, Make for managed cloud solutions.
 
-**Java/Spring stack**: LangChain4j for maximum compatibility with the LangChain ecosystem, Spring AI for deep Spring integration.
+**Java/Spring stack**: LangChain4j or Spring AI. JetBrains Koog for Kotlin-first projects.
+
+**TypeScript/React**: Vercel AI SDK for full-stack with streaming UI. Mastra for backend agent workflows.
+
+**Python with type safety**: Pydantic AI for reliable, type-checked agents.
+
+**Minimal abstractions**: OpenAI Agents SDK or Claude Agent SDK when framework overhead is unacceptable.
+
+**Automatic prompt optimization**: DSPy when you have evaluation data and want systematic prompt improvement.
+
+**Low-code/visual**: Dify for drag-and-drop agent building. n8n for workflow automation with MCP support.
 
 **Maximum control**: direct provider SDKs (OpenAI, Anthropic, Google) when framework abstractions are limiting or when maximum performance is needed.
 
