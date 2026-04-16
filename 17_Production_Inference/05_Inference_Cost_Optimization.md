@@ -191,6 +191,30 @@ Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtr
 
 **Practical guidance:** For models <100B total params (Mixtral 8x7B): standard serving, 1-2 GPUs. For 100B-700B total (Mixtral 8x22B, DeepSeek V3): multi-GPU tensor parallelism + quantization. For cost optimization: expert offloading trades latency for 2-4x memory reduction.
 
+## Prompt Caching Economics
+
+For API-based inference (as opposed to self-hosted), **prompt caching** is one of the highest-impact cost optimizations — and it requires no code changes beyond structuring prompts correctly.
+
+**How it works:** LLM providers cache the KV-cache for the prefix (identical initial portion) of your prompt. If the same prefix appears in the next request, the cached KV-cache is reused, and the provider charges a discounted rate for the cached tokens.
+
+**Provider economics (as of early 2026):**
+
+| Provider | Cache Hit Discount | Min Prefix Length | TTL | Effective Savings |
+|----------|-------------------|-------------------|-----|-------------------|
+| **Anthropic** | 90% off input | 1,024 tokens | 5 min | 50-80% per-turn for agents |
+| **OpenAI** | 50% off input | 1,024 tokens | 5-10 min | 25-40% per-turn for agents |
+| **Google** | Varies | 32K tokens | Varies | Significant for long-context |
+
+**The pattern for agents:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [static context]` → `[dynamic context] + [conversation] + [current message]`. The first block is identical across all calls in a session — fully cacheable. The second block varies per call — never cached.
+
+**Why this matters for multi-turn agents:** An agent making 15 calls per task with a 3K-token system prompt and 5K tokens of tool descriptions saves 8K cached tokens per call × 14 subsequent calls = 112K tokens cached. At Anthropic's 90% discount, this saves approximately $0.50 per task — material at thousands of tasks per day.
+
+**Batching API** offers a complementary optimization: 50% discount on all tokens for deferred processing (24-hour SLA). Suitable for evaluation runs, document processing, and any workload that does not require real-time response. Combine prompt caching (for real-time) with batching (for async) for maximum savings.
+
+See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader context management framework, including KV-cache management patterns for agent identity stability.
+
+---
+
 ## Key Takeaways
 
 Spot instances — low-hanging fruit. 60-90% savings for eligible workloads. Combine with on-demand for resilience.
@@ -206,6 +230,8 @@ Monitor everything relentlessly. Track cost per token, utilization, throughput p
 Implement budget controls. Hard limits prevent surprises. Soft limits balance cost and quality.
 
 Think about trade-offs: spot (cost vs availability), cascading (cost vs quality), large batches (cost vs latency), quantization (cost vs accuracy).
+
+Prompt caching is free optimization for API users — structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
 
 ---
 

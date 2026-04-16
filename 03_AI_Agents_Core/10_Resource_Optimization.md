@@ -333,6 +333,54 @@ See [[../../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the te
 
 ---
 
+## Agent Project Economics
+
+The techniques above — routing, budgeting, caching, distillation — optimize model-level costs. But model costs are only one dimension of what an agent project actually costs. Understanding the full economic picture is essential for project planning and stakeholder communication.
+
+### Development Cost by Complexity
+
+| Complexity | Development Cost | Timeline | Monthly Operations | Examples |
+|------------|-----------------|----------|-------------------|----------|
+| **Simple agent** | $30-80K | 4-8 weeks | $3,200-5,000 | FAQ bot, document classifier, simple RAG |
+| **Multi-step workflow** | $80-250K | 2-4 months | $5,000-8,000 | Customer service agent, code review pipeline |
+| **Complex multi-agent** | $250K-1M+ | 4-9 months | $8,000-13,000 | Research agents, orchestrated workflows |
+| **Enterprise platform** | $1-5M+ | 6-18 months | $13,000+ | Full agent infrastructure, multi-tenant |
+
+Maintenance costs add 15-25% of the initial development cost annually — model updates, prompt drift, evaluation suite maintenance, infrastructure upgrades.
+
+### The TCO Reality
+
+**Development is only 25-35% of three-year total cost of ownership.** Operations — inference costs, monitoring, maintenance, incident response, model retraining, evaluation pipeline — consume the remaining 65-75%. Budgets that focus on build cost will underestimate total investment by 40-60%.
+
+**Rule of thumb:** Multiply the initial development estimate by 2.5-3x for three-year total cost. A $200K development project has a realistic three-year TCO of $500-600K.
+
+**The Jevons Paradox in AI:** Model API prices have dropped approximately 280x in two years (as of early 2026). Yet enterprise AI bills are growing, not shrinking — because cheaper tokens enable more ambitious use cases, longer contexts, more agent iterations, and broader deployment. Cost optimization remains essential even as unit prices fall. Verify current pricing before capacity planning — strategies from even 12 months ago may use outdated assumptions.
+
+### Build vs Buy Thresholds
+
+The decision between building custom agents and buying platform solutions depends primarily on interaction volume:
+
+| Monthly Interactions | Recommendation | Reasoning |
+|---------------------|---------------|-----------|
+| **<10K** | Buy (SaaS/platform) | Development cost cannot be amortized |
+| **10-50K** | Gray zone | Evaluate switching costs, customization needs, data sensitivity |
+| **50-200K** | Custom starts winning | Platform per-unit pricing exceeds infrastructure + development cost |
+| **>200K** | Custom wins decisively | Amortization is favorable; full control over quality and cost |
+
+The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See [[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the platform landscape.
+
+### The 70/30 Hybrid Model Strategy
+
+A cost optimization pattern gaining traction in production: route **70% of inference volume** to open-source models (DeepSeek V3.2, Qwen 3.5, Llama 4) for routine tasks, and **30% to proprietary frontier models** (Claude Opus 4.6, GPT-5.4) for complex reasoning where quality is critical.
+
+This works because model quality follows a long tail: 70% of agent interactions are routine (classification, simple retrieval, formatting, tool selection) where a capable open-source model performs adequately. The remaining 30% — complex reasoning, nuanced generation, multi-step planning — benefits from frontier model capability.
+
+**Implementation:** The cost-aware routing described earlier in this chapter provides the mechanism. The 70/30 split is not fixed — monitor quality metrics by tier and adjust. Some deployments run 80/20 or 60/40 depending on the task distribution.
+
+**Why this works economically (as of early 2026):** DeepSeek V3.2 costs $0.28/$0.42 per 1M tokens. Claude Opus 4.6 costs $5/$25. The frontier model is 60-90x more expensive per token. Even routing just the simple tasks to open-source saves 50-70% of total inference cost while maintaining quality where it matters.
+
+---
+
 ## Related Topics
 
 - [[04_Planning|Planning]] — efficient planning conserves resources
@@ -370,6 +418,11 @@ See [[../../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the te
 6. **Agent Distillation:**
    - Prototype with expensive model, collect traces, fine-tune cheap model
    - Use `budget_tokens` / `reasoning_effort` to control per-step costs in agentic loops
+
+7. **Agent Project Economics:**
+   - Development is only 25-35% of 3-year TCO; multiply estimates by 2.5-3x
+   - Build vs Buy: <10K interactions/month = buy, >200K = build, hybrid in between
+   - 70/30 hybrid strategy: open-source for volume, proprietary for frontier reasoning
 
 ---
 
