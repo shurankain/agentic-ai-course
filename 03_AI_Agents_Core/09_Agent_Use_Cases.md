@@ -35,6 +35,7 @@ Not all agent applications are at the same maturity level. Some already generate
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
 | **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
 | **Internal Employee** | Production | Glean, custom RAG agents | Corporate knowledge + tools |
+| **No-Code/Low-Code Builders** | Production | n8n, Dify, Lovable, Bolt.new | n8n 150K+ stars, Dify $180M valuation, Lovable $100M ARR (as of early 2026) |
 
 ---
 
@@ -310,6 +311,38 @@ AI assistants embedded in corporate workflows: answering HR policy questions, he
 **Architecture:** Typically agentic RAG over internal knowledge bases (Confluence, SharePoint, Notion) with tool access to corporate systems (HRIS, ticketing, calendar). MCP servers provide standardized access to each corporate system.
 
 **Key difference from customer-facing agents:** Higher trust level (employees understand limitations), access to sensitive internal data (requires strict authorization), and integration with SSO/identity systems for audit trails.
+
+---
+
+## No-Code/Low-Code Agent Builders
+
+A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in [[../../07_Frameworks/00_Frameworks_Overview|Module 07]] — they target different audiences and use cases.
+
+### Workflow Automation Platforms
+
+**n8n** — 150K+ GitHub stars (as of early 2026), 400+ integrations, open-source with self-hosted option. n8n 2.0 (January 2026) added sandboxed execution, persistent agent memory, 70+ AI nodes, and full traceability for every reasoning step. The self-hosted option is critical for enterprise scenarios with data sovereignty requirements. Native MCP support connects agents to the growing MCP server ecosystem.
+
+**Dify** — 93K+ GitHub stars, $30M raised at $180M valuation, 1.4M installations (as of early 2026). Drag-and-drop visual canvas for building agentic workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Occupies the middle ground between pure no-code (Flowise) and full frameworks (LangGraph) — visual building with code escape hatches.
+
+**Flowise** — 30K+ GitHub stars. A transparent LangChain visual builder where every chain node is visible and editable. Best for teams that want the visual metaphor but need to understand (and modify) the underlying LangChain constructs.
+
+**Langflow** — visual canvas with a live chat pane for instant testing while building. Useful for rapid iteration — modify the graph, test immediately in the same window.
+
+### AI App Builders
+
+A parallel trend: platforms that generate full applications (not just agent workflows) from natural language descriptions.
+
+**Lovable** — $100M ARR in 8 months (fastest-growing European startup ever, as of early 2026). Generates clean React code from descriptions. $20/month. No built-in database — relies on Supabase for persistence.
+
+**Bolt.new** — $40M ARR in 6 months. Built on WebContainer technology (Node.js running in the browser). Token-based pricing (10M tokens/month). Supports multiple frameworks (Next.js, Remix, Astro, SvelteKit).
+
+**v0** (Vercel) — evolved from a component generator to a full-stack platform with built-in databases and integrated deployment. Uses shadcn/ui as the default component library.
+
+**Replit Agent** — the most autonomous of the app builders. 30+ integrations, built-in PostgreSQL/SQLite/KV store, multi-language support (Python, JS, Go, Java). Can create bots, CLIs, and data pipelines — not just web apps.
+
+**Key market split:** Built-in databases (v0, Replit) vs external Supabase dependency (Bolt, Lovable). This is a critical friction point for non-technical users — built-in databases reduce setup steps.
+
+**Security concern for generated code:** AI-generated applications commonly contain SQL injection vulnerabilities, XSS, tokens in client-side code, and missing rate limiting. A human security review before production deployment is mandatory. The correct strategy: vibe-code a prototype → gather stakeholder feedback → human code review → decide whether to refactor or rewrite.
 
 ---
 

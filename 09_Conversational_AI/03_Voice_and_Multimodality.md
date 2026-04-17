@@ -242,6 +242,34 @@ Alternative text for images, subtitles for audio, and the ability to switch betw
 
 Accounting for speech diversity is especially important. Accents, dialects, speech impairments, and atypical speech rates — recognition systems must work for all users, not only for those who speak "standard" language. Bias in training data leads to bias in the system.
 
+## Voice Agent Market Structure (2026)
+
+The voice agent market has organized into four tiers, each serving different needs and price points:
+
+| Tier | Provider | Pricing | Latency | Best For |
+|------|----------|---------|---------|----------|
+| **Full-Stack** | ElevenLabs | Premium | <500ms | Best-in-class voice quality, custom brand voices, voice cloning |
+| **Orchestration** | Vapi, Retell AI | $0.05-0.13/min | ~200ms | Middleware layer — connect any STT + LLM + TTS. 14+ TTS providers |
+| **Developer Framework** | LiveKit | $0.004/min audio | Varies | Open-source core, up to 80% cheaper at scale, on-premise possible |
+| **Enterprise Phone** | Bland AI | $0.07-0.12/min | ~200ms | Up to 1M parallel calls, SOC2/GDPR/HIPAA, enterprise telephony |
+
+**Cost comparison across the stack (as of early 2026):**
+- OpenAI Realtime API: ~$0.15-0.20/min (native audio processing, no intermediate STT step)
+- Full-stack managed (ElevenLabs): premium pricing, best quality
+- Orchestration layer (Vapi): $0.05-0.13/min depending on STT/TTS choices
+- Open-source stack (LiveKit + Whisper + open TTS): $0.02-0.05/min
+- Enterprise phone (Bland AI): $0.07-0.12/min with compliance guarantees
+
+The cost range spans approximately 10x from cheapest to most expensive. The choice depends on three factors: voice quality requirements (ElevenLabs leads), volume and cost sensitivity (LiveKit at scale), and compliance needs (Bland AI for regulated industries).
+
+**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See [[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for production case studies.
+
+**Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month — evaluate build effort vs managed pricing.
+
+**Retell AI** deserves special mention for its **emotion detection** capability — detecting frustration, satisfaction, and confusion in real-time from voice signals. This enables automated escalation to human agents based on emotional state, not just explicit requests for help.
+
+---
+
 ## Key Takeaways
 
 Multimodality is the natural direction of AI agent evolution. Human communication is inherently multimodal; restricting it to text impoverishes the interaction.
