@@ -32,7 +32,11 @@ Structured output methods range on a scale from "hoping for the best" to "guaran
 
 **Level 2: JSON Mode.** Providers (OpenAI, Anthropic) offer a mode that guarantees valid JSON. The system forcibly closes brackets and fixes syntax. The result always parses. However, only syntactic correctness is guaranteed — it could be {"random": "data"} instead of {"name": "John", "age": 30}. Structure is not controlled.
 
-**Level 3: JSON Schema / Function Calling.** An exact result schema is specified. In OpenAI — via Function Calling, in Anthropic — via Tool Use. It is guaranteed through constrained decoding — restricting allowed tokens at each generation step using a finite automaton. After an opening brace, only key tokens or a closing brace are allowed; after a key — a colon; after a colon — the start of a value. Implementations: Outlines (Python, FSM-based), Guidance (Microsoft, template-based), OpenAI Structured Outputs (built into the API).
+**Level 3: JSON Schema / Function Calling.** An exact result schema is specified. In OpenAI — via Function Calling, in Anthropic — via Tool Use. It is guaranteed through **constrained decoding** — at each generation step, the model's logit probabilities are masked so that only tokens that are valid continuations of the schema can be sampled. A finite automaton tracks the current position in the schema: after an opening brace, only key tokens or a closing brace are allowed; after a key — a colon; after a colon — the start of a value of the correct type. The model literally cannot produce invalid JSON because invalid tokens have zero probability.
+
+This guarantees **syntactic** correctness but not **semantic** correctness. A JSON object can be perfectly valid structurally — all types correct, all required fields present — yet contain hallucinated values (a fictional address, an invented product name, a wrong date). This distinction matters for validation design: constrained decoding eliminates parsing errors, but business-rule validation (Level 4) is still needed for semantic correctness.
+
+Implementations: Outlines (Python, FSM-based, works with vLLM and HuggingFace Transformers), Guidance (Microsoft, template-based), OpenAI Structured Outputs (built into the API with `strict: true`). Note: OpenAI reports a 200-500ms cold start for schema preprocessing on the first structured output call with a new schema.
 
 You describe a schema: fields, types, required properties. The model returns JSON with the correct structure. Function Calling was originally designed for invoking functions but became a mechanism for structured output — the model "calls a function" with the required arguments, and you intercept them.
 
@@ -67,6 +71,55 @@ Different tasks require different levels of guarantees. Excessive complexity cre
 **LangChain4j AI Services** uses a declarative approach through interfaces. A method is annotated with @UserMessage containing a prompt and returns the desired structure. The framework automatically: analyzes the return type, generates JSON Schema, creates a ToolSpecification, sends a request with Function Calling, parses the arguments, creates an object, and returns a type-safe result. Type safety at compile time, IDE autocompletion for fields, safe refactoring. The most convenient approach for Java applications.
 
 **Spring AI** integrates with ChatClient. The .entity(CustomerInfo.class) method automatically analyzes the class structure, generates instructions, converts the response, and handles errors. It supports ParameterizedTypeReference for collections: List<OrderItem>, Map<String, Product>. A natural choice for Spring applications with @Configuration setup and dependency injection.
+
+## Provider Comparison for Structured Outputs
+
+| Provider | Mechanism | Schema Format | Guarantee Level | Notes |
+|----------|-----------|--------------|-----------------|-------|
+| **OpenAI** | Structured Outputs (`strict: true`) | JSON Schema | Syntactic + structural | Constrained decoding built into API. 200-500ms cold start per new schema |
+| **Anthropic** | Tool Use with schema | JSON Schema (via tool parameters) | Syntactic + structural | Uses the tool calling mechanism — the model "calls a tool" with structured arguments |
+| **Google** | Controlled generation | Pydantic schema or JSON Schema | Syntactic + structural | Available on Gemini via `response_schema` parameter |
+| **Open-source (Outlines)** | Constrained decoding via FSM | JSON Schema, regex, CFG | Syntactic + structural | Works with vLLM, HuggingFace Transformers, llama.cpp. No vendor lock-in |
+| **Open-source (Guidance)** | Template-based generation | Custom template language | Syntactic + structural | Microsoft-developed. Templates mix text and structured sections |
+
+**Recommendation:** For API-based systems, use the provider's native structured output (OpenAI Structured Outputs, Anthropic Tool Use). For self-hosted models, Outlines with vLLM provides equivalent guarantees without vendor dependency. All approaches guarantee structure; none guarantee semantic correctness — validation remains your responsibility.
+
+---
+
+## Structured Extraction Tooling
+
+Beyond provider APIs, three libraries have emerged as the standard toolkit for structured extraction in production:
+
+**Instructor** — wraps any LLM provider with Pydantic schema validation and automatic retry on validation failure. Define a Pydantic model, call the LLM, get a validated object or an automatic retry with the validation error as feedback. Minimal setup, excellent for prototyping and development. The most popular choice for Python applications.
+
+**BAML** (Boundary AI Markup Language) — compile-time contracts for structured output. Schema violations are caught before deployment, not at runtime. Generates client code in multiple languages (Python, TypeScript, Ruby). For production systems where a runtime parsing failure is unacceptable.
+
+**Outlines** — constrained decoding via finite state machine, running directly on the inference server (vLLM, HuggingFace). Guarantees valid output at the token level with zero retry overhead. Best for cost-critical self-hosted inference where every wasted token matters.
+
+**Decision guide:** Instructor for development and rapid iteration. BAML for production systems with strict reliability requirements. Outlines + vLLM for high-volume self-hosted inference where cost optimization is paramount.
+
+**Token overhead awareness:** JSON structural tokens (braces, quotes, colons, commas) cost approximately 24 tokens per object. At scale, this overhead is material: field name compression (e.g., `customer_satisfaction_score` → `css`) can save 3-5 tokens per field. For internal agent-to-agent communication where human readability is not required, minimal-delimiter formats reduce overhead significantly — see TOON below.
+
+---
+
+## Token-Optimized Output Notation (TOON)
+
+JSON is the standard structured format, but its overhead is significant: braces, quotes, colons, commas, and verbose key names consume tokens that carry no semantic information. For high-volume applications processing millions of requests per day, this overhead can exceed $100K per year.
+
+**TOON** and similar minimal-delimiter approaches achieve approximately **69% token reduction** compared to JSON by using pipe-separated values, newline-delimited records, and positional fields instead of named keys.
+
+| Format | Tokens for 10-field record | Relative Cost |
+|--------|---------------------------|---------------|
+| JSON | ~45 tokens | 1.0x |
+| TOON / minimal delimiters | ~14 tokens | 0.31x |
+
+**When to use JSON:** External APIs, persistent storage, human-readable logs, any boundary where interoperability with other systems matters. JSON is the universal interchange format — do not replace it where interoperability is required.
+
+**When to use TOON / minimal formats:** Internal agent-to-agent communication, intermediate tool results consumed by the next LLM call, structured output that will be immediately parsed and never stored in its serialized form. The key criterion: will this data ever leave the agent system? If no — optimize for tokens. If yes — use JSON.
+
+See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader discussion of token budget management and output format optimization.
+
+---
 
 ## Key Takeaways
 

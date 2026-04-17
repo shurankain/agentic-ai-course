@@ -132,6 +132,16 @@ Excessive complexity turns a simple task into a debugging nightmare.
 
 **5. Are the costs justified?** Multi-agent is more expensive: tokens x2-10, latency x2-5, debugging x5-20, infrastructure x2-5.
 
+**Additional cost-focused criteria (2026):**
+
+**6. Can you tolerate ~10x cost per query?** A single agent costs ~$0.01/query. A multi-agent system with 6 specialists + supervisor costs ~$0.10/query. At 100K queries/day, this is the difference between $1,000/day and $10,000/day.
+
+**7. Do you have observability to debug multi-agent interactions?** Without tracing across agent boundaries, debugging multi-agent failures is nearly impossible. Ensure your monitoring stack (LangSmith, Langfuse, Braintrust) supports multi-agent traces before adopting this architecture.
+
+**8. Does a single reasoning model with tools achieve <90% of required quality?** Reasoning models (o3, Claude extended thinking) increasingly internalize multi-step reasoning. If a single agent with tools reaches 90% of the quality a multi-agent system would provide, the remaining 10% rarely justifies a 10x cost increase. Prototype with single agent first; add multi-agent only when you hit clear capability boundaries.
+
+**Decision heuristic:** If fewer than 3 of the 8 questions above point toward multi-agent, use a single agent with tools.
+
 ### Anti-Patterns
 
 **Multi-Agent for a summary** - 5 agents for 3 paragraphs. A single agent is 10x cheaper.
@@ -141,6 +151,20 @@ Excessive complexity turns a simple task into a debugging nightmare.
 **Hierarchy for hierarchy's sake** - Supervisor → Manager → Worker for an atomic task. Redundant levels add latency and errors.
 
 **Swarm for deterministic tasks** - if the step order is known, use a pipeline. Swarm is for exploration, not execution.
+
+## Market Reality (2026)
+
+Theory and practice diverge in multi-agent adoption. The LangChain "State of Agent Engineering 2026" survey (1,300+ respondents) provides the clearest picture:
+
+**57% of companies have agents in production** — but most production agents are single-agent systems with tools. Multi-agent deployments are the exception, not the norm. The majority of production value comes from well-designed single agents with good context engineering and tool integration.
+
+**Where multi-agent is common in production:** Code review (parallel file analysis with specialized agents per concern — security, performance, style). Customer service (router agent + specialized agents per product/domain). Research (parallel search agents across different sources + synthesis agent). These are cases where the task has natural decomposition points and parallelism provides real benefit.
+
+**Where single-agent dominates:** FAQ/support chatbots, document analysis, data extraction, code generation, content creation. These are the bulk of production deployments, and a single capable agent with tools handles them well.
+
+**Enterprise platforms reinforce single-agent patterns.** Salesforce Agentforce ($800M ARR) primarily deploys single-agent workflows with deterministic orchestration. Amazon Bedrock AgentCore provides multi-agent capability but most customers use single agents. The market is telling us something: multi-agent is powerful but rarely necessary.
+
+---
 
 ## Key Takeaways
 
