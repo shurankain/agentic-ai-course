@@ -48,6 +48,8 @@ Rollback: MLOps — model version, AgentOps — prompt + tools + guardrails.
 
 **Safety & Guardrail:** Guardrail Trigger Rate (target <5%), False Positive Rate (target <1%), Safety Violation Rate (target 0%), PII Leak Rate (target 0%).
 
+**Agent-Specific Quality:** **Loop Detection Rate** — how often agents get stuck in repetitive cycles (same tool, same args, same error; target: <2% of sessions). **Decision Quality** — correctness of intermediate steps, not just the final output (did the agent choose the right tool, formulate the right query, interpret the result correctly?). **Planning Efficiency** — ratio of useful actions to total actions (an agent that reaches the goal in 5 steps is more efficient than one that takes 15 with 10 wasted steps; target varies by task complexity). These three metrics complement Session Success Rate — a session can "succeed" through an inefficient or fragile path that will not generalize.
+
 ## Agent Tracing
 
 Agent trace includes: Session metadata (ID, user, timestamp, context), LLM calls (each request with input/output), Tool calls (tools with parameters), Retrieval events (what was retrieved for RAG), Guardrail checks (which checks triggered), Timing data (latency of each step).
@@ -68,7 +70,9 @@ Contextual fields: user_id, task_type, model, tokens_in, tokens_out, latency_ms,
 
 **Phoenix (Arize):** Enterprise observability. Embedding analysis, LLM evaluation, RAG analysis, production scale. Use for enterprise deployment, RAG-heavy systems, embedding monitoring. Freemium pricing.
 
-**Braintrust:** End-to-end evaluation and observability platform. Logging, evals, prompt playground, dataset management. Growing adoption in 2025 for its unified evaluation-observability approach.
+**Braintrust:** End-to-end evaluation and observability platform. Logging, evals, prompt playground, dataset management. Growing adoption in 2025 for its unified evaluation-observability approach. Supports **merge-blocking quality gates** — PRs are blocked if evaluation quality drops below a threshold, integrating eval directly into CI/CD.
+
+**DeepEval:** Open-source evaluation framework specifically designed for agent evaluation. Key differentiator: **PlanQualityMetric** and **PlanAdherenceMetric** — metrics that evaluate the quality of an agent's plan (is the plan reasonable?) and whether the agent adhered to its plan during execution (did it follow through?). These evaluate the reasoning process, not just the final output. Essential for debugging agents that produce correct results through unreliable paths.
 
 ### Framework-Native Observability (2024-2025)
 

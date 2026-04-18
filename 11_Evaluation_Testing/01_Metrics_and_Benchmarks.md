@@ -132,6 +132,46 @@ Standard benchmarks measure model capabilities in isolation. Agent benchmarks ev
 
 **Key principle:** Public benchmarks are useful for model selection and comparison, but a custom evaluation set on your actual use case is always the most important metric. Models can be optimized for public benchmarks (Goodhart's Law), and benchmark performance may not correlate with your specific workload.
 
+### Benchmark Reliability and Gaming
+
+Benchmarks are treated as objective truth, but several systematic issues undermine this assumption — especially for the most-cited coding benchmark:
+
+**SWE-bench Verified has known reliability problems.** The SWE-Bench+ paper documented: 32.67% of patches contain **solution leakage** (the answer is already present in the issue description — the model can solve the task without understanding the code), 31.08% have suspiciously weak tests (the test suite fails to catch incorrect solutions), and 94% of tasks were created before model training cutoffs (models may have seen the issues and their solutions during pretraining).
+
+**The gap between reported and real-world performance is large.** When the SWE-Bench+ authors filtered out problematic issues, model performance dropped from 3.97% to 0.55%. A practical estimate: **80% on SWE-bench Verified corresponds to approximately 30-40% on genuinely unseen, uncontaminated tasks.** This does not mean the models are weak — it means the benchmark overstates their capability on novel problems.
+
+**Scaffolding matters more than model.** The same Claude Opus 4.5 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for why context harness determines more than model quality.
+
+**Lesson for practitioners:** Use benchmarks for **relative comparison** (model A vs model B on the same benchmark), not for absolute capability claims ("this model can solve 80% of real bugs"). Always validate benchmark results with a custom evaluation set on your actual workload. And when evaluating coding agents, test with issues from your own repositories — not public benchmarks that may be contaminated.
+
+### Cost per Correct Answer
+
+A practical metric increasingly used in production evaluations: instead of measuring accuracy alone, measure **cost per correct answer.**
+
+| Model | Accuracy | Cost per Query | Cost per Correct Answer |
+|-------|----------|---------------|------------------------|
+| Model A | 70% | $0.03 | $0.043 |
+| Model B | 75% | $2.50 | $3.33 |
+
+Model A is **77x cheaper per correct answer** despite being 5 percentage points less accurate. For production systems processing thousands of queries per day, this metric matters more than raw accuracy — a 5% accuracy improvement rarely justifies a 77x cost increase.
+
+**Evaluation cost itself matters:** LLM-as-Judge evaluation costs approximately $0.06 per sample (15 seconds). Agent-as-Judge (where an agent evaluates another agent's work through multi-step verification) costs approximately $0.96 per sample (15 minutes). Budget evaluation costs into the system design — evaluating every response is often too expensive.
+
+### What Benchmarks Don't Measure
+
+Even reliable benchmarks capture only a fraction of what matters in production:
+
+- **Error recovery** — how the agent handles failures, retries, and unexpected states
+- **Cost efficiency** — token consumption, API call count, cache utilization
+- **User satisfaction** — whether users find the agent helpful, not just technically correct
+- **Time-to-completion** — wall-clock time including tool calls, retries, and thinking
+- **Reliability/consistency** — whether the same input produces the same quality output across runs
+- **Composability** — whether the agent works well as part of a larger system
+
+A critical principle for agent evaluation: **"Evaluate results, not paths."** Agents often find valid approaches that evaluation designers did not anticipate. A code fix that differs from the gold-standard patch but passes all tests is still correct. Penalizing it because the approach differs from the expected solution is a benchmark design failure, not an agent failure.
+
+---
+
 ## Choosing Metrics
 
 **Understanding the task** — what matters to users? Factual accuracy, phrasing quality, format?

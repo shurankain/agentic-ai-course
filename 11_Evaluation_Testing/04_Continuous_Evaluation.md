@@ -40,6 +40,8 @@ Continuous evaluation transforms evaluation from a point-in-time event into an o
 
 **Coverage sampling** — targeted selection to fill gaps. If certain request types are underrepresented in evaluation data, their sampling rate is increased.
 
+**Practical starting point:** Begin with random sampling at 5-10% of traffic. This is sufficient for detecting major quality degradation. Increase to 100% sampling for high-risk agent actions — financial transactions, medical recommendations, legal advice, any action with material consequences for users. The cost of evaluating every request is justified when the cost of a missed error is high.
+
 ## A/B Testing
 
 The gold standard for comparing variants in production. Users are randomly divided into groups, each receives its own variant, and metrics are compared.
@@ -149,6 +151,37 @@ Continuous production evaluation asynchronously processes requests: the sampling
 Periodic analysis (hourly) aggregates metrics over the window, compares with the previous week's baseline, computes z-scores, and sends alerts for significant deviations (z > 2.5 for WARNING, z > 3.5 for CRITICAL).
 
 Regression testing in CI/CD on each commit loads the golden dataset, runs the model with the current configuration, generates an evaluation report, compares with the baseline, identifies regressions (degradations exceeding thresholds), and classifies them as blocking or warning. Status: FAILED if there are blocking regressions, WARNING if there are minor issues, PASSED if everything is in order. On successful merge to main, the baseline is updated.
+
+---
+
+## Simulation Testing with Synthetic Personas
+
+Automated evaluation catches regressions, and A/B testing validates improvements. But neither systematically explores the space of possible user interactions. **Simulation testing** fills this gap by generating hundreds of synthetic multi-turn conversations to find edge cases that are impossible to discover through manual testing or random sampling.
+
+**The pattern:**
+1. Define 5-10 synthetic user personas with different interaction styles: aggressive (demanding, impatient), confused (unclear queries, frequent topic changes), adversarial (intentionally trying to break the agent), verbose (long rambling inputs), non-native speaker (grammatical errors, unusual phrasing), domain expert (uses technical jargon, tests depth)
+2. For each persona, generate 20-50 multi-turn conversation scenarios covering typical workflows and known edge cases
+3. Run all conversations against the agent, measuring: task completion rate per persona, guardrail trigger rate, response quality scores, failure modes
+
+**Tools:** Maxim AI provides end-to-end simulation with synthetic personas and multi-turn trajectory testing — it simulates realistic user behavior including follow-up questions, corrections, and escalation. DeepEval (open-source) offers synthetic conversation generation with configurable personas and automated evaluation.
+
+**When to use:** Before any major deployment or model change for user-facing agents. The investment (setting up personas and scenarios) pays for itself by catching failures that would otherwise reach production users. Particularly valuable for customer service agents, onboarding assistants, and any agent where user dissatisfaction has direct business cost.
+
+---
+
+## CuP: Completion under Policy
+
+An emerging evaluation metric that combines task success with compliance: a task is considered complete **only if it was accomplished without policy violations.**
+
+**The problem it solves:** Traditional success metrics score a customer service agent that resolves a ticket as a success — even if the agent leaked PII, used inappropriate language, or violated a regulatory requirement during the resolution. CuP scores this as 0, not 1. The ticket was resolved, but the resolution violated policy.
+
+**Definition:** CuP(task) = 1 if and only if:
+- The task was completed successfully (goal achieved)
+- AND no policy violations occurred during execution (no PII leaks, no safety violations, no unauthorized actions, no regulatory breaches)
+
+**Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study ([[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]) for an example where an agent's "successful" response created a legal liability.
+
+**Expected adoption:** CuP is expected to become an enterprise standard metric by 2026-2027, particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
 
 ---
 
