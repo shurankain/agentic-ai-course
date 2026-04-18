@@ -316,7 +316,7 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 ### Tier 1: Horizontal Platforms
 
-**Salesforce Agentforce** — the enterprise market leader. $800M ARR (+169% YoY), 29,000 deals, 2.4 billion agentic work units processed (as of early 2026). Pricing: $2/conversation (vs $6-12 for a human agent). **Agentforce Script** enables hybrid reasoning — deterministic steps for policy checks, discount calculations, and ticket routing run as classic business logic, while the LLM handles only the flexible parts requiring natural language understanding. Agentforce Contact Center (March 2026) combines voice, digital channels, CRM data, and AI agents, directly attacking the Five9/Genesys/NICE market. The "work unit" as a metric is significant: it is a completed business operation that a CFO can understand, not a token count.
+**Salesforce Agentforce** — the enterprise market leader. $800M ARR (+169% YoY), 29,000 deals, 2.4 billion agentic work units processed (as of early 2026) (as of early 2026). Pricing: $2/conversation (vs $6-12 for a human agent). **Agentforce Script** enables hybrid reasoning — deterministic steps for policy checks, discount calculations, and ticket routing run as classic business logic, while the LLM handles only the flexible parts requiring natural language understanding. Agentforce Contact Center (March 2026) combines voice, digital channels, CRM data, and AI agents, directly attacking the Five9/Genesys/NICE market. The "work unit" as a metric is significant: it is a completed business operation that a CFO can understand, not a token count.
 
 **Microsoft Copilot Studio** — low-code agent building for business users. The strategy: agents in every Microsoft product (Outlook, Teams, SharePoint, Dynamics 365, GitHub). 500M+ M365 users provide unmatched distribution. The "AI tax" ($30/user/month for Copilot for M365) means 10,000 employees = $3.6M/year.
 
@@ -425,7 +425,7 @@ A frequently overlooked compliance issue: **vector DB embeddings containing pers
 
 ## Why Agent Projects Fail
 
-The statistics are sobering: **88% of agent projects fail to reach production** (industry survey, early 2026). The average cost of a failed project: **$340K**. Understanding failure patterns is as important as understanding success patterns.
+The statistics are sobering: **88% of agent projects fail to reach production** (industry survey, as of early 2026). The average cost of a failed project: **$340K**. Understanding failure patterns is as important as understanding success patterns.
 
 **Top cause: integration with existing systems (46%).** The AI works in isolation; connecting it to enterprise systems — CRM, ERP, legacy databases, identity providers — is where projects die. "Dumb RAG, Brittle Connectors, Polling Tax" — three failure modes identified by Composio: RAG that retrieves irrelevant context, integrations that break on schema changes, and agents that waste tokens polling for state instead of receiving events.
 

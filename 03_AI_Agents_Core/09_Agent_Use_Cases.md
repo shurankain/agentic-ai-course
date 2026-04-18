@@ -250,7 +250,7 @@ The agent autonomously modifies code or configuration, measures the result, and 
 
 AutoResearch represents a philosophical shift from "agents that help humans do research" to "agents that conduct research independently." The human role shifts from doing to directing — defining the metric, constraining the search space, and evaluating whether the discovered optimizations are genuinely useful or merely overfitting the metric.
 
-21K GitHub stars within weeks of release (as of April 2026). Vision: SETI@home-style distributed communities where AI agents conduct research across volunteer compute.
+21K GitHub stars within weeks of release (as of April 2026) (as of April 2026). Vision: SETI@home-style distributed communities where AI agents conduct research across volunteer compute.
 
 ---
 

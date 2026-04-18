@@ -183,7 +183,7 @@ Real-world incidents demonstrate that MCP security risks are not theoretical:
 
 ## OpenClaw: The Agent Plugin Security Catastrophe
 
-OpenClaw became the fastest-growing open-source project in GitHub history (247K stars in ~60 days, surpassing React), providing a self-hosted AI assistant for all major messengers. Its security failure is the canonical cautionary tale for agent plugin ecosystems.
+OpenClaw became the fastest-growing open-source project in GitHub history (247K stars in ~60 days as of early 2026, surpassing React), providing a self-hosted AI assistant for all major messengers. Its security failure is the canonical cautionary tale for agent plugin ecosystems.
 
 **What went wrong:** OpenClaw's "Skills" system allowed plugins with full shell access, arbitrary file read/write, and script execution with agent privileges. No sandboxing, no permission model, no code signing, no review process for the ClawHub marketplace. CVE-2026-25253 (CVSS 8.8) enabled one-click remote code execution via command injection.
 

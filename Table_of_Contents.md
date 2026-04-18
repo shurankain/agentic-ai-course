@@ -237,15 +237,21 @@
 ### 02.5 Context Engineering (`05_Context_Engineering.md`)
 - Evolution: from Prompt Engineering to Context Engineering (Karpathy 2025)
 - Context Engineering philosophy: everything that shapes the context
+- 70% of errors from context, not model quality; scaffolding > model selection
+- The Lost-in-the-Middle Problem
 - WSCI context management strategies
   - Write: generating context (scratchpads, tool outputs)
   - Select: choosing what's relevant (RAG, search, filtering)
   - Compress: compressing context (summarization, distillation)
   - Isolate: separating streams (multi-agent delegation)
+- Karpathy's Context Hierarchy (4 levels: system prompt, retrieved context, conversation, agent memory)
+- Self-Directed Context Engineering (Letta, Claude Code compaction, Agent Teams)
+- Token Budget Management (just-in-time tool loading: 85% reduction)
+- Production Context Patterns (header dedup, dynamic tool loading, compaction, semantic caching, progressive disclosure)
+- Token-Optimized Output Formats (TOON: 69% token reduction vs JSON)
+- The LLM Wiki Pattern (Karpathy, April 2026): anti-RAG for curated knowledge
 - Memory Management: file-based (CLAUDE.md pattern), MCP memory servers, vector DBs, MemGPT/Letta (historical influence)
-- Context budgets and token economics
 - MCP as Context Engineering Infrastructure (2024-2025)
-- Practical patterns: Router, Memory Manager, Summarizer
 
 ---
 
@@ -273,13 +279,19 @@
   - Wooldridge: Autonomy, Social Ability, Reactivity, Proactivity
   - Andrew Ng's 4 Agentic Design Patterns (Reflection, Tool Use, Planning, Multi-agent)
   - Validated academic patterns (ReAct, Plan-and-Execute, Self-Refine, Reflexion, ToT)
+- Willison's canonical agent definition: "LLM runs tools in a loop to achieve a goal"
+- Software 1.0 / 2.0 / 3.0 (Karpathy): human code → neural weights → agent-orchestrated
 - ReAct: Reasoning and action as a unified process
 - Plan-and-Execute: Think first, then act
 - Reflexion: Learning through self-analysis
 - LATS: Exploring the solution space
+- Graph-of-Thought (GoT): arbitrary graph structures, 62% improvement over ToT
+- ReWOO: Reasoning Without Observation, 5x token efficiency
+- The Augmented-LLM Progression (Anthropic): Augmented LLM → Workflows → Agents
+- Agent Loop Essentials: max iterations, loop detection, circuit breaker, checkpointing
+- The Karpathy Loop: universal optimization pattern from AutoResearch
 - Cognitive architectures: Inspired by the human mind
 - Choosing an architecture: Practical recommendations
-- Architecture comparison table
 
 ### 03.3 Tool Use (`03_Tool_Use.md`)
 - Introduction
@@ -316,6 +328,9 @@
 - Forgetting mechanisms
 - Persistence and storage
 - **Memory Storage Decision Guide** (file-based → pgvector → vector DB → SQL → MCP → LanceDB → JSON)
+- **Letta: From MemGPT to Production Memory** (LLM-as-OS, three-tier memory, agent editability, #1 on Terminal-Bench)
+- Mem0 (auto-fact extraction middleware), Amazon Bedrock Episodic Memory
+- **Memory Escalation Ladder** (sliding window → summarization → Mem0 → Letta → Agentic RAG → Graph RAG)
 
 ### 03.6 Computer Use Agents (`06_Computer_Use_Agents.md`)
 - Introduction: AI masters the human interface
@@ -379,21 +394,16 @@
 
 ### 03.9 Practical AI Agent Use Cases (`09_Agent_Use_Cases.md`)
 - Taxonomy of AI agent applications
-- **Coding Agents** — the dominant category
-  - Cursor, GitHub Copilot, Devin ($4B+)
-  - Architectural patterns
-- **Agentic RAG** — intelligent search
-  - Perplexity ($9B, 22M+ users, as of mid-2025)
-  - Router and Multi-Agent patterns
-- **Workflow Automation** — the no-code revolution
-  - n8n (200K+ businesses, MCP support)
-- **Voice Agents** — latency breakthrough (75ms ElevenLabs)
+- **Coding Agents** — Cursor $2B ARR, Claude Code $500M ARR, Devin $10.2B (as of early 2026). Terminal agents as new subcategory
+- **Agentic RAG** — Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-Agent patterns
+- **Workflow Automation** — n8n (200K+ businesses, MCP support)
+- **Voice Agents** — 4-tier market (ElevenLabs, Vapi, LiveKit, Bland AI)
 - **Computer Use Agents** — Anthropic, ChatGPT agent (formerly Operator) (Beta)
-- **Browser Automation** — Browser Use (27K+ stars), Amazon Nova Act
-- **Deep Research** — Gemini Deep Research, OpenAI Deep Research
-- **Code Review Agents** — automated PR review, security scanning
-- **Data Analysis Agents** — natural language to SQL/visualization
-- **Internal Employee Agents** — HR, IT helpdesk, onboarding
+- **Browser Automation** — Browser Use (50-78K+ stars), Stagehand, Playwright MCP. 80/20 production pattern
+- **Automated Research Agents (Karpathy Loop)** — AutoResearch: 630 lines, 700 experiments, universal optimization pattern
+- **Deep Research** — Gemini, OpenAI, OWL (69.09% GAIA, #1 open-source)
+- **No-Code/Low-Code Builders** — n8n (150K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
+- **Code Review / Data Analysis / Internal Employee Agents**
 - Criteria for choosing a use case
 
 ### 03.10 Resource Optimization (`10_Resource_Optimization.md`)
@@ -417,6 +427,10 @@
 - Monitoring and Cost Alerts
 - Agent Distillation: prototype → trace → fine-tune → deploy
   - Budget control: `budget_tokens`, `reasoning_effort`
+- KV-Cache Management for Multi-Turn Agents (prefix caching: 50-90% savings)
+- **Agent Project Economics** — TCO framework (dev = 25-35% of 3-year cost), complexity-based cost table
+- Build vs Buy Thresholds (<10K buy, >200K build, hybrid in between)
+- The 70/30 Hybrid Model Strategy (open-source for volume, proprietary for frontier)
 
 ---
 
@@ -431,15 +445,21 @@
 - Coordination challenges
 - Agent lifecycle
 
+### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`) — continued
+- 8-question decision framework (including cost-focused criteria)
+- Market Reality 2026 (57% have agents in production; most are single-agent)
+
 ### 04.2 Multi-Agent System Patterns (`02_MAS_Patterns.md`)
 - Architectural patterns as a design language
 - Supervisor pattern
 - Hierarchical agents
 - Peer-to-Peer collaboration
-- Debate pattern (Adversarial/Debate)
+- Debate pattern (with Perplexity Model Council example)
 - Swarm Intelligence
 - Mixture of Experts for agents
 - Handoff pattern
+- **Fan-Out/Fan-In** — parallel dispatch + aggregation (DAG with barrier sync)
+- **When Single-Agent Suffices** — reasoning models reduce multi-agent need; 10x cost consideration
 
 ### 04.3 Agent Orchestration (`03_Agent_Orchestration.md`)
 - The conductor of an invisible orchestra
@@ -481,6 +501,8 @@
 - MCP Architecture (Host, Client, Server)
 - MCP advantages
 - MCP in the context of agent systems
+- **MCP Apps (January 2026)** — interactive UI components in conversations
+- **Protocol Landscape** — MCP (agent→tool) / A2A (agent→agent) / ANP (agent→open network, experimental)
 
 ### 05.2 MCP Components (`02_MCP_Components.md`)
 - Introduction to the MCP component model
@@ -666,7 +688,10 @@
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
 - Provider SDKs: OpenAI Agents SDK (March 2025), Claude SDK
-- Framework selection criteria
+- **Fast-Growing Frameworks:** Pydantic AI (type-safe Python), Mastra (TypeScript), Agno (39K+ stars), smolagents (HuggingFace), Vercel AI SDK (20M+ downloads/month)
+- **Specialized:** DSPy (automatic prompt optimization), Dify (93K+ stars, low-code)
+- **JVM Ecosystem Parity:** JetBrains Koog (March 2026), MCP Java SDK 1.0 GA, Spring AI MCP starters, Java 26
+- Framework selection criteria (updated by language/need)
 
 ### 07.1 LangChain4j (`01_LangChain4j.md`)
 - Introduction to LangChain4j
@@ -743,6 +768,9 @@
   - Function calling
   - Grammar-constrained
 - Choosing the method for your task
+- **Provider Comparison** (OpenAI strict, Anthropic tool use, Google controlled generation, Outlines/Guidance)
+- **Structured Extraction Tooling** (Instructor, BAML, Outlines — dev/production/cost-critical)
+- **Token-Optimized Output Notation (TOON)** — 69% token reduction vs JSON
 - Frameworks and libraries
 
 ### 08.2 Data Extraction (`02_Data_Extraction.md`)
@@ -750,6 +778,7 @@
 - Types of extraction tasks
   - Named Entity Recognition
   - Relation extraction
+- **Multi-modal extraction** — ColPali (vision-based, no OCR, +20% nDCG@5)
   - Event extraction
 - Extraction strategies
 - Working with context
@@ -799,6 +828,7 @@
 - Computer vision in conversational systems
 - Multimodal agents
 - **MCP Integration for Voice Agents** (latency budgets, speech-friendly tool responses)
+- **Voice Agent Market Structure (2026)** — 4 tiers: Full-Stack (ElevenLabs), Orchestration (Vapi), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Cost comparison table. Unit economics: AI $0.50-2.00/resolution vs human $15-40
 - Voice interface design specifics
 - Security and ethics of multimodal systems
 
@@ -902,6 +932,8 @@
 - DeepSeek-R1: Open-Source Reasoning
   - Pure RL approach
   - Distillation into small models
+- **The Test-Time Compute Paradox** — longer CoT does NOT guarantee better answers; correct solutions often shorter
+- **Reasoning for Verification, Not Generation** — cheap model generates, reasoning model verifies (cost optimization)
 - Compute-Optimal Inference Strategies
   - 4× efficiency improvement
   - Smaller models + TTC vs larger models
@@ -1002,6 +1034,9 @@
 - Agent-specific evaluation benchmarks
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
+- **Benchmark Reliability and Gaming** — SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
+- **Cost per Correct Answer** — practical metric (77x cost difference hidden by 5% accuracy gap)
+- **What Benchmarks Don't Measure** — error recovery, cost efficiency, consistency, composability
 - Principles of metric selection
 - Building an evaluation dataset
 
@@ -1047,6 +1082,9 @@
   - Importance sampling
   - Error-triggered sampling
   - Coverage sampling
+  - Practical starting point: 5-10% random, 100% for high-risk
+- **Simulation Testing with Synthetic Personas** (Maxim AI, DeepEval)
+- **CuP: Completion under Policy** — task success + policy compliance
 - A/B testing
 - A/B test metrics
   - Guardrail metrics
@@ -1143,6 +1181,8 @@
 - Key AgentOps metrics
   - Session Success Rate
   - Token Efficiency
+  - **Agent-Specific Quality:** Loop Detection Rate, Decision Quality, Planning Efficiency
+- **DeepEval** (PlanQualityMetric, PlanAdherenceMetric for agent plans)
   - Tool Execution Metrics
   - Guardrail Trigger Rate
   - Human Escalation Rate
@@ -1170,6 +1210,9 @@
 - Server-Sent Events and streaming
 - WebSocket for interactive agents
 - Circuit Breaker and Fallback strategies
+- **Multi-Provider Failover Architecture** (LiteLLM, cost-aware routing)
+- **Serverless Deployment** (Lambda/Cloud Functions — constraints and when to use)
+- **Agent-Specific Deployment** (long sessions, graceful termination, resource unpredictability, shm-size)
 - Timeout management
 - LLM response caching
   - Exact match caching
@@ -1209,10 +1252,12 @@
 
 ### 14.1 Prompt Injection (`01_Prompt_Injection.md`)
 - A new class of vulnerabilities
+- OWASP Top 10 for LLM Applications v2.0 (2025)
+- **OWASP Top 10 for Agentic Applications (2026)** — ASI01-ASI10 (goal hijacking, tool misuse, supply chain, etc.)
 - Anatomy of direct injection attacks
 - Indirect Prompt Injection: the hidden threat
 - Jailbreaking: bypassing restrictions
-- Multi-layered defense
+- Multi-layered defense, **Spotlighting** technique
 - Sandwich Defense and context isolation
 - LLM-as-Guard: using the model for protection
 - System prompt protection
@@ -1232,11 +1277,12 @@
 - Principle of least privilege
 - Permission System for tools
 - Code execution sandboxing
-- Static code analysis
+- **OWASP MCP Top 10** (Tool Poisoning, NeighborJack, Model Misbinding, Context Spoofing)
+- MCP Security Incidents (mcp-remote RCE, Anthropic Git MCP CVEs, Agent ROME, 84% attack success rate)
+- **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
+- **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
+- **Agent Governance at Scale** (Microsoft Agent Governance Toolkit, NVIDIA 9 controls)
 - Human-in-the-Loop
-- Rate Limiting and anomalies
-- Action logging and auditing
-- Graceful degradation
 - Agent security testing
 
 ### 14.4 Moderation and Compliance (`04_Moderation_and_Compliance.md`)
@@ -1663,6 +1709,16 @@
   - Center of Excellence vs Distributed
   - AI Product Manager as a new role
 - **CTO's Checklist**
+- **Enterprise Agent Platforms (2025-2026)**
+  - Tier 1 Horizontal: Salesforce Agentforce ($800M ARR), Microsoft Copilot Studio, Amazon Bedrock AgentCore
+  - Tier 2 Vertical: Sierra ($4.5B, Ghostwriter), Harvey (legal)
+  - Tier 3 Embedded: ServiceNow, SAP Joule
+  - Anthropic: Claude Managed Agents, Claude Cowork
+- **Production Case Studies** — Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
+- **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
+- **Enterprise Integration Patterns** — 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
+- **GDPR and Agents** — vector DB embeddings = personal data, Article 22, PII detection pipeline
+- **Why Agent Projects Fail** — 88% failure rate, $340K average cost, integration #1 cause (46%)
 
 ---
 
