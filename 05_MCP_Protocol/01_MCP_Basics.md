@@ -182,6 +182,22 @@ This blurs the line between a tool call and an application. An MCP server for a 
 
 MCP Apps represent the evolution of MCP from a data protocol to an **application platform**. The implications for agent UX are significant: agents can provide rich, interactive responses rather than text-only outputs, without requiring custom frontend development for each integration.
 
+## MCP Server Cards and Discovery
+
+As the MCP ecosystem grew to 10,000+ servers, discovering the right server for a task became a challenge. **MCP Server Cards** address this by providing a standard for exposing structured server metadata via a `.well-known` URL. A browser, crawler, or registry can discover a server's capabilities — what tools it provides, what resources it exposes, what authentication it requires — without connecting to it or starting a session.
+
+This is analogous to OpenAPI specification files for REST APIs: a machine-readable description of capabilities that enables automated discovery and cataloging. The **MCP Registry** (launched in the second half of 2025) serves as the single source of truth for available MCP servers, supporting both public servers and private sub-registries that organizations can customize for their specific needs.
+
+## MCP Tasks: Long-Running Operations
+
+**MCP Tasks** (formalized as SEP-1686) provide first-class support for long-running asynchronous operations — a critical capability for agent orchestration where tool calls may take minutes or hours rather than milliseconds.
+
+A Task represents an operation with a lifecycle: created → running → completed (or failed/cancelled). During execution, the server sends **progress updates** (percentage complete, status messages) and can produce **partial results** (intermediate outputs available before final completion). The client can **cancel** a running task if it is no longer needed.
+
+**Why this matters for agents:** Without Tasks, an agent calling a long-running tool (generating a report, running a CI pipeline, processing a large document set) must either block (wasting context window time) or implement custom polling logic. Tasks make this a protocol-level concern — the agent issues a tool call, receives a task ID, and can continue other work while monitoring progress asynchronously.
+
+---
+
 ## The Protocol Landscape: MCP, A2A, and ANP
 
 MCP exists alongside two complementary protocols at different layers of the agent communication stack:

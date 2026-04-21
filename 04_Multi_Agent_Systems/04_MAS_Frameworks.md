@@ -188,7 +188,9 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 ### When to Use
 
-Microsoft Agent Framework is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration as the framework matures.
+**Microsoft Agent Framework reached 1.0 GA on April 3, 2026** — the first stable release with long-term support. Key additions in 1.0: stable APIs (no more preview churn), full MCP support for tool discovery and invocation, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI** that visualizes agent execution, message flows, and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic Claude, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface (`Microsoft.Agents.AI`).
+
+Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration — the 1.0 API is now locked for servicing.
 
 ### Migration from AutoGen / Semantic Kernel
 
@@ -207,6 +209,10 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 ### Key Features
 
 **Gemini integration:** native access to Gemini 2.5/3 Pro/Flash capabilities including long context (1M+ tokens), multimodal input, and grounding through Google Search. **A2A support:** built-in support for the Agent-to-Agent protocol for inter-agent communication. **Vertex AI deployment:** managed deployment with auto-scaling, monitoring, and enterprise SLA.
+
+**ADK for Go 1.0** (April 2026) — production-ready Go SDK with native OpenTelemetry integration for deep tracing, a plugin system for self-healing logic, human-in-the-loop confirmations for sensitive operations, and YAML-based configurations for rapid iteration. Google's ADK is now the **only Big Tech framework supporting 4 languages** (Python, TypeScript, Java, Go).
+
+**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]).
 
 ### When to Use
 

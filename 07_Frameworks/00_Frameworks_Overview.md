@@ -108,7 +108,7 @@ CrewAI offers a declarative approach: agents as a "team" with roles. Instead of 
 
 **Process** defines the execution mode: sequential (agents work one after another, passing results to the next) or hierarchical (a manager agent distributes tasks among worker agents).
 
-**When to use CrewAI**: multi-agent systems with clearly defined roles (e.g., a research team with researcher, writer, reviewer), when simplicity matters more than flexibility, for a quick start with multi-agent without deep framework study.
+**When to use CrewAI**: multi-agent systems with clearly defined roles (e.g., a research team with researcher, writer, reviewer), when simplicity matters more than flexibility, for a quick start with multi-agent without deep framework study. CrewAI v1.12 (April 2026) adds agent skills, Qdrant Edge memory backend, and hierarchical memory isolation.
 
 ---
 
@@ -142,7 +142,9 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 **Current state**: AutoGen 0.4 was the last major release. The project continues to receive security updates but no new features. Microsoft's strategic investment has shifted to **Microsoft Agent Framework**, which unifies concepts from AutoGen (event-driven multi-agent patterns) and Semantic Kernel (plugin/function model, enterprise integrations).
 
-**For new projects**: use Microsoft Agent Framework for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments can continue operating but should plan migration to Microsoft Agent Framework.
+**Microsoft Agent Framework 1.0 GA** (April 3, 2026): The 1.0 release locked the API surface for long-term servicing. Ships with full MCP support for tool discovery, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI debugger** that visualizes agent execution and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface.
+
+**For new projects**: use Microsoft Agent Framework 1.0 for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should now plan migration — the 1.0 API is stable.
 
 ---
 
@@ -150,7 +152,7 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 Beyond the established leaders and cloud providers, several frameworks have gained significant traction:
 
-**Pydantic AI** — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Backed by the same team that made Pydantic the de facto data validation library in the Python ecosystem. Best for: Python teams that value type safety and reliability.
+**Pydantic AI** (v1.71, April 2026) — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, and a cross-provider **Thinking capability**. Best for: Python teams that value type safety and reliability.
 
 **Mastra** — TypeScript-first agent framework from the team behind Gatsby. 19K+ GitHub stars (as of early 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). Best for: TypeScript/frontend teams building agent-powered web applications.
 
@@ -177,6 +179,14 @@ The JVM agent ecosystem reached parity with Python in 2025-2026:
 **Spring AI MCP starters** — `spring-ai-starter-mcp-client` and `spring-ai-starter-mcp-server` provide turnkey MCP integration for Spring Boot applications. One dependency in `pom.xml` connects a Spring Boot application to any MCP server.
 
 Java 26 (March 2026) is positioned as an "AI-first platform" with value types, structured concurrency, and other features that benefit agent workloads. Combined with LangChain4j, Spring AI, and now Koog, the JVM ecosystem offers production-grade agent development on par with Python.
+
+### Open-Weight Models for Agent Workloads
+
+Three major open-weight model families power self-hosted agent deployments:
+
+- **Llama 4** (Meta) — MoE architecture, 10M token context (Scout), strong ecosystem and tooling. Llama License.
+- **Qwen 3** (Alibaba) — 119 languages, hybrid reasoning mode, Apache 2.0. Broadest multilingual support.
+- **Gemma 4** (Google, April 2026) — newest entrant. 4 sizes: E2B, E4B, 26B MoE, 31B Dense. Natively multimodal (text + images), Apache 2.0. Designed for edge AI and personal AI — the smallest models (E2B, E4B) run on mobile devices and laptops. Fills the gap for on-device multimodal agents that larger families cannot serve.
 
 ---
 
