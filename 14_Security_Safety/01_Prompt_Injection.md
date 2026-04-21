@@ -54,6 +54,8 @@ The framework was developed through collaboration with over 100 industry experts
 
 Three of the top four risks (ASI01, ASI02, ASI04) revolve around the boundary between what an agent intends to do and what it actually does — a category of risk that simply does not exist for non-agentic LLM applications. Defending against these requires architectural decisions (sandboxing, permission systems, human-in-the-loop) rather than input/output filtering alone. See [[03_Agent_Security|Agent Security]] for implementation patterns.
 
+**The frontier of AI cyber capability (April 2026):** Anthropic's **Claude Mythos Preview** demonstrates what happens when agent capabilities extend into the security domain — the model achieves 73% success on expert-level cyber-attack simulations that no model could complete before April 2025. Anthropic restricted access to 12 founding partners due to "the scale and sophistication of the cyberattacks it could enable." OpenAI responded with **GPT-5.4-Cyber**, a model specialized for cyber defense with access gated through Trusted Access for Cyber (TAC). This development validates ASI04 (Unexpected Code Execution) and ASI06 (Excessive Permissions) as critical risks: frontier models are becoming more capable attackers, not just targets. The security community must now contend with models that can autonomously discover and exploit vulnerabilities — making the Agentic Top 10 more urgent, not less.
+
 ## Attack Taxonomy
 
 **Direct Injection** — the attacker directly includes malicious instructions. Override phrases like "Ignore previous instructions", pseudo-system messages "[SYSTEM]: New directive", role hijacking "You are now DAN".

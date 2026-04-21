@@ -179,6 +179,12 @@ Real-world incidents demonstrate that MCP security risks are not theoretical:
 
 **Attack success rates (as of early 2026):** The Agent Security Bench (ICLR 2025) measured an average attack success rate against agent systems exceeding 84%. This number reflects the systemic immaturity of agent security — most deployed agents lack basic defenses against goal hijacking and tool manipulation.
 
+**Vercel/Context.ai breach (April 2026):** The incident originated with a compromise of Context.ai, a third-party AI tool used by a Vercel employee. The attacker gained access through the AI tool's credentials, exposing limited customer credentials on Vercel's platform. This demonstrates that the AI tool supply chain extends beyond model providers to the entire AI tooling ecosystem — developer tools, observability platforms, and AI middleware are all attack surfaces.
+
+**Mercor AI/LiteLLM breach (2026):** AI recruiting startup Mercor was compromised through LiteLLM, a widely used open-source AI framework for unified LLM API access. The attack vector was not Mercor's own code but a trusted dependency — highlighting that supply chain attacks now target AI infrastructure libraries, not just models or training data. Any organization using LiteLLM (or similar proxy libraries) inherits the security posture of that dependency.
+
+**AI agent compromised 600+ firewalls (2026):** An autonomous AI agent compromised over 600 firewalls across 55 countries without a human operator — one of the first documented cases of fully autonomous AI-driven network attacks at scale. AI-enabled attacks rose 89% year-over-year (as of early 2026). The threat landscape is shifting: attackers increasingly target agent orchestration layers and supply chains rather than model outputs directly.
+
 **Lessons:** Always vet MCP servers before connecting (check for known CVEs), prefer OAuth 2.1 over static secrets, never expose MCP servers without authentication, and treat tool descriptions from untrusted servers as potential prompt injection vectors.
 
 ## OpenClaw: The Agent Plugin Security Catastrophe
@@ -214,7 +220,7 @@ Container-based sandboxing (Docker) provides baseline isolation but may be insuf
 
 ## Agent Governance at Scale
 
-As agent deployments grow from experimental to enterprise-wide, governance becomes a blocking requirement. The gap is stark: 80.9% of teams have deployed agents in production, but only 14.4% obtained security approval before deployment (industry survey, early 2026).
+As agent deployments grow from experimental to enterprise-wide, governance becomes a blocking requirement. The gap is stark: 80.9% of teams have deployed agents in production, but only 14.4% obtained security approval before deployment. Further: **36% of organizations lack any formal plan for supervising AI agents**, and **67% of executives believe their company has already suffered a data leak or breach due to unapproved AI tools** (industry surveys, as of early 2026).
 
 **Microsoft Agent Governance Toolkit (April 2026):** An open-source framework for runtime agent security providing goal hijacking protection (detecting when agent objectives diverge from the intended task), tool misuse prevention (monitoring tool call patterns for anomalies), and policy enforcement (declarative rules for what agents can and cannot do). Designed to be framework-agnostic — works with OpenAI Agents SDK, LangGraph, and custom implementations.
 

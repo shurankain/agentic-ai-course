@@ -12,9 +12,11 @@
 
 While the previous chapters of this course were technical, this chapter is strategic. It is addressed to those who make decisions about AI adoption in organizations: CTOs, VPs of Engineering, technical directors. Here we will discuss what happens in practice when an enterprise begins AI transformation, what problems arise, and how to avoid them.
 
-The 2025 statistics are unambiguous: AI is no longer an experimental technology. Over 80% of companies actively use AI in one form or another. However, another statistic is equally unambiguous: only 25% of AI initiatives achieve the expected ROI. The gap between "using AI" and "deriving business value from AI" is enormous.
+The statistics as of early 2026 are striking in their contradictions. **97% of executives say their company deployed AI agents in the past year**, and **52% of employees already use agents** in their daily work. AI is no longer experimental — it is pervasive. However: **79% of organizations face challenges in adoption** (a double-digit increase from 2025), only **29% see significant ROI from generative AI** (23% from AI agents specifically), and **54% of C-suite executives admit AI adoption "is tearing their company apart"** despite the fact that 59% of companies invest over $1 million annually in AI technology (as of early 2026).
 
-Gartner predicts that 40% of agentic AI projects will fail by 2027 due to insufficient governance and lack of clear management processes. This does not mean that agentic AI does not work — it means that organizations underestimate the complexity of adoption.
+The gap between adoption and value extraction is enormous. AI super-users deliver **5x productivity gains**, but the median organization sees modest returns. The difference is organizational execution, not technology. Telecom leads agentic AI adoption at 48%, followed by retail/CPG at 47% — industries with high volumes of repetitive customer interactions where agent ROI is most measurable.
+
+Only **34% of organizations successfully implement agentic AI systems** despite high investment levels. Gartner predicted that 40% of agentic AI projects will fail by 2027 — early data suggests the failure rate may be even higher (88% in some surveys). This does not mean that agentic AI does not work — it means that organizations underestimate the complexity of adoption.
 
 ---
 
