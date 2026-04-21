@@ -158,7 +158,7 @@ Production-like mode, standard benchmark_serving scripts, identical load paramet
 **Reference results Llama-2-7B A100** (historical baseline; current benchmarks typically use Llama-3-8B+ on H100):
 vLLM: 2,500 tok/s, TTFT 45ms, 14.2GB. SGLang single-turn: 2,400 tok/s, multi-turn: 4,200 tok/s. TensorRT-LLM: 2,900 tok/s, TTFT 38ms, less memory. TGI: slightly lower throughput, easier to use.
 
-On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok/s vs vLLM's ~12,500 tok/s in high-throughput scenarios (as of late 2025, SGLang v0.5.9+).
+On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok/s vs vLLM's ~12,500 tok/s — a **29% throughput advantage** in high-throughput scenarios (as of early 2026). On DeepSeek V3, SGLang delivers **3.1x faster inference** than vLLM. Prefill-decode disaggregation with large-scale expert parallelism reaches 52,300 input tok/sec and 22,300 output tok/sec per node across 96 H100 GPUs. SGLang now runs natively on TPU via the SGLang-Jax backend, and achieved **25x inference performance on NVIDIA GB300 NVL72** (February 2026). Disaggregated serving implementations across both vLLM and SGLang demonstrate up to 6.4x throughput improvements and 20x reduction in latency variance — this is now a production feature, not experimental.
 
 ## Production Considerations
 

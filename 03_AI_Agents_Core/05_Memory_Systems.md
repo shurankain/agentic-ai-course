@@ -150,6 +150,8 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 The three approaches represent different points on the automation-control spectrum: Mem0 (fully automated, no agent control), Letta (agent-directed), and Bedrock episodic memory (experience-based, automated but structured).
 
+**The 2026 production pattern:** The most effective production systems do not choose a single memory architecture. Instead, they combine a small stack of complementary systems: **vector memory** for fast fuzzy recall (semantic search over facts and preferences), **an episodic buffer** for short-term coherence (maintaining context within the current task), and **a graph** for entity-heavy queries (navigating relationships between people, products, concepts). The agent routes between them based on query type — a factoid question hits the vector store, a "what happened last time?" question hits the episodic buffer, and a "how is X connected to Y?" question hits the graph. This hybrid pattern consistently outperforms any single memory architecture in production benchmarks (as of early 2026).
+
 ---
 
 ## Memory Escalation Ladder

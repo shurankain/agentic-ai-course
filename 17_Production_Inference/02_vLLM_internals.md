@@ -168,7 +168,9 @@ Tensor parallelism makes large models accessible through transparent distributio
 
 Production-ready out of the box with an OpenAI-compatible API.
 
-vLLM V1 extends capabilities: multi-modal serving (images, audio, video), multi-LoRA serving (hundreds of fine-tuned variants on shared base), disaggregated prefill/decode (30-60% throughput gain), structured output enforcement, and speculative decoding integration.
+vLLM V1 extends capabilities: multi-modal serving (images, audio, video), multi-LoRA serving (hundreds of fine-tuned variants on shared base), disaggregated prefill/decode, structured output enforcement, and speculative decoding integration.
+
+**Disaggregated serving maturity (as of early 2026):** What was initially a 30-60% throughput gain has matured significantly. Across both vLLM and SGLang, disaggregated prefill-decode implementations now demonstrate **up to 6.4x throughput improvements and 20x reduction in latency variance**. The technique is no longer experimental — it is a production feature that most high-throughput deployments should evaluate. The core insight remains: prefill is compute-bound (benefits from high-FLOPS GPUs), while decode is memory-bandwidth-bound (benefits from high-bandwidth memory). Running them on separate, appropriately configured GPU pools eliminates the resource contention that degrades both phases when they share hardware.
 
 ---
 
