@@ -14,7 +14,7 @@ The history of AI assistants in programming began with simple autocomplete — s
 
 This chapter examines the spectrum from interactive assistants (Cursor, Copilot) to fully autonomous agents (Devin, OpenHands). Understanding the capabilities and limitations of each approach is critical for an AI architect making tooling decisions for a development team.
 
-As Simon Willison observed in November 2025, "AI coding agents crossed from 'mostly works' to 'actually works'" — a turning point the industry now treats as the commercial inflection for the category. The market data supports this: Cursor reached $2B ARR with 2M+ users (50% of Fortune 500 companies, as of early 2026), GitHub Copilot grew to 4.7M paying subscribers (90% of Fortune 100), and Claude Code hit $500M ARR run rate within its first two months. On SWE-bench Verified, the top agent score reached 82.1% (Sonnet 5 "Fennec"), approaching estimated human performance of 75-90% on the same tasks.
+As Simon Willison observed in November 2025, "AI coding agents crossed from 'mostly works' to 'actually works'" — a turning point the industry now treats as the commercial inflection for the category. The market data supports this: Cursor reached $2B ARR with 2M+ users (50% of Fortune 500 companies, as of early 2026), GitHub Copilot grew to 4.7M paying subscribers (90% of Fortune 100), and Claude Code hit $500M ARR run rate within its first two months. On SWE-bench Verified, the top agent score reached 87.6% (Claude Opus 4.7, April 2026), with the restricted Claude Mythos Preview achieving 93.9%. Agents have now closed — and by some measures exceeded — the estimated human performance range of 75-90%.
 
 ---
 
@@ -233,6 +233,14 @@ OpenAI's cloud-based autonomous coding agent, released mid-2025:
 
 **Trade-offs:** Excellent for batch-style development (assign multiple tasks, review PRs later), but less suitable for interactive, iterative development where real-time feedback is important.
 
+**Codex capabilities expansion (April 2026):** Codex has evolved significantly beyond its initial PR-generation workflow:
+- **Computer use** — Codex can operate macOS apps by seeing, clicking, and typing, enabling native app testing, simulator flows, and GUI-only bug reproduction
+- **In-app browser** — open local or public pages that do not require sign-in, comment directly on the rendered page, and ask Codex to address page-level feedback
+- **Image generation** — using gpt-image-1.5 to generate and iterate on images for product concepts, frontend designs, mockups, and games within the same coding workflow
+- **90+ plugins** — integrations with Atlassian Rovo, CircleCI, CodeRabbit, GitLab Issues, Microsoft Suite, Neon (Databricks), Remotion, Render, and others
+- **$100/month Pro plan** for longer, high-intensity Codex sessions (in addition to the existing ChatGPT Pro/Team inclusion)
+- **GPT-5.3-Codex-Spark** — a research preview of a smaller, real-time coding model delivering 1000+ tokens per second for near-instant feel
+
 ### Windsurf (formerly Codeium)
 
 Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE:
@@ -273,19 +281,22 @@ The key point: evaluation is **functional**, not textual. The agent does not nee
 **SWE-bench Verified (2024):**
 Curated subset with verified solutions (500 tasks, manually verified):
 
-| Model/Agent | Score |
-|-------------|-------|
-| Human (estimated) | ~75-90% |
-| Claude Opus 4.6 Thinking (early 2026) | 79.2% |
-| Gemini 3 Flash (early 2026) | 76.2% |
-| GPT-5.2 (early 2026) | 75.4% |
-| Claude Sonnet 4 (2025) | 72.7% |
-| Claude Opus 4 (2025) | 72.0% |
-| OpenAI o1 | 48.9% |
-| GPT-4o | 33.2% |
-| Devin (launch, 2024) | 13.86% |
+| Model/Agent | Score | Date |
+|-------------|-------|------|
+| Claude Mythos Preview | 93.9% | April 2026 (restricted access) |
+| **Claude Opus 4.7** | **87.6%** | April 2026 |
+| GPT-5.3-Codex | 85.0% | 2026 |
+| Human (estimated) | ~75-90% | — |
+| Claude Opus 4.6 Thinking | 79.2% | Early 2026 |
+| Gemini 3 Flash | 76.2% | Early 2026 |
+| GPT-5.2 | 75.4% | Early 2026 |
+| Claude Sonnet 4 | 72.7% | Mid-2025 |
+| Claude Opus 4 | 72.0% | Mid-2025 |
+| OpenAI o1 | 48.9% | 2024 |
+| GPT-4o | 33.2% | 2024 |
+| Devin (launch) | 13.86% | 2024 |
 
-*Note:* Scores continue to improve rapidly. By early 2026, the best agents approach 80% (Claude Opus 4.6 Thinking: 79.2%), nearing estimated human performance. SWE-bench Pro (a harder variant) was introduced where top agents score ~23%.
+*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026). Top agents now exceed the upper bound of estimated human performance. SWE-bench Pro (a harder variant) shows a more sober picture: Claude Opus 4.7 at 64.3%, GPT-5.4 at 59.1% — the ~23-point gap between Verified and Pro persists, consistent with the benchmark reliability concerns discussed in [[../../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]].
 
 ### SWE-bench Pro (2025)
 

@@ -21,9 +21,12 @@ Understanding the LLM provider landscape is not simply a matter of picking the "
 OpenAI popularized LLMs through ChatGPT and continues to set the pace of the industry. Their API remains the de facto standard that other providers emulate.
 
 **Frontier models:**
-- **GPT-5.2** — the current flagship (late 2025/early 2026), natively multimodal (text, images, audio). Unified standard and reasoning capabilities. 128K–1M context.
-- **GPT-5** — previous flagship. Still widely deployed. 128K–1M context.
+- **GPT-5.4** — the current flagship (March 2026). $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
+- **GPT-5.4-Cyber** — specialized cybersecurity model for vulnerability analysis and threat detection. Access via Trusted Access for Cyber (TAC), a tiered identity verification system that grants broader access to verified security professionals.
+- **GPT-5.2** — previous flagship (late 2025/early 2026), natively multimodal. 128K–1M context. Still widely deployed.
+- **GPT-5** — earlier generation. 128K–1M context.
 - **GPT-5.2-Codex / GPT-5.3-Codex** — specialized agentic coding models optimized for autonomous multi-step code generation and tool use.
+- **GPT-5.3-Codex-Spark** — research preview (April 2026). First model designed for real-time coding, optimized for near-instant feel — delivers 1000+ tokens per second.
 - **GPT-4o** — deprecated from ChatGPT (February 13, 2026). API still available but being phased out. 128K context.
 - **GPT-4.1** — deprecated from ChatGPT (February 13, 2026) and API (February 16, 2026). Previously optimized for coding and instruction following.
 
@@ -51,11 +54,14 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following, strong code generation, and long context capabilities.
 
 **Claude model family (latest generation):**
-- **Claude Opus 4.6** — most powerful model for the hardest tasks. Deep reasoning, complex analysis, extended autonomous workflows. Significantly cheaper than the original Opus 4 ($5/$25 vs $15/$75 per 1M tokens).
-- **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Benchmark leader in code generation.
+- **Claude Opus 4.7** — the current flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP — first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning — the model decides how much to think based on task complexity.
+- **Claude Opus 4.6** — previous flagship. Still widely deployed. Deep reasoning, complex analysis, extended autonomous workflows. $5/$25 per 1M tokens.
+- **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
 - **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
 
-*Note:* Claude Opus 4 / Sonnet 4 remain available but have been superseded by the 4.6 generation (released early 2026).
+*Note:* Claude Opus 4 / Sonnet 4 remain available but have been superseded by the 4.6/4.7 generation.
+
+**Claude Mythos Preview** — Anthropic's most capable model, achieving 93.9% on SWE-bench Verified (as of April 2026). Access is restricted to 12 founding partners (AWS, Apple, Microsoft, Google, Cisco) and approximately 40 additional organizations responsible for critical software infrastructure. Anthropic restricted access due to concerns about the "scale and sophistication of the cyberattacks it could enable" — the model succeeds 73% of the time on expert-level cyber-attack simulations that no model could complete before April 2025. Mythos represents the frontier where AI capability and AI safety concerns directly collide.
 
 **Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
@@ -240,6 +246,16 @@ Alibaba's latest series, leading many benchmarks and offering the broadest size 
 - Asian language markets
 - Edge deployment (strong small models down to 0.6B)
 
+### Google Gemma 4
+
+Google's newest open-weight family (April 2, 2026), distinct from the proprietary Gemini models. Designed for edge AI and personal AI development.
+
+**Models:** Four sizes — Gemma 4 E2B (Effective 2B), E4B (Effective 4B), 26B MoE, and 31B Dense. All released under Apache 2.0 license. Natively multimodal (text + images).
+
+**Key differentiator:** The smallest open multimodal models that run on consumer hardware. E2B runs on mobile devices, E4B on laptops, 26B MoE on a single GPU. Positioned for on-device AI, privacy-preserving applications, and development environments where sending data to cloud APIs is unacceptable.
+
+**When to choose Gemma 4:** Edge/mobile deployment, on-device AI assistants, privacy-sensitive applications where no data leaves the device, development and testing of multimodal capabilities without GPU servers.
+
 ### Open-Source Comparison Table
 
 | Criterion | DeepSeek R1 | Llama 4 Maverick | Qwen 3 235B |
@@ -327,15 +343,16 @@ The response typically contains:
 
 Cost is a critical factor when choosing a provider and model. All providers charge by token count, with input and output tokens priced differently. Prices are quoted **per 1M tokens** (the industry convention since 2025).
 
-### Pricing Tiers (approximate, early 2026)
+### Pricing Tiers (approximate, April 2026)
 
 **Reasoning models:**
 
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
+| Claude Opus 4.7 (extended thinking) | $5.00 | $25.00 | Current Anthropic flagship, 87.6% SWE-bench |
 | o3 | $2.00 | $8.00 | 80% price cut since launch (June 2025) |
 | o4-mini | $1.10 | $4.40 | Cost-efficient reasoning |
-| Claude Opus 4.6 (extended thinking) | $5.00 | $25.00 | Thinking via budget_tokens |
+| Claude Opus 4.6 (extended thinking) | $5.00 | $25.00 | Previous-gen, still widely deployed |
 | Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Most advanced Google reasoning |
 | Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
@@ -343,6 +360,7 @@ Cost is a critical factor when choosing a provider and model. All providers char
 
 | Model | Input | Output |
 |--------|-------|--------|
+| GPT-5.4 | $2.50 | $15.00 |
 | GPT-5.2 | $1.75 | $14.00 |
 | GPT-5 | $1.25 | $10.00 |
 | GPT-4o | $2.50 | $10.00 |
