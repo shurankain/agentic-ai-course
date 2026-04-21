@@ -76,9 +76,9 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-5.2, GPT-5, o3, o4-mini)
-  - Anthropic (Claude Opus 4.6, Sonnet 4.6, Haiku 4.5)
-  - Google (Gemini 3.1 Pro, 3 Flash, 2.5 Pro/Flash)
+  - OpenAI (GPT-5.4, GPT-5.2, o3, o4-mini, GPT-5.4-Cyber, GPT-5.3-Codex-Spark)
+  - Anthropic (Claude Opus 4.7, Sonnet 4.6, Haiku 4.5, Mythos Preview — restricted access)
+  - Google (Gemini 3.1 Pro, 3 Flash, 2.5 Pro/Flash; Gemma 4 open-weight)
   - Meta (Llama)
   - Mistral
 - API structure: common principles
@@ -360,7 +360,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96% → 79.2% (Claude Opus 4.6 Thinking)
+  - Evolution: 1.96% → 87.6% (Claude Opus 4.7, April 2026); Mythos Preview 93.9% (restricted)
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan → Edit → Test → Debug loop
@@ -502,6 +502,8 @@
 - MCP advantages
 - MCP in the context of agent systems
 - **MCP Apps (January 2026)** — interactive UI components in conversations
+- **MCP Server Cards** — `.well-known` metadata for automated discovery
+- **MCP Tasks (SEP-1686)** — long-running async operations with progress, cancellation, partial results
 - **Protocol Landscape** — MCP (agent→tool) / A2A (agent→agent) / ANP (agent→open network, experimental)
 
 ### 05.2 MCP Components (`02_MCP_Components.md`)
@@ -683,7 +685,7 @@
 - **Key player comparison table**
   - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month (as of early 2026)
   - CrewAI: 45K+ stars, $18M Series A (as of early 2026)
-  - AutoGen → Microsoft Agent Framework (merge Q1 2026)
+  - AutoGen → Microsoft Agent Framework **1.0 GA** (April 3, 2026) — MCP, A2A, DevUI
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
@@ -1279,7 +1281,9 @@
 - Code execution sandboxing
 - **OWASP MCP Top 10** (Tool Poisoning, NeighborJack, Model Misbinding, Context Spoofing)
 - MCP Security Incidents (mcp-remote RCE, Anthropic Git MCP CVEs, Agent ROME, 84% attack success rate)
+- **April 2026 incidents:** Vercel/Context.ai breach (AI tool supply chain), Mercor/LiteLLM (dependency compromise), AI agent hit 600+ firewalls autonomously
 - **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
+- **Claude Mythos cyber capabilities** — 73% on expert cyber simulations; GPT-5.4-Cyber for defense
 - **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
 - **Agent Governance at Scale** (Microsoft Agent Governance Toolkit, NVIDIA 9 controls)
 - Human-in-the-Loop
@@ -1691,10 +1695,11 @@
   - Value learning
 
 ### 18.7 Enterprise AI Adoption (`07_Enterprise_AI_Adoption.md`)
-- **The reality of AI transformation**
-  - 80%+ of companies use AI
-  - Only 25% of AI initiatives achieve expected ROI
-  - 40% of agentic AI projects will fail by 2027 (Gartner)
+- **The reality of AI transformation (April 2026)**
+  - 97% of executives deployed agents; 52% of employees use them
+  - Only 29% see significant ROI from GenAI; 34% successfully implementing agentic AI
+  - 79% face challenges (up from 2025); 54% of C-suite say "AI is tearing company apart"
+  - AI super-users deliver 5x productivity gains — execution gap, not technology gap
 - **Key Enterprise AI challenges**
   - Governance & Security (75% of tech leaders, only 6% have an AI security strategy)
   - Compliance: EU AI Act, HIPAA, risk categories
