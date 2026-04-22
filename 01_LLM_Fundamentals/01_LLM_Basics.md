@@ -146,7 +146,7 @@ Modern LLMs are staggering in their scale:
 | GPT-3 | 175B | 96 | 12288 | 96 |
 | GPT-4 | ~1.7T (estimated MoE) | - | - | - |
 | GPT-5 | undisclosed (MoE) | - | - | - |
-| Claude Opus 4.6 | undisclosed | - | - | - |
+| Claude Opus 4.7 | undisclosed | - | - | - |
 | Gemini 2.5 Pro | undisclosed (MoE) | - | - | - |
 | Llama 4 Maverick | 400B (17B active, 128 experts) | - | - | - |
 | DeepSeek V3 | 671B (37B active) | 61 | 7168 | 128 |

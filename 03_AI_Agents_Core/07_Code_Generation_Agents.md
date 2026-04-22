@@ -216,7 +216,7 @@ Anthropic's CLI-based coding agent, one of the most capable autonomous coding to
 - **MCP extensibility** — connects to any MCP server, giving it access to databases, APIs, and custom tools beyond file/terminal operations
 - **Spec-driven development** — excels at implementing features from detailed specifications, making it effective for the "write spec → agent implements" workflow pattern
 
-**SWE-bench performance:** Claude Code achieved 72.7% on SWE-bench Verified with Claude Sonnet 4 (mid-2025). With the latest Claude models, scores have continued to improve, with frontier agents approaching 80% (top: 79.2% as of early 2026).
+**SWE-bench performance:** Claude Code achieved 72.7% on SWE-bench Verified with Claude Sonnet 4 (mid-2025). With the latest Claude models, scores have continued to improve dramatically, with frontier agents exceeding 87% (top: 87.6% Claude Opus 4.7, as of April 2026).
 
 ### OpenAI Codex (2025)
 
@@ -602,7 +602,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 80%+ on SWE-bench Verified, they are at or near human-level on real GitHub issues
 
-3. **SWE-bench is the gold standard** for measurement; top agents exceed 80% (early 2026), approaching human-level (~75-90%)
+3. **SWE-bench is the gold standard** for measurement; top agents exceed 87% (April 2026), surpassing estimated human performance (~75-90%)
 
 4. **Context management is critical** — the agent must understand the codebase, not just the current file
 

@@ -66,7 +66,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 **Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
 **Anthropic highlights:**
-- Context window — 200K tokens standard, 1M available on Opus 4.6
+- Context window — 200K tokens standard, 1M available on Opus 4.6 / 4.7
 - "Constitutional AI" — models trained to follow ethical principles
 - Excellent performance in long document analysis and code generation
 - **MCP (Model Context Protocol)** — Anthropic-created open standard for tool integration, now an industry standard governed by AAIF
@@ -471,7 +471,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - o3 / o4-mini (OpenAI reasoning)
-- Claude Opus 4.6 or Sonnet 4.6 with extended thinking (Anthropic)
+- Claude Opus 4.7 or Sonnet 4.6 with extended thinking (Anthropic)
 - Gemini 3.1 Pro Preview or 2.5 Pro with thinking (Google)
 
 **Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
@@ -500,7 +500,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - Gemini 3.1 Pro Preview / 3 Flash (1M+ token context)
-- Claude Sonnet 4.6 (200K tokens, 1M on Opus 4.6)
+- Claude Sonnet 4.6 (200K tokens, 1M on Opus 4.6 / 4.7)
 - GPT-5.2 / GPT-5 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
@@ -727,7 +727,7 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 
-**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4.6 with extended thinking are applied. Code generation works best with Claude Sonnet 4.6 or GPT-5.2-Codex, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
+**Routing by task type:** An efficient architecture routes requests to optimal models depending on task complexity. For simple tasks like classification or data extraction, economical models such as GPT-4o-mini or Claude Haiku 4.5 are used. For complex reasoning and analysis, reasoning models like o3 or Claude Opus 4.7 with extended thinking are applied. Code generation works best with Claude Sonnet 4.6 or GPT-5.3-Codex, which lead coding benchmarks. For real-time applications where speed is critical, the fastest models such as Claude Haiku 4.5 or Gemini 2.5 Flash are selected.
 
 **Tool Use via AI Services:** LangChain4j provides a declarative way to create agents with tools. Tools are defined as regular Java methods annotated with `@Tool`, which contains the function description. Method parameters are annotated with `@P` including a description for the model. Then an agent interface is created with a `chat(String message)` method, and `AiServices.builder()` is used to automatically generate the implementation. The model independently analyzes the user's request, decides which tools are needed, invokes them with the correct parameters, and forms the final response based on the results.
 

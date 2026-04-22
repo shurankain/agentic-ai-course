@@ -32,7 +32,7 @@ Not all requests require the most powerful model. Smart routing directs requests
 |------|--------|------|----------|
 | Tier 1 (Economy) | GPT-5-mini/nano, GPT-4o-mini, Claude Haiku 4.5 | $0.05-1.00/1M | Simple tasks, classification |
 | Tier 2 (Standard) | GPT-5.2, GPT-4o, Claude Sonnet 4.6 | $1.75-15/1M | Most tasks |
-| Tier 3 (Premium) | o3, Claude Opus 4 / 4.6 | $5-75/1M | Complex reasoning |
+| Tier 3 (Premium) | o3, Claude Opus 4.7 | $5-75/1M | Complex reasoning |
 
 ### Routing Strategies
 
@@ -303,7 +303,7 @@ A deployment strategy that connects cost optimization with fine-tuning: use an e
 
 ### The Pattern
 
-1. **Prototype with a premium model** (Claude Opus 4.6, o3) — build the agent, iterate on prompts and tool use until quality is satisfactory
+1. **Prototype with a premium model** (Claude Opus 4.7, o3) — build the agent, iterate on prompts and tool use until quality is satisfactory
 2. **Collect successful traces** — log every successful agent run: input, chain-of-thought, tool calls, outputs. These traces become training data
 3. **Fine-tune a smaller model** (Claude Haiku 4.5, GPT-4o-mini) on the collected traces — the smaller model learns the agent's behavior patterns
 4. **Deploy the distilled model** — same agent logic, 10-50x cheaper per request
@@ -371,13 +371,13 @@ The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and c
 
 ### The 70/30 Hybrid Model Strategy
 
-A cost optimization pattern gaining traction in production: route **70% of inference volume** to open-source models (DeepSeek V3.2, Qwen 3.5, Llama 4) for routine tasks, and **30% to proprietary frontier models** (Claude Opus 4.6, GPT-5.4) for complex reasoning where quality is critical.
+A cost optimization pattern gaining traction in production: route **70% of inference volume** to open-source models (DeepSeek V3.2, Qwen 3.5, Llama 4) for routine tasks, and **30% to proprietary frontier models** (Claude Opus 4.7, GPT-5.4) for complex reasoning where quality is critical.
 
 This works because model quality follows a long tail: 70% of agent interactions are routine (classification, simple retrieval, formatting, tool selection) where a capable open-source model performs adequately. The remaining 30% — complex reasoning, nuanced generation, multi-step planning — benefits from frontier model capability.
 
 **Implementation:** The cost-aware routing described earlier in this chapter provides the mechanism. The 70/30 split is not fixed — monitor quality metrics by tier and adjust. Some deployments run 80/20 or 60/40 depending on the task distribution.
 
-**Why this works economically (as of early 2026):** DeepSeek V3.2 costs $0.28/$0.42 per 1M tokens. Claude Opus 4.6 costs $5/$25. The frontier model is 60-90x more expensive per token. Even routing just the simple tasks to open-source saves 50-70% of total inference cost while maintaining quality where it matters.
+**Why this works economically (as of early 2026):** DeepSeek V3.2 costs $0.28/$0.42 per 1M tokens. Claude Opus 4.7 costs $5/$25. The frontier model is 60-90x more expensive per token. Even routing just the simple tasks to open-source saves 50-70% of total inference cost while maintaining quality where it matters.
 
 ---
 

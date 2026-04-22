@@ -543,7 +543,7 @@ Modern models support contexts of 100K-1M+ tokens. Is RAG still needed?
 
 The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100 → reranker narrows to top-20 → all 20 are loaded into long context (40K tokens) → LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
 
-**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3 Flash/Pro, Claude Opus 4.6), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
+**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3 Flash/Pro, Claude Opus 4.7), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
 
 **"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the Lost-in-the-Middle analysis.
 

@@ -124,7 +124,7 @@ Minimization strategies:
 
 ### From Text to Multimodal Understanding
 
-Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-4o, Claude Sonnet 4.6, and Gemini 2.5/3 open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
+Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-5.4, Claude Opus 4.7 (with high-resolution vision), and Gemini 3 Flash/Pro open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
 
 Typical scenarios: screenshot analysis for technical support, document recognition and processing, product identification from photos, chart and diagram analysis, design assistance.
 

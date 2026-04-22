@@ -50,7 +50,7 @@ Frameworks are organized by abstraction level from high to low:
 
 **Google Vertex AI Agent Builder** shows growth with over 7 million Agent Development Kit downloads (as of early 2026). Integration with Gemini models and the ability to ground through Google Search make it attractive for the GCP ecosystem.
 
-**Azure AI Agent Service** is in preview status, offering integration with the enterprise Microsoft stack. Limited availability currently hinders broad adoption.
+**Azure AI Agent Service** is the deployment target for Microsoft Agent Framework 1.0 (GA April 2026), offering integration with the enterprise Microsoft stack including Azure AD, compliance controls, and managed infrastructure.
 
 ### Low-Code Platforms
 
