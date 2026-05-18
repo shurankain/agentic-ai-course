@@ -22,7 +22,9 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 
 **Frontier models:**
 - **GPT-5.4** — the current flagship (March 2026). $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
+- **GPT-5.5 Instant** — new default ChatGPT model (May 5, 2026). 88.7% SWE-bench Verified — first model to surpass Claude Opus 4.7 on this benchmark. 52.5% fewer hallucinations on high-stakes prompts (medicine, law, finance). ~$2.50/$10.00 per 1M tokens.
 - **GPT-5.4-Cyber** — specialized cybersecurity model for vulnerability analysis and threat detection. Access via Trusted Access for Cyber (TAC), a tiered identity verification system that grants broader access to verified security professionals.
+- **GPT-5.5-Cyber** — expanded Trusted Access for Cyber (May 2026). Tools for vulnerability triage, malware analysis, red teaming, patch validation. Restricted access for verified security professionals.
 - **GPT-5.2** — previous flagship (late 2025/early 2026), natively multimodal. 128K–1M context. Still widely deployed.
 - **GPT-5** — earlier generation. 128K–1M context.
 - **GPT-5.2-Codex / GPT-5.3-Codex** — specialized agentic coding models optimized for autonomous multi-step code generation and tool use.
@@ -63,6 +65,8 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 
 **Claude Mythos Preview** — Anthropic's most capable model, achieving 93.9% on SWE-bench Verified (as of April 2026). Access is restricted to 12 founding partners (AWS, Apple, Microsoft, Google, Cisco) and approximately 40 additional organizations responsible for critical software infrastructure. Anthropic restricted access due to concerns about the "scale and sophistication of the cyberattacks it could enable" — the model succeeds 73% of the time on expert-level cyber-attack simulations that no model could complete before April 2025. Mythos represents the frontier where AI capability and AI safety concerns directly collide.
 
+Anthropic reached $30B ARR (April 2026), surpassing OpenAI ($25B). Growth trajectory: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) — 80x in three years. Claude Code reached $1B ARR within 6 months of launch. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming** — background optimization where agents analyze past sessions and rewrite their memory between runs, effectively "sleeping" to improve — the first implementation of continual learning for production agents without model retraining.
+
 **Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
 **Anthropic highlights:**
@@ -98,7 +102,8 @@ The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 Founded by Elon Musk, xAI emerged as a significant provider with competitive models and aggressive pricing.
 
 **Models:**
-- **Grok 4.20 Beta** — latest frontier model (February 2026). Routes queries to 4 parallel specialist agents. Trained on 200K GPU Colossus cluster.
+- **Grok 4.3** — latest frontier model (May 4, 2026). $1.25/M input tokens, 1M-token context, native video input, built-in reasoning. Cost-efficient frontier positioning.
+- **Grok 4.20 Beta** — previous flagship (February 2026). Routes queries to 4 parallel specialist agents.
 - **Grok 3** — previous flagship, competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
 - **Grok 3 Mini** — efficient model for standard tasks
 
@@ -106,6 +111,8 @@ Founded by Elon Musk, xAI emerged as a significant provider with competitive mod
 - Competitive pricing aimed at undercutting incumbents
 - Real-time access to X (Twitter) data
 - OpenAI-compatible API format
+- **Connectors** — integrations with SharePoint, Outlook, OneDrive, Google Workspace, Notion, GitHub, Linear, and custom MCP servers
+- **Computer use** — can write code, run programs, install dependencies, create files (competitor to Claude Computer Use)
 
 ### Mistral AI
 
@@ -113,6 +120,7 @@ A French company offering efficient open-weight models. Attractive for European 
 
 **Models:**
 - **Mistral Large 3** — flagship model (675B total, 41B active MoE, Apache 2.0), competitive with frontier proprietary models
+- **Mistral Medium 3.5** — new flagship (May 1, 2026). Dense 128B model, 256K context, open weights (modified MIT license). 77.6% SWE-bench Verified. $1.50/$7.50 per 1M tokens. Notable: one model for chat, reasoning, and code (no separate reasoning models). Remote agents via Vibe — async cloud agents for routine tasks with GitHub/Slack integration.
 - **Mistral Medium 3** — mid-tier model ($0.40/$2.00 per 1M tokens), strong cost/quality balance
 - **Mistral Small 3** — compact and efficient for simpler tasks
 - **Magistral** — reasoning-focused models
@@ -343,7 +351,7 @@ The response typically contains:
 
 Cost is a critical factor when choosing a provider and model. All providers charge by token count, with input and output tokens priced differently. Prices are quoted **per 1M tokens** (the industry convention since 2025).
 
-### Pricing Tiers (approximate, April 2026)
+### Pricing Tiers (approximate, May 2026)
 
 **Reasoning models:**
 
@@ -356,11 +364,14 @@ Cost is a critical factor when choosing a provider and model. All providers char
 | Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Most advanced Google reasoning |
 | Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
+GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), the highest score on this benchmark, though Claude Opus 4.7 retains the lead on the more rigorous SWE-bench Pro (64.3% vs 58.6%).
+
 **Standard models:**
 
 | Model | Input | Output |
 |--------|-------|--------|
 | GPT-5.4 | $2.50 | $15.00 |
+| GPT-5.5 Instant | $2.50 | $10.00 |
 | GPT-5.2 | $1.75 | $14.00 |
 | GPT-5 | $1.25 | $10.00 |
 | GPT-4o | $2.50 | $10.00 |
@@ -369,7 +380,8 @@ Cost is a critical factor when choosing a provider and model. All providers char
 | Gemini 3 Flash | $0.50 | $3.00 |
 | Gemini 2.5 Pro | $1.25 | $10.00 |
 | Mistral Large 3 | $2.00 | $6.00 |
-| Grok 3 | $3.00 | $15.00 |
+| Mistral Medium 3.5 | $1.50 | $7.50 |
+| Grok 4.3 | $1.25 | - |
 
 **Budget models:**
 
@@ -480,6 +492,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 **Recommended models:**
 - Claude Sonnet 4.6 (consistently strong on coding benchmarks)
+- GPT-5.5 Instant (strongest on SWE-bench Verified)
 - GPT-5.2-Codex / GPT-5.3-Codex (specialized agentic coding models)
 - GPT-5 / GPT-4o
 - Devstral 2 (Mistral, open-weight)

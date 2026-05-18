@@ -94,9 +94,9 @@ As classic benchmarks saturate, the community has shifted to harder, more discri
 
 **GPQA Diamond** — Graduate-level Professional Quality Assurance. 198 extremely difficult questions written by domain experts (PhDs) in physics, chemistry, and biology. Questions are validated to be answerable by experts but not by skilled non-experts. Frontier model scores have risen rapidly: latest reasoning models reach 90%+ (Claude Opus 4.6: 91.3%, Gemini 3.1 Pro: 94.1%), up from o3's 87.7% in early 2025. GPT-4o 53.6%. Approaching saturation for the strongest reasoning models.
 
-**SWE-bench Verified** — evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. The acceleration of scores has been dramatic: 72% (mid-2025) → 79.2% (early 2026) → **87.6%** (Claude Opus 4.7, April 2026), with Claude Mythos Preview reaching **93.9%** (restricted access). GPT-5.3-Codex scores 85.0%. The gap to estimated human performance (75-90%) has been closed — top agents now exceed the upper bound of the human estimate. The most practically relevant coding benchmark, though benchmark reliability concerns apply (see below).
+**SWE-bench Verified** — evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. The acceleration of scores has been dramatic: 72% (mid-2025) → 79.2% (early 2026) → **87.6%** (Claude Opus 4.7, April 2026) → **88.7%** (GPT-5.5 Instant, May 2026), with Claude Mythos Preview reaching **93.9%** (restricted access). Mistral Medium 3.5 scores 77.6%. The gap to estimated human performance (75-90%) has been closed — top agents now exceed the upper bound of the human estimate. The most practically relevant coding benchmark, though benchmark reliability concerns apply (see below). Note: OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination — see Benchmark Reliability section.
 
-**SWE-bench Pro** — a harder variant introduced to address Verified's reliability issues. Top-tier models cluster between 60-70% on Pro while clearing 80%+ on Verified (as of April 2026). Claude Opus 4.7 leads at 64.3%, GPT-5.4 (xHigh) at 59.1%, GPT-5.3-Codex at 56.8%. The ~23-point gap between Verified and Pro for the same model is consistent with the benchmark reliability analysis — Verified overstates real-world capability.
+**SWE-bench Pro** — a harder variant introduced to address Verified's reliability issues, now the recommended replacement after OpenAI abandoned Verified (May 2026). Top-tier models cluster between 60-70% on Pro while clearing 80%+ on Verified (as of May 2026). Claude Opus 4.7 leads at 64.3%, GPT-5.4 (xHigh) at 59.1%, GPT-5.5 Instant at 58.6%, GPT-5.3-Codex at 56.8%. The best Pro result for fully automated runs is approximately 46%, revealing a ~2x gap between Verified and Pro that underscores how much Verified overstates real-world capability. The ~23-point gap between Verified and Pro for the same model is consistent with the benchmark reliability analysis.
 
 **AIME (American Invitational Mathematics Examination)** — competition-level math problems requiring multi-step reasoning, creative problem-solving, and mathematical insight. Much harder than GSM8K or MATH. Scores on AIME 2024: o3 96.7%, o4-mini 93.4%, o1 83.3%, GPT-4o 13.4%. Note: AIME 2024 scores may be inflated due to data contamination in pretraining; AIME 2025 is considered a cleaner benchmark. Demonstrates the dramatic impact of test-time compute on mathematical reasoning.
 
@@ -126,7 +126,7 @@ Standard benchmarks measure model capabilities in isolation. Agent benchmarks ev
 |------------------------|----------------------|
 | General knowledge & reasoning | MMLU-Pro, GPQA Diamond |
 | Mathematical reasoning | AIME, MATH |
-| Coding agents | SWE-bench Verified, HumanEval |
+| Coding agents | SWE-bench Pro, SWE-bench Verified, HumanEval |
 | Tool-using agents | GAIA, TAU-bench, AgentBench |
 | Abstract reasoning | ARC-AGI |
 | User preference / overall quality | Chatbot Arena |
@@ -141,6 +141,8 @@ Benchmarks are treated as objective truth, but several systematic issues undermi
 **SWE-bench Verified has known reliability problems.** The SWE-Bench+ paper documented: 32.67% of patches contain **solution leakage** (the answer is already present in the issue description — the model can solve the task without understanding the code), 31.08% have suspiciously weak tests (the test suite fails to catch incorrect solutions), and 94% of tasks were created before model training cutoffs (models may have seen the issues and their solutions during pretraining).
 
 **The gap between reported and real-world performance is large.** When the SWE-Bench+ authors filtered out problematic issues, model performance dropped from 3.97% to 0.55%. A practical estimate: **80% on SWE-bench Verified corresponds to approximately 30-40% on genuinely unseen, uncontaminated tasks.** This does not mean the models are weak — it means the benchmark overstates their capability on novel problems.
+
+**OpenAI officially abandoned SWE-bench Verified** (May 2026), citing confirmed contamination. OpenAI now recommends SWE-bench Pro as the replacement benchmark. This validation from a major provider strengthens the case that all Verified scores in this course — and the industry — should be interpreted as upper bounds, not real-world capability measures.
 
 **Scaffolding matters more than model.** The same Claude Opus 4.5 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for why context harness determines more than model quality.
 
@@ -158,6 +160,18 @@ A practical metric increasingly used in production evaluations: instead of measu
 Model A is **77x cheaper per correct answer** despite being 5 percentage points less accurate. For production systems processing thousands of queries per day, this metric matters more than raw accuracy — a 5% accuracy improvement rarely justifies a 77x cost increase.
 
 **Evaluation cost itself matters:** LLM-as-Judge evaluation costs approximately $0.06 per sample (15 seconds). Agent-as-Judge (where an agent evaluates another agent's work through multi-step verification) costs approximately $0.96 per sample (15 minutes). Budget evaluation costs into the system design — evaluating every response is often too expensive.
+
+### Completion under Policy (CuP)
+
+A task is scored as complete **only** if completed without policy violations. A customer service agent that resolves a ticket but leaks PII scores **zero** — the task is failed regardless of the outcome.
+
+This mirrors CI/CD pipelines where a build that passes functional tests but fails a security scan is still a failed build. CuP combines task success and policy compliance into a single gate metric. Expected to become an enterprise standard by 2026-2027.
+
+### Simulation Testing
+
+Generation of hundreds of synthetic multi-turn conversations with diverse personas — aggressive, confused, adversarial, non-native speakers — to stress-test user-facing agents before each deployment. Tools such as Maxim AI and DeepEval support persona-based simulation at scale.
+
+This complements traditional evaluation: benchmarks measure capability in isolation, simulation testing measures robustness under realistic adversarial conditions.
 
 ### What Benchmarks Don't Measure
 
