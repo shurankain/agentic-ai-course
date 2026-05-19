@@ -14,7 +14,7 @@ The history of AI assistants in programming began with simple autocomplete — s
 
 This chapter examines the spectrum from interactive assistants (Cursor, Copilot) to fully autonomous agents (Devin, OpenHands). Understanding the capabilities and limitations of each approach is critical for an AI architect making tooling decisions for a development team.
 
-As Simon Willison observed in November 2025, "AI coding agents crossed from 'mostly works' to 'actually works'" — a turning point the industry now treats as the commercial inflection for the category. The market data supports this: Cursor reached $2B ARR with 2M+ users (50% of Fortune 500 companies, as of early 2026), GitHub Copilot grew to 4.7M paying subscribers (90% of Fortune 100), and Claude Code hit $500M ARR run rate within its first two months. On SWE-bench Verified, the top agent score reached 87.6% (Claude Opus 4.7, April 2026), with the restricted Claude Mythos Preview achieving 93.9%. Agents have now closed — and by some measures exceeded — the estimated human performance range of 75-90%.
+As Simon Willison observed in November 2025, "AI coding agents crossed from 'mostly works' to 'actually works'" — a turning point the industry now treats as the commercial inflection for the category. The market data supports this: Cursor reached $2B ARR with 2M+ users (50% of Fortune 500 companies, as of early 2026), GitHub Copilot grew to 4.7M paying subscribers (90% of Fortune 100), and Claude Code hit $1B+ ARR within six months. On SWE-bench Verified, the top agent score reached 88.7% (GPT-5.5 Instant, May 2026), with the restricted Claude Mythos Preview achieving 93.9%. Claude leads on the harder SWE-bench Pro (64.3% vs 58.6% for GPT-5.5). Agents have now closed — and by some measures exceeded — the estimated human performance range of 75-90%.
 
 ---
 
@@ -116,8 +116,8 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 
 | Tool | Key Differentiator | Context | Notable |
 |------|-------------------|---------|---------|
-| **Cursor** | AI-first IDE, codebase RAG | ~120K effective context | Background Agent for autonomous tasks |
-| **Windsurf** | Cascade engine, broad IDE support | 40+ IDEs supported | SWE-1.5 model — 13x faster than Claude Sonnet 4.5 |
+| **Cursor** | AI-first IDE, $2B ARR, $60B valuation | ~120K effective context | Agents Window, Composer 2 (200+ tok/sec), Design Mode |
+| **Windsurf** | Cascade engine, broad IDE support | 40+ IDEs supported | Acquired by Cognition (April 2026), SWE-1.5 at 950 tok/sec on Cerebras |
 | **GitHub Copilot** | Distribution (VS Code, JetBrains, Eclipse, Xcode) | Agent Mode GA | Cloud Coding Agent — assign GitHub issues to Copilot |
 | **Cline** | Full transparency, BYOK | 5M+ VS Code installs | Plan/Act modes, total visibility into agent actions |
 | **Kiro** (Amazon) | Spec-first development | Generates specs before code | Free for students (1000 credits/year) |
@@ -125,9 +125,10 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 | **Trae** (ByteDance) | Free frontier model access | GPT-4o + Claude included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
 
 **Windsurf** (rebranded from Codeium in late 2024):
+Acquired by Cognition (Devin's parent company) in April 2026 after Google hired Windsurf's CEO and co-founder for $2.4B. Now combines Windsurf's IDE with Devin's autonomous agent capabilities.
 - Full agentic IDE with Cascade engine
 - Supports 40+ IDEs including the full JetBrains stack
-- SWE-1.5 model optimized for speed (13x faster than Claude Sonnet 4.5)
+- SWE-1.5 model optimized for speed (950 tok/sec on Cerebras)
 - Multi-model support (Claude, GPT, custom)
 
 **Tabnine:**
@@ -243,15 +244,15 @@ OpenAI's cloud-based autonomous coding agent, released mid-2025:
 
 ### Windsurf (formerly Codeium)
 
-Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE:
+Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE. Acquired by Cognition (Devin's parent company) in April 2026 after Google hired Windsurf's CEO and co-founder for $2.4B.
 
 **Key features:**
 - **Cascade** — an agentic coding engine that can reason across multiple files, run terminal commands, and iterate on solutions
 - **Flows** — persistent context that tracks what you're working on across sessions
 - Multi-model support (Claude, GPT, custom models)
-- Free tier with generous limits
+- Combined with Devin's autonomous agent capabilities post-acquisition
 
-**Positioning:** Competes directly with Cursor as an AI-native IDE, with a focus on the agentic "flow" experience rather than individual completions.
+**Positioning:** Now part of the Cognition ecosystem ($25B valuation), combining Windsurf's IDE experience with Devin's autonomous agent capabilities. Targets the "agent-first" pole of the market alongside Cursor (IDE-first) and Claude Code (CLI-first).
 
 ---
 
@@ -285,7 +286,9 @@ Curated subset with verified solutions (500 tasks, manually verified):
 |-------------|-------|------|
 | Claude Mythos Preview | 93.9% | April 2026 (restricted access) |
 | **Claude Opus 4.7** | **87.6%** | April 2026 |
+| GPT-5.5 Instant | 88.7% | May 2026 |
 | GPT-5.3-Codex | 85.0% | 2026 |
+| Mistral Medium 3.5 | 77.6% | May 2026 |
 | Human (estimated) | ~75-90% | — |
 | Claude Opus 4.6 Thinking | 79.2% | Early 2026 |
 | Gemini 3 Flash | 76.2% | Early 2026 |
@@ -296,7 +299,7 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
 
-*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026). Top agents now exceed the upper bound of estimated human performance. SWE-bench Pro (a harder variant) shows a more sober picture: Claude Opus 4.7 at 64.3%, GPT-5.4 at 59.1% — the ~23-point gap between Verified and Pro persists, consistent with the benchmark reliability concerns discussed in [[../../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]].
+*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026) → 88.7% (May 2026). Top agents now exceed the upper bound of estimated human performance. SWE-bench Pro (a harder variant) shows a more sober picture: Claude Opus 4.7 at 64.3%, GPT-5.5 at 58.6% — the ~23-point gap between Verified and Pro persists, consistent with the benchmark reliability concerns discussed in [[../../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]]. OpenAI officially stopped reporting SWE-bench Verified scores (May 2026) due to confirmed contamination, recommending SWE-bench Pro as the replacement. The best fully automated Pro result is approximately 46%, revealing a ~2x gap with Verified.
 
 ### SWE-bench Pro (2025)
 
@@ -545,13 +548,13 @@ A distinct category emerged in 2025-2026: agents that operate directly in the te
 
 **Why terminal agents?** IDE agents are constrained by the editor paradigm — they operate on files the user has open. Terminal agents operate on entire repositories: they can read any file, run any command, execute tests, install dependencies, interact with Git, and iterate autonomously. This makes them closer to "agentic engineering" (Karpathy's term for the successor to vibe coding) than to autocomplete.
 
-**Claude Code** (Anthropic) — the most capable terminal agent (as of early 2026). 1M token context (GA March 2026), 128K output. Key features: Agent Teams (multiple Claude Code instances coordinating on a task), `/loop` (cron-like mechanism for recurring tasks), compaction (automatic context summarization for infinite-length sessions), MCP extensibility. $500M ARR run rate within first two months of availability — one of the fastest B2B product launches in enterprise software history. Average developer cost ~$6/day.
+**Claude Code** (Anthropic) — the most capable terminal agent (as of early 2026). 1M token context (GA March 2026), 128K output. Key features: Agent Teams (multiple Claude Code instances coordinating on a task), `/loop` (cron-like mechanism for recurring tasks), compaction (automatic context summarization for infinite-length sessions), MCP extensibility. $1B+ ARR within six months of availability — one of the fastest B2B product launches in enterprise software history. Average developer cost ~$6/day. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming** (background self-optimization between sessions), **Outcomes** (goal-oriented execution until success criteria are met), and the Claude Code Desktop redesign with Agent View — a CLI dashboard for managing multiple background sessions simultaneously.
 
-**Codex CLI** (OpenAI) — open-source terminal agent written in Rust. Full-screen terminal UI, multimodal inputs (screenshots, diagrams, Figma mockups), powered by GPT-5.4. Included in existing ChatGPT subscriptions (20M+ paying users get access at no additional cost). Represents OpenAI's bet on distribution — bundling agent capability with the consumer platform.
+**Codex CLI** (OpenAI) — open-source terminal agent written in Rust. Full-screen terminal UI, multimodal inputs (screenshots, diagrams, Figma mockups), powered by GPT-5.4 (GPT-5.5 for Pro subscribers). Included in existing ChatGPT subscriptions (20M+ paying users get access at no additional cost). Represents OpenAI's bet on distribution — bundling agent capability with the consumer platform. **Codex subagents GA (May 2026):** manager-worker model with up to 8 parallel agents. Codex is also available in the mobile ChatGPT app for remote monitoring and approval of agent work.
 
 **Aider** — open-source (39-42K GitHub stars, 15B tokens processed per week). Git-native: every edit is automatically committed, making it easy to review and revert. Pioneered the **Architect/Editor dual-role pattern**: an expensive reasoning model (Opus, o3) handles planning and decision-making (10% of tokens, ~90% of value), while a cheap model handles code edits (90% of tokens, ~10% of value). This yields 3-5x cost savings. The pattern is generalizable — any agent system can split "thinking" and "doing" across model tiers.
 
-**The convergence trend:** IDE agents are adding autonomous features (Cursor Background Agent, Copilot Cloud Coding Agent), while terminal agents are integrating with IDEs (Claude Code in VS Code, Codex in editors). The future split will likely be "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget), rather than IDE vs. terminal.
+**IDE market consolidation (as of May 2026):** Three poles have emerged — Cursor ($2B ARR, IDE-first, $60B valuation), Windsurf/Devin (agent-first, Cognition $25B valuation), and Claude Code ($1B+ ARR, CLI-first). Coding agents have evolved from autocomplete into autonomous workers with multi-agent orchestration, remote execution, and mobile control. The future split is "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget), rather than IDE vs. terminal.
 
 ---
 

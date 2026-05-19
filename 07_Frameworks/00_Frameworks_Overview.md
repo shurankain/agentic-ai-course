@@ -132,7 +132,7 @@ Anthropic provides the Claude API with tool use capabilities and the Claude Code
 
 Google Agent Development Kit is a unified toolkit for building agents in the Google Cloud ecosystem.
 
-**Key capabilities**: deep integration with Gemini models provides access to multimodal capabilities. Grounding through Google Search allows models to verify facts via search. Support for the A2A protocol (Agent-to-Agent) simplifies building multi-agent systems.
+**Key capabilities**: deep integration with Gemini models provides access to multimodal capabilities. Grounding through Google Search allows models to verify facts via search. Support for the A2A protocol (Agent-to-Agent) simplifies building multi-agent systems. ADK is the only Big Tech framework available on **four languages** (Python, TypeScript, Java, Go — Go SDK added April 2026). **ADK SkillToolset** provides progressive disclosure of tools — loading only relevant tool descriptions per step, achieving approximately **90% token reduction** compared to loading all tool descriptions upfront.
 
 ---
 
@@ -166,6 +166,8 @@ Beyond the established leaders and cloud providers, several frameworks have gain
 
 **DSPy** (Stanford) — automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's MIPROv2 optimizer find optimal prompts through automated search. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
 
+**Mistral Vibe** — remote agents from Mistral AI launched alongside Mistral Medium 3.5 (May 2026). Async cloud agents for routine development tasks (bug fixes, dependency updates) with GitHub and Slack integration. The agents run in Mistral's cloud and create PRs autonomously. Notable because Mistral Medium 3.5 (128B dense, 77.6% SWE-bench Verified, open weights) is one model for chat, reasoning, and code — no separate reasoning model needed. Best for: teams using Mistral models who want hosted agent capabilities.
+
 **Dify** — 93K+ GitHub stars (as of early 2026), $30M raised at $180M valuation, 1.4M installations. Drag-and-drop low-code platform for building agent workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Best for: teams that need visual workflow building with minimal code.
 
 ### JVM Ecosystem: Reaching Parity
@@ -179,6 +181,8 @@ The JVM agent ecosystem reached parity with Python in 2025-2026:
 **Spring AI MCP starters** — `spring-ai-starter-mcp-client` and `spring-ai-starter-mcp-server` provide turnkey MCP integration for Spring Boot applications. One dependency in `pom.xml` connects a Spring Boot application to any MCP server.
 
 Java 26 (March 2026) is positioned as an "AI-first platform" with value types, structured concurrency, and other features that benefit agent workloads. Combined with LangChain4j, Spring AI, and now Koog, the JVM ecosystem offers production-grade agent development on par with Python.
+
+**Google ADK for Go 1.0** (April 2026) — extends ADK to the Go ecosystem, making ADK the only major Big Tech framework supporting four languages. Particularly relevant for infrastructure and DevOps teams building agents in Go.
 
 ### Open-Weight Models for Agent Workloads
 
@@ -253,6 +257,8 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 6. **Anthropic's approach to agents** — use the Claude API with tool calling and MCP for extensibility; Claude Code demonstrates the pattern of a production coding agent built on native capabilities.
 
 7. **Choose by task, not by hype** — a simple RAG does not require complex agent frameworks, and a complex multi-agent system cannot be built on basic chains.
+
+8. **The framework landscape is consolidating.** Microsoft unified AutoGen + Semantic Kernel into Agent Framework 1.0 GA. Google ADK is the only Big Tech framework on 4 languages. Mistral launched hosted remote agents. The choice for new projects: Java → LangChain4j/Spring AI; TypeScript → Vercel AI SDK/Mastra; Python type-safe → Pydantic AI; minimal → OpenAI Agents SDK; auto prompt optimization → DSPy.
 
 ---
 
