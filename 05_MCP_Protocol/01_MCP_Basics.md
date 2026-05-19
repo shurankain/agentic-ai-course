@@ -102,6 +102,8 @@ MCP is built around several key concepts.
 
 **Transport** — the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and Streamable HTTP (for remote servers). The earlier SSE-based HTTP transport was deprecated in March 2025 in favor of Streamable HTTP. The reason: SSE is unidirectional (server → client only), requiring a separate HTTP endpoint for client → server messages. Streamable HTTP provides true bidirectional communication over a single HTTP connection, simplifying deployment and enabling server-initiated messages (Sampling, Elicitation) to flow naturally.
 
+**STDIO transport security warning (May 2026):** A critical vulnerability (CVSS 9.8) was discovered in the STDIO transport mechanism, enabling arbitrary OS command execution. The vulnerability affects all MCP SDK implementations and puts an estimated 200,000+ servers at risk. This is a fundamental design issue in the transport layer, not an implementation bug in a specific SDK. A separate NGINX integration flaw (also CVSS 9.8) was discovered around the same time. These are the first serious architectural vulnerabilities in a protocol that had already become an industry standard — a classic example of adoption outpacing security review. Production deployments using STDIO transport should implement defense-in-depth: sandboxing, network policies, and input validation at every boundary. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for detailed MCP security analysis.
+
 ## MCP Architecture
 
 MCP architecture is designed with flexibility and extensibility in mind. It follows the separation of concerns principle: each component does one thing well.

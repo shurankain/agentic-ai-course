@@ -167,6 +167,8 @@ Tool Poisoning deserves special attention because it exploits a fundamental desi
 
 Real-world incidents demonstrate that MCP security risks are not theoretical:
 
+**STDIO transport vulnerability (May 2026, CVSS 9.8):** A critical architectural vulnerability in MCP's STDIO transport enables arbitrary OS command execution. Unlike implementation bugs, this is a design-level flaw affecting all SDK implementations, with approximately 200,000 servers at risk. A separate NGINX integration flaw (also CVSS 9.8) was discovered concurrently. These represent the first serious architectural vulnerabilities in the protocol — a textbook case of an adoption-security gap where a protocol achieves industry-standard status before its security audit is complete.
+
 **mcp-remote RCE (CVE-2025-6514, CVSS 9.6):** OS command injection via OAuth discovery fields in the widely-used mcp-remote package. Hundreds of thousands of installations were affected. An attacker controlling a malicious OAuth server could achieve remote code execution on any machine running the MCP client.
 
 **Anthropic Git MCP Server (January 2026):** Three CVEs (CVE-2025-68145, CVE-2025-68143, CVE-2025-68144) in Anthropic's own first-party Git MCP server. Remote code execution was achievable via prompt injection through crafted repository content — demonstrating that even first-party servers from the protocol creators can be vulnerable.
@@ -179,11 +181,19 @@ Real-world incidents demonstrate that MCP security risks are not theoretical:
 
 **Attack success rates (as of early 2026):** The Agent Security Bench (ICLR 2025) measured an average attack success rate against agent systems exceeding 84%. This number reflects the systemic immaturity of agent security — most deployed agents lack basic defenses against goal hijacking and tool manipulation.
 
+**Confirmed breach statistics (as of May 2026):** 88% of organizations with deployed AI agents reported a confirmed or suspected security incident in the prior year. 65% experienced at least one incident directly caused by AI agents in corporate networks. Autonomous agents now account for 1 in 8 AI-related breaches — yet only 14.4% of agents are launched with full security approval.
+
 **Vercel/Context.ai breach (April 2026):** The incident originated with a compromise of Context.ai, a third-party AI tool used by a Vercel employee. The attacker gained access through the AI tool's credentials, exposing limited customer credentials on Vercel's platform. This demonstrates that the AI tool supply chain extends beyond model providers to the entire AI tooling ecosystem — developer tools, observability platforms, and AI middleware are all attack surfaces.
 
 **Mercor AI/LiteLLM breach (2026):** AI recruiting startup Mercor was compromised through LiteLLM, a widely used open-source AI framework for unified LLM API access. The attack vector was not Mercor's own code but a trusted dependency — highlighting that supply chain attacks now target AI infrastructure libraries, not just models or training data. Any organization using LiteLLM (or similar proxy libraries) inherits the security posture of that dependency.
 
 **AI agent compromised 600+ firewalls (2026):** An autonomous AI agent compromised over 600 firewalls across 55 countries without a human operator — one of the first documented cases of fully autonomous AI-driven network attacks at scale. AI-enabled attacks rose 89% year-over-year (as of early 2026). The threat landscape is shifting: attackers increasingly target agent orchestration layers and supply chains rather than model outputs directly.
+
+**Mexico government breach (December 2025 – February 2026):** A single attacker used Claude Code and GPT-4.1 to breach 9 Mexican government agencies, gaining access to 195 million taxpayer records. This incident demonstrated that coding agents, designed for development productivity, are equally effective as offensive security tools in the hands of a malicious actor.
+
+**Fake Claude installers (2026):** Malware dubbed "MacSync" was distributed through Google Ads, disguised as a Claude desktop installer. Users searching for Claude downloaded a trojan instead. This attack vector targets the growing population of AI tool users who may not verify download sources.
+
+**1 million exposed AI services (2026):** Security scanning revealed approximately 1 million unprotected AI endpoints in production — services deployed without authentication, rate limiting, or access controls. The scale underscores the gap between AI deployment velocity and security practices.
 
 **Lessons:** Always vet MCP servers before connecting (check for known CVEs), prefer OAuth 2.1 over static secrets, never expose MCP servers without authentication, and treat tool descriptions from untrusted servers as potential prompt injection vectors.
 
