@@ -26,17 +26,20 @@ The EU AI Act classifies AI systems into four risk levels:
 
 **MINIMAL RISK** — no special requirements: spam filters, video games, warehouse management.
 
-### Enforcement Timeline (Updated February 2026)
+### Enforcement Timeline (Updated May 2026 — Digital Omnibus)
 
 - **August 2024** — the law entered into force ✓
 - **February 2025** — ban on unacceptable risk practices ✓ (NOW ENFORCED — social scoring, real-time public biometrics, emotion recognition in workplaces/schools are actively prohibited with fines)
 - **August 2025** — obligations for GPAI models ✓ (NOW ENFORCED — all GPAI providers must provide technical documentation, training data summaries, copyright compliance)
-- **August 2026** — full enforcement for high-risk systems (IMMINENT, 6 months away — certification requirements for HR, credit scoring, law enforcement, healthcare AI)
-- **August 2027** — high-risk in Annex I (safety products)
+- **December 2026** — watermarking requirements (Article 50) — delayed from August 2026 by the Digital Omnibus (+4 months)
+- **December 2027** — full enforcement for standalone high-risk systems (Annex III) — delayed from August 2026 by the Digital Omnibus (+16 months). Covers HR, credit scoring, law enforcement, healthcare AI
+- **August 2028** — high-risk AI in regulated products (Annex I — safety products) — delayed from August 2027 by the Digital Omnibus (+12 months)
 
-### Enforcement Reality (as of early 2026)
+**Digital Omnibus (May 7, 2026):** The EU Council and European Parliament reached a provisional political agreement to delay high-risk enforcement deadlines as part of a broader simplification package. The agreement also introduced a new prohibition: AI for generating non-consensual intimate imagery (NCII) and CSAM ("nudifiers"). The deal has provisional status — formal adoption is expected via an accelerated procedure given the proximity of the original August 2026 deadline. The requirements themselves are unchanged — only the deadlines shifted. This is additional time for compliance, not a relaxation of obligations.
 
-No fines have been issued yet under the EU AI Act. The first enforcement wave (prohibited practices, February 2025) is being monitored, but national market surveillance authorities are still building enforcement capacity. The GPAI Code of Practice (finalized 2025) provides a "safe harbor" — signatories receive a presumption of compliance and face fewer enforcement investigations. The practical reality: organizations have a narrow window (through August 2026) to prepare for high-risk system requirements, which will be the first large-scale enforcement milestone with real teeth.
+### Enforcement Reality (as of May 2026)
+
+No fines have been issued yet under the EU AI Act. The first enforcement wave (prohibited practices, February 2025) is being monitored, but national market surveillance authorities are still building enforcement capacity. The GPAI Code of Practice (finalized 2025) provides a "safe harbor" — signatories receive a presumption of compliance and face fewer enforcement investigations. The practical reality: the Digital Omnibus delay (May 2026) extended the high-risk compliance window by 16-24 months, but the requirements are unchanged. Organizations should use the additional time to prepare — not to postpone. AI Literacy obligations (February 2025) and GPAI obligations (August 2025) remain fully in force.
 
 ### Prohibited Practices
 
@@ -160,7 +163,7 @@ When deploying across multiple jurisdictions, a unified approach covering the st
 
 ## Key Takeaways
 
-The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025, high-risk requirements coming August 2026. The GPAI Code of Practice provides a compliance safe harbor.
+The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025. High-risk requirements were delayed by the Digital Omnibus (May 2026): standalone high-risk (Annex III) now December 2027, product-embedded high-risk (Annex I) now August 2028. The GPAI Code of Practice provides a compliance safe harbor.
 
 The US landscape shifted: Biden's AI Executive Order was rescinded (January 2025), making NIST AI RMF the primary federal guidance (voluntary). US states are filling the gap — Colorado AI Act (2026 enforcement), with Texas, Illinois, and others following.
 
@@ -180,7 +183,7 @@ When developing an AI system, the process of determining requirements includes s
 
 **Compiling the requirements list:** For high-risk: risk management system, data governance, technical documentation, automatic logging, human oversight, accuracy validation, cybersecurity, conformity assessment, registration in the EU database. For limited risk: informing users about interaction with AI, labeling AI-generated content. For GPAI: model technical documentation, information for downstream providers, copyright policy, training data summary.
 
-For risk classification, the following logic applies: if the use case is on the prohibited list (social scoring, public biometrics) — UNACCEPTABLE. If on the high-risk list (employment, credit scoring, law enforcement, education, critical infrastructure) — HIGH. If on the limited-risk list (chatbot, emotion recognition, deepfake) — LIMITED. Otherwise — MINIMAL. This approach ensures systematic assessment and understanding of the timeline: prohibited practices cannot be used from February 2025, GPAI obligations from August 2025, full requirements for high-risk from August 2026.
+For risk classification, the following logic applies: if the use case is on the prohibited list (social scoring, public biometrics) — UNACCEPTABLE. If on the high-risk list (employment, credit scoring, law enforcement, education, critical infrastructure) — HIGH. If on the limited-risk list (chatbot, emotion recognition, deepfake) — LIMITED. Otherwise — MINIMAL. This approach ensures systematic assessment and understanding of the timeline: prohibited practices cannot be used from February 2025, GPAI obligations from August 2025, full requirements for standalone high-risk from December 2027 (delayed from August 2026 by the Digital Omnibus).
 
 ---
 

@@ -51,7 +51,7 @@ According to research, 75% of technical leaders name governance and security as 
 
 ### Compliance & Regulatory: Mounting Pressure
 
-The EU AI Act has come into effect and establishes strict requirements for high-risk AI systems. HIPAA, GDPR, and SOC 2 require a specific approach to AI.
+The EU AI Act has come into effect and establishes strict requirements for high-risk AI systems. The Digital Omnibus (May 2026) delayed high-risk enforcement by 16-24 months (standalone: December 2027, products: August 2028), but the requirements are unchanged. HIPAA, GDPR, and SOC 2 require a specific approach to AI.
 
 **EU AI Act: key categories:**
 
@@ -338,13 +338,21 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 ### Anthropic's Enterprise Play
 
-**Claude Managed Agents** (April 2026 beta) — $0.08/session-hour plus token costs. Composable APIs for building and deploying cloud-hosted agents at scale, with infrastructure abstracted away. Self-evaluation loop improves task success rate by ~10 percentage points. Early adopters: Notion, Rakuten, Asana, Sentry. **Claude Cowork** (GA) targets knowledge work on desktops — moving between local files and applications to synthesize, assemble, and finish deliverables. Targets 500M knowledge workers (vs ~30M developers for coding tools).
+**Claude Managed Agents** (April 2026 beta, multi-agent orchestration added May 2026) — $0.08/session-hour plus token costs. Composable APIs for building and deploying cloud-hosted agents at scale, with infrastructure abstracted away. Self-evaluation loop improves task success rate by ~10 percentage points. The May 2026 update added multi-agent orchestration: a lead agent delegates tasks to specialized sub-agents with their own models, prompts, and tools, running in parallel on a shared filesystem. Early adopters: Notion, Rakuten, Asana, Sentry. **Claude Cowork** (GA) targets knowledge work on desktops — moving between local files and applications to synthesize, assemble, and finish deliverables. Targets 500M knowledge workers (vs ~30M developers for coding tools).
+
+**Anthropic revenue trajectory:** Anthropic reached $30B ARR (April 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) — 80x in three years. 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
 
 ### Emerging Enterprise Patterns
 
 **Decagon AOPs** (Agent Operating Procedures) — natural language behavioral rules that control agent behavior, editable by business teams without developers. Clients: Notion, Duolingo, Substack, Rippling ($231M funding). The pattern is significant: it separates agent behavior specification (business team owns) from agent implementation (engineering team owns).
 
 **Agent Washing** — Debevoise & Plimpton published an analysis of disclosure risks related to exaggerated agentic capabilities. This is now a legal liability, not just a marketing problem. Gartner estimates only ~130 of thousands of vendors build genuinely agentic systems. Five red flags: claims of full autonomy, no real tool use, weak error handling, no memory between tasks, vague marketing without concrete capability demonstrations.
+
+### Industry Investment Scale (as of May 2026)
+
+**Meta** announced $115-135 billion in AI capital expenditures for 2026 — nearly double the previous year. Meta Superintelligence Labs released Muse Spark as a successor/extension to the Llama family. This level of CapEx indicates that Big Tech treats AI infrastructure as a strategic investment comparable to cloud computing build-outs of the 2010s.
+
+**Inference cost trajectory:** Costs have fallen approximately 280x over two years (early 2024 to early 2026), and NVIDIA Blackwell hardware combined with open-source model optimization is driving an additional 4-10x reduction. The Jevons Paradox applies: as inference becomes cheaper, usage increases proportionally — total spending often remains flat or grows despite per-unit cost drops. Amazon and Cerebras formed a "disaggregated inference" alliance (AWS Trainium for prefill + Cerebras WSE-3 for decode), directly challenging NVIDIA's memory monopoly with 5x token throughput improvement.
 
 ---
 
