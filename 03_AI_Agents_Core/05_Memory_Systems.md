@@ -142,6 +142,8 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 **Production validation:** Letta-based agents ranked #1 among open-source agents on Terminal-Bench and #4 overall (as of early 2026), demonstrating that self-directed memory translates to measurable task performance.
 
+**Letta Code** (launched February 2026) is a coding agent built on Letta's memory architecture. Its distinguishing feature is the **Skill Library** — the agent saves learned coding patterns as `.md` files (Markdown skill descriptions) and reuses them in future tasks. This is a practical implementation of Karpathy's LLM-as-OS concept: the agent builds its own knowledge base through experience, without model retraining. The three-tier memory (Core Memory in context, Recall Memory as searchable history, Archival Memory as long-term vector-indexed storage) provides the foundation for this learning loop.
+
 **Alternative approaches to agent memory:**
 
 **Mem0** takes a different path — middleware for automatic fact extraction. Instead of the agent managing its own memory, Mem0 intercepts conversations and automatically extracts facts, preferences, and patterns. This is simpler to integrate (plug-and-play) but gives the agent less control over what gets remembered.
@@ -151,6 +153,8 @@ The MemGPT concept described above was influential but saw limited direct adopti
 The three approaches represent different points on the automation-control spectrum: Mem0 (fully automated, no agent control), Letta (agent-directed), and Bedrock episodic memory (experience-based, automated but structured).
 
 **The 2026 production pattern:** The most effective production systems do not choose a single memory architecture. Instead, they combine a small stack of complementary systems: **vector memory** for fast fuzzy recall (semantic search over facts and preferences), **an episodic buffer** for short-term coherence (maintaining context within the current task), and **a graph** for entity-heavy queries (navigating relationships between people, products, concepts). The agent routes between them based on query type — a factoid question hits the vector store, a "what happened last time?" question hits the episodic buffer, and a "how is X connected to Y?" question hits the graph. This hybrid pattern consistently outperforms any single memory architecture in production benchmarks (as of early 2026).
+
+**Dreaming: offline memory optimization (May 2026).** Anthropic announced Dreaming at the Code with Claude conference (May 6, 2026) — a background process where agents analyze past sessions, find patterns, and rewrite their memory between runs. This is effectively "sleep" for AI agents: processing experience and self-optimizing offline. Dreaming represents the first implementation of continual learning for production agents without model retraining — the agent improves through memory reorganization, not weight updates. Combined with Outcomes (goal-oriented execution that iterates until success criteria are met), this shifts agents from instruction-following to result-achieving.
 
 ---
 

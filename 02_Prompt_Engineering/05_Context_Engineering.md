@@ -244,6 +244,8 @@ In traditional RAG, the context assembly pipeline is fixed: query → embed → 
 
 **Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context, enabling effectively infinite-length sessions within a finite window.
 
+**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience — not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for details.
+
 **Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering — see [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]].
 
 The common thread: context engineering is shifting from something engineers build around the model to something the agent manages for itself. The agent is becoming its own context engineer.

@@ -485,6 +485,8 @@ The progression defines three levels:
 
 Most teams that skip to Level 3 prematurely discover that 80% of their use cases could have been solved at Level 1 or 2, at lower cost and with better reliability. Start at the lowest level that works. Escalate only when you have evidence that the current level is insufficient.
 
+**Single agent sufficiency (2026 update):** Reasoning models (o3, o4-mini, Claude with extended thinking) have internalized much of the multi-step reasoning that previously required multi-agent orchestration. Multi-agent systems add approximately **10x cost**, increased latency, and additional failure modes compared to a single agent. The 2026 trend: deterministic orchestration (Level 2 workflows) for control flow, with LLM reasoning for bounded decisions within each step. **Decision rule:** prototype with a single agent using a reasoning model first. Move to multi-agent only when clear capability boundaries justify the cost — for example, when different steps require fundamentally different tool sets, models, or security contexts.
+
 ---
 
 ## Agent Loop Essentials
@@ -502,6 +504,16 @@ Every agent architecture discussed in this chapter — ReAct, Plan-and-Execute, 
 **Graceful degradation.** When the iteration limit is reached or a circuit breaker trips, the agent should return its best partial result with an explanation of what was completed and what remains. A partial answer is almost always more useful than an error message.
 
 These patterns are mentioned individually across earlier sections (ReAct mentions iteration limits, LATS discusses cost bounds). This consolidation is deliberate — these are universal requirements, not architecture-specific features.
+
+### Fan-Out/Fan-In: Parallel Subtask Processing
+
+A practical multi-agent pattern for tasks that decompose into independent subtasks: dispatch all subtasks in parallel, then aggregate results.
+
+The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orchestrator fans out subtasks to parallel workers, each worker processes independently, and the orchestrator waits for all workers before aggregating (fan-in). Wall-clock time equals the slowest subtask, not the sum — making this the most cost-efficient multi-agent pattern for parallelizable work.
+
+**Common applications:** code review (parallel analysis of different files), research (parallel web searches on different aspects), data analysis (parallel queries to different sources), document processing (parallel summarization of different sections).
+
+**When to use:** the task naturally decomposes into independent subtasks with a clear aggregation step. **When not to use:** subtasks have dependencies (step 3 needs step 1's output) — use sequential orchestration instead.
 
 ---
 
