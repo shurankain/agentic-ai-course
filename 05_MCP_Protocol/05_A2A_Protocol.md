@@ -140,7 +140,9 @@ A multi-level structure with delegation. Travel Planner Agent coordinates domain
 
 ### Honest Adoption Assessment
 
-As of April 2026, A2A adoption has moved beyond announcements to early production use. While 150+ partners expressed intent at the April 2025 launch, real production implementations are now emerging — S&P Global, Tyson Foods, and Twilio have deployed A2A-based agent coordination. The protocol reached **v0.2** with key enhancements: support for **stateless interactions** (simplifying development for scenarios where session management is not needed) and **standardized authentication** based on an OpenAPI-like auth schema. An **official Python SDK** was released, and Microsoft Agent Framework 1.0 (April 3, 2026) ships with full A2A support, marking the first major framework to include A2A out of the box. However, most multi-agent systems still use direct API calls, framework-native patterns (LangGraph handoffs, CrewAI delegation), or MCP for tool integration rather than A2A for agent-to-agent communication.
+As of May 2026, A2A has crossed from announcements into production. The protocol celebrated its first anniversary (April 2026) with **150+ participating organizations** and **22,000+ GitHub stars**. Production deployments are now live in major enterprise platforms: **Azure AI Foundry**, **Amazon Bedrock AgentCore**, **Salesforce**, **SAP**, and **ServiceNow** — these are not pilot integrations but production-grade implementations handling real workloads. The protocol reached **v0.2** with key enhancements: support for **stateless interactions** (simplifying development for scenarios where session management is not needed) and **standardized authentication** based on an OpenAPI-like auth schema. An **official Python SDK** was released, and Microsoft Agent Framework 1.0 (April 3, 2026) ships with full A2A support, marking the first major framework to include A2A out of the box.
+
+The protocol has effectively ceased to be experimental. MCP (tool integration) and A2A (agent-to-agent communication) are now the two complementary standards for agent systems, both in production and both under AAIF governance. However, most multi-agent systems still use direct API calls or framework-native patterns (LangGraph handoffs, CrewAI delegation) for intra-framework coordination — A2A's primary value is cross-framework and cross-organization agent interoperability.
 
 MCP, by contrast, has seen massive real-world adoption: 10,000+ servers, 97M+ monthly SDK downloads (as of late 2025), and integration into every major AI development tool. The practical reality is that most "agent-to-agent" coordination happens within a single framework or orchestrator, not across independent agents from different providers — which is A2A's primary use case.
 
@@ -156,7 +158,7 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 | **Discovery** | Well-known URLs | Registry API | DF (Directory Facilitator) | Service mesh |
 | **Task model** | Async + streaming | Sync only | Performatives | Depends |
 | **Schema** | JSON Schema | OpenAPI | FIPA-SL | Protobuf |
-| **Adoption** | 150+ announced partners | Emerging | Academic | Custom |
+| **Adoption** | 150+ orgs, production (Azure, Bedrock, Salesforce) | Emerging | Academic | Custom |
 | **LLM focus** | Native | Yes | No | No |
 
 **Why Google chose a new protocol:**
@@ -164,7 +166,7 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 2. **Agent Protocol from AI21 is too simple** — lacks async, streaming, and rich capabilities support
 3. **Direct use of gRPC/REST requires ad-hoc coordination** — no standard patterns
 
-**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon — establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 10,000+ servers and 97M+ monthly SDK downloads, while A2A adoption remains mostly at the announcement stage.
+**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon — establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 10,000+ servers and 97M+ monthly SDK downloads, while A2A has moved into early production in major enterprise platforms (Azure AI Foundry, Bedrock AgentCore, Salesforce, SAP, ServiceNow).
 
 **Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium).
 
@@ -233,7 +235,7 @@ This is critical for enterprise deployments with compliance requirements — it 
 
 ## Key Takeaways
 
-A2A Protocol solves the problem of coordination between autonomous agents, complementing MCP. If MCP is "how an agent gets data," then A2A is "how agents work together."
+A2A Protocol solves the problem of coordination between autonomous agents, complementing MCP. If MCP is "how an agent gets data," then A2A is "how agents work together." As of May 2026, A2A is in production at Azure AI Foundry, Amazon Bedrock AgentCore, Salesforce, SAP, and ServiceNow — no longer experimental.
 
 Key features of A2A include Agent Cards for automatic discovery and capability description, full support for long-running tasks with a detailed lifecycle, streaming for receiving progressive results as execution proceeds, and multi-provider support enabling agents on different LLMs to interact with each other. The protocol is designed as an enterprise-ready solution with built-in support for security, audit trail, and compliance requirements.
 

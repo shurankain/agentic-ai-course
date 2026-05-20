@@ -233,6 +233,10 @@ Think about trade-offs: spot (cost vs availability), cascading (cost vs quality)
 
 Prompt caching is free optimization for API users — structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
 
+**Hardware cost trajectory (as of May 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026). NVIDIA Blackwell hardware combined with open-source model optimization is driving an additional **4-10x reduction** on top of that. Four leading inference providers confirm: Blackwell + optimized serving stacks + open-source models = 4-10x cheaper than H100 + proprietary models. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally — overall spending often remains flat or grows.
+
+**Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026) — AWS Trainium handles prefill, Cerebras WSE-3 handles decode — achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see [[07_SGLang_and_Alternatives|SGLang and Alternatives]] for benchmarks).
+
 ---
 
 ## Navigation

@@ -160,6 +160,22 @@ vLLM: 2,500 tok/s, TTFT 45ms, 14.2GB. SGLang single-turn: 2,400 tok/s, multi-tur
 
 On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok/s vs vLLM's ~12,500 tok/s — a **29% throughput advantage** in high-throughput scenarios (as of early 2026). On DeepSeek V3, SGLang delivers **3.1x faster inference** than vLLM. Prefill-decode disaggregation with large-scale expert parallelism reaches 52,300 input tok/sec and 22,300 output tok/sec per node across 96 H100 GPUs. SGLang now runs natively on TPU via the SGLang-Jax backend, and achieved **25x inference performance on NVIDIA GB300 NVL72** (February 2026). Disaggregated serving implementations across both vLLM and SGLang demonstrate up to 6.4x throughput improvements and 20x reduction in latency variance — this is now a production feature, not experimental.
 
+## NVIDIA Dynamo: Disaggregated Serving Framework
+
+**NVIDIA Dynamo** (2026) is NVIDIA's answer to the disaggregated inference trend — a production framework that separates prefill and decode stages onto different hardware optimized for each workload. Prefill (compute-bound, processes the input prompt) runs on compute-optimized GPUs, while decode (memory-bandwidth-bound, generates tokens one at a time) runs on memory-optimized GPUs or specialized hardware.
+
+Dynamo complements the Amazon+Cerebras disaggregated approach (AWS Trainium for prefill + Cerebras WSE-3 for decode) but keeps the entire pipeline on NVIDIA hardware. Combined with Blackwell GPUs, Dynamo enables 4-10x cost-per-token reduction compared to H100-era monolithic serving.
+
+**Practical impact:** Disaggregated serving is now production-standard across both vLLM and SGLang. The benchmarks above (6.4x throughput, 20x latency variance reduction) reflect disaggregated deployments. For new production deployments on Blackwell hardware, disaggregated prefill-decode should be the default architecture.
+
+## Test-Time Compute: Quality vs Cost
+
+A counterintuitive finding from 2026 production deployments: longer chain-of-thought does **not** guarantee better answers. Correct solutions are often **shorter** than incorrect ones — the model spends more tokens when it is uncertain or going down a wrong path.
+
+This has direct implications for agent loops: use `reasoning_effort` (OpenAI) or `budget_tokens` (Anthropic) not just as cost controls but as quality controls. Low reasoning effort on routine steps (tool call formatting, simple decisions), high reasoning only on complex decisions (architectural choices, ambiguous requirements).
+
+**Reasoning for verification, not generation:** A cost-effective pattern — use a cheap, fast model to generate candidate responses, then use a reasoning model to **verify** the best one. Verification is cheaper than generation because the reasoning model works with a concrete answer rather than an open-ended problem. This mirrors the Architect/Editor pattern from coding agents (see [[../../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]]).
+
 ## Production Considerations
 
 **Monitoring:**
