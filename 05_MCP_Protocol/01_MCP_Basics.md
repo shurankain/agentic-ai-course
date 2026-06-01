@@ -14,7 +14,7 @@ Every application, service, and database uses its own API. Integrating an AI ass
 
 Model Context Protocol (MCP) is an open standard — originally created by Anthropic (November 2024) and now governed by the Agentic AI Foundation (AAIF) under the Linux Foundation — that defines a universal way for AI models to interact with external systems. Instead of N×M integrations (N applications × M services), only N + M implementations are needed (N clients + M servers).
 
-MCP has rapidly become the cross-industry standard for AI tool integration. As of early 2026, the ecosystem includes 97M+ monthly SDK downloads, 10,000+ community servers, and native support from all major AI platforms (Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, and many others). The official MCP Registry catalogs approximately 2,000 verified servers.
+MCP has rapidly become the cross-industry standard for AI tool integration. As of early 2026, the ecosystem includes 97M+ monthly SDK downloads, 10,000+ community servers, and native support from all major AI platforms (Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, and many others). The official MCP Registry — now governed by the Linux Foundation's Agentic AI Foundation (AAIF, with Block and OpenAI as co-stewards) — catalogs 500+ verified public servers (as of late May 2026) with namespace verification via GitHub OAuth/OIDC and DNS/HTTP domain verification to prevent impersonation.
 
 This chapter covers MCP architecture, the problems it solves, and its impact on AI application development.
 
@@ -197,6 +197,22 @@ This is analogous to OpenAPI specification files for REST APIs: a machine-readab
 A Task represents an operation with a lifecycle: created → running → completed (or failed/cancelled). During execution, the server sends **progress updates** (percentage complete, status messages) and can produce **partial results** (intermediate outputs available before final completion). The client can **cancel** a running task if it is no longer needed.
 
 **Why this matters for agents:** Without Tasks, an agent calling a long-running tool (generating a report, running a CI pipeline, processing a large document set) must either block (wasting context window time) or implement custom polling logic. Tasks make this a protocol-level concern — the agent issues a tool call, receives a task ID, and can continue other work while monitoring progress asynchronously.
+
+## MCP 2026-07-28 Release Candidate (May 21, 2026)
+
+The biggest revision since MCP's launch was published as a Release Candidate on May 21, 2026, with the final specification targeted for July 28, 2026. Key changes (as of late May 2026):
+
+**Stateless core.** The protocol moves to HTTP-level operation without mandatory sessions. Servers no longer need to track client session state, enabling horizontal scaling behind standard load balancers without sticky sessions. This is the most architecturally significant change — it transforms MCP from a session-oriented protocol into a stateless one suitable for cloud-native deployment.
+
+**MCP Apps.** Servers can now return interactive HTML UI rendered in a sandboxed iframe within the host application. A database MCP server can return a filterable table; a monitoring server can return a live chart; a workflow server can return an approval form. This formalizes and extends the MCP Apps concept introduced earlier.
+
+**Tasks as extension.** The Tasks primitive (formalized from SEP-1686) becomes an official protocol extension rather than a core requirement. Servers that need long-running operation support opt into the Tasks extension; simple synchronous servers remain lightweight.
+
+**Formal deprecation policy.** The specification now includes explicit rules for deprecating protocol features, transport mechanisms, and capability versions — providing stability guarantees for production deployments.
+
+**OAuth/OIDC alignment.** Authentication aligns with standard OAuth 2.0 and OpenID Connect flows, simplifying integration with enterprise identity providers.
+
+**Transport default: stateless Streamable HTTP.** MCP is moving to stateless Streamable HTTP as the default transport. This enables horizontal scaling without sticky sessions — critical for production deployments where MCP servers must handle thousands of concurrent clients behind load balancers. The STDIO transport remains supported for local development.
 
 ---
 
