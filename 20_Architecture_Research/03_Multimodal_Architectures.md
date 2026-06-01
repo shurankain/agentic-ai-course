@@ -252,6 +252,10 @@ Inference (section 17): Visual tokens increase context length. KV cache for 576+
 
 Distributed Training (section 16): Multimodal training requires larger batch sizes (contrastive learning), cross-modal synchronization, different parallelism for vision and language.
 
+## Interpretability and Activation Research
+
+**Natural Language Autoencoders (Anthropic, as of late May 2026):** A research direction that translates internal model activations into natural-language explanations and then reconstructs the activations back from those explanations. The encoder converts a hidden-state vector into a human-readable sentence describing what the model "represents" at that layer; the decoder reconstructs an approximation of the original activation from the text explanation. This creates a more testable bridge between hidden state and human-readable interpretation than sparse autoencoders or probing classifiers — because the intermediate representation is literally natural language, it can be inspected, edited, and verified by humans. Early results show that the reconstruction fidelity is sufficient to preserve downstream model behavior in many cases, suggesting that a significant fraction of what models compute can be expressed in language.
+
 ## Key Takeaways
 
 Vision encoders are the foundation. ViT, CLIP, SigLIP provide visual understanding. Contrastive pretraining creates an aligned vision-language space.

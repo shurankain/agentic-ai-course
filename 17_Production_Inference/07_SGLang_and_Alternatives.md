@@ -160,6 +160,10 @@ vLLM: 2,500 tok/s, TTFT 45ms, 14.2GB. SGLang single-turn: 2,400 tok/s, multi-tur
 
 On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok/s vs vLLM's ~12,500 tok/s — a **29% throughput advantage** in high-throughput scenarios (as of early 2026). On DeepSeek V3, SGLang delivers **3.1x faster inference** than vLLM. Prefill-decode disaggregation with large-scale expert parallelism reaches 52,300 input tok/sec and 22,300 output tok/sec per node across 96 H100 GPUs. SGLang now runs natively on TPU via the SGLang-Jax backend, and achieved **25x inference performance on NVIDIA GB300 NVL72** (February 2026). Disaggregated serving implementations across both vLLM and SGLang demonstrate up to 6.4x throughput improvements and 20x reduction in latency variance — this is now a production feature, not experimental.
 
+**vLLM rapid release cycle (as of late May 2026):** Three releases in 14 days (v0.18 through v0.19.1rc0) demonstrate the accelerating pace of inference engine development. Key additions: async scheduler on-by-default (reducing scheduling overhead for high-throughput deployments), gRPC serving (lower-overhead alternative to HTTP for internal services), GPU NGram speculative decoding (speculation entirely on GPU, avoiding CPU-GPU round trips), FlexKV cache offload (dynamic KV-cache spilling to CPU/NVMe for longer contexts), day-one Gemma 4 support, and MLA optimizations for DeepSeek/Kimi models on Blackwell GPUs (critical for efficient MoE inference).
+
+**SGLang hardware expansion (as of late May 2026):** SGLang added support for GB300/B300 Blackwell Ultra systems, RTX PRO 6000 Blackwell workstation GPUs, and DGX Spark — extending its reach from cloud-scale inference to desktop development and edge deployment scenarios.
+
 ## NVIDIA Dynamo: Disaggregated Serving Framework
 
 **NVIDIA Dynamo** (2026) is NVIDIA's answer to the disaggregated inference trend — a production framework that separates prefill and decode stages onto different hardware optimized for each workload. Prefill (compute-bound, processes the input prompt) runs on compute-optimized GPUs, while decode (memory-bandwidth-bound, generates tokens one at a time) runs on memory-optimized GPUs or specialized hardware.
@@ -167,6 +171,16 @@ On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok
 Dynamo complements the Amazon+Cerebras disaggregated approach (AWS Trainium for prefill + Cerebras WSE-3 for decode) but keeps the entire pipeline on NVIDIA hardware. Combined with Blackwell GPUs, Dynamo enables 4-10x cost-per-token reduction compared to H100-era monolithic serving.
 
 **Practical impact:** Disaggregated serving is now production-standard across both vLLM and SGLang. The benchmarks above (6.4x throughput, 20x latency variance reduction) reflect disaggregated deployments. For new production deployments on Blackwell hardware, disaggregated prefill-decode should be the default architecture.
+
+## Cloudflare Infire: Rust-Based Inference
+
+**Cloudflare Infire** (as of late May 2026) is the first major production-grade Rust-based LLM inference engine. Cloudflare built Infire from scratch, motivated by "lack of control in the Python-based vLLM stack" — Python's GIL, garbage collection pauses, and difficulty debugging production issues at scale drove the decision to rewrite in Rust.
+
+**Performance:** Up to 7% faster than vLLM 0.10 on H100 NVL benchmarks, with significantly lower CPU overhead. The Rust implementation eliminates Python's GIL contention and provides deterministic memory management, resulting in more consistent latency under load.
+
+**Significance:** Infire represents a potential inflection point for inference infrastructure. While vLLM and SGLang dominate the Python ecosystem, a production-validated Rust alternative opens the door for performance-critical deployments where Python's overhead is unacceptable. Cloudflare runs Infire in production for their Workers AI platform, serving millions of inference requests.
+
+**Trade-offs:** The Rust ecosystem for ML is less mature — fewer model implementations, smaller contributor community, and steeper development curve. For most teams, vLLM or SGLang remain the pragmatic choice. Infire is most relevant for hyperscale operators who need maximum control over the inference stack.
 
 ## Test-Time Compute: Quality vs Cost
 

@@ -50,9 +50,15 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **AMD MI350 (Q3 2025)** — CDNA 4 architecture, significant compute uplift over MI300X. Positioned to compete directly with Blackwell B200.
 
-**AMD MI400 (expected 2026)** — next-generation with HBM4, 432 GB memory. AMD's answer to NVIDIA's Vera Rubin platform.
+**NVIDIA Blackwell Ultra GB300 NVL72 (as of late May 2026):** The production-grade Blackwell Ultra configuration. Per-rack: **1.1 EXAFLOPS** FP4, 288 GB HBM3e per GPU, liquid cooling mandatory (1,400W TDP per GPU). NVIDIA projects 60,000 GB300 NVL72 racks shipping in 2026 (+129% YoY). Inference cost on Blackwell Ultra is projected at **$0.15/M tokens for Llama-3-70B class models** — a 3-5x reduction from H100-era pricing. NVIDIA Q1 FY27 revenue reached $81.6B (+85% YoY), with data center revenue at $75.2B.
 
-**NVIDIA Vera Rubin (announced CES 2026, expected H2 2026)** — the next-generation platform after Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell), HBM4 memory, designed for multi-trillion parameter models. Signals that the GPU performance race continues to accelerate.
+**AMD MI400 / Helios (as of late May 2026)** — 432 GB HBM4, 40 PFLOPS FP4, 2.9 ExaFLOPS per rack. H2 2026 production. The first serious Blackwell competitor: MI400 offers more memory (432 GB vs 288 GB HBM3e) and competitive raw throughput in a rack-scale configuration. AMD's Helios platform (MI400 + custom interconnect) targets the same hyperscale training and inference market as NVL72.
+
+**NVIDIA Vera Rubin (announced CES 2026, expected H2 2026)** — the next-generation platform after Blackwell. 50 PFLOPS FP4, 288 GB HBM4, 22 TB/s memory bandwidth, 10x performance-per-watt vs Grace Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell). Expected to generate $1T+ in orders through 2027. Vera Rubin represents the transition from HBM3e to HBM4, a memory technology jump that will define the next generation of training and inference economics.
+
+**Google TPU v7 Ironwood (as of late May 2026):** Google's latest custom AI accelerator. Anthropic is deploying over 1 million Ironwood chips (exceeding 1 GW of compute capacity) exclusively for Claude inference and training in 2026 — the largest single-customer TPU deployment announced to date. TPU v7 competes with Blackwell Ultra on training throughput while offering Google's proprietary interconnect advantages for large-scale distributed training.
+
+**Apple Silicon and local inference (as of late May 2026):** Ollama 0.19 introduced an MLX preview, marking a full transition to Apple's MLX framework on Apple Silicon (minimum 32 GB unified memory required). On M5 Max: 1,851 tok/s prefill and 134 tok/s decode on Qwen3.5-35B-A3B int4 — a +57% prefill and +93% decode improvement over the previous Metal backend. This makes Apple Silicon competitive for local inference of 30B+ parameter models, relevant for on-device agent deployments and development workflows.
 
 ### Anatomy of a Streaming Multiprocessor
 

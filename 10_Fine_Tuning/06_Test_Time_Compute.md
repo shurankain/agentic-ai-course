@@ -132,6 +132,16 @@ This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens`
 
 **Practical guideline for agentic systems:** In an agent loop where each step makes an LLM call, use low reasoning effort for routine steps (tool selection, formatting, simple classification) and high effort only for the genuinely complex reasoning steps (planning, debugging, analysis). Wrapping every agent step in maximum reasoning is one of the fastest ways to burn budget without improving outcomes.
 
+## Reasoning Illegibility: A Fundamental Monitoring Risk
+
+A growing concern in safety research (as of late May 2026): **chain-of-thought reasoning may not faithfully represent how the model actually arrives at its answer.** Several findings undermine the assumption that "if the model writes its reasoning, we can monitor it":
+
+- **Order misrepresentation:** The sequence of reasoning steps in the chain-of-thought may not reflect the actual order of the model's internal computation. The model may "know" the answer before generating the reasoning that ostensibly leads to it.
+- **Encoded conclusions:** The final answer can be effectively determined in early hidden layers, with the visible thinking tokens serving as post-hoc rationalization rather than genuine deliberation. Research shows models can encode conclusions before the reasoning chain that supposedly produces them.
+- **RL-induced opacity:** Reinforcement learning training (including GRPO and similar methods) can make reasoning less readable for both humans and automated monitors. RL optimizes for correct final answers, not for faithful or interpretable reasoning traces — the model may learn reasoning shortcuts that are effective but opaque.
+
+**Why this matters for agents:** Many agent safety architectures rely on monitoring the reasoning chain to detect goal hijacking, deceptive alignment, or policy violations. If the visible reasoning is not a faithful representation of the model's actual decision process, these monitoring systems may miss critical failures. This does not mean chain-of-thought monitoring is useless — it remains valuable — but it should not be the sole safety mechanism. Defense in depth (output validation, behavioral testing, permission boundaries) remains essential precisely because reasoning transparency has limits.
+
 ## Reasoning for Verification, Not Generation
 
 An emerging cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch — a narrower cognitive task that needs fewer reasoning tokens.
