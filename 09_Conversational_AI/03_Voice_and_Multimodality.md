@@ -62,7 +62,13 @@ The traditional voice agent architecture — ASR → LLM → TTS — is being di
 
 The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems. Async tool calls allow long-running functions without blocking the conversation.
 
-**Pricing (as of early 2026):** `gpt-realtime-1.5`: ~$0.04/min audio input, ~$0.08/min audio output ($32/$64 per 1M audio tokens). A cheaper `gpt-4o-mini-realtime-preview` variant is also available at ~$10/$20 per 1M tokens. The GA launch brought a ~20% price reduction over the original preview pricing. No waitlist — available to all developers.
+**GPT-Realtime-2 (May 7, 2026, GA):** The next generation brings GPT-5-class reasoning to voice interactions (as of late May 2026). Key advances: 128K context window (up from 32K), parallel tool calls with narration (the model explains what it is doing while tools execute), preambles during tool calls to maintain conversational flow, native MCP server support for agent tool access, and SIP phone calling for direct enterprise telephony integration. Pricing: $32/M input audio tokens, $64/M output audio tokens. **Case study:** Zillow deployed GPT-Realtime-2 for property inquiry calls — success rate increased from 69% to 95%.
+
+**OpenAI Translate (May 7, 2026, GA):** Real-time speech translation API. 70+ input languages, 13 output languages. Pricing: $0.034/min. Designed for call centers and international business communication.
+
+**Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min — the cheapest production STT available from a frontier provider.
+
+**Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant is also available at ~$10/$20 per 1M tokens. No waitlist — available to all developers.
 
 **Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
 
@@ -244,7 +250,7 @@ Accounting for speech diversity is especially important. Accents, dialects, spee
 
 ## Voice Agent Market Structure (2026)
 
-The voice agent market has organized into four tiers, each serving different needs and price points:
+The voice agent market has organized into four tiers (as of late May 2026): full-stack quality providers, orchestration middleware, developer frameworks, and enterprise telephony — each serving different needs and price points:
 
 | Tier | Provider | Pricing | Latency | Best For |
 |------|----------|---------|---------|----------|
@@ -274,7 +280,7 @@ The cost range spans approximately 10x from cheapest to most expensive. The choi
 
 Multimodality is the natural direction of AI agent evolution. Human communication is inherently multimodal; restricting it to text impoverishes the interaction.
 
-Native speech-to-speech is a paradigm shift. OpenAI Realtime API (now GA with purpose-built `gpt-realtime` models) and Gemini Live process audio directly — no ASR/TTS pipeline needed. 200-350ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
+Native speech-to-speech is a paradigm shift. OpenAI Realtime API (now at GPT-Realtime-2 with GPT-5-class reasoning, 128K context, and MCP support) and Gemini Live process audio directly — no ASR/TTS pipeline needed. 200-350ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
 
 Voice interfaces require a fundamental rethinking of design. Brevity, structure, error tolerance, and natural interruptions distinguish voice interaction from text interaction. Latency is a critical factor: hundreds of milliseconds determine the difference between a natural conversation and an irritating wait.
 

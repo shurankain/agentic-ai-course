@@ -326,7 +326,7 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 ### Tier 2: Vertical Platforms
 
-**Sierra** — customer experience agents. $4.5B valuation, 40% of Fortune 50 as clients (ADT, Cigna, Nordstrom, Wayfair, Rocket Mortgage). Ghostwriter (March 2026) is an agent that creates other production-ready agents from SOPs, transcripts, and plain English in 30+ languages. Pay-per-resolution pricing aligns vendor incentives with outcomes.
+**Sierra** — customer experience agents. $15.8B valuation after $950M raise (as of late May 2026), ARR $150M (from $26M end 2024). 40% of Fortune 50 as clients (ADT, Cigna, Nordstrom, Wayfair, Rocket Mortgage). Ghostwriter (March 2026) is an agent that creates other production-ready agents from SOPs, transcripts, and plain English in 30+ languages. Pay-per-resolution pricing aligns vendor incentives with outcomes.
 
 **Harvey** — legal AI. Works with Magic Circle firms (Allen & Overy) and Big 4 (PwC). Contract analysis, due diligence, legal research. Represents the vertical specialization pattern: domain expertise + compliance = pricing power.
 
@@ -340,7 +340,15 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 **Claude Managed Agents** (April 2026 beta, multi-agent orchestration added May 2026) — $0.08/session-hour plus token costs. Composable APIs for building and deploying cloud-hosted agents at scale, with infrastructure abstracted away. Self-evaluation loop improves task success rate by ~10 percentage points. The May 2026 update added multi-agent orchestration: a lead agent delegates tasks to specialized sub-agents with their own models, prompts, and tools, running in parallel on a shared filesystem. Early adopters: Notion, Rakuten, Asana, Sentry. **Claude Cowork** (GA) targets knowledge work on desktops — moving between local files and applications to synthesize, assemble, and finish deliverables. Targets 500M knowledge workers (vs ~30M developers for coding tools).
 
-**Anthropic revenue trajectory:** Anthropic reached $30B ARR (April 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) — 80x in three years. 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
+**Anthropic revenue trajectory:** Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) → $47B (May 2026) — 80x in three years. $65B Series H at $965B post-money valuation — surpassed OpenAI in private round valuations (as of late May 2026). 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. KPMG deployed Claude across 276,000 employees; PwC expanded its alliance. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
+
+### OpenAI's Path to Public Markets
+
+**OpenAI filed a confidential S-1** on May 22, 2026 (Goldman Sachs + Morgan Stanley as lead underwriters), targeting a valuation of $852B-$1T with IPO expected Q4 2026 (as of late May 2026). **DeployCo** — OpenAI's enterprise deployment subsidiary — raised $4B at $14B post-money; investors include McKinsey, Bain, and Capgemini, meaning major consulting firms now hold equity in a potential disruptor of their own services.
+
+### xAI / SpaceXAI
+
+xAI ceased to exist as a separate company on May 6, 2026 — it is now the SpaceXAI division. A public S-1 was filed May 20, ticker SPCX, targeting $1.75-2T valuation (as of late May 2026). Notable from the S-1 filing: Anthropic signed a Cloud Services Agreement with SpaceX at $1.25B/month through May 2029 for compute access on the Colossus / Colossus II superclusters.
 
 ### Emerging Enterprise Patterns
 
@@ -352,7 +360,26 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 **Meta** announced $115-135 billion in AI capital expenditures for 2026 — nearly double the previous year. Meta Superintelligence Labs released Muse Spark as a successor/extension to the Llama family. This level of CapEx indicates that Big Tech treats AI infrastructure as a strategic investment comparable to cloud computing build-outs of the 2010s.
 
+**Multi-cloud AI becomes reality (as of late May 2026):** OpenAI models are now available on AWS Bedrock — ending the 7-year Azure exclusivity arrangement. AWS Bedrock reports 180% YoY adoption growth. Salesforce Manager Agent reached 100% adoption among target accounts, saving 50,000 hours. Informatica MCP servers are now discoverable directly in Azure AI Foundry. The pattern: enterprises no longer accept single-vendor lock-in for AI infrastructure.
+
 **Inference cost trajectory:** Costs have fallen approximately 280x over two years (early 2024 to early 2026), and NVIDIA Blackwell hardware combined with open-source model optimization is driving an additional 4-10x reduction. The Jevons Paradox applies: as inference becomes cheaper, usage increases proportionally — total spending often remains flat or grows despite per-unit cost drops. Amazon and Cerebras formed a "disaggregated inference" alliance (AWS Trainium for prefill + Cerebras WSE-3 for decode), directly challenging NVIDIA's memory monopoly with 5x token throughput improvement.
+
+### Agent Startup Funding Landscape (as of late May 2026)
+
+The funding environment for agent startups has reached unprecedented levels — but consolidation warnings are emerging:
+
+| Company | Round | Valuation | ARR | Note |
+|---------|-------|-----------|-----|------|
+| **Sierra** | $950M | $15.8B | $150M (from $26M end 2024) | Largest agent-focused round |
+| **Cursor/Anysphere** | — | $50B (April 19) | $4B | Doubled ARR in 3 months |
+| **Devin/Cognition** | Series D $1B+ | $26B | $492M | 13x ARR growth YoY |
+| **Ineffable Intelligence** | $1.1B seed | — | — | Largest seed round in AI history |
+
+Bret Taylor (Sierra CEO, former Salesforce co-CEO) warned publicly about a "culling effect" in agent startups within the next two years — the market will consolidate dramatically as platform providers (OpenAI, Anthropic, Google) absorb use cases that startups currently serve.
+
+### Talent Movements (as of late May 2026)
+
+**Andrej Karpathy** joined Anthropic's pre-training team (May 19, 2026); Eureka Labs paused operations. **Meta** appointed Alexandr Wang (Scale AI founder) as Chief AI Officer and executed ~8,000 layoffs (~10% of workforce) on May 20 — a restructuring focused on concentrating resources on Superintelligence Labs.
 
 ---
 
