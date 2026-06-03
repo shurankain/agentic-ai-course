@@ -35,7 +35,15 @@ The EU AI Act classifies AI systems into four risk levels:
 - **December 2027** — full enforcement for standalone high-risk systems (Annex III) — delayed from August 2026 by the Digital Omnibus (+16 months). Covers HR, credit scoring, law enforcement, healthcare AI
 - **August 2028** — high-risk AI in regulated products (Annex I — safety products) — delayed from August 2027 by the Digital Omnibus (+12 months)
 
-**Digital Omnibus (May 7, 2026):** The EU Council and European Parliament reached a provisional political agreement to delay high-risk enforcement deadlines as part of a broader simplification package. The agreement also introduced a new prohibition: AI for generating non-consensual intimate imagery (NCII) and CSAM ("nudifiers"). The deal has provisional status — formal adoption is expected via an accelerated procedure given the proximity of the original August 2026 deadline. The requirements themselves are unchanged — only the deadlines shifted. This is additional time for compliance, not a relaxation of obligations.
+**Digital Omnibus (May 7, 2026):** The EU Council and European Parliament reached a provisional political agreement to delay high-risk enforcement deadlines as part of a broader simplification package. The deal has provisional status — formal adoption is expected before August 2, 2026, with amendments becoming binding after publication in the Official Journal. The requirements themselves are unchanged — only the deadlines shifted. This is additional time for compliance, not a relaxation of obligations.
+
+**New prohibition — AI-generated NCII/CSAM (Article 5 amendment):** The Digital Omnibus adds a new entry to the list of prohibited AI practices: AI systems that generate or manipulate non-consensual intimate imagery (NCII) and child sexual abuse material (CSAM), including so-called "nudifier" tools. Effective December 2, 2026. This is the first new prohibited practice added to the AI Act since its adoption — signaling that the prohibition list is not static and will expand as new harms emerge (as of late May 2026).
+
+**Additional Digital Omnibus changes (as of late May 2026):**
+- **AI regulatory sandbox deadline extended** to August 2, 2027 (from the original earlier date). Member states have more time to establish national AI sandboxes for controlled testing of AI systems before market deployment.
+- **Transparency grace period shortened** from 6 months to 3 months — new deadline December 2, 2026 (was later under the original schedule). Providers of AI systems with transparency obligations (chatbots, emotion recognition, deepfakes) now have less time to comply after the formal adoption.
+- **AI Office competence clarified:** The EU AI Office supervises GPAI-model-based systems where the same provider develops both the model and the downstream system. Exceptions remain under national authority: law enforcement, border management, judicial systems, and financial institutions — these continue to be supervised by national market surveillance authorities.
+- **GPAI Code of Practice signatories:** Amazon, Anthropic, Google, Microsoft, and OpenAI have signed the GPAI Code of Practice, which provides a presumption of compliance ("safe harbor") with GPAI obligations.
 
 ### Enforcement Reality (as of May 2026)
 
@@ -107,6 +115,10 @@ SEC AI Guidance (2024): disclosure requirements for AI-driven trading, risk mana
 
 AI in federal systems: FedRAMP authorization, FISMA compliance, agency requirements. Note: The Biden Executive Order on AI (October 2023) was rescinded in January 2025. Federal AI policy is now primarily driven by individual agency guidance and procurement requirements rather than a centralized executive mandate.
 
+### Bilateral AI Safety Testing (as of late May 2026)
+
+Microsoft signed evaluation agreements with U.S. CAISI (Consortium for AI Safety and Innovation) and U.K. AISI (AI Safety Institute) on May 5, 2026, for testing national security and public safety risks of AI models. This is the first bilateral AI safety testing agreement involving a major AI company — establishing a precedent for government-industry cooperation on frontier model evaluation across jurisdictions. The agreement allows both institutes to test Microsoft's frontier models before and after deployment, with a focus on national security applications and public safety scenarios. This voluntary model — where companies proactively submit to government testing — may become the de facto standard in the absence of mandatory federal AI safety legislation.
+
 ### US State-Level AI Regulation
 
 With the federal executive order rescinded, **US states have become the primary source of AI regulation**:
@@ -165,7 +177,7 @@ When deploying across multiple jurisdictions, a unified approach covering the st
 
 The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025. High-risk requirements were delayed by the Digital Omnibus (May 2026): standalone high-risk (Annex III) now December 2027, product-embedded high-risk (Annex I) now August 2028. The GPAI Code of Practice provides a compliance safe harbor.
 
-The US landscape shifted: Biden's AI Executive Order was rescinded (January 2025), making NIST AI RMF the primary federal guidance (voluntary). US states are filling the gap — Colorado AI Act (2026 enforcement), with Texas, Illinois, and others following.
+The US landscape shifted: Biden's AI Executive Order was rescinded (January 2025), making NIST AI RMF the primary federal guidance (voluntary). US states are filling the gap — Colorado AI Act (2026 enforcement), with Texas, Illinois, and others following. A new development (as of late May 2026): bilateral AI safety testing agreements between companies (Microsoft) and government institutes (U.S. CAISI, U.K. AISI) may establish a voluntary frontier model evaluation standard.
 
 GPAI obligations now affect all foundation model providers: technical documentation, training data summaries, copyright compliance, and (for systemic risk models) adversarial testing and incident reporting.
 

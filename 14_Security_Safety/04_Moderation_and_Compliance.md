@@ -116,6 +116,24 @@ The EU AI Act is no longer future regulation — it is active law with enforceme
 
 Industry-specific regulations in finance (SEC, FINRA), insurance, and education add additional requirements.
 
+## Runtime Safety Controls (as of late May 2026)
+
+Safety enforcement is shifting from application-level configuration to centralized organizational policy. This represents a significant architectural change: instead of each team configuring safety guardrails in their own application code, the platform enforces safety controls uniformly across all workloads.
+
+### AWS Bedrock Guardrails — Organizational Enforcement
+
+AWS Bedrock Guardrails (April 3, 2026 update) are now enforceable cross-account and at the AWS Organizations level. Previously, guardrails were configured per-application by individual development teams. Now, a central security team can define content policies, PII filters, and topic restrictions that apply to all Bedrock invocations across all accounts in the organization — regardless of what the application code does.
+
+**Architectural implication:** Safety controls have moved from "each team configures safety" to "platform enforces safety." Individual applications cannot bypass organizational guardrails even if their code does not explicitly reference them. This is analogous to how AWS SCPs (Service Control Policies) restrict IAM permissions organization-wide — guardrails now work the same way for AI content safety.
+
+### Anthropic Runtime Controls — Beyond Refusals
+
+Anthropic introduced runtime controls that go beyond traditional model refusals: **cyber-risk blocks** prevent the model from executing actions that could cause security harm (not just refusing to answer, but actively blocking dangerous tool calls and code execution at the runtime level). The **Cyber Verification Program** provides a pathway for legitimate security researchers and professionals to access capabilities that are blocked for general users.
+
+**Architectural implication:** Safety has moved beyond the prompt-response layer into runtime control. The model does not just refuse dangerous requests — the runtime prevents them from executing. This is the difference between a firewall that logs bad packets (refusals) and a firewall that drops them (runtime controls). For architects building agent systems with tool use, this means safety enforcement happens at the execution layer, not just the generation layer.
+
+---
+
 ## Data Retention and Deletion
 
 Retention policies define the data storage period. Different types have different requirements.
@@ -167,6 +185,8 @@ Input moderation prevents attacks and resource waste. Output moderation protects
 Factual claims and misinformation are especially dangerous in sensitive domains (medicine, finance, law). Disclaimers and domain restrictions reduce risk.
 
 The EU AI Act is now actively enforced: prohibited practices banned (Feb 2025), GPAI obligations in force (Aug 2025), high-risk requirements upcoming (Aug 2026). The US landscape is fragmented: federal EO rescinded, but state laws (Colorado AI Act, California) create a compliance patchwork. GDPR, CCPA/CPRA, HIPAA, SOC 2, and industry-specific regulations continue to define data protection standards.
+
+Runtime safety controls are shifting from application-level to organizational-level enforcement (as of late May 2026): AWS Bedrock Guardrails now enforce cross-account at the Organizations level; Anthropic runtime controls block dangerous actions at the execution layer, not just at the generation layer.
 
 Data retention policies differ for conversation data, audit logs, and training data. Right to be forgotten requires comprehensive deletion.
 

@@ -381,6 +381,30 @@ This works because model quality follows a long tail: 70% of agent interactions 
 
 ---
 
+## Agent Billing Fragmentation (as of late May 2026)
+
+Agent billing is fragmenting across providers. The era of flat-rate "unlimited" AI pricing is ending — usage-based billing is becoming the standard for agent workloads, and agent-specific costs are diverging from general model API costs.
+
+### Provider Billing Changes
+
+**Anthropic** is separating Agent SDK credits from general usage, effective June 15, 2026. Teams using Claude Code in CI/automation pipelines must move to Max 20x plans or switch to direct API keys. Agent SDK usage (multi-step tasks, tool calls, background execution) will no longer draw from the same credit pool as standard API calls.
+
+**Cursor** is moving Bugbot (automated bug detection agent) to usage-based billing, replacing the previous flat-rate inclusion in Pro plans.
+
+**GitHub Copilot** is adding usage-based pricing beyond premium request limits. Copilot Pro and Business tiers retain a base allocation, but agent-mode interactions (multi-file edits, workspace-wide refactoring) that exceed the premium limit are billed per-use.
+
+**Google Gemini** is moving to a compute-used pricing model. The new AI Ultra tier ($100/month) provides 5x higher limits than the standard plan, but usage is measured in compute units rather than flat message counts.
+
+### Why This Matters for Architects and PMs
+
+**Budget for agent billing separately from model API costs.** Agent execution — multi-step loops, tool calls, background tasks, code generation with verification cycles — consumes tokens at 10-20x the rate of a single query. A developer using Claude Code for a refactoring task may trigger 50-100 LLM calls in a single session. An automated CI pipeline running Codex or Claude Code on every PR may generate thousands of calls per day.
+
+**The trend:** Providers are discovering that agent workloads have fundamentally different economics from chat workloads. Chat is low-volume, high-margin. Agent execution is high-volume, infrastructure-intensive. Flat-rate pricing that made sense for chat becomes unsustainable when agents are running multi-minute automated workflows. Expect every major provider to have agent-specific billing by late 2026.
+
+**Practical guidance:** Track agent token consumption separately in your monitoring dashboards. Set per-agent and per-workflow budget caps (see the Token Budgeting section above). When evaluating agent platforms, compare the total cost of a typical workflow (including all intermediate LLM calls), not just the per-token price of the underlying model.
+
+---
+
 ## Related Topics
 
 - [[04_Planning|Planning]] — efficient planning conserves resources
@@ -423,6 +447,11 @@ This works because model quality follows a long tail: 70% of agent interactions 
    - Development is only 25-35% of 3-year TCO; multiply estimates by 2.5-3x
    - Build vs Buy: <10K interactions/month = buy, >200K = build, hybrid in between
    - 70/30 hybrid strategy: open-source for volume, proprietary for frontier reasoning
+
+8. **Agent Billing Fragmentation (as of late May 2026):**
+   - Flat-rate "unlimited" AI pricing is ending; usage-based billing is becoming standard for agent workloads
+   - Budget for agent execution separately from model API costs — agents consume 10-20x more tokens than single queries
+   - Track per-agent and per-workflow token consumption in monitoring dashboards
 
 ---
 
