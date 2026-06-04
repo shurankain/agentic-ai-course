@@ -76,9 +76,10 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-5.4, GPT-5.2, o3, o4-mini, GPT-5.4-Cyber, GPT-5.3-Codex-Spark)
-  - Anthropic (Claude Opus 4.7, Sonnet 4.6, Haiku 4.5, Mythos Preview — restricted access)
-  - Google (Gemini 3.1 Pro, 3 Flash, 2.5 Pro/Flash; Gemma 4 open-weight)
+  - OpenAI (GPT-5.5, GPT-5.4, o3, o4-mini, GPT-5.5-Cyber, GPT-5.3-Codex-Spark)
+  - Anthropic (Claude Opus 4.8, Sonnet 4.6, Haiku 4.5, Mythos Preview — restricted access)
+  - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4 open-weight)
+  - DeepSeek (V4-Pro, V4-Flash — open weights MIT)
   - Meta (Llama)
   - Mistral
 - API structure: common principles
@@ -360,7 +361,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96% → 87.6% (Claude Opus 4.7, April 2026); Mythos Preview 93.9% (restricted)
+  - Evolution: 1.96% → 88.6% (Claude Opus 4.8, May 2026); Mythos Preview 93.9% (restricted)
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan → Edit → Test → Debug loop
@@ -370,6 +371,8 @@
   - Sandboxed execution
   - Git-based changes
   - Review before commit
+- **Terminal Agents** — Claude Code, Codex CLI, Antigravity 2.0; composable stack trend
+- **IDE market consolidation (as of late May 2026)** — Cursor $4B ARR, Devin $26B, Claude Code $1B+ ARR
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
@@ -394,8 +397,8 @@
 
 ### 03.9 Practical AI Agent Use Cases (`09_Agent_Use_Cases.md`)
 - Taxonomy of AI agent applications
-- **Coding Agents** — Cursor $2B ARR, Claude Code $500M ARR, Devin $10.2B (as of early 2026). Terminal agents as new subcategory
-- **Agentic RAG** — Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-Agent patterns
+- **Coding Agents** — Cursor $4B ARR, Claude Code $1B+ ARR, Devin $26B valuation (as of late May 2026). Terminal agents as new subcategory
+- **Agentic RAG** — Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-agent patterns
 - **Workflow Automation** — n8n (200K+ businesses, MCP support)
 - **Voice Agents** — 4-tier market (ElevenLabs, Vapi, LiveKit, Bland AI)
 - **Computer Use Agents** — Anthropic, ChatGPT agent (formerly Operator) (Beta)
@@ -431,6 +434,7 @@
 - **Agent Project Economics** — TCO framework (dev = 25-35% of 3-year cost), complexity-based cost table
 - Build vs Buy Thresholds (<10K buy, >200K build, hybrid in between)
 - The 70/30 Hybrid Model Strategy (open-source for volume, proprietary for frontier)
+- **Agent Billing Fragmentation** — usage-based replacing flat-rate; Anthropic Agent SDK credits separate from June 2026
 
 ---
 
@@ -504,6 +508,7 @@
 - **MCP Apps (January 2026)** — interactive UI components in conversations
 - **MCP Server Cards** — `.well-known` metadata for automated discovery
 - **MCP Tasks (SEP-1686)** — long-running async operations with progress, cancellation, partial results
+- **MCP 2026-07-28 Release Candidate** — stateless core, MCP Apps (interactive HTML UI), horizontal scaling, formal deprecation policy (as of late May 2026)
 - **Protocol Landscape** — MCP (agent→tool) / A2A (agent→agent) / ANP (agent→open network, experimental)
 
 ### 05.2 MCP Components (`02_MCP_Components.md`)
@@ -683,13 +688,13 @@
   - Low-level (Building Blocks): LangChain, LlamaIndex
   - Provider SDKs: OpenAI, Anthropic, Google
 - **Key player comparison table**
-  - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month (as of early 2026)
-  - CrewAI: 45K+ stars, $18M Series A (as of early 2026)
+  - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month; LangGraph 1.2 (as of late May 2026)
+  - CrewAI: 47.8K stars, 27M+ downloads, $18M Series A (as of late May 2026)
   - AutoGen → Microsoft Agent Framework **1.0 GA** (April 3, 2026) — MCP, A2A, DevUI
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
-- Provider SDKs: OpenAI Agents SDK (March 2025), Claude SDK
+- Provider SDKs: OpenAI Agents SDK (March 2025), Claude SDK, **Antigravity 2.0** (Google, replaces Gemini CLI)
 - **Fast-Growing Frameworks:** Pydantic AI (type-safe Python), Mastra (TypeScript), Agno (39K+ stars), smolagents (HuggingFace), Vercel AI SDK (20M+ downloads/month)
 - **Specialized:** DSPy (automatic prompt optimization), Dify (93K+ stars, low-code)
 - **JVM Ecosystem Parity:** JetBrains Koog (March 2026), MCP Java SDK 1.0 GA, Spring AI MCP starters, Java 26
@@ -830,6 +835,7 @@
 - Computer vision in conversational systems
 - Multimodal agents
 - **MCP Integration for Voice Agents** (latency budgets, speech-friendly tool responses)
+- **GPT-Realtime-2** (May 2026, GA) — GPT-5-class reasoning in voice, 128K context, MCP support, SIP calling
 - **Voice Agent Market Structure (2026)** — 4 tiers: Full-Stack (ElevenLabs), Orchestration (Vapi), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Cost comparison table. Unit economics: AI $0.50-2.00/resolution vs human $15-40
 - Voice interface design specifics
 - Security and ethics of multimodal systems
@@ -1036,6 +1042,8 @@
 - Agent-specific evaluation benchmarks
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
+  - **Terminal-Bench 2.1**, **MCP Atlas**, **ITBench-AA** (as of late May 2026)
+- **Long-horizon agent reliability** — Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50% — real-world multi-step agents still unreliable
 - **Benchmark Reliability and Gaming** — SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
 - **Cost per Correct Answer** — practical metric (77x cost difference hidden by 5% accuracy gap)
 - **What Benchmarks Don't Measure** — error recovery, cost efficiency, consistency, composability
@@ -1282,6 +1290,8 @@
 - **OWASP MCP Top 10** (Tool Poisoning, NeighborJack, Model Misbinding, Context Spoofing)
 - MCP Security Incidents (mcp-remote RCE, Anthropic Git MCP CVEs, Agent ROME, 84% attack success rate)
 - **April 2026 incidents:** Vercel/Context.ai breach (AI tool supply chain), Mercor/LiteLLM (dependency compromise), AI agent hit 600+ firewalls autonomously
+- **NSA MCP security guidance** (PP-26-1834) — national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
+- **May 2026 CVEs:** CVE-2026-33032 (nginx-ui, CVSS 9.8), CVE-2026-26118 (MS MCP Server), database MCP vulns
 - **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
 - **Claude Mythos cyber capabilities** — 73% on expert cyber simulations; GPT-5.4-Cyber for defense
 - **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
@@ -1548,10 +1558,11 @@
   - RadixAttention: KV-cache as a radix tree
   - Up to 3× throughput for chatbots
 - Inference engine comparison
-  - vLLM: PagedAttention reference
+  - vLLM: PagedAttention reference (v0.18-v0.19, async scheduler, gRPC, GPU NGram speculative decoding)
   - SGLang: structured generation + RadixAttention
   - TensorRT-LLM: maximum NVIDIA performance
   - Text Generation Inference (TGI): HuggingFace production
+  - **Cloudflare Infire**: Rust-based, up to 7% faster than vLLM 0.10 on H100 NVL
 - Decision Framework: when to choose what
 - SGLang Language Features
   - Primitives: gen, select, fork, join
@@ -1569,7 +1580,7 @@
   - Unacceptable risk: prohibited practices
   - High-risk AI: conformity assessment requirements
   - GPAI (General Purpose AI) obligations
-  - Timeline: February 2025 — August 2027
+  - Timeline: February 2025 — August 2028 (extended by Digital Omnibus, May 2026)
 - NIST AI Risk Management Framework
   - GOVERN, MAP, MEASURE, MANAGE
   - AI RMF Playbook
@@ -1716,9 +1727,10 @@
 - **CTO's Checklist**
 - **Enterprise Agent Platforms (2025-2026)**
   - Tier 1 Horizontal: Salesforce Agentforce ($800M ARR), Microsoft Copilot Studio, Amazon Bedrock AgentCore
-  - Tier 2 Vertical: Sierra ($4.5B, Ghostwriter), Harvey (legal)
+  - Tier 2 Vertical: Sierra ($15.8B, $150M ARR, Ghostwriter), Harvey (legal)
   - Tier 3 Embedded: ServiceNow, SAP Joule
   - Anthropic: Claude Managed Agents, Claude Cowork
+- **Funding & Market (as of late May 2026)** — Anthropic $47B ARR, $65B Series H at $965B; OpenAI S-1 filed ($852B-$1T, IPO Q4 2026); OpenAI on Bedrock (end of Azure exclusivity); Karpathy joined Anthropic
 - **Production Case Studies** — Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
 - **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
 - **Enterprise Integration Patterns** — 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
