@@ -442,7 +442,7 @@ GRPO (Group Relative Policy Optimization), introduced with DeepSeek R1 (January 
 
 **Overtraining is economically justified for inference efficiency** — if your model will handle billions of requests, it is worth overpaying on training to get a smaller, faster model. Inference cost dominates for high-volume services. LLaMA 2 7B was overtrained 14x relative to Chinchilla optimal precisely for this reason.
 
-**Test-time compute is an established scaling dimension** — all major providers now offer reasoning models (o3, o4-mini, Claude extended thinking, Gemini thinking, DeepSeek R1). GRPO demonstrated that reasoning can emerge from pure RL. Distillation enables efficient transfer of reasoning capabilities to smaller models. Budget control APIs enable per-request cost-quality optimization.
+**Test-time compute is an established scaling dimension** — all major providers now offer reasoning models (o3, o4-mini, Claude extended thinking, Gemini thinking, DeepSeek V4 reasoning mode). GRPO (pioneered in DeepSeek R1) demonstrated that reasoning can emerge from pure RL. Distillation enables efficient transfer of reasoning capabilities to smaller models. Budget control APIs enable per-request cost-quality optimization.
 
 **Scaling is not universal** — there are tasks where simply increasing the model is ineffective: factual knowledge after the cut-off date, exact retrieval from memory, domain-specific knowledge without corresponding data. For these cases, specialized solutions are needed (RAG, fine-tuning, external tools).
 

@@ -142,9 +142,9 @@ A French company offering efficient open-weight models. Attractive for European 
 
 ### Other Notable Providers
 
-**Amazon Bedrock** — access to models from multiple providers (Anthropic, Meta, Mistral, Cohere) through a unified AWS API with enterprise guarantees.
+**Amazon Bedrock** — access to models from multiple providers (Anthropic, Meta, Mistral, Cohere, and now OpenAI) through a unified AWS API with enterprise guarantees. OpenAI models became available on Bedrock in April 2026, ending nearly 7 years of Azure exclusivity for OpenAI models. AWS shops no longer need Azure for GPT-5.5 access.
 
-**Azure OpenAI** — OpenAI models with enterprise SLA, compliance, and integration with the Azure ecosystem.
+**Azure OpenAI** — OpenAI models with enterprise SLA, compliance, and integration with the Azure ecosystem. No longer the exclusive hyperscaler for OpenAI models (as of April 28, 2026), but retains deep integration with Microsoft 365 and Azure AI services.
 
 **Cohere** — specializes in enterprise search and RAG. Embed models for embeddings, Command for generation, Rerank for re-ranking search results.
 
@@ -187,7 +187,7 @@ Unlike standard models that generate responses token by token, reasoning models 
 
 ## Open-Source Models: In-Depth Comparison
 
-The open-source landscape has transformed. In 2025, open-source models achieved parity with — and in some domains surpassed — proprietary ones. DeepSeek R1, Llama 4, and Qwen 3 are the three flagship families.
+The open-source landscape has transformed. In 2025, open-source models achieved parity with — and in some domains surpassed — proprietary ones. DeepSeek V4, Llama 4, and Qwen 3 are the three flagship families (DeepSeek R1 was the 2025 breakthrough; V4 superseded it in April 2026).
 
 ### DeepSeek
 
@@ -307,11 +307,11 @@ Google's newest open-weight family (April 2, 2026), distinct from the proprietar
 
 ### Practical Recommendations
 
-**For a startup with a limited budget:** start with Qwen 3 in a 14B or 32B configuration — good balance between quality and resources. Use hybrid reasoning mode to avoid needing separate models. For pure reasoning tasks, DeepSeek R1 distilled variants (7B-70B) deliver outstanding performance.
+**For a startup with a limited budget:** start with Qwen 3 in a 14B or 32B configuration — good balance between quality and resources. Use hybrid reasoning mode to avoid needing separate models. For pure reasoning tasks, DeepSeek V4-Flash (284B/13B active, MIT license) or R1 distilled variants (7B-70B) deliver outstanding performance.
 
-**For enterprise self-hosting:** Llama 4 Maverick or Scout are the optimal choices thanks to the mature ecosystem, strong tooling (vLLM, TGI), and clear licensing. Scout's 10M context window eliminates many RAG complexity needs. For reasoning-heavy workloads, pair with R1 distilled models.
+**For enterprise self-hosting:** Llama 4 Maverick or Scout are the optimal choices thanks to the mature ecosystem, strong tooling (vLLM, TGI), and clear licensing. Scout's 10M context window eliminates many RAG complexity needs. For reasoning-heavy workloads, DeepSeek V4 folds reasoning into a unified model (no need for separate R1).
 
-**For research:** DeepSeek R1 is of particular interest for studying GRPO and RL-based reasoning emergence. Qwen 3's hybrid reasoning mode offers insights into mode-switching architectures. All three families provide full model weights for analysis.
+**For research:** DeepSeek R1 remains of interest for studying GRPO and RL-based reasoning emergence (the R1 line was discontinued, but V4 inherits its innovations). Qwen 3's hybrid reasoning mode offers insights into mode-switching architectures. All three families provide full model weights for analysis.
 
 ### Interview Questions: Open-Source Models
 
@@ -759,7 +759,7 @@ Modern LLMs require significant resources:
 
 4. **Cost is determined by tokens.** Output tokens are 3-5x more expensive than input. Thinking tokens in reasoning models can dominate costs. Caching, batching, and routing can reduce costs by several times.
 
-5. **Open-source models have reached parity.** DeepSeek R1, Llama 4, and Qwen 3 compete with proprietary models. MoE architecture dominates the frontier.
+5. **Open-source models have reached parity.** DeepSeek V4, Llama 4, and Qwen 3 compete with proprietary models. MoE architecture dominates the frontier.
 
 6. **Tool use / function calling** is the standard for agents. All major providers support this capability with compatible formats.
 
