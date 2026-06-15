@@ -366,6 +366,20 @@ xAI ceased to exist as a separate company on May 6, 2026 — it is now the Space
 
 **Inference cost trajectory:** Costs have fallen approximately 280x over two years (early 2024 to early 2026), and NVIDIA Blackwell hardware combined with open-source model optimization is driving an additional 4-10x reduction. The Jevons Paradox applies: as inference becomes cheaper, usage increases proportionally — total spending often remains flat or grows despite per-unit cost drops. Amazon and Cerebras formed a "disaggregated inference" alliance (AWS Trainium for prefill + Cerebras WSE-3 for decode), directly challenging NVIDIA's memory monopoly with 5x token throughput improvement.
 
+### Market Landscape & Business Model Disruption (as of mid-June 2026)
+
+The AI industry is undergoing a structural transformation that goes beyond technology improvements — it is reshaping how software is built, sold, and valued.
+
+**The SaaS Shakeout.** In February 2026, Anthropic's launch of Claude Cowork triggered a 48-hour selloff that wiped approximately $285 billion from SaaS company valuations. The rolling impact exceeded $2 trillion in total SaaS market cap erosion since the start of 2026. The mechanism: AI agents demonstrated they could replace entire categories of knowledge work previously handled by SaaS tools with per-seat licenses. One AI-equipped user does the work of five, reducing seats needed. Software P/S ratios compressed from 9x to 6x — levels not seen since the mid-2010s. The "SaaSpocalypse" (financial press term) is not a temporary correction — it reflects a structural repricing of the value of traditional software.
+
+**Per-Seat Pricing Collapse.** Per-seat pricing adoption dropped from 21% to 15% in 12 months. 40% of enterprise SaaS contracts now include outcome-based elements (up from 15% two years ago). The shift: per-seat → outcome/usage-based. AI product gross margins run approximately 52% (vs traditional SaaS 75-85%) because inference costs, while declining, are non-zero. Hybrid pricing is emerging as the stable pattern: subscription base (predictable revenue) + usage variable (aligned with value delivered). GitHub Copilot's transition to usage-based billing (June 1, 2026) is the most visible example — the last major flat-rate AI coding product abandoned unlimited pricing.
+
+**Market Consolidation.** The "great shakeout" is over; the "great consolidation" has begun. Platform-led rollups dominate — major platforms acquire point solutions to build integrated stacks. Revenue is shifting from vertical AI startups to horizontal AI platforms (Salesforce Agentforce, Microsoft Agent 365, AWS Bedrock AgentCore). Sierra CEO Bret Taylor warns of a "culling effect" in agent startups within two years. The next mega-deal sectors: energy (AI data center power) and cybersecurity (AI-enabled attack/defense).
+
+**AI Market Scale.** The global AI market reached $601.93B in 2026, projected to reach $3,638B by 2033 (29.3% CAGR). Q1 2026 venture capital set a record: $300B+, with AI capturing 57-80% of all VC funding. This concentration is unprecedented — more than half of all venture investment is flowing into a single technology category.
+
+**Inference Economics as the New Center of Gravity.** The economic balance has shifted from training to inference as the primary cost center. Hyperscalers now evaluate AI accelerators on cost/million tokens and revenue/watt rather than peak FLOPS. Training a frontier model is a one-time expense (months, then amortized); inference runs continuously at scale. This changes procurement decisions: the $725B in Big Tech CapEx is increasingly targeted at inference capacity, not training clusters. For enterprise architects, the implication is clear — optimize for inference cost, not training cost. The models are commoditizing; the serving infrastructure is where value accrues.
+
 ### Agent Startup Funding Landscape (as of late May 2026)
 
 The funding environment for agent startups has reached unprecedented levels — but consolidation warnings are emerging:
