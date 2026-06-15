@@ -123,7 +123,7 @@ Microsoft signed evaluation agreements with U.S. CAISI (Consortium for AI Safety
 
 With the federal executive order rescinded, **US states have become the primary source of AI regulation**:
 
-**Colorado AI Act (SB 24-205, signed May 2024):** The first comprehensive US state AI law. Requires deployers of "high-risk AI systems" to use reasonable care to avoid algorithmic discrimination. Mandates risk management policies, impact assessments, and consumer notification when AI is used in consequential decisions (employment, finance, housing, insurance, education). Effective February 2026.
+**Colorado AI Act (SB 24-205, signed May 2024):** Originally the first comprehensive US state AI law requiring reasonable care to avoid algorithmic discrimination, with risk management policies, impact assessments, and consumer notification for consequential decisions. The original effective date (February 2026) was delayed to June 30, 2026, then **delayed again to January 1, 2027** by SB 189 (signed May 14, 2026). More significantly, SB 189 **narrowed the scope**: the risk-based framework was replaced with a transparency-only approach — eliminating the duty of care, deployer obligations for impact assessments, and most reporting requirements to the Attorney General. The first comprehensive US state AI law was substantially weakened before ever being enforced — a cautionary signal about the political durability of AI regulation.
 
 **California SB-1047 (vetoed September 2024):** Would have required safety testing for large AI models (>$100M training cost or >10^26 FLOPS). Though vetoed by Governor Newsom, it influenced national debate. California subsequently passed **SB-53** (signed September 2024) — a narrower alternative requiring frontier model developers to publish transparency reports about safety testing. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking, making it the most active US state on AI regulation.
 
@@ -131,21 +131,35 @@ With the federal executive order rescinded, **US states have become the primary 
 
 **Implication for AI architects:** Multi-state deployment in the US now requires tracking a patchwork of state laws, similar to how GDPR compliance was needed for EU deployment. The strictest applicable state law effectively sets the floor.
 
+### Federal AI Legislation Attempts (as of mid-June 2026)
+
+**Great American Artificial Intelligence Act (June 4, 2026):** A 269-page bipartisan discussion draft from Reps. Obernolte (R-CA) and Trahan (D-MA) — the most comprehensive federal AI bill proposed to date. Four titles: Frontier AI Governance (mandatory safety frameworks for models costing >$500M to train, third-party audits), Workforce (retraining programs), Cybersecurity, and Research/Development/International Cooperation. The most significant provision: a **3-year preemption of state AI development laws** — states retain the right to regulate AI *use* within their borders but lose the ability to legislate how AI systems are *built*. If enacted, this would override the Colorado AI Act and similar state laws on AI development. $100M/year authorized for a Center for AI Standards and Innovation. Status: discussion draft only — not yet introduced as a formal bill. The preemption clause is highly contested.
+
+**Trump AI Executive Order (as of mid-June 2026):** Establishes a voluntary 30-day model review framework. CISA, NSA, and Treasury to define "qualifying models" subject to review within 60 days. The voluntary nature contrasts sharply with the EU's mandatory approach and with the June 13 export ban on Fable 5/Mythos 5 — the administration simultaneously promotes voluntary cooperation and wields export controls unilaterally when it deems necessary.
+
+**First model-level export controls (June 13, 2026):** The Fable 5/Mythos 5 export ban (see [[../14_Security_Safety/03_Agent_Security|Agent Security]]) sets a precedent: AI models can now be export-controlled independently of hardware. This goes beyond the chip-focused CHIPS Act framework and creates a new category of AI governance — model-level access control by government directive.
+
+### China: National AI Agent Framework (as of mid-June 2026)
+
+**China issued the first national policy framework for AI agents** (May 8, 2026) — a joint publication by the Cyberspace Administration, National Development and Reform Commission, and Ministry of Industry and Information Technology. The framework introduces **risk-tiered governance** based on application scenarios: healthcare, transport, media, and public safety applications require mandatory filing, safety testing, and recall procedures. The document enumerates 19 application scenarios spanning scientific research, manufacturing, energy, agriculture, finance, education, healthcare, and public safety.
+
+Key differences from the EU approach: China's framework specifically addresses agentic AI (agents that take autonomous actions) as a distinct governance category — not just a subcategory of general-purpose AI. Decision boundaries, behavioral controls, risk warnings, traceability, human oversight, and multi-agent coordination are all explicitly regulated. This is the most detailed national framework for agent governance globally and may influence how other jurisdictions approach agentic AI regulation.
+
 ## Global Differences
 
 ### Comparison of Approaches
 
 **EU:** Regulation of all AI, strong enforcement, GPAI rules in place.
 
-**USA:** Voluntary federal framework (NIST) after Biden EO rescission (Jan 2025), growing state-level regulation (Colorado AI Act), sector-specific federal rules.
+**USA:** Voluntary federal framework (NIST) after Biden EO rescission (Jan 2025), growing state-level regulation (Colorado weakened May 2026), Great American AI Act draft (June 2026), model-level export controls (June 2026). Fragmented but increasingly active.
 
-**China:** Comprehensive regulation focused on safety and ethics, state enforcement, GPAI rules in place.
+**China:** Comprehensive regulation including the first national AI agent framework (May 2026). Risk-tiered: 19 application scenarios with mandatory filing for healthcare/transport/media. State enforcement, GPAI rules in place.
 
 **UK:** Pro-innovation approach, principles-based foundation, sandbox for experimentation, evolving GPAI rules.
 
 ### China: Comprehensive Regulation
 
-Key regulations: Algorithm Recommendation (2022), Deep Synthesis (2023) for deepfakes, Generative AI Measures (2023). Requirements: content moderation, registration, user consent, safety assessment.
+Key regulations: Algorithm Recommendation (2022), Deep Synthesis (2023) for deepfakes, Generative AI Measures (2023), **AI Agent Framework (May 2026)** — the first national agentic AI policy (see above). Requirements: content moderation, registration, user consent, safety assessment. The agent framework adds: decision boundary controls, behavioral monitoring, risk-tiered filing, and mandatory recall procedures for high-risk agent applications.
 
 ### UK: Pro-Innovation Approach
 
@@ -177,7 +191,7 @@ When deploying across multiple jurisdictions, a unified approach covering the st
 
 The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025. High-risk requirements were delayed by the Digital Omnibus (May 2026): standalone high-risk (Annex III) now December 2027, product-embedded high-risk (Annex I) now August 2028. The GPAI Code of Practice provides a compliance safe harbor.
 
-The US landscape shifted: Biden's AI Executive Order was rescinded (January 2025), making NIST AI RMF the primary federal guidance (voluntary). US states are filling the gap — Colorado AI Act (2026 enforcement), with Texas, Illinois, and others following. A new development (as of late May 2026): bilateral AI safety testing agreements between companies (Microsoft) and government institutes (U.S. CAISI, U.K. AISI) may establish a voluntary frontier model evaluation standard.
+The US landscape is in flux (as of mid-June 2026): Biden's EO rescinded (Jan 2025), Colorado AI Act weakened before enforcement (SB 189, May 2026), but the **Great American AI Act** draft (June 4) proposes the first comprehensive federal framework with 3-year state preemption. The **Fable 5/Mythos 5 export ban** (June 13) established model-level export controls as a new governance tool. Bilateral safety testing (Microsoft-CAISI/AISI) may become the de facto standard. China published the **first national AI agent framework** (May 8) with risk-tiered governance for agentic AI — the most detailed agent-specific regulation globally.
 
 GPAI obligations now affect all foundation model providers: technical documentation, training data summaries, copyright compliance, and (for systemic risk models) adversarial testing and incident reporting.
 
