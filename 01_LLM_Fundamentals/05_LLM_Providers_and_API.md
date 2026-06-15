@@ -110,6 +110,7 @@ The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 - Competitive pricing, especially for Flash models
 - **Antigravity 2.0** (May 19, 2026) — replaced Gemini CLI as the desktop orchestration hub with CLI, SDK, plugins, skills, hooks, and subagent workflows
 - Moving from daily prompt limits to compute-used pricing model. AI Ultra $100/month with 5x higher limits. Gemini Spark personal agent for AI Ultra subscribers
+- **Siri AI deal (WWDC, June 9, 2026):** Google Gemini powers the rebuilt Siri AI under a ~$1B/year multi-year agreement. This gives Google distribution across 2+ billion Apple devices — the largest AI distribution deal. Apple is not building a frontier model; it is becoming a multi-model platform via iOS 27 Extensions (Claude, Gemini, ChatGPT as selectable default assistants)
 
 ### xAI
 

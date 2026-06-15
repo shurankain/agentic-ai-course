@@ -74,6 +74,10 @@ The API uses a **session-based model**: create a session with configuration (voi
 
 **Anthropic Claude voice:** Claude processes audio input through transcription but excels at understanding the *content* of conversations, meeting recordings, and spoken instructions. While not natively speech-to-speech, Claude's strength is in deep reasoning about audio-derived content.
 
+**Apple Siri AI (WWDC, June 9, 2026):** The most significant overhaul of Apple's voice assistant in 15 years. Siri AI is rebuilt from the ground up on a custom Google Gemini model under a multi-year deal worth approximately $1 billion per year. The architecture follows a three-tier privacy stack: queries are first processed by on-device Apple Foundation Models, then escalated to Private Cloud Compute (PCC) for more complex tasks, and finally routed to Gemini for the most demanding requests. Siri AI launches as a standalone app (text or voice input) alongside system-wide integration. The deal gives Google distribution across billions of Apple devices — the largest single AI distribution agreement to date.
+
+**iOS 27 Extensions — the BYOAI moment:** iOS 27 introduces Extensions that let users select a third-party AI model as their default assistant. For the first time, Claude, Gemini, and ChatGPT can serve as the primary assistant on iPhone and iPad. This is the "Bring Your Own AI" paradigm — model choice becomes a user preference, not an IT policy decision. For AI providers, Apple's 2+ billion active devices represent the largest potential distribution channel. For architects, it means designing for a multi-model world where the same application may be accessed through different AI frontends. Apple itself is not building a frontier model — it is becoming a multi-model platform, validating the BYOAI approach.
+
 ### Impact on Voice Agent Architecture
 
 The native speech-to-speech approach changes the architecture fundamentally:
@@ -289,6 +293,8 @@ Vision-language models open new scenarios. Showing instead of describing, seeing
 Modality integration matters more than modality availability. A multimodal agent connects information from different channels into a unified understanding, selects the appropriate modality for responses, and maintains cross-modal context.
 
 Safety and ethics gain a new dimension. Voice and images are biometric data requiring special protection. Voice cloning and deepfake technologies create risks of misuse. Accessibility and inclusivity require support for alternative modalities.
+
+The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI — not platforms.
 
 Technical challenges: minimizing latency, ensuring operation in noisy conditions, adapting to various accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
 
