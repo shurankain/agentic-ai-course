@@ -342,7 +342,7 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 **Claude Managed Agents** (April 2026 beta, multi-agent orchestration added May 2026) — $0.08/session-hour plus token costs. Composable APIs for building and deploying cloud-hosted agents at scale, with infrastructure abstracted away. Self-evaluation loop improves task success rate by ~10 percentage points. The May 2026 update added multi-agent orchestration: a lead agent delegates tasks to specialized sub-agents with their own models, prompts, and tools, running in parallel on a shared filesystem. Early adopters: Notion, Rakuten, Asana, Sentry. **Claude Cowork** (GA) targets knowledge work on desktops — moving between local files and applications to synthesize, assemble, and finish deliverables. Targets 500M knowledge workers (vs ~30M developers for coding tools).
 
-**Anthropic revenue trajectory:** Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) → $47B (May 2026) — 80x in three years. $65B Series H at $965B post-money valuation — surpassed OpenAI in private round valuations (as of late May 2026). 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. KPMG deployed Claude across 276,000 employees; PwC expanded its alliance. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
+**Anthropic revenue trajectory:** Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) → $47B (May 2026) — 80x in three years. $65B Series H at $965B post-money valuation. **Anthropic filed a confidential S-1** (June 1, 2026) targeting $1.75-1.8T valuation and up to $75B raise — potentially the largest IPO in history, expected October 2026. 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. KPMG deployed Claude across 276,000 employees; PwC expanded its alliance. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
 
 ### OpenAI's Path to Public Markets
 
@@ -350,7 +350,7 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 ### xAI / SpaceXAI
 
-xAI ceased to exist as a separate company on May 6, 2026 — it is now the SpaceXAI division. A public S-1 was filed May 20, ticker SPCX, targeting $1.75-2T valuation (as of late May 2026). Notable from the S-1 filing: Anthropic signed a Cloud Services Agreement with SpaceX at $1.25B/month through May 2029 for compute access on the Colossus / Colossus II superclusters.
+xAI ceased to exist as a separate company on May 6, 2026 — it is now the SpaceXAI division. **SpaceX IPO completed June 12:** ticker SPCX on Nasdaq, raised $75B at $135/share (record-breaking — more than double Saudi Aramco's $29.4B in 2019), +19% on first day closing at $161. Valuation: ~$1.75T. **Google signed a $920M/month compute deal** with SpaceX (June 5) — ~$30B total through June 2029, providing 110,000 NVIDIA GPUs. Google cited "surging customer demand for Gemini Enterprise." SpaceX Q1 2026 loss: $4.27B. Notable from the S-1: Anthropic signed a Cloud Services Agreement at $1.25B/month through May 2029 for Colossus/Colossus II superclusters.
 
 ### Emerging Enterprise Patterns
 
@@ -360,7 +360,7 @@ xAI ceased to exist as a separate company on May 6, 2026 — it is now the Space
 
 ### Industry Investment Scale (as of May 2026)
 
-**Meta** announced $115-135 billion in AI capital expenditures for 2026 — nearly double the previous year. Meta Superintelligence Labs released Muse Spark as a successor/extension to the Llama family. This level of CapEx indicates that Big Tech treats AI infrastructure as a strategic investment comparable to cloud computing build-outs of the 2010s.
+**Big Tech AI CapEx reached $725B for 2026** (+77% over 2025's $410B), according to Q1 earnings compilations: Amazon ~$200B, Microsoft ~$190B, Alphabet $175-190B, Meta $125-145B. Microsoft attributed $25B of the increase to rising memory chip and component costs. Meta Superintelligence Labs released Muse Spark as a successor/extension to the Llama family. This level of CapEx — three-quarters of a trillion dollars in a single year — indicates that Big Tech treats AI infrastructure as the defining strategic investment of the decade.
 
 **Multi-cloud AI becomes reality (as of late May 2026):** OpenAI models are now available on AWS Bedrock — ending the 7-year Azure exclusivity arrangement. AWS Bedrock reports 180% YoY adoption growth. Salesforce Manager Agent reached 100% adoption among target accounts, saving 50,000 hours. Informatica MCP servers are now discoverable directly in Azure AI Foundry. The pattern: enterprises no longer accept single-vendor lock-in for AI infrastructure.
 

@@ -146,6 +146,8 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 **Microsoft Agent Framework 1.0 GA** (April 3, 2026): The 1.0 release locked the API surface for long-term servicing. Ships with full MCP support for tool discovery, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI debugger** that visualizes agent execution and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface.
 
+**Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout** — an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ** — a new workplace intelligence layer with APIs (GA June 16), providing organizational context to agents. **Agent 365** — agents spanning M365, Azure, Dynamics, and Power Platform — preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake serves as the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform — leveraging 500M+ M365 users for distribution.
+
 **For new projects**: use Microsoft Agent Framework 1.0 for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should now plan migration — the 1.0 API is stable.
 
 ---
