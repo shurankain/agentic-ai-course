@@ -146,7 +146,7 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 **Alternative approaches to agent memory:**
 
-**Mem0** takes a different path — middleware for automatic fact extraction. Instead of the agent managing its own memory, Mem0 intercepts conversations and automatically extracts facts, preferences, and patterns. This is simpler to integrate (plug-and-play) but gives the agent less control over what gets remembered.
+**Mem0** (47K+ GitHub stars as of mid-June 2026) takes a different path — middleware for automatic fact extraction combining vector, graph, and key-value storage. Instead of the agent managing its own memory, Mem0 intercepts conversations and automatically extracts facts, preferences, and patterns. This is simpler to integrate (plug-and-play) but gives the agent less control over what gets remembered. **Zep** has evolved around Temporal Knowledge Graphs — scoring 63.8% on LongMemEval, the strongest result for memory retrieval across long conversation histories. Hybrid memory stacks (vector + graph + KV) are now the production standard, not the exception.
 
 **Amazon Bedrock AgentCore** introduces **episodic memory** — agents remember specific situations, decisions, and outcomes (not just facts). When a similar situation arises, the agent can recall how it handled it before. This goes beyond semantic memory (knowing facts) to experiential memory (knowing what worked).
 

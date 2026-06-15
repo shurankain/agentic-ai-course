@@ -723,7 +723,9 @@ Advanced RAG goes beyond simple "find and answer." Main directions of developmen
 - Late Chunking (Jina) — embeddings with full document context
 - ColPali — vision-language retrieval without OCR (+15% recall on tables)
 
-**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios.
+**Production landscape (mid-2026):** Adaptive RAG has become the dominant production pattern — a query classifier routes requests by complexity: simple factual queries to direct retrieval, multi-hop queries to agentic RAG, entity-relationship queries to GraphRAG. Microsoft and Thomson Reuters run GraphRAG in production for legal and compliance workflows. Continuous ingestion is replacing batch reindexing — documents are embedded and indexed on arrival, not in nightly batches. Agentic memory (persistent cross-session memory for agents) is now table stakes, not a differentiator.
+
+**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier → pipeline selection) is the recommended starting point for production systems (as of mid-June 2026).
 
 ---
 

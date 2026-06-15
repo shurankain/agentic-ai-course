@@ -254,12 +254,12 @@ Accounting for speech diversity is especially important. Accents, dialects, spee
 
 ## Voice Agent Market Structure (2026)
 
-The voice agent market has organized into four tiers (as of late May 2026): full-stack quality providers, orchestration middleware, developer frameworks, and enterprise telephony — each serving different needs and price points:
+The voice agent market has organized into four tiers (as of mid-June 2026): full-stack quality providers, orchestration middleware, developer frameworks, and enterprise telephony — each serving different needs and price points. The market is growing rapidly: projected $2.4B (2026) → $47.5B (2034).
 
 | Tier | Provider | Pricing | Latency | Best For |
 |------|----------|---------|---------|----------|
-| **Full-Stack** | ElevenLabs | Premium | <500ms | Best-in-class voice quality, custom brand voices, voice cloning |
-| **Orchestration** | Vapi, Retell AI | $0.05-0.13/min | ~200ms | Middleware layer — connect any STT + LLM + TTS. 14+ TTS providers |
+| **Full-Stack** | ElevenLabs | Premium | <100ms (Flash v2.5) | Best-in-class voice quality, 70+ languages, custom brand voices, voice cloning |
+| **Orchestration** | Vapi, Retell AI | $0.05-0.13/min | ~200ms | **Vapi:** 1B+ cumulative calls, 1-5M/day, $500M valuation (Series B, May 2026). 14+ TTS providers |
 | **Developer Framework** | LiveKit | $0.004/min audio | Varies | Open-source core, up to 80% cheaper at scale, on-premise possible |
 | **Enterprise Phone** | Bland AI | $0.07-0.12/min | ~200ms | Up to 1M parallel calls, SOC2/GDPR/HIPAA, enterprise telephony |
 
