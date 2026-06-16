@@ -242,6 +242,46 @@ The line between "understanding" and "generation" models is blurring:
 
 **Cost implications:** Native multimodal models are more expensive to train (multimodal data is harder to curate, training is more complex) but enable capabilities impossible with the adapter approach.
 
+## Emerging Frontiers: Beyond Understanding and Generation (as of mid-June 2026)
+
+Multimodal AI is extending beyond perceiving and generating content toward predicting, acting in, and discovering new knowledge about the physical world. Four research directions are converging toward production in a 12-18 month horizon.
+
+### World Models
+
+World models are AI systems that learn to predict how environments evolve over time — not just recognizing a scene but simulating what happens next. A world model takes a current state and an action as input and predicts the resulting state. This is fundamentally different from image classification or generation: it requires understanding physics, causality, and temporal dynamics.
+
+The practical applications are converging rapidly: autonomous navigation (Wayve's GAIA-2 learns driving behavior from video rather than hand-coded rules), digital twins (simulating factory layouts, supply chains, or clinical trials before physical execution), AR/VR (predicting how objects will behave in mixed-reality environments), and robotics (planning movements in unstructured environments). Industry consensus points toward unified foundation world models with persistent memory by 2027 — a single model that can simulate diverse physical environments rather than domain-specific simulators.
+
+For AI architects, world models matter because they represent the next leap in what agents can do. Current agents reason about text and code. Agents with world models will reason about physical spaces, predict consequences of physical actions, and plan in three-dimensional environments.
+
+### Vision-Language-Action (VLA) Models
+
+VLA models extend the vision-language paradigm into physical action. Where a VLM perceives and reasons, a VLA perceives, reasons, and acts — translating natural language instructions into physical behaviors through robotic actuators.
+
+Key systems: **Gemini Robotics** (Google DeepMind) applies Gemini's multimodal reasoning to robotic manipulation. **NVIDIA GR00T** provides a foundation model for humanoid robots trained in simulation (Isaac Sim) and transferred to physical hardware. **Figure AI** develops general-purpose humanoid robots with integrated VLA capabilities. **Wayve** applies VLAs to autonomous driving, learning driving behaviors from video data.
+
+The architectural pattern: a vision encoder processes the robot's camera feeds, a language model processes the task instruction, and an action decoder generates motor commands — all in a single end-to-end model. The critical insight is that spatial intelligence — understanding 3D space, object affordances, and physical constraints — is emerging as the next frontier after language and vision understanding.
+
+### AI for Scientific Discovery
+
+AI systems are moving beyond assisting researchers to actively generating hypotheses, designing experiments, and interpreting results.
+
+**GPT-Rosalind** (OpenAI, June 3, 2026) is the first commercial vertical frontier model purpose-built for life sciences. It combines GPT-5.5's agentic capabilities with specialized performance in medicinal chemistry, genomics, and laboratory workflows. Claude Fable 5 / Mythos 5 demonstrated genomics capabilities that outperformed results from a Science paper at 100x smaller scale — showing that frontier models can match domain specialists on specific scientific tasks.
+
+**Digital twins** are moving from pilot to practice in clinical development. Pharmaceutical companies use AI-driven simulations to model drug interactions, patient responses, and trial outcomes before committing to physical trials — reducing development time from years to months for certain phases.
+
+The pattern for scientific AI: the model generates hypotheses from existing literature and data, proposes experimental designs to test them, controls laboratory equipment (through robotic integration), interprets results, and iterates. This is the full scientific method, automated — with human researchers overseeing and guiding rather than executing each step.
+
+### Automated AI R&D
+
+The most consequential frontier: AI systems that improve AI systems.
+
+**Karpathy's AutoResearch** demonstrated the concept: 700 experiments, 2 days, 1 GPU. An AI agent formulated research hypotheses about model training, designed experiments to test them, ran the experiments, analyzed results, and iterated — producing a research report with findings. The agent replaced weeks of a researcher's manual experiment loop.
+
+**Agent0** takes a different approach: adversarial co-evolution where two AI systems improve each other. Results: +18% on math benchmarks, +24% on reasoning — through self-play without human-generated training data. This echoes the AlphaZero pattern (self-play in chess/Go) applied to general reasoning.
+
+The trajectory is clear: AI systems are beginning to participate in their own improvement. Current systems require human guidance at the goal-setting level (what to research, what metrics matter). The research question is how far this automation extends before fundamental limits — or safety concerns — intervene. Sam Altman has referenced this as the "recursive self-improvement" trajectory. Whether this leads to rapid capability gains or diminishing returns is one of the most important open questions in the field.
+
 ## Connections to Other Course Topics
 
 Scaling (section 01): Multimodal models show emergence at large scale. GPT-4V capabilities appeared at sufficient size.
@@ -280,7 +320,9 @@ Audio/speech is now a first-class modality. Real-time voice conversation (GPT-4o
 
 Image/video generation is converging with understanding. Unified architectures that both understand and generate images (and video) are emerging, blurring the line between "understanding" and "generation" models.
 
-This is a rapidly evolving field. GPT-4o/5, Gemini 2.5/3, Claude Sonnet 4.6, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
+The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers — expected to reach production between 2026-2028 — will define the next generation of AI applications beyond text and code.
+
+This is a rapidly evolving field. GPT-4o/5, Gemini 2.5/3, Claude Sonnet 4.6/Fable 5, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
 
 ---
 
