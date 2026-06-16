@@ -195,6 +195,8 @@ Gradient accumulation allows emulating a large batch size: gradients are accumul
 
 **The GPU landscape is no longer NVIDIA-only.** AMD MI300X offers competitive memory capacity and bandwidth. Grace Hopper's unified memory simplifies large-model workloads. Blackwell's dual-GPU modules change the multi-GPU boundary. Choose hardware based on workload: training favors NVIDIA (CUDA ecosystem maturity), inference can benefit from AMD's memory advantage.
 
+**Energy is becoming a constraint, not just a cost.** A single NVL72 rack draws ~120 kW. Data centers are projected to consume ~1,000 TWh by 2026 (IEA). Hyperscalers are procuring nuclear (SMR pipeline: 25→45 GW in 16 months) and geothermal to power AI infrastructure. Performance-per-watt (Vera Rubin: 10x over Grace Blackwell) is now an accelerator selection criterion alongside raw throughput. See [[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the full energy landscape.
+
 **Profiling reveals real bottlenecks.** Only profiling shows the true picture. torch.profiler and Nsight are essential tools.
 
 ## Practical Examples

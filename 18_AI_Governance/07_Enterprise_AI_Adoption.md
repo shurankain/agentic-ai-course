@@ -380,6 +380,16 @@ The AI industry is undergoing a structural transformation that goes beyond techn
 
 **Inference Economics as the New Center of Gravity.** The economic balance has shifted from training to inference as the primary cost center. Hyperscalers now evaluate AI accelerators on cost/million tokens and revenue/watt rather than peak FLOPS. Training a frontier model is a one-time expense (months, then amortized); inference runs continuously at scale. This changes procurement decisions: the $725B in Big Tech CapEx is increasingly targeted at inference capacity, not training clusters. For enterprise architects, the implication is clear — optimize for inference cost, not training cost. The models are commoditizing; the serving infrastructure is where value accrues.
 
+### AI, Energy & Sustainability (as of mid-June 2026)
+
+The course would be incomplete without addressing the energy dimension of AI infrastructure. The scale of power consumption is becoming a constraint on AI deployment — not just a sustainability concern.
+
+**AI energy footprint.** The IEA projects global data center electricity consumption will reach approximately 1,000 TWh by 2026 — double current levels. AI accelerators represent the largest share of this growth. AI-specific power consumption is estimated at ~90 TWh (roughly 10x the 2022 level), driven by the shift from training (burst workloads) to inference (continuous, 24/7 workloads). A single NVL72 rack consumes approximately 120 kW. At ~1,000 racks per week per major hyperscaler, the power demand is enormous and growing.
+
+**Power procurement shift.** Hyperscalers have moved beyond renewable energy certificates into direct power procurement. The most significant development: nuclear power partnerships. Microsoft signed a deal to restart Three Mile Island Unit 1. Amazon, Google, and Oracle are investing in Small Modular Reactors (SMRs). The SMR pipeline has grown from 25 GW (end 2024) to 45 GW (April 2026) — nearly doubling in 16 months. Advanced geothermal (Fervo Energy partnerships with Google) and direct utility-scale solar are also in play. The pattern: AI companies are becoming energy companies, directly procuring generation capacity rather than buying credits on the open market.
+
+**Enterprise implications.** Energy availability is becoming a competitive constraint for AI deployment. Several jurisdictions have imposed data center moratoria (Ireland, Singapore, parts of the Netherlands). For enterprises choosing deployment regions, power availability now ranks alongside latency, data residency, and cost. "Green AI" initiatives — model efficiency, inference optimization, workload scheduling to match renewable generation — are emerging as both sustainability and cost optimization strategies. Energy cost is increasingly factored into inference economics: revenue/watt is joining cost/million tokens as a key accelerator evaluation metric. For AI architects, this means that model efficiency (smaller models, quantization, speculative decoding, MoE sparsity) is not just a cost optimization — it is an energy sustainability requirement.
+
 ### Agent Startup Funding Landscape (as of late May 2026)
 
 The funding environment for agent startups has reached unprecedented levels — but consolidation warnings are emerging:
