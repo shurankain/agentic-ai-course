@@ -76,10 +76,12 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-5.5, GPT-5.4, o3, o4-mini, GPT-5.5-Cyber, GPT-5.3-Codex-Spark)
-  - Anthropic (Claude Opus 4.8, Sonnet 4.6, Haiku 4.5, Mythos Preview — restricted access)
-  - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4 open-weight)
-  - DeepSeek (V4-Pro, V4-Flash — open weights MIT)
+  - OpenAI (GPT-5.5, GPT-5.4, o3, o4-mini, GPT-Rosalind, GPT-5.3-Codex-Spark)
+  - Anthropic (**Claude Fable 5** — Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro; Opus 4.8, Sonnet 4.6, Haiku 4.5; **model export controls June 13**)
+  - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4; **Siri AI deal ~$1B/year**)
+  - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash — in-house models, Build 2026)
+  - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash — open weights MIT)
+  - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer)
   - Meta (Llama)
   - Mistral
 - API structure: common principles
@@ -361,7 +363,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96% → 88.6% (Claude Opus 4.8, May 2026); Mythos Preview 93.9% (restricted)
+  - Evolution: 1.96% → 88.6% → **95.0% (Fable 5, June 2026)**; SWE-bench Pro: **80.3%** (Fable 5)
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan → Edit → Test → Debug loop
@@ -371,8 +373,8 @@
   - Sandboxed execution
   - Git-based changes
   - Review before commit
-- **Terminal Agents** — Claude Code, Codex CLI, Antigravity 2.0; composable stack trend
-- **IDE market consolidation (as of late May 2026)** — Cursor $4B ARR, Devin $26B, Claude Code $1B+ ARR
+- **Terminal Agents** — Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
+- **IDE market (mid-June 2026)** — 7 contenders: Claude Code, Cursor, Devin Desktop (ex-Windsurf), Codex, Copilot (usage-based June 1), Kiro (Amazon), Antigravity
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
@@ -690,7 +692,7 @@
 - **Key player comparison table**
   - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month; LangGraph 1.2 (as of late May 2026)
   - CrewAI: 47.8K stars, 27M+ downloads, $18M Series A (as of late May 2026)
-  - AutoGen → Microsoft Agent Framework **1.0 GA** (April 3, 2026) — MCP, A2A, DevUI
+  - AutoGen → Microsoft Agent Framework **1.0 GA** (April 3, 2026) — MCP, A2A, DevUI; **Build 2026:** Scout, Work IQ (GA June 16), Agent 365 (preview July)
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
@@ -836,7 +838,8 @@
 - Multimodal agents
 - **MCP Integration for Voice Agents** (latency budgets, speech-friendly tool responses)
 - **GPT-Realtime-2** (May 2026, GA) — GPT-5-class reasoning in voice, 128K context, MCP support, SIP calling
-- **Voice Agent Market Structure (2026)** — 4 tiers: Full-Stack (ElevenLabs), Orchestration (Vapi), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Cost comparison table. Unit economics: AI $0.50-2.00/resolution vs human $15-40
+- **Siri AI** (WWDC June 9) — rebuilt on Gemini, ~$1B/year; **iOS 27 Extensions** (BYOAI: Claude/Gemini/ChatGPT as default assistant)
+- **Voice Agent Market Structure (2026)** — 4 tiers: Full-Stack (ElevenLabs sub-100ms), Orchestration (Vapi 1B+ calls, $500M), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Market $2.4B→$47.5B
 - Voice interface design specifics
 - Security and ethics of multimodal systems
 
@@ -1043,6 +1046,7 @@
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
   - **Terminal-Bench 2.1**, **MCP Atlas**, **ITBench-AA** (as of late May 2026)
+- **Benchmark Saturation** — SWE-bench Verified at 95% (Fable 5), industry shifting to Pro and domain-specific benchmarks
 - **Long-horizon agent reliability** — Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50% — real-world multi-step agents still unreliable
 - **Benchmark Reliability and Gaming** — SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
 - **Cost per Correct Answer** — practical metric (77x cost difference hidden by 5% accuracy gap)
@@ -1292,6 +1296,7 @@
 - **April 2026 incidents:** Vercel/Context.ai breach (AI tool supply chain), Mercor/LiteLLM (dependency compromise), AI agent hit 600+ firewalls autonomously
 - **NSA MCP security guidance** (PP-26-1834) — national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
 - **May 2026 CVEs:** CVE-2026-33032 (nginx-ui, CVSS 9.8), CVE-2026-26118 (MS MCP Server), database MCP vulns
+- **First model export controls** (June 13) — Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking** — 20K+ Instagram accounts via AI support chatbot
 - **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
 - **Claude Mythos cyber capabilities** — 73% on expert cyber simulations; GPT-5.4-Cyber for defense
 - **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
@@ -1345,6 +1350,8 @@
   - Hardware acceleration of matrix operations
   - Mixed precision computation
 - Memory coalescing and bandwidth optimization
+- **Vera Rubin in full production** (Computex June 1, 2026); **RTX Spark** ARM AI PC (128GB, 1 PFLOP)
+- **Energy constraint** — ~1,000 TWh data centers by 2026, SMR pipeline 25→45 GW
 - GPU operation profiling
 
 ### 15.2 Flash Attention (`02_Flash_Attention.md`)
@@ -1581,6 +1588,9 @@
   - High-risk AI: conformity assessment requirements
   - GPAI (General Purpose AI) obligations
   - Timeline: February 2025 — August 2028 (extended by Digital Omnibus, May 2026)
+- **Great American AI Act** (June 4, 2026) — 269p discussion draft, 3-year state preemption
+- **China AI Agent Framework** (May 8, 2026) — first national agentic AI policy, risk-tiered
+- **Colorado AI Act** delayed to January 1, 2027 (SB 189), scope narrowed to transparency-only
 - NIST AI Risk Management Framework
   - GOVERN, MAP, MEASURE, MANAGE
   - AI RMF Playbook
@@ -1730,7 +1740,11 @@
   - Tier 2 Vertical: Sierra ($15.8B, $150M ARR, Ghostwriter), Harvey (legal)
   - Tier 3 Embedded: ServiceNow, SAP Joule
   - Anthropic: Claude Managed Agents, Claude Cowork
-- **Funding & Market (as of late May 2026)** — Anthropic $47B ARR, $65B Series H at $965B; OpenAI S-1 filed ($852B-$1T, IPO Q4 2026); OpenAI on Bedrock (end of Azure exclusivity); Karpathy joined Anthropic
+- **BYOAI paradigm** (WWDC June 2026) — iOS 27 Extensions, model choice = user preference, end of provider lock-in
+- **Market Landscape (mid-June 2026)** — SaaS $285B shakeout, per-seat→outcome pricing, AI market $601.93B→$3,638B (2033), inference economics as center of gravity
+- **AI, Energy & Sustainability** — ~90 TWh AI-specific, nuclear/SMR procurement (25→45 GW), data center moratoria
+- **Workforce Impact** — augmentation > replacement, 56% AI salary premium, developer productivity ~20-30% (not 10x)
+- **Funding & Market** — Anthropic S-1 filed ($1.75-1.8T target, Oct 2026); SpaceX IPO ($75B, Google $920M/mo deal); Big Tech CapEx **$725B** (+77%)
 - **Production Case Studies** — Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
 - **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
 - **Enterprise Integration Patterns** — 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
@@ -1927,6 +1941,11 @@
   - Temporal modeling challenges
   - Frame sampling strategies
   - Efficiency considerations
+- **Emerging Frontiers (mid-2026)**
+  - World Models (environment prediction, digital twins, convergence 2027)
+  - Vision-Language-Action (VLA) models (Gemini Robotics, NVIDIA GR00T, Figure AI)
+  - AI for Scientific Discovery (GPT-Rosalind, Fable 5 genomics, clinical digital twins)
+  - Automated AI R&D (Karpathy AutoResearch, Agent0 adversarial co-evolution)
 
 ---
 
@@ -2050,7 +2069,7 @@ Each chapter contains a "Practical Code Examples" section with Java implementati
 
 ---
 
-*Generated based on actual course file contents.*
+*Generated based on actual course file contents. Last updated: mid-June 2026.*
 
 ---
 
