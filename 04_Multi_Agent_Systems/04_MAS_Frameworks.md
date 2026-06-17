@@ -68,9 +68,17 @@ Checkpointing advantages: Resume after crash (the system automatically continues
 
 **Reducers for state management:** when concurrent state updates occur (when multiple nodes try to modify the same field), LangGraph uses reducer functions. Instead of simply overwriting a value, the reducer defines the logic for merging old and new values. For example, for a message list, the reducer does not replace the entire list but appends new messages to the existing ones.
 
+### Production Deployment Patterns
+
+**Checkpointing for resumability.** Production agents crash — providers time out, memory limits are hit, infrastructure fails. LangGraph's checkpoint mechanism means a crashed agent resumes from the last completed node, not from scratch. For a multi-hour research agent, this is the difference between losing 2 hours of work and losing 5 minutes. Checkpoints are stored in PostgreSQL (production) or SQLite (development).
+
+**Human-in-the-loop gates.** Insert a node that pauses execution and waits for human approval. The graph state is persisted, the human reviews, approves or modifies, and execution continues. This is essential for high-stakes agent decisions — financial transactions, content publication, infrastructure changes. The pattern: agent proposes → human reviews → agent executes.
+
+**Multi-agent handoffs via subgraphs.** LangGraph supports nested graphs: a node in the outer graph invokes a complete inner graph. This enables composable multi-agent systems where each agent is a self-contained graph. The outer graph handles orchestration; inner graphs handle domain logic. This is the recommended pattern for production multi-agent systems on LangGraph.
+
 ### When to Use
 
-LangGraph is particularly well-suited for systems where precise coordination between agents and result reproducibility matter. If you need to build an agent with a clearly defined process (for example, step-by-step document analysis), LangGraph provides tools for explicitly describing this process. The framework also integrates well with LangSmith for observability, which is important in production systems.
+LangGraph is the right choice when you need: precise control over execution flow (conditional branching, cycles, parallel paths), state persistence and resumability (checkpointing), human-in-the-loop workflows, or granular observability (LangSmith integration). It is the most expressive multi-agent framework but has the steepest learning curve. Production backbone for Klarna, LinkedIn, Uber, Replit, and JPMorgan (as of mid-June 2026).
 
 ## AutoGen: Multi-Agent Dialogue from Microsoft (Maintenance Mode)
 
@@ -126,9 +134,19 @@ CrewAI supports multiple execution modes. In sequential mode, tasks execute one 
 
 CrewAI also added enterprise features including CrewAI Enterprise for managed deployment, built-in memory across crew executions, and integration with major LLM providers.
 
+### Delegation and Observability
+
+CrewAI's built-in delegation — where one agent asks another for help mid-task — is a differentiator over LangGraph, where delegation requires explicit graph design. A researcher agent can autonomously delegate a sub-question to a fact-checker without the developer pre-defining this path. CrewAI tracks delegation chains for debugging: which agent delegated to which, what was asked, what was returned.
+
+Built-in observability in CrewAI v1.14.x provides: agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility — seeing how agents delegate, collaborate, and hand off tasks — fills a gap that general-purpose observability tools miss.
+
+### When to Use CrewAI vs LangGraph
+
+CrewAI when: roles are clearly defined, the team metaphor maps to your domain (research team, editorial team, review board), you want fast time-to-prototype, and delegation flexibility matters more than flow control precision. LangGraph when: the execution flow is complex with conditional branches and cycles, you need checkpointing/resumability, human-in-the-loop gates are required, or you need granular state management. In practice, many teams prototype with CrewAI (faster) and migrate to LangGraph (more control) as requirements grow.
+
 ### Ideal Scenarios
 
-CrewAI is well-suited for content-generation workflows: topic research, article writing, editing, fact-checking. It also works well for analytical tasks where data needs to be collected from different sources and synthesized into a report.
+CrewAI is well-suited for content-generation workflows: topic research, article writing, editing, fact-checking. It also works well for analytical tasks where data needs to be collected from different sources and synthesized into a report. PwC improved code-generation accuracy from 10% to 70% using a CrewAI crew (as of late May 2026).
 
 ## Semantic Kernel: Enterprise Orchestration from Microsoft (Transitioning)
 
@@ -192,6 +210,8 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration — the 1.0 API is now locked for servicing.
 
+**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout** — an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ** — a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365** — agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake serves as the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform — leveraging 500M+ M365 users for distribution.
+
 ### Migration from AutoGen / Semantic Kernel
 
 | Source | What Carries Over | What Changes | Migration Effort |
@@ -251,6 +271,27 @@ Each framework occupies its own niche. The choice depends on the specific requir
 | **Google ADK** | Native — Gemini with `thinkingBudget` | Deep integration with Gemini thinking capabilities |
 
 **Practical note:** Reasoning models reduce the need for complex multi-agent orchestration on moderate tasks. A single agent with o3 or Claude extended thinking can often replace a 3-4 agent pipeline that was needed with standard models. When evaluating frameworks, consider whether your use case truly needs multi-agent coordination or whether a single reasoning-capable agent suffices.
+
+## Framework Decision Matrix
+
+| Criterion | LangGraph | CrewAI | OpenAI Agents SDK | MS Agent Framework | Google ADK |
+|-----------|----------|--------|-------------------|-------------------|-----------|
+| **Pattern support** | All (graph = arbitrary flow) | Supervisor, hierarchical, flows | Handoff, routing | All (event-driven) | Supervisor, A2A |
+| **Language** | Python (primary), JS | Python | Python | .NET, Python | Python, TS, Java, Go |
+| **State management** | Explicit (reducers, checkpoints) | Implicit (crew context) | Typed context objects | Event-driven state | Session-based |
+| **Maturity** | Production (1.0+, Klarna/LinkedIn) | Production (1.14.x, 27M+ downloads) | Production (v0.14+) | Production (1.0 GA) | Production (7M+ downloads) |
+| **Observability** | LangSmith (deep) | Built-in + Langfuse | Built-in tracing | DevUI + Azure Monitor | Cloud Trace |
+| **Learning curve** | Steep | Low | Low | Medium | Medium |
+| **Best for** | Complex flows, checkpointing | Role-based teams, fast prototyping | Handoff routing on OpenAI | Enterprise MS ecosystem | GCP + Gemini |
+
+**Quick decision guide:**
+- Need checkpointing/resumability? → LangGraph
+- Need fast prototype with role-based agents? → CrewAI
+- Need simple routing on OpenAI models? → OpenAI Agents SDK
+- Enterprise Microsoft stack? → Microsoft Agent Framework
+- GCP + Gemini + A2A? → Google ADK
+- Type-safe Python? → Pydantic AI
+- Go infrastructure team? → Google ADK for Go
 
 ## Key Takeaways
 

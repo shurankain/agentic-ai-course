@@ -12,17 +12,29 @@
 
 Multi-agent systems use a specialized team of agents instead of a single general-purpose agent. A research agent finds information, an analyst processes it, a writer converts conclusions into readable text. Each agent focuses on its area of expertise, enabling solutions to problems that are beyond the reach of individual agents.
 
-## Why a Single Agent Is Not Enough
+## When Multi-Agent vs Single-Agent: The Decision Framework
 
-Single agents face fundamental limitations:
+The question is not "should we use multi-agent?" but "does the task justify the cost?" Anthropic's 2026 research quantified the trade-off: their multi-agent research system outperformed a single-agent setup by 90.2% on internal evaluations — but consumed approximately 15x more tokens. The performance gain is real. The cost multiplier is also real.
 
-**Context window** - finite model memory size. When an agent tries to hold task details, accumulated context, and instructions for dozens of tools, it starts "forgetting" important information. Specialized agents focus only on relevant information.
+**Single-agent still dominates production.** The LangChain "State of Agent Engineering 2026" survey (1,300+ respondents) found that 57% of companies with agents in production run single-agent systems. Most production value comes from a well-designed single agent with good context engineering, strong tool integration, and a capable reasoning model (o3, Claude extended thinking, Gemini thinking). A single agent with tools handles FAQ/support, document analysis, data extraction, code generation, and content creation — the bulk of production use cases.
 
-**Conflicting roles** - a critical analyst and an optimistic idea generator require opposite dispositions. Within a single agent, they conflict and dilute quality. Separate critic and generator agents argue with each other, improving the result.
+**Multi-agent is justified in three specific scenarios.** First, when the task requires genuinely distinct expertise domains — security review is fundamentally different from performance review, and combining both dispositions in one agent degrades quality. Second, when parallel independent subtasks provide measurable latency benefit — searching 5 data sources simultaneously is 5x faster than sequentially. Third, when adversarial validation improves reliability — a generator and a critic arguing about a financial analysis catch errors that a single agent misses.
 
-**Scalability** - a single agent either handles the load or it does not. A multi-agent system scales by adding more workers.
+**The cost model is concrete.** A single agent costs approximately $0.01 per query. A multi-agent system with 3 specialists and a supervisor costs approximately $0.04-0.10 per query. At 100K queries/day, that is the difference between $1,000/day and $4,000-10,000/day. The 15x token multiplier from Anthropic's research is the upper bound for a complex research system; production deployments with 2-3 agents typically see 3-5x overhead.
 
-**Expertise** - a general-purpose agent is mediocre at everything. Deep specialization of each agent yields better results.
+**Decision heuristic:** Prototype with a single agent + reasoning model first. If the single agent achieves 90%+ of required quality, stop there. Add multi-agent only when you hit clear capability boundaries — the remaining 10% quality improvement rarely justifies a 3-15x cost increase.
+
+## Why a Single Agent Is Not Enough (When Multi-Agent Is Justified)
+
+When the decision framework above points toward multi-agent, the underlying reasons are fundamental:
+
+**Context window saturation** — finite model memory becomes the bottleneck. When an agent tries to hold task details, accumulated context, instructions for dozens of tools, and the full conversation history, it starts "forgetting" important information. The lost-in-the-middle effect means critical information placed in the middle of long contexts is retrieved poorly. Specialized agents focus only on relevant information, using their context window efficiently.
+
+**Conflicting cognitive modes** — a critical analyst and an optimistic idea generator require opposite dispositions. Within a single agent, they conflict and dilute quality. Separate critic and generator agents argue with each other, improving the result. This is the "debate" pattern, and it is one of the few scenarios where multi-agent consistently outperforms single-agent — factual accuracy improves 15-30% through adversarial review.
+
+**Horizontal scalability** — a single agent either handles the load or it does not. A multi-agent system scales by adding more workers. When your document processing pipeline needs to handle 10x more documents, you add 10x more processing agents — without changing the orchestration logic.
+
+**Deep expertise** — a general-purpose agent is mediocre at everything. A single agent trying to be a security expert, performance optimizer, and style guide enforcer simultaneously underperforms three specialists. The specialization benefit is largest when domains have distinct terminology, reasoning patterns, and evaluation criteria.
 
 ## What Is a Multi-Agent System
 
@@ -56,23 +68,42 @@ The inverse problem: how to design rules so that the equilibrium coincides with 
 
 ## Communication Protocols
 
-Communication is the heart of a multi-agent system. Without it, agents remain isolated programs.
+Communication is the heart of a multi-agent system. Without it, agents remain isolated programs. The choice of communication mechanism has a direct impact on debuggability, latency, and coupling.
 
 ### Message Passing
 
 Direct sending of messages to a specific recipient. A message contains: sender, recipient, type (request, command, notification, response), content, and context.
 
-Synchronous passing (sender waits for a response) is simpler but creates bottlenecks. Asynchronous passing (sender continues working) is more efficient but requires callback handling.
+Synchronous passing (sender waits for a response) is simpler but creates bottlenecks. Asynchronous passing (sender continues working) is more efficient but requires callback handling. In practice, most production multi-agent systems use asynchronous message passing — the orchestrator dispatches tasks and collects results without blocking on each agent.
 
-### Shared State
+### Shared State (Blackboard)
 
-Shared memory (blackboard) where agents write to and read from. Advantages: publish-subscribe pattern, persistent context, simplified debugging. Disadvantages: synchronization under concurrent access, performance bottleneck.
+Shared memory where agents write to and read from. Advantages: publish-subscribe pattern, persistent context, simplified debugging — any agent can inspect what other agents have produced. Disadvantages: synchronization under concurrent access, performance bottleneck, and the risk of state corruption when multiple agents write simultaneously.
 
-### Formalization
+The blackboard architecture is a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order. LangGraph's shared state model is a modern implementation of this pattern — the graph state serves as the blackboard, and nodes are knowledge sources.
 
-**FIPA-ACL** — a standard for agent message structure from the 1990s (Foundation for Intelligent Physical Agents): sender, recipient, communicative act (inform, request, query, propose, accept/reject), content, metadata. While historically important for establishing the vocabulary of agent communication, FIPA-ACL saw limited adoption in practice. Modern LLM agent systems use lighter-weight protocols: **MCP (Model Context Protocol)** for tool integration and **A2A (Agent-to-Agent)** for inter-agent communication, both designed for the specific needs of LLM-based agents.
+### Event Bus
 
-**Blackboard Architecture** — a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order.
+An event-driven approach where agents publish events and subscribe to event types. Agent A publishes "document_analyzed" with results; Agent B, subscribed to this event type, automatically receives it and begins its work. Advantages: loose coupling (agents do not need to know about each other), easy to add new agents (subscribe to existing events), natural parallelism. Disadvantages: harder to trace the flow of execution, event ordering can be complex, eventual consistency rather than immediate.
+
+Microsoft Agent Framework 1.0 uses an event-driven architecture internally. AutoGen 0.4 adopted this pattern before entering maintenance mode. For production systems, event buses (Kafka, RabbitMQ) provide the infrastructure for event-driven multi-agent coordination.
+
+### Modern Protocol Stack
+
+**A2A (Agent-to-Agent Protocol, v1.0.0 stable)** — the standard for inter-agent communication across organizational and framework boundaries. Agent Cards describe capabilities, Tasks manage long-running work, and streaming delivers progressive results. A2A is designed for agents that need to discover and coordinate with each other without sharing a runtime — for example, a travel agent built on LangGraph coordinating with a hotel agent built on CrewAI. See [[../05_MCP_Protocol/05_A2A_Protocol|A2A Protocol]] for architecture details.
+
+**MCP (Model Context Protocol)** — the standard for agent-to-tool integration. While not a communication protocol between agents, MCP is critical for multi-agent systems because every agent needs tools. A shared MCP server ecosystem means agents built on different frameworks can access the same tools through a standardized interface. See [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]].
+
+**FIPA-ACL** — a historical standard for agent message structure from the 1990s (Foundation for Intelligent Physical Agents). While important for establishing the vocabulary of agent communication (communicative acts: inform, request, query, propose, accept/reject), FIPA-ACL saw limited adoption in practice. Modern LLM agent systems use the lighter-weight A2A and MCP protocols.
+
+**Choosing a communication mechanism:**
+
+| Mechanism | Coupling | Latency | Debuggability | Best For |
+|-----------|---------|---------|---------------|----------|
+| Direct messages | High | Low | Easy | Small teams, tight coordination |
+| Shared state | Medium | Low | Easy | Iterative refinement, brainstorming |
+| Event bus | Low | Medium | Harder | Scalable systems, loose coupling |
+| A2A protocol | Low | Medium | Structured (traces) | Cross-framework, cross-org coordination |
 
 ## Roles and Specialization
 
@@ -168,11 +199,13 @@ Theory and practice diverge in multi-agent adoption. The LangChain "State of Age
 
 ## Key Takeaways
 
-Multi-agent systems overcome single-agent limitations through specialization, load distribution, and scaling. Key principles: clear roles and boundaries, appropriate communication, conflict resolution, correct lifecycle management, and protection against deadlocks/livelocks.
+Multi-agent systems overcome single-agent limitations through specialization, load distribution, and scaling — but at 3-15x token cost. The decision framework: prototype with a single agent first, add multi-agent only when single-agent hits clear capability boundaries.
 
-Communication: message passing (synchronous/asynchronous) or blackboard. Hierarchy is natural but creates single points of failure. Flat structures are more resilient but harder to coordinate.
+Multi-agent is justified for: distinct expertise domains (security ≠ performance review), parallel independent tasks (5 searches simultaneously), and adversarial validation (generator + critic for high-stakes decisions). Single-agent dominates 57% of production deployments (2026 data) and handles the bulk of real-world use cases.
 
-Make sure the task actually requires multi-agent architecture. Simplicity often outperforms complexity.
+Communication mechanisms range from tightly coupled (direct messages) to loosely coupled (event bus, A2A). Modern production systems use MCP for tool access and A2A for cross-framework agent coordination. Hierarchy is natural but creates single points of failure. Flat structures are more resilient but harder to coordinate.
+
+Real-world deployments (Microsoft IQ, Salesforce Agentforce, Amazon Bedrock AgentCore) confirm: most enterprise multi-agent value comes from well-defined patterns (fan-out/fan-in, router + specialists) rather than complex emergent coordination. Start with established patterns, not novel architectures.
 
 ---
 

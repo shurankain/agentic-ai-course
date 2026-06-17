@@ -46,13 +46,19 @@ Advantages: simplicity, predictability, clear responsibility, full visibility, s
 
 Disadvantages: single point of failure (supervisor failure halts the system), bottleneck as workers scale, poor dynamics for tasks with unpredictable subtasks.
 
-## Hierarchical Agents
+## Hierarchical (Manager-Worker)
 
-Multi-level tree structure: top managers → middle managers → workers. Each level abstracts the details of the level below, exposing a high-level interface to the level above.
+The most common multi-agent pattern in production. A manager agent decomposes the task, distributes subtasks to specialized workers, and synthesizes results. The key distinction from the supervisor pattern: multiple levels of hierarchy are possible, with middle managers coordinating groups of workers.
 
-Use cases: complex multi-level tasks (creating a marketing campaign: strategist → channel agents → copywriters/designers). Complexity isolation — the top level has no knowledge of lower-level details.
+**Why this works in practice.** The manager-worker pattern maps naturally to how human organizations solve complex problems: a project lead breaks down the work, assigns it to specialists, reviews results, and assembles the final deliverable. LLMs are remarkably good at task decomposition — breaking a complex request into subtasks is a natural language task that plays to the model's strengths.
 
-Challenges: communication overhead (information passes up/down, losing detail), cross-branch coordination (communication through a distant common ancestor).
+**Production example — Kiro's spec-driven approach.** Amazon's Kiro IDE uses a hierarchical pattern: a planning agent generates requirements → a design agent produces architecture → a task agent decomposes into implementation steps → coding agents write code. Each level operates independently with a clear handoff contract. The result: spec-driven development where the human reviews artifacts at each level, not just the final code.
+
+**Another production pattern — code review.** A review manager receives a PR, dispatches it to parallel specialist agents (security reviewer, performance reviewer, style reviewer, architecture reviewer), collects their findings, resolves conflicting recommendations, and produces a unified review comment. This is hierarchical + fan-out/fan-in combined.
+
+Use cases: complex multi-level tasks (creating a marketing campaign: strategist → channel agents → copywriters/designers), software projects with natural decomposition, research tasks with specialized sub-questions. Complexity isolation — the top level has no knowledge of lower-level details.
+
+Challenges: communication overhead (information passes up/down, losing detail at each level), cross-branch coordination (communication through a distant common ancestor), manager as bottleneck (the manager must be capable enough to decompose correctly — a weak manager undermines the entire system).
 
 ## Peer-to-Peer Collaboration
 
@@ -69,6 +75,10 @@ Adversarial system: agents take opposing positions, challenge each other, and a 
 Use cases: tasks requiring high reliability (financial analysis: "bull" vs. "bear"), generation and verification (code author vs. reviewer), factual accuracy on contested or ambiguous topics where a single model might commit to a wrong answer confidently.
 
 **Real-world example:** Perplexity Computer's **Model Council** sends the same query to multiple LLMs simultaneously, compares their answers, and selects the best response (or synthesizes from multiple). This is the Debate Pattern applied at the model level — using diversity of models as the source of independent perspectives.
+
+**Quantified benefit:** Research consistently shows 15-30% improvement in factual accuracy through adversarial review. The mechanism: a single agent commits to an answer and defends it even when wrong (confidence bias). Two opposing agents surface weaknesses that a single agent would overlook. The judge sees both sides and makes a more informed decision.
+
+**Voting/ensemble variant:** Instead of adversarial debate, multiple agents solve the same problem independently, then results are aggregated through majority vote or weighted average. This is more expensive (N full solutions instead of 1 solution + critique) but more reliable for critical decisions. The trade-off: debate is 2-3x cost (proposer + critic + judge); voting is N×cost (N independent solutions). Use debate for tasks with clear right/wrong answers; use voting for subjective or ambiguous tasks.
 
 Key requirement: true independence of opponents (different models, prompts, data sources). Identical models produce identical blind spots. The judge must be capable of evaluating the quality of arguments, not just averaging positions.
 
@@ -96,15 +106,19 @@ Advantages: deep specialization in a niche (SQL agent vs. generalist), system ve
 
 Critical point: routing quality. Incorrect routing → poor results. Alternative: multiple experts + response aggregation (more expensive but more reliable).
 
-## Handoff Pattern
+## Handoff / Pipeline Pattern
 
-Sequential task transfer between specialist agents. Each performs its stage and passes the result to the next (assembly line).
+Sequential task transfer between specialist agents. Each performs its stage and passes the result to the next — an assembly line for information processing. This is the most deterministic multi-agent pattern and the easiest to debug, because the flow is linear and each agent's input/output is clearly defined.
 
-Example: parser (text extraction) → analyzer (entities, facts) → enricher (external information) → synthesizer (final report).
+Example: parser (text extraction) → analyzer (entities, facts) → enricher (external information) → synthesizer (final report). Document processing pipelines, ETL workflows, and multi-stage data analysis all follow this pattern.
 
-Advantages: clear separation of responsibilities, independent development/testing, easy to add/replace stages.
+**Why pipelines are underrated.** In a field excited about emergent agent coordination, the simple pipeline is often the right answer. When you know the processing steps in advance and each step has a well-defined input/output contract, a pipeline gives you: deterministic behavior (same input → same output), easy debugging (inspect the artifact at each stage), independent testing (unit test each agent in isolation), and straightforward error recovery (retry the failed stage).
 
-Limitations: sequential nature (failure/delay in one stage → blocks the entire chain), poor support for feedback loops (late-stage results requiring revision of earlier stages).
+**The OpenAI Agents SDK handoff pattern** is a lightweight implementation: Agent A transfers control to Agent B along with the conversation context. The triage agent determines intent and hands off to the appropriate specialist. This is a pipeline with dynamic routing at the first stage.
+
+Advantages: clear separation of responsibilities, independent development/testing, easy to add/replace stages, lowest debugging complexity of all multi-agent patterns.
+
+Limitations: sequential nature (failure/delay in one stage → blocks the entire chain), poor support for feedback loops (late-stage results requiring revision of earlier stages), total latency is the sum of all stages. To add feedback loops, combine with the debate pattern or add a "quality gate" agent that can route back to previous stages.
 
 ## Fan-Out/Fan-In
 
@@ -137,6 +151,26 @@ Not every problem needs multiple agents. Reasoning models (o3, Claude with exten
 **Decision rule:** Prototype with a single agent + reasoning model first. Add multi-agent orchestration only when you hit clear capability boundaries: the task requires genuinely different expertise (security review ≠ performance review), parallelism provides measurable latency benefit, or the context required exceeds what a single agent can hold.
 
 ---
+
+## Pattern Selection Framework
+
+Choosing a pattern is an architectural decision with direct cost, latency, and reliability implications. This table maps task characteristics to recommended patterns:
+
+| Dimension | Supervisor | Hierarchical | Pipeline | Fan-Out/Fan-In | Debate | Peer-to-Peer |
+|-----------|-----------|-------------|----------|----------------|--------|-------------|
+| **Complexity** | Simple | Complex, multi-level | Linear, sequential | Parallelizable | Needs validation | Dynamic, unpredictable |
+| **Cost (vs single-agent)** | 2-3x | 3-10x | 2-5x | 2-Nx (N = parallelism) | 2-3x | 3-10x |
+| **Latency** | Medium | High (deep hierarchy) | High (sum of stages) | Low (max of parallel) | Medium (2-3 rounds) | Variable |
+| **Debuggability** | Easy | Medium | Easy | Medium | Easy | Hard |
+| **Fault tolerance** | Low (SPOF) | Medium | Low (one stage fails all) | Medium (partial results) | Medium | High (no SPOF) |
+| **Best use case** | Clear decomposition | Large projects | ETL, document processing | Research, code review | High-stakes decisions | Autonomous coordination |
+
+**Decision shortcuts:**
+- "I know the steps" → Pipeline or Supervisor
+- "Steps are independent" → Fan-Out/Fan-In
+- "Accuracy matters more than speed" → Debate
+- "I need to scale to 100 agents" → Hierarchical or Peer-to-Peer
+- "Cost is the primary concern" → Single agent (reconsider multi-agent)
 
 ## Key Takeaways
 

@@ -72,6 +72,42 @@ When the system has multiple agents of the same type (for example, three order p
 
 **Adaptive load balancing:** advanced systems adapt distribution based on actual performance. They track each agent's task execution time and automatically adjust weights. An agent that has become slower (possibly due to external service degradation) receives fewer tasks without manual intervention.
 
+## State Management Across Agents
+
+When multiple agents collaborate, the question of how they share and manage state becomes critical. Two fundamental approaches exist, with hybrid options in between.
+
+**Shared state (blackboard model).** All agents read from and write to a common state object. LangGraph implements this: the graph state is the shared context, and each node (agent) receives it, modifies it, and returns updates. Advantages: any agent can see what other agents have produced, simple to reason about. Disadvantages: concurrent writes can conflict (LangGraph uses reducer functions to handle this), and the state can grow unboundedly if agents are not disciplined about what they add.
+
+**Isolated state with message passing.** Each agent maintains its own private state and communicates only through explicit messages. The A2A protocol supports this model: agents exchange Tasks and Messages, each maintaining internal state independently. Advantages: no state corruption from concurrent access, easier to scale, cleaner security boundaries (Agent A cannot see Agent B's internal data). Disadvantages: agents must explicitly communicate everything they need — nothing is implicitly shared.
+
+**CQRS-like patterns for agent systems.** Inspired by Command Query Responsibility Segregation from microservice architecture: one agent writes decisions (commands), another reads results (queries), and they communicate through an event log. This provides a clean audit trail and allows replaying the decision sequence for debugging. Event sourcing (storing the complete event history rather than current state) enables time-travel debugging — replaying the exact sequence of agent interactions that led to a problem.
+
+**Conflict resolution when agents modify shared state.** When two agents simultaneously try to update the same field, a resolution strategy is needed. LangGraph's reducer functions define how to merge concurrent updates (e.g., append messages rather than overwrite). Timestamp-based resolution (last write wins) is simple but can lose data. Semantic merging (agents negotiate on conflicting updates) is more robust but adds latency.
+
+## Error Handling in Multi-Agent Systems
+
+A single agent failing in a multi-agent pipeline can cascade unpredictably. Error handling strategies must account for partial failures, compensating actions, and graceful degradation.
+
+**What happens when one agent fails mid-task.** Consider a 3-agent pipeline: Agent A extracts data, Agent B analyzes it, Agent C generates a report. If Agent B fails after Agent A succeeds, you have a partial result. The orchestrator must decide: retry Agent B (transient failure?), reassign to a backup agent (Agent B is down?), or degrade gracefully (return Agent A's raw output with a disclaimer?).
+
+**Retry strategies.** Exponential backoff with jitter for transient failures (rate limits, temporary unavailability). Maximum retry count per agent (3-5 attempts is typical). Idempotency checks: if Agent B partially completed before failing, retrying should not duplicate work. Circuit breaker pattern: if an agent fails repeatedly, stop sending it work and fall back to an alternative.
+
+**Saga pattern for multi-agent transactions.** Borrowed from microservice architecture: each agent action has a compensating action for rollback. Agent A books a hotel → Agent B books a flight → Agent C charges payment. If Agent C fails: compensate by canceling the flight (Agent B rollback), then canceling the hotel (Agent A rollback). This ensures system consistency even when individual agents fail. See the Saga Pattern discussion in the Conflict Resolution section below.
+
+**Graceful degradation tiers.** Tier 1: retry the failed agent. Tier 2: fall back to a simpler model (cheaper agent as backup). Tier 3: return partial results with a warning. Tier 4: honestly report the failure. Each tier should be configurable per agent and per task criticality.
+
+## Resource Management Across Agents
+
+Multi-agent systems multiply resource consumption. Without explicit budgeting, costs and latency grow uncontrollably.
+
+**Token budgets per agent.** Each agent should have a maximum token budget per invocation. A research agent that is allowed unlimited tokens will produce exhaustive but expensive results. Setting a budget forces the agent to be concise. LangGraph allows setting per-node timeouts and token limits. The total session budget should be the sum of individual agent budgets plus overhead for orchestration.
+
+**Rate limit sharing.** If all agents use the same LLM provider, they share the same rate limits. A supervisor + 5 workers making simultaneous API calls can exceed rate limits that a single agent would not. Solutions: a shared rate limiter that all agents check before making API calls, or a proxy (LiteLLM) that manages rate limiting centrally.
+
+**Priority queuing.** Not all agents are equally important. A security-checking agent should take priority over a style-checking agent. When resources are constrained, lower-priority agents wait while higher-priority ones execute immediately.
+
+**Timeout and termination.** Runaway agents — stuck in infinite reasoning loops or retrying endlessly — must be killed. Watchdog patterns: set a maximum wall-clock time per agent (e.g., 60 seconds), a maximum iteration count (e.g., 10 LLM calls), and a total session budget (e.g., $0.50). When any limit is exceeded, the orchestrator terminates the agent and falls back to the degradation tier.
+
 ## Conflict Resolution
 
 When multiple autonomous agents work on a shared task, conflicts are inevitable.
