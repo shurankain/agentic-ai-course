@@ -486,6 +486,18 @@ A frequently overlooked compliance issue: **vector DB embeddings containing pers
 
 ---
 
+## Workforce Impact: Augmentation, New Roles, and the Productivity Reality (as of mid-June 2026)
+
+The course has covered developer productivity extensively (see [[../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]]). This section addresses the broader workforce impact beyond software development.
+
+**Augmentation over replacement — but with caveats.** BCG and Goldman Sachs research consistently shows that AI primarily augments rather than replaces workers. Senior professionals benefit most — they have the domain knowledge to direct AI effectively, verify its output, and correct its mistakes. Gartner projects that by 2030, 75% of IT work will involve humans collaborating with AI, while 25% will be handled by AI alone. The augmentation narrative is real but incomplete: it describes the near-term equilibrium, not the long-term trajectory. Claude Cowork's launch triggered a $285B SaaS selloff precisely because the market sees AI replacing not workers directly, but the software tools workers use — which has the same economic effect on per-seat pricing.
+
+**New roles are emerging faster than old ones are disappearing.** Agent product managers (defining agent behavior, guardrails, and escalation policies), AI evaluation writers (creating test suites and golden datasets for agent quality), HITL validators (reviewing agent decisions in high-stakes domains), AI SRE (monitoring agent fleets, debugging non-deterministic systems), and prompt/context engineers (designing system prompts and context pipelines) did not exist three years ago. AI skills now appear in 2.5% of US job postings — a +297% increase over the past decade. Workers with advanced AI skills earn **56% more** than peers in equivalent roles without those skills.
+
+**The warning signal.** Business leaders are 3.1x more likely to prefer hiring AI-ready talent than retraining existing employees. This creates a tension: the official narrative is "AI augments workers" while the revealed preference is "hire people who already know AI, don't invest in retraining the rest." For organizations, this means the window for workforce upskilling is narrowing — the companies that invested in AI literacy programs in 2024-2025 are now seeing returns, while those that delayed are facing a talent gap that is harder and more expensive to close.
+
+**Developer productivity: the real numbers.** GitHub data shows that AI-assisted developers produce approximately 2x the code volume. However, code review time and debugging time remain unchanged — the reviewer must still understand and verify the code, regardless of who or what wrote it. The net productivity gain is approximately 20-30%, not the "10x" claimed in marketing materials. The 2x code volume metric is misleading: more code is not inherently better. The actual value is in reduced time-to-first-draft and elimination of boilerplate, freeing developer time for architecture, design, and review — the tasks where human judgment matters most. Anthropic's own data shows developers can delegate only 0-20% of tasks fully, despite using AI in ~60% of their work.
+
 ## Why Agent Projects Fail
 
 The statistics are sobering: **88% of agent projects fail to reach production** (industry survey, as of early 2026). The average cost of a failed project: **$340K**. Understanding failure patterns is as important as understanding success patterns.
