@@ -186,7 +186,7 @@ MCP Apps represent the evolution of MCP from a data protocol to an **application
 
 ## MCP Server Cards and Discovery
 
-As the MCP ecosystem grew to 10,000+ servers, discovering the right server for a task became a challenge. **MCP Server Cards** address this by providing a standard for exposing structured server metadata via a `.well-known` URL. A browser, crawler, or registry can discover a server's capabilities — what tools it provides, what resources it exposes, what authentication it requires — without connecting to it or starting a session.
+As the MCP ecosystem grew to 9,400+ verified servers (mid-June 2026), discovering the right server for a task became a challenge. **MCP Server Cards** address this by providing a standard for exposing structured server metadata via a `.well-known` URL. A browser, crawler, or registry can discover a server's capabilities — what tools it provides, what resources it exposes, what authentication it requires — without connecting to it or starting a session.
 
 This is analogous to OpenAPI specification files for REST APIs: a machine-readable description of capabilities that enables automated discovery and cataloging. The **MCP Registry** (launched in the second half of 2025) serves as the single source of truth for available MCP servers, supporting both public servers and private sub-registries that organizations can customize for their specific needs.
 

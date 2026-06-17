@@ -188,9 +188,9 @@ The **Model Context Protocol (MCP)**, introduced by Anthropic in late 2024 and w
 
 **MCP Prompts → COMPRESS/SELECT:** MCP prompt templates provide pre-structured context for specific tasks. Instead of the agent assembling context from scratch, a prompt template defines what information to include and how to structure it — a form of compression and selection baked into the protocol.
 
-**Why MCP matters for context engineering:** Before MCP, every agent framework implemented its own approach to tool definitions, resource access, and context assembly. MCP standardizes this, enabling interoperable context engineering across tools, IDEs, and agent frameworks. The same MCP server providing access to a Postgres database works identically in Claude Code, Cursor, Windsurf, or any custom agent.
+**Why MCP matters for context engineering:** Before MCP, every agent framework implemented its own approach to tool definitions, resource access, and context assembly. MCP standardizes this, enabling interoperable context engineering across tools, IDEs, and agent frameworks. The same MCP server providing access to a Postgres database works identically in Claude Code, Cursor, Devin Desktop (formerly Windsurf), or any custom agent.
 
-**MCP's context engineering impact by the numbers (early 2026):** 97M+ monthly SDK downloads, 10,000+ community servers, native support in all major AI platforms. MCP is no longer emerging infrastructure — it is the industry-standard context engineering protocol, governed by the Agentic AI Foundation under the Linux Foundation.
+**MCP's context engineering impact by the numbers (mid-June 2026):** 97M+ monthly SDK downloads, 9,400+ verified servers, 28% of Fortune 500 deploying MCP servers, native support in all major AI platforms. MCP is no longer emerging infrastructure — it is the industry-standard context engineering protocol, governed by the Agentic AI Foundation under the Linux Foundation.
 
 **MCP primitives as WSCI enablers:**
 
@@ -246,7 +246,7 @@ In traditional RAG, the context assembly pipeline is fixed: query → embed → 
 
 **Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience — not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for details.
 
-**Opus 4.8 Messages API: inline system records (as of late May 2026).** The Claude Messages API now accepts `system` records inside the `messages[]` array — not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
+**Claude Messages API: inline system records (Opus 4.8+, Fable 5).** The Claude Messages API now accepts `system` records inside the `messages[]` array — not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
 
 **Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering — see [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]].
 
@@ -357,7 +357,7 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 
 6. **LLM Wiki is the anti-RAG pattern** for curated, synthesis-heavy knowledge bases. RAG wins for large corpora and real-time data. Both are complementary.
 
-7. **MCP is the industry-standard context engineering protocol.** 97M+ monthly downloads, 10,000+ servers. WSCI maps directly to MCP primitives.
+7. **MCP is the industry-standard context engineering protocol.** 97M+ monthly downloads, 9,400+ verified servers, 28% F500 deployed. WSCI maps directly to MCP primitives.
 
 ---
 

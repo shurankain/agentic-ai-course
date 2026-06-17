@@ -141,7 +141,7 @@ Windsurf was rebranded from Codeium in late 2024, acquired by Cognition (April 2
 
 ### IDE Tools Comparison
 
-| Feature | Copilot | Cursor | Windsurf | Tabnine |
+| Feature | Copilot | Cursor | Devin Desktop (ex-Windsurf) | Tabnine |
 |---------|---------|--------|----------|---------|
 | Multi-file edit | Agent mode | ✓ | ✓ (Cascade) | ✗ |
 | Codebase RAG | Limited | ✓ | ✓ | ✓ |
@@ -606,7 +606,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 ## Key Takeaways
 
-1. **IDE tools (Copilot, Cursor, Windsurf) augment the developer** — agent modes now enable multi-file autonomous editing alongside traditional autocomplete
+1. **IDE tools (Copilot, Cursor, Devin Desktop) augment the developer** — agent modes now enable multi-file autonomous editing alongside traditional autocomplete
 
 2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 80%+ on SWE-bench Verified, they are at or near human-level on real GitHub issues
 
@@ -620,7 +620,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 7. **Supply chain security is an emerging concern** — AI-generated code introduces new attack vectors (see below)
 
-7. **Trend: convergence toward agent-native tools** — Cursor, Windsurf, and Copilot agent mode all moving toward autonomous multi-file editing
+7. **Trend: convergence toward agent-native tools** — Cursor, Devin Desktop, and Copilot agent mode all moving toward autonomous multi-file editing
 
 8. **CLI agents (Claude Code) and cloud agents (Codex)** represent two complementary paradigms: interactive vs. asynchronous
 

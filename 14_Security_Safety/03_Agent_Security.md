@@ -152,7 +152,7 @@ When multiple agents collaborate (via frameworks like OpenAI Agents SDK, LangGra
 
 ## OWASP MCP Top 10
 
-MCP's rapid adoption (97M+ monthly SDK downloads, 10,000+ servers as of early 2026) generated a dedicated threat taxonomy from OWASP, separate from both the LLM Top 10 and the Agentic Top 10.
+MCP's rapid adoption (97M+ monthly SDK downloads, 9,400+ verified servers as of mid-June 2026) generated a dedicated threat taxonomy from OWASP, separate from both the LLM Top 10 and the Agentic Top 10.
 
 | Risk | Attack Vector | Why It Is Dangerous |
 |------|--------------|---------------------|

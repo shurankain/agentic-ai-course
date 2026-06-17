@@ -407,7 +407,7 @@ Integration with Spring Boot is especially convenient — tools can be Spring be
 
 ### The Problem MCP Solves
 
-Before MCP, every agent framework defined tools differently. LangChain had its tool format, OpenAI had function calling schemas, Anthropic had its own tool_use format, and custom agents used bespoke interfaces. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, Windsurf, Zed, custom agents, and more.
+Before MCP, every agent framework defined tools differently. LangChain had its tool format, OpenAI had function calling schemas, Anthropic had its own tool_use format, and custom agents used bespoke interfaces. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, Devin Desktop (formerly Windsurf), Zed, custom agents, and more.
 
 ### MCP Architecture
 
@@ -444,7 +444,7 @@ MCP introduces specific security considerations (see [[../14_Security_Safety/03_
 
 ### Practical Impact
 
-MCP has become the industry standard for agent tool integration, replacing custom JSON schema definitions as the primary way agents connect to external systems. By early 2026: 97M+ monthly SDK downloads, 10,000+ community servers, an official MCP Registry with ~2,000 verified servers, and governance under the Agentic AI Foundation (AAIF, Linux Foundation). Major adopters include all leading AI platforms: Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, JetBrains IDEs, and many others.
+MCP has become the industry standard for agent tool integration, replacing custom JSON schema definitions as the primary way agents connect to external systems. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers (~9,652 in the official registry), 28% of Fortune 500 deploying MCP servers, 41% of software organizations in production (Stacklok 2026 report), and governance under the Agentic AI Foundation (AAIF, Linux Foundation). Major adopters include all leading AI platforms: Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, JetBrains IDEs, and many others.
 
 For tool designers, MCP means: build your tool as an MCP server once, and it works everywhere. For agent architects, MCP means: access to a vast ecosystem of pre-built tools without custom integration work. The shift from per-framework tool definitions to MCP is analogous to the shift from per-IDE language support to LSP — a one-time industry standardization that benefits everyone.
 
