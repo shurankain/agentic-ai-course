@@ -96,6 +96,30 @@ Deploying AI agents differs from deploying standard LLM applications in several 
 
 **Shared memory for inference.** Self-hosted models via vLLM require large shared memory allocations (`shm-size: 16Gi` in Docker/Kubernetes) for the KV-cache. Default container shared memory (64MB) is insufficient and will cause silent failures or crashes.
 
+## Agent State Persistence and Recovery
+
+When an agent crashes mid-task — provider timeout, OOM kill, infrastructure failure — what happens to the work in progress? Without state persistence, the entire task restarts from scratch. For a 30-minute research agent session, that is 30 minutes of lost work and wasted tokens.
+
+**Checkpoint after each tool call.** The minimum viable persistence strategy: after every successful tool call, save the agent's state (conversation history, tool results, plan progress) to durable storage. If the agent crashes, it resumes from the last checkpoint rather than the beginning. LangGraph implements this natively through its checkpoint mechanism (PostgreSQL for production, SQLite for development). For custom agents, the checkpoint is a serialized state object stored in Redis (fast, TTL-based expiry) or PostgreSQL (durable, queryable).
+
+**Database schema for agent sessions.** A production agent needs at minimum: a sessions table (session_id, user_id, agent_type, status, created_at, updated_at), a checkpoints table (checkpoint_id, session_id, state_json, step_number, created_at), and a tool_results table (result_id, session_id, tool_name, input_json, output_json, duration_ms, created_at). The checkpoint state_json contains everything needed to resume: conversation messages, plan state, accumulated results, and current step. Index by session_id and step_number for fast recovery.
+
+**Idempotency for resumable agents.** When an agent resumes from a checkpoint, it must not repeat side effects. If the agent sent an email before crashing, it should not send it again on resume. Implementation: each tool call is tagged with a unique idempotency key (session_id + step_number). Tools check whether an action with this key was already completed before executing. This is the same idempotency pattern used in payment systems — apply it to agent tool calls.
+
+**Session recovery flow:** On agent startup, check for an incomplete session for this user/task. If found, load the latest checkpoint, verify external state consistency (did the email actually send? did the file actually write?), and resume from the next step. If external state is inconsistent, fall back to the last known-good checkpoint.
+
+## Load Testing Methodology for AI Agents
+
+Load testing AI systems differs fundamentally from load testing web APIs. A web API request takes 50ms; an agent session takes 5-60 seconds (or minutes for autonomous agents). Traditional tools configured for millisecond latencies produce misleading results.
+
+**The challenge.** A conventional load test might spawn 1,000 concurrent requests and measure throughput. For agents, 1,000 concurrent sessions means 1,000 simultaneous LLM API calls (hitting rate limits immediately), 1,000 active WebSocket connections (if streaming), and potentially 10,000-50,000 LLM calls in total (each agent session makes 10-50 calls). The load test saturates provider rate limits long before it stresses the application.
+
+**Locust/k6 configuration for agents.** Use long-lived "user" sessions that simulate realistic agent interactions: start a session, send a task, wait for progressive results (5-60 seconds), send a follow-up, wait again. Set think times between interactions to 5-30 seconds (not milliseconds). Ramp up slowly — add 1-2 concurrent users per minute, not 100 per second. Monitor provider rate limit responses (HTTP 429) as the primary saturation signal.
+
+**What to measure.** Concurrent agent session capacity (how many simultaneous sessions before degradation), time-to-first-response under load, session completion rate under load (do agents start failing to complete tasks?), provider rate limit hit rate, memory consumption growth over time (agent state accumulates), and cost per session under load (does cost increase due to retries?).
+
+**Concurrent session limits.** Determine your system's practical limit: start with 10 concurrent sessions, increase by 10, and observe when P95 latency exceeds SLA or session completion rate drops below 95%. This number — not requests-per-second — is the capacity metric for agent systems. Plan production capacity at 60-70% of this limit to handle bursts.
+
 ---
 
 ## Key Takeaways

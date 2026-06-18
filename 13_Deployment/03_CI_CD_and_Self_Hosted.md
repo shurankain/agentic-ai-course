@@ -56,6 +56,16 @@ LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-4o eval
 
 Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation — pre-prepared test cases with reference answers.
 
+## Prompt Versioning and Registry
+
+A prompt change can alter system behavior as drastically as a code change — yet most teams version prompts less rigorously than code. In production agent systems, every prompt is a versioned artifact with its own lifecycle.
+
+**Git-based prompt management.** Store prompts in a dedicated directory (e.g., `prompts/`) alongside code, with the same branch/PR/review workflow. Each prompt file includes: the prompt text, metadata (model target, temperature, expected behavior), and a changelog. A prompt change goes through code review just like a code change — because it has the same production impact.
+
+**Prompt registry pattern.** For systems with many prompts (dozens of agents, each with system prompts, tool descriptions, and few-shot examples), a prompt registry provides centralized management. The registry stores prompt versions with semantic versioning (1.0.0 → 1.1.0 for compatible changes, 2.0.0 for breaking changes), links each version to evaluation results (what quality score did this prompt achieve?), and supports instant rollback (switch to previous version without redeployment). LangSmith Prompt Hub and Humanloop implement this pattern as managed services.
+
+**A/B testing prompt variants.** Deploy two prompt versions simultaneously, route traffic 50/50, compare quality metrics. The winning prompt becomes the new default. This is the prompt equivalent of canary deployment — and it is more important for prompts than for code, because prompt quality is harder to predict from review alone.
+
 Post-deployment monitoring tracks behavior for 30-60 minutes after deployment. If no issues arise, the deployment is successful. Grafana dashboards show metrics in real time with deployment event annotations for correlation. Alerts are configured for critical deviations: spikes in error rate, increased latency, throughput drops. PagerDuty notifies the on-call engineer.
 
 ## Self-Hosted Models: Why and When
@@ -141,6 +151,16 @@ Inference-specific metrics: tokens per second, time to first token, batch size d
 Alerting: GPU temperature > 85°C for more than 5 minutes (warning), > 90°C (critical). GPU memory utilization > 95% for more than 2 minutes. Throughput drop > 50% over 5 minutes. Queue depth > 100 requests. P95 latency increase > 2x baseline. Each alert is sent to PagerDuty with severity and a runbook link.
 
 Capacity planning is based on historical data. Analysis: average 100 requests/minute, peak 500 requests/minute. Average processing time is 5 seconds, so peak load requires handling 500 * 5/60 = ~42 concurrent requests. Each request uses 2GB of KV-cache. 42 * 2GB = 84GB, requiring a minimum of 2x A100-80GB. Adding 50% headroom for bursts and failover = 3x A100-80GB as the minimum configuration.
+
+## Disaster Recovery for AI Systems
+
+Traditional disaster recovery focuses on database backups and application state. AI systems add unique recovery challenges: model weights (140GB+ per model), vector store indexes (potentially terabytes of embeddings), conversation history and agent state, and prompt/configuration artifacts.
+
+**What to back up and how often.** Model weights: back up once after each deployment (they do not change between deployments). Use object storage (S3, GCS) with versioning. For self-hosted models, the HuggingFace cache directory is the backup target. Vector stores: continuous replication for production (pgvector replication, Qdrant snapshots, Pinecone managed backups). RPO target: <1 hour — a stale knowledge base gives wrong answers, not errors. Conversation history and agent state: continuous replication (PostgreSQL streaming replication, Redis persistence). RPO target: <5 minutes for active sessions. Prompts and configuration: version-controlled in git — recovery is a git checkout.
+
+**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic → OpenAI → self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern — it is a disaster recovery strategy. See [[01_Deployment_Strategies|Deployment Strategies]] for multi-provider failover architecture.
+
+**Provider outage scenario.** On June 13, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive — at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical — it is the canonical case for why multi-provider failover is mandatory for production AI systems.
 
 ## Key Takeaways
 

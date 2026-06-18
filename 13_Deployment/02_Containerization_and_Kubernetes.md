@@ -102,6 +102,26 @@ Mounting as a volume is safer for complex configurations and secrets. Environmen
 
 **Secrets security:** enable encryption at rest in etcd via EncryptionConfiguration. By default, base64-encoded Secrets are NOT encrypted. External Secrets Operator syncs from Vault, AWS Secrets Manager, Azure Key Vault, GCP Secret Manager. Pods receive secrets on the fly, rotation is automated. RBAC restricts access: a ServiceAccount should only have access to its own secrets.
 
+## Multi-Region Deployment for AI
+
+AI workloads have unique multi-region considerations beyond traditional application deployments: data residency requirements for AI training/inference data, model proximity to users (latency), and the physical location of GPU capacity.
+
+**Data residency and GDPR.** Under GDPR, personal data processed by AI systems must remain within approved jurisdictions. EU users' data must be processed by models running in EU regions — sending prompts containing personal data to a US-based inference endpoint violates GDPR. This means: EU deployment region for EU users, separate vector stores per region (embeddings derived from personal data are personal data), and prompt/response logging in the same region as the user. The practical architecture: a global load balancer routes users to the nearest region, each region runs its own inference stack and vector store, and cross-region replication is limited to anonymized aggregated metrics.
+
+**Model proximity and latency.** For real-time agent interactions, every 100ms of added latency degrades user experience. A user in Frankfurt connecting to an inference endpoint in Virginia adds ~100ms network round-trip. For streaming responses where every token travels this distance, the cumulative effect is noticeable. Self-hosted models in the user's region eliminate this. For cloud API providers, choose the region closest to your users — most providers now offer multi-region endpoints.
+
+**Cross-region failover.** When a region goes down (provider outage, infrastructure failure), traffic must fail over to another region. For AI systems, this means: model weights cached in multiple regions (avoid re-downloading 140GB on failover), vector store replicas in the failover region (stale by replication lag but functional), and session state accessible cross-region (Redis Cluster or DynamoDB Global Tables). The failover target: RTO < 5 minutes for the inference layer, RPO < 1 hour for the knowledge base.
+
+## GPU Node Management on Kubernetes
+
+GPU nodes are expensive and scarce. Efficient management directly impacts cost.
+
+**Spot/preemptible instances for inference.** GPU spot instances cost 60-70% less than on-demand. For inference workloads that can tolerate brief interruptions (batch processing, async agents), spot instances dramatically reduce cost. The pattern: a baseline of on-demand GPU nodes for latency-sensitive real-time inference, plus spot GPU nodes for batch processing and async agent workloads. When a spot node is reclaimed, in-flight requests are retried on another node (agent checkpointing makes this seamless).
+
+**Node pools for different GPU types.** Not all workloads need the same GPU. A small classification model runs fine on an L4 ($0.70/hr); a 70B model requires an A100-80GB ($4/hr). Create separate node pools: a "small-gpu" pool with L4/T4 for lightweight models, a "large-gpu" pool with A100/H100 for frontier models. Use node selectors and tolerations to direct workloads to the appropriate pool. This prevents a $0.01/query classification task from occupying a $4/hr A100.
+
+**Bin-packing for GPU utilization.** A single A100-80GB can serve multiple small models simultaneously (if total VRAM fits). vLLM supports serving multiple models on one GPU through model multiplexing. The scheduler should pack small models onto shared GPUs before allocating dedicated GPUs. Target: >70% GPU memory utilization across the cluster. Monitor with NVIDIA DCGM — if average utilization is below 50%, you are overpaying.
+
 ## Key Takeaways
 
 Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection significantly impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.
