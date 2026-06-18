@@ -119,9 +119,45 @@ Advantages: understanding of LLM specifics, built-in visualizations, integration
 - PII masking in logs
 - Compliance audit trail
 
+## PII Masking in Traces
+
+LLM traces contain sensitive data by nature — user inputs often include names, emails, phone numbers, addresses, medical information, and financial data. Storing this unmasked creates legal liability under GDPR (EU), CCPA (California), HIPAA (healthcare), and other privacy frameworks. PII masking is not optional for production systems.
+
+**What to mask:** Personally identifiable information varies by jurisdiction but generally includes: email addresses, phone numbers, government IDs (SSN, passport), credit card numbers, physical addresses, full names (when combined with other identifiers), medical records, financial account numbers. The challenge: aggressive masking can destroy debugging value, while insufficient masking creates compliance risk.
+
+**Masking approaches, from simple to sophisticated:**
+
+**Regex-based masking** — pattern matching for structured PII (emails, phone numbers, credit cards, SSNs). Fast and deterministic. Handles well-formatted data but misses unstructured mentions ("my social is nine four three..."). Typical implementation: a pre-processing pipeline that runs regex patterns before trace storage. Effectiveness: catches 60-70% of PII in typical LLM traces.
+
+**NER-based masking** — Named Entity Recognition models identify PERSON, LOCATION, ORGANIZATION entities in free text. Microsoft Presidio is the standard open-source library for this. Higher recall than regex (catches names, addresses in narrative text) but slower and can produce false positives (masking product names that resemble person names). Effectiveness: catches 85-90% of PII.
+
+**Hybrid approach** — regex for structured patterns (fast, cheap, high precision) + NER for unstructured text (higher recall). Run regex first, NER second, union the results. This is the production standard for regulated industries. For LLM traces specifically, apply masking to: user inputs, model outputs, tool call arguments, and tool results. Leave trace metadata (trace_id, timestamps, model name, token counts) unmasked — these are needed for debugging and contain no PII.
+
+**GDPR/CCPA implications for trace storage:** Under GDPR, LLM traces containing personal data are "processing" that requires a legal basis. Article 17 (right to erasure) means you must be able to delete all traces associated with a specific user. This requires indexing traces by user_id — which many observability platforms do not support natively. Retention policies must account for both debugging value (short) and compliance requirements (varies by regulation). Standard approach: 7 days full traces with masked PII, 90 days aggregated metrics without PII, indefinite for compliance audit trails (anonymized).
+
+## Multi-Tenant Tracing
+
+When a single observability platform serves multiple customers or business units, tenant isolation in traces becomes critical. Leaking one tenant's trace data to another is a security incident.
+
+**Namespace isolation:** Each tenant's traces are stored in a separate namespace (project in LangSmith, organization in Langfuse). Queries are scoped to the authenticated tenant's namespace — cross-tenant queries are architecturally impossible, not just access-controlled. This is the simplest and strongest isolation model.
+
+**Per-tenant retention policies:** Different tenants may have different compliance requirements. A healthcare tenant needs HIPAA-compliant retention (6 years), while a marketing tenant may prefer 30-day retention to minimize data liability. The observability platform must support per-namespace retention configuration.
+
+**Tenant-aware cost attribution:** In multi-tenant deployments, each tenant should see only their own token consumption, cost, and performance metrics. This enables chargeback (billing tenants for their AI usage) and prevents cross-tenant information leakage through side channels (e.g., inferring a competitor's usage volume from aggregate metrics).
+
+## Compliance Audit Trails
+
+For regulated industries, observability is not just debugging — it is a legal requirement. Auditors will ask: what data did the AI system process? What decisions did it make? Who approved those decisions? Can you prove the system behaved correctly at a specific point in time?
+
+**What auditors actually ask for:** In healthcare (HIPAA): who accessed patient data, when, for what purpose, and what the AI recommended. In finance (SOX): complete trace of every AI-influenced financial decision, with timestamps and approval chains. In any EU deployment (AI Act): evidence of human oversight for high-risk AI decisions, conformity assessment documentation.
+
+**Immutable audit logs:** Audit trails must be tamper-proof — append-only storage where entries cannot be modified or deleted (except under a court-ordered data deletion). Options: append-only databases (Amazon QLDB), cryptographic chaining (each log entry includes a hash of the previous entry), write-once storage (S3 Object Lock, Azure Immutable Blob Storage). The cost of immutable storage is higher, but for regulated deployments, it is non-negotiable.
+
+**Practical architecture:** LLM observability traces → PII masking pipeline → two output streams: (1) debugging traces with masked PII to the observability platform (Langfuse, LangSmith) with short retention, and (2) compliance audit records to immutable storage with long retention and full metadata (but PII replaced with pseudonymous identifiers).
+
 ## Storage and Retention
 
-LLM observability data is voluminous. Tiered storage: hot data in fast storage, cold data in archival storage. Sampling: 1% random + 100% errors + 100% slow requests. Retention policies: 7 days with full prompts, 90 days of aggregated metrics. Consider compliance requirements.
+LLM observability data is voluminous. Tiered storage: hot data in fast storage, cold data in archival storage. Sampling: 1% random + 100% errors + 100% slow requests. Retention policies: 7 days with full prompts (masked PII), 90 days of aggregated metrics, indefinite for compliance audit trails (anonymized). Consider compliance requirements — HIPAA requires 6 years, SOX requires 7 years, GDPR requires deletion upon request but retention for legitimate purposes.
 
 ## Practical Tracing Implementation
 

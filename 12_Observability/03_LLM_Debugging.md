@@ -126,6 +126,34 @@ Debugging strategy: Reproduce → Hypothesize → Test → Fix.
 
 Interview checklist: check tensor shapes first, verify gradient flow, Cross-entropy expects logits not probs, create Optimizer after requires_grad, effects of eval vs train mode.
 
+## Hallucination Detection: From Metric to System
+
+"Hallucination rate" as a single metric is insufficient — it tells you that hallucinations exist but not how to detect or prevent them. A systematic approach requires multiple detection layers, each catching a different category of hallucination.
+
+**Consistency checks across runs.** The same query run 3 times should produce consistent factual claims. If the model says "revenue was $50M" in run 1 and "$75M" in run 2, at least one is hallucinated. Implementation: for critical queries, run the model N times (N=3 is the sweet spot between cost and coverage), extract factual claims from each response, and flag inconsistencies. Cost: N× the original query cost. Use selectively for high-stakes outputs only.
+
+**Grounding ratio monitoring.** For RAG systems, measure the overlap between the model's response and the retrieved context. A grounding ratio below 0.3 (less than 30% of response content can be traced to retrieved documents) signals that the model is generating from internal knowledge rather than the provided context — a primary hallucination vector in RAG systems. The ratio is computed as: (tokens in response that match or paraphrase context tokens) / (total tokens in response). NLI (Natural Language Inference) models provide a more sophisticated grounding check than word overlap.
+
+**Semantic contradiction detection.** Over a conversation or across sessions, the model may contradict its own previous statements. "The deadline is Friday" followed later by "The deadline is next Wednesday" is a contradiction that indicates at least one hallucination. Implementation: maintain a running fact store of claims made in the session, and for each new response, check new claims against stored claims using an NLI model. Flag contradictions for review.
+
+**Domain-specific fact validation.** For applications with access to ground truth (databases, APIs, knowledge bases), validate factual claims in real time. "Your order #12345 was shipped on June 10" can be verified against the order database. This is the most reliable hallucination detection method but requires domain-specific integration.
+
+**Production hallucination monitoring pipeline.** Combine the layers: grounding ratio monitoring on every response (cheap, continuous), consistency checks on a 5% random sample (moderate cost, statistical coverage), semantic contradiction detection within sessions (moderate cost, session-scoped), and domain fact validation where ground truth is available (most reliable, domain-specific). Alert when: grounding ratio drops below threshold for more than N consecutive responses, consistency checks show >20% divergence, or any domain fact validation fails.
+
+## RAG Debugging Workflow
+
+When a RAG system gives a wrong answer, the bug can be in any of four stages: retrieval, ranking, context assembly, or generation. A systematic debugging workflow isolates the problem stage.
+
+**Stage 1 — Retrieval: are we finding the right documents?** Inspect the query sent to the vector store. Is it a good query? (Sometimes the LLM reformulates the user's question poorly.) Check the top-K retrieved documents — are the relevant documents present at all? If not, the problem is embedding quality, chunking strategy, or the document is missing from the index entirely. Red flags: top-K similarity scores all below 0.5 (the query does not match anything well), the relevant document is not in the index, the query was reformulated incorrectly.
+
+**Stage 2 — Ranking: are the right documents at the top?** The relevant document may be retrieved but ranked below irrelevant ones. Check the reranker output — did it improve or degrade the ranking? A cross-encoder reranker occasionally demotes relevant results when they contain unusual formatting. Red flags: relevant document present in top-20 but absent from top-5 after reranking, reranker scores are flat (no clear separation between relevant and irrelevant).
+
+**Stage 3 — Context assembly: is the context well-formed?** The right documents may be retrieved and ranked correctly, but the context window assembly may be wrong. Check: is the context truncated (exceeds token budget)? Are chunks from different documents interleaved confusingly? Is critical information split across chunks (the answer spans a chunk boundary)? Red flags: context exceeds 80% of the model's effective window, chunks from unrelated documents are mixed, the answer-containing sentence is split between two chunks.
+
+**Stage 4 — Generation: is the model using the context correctly?** The right context is provided, but the model ignores it or draws from internal knowledge instead. Check the grounding ratio (see hallucination detection above). Try adding explicit instructions: "Answer ONLY based on the provided context. If the context does not contain the answer, say so." Red flags: grounding ratio below 0.3, the answer contains information not present in the context, the model says "based on my knowledge" rather than citing the context.
+
+**The debugging shortcut:** Start from Stage 4 and work backward. If the grounding ratio is high but the answer is wrong, the problem is in retrieval (wrong context). If the grounding ratio is low but good documents exist in the index, the problem is in the generation stage (model ignoring context). This top-down approach finds the root cause faster than bottom-up inspection.
+
 ## Practical Examples
 
 The snapshot mechanism captures system state: timestamp, user input, model, parameters, prompts, response, latency, tokens, errors. The replay mechanism re-executes the request with exactly the same parameters to verify fixes.

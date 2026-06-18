@@ -132,6 +132,36 @@ Hallucination surge (grounding score decline) → Shadow mode + fix.
 
 **Runbook structure:** Detection (how to detect), Triage (severity assessment), Mitigation (immediate actions), Resolution (long-term fix), Post-mortem (root cause analysis).
 
+## Multi-Agent Observability
+
+Single-agent tracing is straightforward — one trace, one span tree. Multi-agent systems produce trace forests: multiple interleaved traces where causality crosses agent boundaries. Debugging "why did the system give a wrong answer?" requires understanding which agent made the wrong decision and what information it had when it decided.
+
+**Cross-agent communication traces.** Each inter-agent message (handoff, delegation, result return) should be a span that links the sender's trace to the receiver's trace. The parent-child span relationship crosses agent boundaries: Agent A's "delegate_to_B" span is the parent of Agent B's root span. This creates a unified trace tree across agents. LangSmith and Langfuse support this through trace correlation IDs.
+
+**Delegation chain visualization.** In a hierarchical multi-agent system, a task may be delegated through 3-4 levels: Orchestrator → Research Manager → Web Search Agent → URL Fetcher. Each level adds latency and token cost. Visualizing the delegation chain reveals: which agent consumed the most time (bottleneck identification), which agent consumed the most tokens (cost optimization target), where errors originated and how they propagated (root cause analysis). CrewAI's built-in delegation tracking provides this natively; for LangGraph and custom systems, implement explicit delegation logging.
+
+**Agent-level metrics comparison dashboard.** A side-by-side view of all agents in the system: success rate per agent, average latency per agent, average token cost per agent, error rate per agent. This immediately reveals imbalances — if the security review agent takes 30 seconds while the style review agent takes 2 seconds, you know where to optimize. If one agent's error rate spikes, you know which agent to debug first.
+
+## Knowledge Base Freshness Monitoring
+
+RAG systems degrade silently when the knowledge base becomes stale. If the product pricing changed last week but the indexed documents still show old prices, the agent confidently gives wrong answers — and no error is logged.
+
+**Document staleness detection.** Track the last-updated timestamp for every document in the knowledge base. Alert when: any document exceeds its expected refresh interval (e.g., pricing documents should be refreshed weekly), a significant fraction of the corpus (>20%) has not been updated in more than the expected cycle, new documents are ingested at a rate significantly below the expected rate (ingestion pipeline may be broken).
+
+**Retrieval coverage metrics.** Track the percentage of user queries where the retrieval system returns no relevant results (all similarity scores below threshold). A coverage rate below 80% indicates knowledge gaps — topics users ask about that the knowledge base does not address. Log these "no-good-result" queries and review them weekly to identify content gaps.
+
+**Knowledge gap identification.** Cluster the "no-good-result" queries by topic. If 50 users asked about "return policy for electronics" and the knowledge base has no document covering this, that is a content gap that directly impacts agent quality. Automated gap detection: embed the "no-result" queries, cluster them, and generate a weekly report of topic clusters ranked by query volume. This transforms observability data into actionable content improvement recommendations.
+
+## Agent Health Scoring
+
+As agent fleets grow, individual agent monitoring becomes impractical. An aggregate health score — a single number that captures whether an agent is performing well — enables fleet-level management.
+
+**Composite health metric.** Combine four dimensions into a 0-100 score: success rate (weight 40% — the agent completes tasks successfully), efficiency (weight 20% — tasks completed within expected token/time budgets), cost (weight 20% — cost per task relative to baseline), safety (weight 20% — guardrail violations, PII leaks, policy breaches). Each dimension is normalized to 0-100, then weighted. An agent scoring below 60 is flagged for investigation; below 40 triggers automatic failover to a backup.
+
+**Traffic-light dashboard for agent fleets.** Green (score 80-100): healthy, no action needed. Yellow (score 60-79): degrading, investigate within 24 hours. Red (score 0-59): failing, immediate investigation required. For a fleet of 20 agents, a single dashboard with 20 traffic lights provides instant operational awareness. Drill-down into any red/yellow agent shows the contributing factors (which dimension is pulling the score down).
+
+**Health score trends.** A declining health score over time (e.g., 85 → 75 → 65 over 3 weeks) signals gradual degradation — perhaps the model provider's behavior changed, or the knowledge base became stale, or the user query distribution shifted. Trend alerts catch slow degradation that point-in-time metrics miss.
+
 ## Practical Examples
 
 **Basic Observability Integration:**

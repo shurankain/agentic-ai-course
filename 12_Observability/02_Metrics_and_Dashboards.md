@@ -112,6 +112,43 @@ Budget Alerts warn about approaching limits. Multi-level alerts (50%, 75%, 90%) 
 
 Cost Optimization Insights suggest optimizations: "Prompt X consumes 40% more tokens," "Caching will save $Y per month."
 
+## SLA Monitoring for AI Systems
+
+Defining SLAs for non-deterministic systems is fundamentally harder than for traditional software. A database either returns the correct result or it does not. An LLM returns answers on a quality spectrum — and "good enough" depends on the use case.
+
+**Two SLA dimensions for AI:** Response quality SLA — "95% of responses must score above 4.0 on our 1-5 quality rubric, as measured by weekly LLM-as-Judge evaluation." Latency SLA — "P95 response time must be under 10 seconds for standard queries, under 60 seconds for reasoning queries." These are independent: a fast, wrong answer violates the quality SLA; a slow, correct answer violates the latency SLA. Both must be monitored separately.
+
+**Measuring "good enough" at scale.** You cannot evaluate every response with a human or even with LLM-as-Judge (too expensive). Practical approach: sample-based SLA monitoring. Evaluate 1-5% of responses on a rolling basis. If the sampled quality drops below the SLA threshold for 3 consecutive evaluation windows, trigger an alert. The sampling strategy matters: stratified sampling (proportional representation of different query types) is more informative than random sampling.
+
+**SLA dashboards.** The executive view: a single traffic-light indicator — green (SLA met), yellow (within 10% of threshold), red (SLA violated). Drill-down: quality trend over time, latency percentiles over time, SLA compliance percentage by query type, by model, by feature. Alerts: PagerDuty integration when SLA is breached for more than N consecutive minutes.
+
+## Cost Attribution in Multi-Agent Systems
+
+When a multi-agent system processes a request, the total cost is the sum of all agent invocations, tool calls, and orchestration overhead. Without per-agent cost attribution, you cannot identify which agent is consuming disproportionate resources or optimize the most expensive components.
+
+**Per-agent cost tracking.** Each agent invocation should record: model used, input tokens, output tokens, thinking tokens (for reasoning models), cost computed from the model's pricing table. Aggregate by agent role to answer: "The research agent costs $0.08 per session on average, while the summary agent costs $0.005." When the research agent consumes 16x the budget of the summary agent, you know where to optimize.
+
+**Per-user and per-feature attribution.** Beyond agent-level, track costs by: user (for chargeback or fair-use policies), feature (which product feature drives the most AI spend), query type (simple queries vs complex reasoning). This enables data-driven decisions: "Feature X costs $50K/month in AI spend but generates $10K in revenue — is it worth it?"
+
+**Chargeback models.** In multi-tenant or multi-department deployments, each team should pay for their AI consumption. Options: direct pass-through (each team pays their actual token costs), tiered allocation (teams get a budget, overages are charged), shared infrastructure cost (AI spend is allocated proportionally to usage). The direct pass-through model aligns incentives best — teams that waste tokens pay for it.
+
+## Token Economics by Language
+
+Tokenization algorithms create uneven cost distributions across languages. This is a material concern for multilingual deployments — the same semantic content costs dramatically different amounts depending on the language.
+
+| Language | Token Multiplier vs English | Reason | Cost Implication |
+|----------|---------------------------|--------|-----------------|
+| English | 1.0x | BPE training corpus majority | Baseline |
+| German | 1.2-1.3x | Compound words ("Handschuhschneeballwerfer") | +20-30% |
+| Ukrainian | 1.7-1.8x | Cyrillic, less training data | +70-80% |
+| Arabic | 1.5-2.0x | RTL, connected script | +50-100% |
+| Japanese | 2.0-3.0x | CJK characters, mixed scripts | +100-200% |
+| Chinese | 1.8-2.5x | Each character may be a separate token | +80-150% |
+
+**Practical impact.** A customer support system operating in Japanese consumes 2-3x more tokens than the same system in English. At 100K queries/day with an average of 500 tokens per query, the annual cost difference between English and Japanese deployments can exceed $200K for a frontier model. System prompts (which repeat on every request) should be in English where possible — they benefit from prompt caching (up to 90% savings) and lower tokenization overhead. User-facing responses are generated in the user's language.
+
+**Monitoring recommendation.** Add "tokens per semantic unit" as a metric — not just raw token count, but token count normalized by the semantic content length. Track this by language to identify tokenization inefficiency and inform model selection (some models handle CJK/Cyrillic better than others).
+
 ## Production Quality Monitoring
 
 Drift detection identifies gradual quality degradation.
