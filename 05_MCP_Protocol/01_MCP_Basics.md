@@ -216,6 +216,28 @@ The biggest revision since MCP's launch was published as a Release Candidate on 
 
 ---
 
+## Why MCP Won: The Adoption Story
+
+MCP's dominance was not inevitable. When Anthropic launched the protocol in November 2024, it was one of several competing approaches to AI tool integration — alongside OpenAI's function calling, Google's Vertex AI tools, and various custom frameworks. By mid-2026, MCP became the universal standard. Understanding why illuminates what makes a protocol succeed.
+
+**The USB moment.** MCP solved a real pain point at the right time. By late 2024, every team building AI agents was writing custom integration code — different formats for LangChain tools, OpenAI function schemas, Anthropic tool_use, and framework-specific interfaces. The same GitHub integration was written dozens of times in slightly different ways. MCP provided "write once, use everywhere" — a single server works with Claude, ChatGPT, Gemini, Copilot, Cursor, and any custom agent. The value proposition was immediately obvious.
+
+**Critical mass through openness.** Anthropic open-sourced MCP from day one and transferred governance to the Agentic AI Foundation (AAIF) under the Linux Foundation — with Google, OpenAI, Microsoft, Amazon, Meta, and Block as co-stewards. No single company controls the protocol. This removed the adoption barrier: competitors adopted MCP because they were co-owners, not just consumers. When OpenAI added MCP support to ChatGPT (mid-2025), the last major holdout disappeared.
+
+**Network effects.** Each new MCP server makes the ecosystem more valuable for every client. Each new client makes it more worthwhile to build servers. By mid-2026: 9,400+ verified servers, 97M monthly SDK downloads, ~1,000 new servers per month. The flywheel is self-sustaining — building a new AI tool without MCP support is now a competitive disadvantage.
+
+## MCP vs Function Calling vs A2A: When to Use Which
+
+Three mechanisms for connecting AI to the outside world serve different purposes. Choosing correctly avoids overengineering.
+
+**Function calling (provider-native tool use)** — the simplest option. The model receives JSON Schema descriptions of available functions, decides when to call one, and generates structured arguments. The application code executes the function and returns results. No protocol, no server process, no transport — just a function in your codebase. Use when: the tools are application-specific (not reusable across projects), the number of tools is small (<10), and there is no need for tool discovery or sharing. Example: a chatbot that queries its own database and sends emails.
+
+**MCP** — the standardized tool integration protocol. Tools are defined once as MCP servers and work with any MCP-compatible client. Use when: tools should be reusable across applications (a GitHub integration used by Claude Code, Cursor, and your custom agent), the tool ecosystem is large or growing, tools are developed by different teams or third parties, or you need standardized security (OAuth 2.1), discovery, and lifecycle management. Example: enterprise tool platform where 50+ integrations serve multiple AI applications.
+
+**A2A** — agent-to-agent coordination protocol. Enables agents built on different frameworks to discover each other and delegate tasks. Use when: agents from different organizations or frameworks need to coordinate, cross-organizational delegation is required (your travel agent talks to an airline's booking agent), or you need long-running task management across agent boundaries. Example: an enterprise orchestration platform where Salesforce agents coordinate with custom internal agents.
+
+**Decision shortcut:** If the tool is a function in your code → function calling. If the tool should be reusable across AI applications → MCP. If agents need to find and delegate to other agents → A2A. Most production systems use function calling for simple cases AND MCP for the tool ecosystem — they are not mutually exclusive.
+
 ## The Protocol Landscape: MCP, A2A, and ANP
 
 MCP exists alongside two complementary protocols at different layers of the agent communication stack:

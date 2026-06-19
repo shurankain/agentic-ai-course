@@ -198,29 +198,37 @@ The client can transform technical errors into user-friendly messages. The origi
 
 Some errors allow retrying the operation. The client can offer the user a retry or automatically repeat the request.
 
+## Production MCP Client Patterns
+
+Building an MCP client that works in development is straightforward. Building one that works reliably in production requires handling failure modes that rarely appear during testing.
+
+**Connection pooling.** A production client typically connects to 5-20 MCP servers simultaneously. Each connection consumes resources: a child process for stdio servers, a persistent HTTP connection for remote servers. Connection pooling manages this: maintain a pool of initialized connections, reuse them across requests, and limit the total number of concurrent connections. When a request needs a tool from a server with no available connection, queue the request rather than spawning unlimited connections.
+
+**Server health monitoring.** Not all connected servers are equally healthy. A server may be technically connected but responding slowly, returning errors, or timing out. Health monitoring tracks: response latency (P50, P95), error rate over a sliding window, and last successful response time. When a server's health degrades beyond a threshold — mark it unhealthy, stop routing requests to it, and attempt recovery in the background. This prevents a single degraded server from dragging down the entire system.
+
+**Graceful degradation when servers are unavailable.** When a server goes down, the client must continue operating with reduced functionality — not crash entirely. The pattern: maintain a registry of which tools come from which servers. When a server is unavailable, remove its tools from the model's tool list for subsequent requests. If the model attempts to call an unavailable tool, return a clear error message ("The GitHub integration is temporarily unavailable") rather than a cryptic failure. Optionally, suggest alternative tools that provide similar functionality.
+
+**Retry logic for tool calls.** Tool calls can fail transiently (network timeout, rate limit, server restart). Retry with exponential backoff: first retry after 1 second, second after 2 seconds, third after 4 seconds, then give up. Idempotency matters: retrying a "read" operation is safe, but retrying a "send email" operation may cause duplicates. The client should check tool metadata for idempotency guarantees before retrying write operations.
+
 ## Client-Side Security
 
-### Server Validation
+MCP security is a shared responsibility between client and server. The client's security posture determines whether the agent is protected from malicious or compromised servers.
 
-The client must verify server identity before connecting. For remote servers, TLS certificates are used. For local ones, the executable file is verified.
+### Server Trust Levels
 
-The list of trusted servers can be managed centrally. Corporate policies determine which servers are permitted for use.
+Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector — a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for the CurXecute CVE and Tool Poisoning attack taxonomy.
 
-Unknown or untrusted servers should require explicit user approval.
+### OAuth 2.1 Integration
 
-### Access Control
+MCP's authorization framework (added to the spec in 2025) uses OAuth 2.1 with PKCE for secure credential delegation. The client obtains scoped access tokens on behalf of the user, with limited permissions and expiration. Production implementation: use short-lived tokens (minutes, not hours), request minimum scopes for each tool call, implement token rotation for long-running agent sessions, and log all token grants for audit. Protected Resource Metadata (PRM) allows servers to advertise their authorization requirements — the client discovers what credentials are needed before attempting access.
 
-Not all users should have access to all capabilities. The client can filter tools based on the current user's permissions.
+### STDIO Vulnerability Awareness
 
-Roles and permissions determine which servers are accessible and which operations are allowed. An administrator sees all capabilities; a regular user sees a limited set.
+The STDIO transport (MCP servers running as child processes communicating via stdin/stdout) has a critical architectural vulnerability (CVSS 9.8, May 2026): it enables arbitrary OS command execution by design. Approximately 200,000 servers are affected. For production deployments with untrusted servers, prefer Streamable HTTP transport over STDIO, run STDIO servers in sandboxed environments (containers, MicroVMs), and audit server code before granting STDIO access.
 
 ### Audit and Logging
 
-All interactions with servers should be logged. Who called which tool, when, with what parameters, and with what result.
-
-These logs are important for security — detecting suspicious activity, investigating incidents. They are also useful for debugging and optimization.
-
-Sensitive data in logs must be masked or excluded in accordance with privacy policies.
+All interactions with servers should be logged: who called which tool, when, with what parameters, and with what result. These logs serve security (detecting suspicious tool usage patterns), debugging (tracing failures across the client-server boundary), compliance (demonstrating what actions the agent took and why), and cost attribution (tracking which servers consume the most resources). Sensitive data in logs must be masked — see [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]] for PII masking patterns.
 
 ## Key Takeaways
 
