@@ -76,19 +76,49 @@ Different priority levels for different clients or request types.
 **Preemption:**
 Interrupting a current request to process a higher-priority one. vLLM supports this via swapping KV-cache to CPU or recomputation.
 
-## Serving Architecture Patterns
+## Inference Architecture Taxonomy
 
-**Single GPU:**
-The simplest option. The model runs on a single GPU. Suitable for models < 10B parameters, low traffic, development.
+Not all inference workloads are the same. The right architecture depends on volume, latency requirements, data sensitivity, and budget. Five deployment patterns exist, from simplest to most complex.
 
-**Multi-GPU (tensor parallelism):**
-The model is distributed across GPUs via tensor parallelism. Each layer is split across devices. Minimal latency, but throughput does not scale.
+**Cloud API (OpenAI, Anthropic, Google, DeepSeek):** No infrastructure to manage. Pay per token. Fastest time-to-production. Best for: prototyping, low-to-medium volume, when frontier model quality is needed, when operational simplicity matters. Limitations: data leaves your infrastructure, cost unpredictable at high volume, provider outages affect you directly, rate limits constrain burst capacity.
 
-**Multiple replicas (data parallelism):**
-Independent model copies behind a load balancer. High throughput, fault tolerance, linear scaling.
+**Self-hosted single-GPU:** One GPU, one model, one process. vLLM or TGI serving Llama-8B or Qwen-14B in INT4. Suitable for models <10B parameters, low traffic, development, privacy-sensitive workloads. The entry point for self-hosting: a single A100-80GB runs a quantized 70B model. Cost: $3-5K/month for cloud GPU, predictable.
 
-**Disaggregated serving:**
-Prefill and decode on separate clusters. Prefill is compute-intensive (powerful GPUs), decode is memory-intensive (high memory bandwidth). Significant improvements in cost efficiency.
+**Self-hosted multi-GPU (tensor parallelism):** The model is distributed across GPUs via tensor parallelism. Each layer is split across devices. Required for models that do not fit in a single GPU's memory (70B+ in FP16). Minimal per-request latency, but throughput does not scale linearly — NVLink communication adds overhead. Cost: $10-20K/month for a 2-4 GPU setup.
+
+**Serverless inference (SageMaker Endpoints, Vertex AI, Replicate):** Managed infrastructure with auto-scaling, including scale-to-zero. You deploy a model, the platform handles scaling, load balancing, and GPU management. Best for: variable-load workloads where maintaining always-on GPUs is wasteful, when operational overhead must be minimized. Limitations: cold start latency (30-120 seconds for GPU initialization), limited model customization, vendor lock-in.
+
+**Edge inference (on-device):** Models running on user devices — laptops (Apple Silicon with MLX), phones, IoT devices. Ollama on MacBook, NVIDIA RTX Spark (128GB, 1 PFLOP). Best for: privacy-critical applications where data cannot leave the device, offline scenarios, ultra-low latency (no network round-trip). Limitations: model size constrained by device memory, no access to frontier-quality models, inference speed limited by consumer hardware.
+
+**Multiple replicas (data parallelism):** Independent model copies behind a load balancer. High throughput, fault tolerance, linear scaling. The production standard for self-hosted inference at scale.
+
+**Disaggregated serving:** Prefill and decode on separate clusters. Prefill is compute-intensive (powerful GPUs), decode is memory-intensive (high memory bandwidth). Amazon-Cerebras alliance uses AWS Trainium for prefill + Cerebras WSE-3 for decode, achieving 5x throughput improvement. NVIDIA Dynamo provides a framework for disaggregated serving. This is now a production-standard approach for high-volume deployments — see [[07_SGLang_and_Alternatives|SGLang and Alternatives]].
+
+| Pattern | Latency | Cost | Ops Complexity | Data Privacy | Best For |
+|---------|---------|------|---------------|-------------|----------|
+| Cloud API | Low | Per-token | Minimal | Low (data leaves) | Prototyping, medium volume |
+| Single GPU | Low | Fixed | Low | High | Dev, small models, privacy |
+| Multi-GPU TP | Lowest | Fixed (high) | Medium | High | Large models, low-latency |
+| Serverless | Variable (cold start) | Per-use | Low | Medium | Variable load |
+| Edge | Lowest (no network) | Device cost | Low | Highest | Offline, on-device |
+| Multi-replica DP | Low | Fixed (scales) | Medium | High | High throughput |
+| Disaggregated | Low | Optimized | High | High | High volume, cost-critical |
+
+## The Request Lifecycle
+
+Understanding what happens between "user sends a prompt" and "user receives a response" is essential for identifying optimization opportunities. Each stage contributes latency, and the slowest stage determines the user experience.
+
+**1. Input processing.** The user's text is received via HTTP/WebSocket. The prompt is assembled: system prompt + conversation history + user message + tool descriptions. Token count is estimated for routing decisions (does this fit the context window? which model tier?).
+
+**2. Tokenization.** The assembled prompt is converted from text to token IDs using the model's tokenizer (BPE). This is CPU-bound and fast (<10ms for most prompts). Token count determines cost and whether the prompt fits the model's context window.
+
+**3. Prefill (prompt processing).** All input tokens are processed in a single forward pass through the model. Compute-intensive: matrix multiplications across all layers. Generates the initial KV-cache — the key and value vectors for every input token at every layer. Latency scales linearly with input length: ~100ms for 4K tokens, ~800ms for 32K, ~3-4 seconds for 128K on an A100. This is the phase where prompt caching saves time — if the prefix matches a cached KV-cache, only the new tokens need prefill.
+
+**4. Decode (token generation).** Tokens are generated one at a time, autoregressively. Each token requires reading the entire KV-cache (memory-bound) and performing a small amount of computation. Inter-token latency (ITL) is typically 20-50ms per token on modern hardware. For a 500-token response: 10-25 seconds of decode time. This is where speculative decoding helps — a smaller draft model generates candidate tokens in bulk, and the main model verifies them in parallel.
+
+**5. Detokenization and delivery.** Token IDs are converted back to text. For streaming responses, each token is sent to the client as it is generated (via SSE or WebSocket). For non-streaming, the complete response is assembled and returned. Post-processing may include: content filtering, structured output validation, tool call extraction.
+
+**Optimization opportunities by stage:** Tokenization (negligible). Prefill (prompt caching: 50-90% savings on repeated prefixes). Decode (speculative decoding: 2-3x speedup; KV-cache quantization: more concurrent requests). Delivery (streaming: perceived latency reduction).
 
 ## Key Takeaways
 
