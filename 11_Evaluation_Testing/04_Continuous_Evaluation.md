@@ -90,13 +90,33 @@ Benjamini-Hochberg FDR method — controls the false discovery rate: sorts p-val
 
 **Effect size** helps assess practical importance. Cohen's d shows the standardized difference: a small effect (~0.2) is statistically significant but practically unnoticeable; medium (~0.5) is a moderate improvement; large (≥0.8) is a substantial change that users will notice.
 
+## Production Evaluation Pipeline
+
+The difference between "we evaluate" and "we have a production evaluation system" is the pipeline — an automated, continuously running process that detects quality issues before users do.
+
+**Sampling strategy for production.** The optimal sampling combines multiple strategies: 1% random (baseline quality monitoring — cheap, continuous, representative), 100% errors (every error is evaluated to understand failure modes and detect systemic issues), 10% edge cases (queries that match known-difficult patterns — long inputs, multi-language, adversarial-looking), and 100% high-risk actions (financial transactions, medical recommendations, any action with material consequences). This gives comprehensive coverage at manageable cost: for a system processing 100K requests/day, this evaluates approximately 2,000-3,000 requests daily.
+
+**Evaluation frequency and alert thresholds.** Real-time: error rate monitoring (alert on >2x baseline), latency monitoring (alert on P95 exceeding SLA). Hourly: aggregated quality metrics from sampled evaluations (alert on >10% quality drop vs 7-day rolling average). Daily: comprehensive quality report with breakdown by query type, model, and feature. Weekly: deep-dive analysis including LLM-as-Judge evaluation on a curated sample, trend review, and comparison with human evaluation on a 5% subset.
+
+**From Braintrust merge-blocking gates to weekly quality reports.** Braintrust (and similar platforms like DeepEval) support merge-blocking quality gates — PRs that introduce prompt or model changes are blocked if evaluation quality drops below a configured threshold. This integrates evaluation directly into the development workflow, not just the production monitoring workflow. The pattern: developer changes prompt → CI runs evaluation suite → if score drops below baseline - N%, the PR is blocked with a clear report of which test cases regressed → developer fixes the regression before merging.
+
+## Regression Detection After Provider Updates
+
+One of the most insidious quality issues in LLM applications: the model provider updates the model without notice, and your system's quality changes — sometimes improving, sometimes degrading. OpenAI retired GPT-5.2 on June 12, 2026 and migrated all conversations to GPT-5.5 automatically, with no advance notice. Developers whose prompts were tuned for GPT-5.2's specific behavior patterns saw unexpected changes.
+
+**Shadow evaluation.** Run every Nth request through both the current model and a "shadow" model (the candidate or the provider's latest version). Compare quality metrics between the two without exposing the shadow model's output to users. When the shadow model consistently outperforms the current model — upgrade with confidence. When it underperforms — stay on the current version and investigate.
+
+**A/B quality comparison for model changes.** When a provider updates a model (GPT-4o → GPT-5, Claude Opus 4.7 → 4.8), do not switch production immediately. Run a canary: 5% of traffic on the new model, 95% on the old. Compare quality metrics over 24-48 hours. Only expand when the new model meets or exceeds the old model's quality on your specific workload. Generic benchmarks (SWE-bench, MMLU) do not predict how the model will behave on your prompts.
+
+**What to do when model behavior changes silently.** Provider-side model updates (without version change) can alter behavior. Detection: monitor quality metrics on the golden dataset daily. If scores change significantly with no code change on your side — the provider updated something. Response: re-run the golden dataset evaluation, compare with the historical baseline, identify which test cases regressed, and file a support ticket with the provider if the regression is significant. Longer term: maintain a version-pinned model configuration where possible (many providers offer dated model versions — e.g., `claude-sonnet-4-20250514`) and upgrade explicitly rather than tracking the latest alias.
+
 ## Regression Testing in CI/CD
 
-**Golden dataset** — a set of examples with known correct answers. With every change, the golden dataset is run and compared against the baseline.
+**Golden dataset** — a set of examples with known correct answers. With every change, the golden dataset is run and compared against the baseline. The golden dataset should grow over time: every production bug that is root-caused becomes a new test case. A golden dataset of 200-500 examples covering all major query types provides strong regression coverage.
 
 **Regression thresholds** — acceptable degradation. "Accuracy ≥95% of the baseline level" or "Latency must not increase >10%".
 
-**Blocking vs warning** — serious regressions block deployment, minor ones generate warnings.
+**Blocking vs warning** — serious regressions block deployment, minor ones generate warnings. Braintrust and DeepEval support this as CI/CD integration.
 
 **Incremental testing** — for major changes, first test on a portion of traffic (canary deployment), then gradually expand.
 

@@ -56,6 +56,26 @@ Comparing pairs instead of assigning absolute scores has significant advantages.
 
 **Limitation:** quadratic growth in the number of pairs. For N answers, N(N-1)/2 comparisons are needed. Solutions: sampling, tournament-style evaluations.
 
+## Annotation Guidelines: The Foundation of Consistent Evaluation
+
+The difference between useful and useless human evaluation comes down to the quality of annotation guidelines. Vague guidelines produce noisy data. Precise guidelines produce consistent, actionable assessments.
+
+**Building effective annotation guidelines.** Start with a concrete rubric, not abstract criteria. For each dimension (correctness, completeness, clarity), define exactly what each score means with examples. A 3-page guideline with 10 annotated examples produces better inter-annotator agreement than a 30-page guideline without examples. The document should answer three questions for every possible situation: what score to assign, why, and what the adjacent scores look like (so annotators understand the boundaries between ratings).
+
+**Inter-annotator agreement (IAA) as a quality signal.** Cohen's kappa measures agreement between two annotators beyond what chance would predict. Kappa > 0.8: strong agreement — guidelines are clear, annotators are calibrated. Kappa 0.6-0.8: moderate agreement — acceptable for most tasks, but review guidelines for ambiguous cases. Kappa 0.4-0.6: fair agreement — guidelines need revision, consider additional training. Kappa < 0.4: poor agreement — stop evaluation, redesign the task. Compute IAA continuously throughout the campaign, not just at the start. Agreement can degrade as annotators fatigue or encounter novel examples not covered by the guidelines.
+
+**Common pitfalls that destroy annotation quality.** Anchoring bias: the first example an annotator sees calibrates all subsequent ratings. Mitigate by randomizing example order and providing calibration examples at the start of each session. Fatigue effects: after 50-100 evaluations, attention drops and ratings become noisier. Limit sessions to 30-45 minutes with mandatory breaks. Scale compression: annotators tend to avoid extreme ratings (1 and 5), clustering around 3. Counteract with guidelines that explicitly describe what a 1 and a 5 look like, and include calibration examples at the extremes.
+
+## Crowdsourcing Evaluation at Scale
+
+For production AI systems processing millions of requests, evaluation must scale beyond what a small expert panel can handle. Crowdsourcing provides volume, but quality control is essential.
+
+**When to use crowd workers vs domain experts.** Crowd workers (Mechanical Turk, Prolific, Appen) handle: fluency judgments (is the response well-written?), format compliance (does it follow instructions?), pairwise preferences (which answer is better?), and general helpfulness assessment. Cost: $0.50-2.00 per evaluation, depending on complexity and platform. Domain experts are required for: factual correctness in specialized domains (medical, legal, financial), safety-critical assessments, and evaluation of technical depth. Cost: $10-50+ per evaluation.
+
+**Quality control for crowd annotations.** Attention checks — insert known-answer questions (10-15% of tasks) to identify inattentive workers. Workers who fail more than 20% of attention checks are excluded and their data is discarded. Gold standard questions — embed pre-evaluated examples with known correct ratings. Measure each worker's deviation from gold standard to compute a reliability score. Weight their annotations by this score. Minimum time thresholds — evaluations completed in under 10 seconds for a complex task are likely unread. Reject and re-queue. Redundancy — assign each example to 3-5 workers and aggregate through majority voting or weighted averaging. Redundancy costs more but produces more reliable results than relying on single annotators.
+
+**The crowdsourcing evaluation pipeline.** Design task and guidelines → pilot with 5-10 workers (calibration) → launch with attention checks and gold standards → monitor IAA in real time → exclude unreliable workers → aggregate results → validate against expert panel on a 10% subsample. This pipeline typically produces crowd annotations that agree with expert judgments 85-90% of the time — sufficient for most quality monitoring use cases, though not for safety-critical decisions.
+
 ## Selecting Evaluators
 
 **Domain experts** provide expert assessment of content. Medical Q&A requires physicians. Limitations: expensive, slow, small pool, specific biases.
