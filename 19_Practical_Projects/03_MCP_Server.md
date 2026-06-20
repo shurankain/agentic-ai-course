@@ -100,6 +100,34 @@ summarize_article — summary generation (ID, length short/medium/long). answer_
 
 Lower the entry barrier, demonstrate capabilities, ensure best practices are followed, speed up routine tasks, guarantee proper formatting.
 
+## Building the Server: Step-by-Step Walkthrough
+
+The knowledge base MCP server is built in stages, each adding a capability that can be tested independently.
+
+**Stage 1: Minimal viable server with one resource.** Start with a single resource — `kb://articles/list` that returns a JSON list of article titles and IDs from a PostgreSQL database. Use the Python MCP SDK (`mcp` on PyPI) or the TypeScript SDK (`@modelcontextprotocol/sdk`). The server reads from the database, formats the response, and returns it. Test by connecting to Claude Desktop or the MCP Inspector. If the client can discover and read the resource, the foundation works.
+
+**Stage 2: Add tools for search and CRUD.** Define `search_articles(query: str, limit: int)` with JSON Schema for parameters. The model sees the schema, understands the parameters, and calls the tool with structured arguments. Add `create_article(title: str, content: str, tags: list[str])` and `update_article(article_id: str, ...)` for mutations. Each tool validates inputs against the schema before executing. Test with progressively complex queries: simple keyword search, multi-word queries, edge cases (empty query, special characters).
+
+**Stage 3: Add prompts for common workflows.** Define `summarize_article(article_id)` and `answer_question(question)`. The `answer_question` prompt internally calls `search_articles` to find relevant content, then formats a prompt that includes the retrieved articles as context. This transforms the server from a data source into a knowledge assistant. Test by asking questions that require synthesizing information across multiple articles.
+
+**Stage 4: Add error handling and edge cases.** What happens when: the article does not exist (return a clear error, not a crash), the database is down (return a service unavailable error with a retry hint), the search returns no results (return an empty result with a suggestion to broaden the query), the input contains SQL injection attempts (parameterized queries prevent this, but validate inputs explicitly). Each error path should return a human-readable message that helps the model (and the user) understand what went wrong and what to try next.
+
+**Integration testing with Claude Code.** Configure Claude Code to connect to the server via stdio. Ask Claude to "search the knowledge base for authentication articles" and verify it calls the right tool. Ask it to "create an article about OAuth best practices" and verify the article appears in the database. Ask a question that requires cross-referencing multiple articles. This end-to-end test validates that the server works as part of a real agent workflow, not just in isolation.
+
+## Production Hardening
+
+Moving from a working prototype to a production-ready MCP server requires addressing reliability, security, and operational concerns.
+
+**Authentication and authorization.** For servers exposed over the network (Streamable HTTP transport), implement OAuth 2.1 as described in the OAuth 2.1 Authorization section below. For stdio servers running locally, authentication is implicit — the server runs in the user's process. Never expose a stdio server over the network without wrapping it in an authenticated HTTP layer.
+
+**Rate limiting.** Prevent abuse and control costs. Implement per-user rate limits (e.g., 100 tool calls per minute, 1000 resource reads per hour) using a sliding window counter in Redis. Return a clear rate limit error with a Retry-After hint. For search operations that hit the database, add a separate query rate limit to protect the backend.
+
+**Input validation beyond JSON Schema.** JSON Schema validates types and required fields, but not business logic. Additional validation: string length limits (prevent 1MB article titles), allowed characters (prevent injection), referential integrity (article_id must exist), and content sanitization (strip scripts from user-provided content). Fail fast with a descriptive error — do not let invalid data reach the database.
+
+**Monitoring and alerting.** Log every tool call with: timestamp, user/session ID, tool name, input parameters (PII-masked), execution time, result status (success/error). Alert on: error rate exceeding 5% over a 5-minute window, P95 latency exceeding 2 seconds, rate limit violations (potential abuse), and tool calls from unexpected clients (security incident). Integrate with the observability stack — see [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]] for patterns.
+
+**Graceful degradation.** When the database is slow or unavailable, the server should: return cached results for read operations (with a staleness warning), queue write operations for retry, and return a service degradation error for operations that cannot be cached or queued. The model (and user) should receive a clear message: "The knowledge base is temporarily operating in read-only mode. New articles cannot be created until the issue is resolved."
+
 ## Production Features
 
 ### Logging
