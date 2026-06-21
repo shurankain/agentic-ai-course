@@ -144,13 +144,25 @@ When transitioning from PyTorch to JAX, follow these steps:
 
 **Python control flow in jit**: inside @jit, you cannot use Python if with conditions depending on traced array values (the compiler does not know their values). Instead of if x > 0: return x else: return -x, use jnp.where(x > 0, x, -x), which works with arrays and is supported by the compiler.
 
+## JAX in the AI Agent Landscape: Where It Matters
+
+For an AI architect building agentic systems, JAX is not a framework you use directly — it is the infrastructure beneath the models you deploy. Understanding when and why it matters helps make informed decisions about model selection and custom component development.
+
+**JAX powers the models you use.** Anthropic trains Claude (including Fable 5) on JAX. Google DeepMind trains Gemini on JAX. When you call the Claude API, the inference runs on a JAX-based serving stack optimized for Google TPUs. When Anthropic deploys over 1 million TPU v7 Ironwood chips for Claude (2026), the JAX ecosystem is the foundation. You do not need to know JAX to use these models — but understanding JAX explains why certain models perform differently on TPU vs GPU infrastructure.
+
+**When an AI architect needs JAX directly.** Custom training loops for fine-tuning where PyTorch's abstractions are limiting (e.g., research on new PEFT methods, per-example gradient computation for data influence analysis). TPU-native workloads where JAX's XLA compilation provides 2-3x throughput advantage over PyTorch on the same hardware. Custom inference kernels for specialized model architectures (Mamba, hybrid attention, novel quantization schemes) where JAX's composable transformations simplify implementation. Evaluation and interpretability research — computing Hessians, activation patching, and other second-order analysis benefits from JAX's autodiff composability.
+
+**When PyTorch is the right choice (most of the time).** Building agent applications (LangChain, LangGraph, CrewAI — all Python/PyTorch ecosystem). Deploying models via vLLM, TGI, or SGLang (all PyTorch-native). Fine-tuning with HuggingFace Transformers and PEFT libraries. Production inference on NVIDIA GPUs (CUDA ecosystem favors PyTorch). Rapid prototyping where ecosystem breadth matters more than compilation speed.
+
+**The practical decision.** If you are building agents, deploying models, or fine-tuning — use PyTorch. If you are training models from scratch, doing ML research, or working on Google TPU infrastructure — evaluate JAX. If you are joining Anthropic or DeepMind — learn JAX. For everyone else, understanding JAX concepts (functional paradigm, composable transformations) improves your thinking about model architecture even if you never write a line of JAX code.
+
 ## Key Takeaways
 
 JAX represents a functional paradigm for deep learning with an emphasis on composability of transformations. The core transformations — jit for compilation, grad for automatic differentiation, vmap for vectorization, and pmap for parallelization — can be freely combined.
 
 The Flax, Optax, and Orbax ecosystem provides the necessary tools for building and training neural networks in a functional style. Explicit state and random key management requires adaptation from PyTorch developers but offers advantages in determinism and parallelization.
 
-JAX is particularly strong for research and TPU workloads, but PyTorch remains the leader for rapid prototyping and production deployment thanks to its mature ecosystem.
+JAX is particularly strong for research and TPU workloads. It powers the training infrastructure for Claude and Gemini — the frontier models most AI architects build on. PyTorch remains the leader for rapid prototyping, agent development, and production deployment thanks to its mature ecosystem and CUDA integration.
 
 ## Navigation
 

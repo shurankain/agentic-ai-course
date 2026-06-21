@@ -144,6 +144,18 @@ Strict flow requirements. Compliance and audit. Complex state machines. Full con
 
 **Deployment via Bedrock AgentCore**: for production, the BedrockAgent class is used. During creation, a unique agent_id, model, guardrails settings (content filtering, personal data detection), and tracing parameters for monitoring are specified. The agent is invoked through the invoke() method with a session_id for tracking user sessions. All interactions are automatically logged, and traces are available for analysis and debugging.
 
+## AWS Strands in the Framework Landscape
+
+Strands exists alongside several agent frameworks, each occupying a different niche. Understanding the positioning helps choose correctly for a given project.
+
+**Strands vs Bedrock Agents (AWS-native managed service).** Bedrock Agents is a fully managed, no-code/low-code agent builder within the AWS console — define an agent's instructions and tools through the UI, and AWS handles orchestration, scaling, and state management. Strands SDK is the open-source, code-first alternative — full control, local development, testable outside AWS. The relationship: Strands is the SDK for developers who want to build custom agent logic; Bedrock Agents is the managed service for teams who want agents without writing orchestration code. Bedrock AgentCore bridges both — Strands agents can be deployed on AgentCore for production infrastructure.
+
+**Strands vs LangChain/LangGraph.** LangChain provides building blocks (chains, memory, retrieval); LangGraph adds explicit state machines. Strands takes the opposite approach: minimal abstractions, let the model decide. A basic LangGraph agent requires defining states, edges, and transitions (50-100 lines). A basic Strands agent requires defining tools and a system prompt (5-10 lines). The trade-off is control vs simplicity: LangGraph when you need explicit flow control and checkpointing; Strands when you want the model to handle orchestration and you are willing to accept less predictability.
+
+**Strands vs Spring AI (JVM ecosystem).** Spring AI provides AI integration for Java/Kotlin applications within the Spring ecosystem — dependency injection, auto-configuration, Spring Boot integration. Strands is Python-native. For JVM teams already on Spring Boot, Spring AI is the natural choice (with LangChain4j as the alternative). For Python teams on AWS, Strands is simpler than LangChain while providing native AWS integration. The two do not compete directly — they serve different language ecosystems.
+
+**When to choose AWS-native.** Choose Strands when: your infrastructure is on AWS, you want Bedrock AgentCore for managed production deployment, IAM integration matters for security, and you prefer a model-driven approach. Choose Strands over LangGraph when predictability is less important than development speed and your agents are adaptive (customer support, research) rather than workflow-driven (compliance, audit). Do not choose Strands when: you need cross-cloud portability, you require explicit flow control for regulated workflows, or your team is not on Python.
+
 ## Ecosystem and Adoption (2025)
 
 **Community growth:** Active ecosystem of contributed tools and MCP server integrations. AWS published reference architectures for common patterns (customer support, data analysis, code generation).
