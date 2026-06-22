@@ -96,7 +96,7 @@ The EU AI Act is no longer future regulation — it is active law with enforceme
 
 **State level — the new regulatory frontier:**
 
-**Colorado AI Act (SB 24-205):** The first comprehensive US state AI law, now in effect (February 2026). Requires reasonable care to avoid algorithmic discrimination for "high-risk AI systems" in consequential decisions (employment, finance, housing, insurance, education). Mandates impact assessments, risk management policies, and consumer notification.
+**Colorado AI Act (SB 24-205):** Originally the first comprehensive US state AI law (signed May 2024). Delayed to January 1, 2027 and significantly narrowed by SB 189 (signed May 14, 2026) — the risk-based framework was replaced with a transparency-only approach, eliminating the duty of care and most deployer obligations. The first comprehensive US state AI law was substantially weakened before enforcement.
 
 **California:** SB-1047 was vetoed (September 2024), but California subsequently passed **SB-53** (signed into law September 2024) — a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
 

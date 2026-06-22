@@ -24,7 +24,7 @@ At the final stage, the model aggregates representations of all tokens into a si
 
 ### Geometry of the Embedding Space
 
-To understand why embeddings work, one must delve into the geometry of the resulting space.
+To understand why embeddings work, consider the geometry of the resulting space.
 
 **Why Cosine Similarity?**
 

@@ -116,7 +116,7 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 
 | Tool | Key Differentiator | Context | Notable |
 |------|-------------------|---------|---------|
-| **Cursor** | AI-first IDE, $4B ARR, $60B valuation, 64% Fortune 500 | ~120K effective context | **Cursor 3.5** (May 2026): cloud agents in isolated VMs, parallel multi-repo work. Free/$20/$60/$200. Design Mode |
+| **Cursor** | AI-first IDE, $4B ARR, $50B valuation (April 2026), 64% Fortune 500 | ~120K effective context | **Cursor 3.5** (May 2026): cloud agents in isolated VMs, parallel multi-repo work. Free/$20/$60/$200. Design Mode |
 | **Devin Desktop** (formerly Windsurf, June 2) | Cascade → Devin Local (Rust rewrite), Agent Command Center | 40+ IDEs supported | Cognition acquisition (April 2026). Cascade EOL July 1. Agent Client Protocol support |
 | **GitHub Copilot** | Distribution (VS Code, JetBrains, Eclipse, Xcode) | Agent Mode GA | **Usage-based billing (June 1):** AI Credits system ($0.01/credit). Pro $10/mo credits, Pro+ $39/mo. Flat-rate ending |
 | **Cline** | Full transparency, BYOK | 5M+ VS Code installs | Plan/Act modes, total visibility into agent actions |

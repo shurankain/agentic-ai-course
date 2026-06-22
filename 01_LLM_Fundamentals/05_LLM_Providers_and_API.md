@@ -21,7 +21,7 @@ Understanding the LLM provider landscape is not simply a matter of picking the "
 OpenAI popularized LLMs through ChatGPT and continues to set the pace of the industry. Their API remains the de facto standard that other providers emulate.
 
 **Frontier models:**
-- **GPT-5.4** — the current flagship (March 2026). $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
+- **GPT-5.4** — previous flagship (March 2026), superseded by GPT-5.5. $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
 - **GPT-5.5 Instant** — new default ChatGPT model (May 5, 2026). 88.7% SWE-bench Verified. 52.5% fewer hallucinations on high-stakes prompts (medicine, law, finance). ~$2.50/$10.00 per 1M tokens. Full GPT-5.5 API: $5/$30 per 1M tokens; Pro configuration $30/$180.
 - **GPT-5.4-Cyber** — specialized cybersecurity model for vulnerability analysis and threat detection. Access via Trusted Access for Cyber (TAC), a tiered identity verification system that grants broader access to verified security professionals.
 - **GPT-5.5-Cyber** — expanded Trusted Access for Cyber (May 2026). Tools for vulnerability triage, malware analysis, red teaming, patch validation. Restricted access for verified security professionals.

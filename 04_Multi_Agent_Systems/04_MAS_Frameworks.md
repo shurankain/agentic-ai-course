@@ -84,19 +84,19 @@ LangGraph is the right choice when you need: precise control over execution flow
 
 > **Note (February 2026):** AutoGen has entered maintenance mode. Microsoft's strategic investment has shifted to Microsoft Agent Framework, which unifies concepts from AutoGen and Semantic Kernel. Existing AutoGen deployments continue to work and receive security updates, but new projects should evaluate Microsoft Agent Framework, OpenAI Agents SDK, or LangGraph instead.
 
-AutoGen is a framework from Microsoft Research that focuses on conversational agents -- agents that interact with each other through natural dialogue.
+AutoGen is a framework from Microsoft Research that focuses on conversational agents — agents that interact with each other through natural dialogue.
 
 ### Agents as Conversationalists
 
 The central metaphor of AutoGen is group chat. Multiple agents participate in a conversation, each with their own role and expertise. One agent generates code, another reviews it, a third runs tests, a fourth coordinates the discussion. They communicate with each other via text messages, like people in a chat.
 
-This approach is intuitive and flexible. There is no need to design complex interaction schemas -- agents simply "talk" until they reach a solution. New agents can easily be added to the conversation.
+This approach is intuitive and flexible. There is no need to design complex interaction schemas — agents simply "talk" until they reach a solution. New agents can easily be added to the conversation.
 
 ### Automatic Interaction
 
 The name AutoGen reflects the automatic nature of interaction. When one agent sends a message, the framework determines who should respond and automatically triggers that agent. The chain continues until a termination condition is met.
 
-This simplifies development -- there is no need to manually program each transition. But it also creates the risk of infinite loops or unpredictable behavior if agents are not configured carefully.
+This simplifies development — there is no need to manually program each transition. But it also creates the risk of infinite loops or unpredictable behavior if agents are not configured carefully.
 
 ### Human-in-the-Loop
 
@@ -114,15 +114,15 @@ AutoGen 0.4 introduced a completely redesigned architecture that was the last ma
 
 **Improved Testability:** the new architecture significantly simplifies testing. Mock runtimes allow writing isolated unit tests for agents. Deterministic execution mode guarantees reproducible results. Replay capabilities allow recording real interactions and replaying them for debugging.
 
-AutoGen 0.4 is incompatible with version 0.2 -- a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
+AutoGen 0.4 is incompatible with version 0.2 — a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
 
 ## CrewAI: Role-Based Collaboration
 
-CrewAI (now at version ~1.10.x) offers the metaphor of a crew -- a group of specialists, each with their own role, working toward a common goal.
+CrewAI (now at version ~1.10.x) offers the metaphor of a crew — a group of specialists, each with their own role, working toward a common goal.
 
 ### Roles and Tasks
 
-In CrewAI, you define agents through their roles: researcher, writer, editor, analyst. Each role has a description, a set of tools, and a work style. Then you define tasks -- specific units of work that need to be completed.
+In CrewAI, you define agents through their roles: researcher, writer, editor, analyst. Each role has a description, a set of tools, and a work style. Then you define tasks — specific units of work that need to be completed.
 
 The framework automatically assigns tasks to agents based on role matching. Research tasks go to the researcher, writing tasks go to the writer. This creates an intuitive structure similar to how work is organized in real teams.
 
@@ -158,7 +158,7 @@ Semantic Kernel is an SDK from Microsoft for integrating AI into enterprise appl
 
 The main abstraction in Semantic Kernel is plugins containing a set of functions. Functions can be native (regular code in C#, Python, or Java) or semantic (prompts to an LLM). The Kernel orchestrates function calls, manages context, and provides integration with various LLM providers.
 
-This approach allows gradually adding AI capabilities to existing applications. There is no need to rewrite everything from scratch -- it is enough to wrap existing services in plugins and add semantic functions for new functionality.
+This approach allows gradually adding AI capabilities to existing applications. There is no need to rewrite everything from scratch — it is enough to wrap existing services in plugins and add semantic functions for new functionality.
 
 ### Planners
 
@@ -242,21 +242,21 @@ ADK is the natural choice for organizations in the GCP ecosystem, especially whe
 
 Each framework occupies its own niche. The choice depends on the specific requirements of the project.
 
-**LangGraph** -- choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.0 with managed deployment via LangGraph Platform.
+**LangGraph** — choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.0 with managed deployment via LangGraph Platform.
 
-**OpenAI Agents SDK** -- for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
+**OpenAI Agents SDK** — for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
 
-**CrewAI** -- a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly. Flows add event-driven orchestration for complex scenarios.
+**CrewAI** — a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly. Flows add event-driven orchestration for complex scenarios.
 
-**Microsoft Agent Framework** -- for enterprise applications in the Microsoft ecosystem. Replaces both AutoGen and Semantic Kernel as the unified agent platform with Azure integration.
+**Microsoft Agent Framework** — for enterprise applications in the Microsoft ecosystem. Replaces both AutoGen and Semantic Kernel as the unified agent platform with Azure integration.
 
-**Google ADK** -- for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
+**Google ADK** — for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
 
-**AutoGen / Semantic Kernel** -- in maintenance mode (bugfix-only). Existing deployments continue to work, but **all existing AutoGen projects are legacy requiring migration**. New projects should evaluate the alternatives above.
+**AutoGen / Semantic Kernel** — in maintenance mode (bugfix-only). Existing deployments continue to work, but **all existing AutoGen projects are legacy requiring migration**. New projects should evaluate the alternatives above.
 
-**Pydantic AI** -- for type-safe Python multi-agent systems with durable execution. From the Pydantic creators. Best when reliability and type checking matter more than ecosystem breadth.
+**Pydantic AI** — for type-safe Python multi-agent systems with durable execution. From the Pydantic creators. Best when reliability and type checking matter more than ecosystem breadth.
 
-**Agno** (formerly Phidata, 39K+ stars as of early 2026) -- session-based memory and ReasoningTools for multi-agent coordination. Good middle ground between LangGraph's explicit control and CrewAI's simplicity.
+**Agno** (formerly Phidata, 39K+ stars as of early 2026) — session-based memory and ReasoningTools for multi-agent coordination. Good middle ground between LangGraph's explicit control and CrewAI's simplicity.
 
 **CrewAI ecosystem update (as of early 2026):** CrewAI reached 12M+ daily executions with native MCP and A2A support. This makes it one of the few frameworks natively supporting both protocols — agents can use MCP tools and coordinate with external agents via A2A without custom integration code.
 
