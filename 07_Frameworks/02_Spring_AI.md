@@ -12,7 +12,9 @@
 
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
 
-**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations, and **2.0.0-M1** (milestone preview) was released in December 2025. Key 1.0 milestones: stable API surface (no more breaking changes between releases), official Spring Boot starter support, comprehensive documentation and migration guides.
+**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations. **Spring AI 2.0.0 GA** was released on **June 12, 2026** — a major version requiring **Spring Boot 4.0/4.1** and **Spring Framework 7.0**. Key 2.0 additions: **ToolSearchToolCallingAdvisor** for progressive tool disclosure (indexes all tools per session, exposes only a built-in `toolSearchTool` for on-demand retrieval — three ToolIndex implementations: vector store, Lucene, regex), enhanced observability for chat models, and improved OpenAI options builder pattern. Spring AI 1.0.9 and 1.1.8 were also released on June 12 as security patches.
+
+**Security: CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. Affects Spring AI versions prior to 1.0.9/1.1.8/2.0.0. Patch: upgrade to 1.0.9, 1.1.8, or 2.0.0 GA. If you use vector store metadata filters in production, patch immediately.
 
 Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud streamlined cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
 
@@ -214,7 +216,7 @@ The configuration creates a ChatClient via a builder specifying a VectorStore fo
 
 ## Key Takeaways
 
-Spring AI 1.0 GA (May 2025) marks production readiness — stable APIs, Spring Boot starters, comprehensive documentation.
+Spring AI 2.0 GA (June 2026) is the current release — requires Spring Boot 4.0, adds progressive tool disclosure (ToolSearchToolCallingAdvisor), and enhanced observability. Check CVE-2026-47835 (CVSS 8.6) for vector store metadata filtering vulnerability — patch to 1.0.9/1.1.8/2.0.0.
 
 Spring AI brings modern AI capabilities to the Spring ecosystem in a natural and idiomatic way. Provider portability, deep Spring integration, and production readiness make it a strong choice for enterprise applications.
 

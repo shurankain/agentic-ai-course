@@ -116,7 +116,7 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 
 | Tool | Key Differentiator | Context | Notable |
 |------|-------------------|---------|---------|
-| **Cursor** | AI-first IDE, $4B ARR, $50B valuation (April 2026), 64% Fortune 500 | ~120K effective context | **Cursor 3.5** (May 2026): cloud agents in isolated VMs, parallel multi-repo work. Free/$20/$60/$200. Design Mode |
+| **Cursor** | AI-first IDE, $4B ARR, 64% Fortune 500. **Acquired by SpaceX for ~$60B** (June 22) | ~120K effective context | **Cursor 3.8** (June 18): `/automate` skill (Slack/GitHub triggers), computer use for cloud agents, Design Mode. Free/$20/$60/$200 |
 | **Devin Desktop** (formerly Windsurf, June 2) | Cascade → Devin Local (Rust rewrite), Agent Command Center | 40+ IDEs supported | Cognition acquisition (April 2026). Cascade EOL July 1. Agent Client Protocol support |
 | **GitHub Copilot** | Distribution (VS Code, JetBrains, Eclipse, Xcode) | Agent Mode GA | **Usage-based billing (June 1):** AI Credits system ($0.01/credit). Pro $10/mo credits, Pro+ $39/mo. Flat-rate ending |
 | **Cline** | Full transparency, BYOK | 5M+ VS Code installs | Plan/Act modes, total visibility into agent actions |
@@ -240,7 +240,7 @@ OpenAI's cloud-based autonomous coding agent, released mid-2025:
 - **$100/month Pro plan** for longer, high-intensity Codex sessions (in addition to the existing ChatGPT Pro/Team inclusion)
 - **GPT-5.3-Codex-Spark** — a research preview of a smaller, real-time coding model delivering 1000+ tokens per second for near-instant feel
 
-### Windsurf (formerly Codeium)
+### Devin Desktop (formerly Windsurf, formerly Codeium)
 
 Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE. Acquired by Cognition (Devin's parent company) in April 2026 after Google hired Windsurf's CEO and co-founder for $2.4B.
 
@@ -557,7 +557,7 @@ A distinct category emerged in 2025-2026: agents that operate directly in the te
 
 **Aider** — open-source (39-42K GitHub stars, 15B tokens processed per week). Git-native: every edit is automatically committed, making it easy to review and revert. Pioneered the **Architect/Editor dual-role pattern**: an expensive reasoning model (Opus, o3) handles planning and decision-making (10% of tokens, ~90% of value), while a cheap model handles code edits (90% of tokens, ~10% of value). This yields 3-5x cost savings. The pattern is generalizable — any agent system can split "thinking" and "doing" across model tiers.
 
-**IDE market consolidation (as of mid-June 2026):** Seven major contenders: **Claude Code** (CLI-first, Fable 5, $1B+ ARR), **Cursor** ($4B ARR, IDE-first, $60B valuation), **Devin Desktop** (agent-first, Cognition $26B), **Codex** (5M weekly, knowledge work expansion), **Copilot** (4.7M subscribers, usage-based since June 1), **Kiro** (Amazon, spec-driven), **Antigravity** (Google, replaces Gemini CLI). Coding agents have evolved from autocomplete into autonomous workers with multi-agent orchestration, remote execution, and mobile control. The future split is "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget), rather than IDE vs. terminal.
+**IDE market consolidation (as of late June 2026):** The landscape shifted dramatically on June 22 when **SpaceX acquired Anysphere (Cursor) for ~$60B** in an all-stock deal — the largest acquisition of a VC-backed startup in history. Cursor ($4B ARR, 1M+ paying users, 64% of Fortune 500) is now owned by SpaceX/xAI, raising questions about model neutrality (will Cursor favor Grok over Claude/GPT?). Seven major contenders remain: **Claude Code** (CLI-first, $1B+ ARR), **Cursor/SpaceX** (IDE-first, $60B acquisition), **Devin Desktop** (agent-first, Cognition $26B), **Codex** (5M weekly, knowledge work expansion), **Copilot** (4.7M subscribers, usage-based since June 1), **Kiro** (Amazon, spec-driven), **Antigravity** (Google, replaces Gemini CLI). The future split is "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget).
 
 **Composable stack trend:** Rather than consolidating on a single tool, the fastest-shipping developers compose multiple agents — Cursor for IDE editing + Claude Code for terminal automation + Codex for async batch tasks + Antigravity for Google ecosystem orchestration. The tools form a layered ecosystem, not a winner-take-all market. "Developers shipping fastest are composing, not choosing" (as of late May 2026).
 

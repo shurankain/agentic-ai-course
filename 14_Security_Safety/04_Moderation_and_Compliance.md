@@ -86,7 +86,7 @@ The EU AI Act is no longer future regulation — it is active law with enforceme
 
 **August 2025 — GPAI obligations in force:** All General Purpose AI model providers must provide: technical documentation (architecture, training process, data sources), training data summaries, copyright compliance policies, and cooperation with regulators. Models exceeding 10^25 FLOPS (systemic risk) face additional requirements: adversarial testing, incident reporting, cybersecurity measures.
 
-**August 2026 — High-risk system requirements upcoming:** Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure. Requires: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
+**December 2027 — Standalone high-risk system requirements (delayed from August 2026 by the Digital Omnibus, May 2026):** Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure (Annex III). **August 2028** for high-risk AI embedded in regulated products (Annex I). Requirements unchanged — only deadlines shifted: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
 
 **Implications for AI architects:** Every production AI system deployed in the EU needs a risk classification. High-risk systems need conformity assessment architecture from the start. GPAI providers must maintain technical documentation as a continuous process, not a one-time effort.
 
@@ -184,7 +184,7 @@ Input moderation prevents attacks and resource waste. Output moderation protects
 
 Factual claims and misinformation are especially dangerous in sensitive domains (medicine, finance, law). Disclaimers and domain restrictions reduce risk.
 
-The EU AI Act is now actively enforced: prohibited practices banned (Feb 2025), GPAI obligations in force (Aug 2025), high-risk requirements upcoming (Aug 2026). The US landscape is fragmented: federal EO rescinded, but state laws (Colorado AI Act, California) create a compliance patchwork. GDPR, CCPA/CPRA, HIPAA, SOC 2, and industry-specific regulations continue to define data protection standards.
+The EU AI Act is actively enforced: prohibited practices banned (Feb 2025), GPAI obligations in force (Aug 2025), transparency obligations binding (Aug 2026), standalone high-risk requirements delayed to Dec 2027, product-embedded to Aug 2028 (Digital Omnibus, May 2026). The US landscape is fragmented: federal EO rescinded, Great American AI Act proposed (June 2026), state laws (Colorado delayed/weakened, Illinois SB 315 audit law) create a compliance patchwork. GDPR, CCPA/CPRA, HIPAA, SOC 2, and industry-specific regulations continue to define data protection standards.
 
 Runtime safety controls are shifting from application-level to organizational-level enforcement (as of late May 2026): AWS Bedrock Guardrails now enforce cross-account at the Organizations level; Anthropic runtime controls block dangerous actions at the execution layer, not just at the generation layer.
 

@@ -387,13 +387,13 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 ### Provider Billing Changes
 
-**Anthropic** is separating Agent SDK credits from general usage, effective June 15, 2026. Teams using Claude Code in CI/automation pipelines must move to Max 20x plans or switch to direct API keys. Agent SDK usage (multi-step tasks, tool calls, background execution) will no longer draw from the same credit pool as standard API calls.
+**Anthropic** planned to separate Agent SDK credits from general usage on June 15, 2026 — but **the change was paused** and never took effect. All programmatic usage continues drawing from existing subscription limits. Teams using Claude Code in CI/automation pipelines do not need to change billing arrangements (as of late June 2026).
 
-**Cursor 3.5** (May 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2.
+**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 22 — pricing and model-neutrality implications unclear.
 
 **GitHub Copilot** transitioned to **usage-based billing (June 1, 2026)** — all plans now use AI Credits ($0.01/credit). Pro includes $10/month in credits, Pro+ includes $39/month. Usage calculated by token consumption including input, output, and cached tokens. Annual Pro/Pro+ plans remain on legacy request-based pricing until expiration. The era of flat-rate "unlimited" AI coding assistance is ending.
 
-**Anthropic SDK billing split (June 15, 2026):** Separate billing for Claude API vs Claude Code usage, enabling finer cost attribution.
+**Anthropic SDK billing split:** Originally planned for June 15, 2026 — separate billing for Claude API vs Claude Code usage. **Paused indefinitely** on June 15; the change never took effect.
 
 **Google Gemini** is moving to a compute-used pricing model. The new AI Ultra tier ($100/month) provides 5x higher limits than the standard plan, but usage is measured in compute units rather than flat message counts.
 
