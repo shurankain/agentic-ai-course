@@ -60,14 +60,14 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following, strong code generation, and long context capabilities.
 
 **Claude model family (latest generation):**
-- **Claude Fable 5** — the current flagship (June 9, 2026). First public Mythos-class model. 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (+11pp over Opus 4.8, vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to Claude Opus 4.8. Included on Pro/Max/Team plans through June 22, then requires usage credits. Knowledge cutoff January 2026.
+- **Claude Fable 5** — the Mythos-class flagship (launched June 9, 2026; **suspended June 13 due to export controls** — see below). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (+11pp over Opus 4.8, vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to Claude Opus 4.8. Knowledge cutoff January 2026. **Availability (as of late June 2026):** partially restored with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic introducing biometric identity verification (government ID, facial geometry) starting July 8.
 - **Claude Opus 4.8** — previous flagship (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro (+4.9% over 4.7 — significant Pro jump), 74.6% Terminal-Bench 2.1. Sharper judgement — the model is more likely to flag uncertainties and less likely to make unsupported claims. Dynamic workflows for large-scale problems. Fast mode now 3x cheaper than previous models. $5/$25 per 1M tokens. Beats GPT-5.5 on 12+ benchmarks. Messages API now accepts `system` records inside `messages[]`, allowing mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
 - **Claude Opus 4.7** — previous flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP — first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning — the model decides how much to think based on task complexity.
 - **Claude Opus 4.6** — previous flagship. Still widely deployed. Deep reasoning, complex analysis, extended autonomous workflows. $5/$25 per 1M tokens.
 - **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
 - **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
 
-*Note:* Claude Opus 4 / Sonnet 4 remain available but have been superseded by the 4.6/4.7 generation.
+*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-6-20250923`) were **retired from the API on June 15, 2026** — hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
 
 **Anthropic now operates a 4-tier model hierarchy (as of mid-June 2026):** Mythos ($10/$50) > Opus ($5/$25) > Sonnet ($3/$15) > Haiku ($0.25/$1.25). Fable 5 is the public-facing Mythos-class model; full Mythos 5 remains restricted.
 
@@ -370,7 +370,7 @@ This format reflects the conversation structure and allows the model to understa
 ### Core Request Parameters
 
 A typical API request includes:
-- **model** — model identifier (e.g., "gpt-4o", "claude-sonnet-4-20250514", "gemini-2.5-pro")
+- **model** — model identifier (e.g., "gpt-4o", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
 - **messages** — array of messages
 - **temperature** — degree of randomness in responses (0-2; note: some reasoning models fix this)
 - **max_tokens** — maximum response length
@@ -444,7 +444,7 @@ GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), though Cla
 | GPT-5-mini | $0.25 | $2.00 |
 | GPT-5-nano | $0.05 | $0.40 |
 | GPT-4o-mini | $0.15 | $0.60 |
-| Claude Haiku 4.5 | $1.00 | $5.00 |
+| Claude Haiku 4.5 | $0.25 | $1.25 |
 | Gemini 2.5 Flash | $0.15 | $0.60 |
 | Gemini 2.0 Flash | $0.10 | $0.40 |
 | Mistral Small 3 | $0.10 | $0.30 |
@@ -536,9 +536,9 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Complex Reasoning and Analysis
 
 **Recommended models:**
-- Claude Fable 5 (Mythos-class reasoning, best on complex multi-step tasks)
+- Claude Fable 5 (Mythos-class reasoning, best on complex multi-step tasks — **currently suspended**, see Anthropic section)
+- Claude Opus 4.8 with extended thinking (accessible Anthropic flagship while Fable 5 is offline)
 - o3 / o4-mini (OpenAI reasoning)
-- Claude Opus 4.8 or Sonnet 4.6 with extended thinking (Anthropic)
 - Gemini 3.1 Pro Preview or 2.5 Pro with thinking (Google)
 
 **Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
@@ -546,8 +546,8 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Code Generation
 
 **Recommended models:**
-- Claude Fable 5 (95.0% SWE-bench Verified, 80.3% Pro — leader on both; multi-day agentic coding)
-- Claude Opus 4.8 (88.6% Verified, 69.2% Pro — strong alternative at lower cost)
+- Claude Fable 5 (95.0% Verified, 80.3% Pro — leader on both; **currently suspended**, see Anthropic section)
+- Claude Opus 4.8 (88.6% Verified, 69.2% Pro — accessible flagship while Fable 5 is offline)
 - Claude Sonnet 4.6 (consistently strong on coding benchmarks)
 - GPT-5.5 Instant (88.7% Verified)
 - GPT-5.2-Codex / GPT-5.3-Codex (specialized agentic coding models)
@@ -794,7 +794,7 @@ Modern LLMs require significant resources:
 
 ### Basic Integration via LangChain4j
 
-Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-4o"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-sonnet-4-20250514", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-2.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama4:maverick".
+Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-4o"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-sonnet-4-6-20250923", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-2.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama4:maverick".
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 

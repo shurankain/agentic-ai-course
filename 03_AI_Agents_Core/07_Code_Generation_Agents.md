@@ -282,7 +282,7 @@ Curated subset with verified solutions (500 tasks, manually verified):
 
 | Model/Agent | Score | Date |
 |-------------|-------|------|
-| **Claude Fable 5** | **95.0%** | June 2026 (Mythos-class, independently confirmed) |
+| **Claude Fable 5** | **95.0%** | June 2026 (Mythos-class, independently confirmed; **model suspended June 13**) |
 | Claude Mythos Preview | 93.9% | April 2026 (restricted access) |
 | GPT-5.5 Instant | 88.7% | May 2026 |
 | Claude Opus 4.8 | 88.6% | May 2026 |
@@ -294,8 +294,8 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | Claude Opus 4.6 Thinking | 79.2% | Early 2026 |
 | Gemini 3 Flash | 76.2% | Early 2026 |
 | GPT-5.2 | 75.4% | Early 2026 |
-| Claude Sonnet 4 | 72.7% | Mid-2025 |
-| Claude Opus 4 | 72.0% | Mid-2025 |
+| Claude Sonnet 4 (*retired June 15*) | 72.7% | Mid-2025 |
+| Claude Opus 4 (*retired June 15*) | 72.0% | Mid-2025 |
 | OpenAI o1 | 48.9% | 2024 |
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
