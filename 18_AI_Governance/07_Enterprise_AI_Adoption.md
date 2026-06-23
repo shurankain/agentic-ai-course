@@ -409,7 +409,7 @@ The funding environment for agent startups has reached unprecedented levels — 
 | Company | Round | Valuation | ARR | Note |
 |---------|-------|-----------|-----|------|
 | **Sierra** | $950M | $15.8B | $150M (from $26M end 2024) | Largest agent-focused round |
-| **Cursor/Anysphere** | — | $50B (April 19) | $4B | Doubled ARR in 3 months |
+| **Cursor/Anysphere** | **Acquired by SpaceX $60B** (June 22) | $50B (April 19, pre-acquisition) | $4B | Largest VC-backed acquisition ever |
 | **Devin/Cognition** | Series D $1B+ | $26B | $492M | 13x ARR growth YoY |
 | **Ineffable Intelligence** | $1.1B seed | — | — | Largest seed round in AI history |
 

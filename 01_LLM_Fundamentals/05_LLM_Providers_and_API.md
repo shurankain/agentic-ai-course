@@ -67,7 +67,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 - **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
 - **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
 
-*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-6-20250923`) were **retired from the API on June 15, 2026** — hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
+*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-20250514`) were **retired from the API on June 15, 2026** — hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
 
 **Anthropic now operates a 4-tier model hierarchy (as of mid-June 2026):** Mythos ($10/$50) > Opus ($5/$25) > Sonnet ($3/$15) > Haiku ($0.25/$1.25). Fable 5 is the public-facing Mythos-class model; full Mythos 5 remains restricted.
 
