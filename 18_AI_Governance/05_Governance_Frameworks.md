@@ -393,7 +393,7 @@ Organizations preparing for compliance encounter recurring challenges:
 1. **Sign the GPAI Code of Practice** if you are a model provider — the presumption of compliance is worth the effort
 2. **Build documentation into the development process** — retrofitting is 10x harder than building it in
 3. **Classify risk at design time** — before building, not after deploying
-4. **Treat August 2026 as a hard deadline** — high-risk system requirements will be the first enforcement actions with real penalties
+4. **Treat December 2027 as the high-risk deadline** (delayed from August 2026 by the Digital Omnibus, May 2026) — standalone high-risk (Annex III) requirements will be the first enforcement actions with real penalties. Product-embedded high-risk (Annex I): August 2028
 
 ## Practical Code Examples
 
