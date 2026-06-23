@@ -36,7 +36,7 @@ A typical architecture consists of several layers. The API Gateway provides auth
 
 ### Multi-Provider Failover Architecture
 
-Production systems should not depend on a single LLM provider. A robust failover architecture uses a **unified abstraction layer** — tools like LiteLLM provide a unified API for 100+ LLM providers with cost routing, budget enforcement, and spend tracking behind a single interface. The application code calls LiteLLM; LiteLLM routes to the configured provider.
+Production systems should not depend on a single LLM provider. A robust failover architecture uses a **unified abstraction layer** — tools like LiteLLM provide a unified API for 100+ LLM providers with cost routing, budget enforcement, and spend tracking behind a single interface. The application code calls LiteLLM; LiteLLM routes to the configured provider. **Security caveat:** LiteLLM CVE-2026-42271 (added to CISA Known Exploited Vulnerabilities catalog, June 9) demonstrated that proxy libraries inherit and amplify security risk — a vulnerability in the proxy affects every application behind it. Pin proxy library versions, monitor security advisories, and apply patches within hours of disclosure. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for the full CVE chain and the Mercor breach case study.
 
 **Failover chain:** Primary provider (e.g., Anthropic) → Secondary provider (e.g., OpenAI) → Degraded mode (cached responses or simpler model). Each transition is triggered by circuit breaker thresholds. Provider health is monitored continuously — latency percentiles, error rates, and availability.
 
