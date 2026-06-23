@@ -110,7 +110,8 @@ The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 - Competitive pricing, especially for Flash models
 - **Antigravity 2.0** (May 19, 2026) — replaced Gemini CLI as the desktop orchestration hub with CLI, SDK, plugins, skills, hooks, and subagent workflows
 - Moving from daily prompt limits to compute-used pricing model. AI Ultra $100/month with 5x higher limits. Gemini Spark personal agent for AI Ultra subscribers
-- **Siri AI deal (WWDC, June 9, 2026):** Google Gemini powers the rebuilt Siri AI under a ~$1B/year multi-year agreement. This gives Google distribution across 2+ billion Apple devices — the largest AI distribution deal. Apple is not building a frontier model; it is becoming a multi-model platform via iOS 27 Extensions (Claude, Gemini, ChatGPT as selectable default assistants)
+- **Siri AI deal (WWDC, June 9, 2026):** Google Gemini powers the rebuilt Siri AI under a ~$1B/year multi-year agreement. Distribution across 2+ billion Apple devices — the largest AI distribution deal
+- **Gemini 3.5 Flash in Google Search** (June 17): folded into Google Search as the global standard, with agents monitoring information continuously and auto-booking capability. Marks the transition of agentic AI from demo to default in the world's most-used search engine
 
 ### xAI
 
@@ -294,13 +295,21 @@ Google's newest open-weight family (April 2, 2026), distinct from the proprietar
 
 **When to choose Command A+:** Sovereign deployment where Apache 2.0 matters, enterprise RAG at frontier quality without proprietary dependencies, GPU-constrained environments where quantized MoE is essential.
 
-### Kimi K2.6
+### Kimi K2.6 / K2.7-Code
 
 **Kimi K2.6** (Moonshot AI, April 20, 2026) — 1T MoE / 32B active parameters, modified MIT license. Agent Swarm: up to 300 sub-agents and 4000 steps in a single run. Designed for agentic workflows requiring massive parallelism. Artificial Analysis Intelligence Index 54 — the highest among open-weight models, trailing proprietary leaders (Anthropic, Google, OpenAI at 57) by a narrow margin.
+
+**Kimi K2.7-Code** (June 12, 2026) — coding-focused successor. Same 1T MoE / 32B active architecture, 256K context. +21.8% on Kimi Code Bench v2, +11.0% on Program Bench, +31.5% on MLS Bench Lite vs K2.6. 30% lower reasoning-token usage. $0.95/$4.00 per 1M tokens. **Caveat:** all published benchmarks are Moonshot proprietary — no independent third-party results on standard public suites at release. Moonshot is also seeking $2B at $30B valuation (its third financing round in six months).
 
 ### NVIDIA Nemotron 3 Ultra
 
 **Nemotron 3 Ultra** (June 4, 2026) — 550B MoE (55B active), hybrid Mamba-2/Transformer architecture. Combines Mamba-2 state-space layers for efficient long-context processing with Transformer attention blocks for tasks where attention excels. 1M token context with low memory usage. Artificial Analysis Intelligence Index 48, second among US open-weight models. ~6x higher inference throughput than comparable open LLMs. Includes Multi-Token Prediction (MTP) layers and Latent MoE routing. Available on Hugging Face, NVIDIA NIM, and OpenRouter under the permissive Linux Foundation license — shipped with training data and recipes.
+
+**Nemotron 3 Nano Omni** (June 10, 2026) — 30B-parameter omni-modal model unifying vision, audio, and language in a single open-weight architecture. Designed for edge and embedded deployments where running separate models per modality is impractical.
+
+### MiniMax 3
+
+**MiniMax 3** (China, June 12, 2026) — aggressively priced at approximately $0.53 per 1M tokens, 15-30x cheaper than Western frontier models. 1M-token multimodal context. The pricing makes it relevant for high-volume production workloads where cost dominates model selection — particularly in Asian markets where Chinese models have strong language support.
 
 ### Zyphra ZAYA1-8B
 
