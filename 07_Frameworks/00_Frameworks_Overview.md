@@ -134,7 +134,9 @@ Google Agent Development Kit is a unified toolkit for building agents in the Goo
 
 **Key capabilities**: deep integration with Gemini models provides access to multimodal capabilities. Grounding through Google Search allows models to verify facts via search. Support for the A2A protocol (Agent-to-Agent) simplifies building multi-agent systems. ADK is the only Big Tech framework available on **four languages** (Python, TypeScript, Java, Go — Go SDK added April 2026). **ADK SkillToolset** provides progressive disclosure of tools — loading only relevant tool descriptions per step, achieving approximately **90% token reduction** compared to loading all tool descriptions upfront.
 
-**Antigravity 2.0** (May 19, 2026) replaces Gemini CLI as Google's desktop orchestration hub. Antigravity 2.0 is not just a CLI rename — it is a full-featured agent platform with CLI, SDK, plugins, skills, hooks, and subagent workflows. Developers can define reusable skills (composable agent capabilities), hook into lifecycle events, and orchestrate subagent workflows where one Antigravity instance spawns and coordinates others. Users of Gemini CLI are being migrated to Antigravity (as of late May 2026).
+**Google ADK v2.3.0** (June 18): **Interactions API** integration provides unified model/agent access with server-side state management and background execution. **Graph-based Workflow Runtime** and **Task API** for agent-to-agent delegation. ADK 2.0 has been GA since May 19, with rapid iteration (v2.0 → v2.3 in one month).
+
+**Antigravity 2.0** (May 19, 2026) replaces Gemini CLI as Google's desktop orchestration hub. Full-featured agent platform with CLI, SDK, plugins, skills, hooks, and subagent workflows. **Gemini CLI was shut down June 18** — Pro, Ultra, and free Code Assist users lost access with no grace period, breaking CI/CD pipelines for non-migrated teams. Enterprise accounts retain temporary access.
 
 ---
 
@@ -148,7 +150,9 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 **Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout** — an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ** — a new workplace intelligence layer with APIs (GA June 16), providing organizational context to agents. **Agent 365** — agents spanning M365, Azure, Dynamics, and Power Platform — preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake serves as the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform — leveraging 500M+ M365 users for distribution.
 
-**For new projects**: use Microsoft Agent Framework 1.0 for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should now plan migration — the 1.0 API is stable.
+**Microsoft Agent Framework v1.9.0** (June 18): **Agent Harness** (GA) provides production patterns as first-class features — context compaction, instruction merging, todo tracking, extensible providers. **Hosted Agents** (GA by end of June) run in hypervisor-isolated sandboxes with persistent file systems, per-agent Entra ID, built-in OpenTelemetry tracing, sub-100ms cold starts, and zero idle cost. **A2A (Agent2Agent) in public preview** — expose any Foundry agent as an A2A endpoint. The velocity: from 1.0 GA (April 3) to 1.9.0 (June 18) in 11 weeks, with significant GA features each release.
+
+**For new projects**: use Microsoft Agent Framework for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should plan migration — the API is stable and rapidly maturing.
 
 ---
 
@@ -156,7 +160,7 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 Beyond the established leaders and cloud providers, several frameworks have gained significant traction:
 
-**Pydantic AI** (v1.85.1, 16.5K stars as of late May 2026) — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows where the agent pauses for explicit user confirmation before executing sensitive tools. Best for: Python teams that value type safety and reliability.
+**Pydantic AI** (v2.0.0b7 as of late June 2026, v1.107.0 stable) — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities — instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
 
 **Mastra** — TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers — enabling automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
 
@@ -178,7 +182,7 @@ Beyond the established leaders and cloud providers, several frameworks have gain
 
 The JVM agent ecosystem reached parity with Python in 2025-2026:
 
-**JetBrains Koog** (March 2026) — a new JVM-native agent framework from JetBrains, built with Kotlin. Ships with OpenTelemetry integration for observability out of the box. Represents JetBrains' bet on the agent ecosystem alongside their IDE investments (Kiro).
+**JetBrains Koog** (March 2026) — a JVM-native agent framework from JetBrains, built with Kotlin. Ships with OpenTelemetry integration for observability out of the box. **JetBrains Junie** (GA June 17) — a coding agent that left beta as the #1 on SWE-Rebench (61.6% resolved, 72.7% pass@5). Differentiator: **agentic debugging** — Junie drives the IDE debugger autonomously (launches sessions, sets breakpoints, inspects variables). Structured planning (requirements → design → delivery stages → testing strategy) before writing code. Model-agnostic, available across IntelliJ IDEA, WebStorm, PyCharm + standalone Junie CLI for terminal/CI/CD. Together, Koog (framework) and Junie (agent) represent JetBrains' full-stack bet on the agent ecosystem.
 
 **MCP Java SDK** (`io.modelcontextprotocol.sdk:mcp`) v1.0.0 GA — the official MCP SDK for Java, co-created with Spring AI. Supports both blocking and reactive programming models (WebFlux), with STDIO and Servlet-based transports. This is the foundation layer — both LangChain4j and Spring AI build on it.
 

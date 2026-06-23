@@ -234,6 +234,14 @@ The line between "understanding" and "generation" models is blurring:
 
 **Video generation:** Sora (OpenAI, 2024), Veo 2 (Google, 2025), and others demonstrated that diffusion transformer architectures can generate coherent video clips. These models treat video as sequences of spatial-temporal patches processed by transformer layers with temporal attention.
 
+### DiffusionGemma: A New Text Generation Paradigm (June 10, 2026)
+
+**DiffusionGemma** (Google DeepMind) is the first open-weight diffusion LLM (dLLM) — a 26B MoE model (3.8B active parameters) under Apache 2.0 that generates text through iterative denoising rather than autoregressive token-by-token generation. Instead of producing one token at a time, DiffusionGemma generates 256-token "canvas" blocks in parallel, then iteratively refines them through denoising steps — conceptually similar to how diffusion models generate images.
+
+**Why this matters architecturally.** Autoregressive generation is inherently sequential: each token depends on all previous tokens. DiffusionGemma breaks this constraint by generating blocks of tokens simultaneously, achieving approximately **4x faster generation** in practice. The model received day-0 serving support from vLLM (v0.23), SGLang, HuggingFace Transformers, and Apple MLX — indicating broad ecosystem confidence in the paradigm.
+
+**Implications for the field.** If diffusion-based text generation proves robust at scale, it represents the most significant architectural alternative to autoregressive generation since the Transformer itself. The trade-off: diffusion models require multiple refinement passes (adding latency per block) but parallelize within each block (reducing latency per token). For long-form generation where the total output is many tokens, the net effect is significantly faster. For short responses where the overhead of denoising dominates, autoregressive models remain faster.
+
 ### Architectural Implications
 
 **Unified tokenization:** The trend is toward representing all modalities (text, images, audio, video) as tokens in a shared vocabulary. This simplifies the architecture but requires careful balancing of token budgets across modalities.

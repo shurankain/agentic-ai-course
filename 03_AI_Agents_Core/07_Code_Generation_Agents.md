@@ -117,10 +117,12 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 | Tool | Key Differentiator | Context | Notable |
 |------|-------------------|---------|---------|
 | **Cursor** | AI-first IDE, $4B ARR, 64% Fortune 500. **Acquired by SpaceX for ~$60B** (June 22) | ~120K effective context | **Cursor 3.8** (June 18): `/automate` skill (Slack/GitHub triggers), computer use for cloud agents, Design Mode. Free/$20/$60/$200 |
-| **Devin Desktop** (formerly Windsurf, June 2) | Cascade → Devin Local (Rust rewrite), Agent Command Center | 40+ IDEs supported | Cognition acquisition (April 2026). Cascade EOL July 1. Agent Client Protocol support |
+| **Devin Desktop** (formerly Windsurf, June 2) | Cascade → Devin Local (Rust rewrite), Agent Command Center | 40+ IDEs supported | Cognition $26B. Cascade EOL July 1. **ACP** (Agent Client Protocol): Codex, Claude, Gemini, OpenCode, Junie as first-class agents |
 | **GitHub Copilot** | Distribution (VS Code, JetBrains, Eclipse, Xcode) | Agent Mode GA | **Usage-based billing (June 1):** AI Credits system ($0.01/credit). Pro $10/mo credits, Pro+ $39/mo. Flat-rate ending |
 | **Cline** | Full transparency, BYOK | 5M+ VS Code installs | Plan/Act modes, total visibility into agent actions |
-| **Kiro** (Amazon, May 7) | Spec-first IDE replacing Q Developer | Requirements → design → tasks → code. Claude/Bedrock | Free (50 interactions/mo)/$19 Pro. Q Developer signups closed May 15 |
+| **Kiro** (Amazon, May 7) | Spec-first IDE replacing Q Developer | Requirements → design → tasks → code. Claude/Bedrock | Free/$19 Pro/**$100 Pro Max**. Kiro CLI V3 early access. Q Developer EOL April 2027 |
+| **OpenCode** | #1 open-source coding agent. 160K+ stars, 7.5M MAU | MIT, 75+ model providers, LSP integration | Terminal TUI, desktop app, IDE extension. Air-gapped deployment. Model-agnostic |
+| **Junie** (JetBrains, GA June 17) | Agentic debugging (drives IDE debugger autonomously) | #1 SWE-Rebench 61.6% (72.7% pass@5) | IntelliJ, WebStorm, PyCharm + CLI. Model-agnostic. Structured planning before coding |
 | **Augment Code** | Context Engine over full codebase | #1 on SWE-Bench Pro | Works as MCP server enriching other tools |
 | **Trae** (ByteDance) | Free frontier model access | GPT-4o + Claude included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
 
@@ -239,6 +241,7 @@ OpenAI's cloud-based autonomous coding agent, released mid-2025:
 - **90+ plugins** — integrations with Atlassian Rovo, CircleCI, CodeRabbit, GitLab Issues, Microsoft Suite, Neon (Databricks), Remotion, Render, and others
 - **$100/month Pro plan** for longer, high-intensity Codex sessions (in addition to the existing ChatGPT Pro/Team inclusion)
 - **GPT-5.3-Codex-Spark** — a research preview of a smaller, real-time coding model delivering 1000+ tokens per second for near-instant feel
+- **OpenAI acquires Ona** (ex-Gitpod, June 11) — persistent agent environments that survive across sessions. Expands Codex beyond single-device/session limitations. Agents can maintain state, file systems, and running processes across multiple work sessions
 
 ### Devin Desktop (formerly Windsurf, formerly Codeium)
 
@@ -601,6 +604,8 @@ The phrase "1000x developer" has entered the discourse, but the reality is more 
 **The real multiplier comes from orchestrating agent fleets.** Instead of one developer using one agent, a developer assigns tasks to multiple autonomous agents running in parallel — each working on a different file, feature, or repository. The output is not "writing code 1000x faster" but "managing systems that write code" — a coordination challenge more than a coding challenge.
 
 This creates a new **"Orchestrator" role** distinct from the traditional "Coder" role. The orchestrator writes specifications, reviews agent output, manages context, and makes architectural decisions. The shift is from "how do I implement this?" to "how do I specify this clearly enough for agents to implement?" — which is, ultimately, a return to the core skill of software engineering: clear thinking about requirements.
+
+**The cost reality: Uber's cautionary tale.** Uber burned its entire 2026 AI tooling budget in four months after Claude Code adoption jumped from 32% to 84% of its 5,000-engineer organization. Monthly API costs reached $500-2,000 per engineer. The 10x developer is also a 10x cost center. Without per-engineer budgets, cost alerts, and usage-based routing (cheap models for routine tasks, frontier models only when needed), AI coding tools can consume budgets faster than they generate value. This is not an argument against adoption — it is an argument for treating AI tool costs as infrastructure spend that requires capacity planning, not as a free productivity boost.
 
 ---
 

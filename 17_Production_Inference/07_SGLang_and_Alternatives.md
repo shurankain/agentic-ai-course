@@ -170,6 +170,10 @@ On current hardware (H100, Llama-3-8B class models), SGLang achieves ~16,200 tok
 
 Dynamo complements the Amazon+Cerebras disaggregated approach (AWS Trainium for prefill + Cerebras WSE-3 for decode) but keeps the entire pipeline on NVIDIA hardware. Combined with Blackwell GPUs, Dynamo enables 4-10x cost-per-token reduction compared to H100-era monolithic serving.
 
+**Dynamo Snapshot** (June 5, 2026): CRIU + cuda-checkpoint based checkpoint/restore for single-GPU inference on Kubernetes. Serializes full GPU + CPU state, restores on the same or different node. KV cache unmapping reduces checkpoint size from ~190 GiB to ~6 GiB (Qwen3-0.6B on B200). Result: **21x startup reduction** for gpt-oss-120b (under 5 seconds with 8 striped NVMe SSDs). Eliminates cold-start latency for autoscaled inference pods. Currently limited to vLLM workers in preview; no multi-GPU TP validation yet.
+
+**SGLang DFlash + Spec V2** (June 15, 2026): Spec V2 is now the default speculative decoding engine in SGLang. Combined with DFlash (Z Lab), it achieves **>4.3x baseline throughput** and 1.5x throughput vs MTP at concurrency 1 on HumanEval. New DFlash model for Qwen 3.5 397B-A17B outperforms both baseline and native MTP. Tree drafting across triton, FA3, MLA, and aiter backends.
+
 **Practical impact:** Disaggregated serving is now production-standard across both vLLM and SGLang. The benchmarks above (6.4x throughput, 20x latency variance reduction) reflect disaggregated deployments. For new production deployments on Blackwell hardware, disaggregated prefill-decode should be the default architecture.
 
 ## Cloudflare Infire: Rust-Based Inference
