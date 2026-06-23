@@ -156,6 +156,20 @@ Red Flags in answers: "we" without "I" (your role is unclear), no specific numbe
 - Practiced out loud at least three times
 - Research on the company and team
 
+## Key Takeaways
+
+1. **The STAR framework (Situation, Task, Action, Result) is non-negotiable.** Every behavioral answer must follow this structure to be clear, specific, and evaluable; unstructured answers are the fastest way to lose a behavioral round.
+
+2. **Staff+ expectations center on organizational impact, not individual output.** Interviewers want evidence of cross-team influence, setting technical direction, and defining which problems to solve -- not just solving assigned tasks well.
+
+3. **Prepare five to seven stories that each cover multiple question types.** A single well-chosen project story can address leadership, conflict, ambiguity, and cross-functional collaboration depending on which facet you emphasize.
+
+4. **Show measurable impact, not just activity.** "I designed a RAG system" is weak; "search time reduced by 60%, CSAT increased from 72% to 85%, scaled to all categories" is strong because it ties your actions to business outcomes.
+
+5. **Failure stories are mandatory and must include genuine learnings.** Prepare two to three stories where you honestly describe your role in the failure, what you learned, and how you applied that learning in a subsequent project.
+
+6. **ML-specific behavioral questions require bridging technical and business language.** Explaining uncertainty in ML timelines, framing ethical concerns as business risks, and translating abstract metrics into stakeholder-friendly examples are skills interviewers explicitly evaluate.
+
 ---
 
 ## Navigation

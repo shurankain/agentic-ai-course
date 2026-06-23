@@ -188,7 +188,7 @@ A counterintuitive finding from 2026 production deployments: longer chain-of-tho
 
 This has direct implications for agent loops: use `reasoning_effort` (OpenAI) or `budget_tokens` (Anthropic) not just as cost controls but as quality controls. Low reasoning effort on routine steps (tool call formatting, simple decisions), high reasoning only on complex decisions (architectural choices, ambiguous requirements).
 
-**Reasoning for verification, not generation:** A cost-effective pattern — use a cheap, fast model to generate candidate responses, then use a reasoning model to **verify** the best one. Verification is cheaper than generation because the reasoning model works with a concrete answer rather than an open-ended problem. This mirrors the Architect/Editor pattern from coding agents (see [[../../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]]).
+**Reasoning for verification, not generation:** A cost-effective pattern — use a cheap, fast model to generate candidate responses, then use a reasoning model to **verify** the best one. Verification is cheaper than generation because the reasoning model works with a concrete answer rather than an open-ended problem. This mirrors the Architect/Editor pattern from coding agents (see [[../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]]).
 
 ## Production Considerations
 

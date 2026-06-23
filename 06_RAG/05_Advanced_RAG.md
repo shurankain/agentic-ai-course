@@ -53,7 +53,7 @@ What distinguishes a true agentic RAG system from a pipeline with a few extra st
 1. **Orchestrator** — a ReAct or CoT-based agent that decides the retrieval strategy for each query. It determines whether to search, which sources to query, and in what order.
 2. **Specialized retriever agents** — different sources require different retrieval strategies. A vector search agent for the knowledge base, a SQL agent for structured data, a web search agent for current information. The orchestrator delegates to the right specialist.
 3. **Short-term memory** — the current workflow state: what has been retrieved so far, which queries have been tried, what gaps remain. This prevents redundant searches and enables the agent to build on previous results.
-4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See [[../../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]].
+4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]].
 5. **Evaluation and refinement loop** — the agent assesses whether retrieved context is sufficient and relevant before generating an answer. If not, it iterates. This fifth component is what creates the accuracy jump: the system does not assume that retrieval always works.
 
 Basic RAG (components 1-2 only) handles simple single-hop queries well. Adding components 3-5 is what enables the 34%→78% improvement on complex queries — and is what makes the system genuinely agentic.
@@ -545,7 +545,7 @@ The optimal strategy combines both approaches: RAG filters the corpus (1M docs) 
 
 **Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
 
-**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the Lost-in-the-Middle analysis.
+**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the Lost-in-the-Middle analysis.
 
 ---
 

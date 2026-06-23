@@ -161,7 +161,7 @@ MCP's rapid adoption (97M+ monthly SDK downloads, 9,400+ verified servers as of 
 | **Model Misbinding** | Agent connects to a spoofed or wrong MCP server | Attacker serves malicious tools that mimic legitimate ones; agent trusts them implicitly |
 | **Context Spoofing** | Manipulated resource content injected into agent context | Poisoned data from MCP resources enters the LLM's reasoning without sanitization |
 
-Tool Poisoning deserves special attention because it exploits a fundamental design assumption: tool descriptions are treated as trusted, system-level content. A malicious server provides tools that function correctly — but whose descriptions contain hidden instructions that redirect the agent's behavior when it reads them during tool selection. Unlike prompt injection through user input, this attack vector operates at the infrastructure level. See [[../../05_MCP_Protocol/03_MCP_Server_Development|MCP Server Development]] for server-side security practices.
+Tool Poisoning deserves special attention because it exploits a fundamental design assumption: tool descriptions are treated as trusted, system-level content. A malicious server provides tools that function correctly — but whose descriptions contain hidden instructions that redirect the agent's behavior when it reads them during tool selection. Unlike prompt injection through user input, this attack vector operates at the infrastructure level. See [[../05_MCP_Protocol/03_MCP_Server_Development|MCP Server Development]] for server-side security practices.
 
 ## MCP Security Incidents (2025-2026)
 

@@ -76,7 +76,7 @@ Extraction is no longer limited to text. Vision-language models (GPT-4o, Claude 
 
 **Practical applications:** Invoice processing (extracting line items, totals, vendor info from scanned invoices), form data extraction (insurance claims, government forms), table extraction from PDFs where the table structure is visual rather than semantic. In all cases, the vision model "sees" the layout as a human would, rather than trying to reconstruct it from OCR text.
 
-**When to use multi-modal extraction:** Documents with complex visual layouts, scanned/photographed documents, forms, tables, and any document where OCR accuracy is insufficient. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See [[../../06_RAG/05_Advanced_RAG|Advanced RAG]] for ColPali's retrieval capabilities beyond extraction.
+**When to use multi-modal extraction:** Documents with complex visual layouts, scanned/photographed documents, forms, tables, and any document where OCR accuracy is insufficient. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See [[../06_RAG/05_Advanced_RAG|Advanced RAG]] for ColPali's retrieval capabilities beyond extraction.
 
 ---
 

@@ -162,6 +162,20 @@ The RAG problem analyzer checks relevance scores of retrieved documents (if aver
 
 The hypothesis testing system formulates specific testable hypotheses. Instead of "the model responds poorly" — "The model ignores the system prompt when the user message exceeds 500 tokens." Hypotheses have statuses: PENDING, CONFIRMED (>90% successful tests), REJECTED (<10%). Each hypothesis is linked to test cases for verification.
 
+## Key Takeaways
+
+- **Non-determinism is the core debugging challenge.** Identical inputs produce different outputs, "correctness" is subjective, and the bug may be in data, prompts, or the model itself rather than in code.
+
+- **A structured problem taxonomy accelerates root-cause analysis.** Categorizing issues into infrastructure, integration, prompt, data quality, and model behavior directs investigation to the right layer immediately.
+
+- **Reproducibility requires fixing the seed, capturing full state snapshots, and logging complete prompts.** Without the ability to reproduce a problem, you cannot confirm a fix -- version control prompts as strictly as code.
+
+- **Hallucination detection requires multiple layers, not a single metric.** Consistency checks across runs, grounding ratio monitoring, semantic contradiction detection, and domain-specific fact validation each catch a different category.
+
+- **RAG debugging follows a four-stage workflow: retrieval, ranking, context assembly, generation.** Start from Stage 4 (generation) and work backward -- checking the grounding ratio first identifies whether the problem is in context quality or model behavior.
+
+- **Statistical anomaly detection methods must be adapted for LLM specifics.** Z-score catches sudden deviations, CUSUM detects slow trends, EWMA tracks recent behavior, and PSI identifies input distribution drift -- each serves a different failure mode.
+
 ---
 
 ## Navigation

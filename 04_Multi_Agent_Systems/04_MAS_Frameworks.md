@@ -232,7 +232,7 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 
 **ADK for Go 1.0** (April 2026) — production-ready Go SDK with native OpenTelemetry integration for deep tracing, a plugin system for self-healing logic, human-in-the-loop confirmations for sensitive operations, and YAML-based configurations for rapid iteration. Google's ADK is now the **only Big Tech framework supporting 4 languages** (Python, TypeScript, Java, Go).
 
-**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]).
+**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]).
 
 ### When to Use
 

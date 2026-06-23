@@ -257,7 +257,7 @@ For MCP ecosystem security statistics (88% require credentials but 53% use insec
 When developing MCP servers, consider several critical security aspects:
 
 **Input Validation:**
-All tool parameters must undergo strict validation. For example, for a file reading function, it is necessary to use a Pydantic Field with a regular expression restricting allowed characters in the path. This protects against path injection attacks where a malicious user may attempt to access system files through constructs like `../../../etc/passwd`.
+All tool parameters must undergo strict validation. For example, for a file reading function, it is necessary to use a Pydantic Field with a regular expression restricting allowed characters in the path. This protects against path injection attacks where a malicious user may attempt to access system files through constructs like `../../etc/passwd`.
 
 **Sandboxing:**
 Restrict server access to the file system to only the necessary directories. Use Docker containers or other isolation mechanisms for executing potentially dangerous operations. Apply the principle of least privilege — the server should have only those rights that are absolutely necessary for its operation.

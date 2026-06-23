@@ -152,6 +152,20 @@ The pairwise comparison system implements Elo rating. When creating a pair, the 
 
 Statistical significance is verified through a binomial test on direct comparisons between systems. With fewer than 10 direct matches — insufficient data. A p-value < 0.05 is considered significant.
 
+## Key Takeaways
+
+- **Human evaluation is the gold standard that all automated metrics must be calibrated against.** No metric fully models human perception of usefulness, appropriateness, and quality.
+
+- **Annotation guidelines determine evaluation quality.** A 3-page rubric with 10 annotated examples produces better inter-annotator agreement than a 30-page document without examples.
+
+- **Inter-annotator agreement (IAA) must be monitored continuously, not just at the start.** Cohen's kappa above 0.8 signals strong agreement; below 0.4 means the task needs redesign.
+
+- **Pairwise comparison is more reliable than absolute scoring.** Evaluators agree more often, the method is less sensitive to individual bias, and it enables Elo-style global rankings.
+
+- **Crowdsourcing scales human evaluation but requires strict quality control.** Attention checks, gold standard questions, minimum time thresholds, and 3-5x redundancy produce crowd annotations that agree with experts 85-90% of the time.
+
+- **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality -- randomization, session limits, and calibration examples are essential countermeasures.
+
 ---
 
 ## Navigation

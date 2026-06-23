@@ -141,6 +141,20 @@ Multi-judge aggregation runs evaluation with several models in parallel via Comp
 **Previous:** [[02_Human_Evaluation|Human Evaluation]]
 **Next:** [[04_Continuous_Evaluation|Continuous Evaluation]]
 
+## Key Takeaways
+
+- **LLM-as-Judge bridges the gap between expensive human evaluation and shallow automated metrics.** It provides scalable, explainable scoring at a fraction of human evaluation cost.
+
+- **G-Eval's chain-of-thought approach improves correlation with human judgments.** Generating intermediate reasoning steps and using probability-weighted scoring yields continuous, more reliable scores.
+
+- **LLM judges carry systematic biases that must be measured and mitigated.** Self-enhancement bias, verbosity bias, position bias, and sycophancy all distort scores if left unaddressed.
+
+- **Calibration against human evaluations is non-negotiable.** Run a human-annotated dataset through the LLM judge regularly to verify correlation; without this, judge scores are uninterpretable.
+
+- **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.5 + Claude Opus 4.8 + Gemini) and taking the median produces more robust scores than any single judge.
+
+- **Pairwise comparison is the most reliable LLM judge mode.** Randomizing A/B order and averaging two runs eliminates position bias and avoids the scale calibration problem of absolute ratings.
+
 ---
 
 ## Practical Prompt Examples

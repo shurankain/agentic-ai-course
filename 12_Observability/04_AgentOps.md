@@ -186,6 +186,20 @@ The alerting system checks metrics against thresholds. On anomalies (success rat
 
 Test cases define input data, expected results, and success criteria. The evaluator runs the agent on each case and collects results: actual output, invoked tools, iteration count, success flag, errors, and execution time. The summary aggregates results: total count, passed/failed, pass rate (target >90%), average time, and error list. CI/CD integration runs evaluation automatically on changes. If the pass rate drops below the threshold, deployment is blocked and manual review is required.
 
+## Key Takeaways
+
+- **AgentOps is a distinct discipline from MLOps.** The artifact is an agent (model + prompt + tools), behavior is stochastic, debugging requires multi-step traces, and rollback involves prompt + tools + guardrails -- not just a model version.
+
+- **Session-level metrics matter more than request-level metrics.** Session success rate, turns per session, abandonment rate, and loop detection rate capture the user experience that per-call metrics miss.
+
+- **Multi-agent observability requires cross-agent trace linking.** Each inter-agent message should be a span connecting sender and receiver traces, creating a unified trace tree that reveals bottlenecks, cost distribution, and error propagation across agent boundaries.
+
+- **Knowledge base freshness degrades RAG agents silently.** Document staleness detection, retrieval coverage monitoring, and automated knowledge gap identification prevent agents from confidently serving outdated information with no error logged.
+
+- **Agent health scoring enables fleet-level management.** A composite 0-100 score combining success rate (40%), efficiency (20%), cost (20%), and safety (20%) provides a traffic-light dashboard for rapid operational awareness across agent fleets.
+
+- **Incident response for agents requires specialized runbooks.** Prompt leaks, tool abuse, safety violations, cost spikes, and hallucination surges each demand specific detection, triage, and mitigation steps beyond traditional DevOps playbooks.
+
 ---
 
 ## Navigation

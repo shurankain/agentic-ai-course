@@ -272,7 +272,7 @@ The voice agent market has organized into four tiers (as of mid-June 2026): full
 
 The cost range spans approximately 10x from cheapest to most expensive. The choice depends on three factors: voice quality requirements (ElevenLabs leads), volume and cost sensitivity (LiveKit at scale), and compliance needs (Bland AI for regulated industries).
 
-**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See [[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for production case studies.
+**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for production case studies.
 
 **Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month — evaluate build effort vs managed pricing.
 

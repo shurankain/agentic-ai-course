@@ -214,6 +214,22 @@ AI Safety is not only for safety researchers. As a practicing ML engineer you ma
 
 Demonstrating awareness of safety shows maturity as an engineer, long-term thinking, alignment with the company's mission. Even if the interview is not directly about safety, the ability to discuss these topics differentiates you from candidates with a purely technical focus.
 
+## Key Takeaways
+
+1. **The alignment problem is the central challenge in AI safety.** Ensuring a system does what we actually want -- across outer alignment, inner alignment, and robust alignment -- is the thread connecting every other safety topic.
+
+2. **RLHF works but has fundamental limitations.** Reward hacking, sycophancy, annotator biases, and the inability of humans to evaluate superhuman outputs mean RLHF alone is insufficient for safe frontier models.
+
+3. **Constitutional AI addresses RLHF's scalability bottleneck.** Replacing human feedback with AI feedback guided by explicit principles removes the per-response annotator dependency, but introduces the bootstrap problem of trusting AI self-evaluation.
+
+4. **Interpretability is the path from behavioral testing to mechanistic understanding.** Circuits, superposition, sparse autoencoders, and activation patching let you look inside the model rather than only observing outputs, which is critical given that alignment faking can defeat purely behavioral evaluations.
+
+5. **Red teaming is a structured discipline, not ad-hoc testing.** A proper methodology includes scoped threat models, automated attack patterns, manual creative probing, responsible disclosure, and ongoing post-launch monitoring.
+
+6. **Know the open problems and be ready to state your position.** Scalable oversight, deceptive alignment, the open-source proliferation trade-off, and multi-agent safety are active debates; interviewers at frontier companies expect you to engage with nuance rather than recite definitions.
+
+7. **Anthropic's RSP and ASL levels are required knowledge for safety interviews.** Understanding how capability evaluations trigger progressively stricter security and deployment requirements demonstrates that you grasp the governance side of safety, not just the technical side.
+
 ---
 
 ## Navigation

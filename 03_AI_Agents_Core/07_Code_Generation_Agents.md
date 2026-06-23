@@ -300,7 +300,7 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
 
-*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026) → 88.6-88.7% (late May 2026) → **95.0% (Fable 5, June 2026)**. SWE-bench Verified is now effectively saturated. **SWE-bench Pro is the meaningful benchmark:** Fable 5 at **80.3%** (+11pp, vendor-reported), Mythos Preview at 77.8%, Opus 4.8 at 69.2%, GPT-5.5 at 58.6%. The Verified-Pro gap for Fable 5 is ~15pp (down from 19pp for Opus 4.8), suggesting genuine capability improvement. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination. See [[../../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]] for full analysis.
+*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026) → 88.6-88.7% (late May 2026) → **95.0% (Fable 5, June 2026)**. SWE-bench Verified is now effectively saturated. **SWE-bench Pro is the meaningful benchmark:** Fable 5 at **80.3%** (+11pp, vendor-reported), Mythos Preview at 77.8%, Opus 4.8 at 69.2%, GPT-5.5 at 58.6%. The Verified-Pro gap for Fable 5 is ~15pp (down from 19pp for Opus 4.8), suggesting genuine capability improvement. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination. See [[../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]] for full analysis.
 
 ### SWE-bench Pro (2025)
 
@@ -655,7 +655,7 @@ A defense pattern gaining traction: use one AI agent to security-review code pro
 
 ### MCP Tool Description Injection
 
-Coding agents that use MCP servers to access tools (file systems, databases, APIs) are vulnerable to tool description injection. A malicious MCP server can craft tool descriptions that manipulate the agent into executing unintended operations. The CurXecute attack (CVE-2025-54135) demonstrated this: a malicious VS Code extension used crafted MCP tool descriptions to hijack a coding agent's actions. See [[../../14_Security_Safety/03_Agent_Security|Agent Security]] for MCP security incidents and mitigations.
+Coding agents that use MCP servers to access tools (file systems, databases, APIs) are vulnerable to tool description injection. A malicious MCP server can craft tool descriptions that manipulate the agent into executing unintended operations. The CurXecute attack (CVE-2025-54135) demonstrated this: a malicious VS Code extension used crafted MCP tool descriptions to hijack a coding agent's actions. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for MCP security incidents and mitigations.
 
 ---
 

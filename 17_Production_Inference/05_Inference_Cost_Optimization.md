@@ -211,7 +211,7 @@ For API-based inference (as opposed to self-hosted), **prompt caching** is one o
 
 **Batching API** offers a complementary optimization: 50% discount on all tokens for deferred processing (24-hour SLA). Suitable for evaluation runs, document processing, and any workload that does not require real-time response. Combine prompt caching (for real-time) with batching (for async) for maximum savings.
 
-See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader context management framework, including KV-cache management patterns for agent identity stability.
+See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader context management framework, including KV-cache management patterns for agent identity stability.
 
 ---
 

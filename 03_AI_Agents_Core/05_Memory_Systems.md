@@ -136,7 +136,7 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 **The LLM-as-Operating-System paradigm:** Letta treats the LLM as a CPU managing its own memory hierarchy. Three tiers of memory map to hardware analogy: **Core Memory** (always loaded in prompt — analogous to CPU registers), **Recall Memory** (searchable conversation history — analogous to RAM), and **Archival Memory** (large-scale vector-indexed storage — analogous to disk). The agent accesses all three tiers through explicit tool calls.
 
-**The key differentiator: agent editability.** Unlike systems where memory is written by the application and read by the agent, Letta agents actively **update, delete, and reorganize** their own memory blocks. The agent decides what is worth remembering, what is outdated, and how to structure its knowledge. This is self-directed context engineering at the memory level — see [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]].
+**The key differentiator: agent editability.** Unlike systems where memory is written by the application and read by the agent, Letta agents actively **update, delete, and reorganize** their own memory blocks. The agent decides what is worth remembering, what is outdated, and how to structure its knowledge. This is self-directed context engineering at the memory level — see [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]].
 
 **Core Memory** consists of named blocks (persona, human, goals, preferences) that are version-controlled. The agent modifies these blocks as it learns. For example, after discovering a user prefers concise answers, the agent updates its "human" block. This update persists across sessions and influences all future interactions.
 

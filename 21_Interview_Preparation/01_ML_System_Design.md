@@ -249,6 +249,22 @@ Think out loud — the interviewer wants to understand your thought process. Dra
 - Can draw clear architecture diagrams
 - Practiced 3-5 case studies end-to-end
 
+## Key Takeaways
+
+1. **The RESHAPE framework gives you a repeatable structure for any ML system design question.** Requirements, Estimation, Service Architecture, How ML Works, API Design, Production Concerns, and Edge Cases ensure you cover every dimension the interviewer expects.
+
+2. **Always start with requirements clarification.** Jumping straight to a solution is the most common red flag; spending five to seven minutes scoping functional and non-functional requirements demonstrates engineering maturity.
+
+3. **Back-of-envelope estimation justifies every architectural decision.** Calculating data volumes, embedding sizes, GPU counts, and token throughput turns hand-waving into concrete, defensible numbers.
+
+4. **Trade-off analysis separates Senior from Staff+ candidates.** Quantify costs explicitly ("cross-encoder reranking adds 100ms but improves relevance by 25%") rather than stating preferences without evidence.
+
+5. **Production concerns must surface early, not as an afterthought.** Monitoring, caching, access control, fallback strategies, and cost attribution are what distinguish a whiteboard design from a shippable system.
+
+6. **Common mistakes are predictable and avoidable.** Ignoring scale differences, forgetting LLM cost modeling, over-engineering before validating with an MVP, and omitting failure modes are the patterns interviewers watch for.
+
+7. **Practice end-to-end case studies under time pressure.** Working through three to five full cases (RAG, LLM serving, content moderation, recommendations) with the 45-60 minute timing builds the muscle memory needed on interview day.
+
 ---
 
 ## Navigation

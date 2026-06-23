@@ -199,9 +199,23 @@ An emerging evaluation metric that combines task success with compliance: a task
 - The task was completed successfully (goal achieved)
 - AND no policy violations occurred during execution (no PII leaks, no safety violations, no unauthorized actions, no regulatory breaches)
 
-**Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study ([[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]) for an example where an agent's "successful" response created a legal liability.
+**Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study ([[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]) for an example where an agent's "successful" response created a legal liability.
 
 **Expected adoption:** CuP is expected to become an enterprise standard metric by 2026-2027, particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
+
+## Key Takeaways
+
+- **Continuous evaluation transforms quality assurance from a one-time gate into an ongoing process.** Models degrade in production due to data drift, provider updates, and changing user expectations -- one-time evaluation before release is necessary but insufficient.
+
+- **Sampling strategy determines evaluation coverage and cost.** Start with 5-10% random sampling for baseline monitoring, but increase to 100% for high-risk agent actions where the cost of a missed error exceeds the cost of evaluation.
+
+- **A/B testing is the gold standard for comparing variants in production.** Randomize by user (not request), define guardrail metrics that must not deteriorate, and run tests long enough to cover natural variability.
+
+- **Regression detection after silent provider updates is critical.** Shadow evaluation and canary deployments catch quality changes before full rollout -- generic benchmarks do not predict how a model update will behave on your specific prompts.
+
+- **CuP (Completion under Policy) combines task success with compliance into a single gate metric.** A task that succeeds while violating policy scores zero -- essential for regulated industries where policy violations carry legal consequences.
+
+- **Simulation testing with synthetic personas systematically explores the interaction space.** Generating multi-turn conversations with aggressive, confused, and adversarial personas catches edge cases that random sampling and manual testing miss.
 
 ---
 

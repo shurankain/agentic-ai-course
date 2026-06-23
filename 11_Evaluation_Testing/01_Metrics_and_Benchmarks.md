@@ -160,7 +160,7 @@ Benchmarks are treated as objective truth, but several systematic issues undermi
 
 **OpenAI officially abandoned SWE-bench Verified** (May 2026), citing confirmed contamination. OpenAI now recommends SWE-bench Pro as the replacement benchmark. This validation from a major provider strengthens the case that all Verified scores in this course — and the industry — should be interpreted as upper bounds, not real-world capability measures.
 
-**Scaffolding matters more than model.** The same Claude Opus 4.5 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for why context harness determines more than model quality.
+**Scaffolding matters more than model.** The same Claude Opus 4.5 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for why context harness determines more than model quality.
 
 **Lesson for practitioners:** Use benchmarks for **relative comparison** (model A vs model B on the same benchmark), not for absolute capability claims ("this model can solve 80% of real bugs"). Always validate benchmark results with a custom evaluation set on your actual workload. And when evaluating coding agents, test with issues from your own repositories — not public benchmarks that may be contaminated.
 
@@ -247,6 +247,22 @@ Practical implementation includes a service class that encapsulates various metr
 **Faithfulness score** for RAG: each sentence of the generation is compared with all source sentences, the maximum similarity is taken, and the final score is the average of these maximums.
 
 The evaluation runner coordinates the process: it accepts a model, a test dataset, and a metric configuration. For each example it records the time, generates a response, computes the enabled metrics, and collects results. Parallel processing via parallelStream accelerates evaluation on large datasets. Aggregation includes metric averages, latency statistics (mean, median, percentiles), breakdown by category, and identification of worst-performing examples.
+
+## Key Takeaways
+
+- **LLM quality is multidimensional, not binary.** Correctness, relevance, completeness, coherence, fluency, safety, and usefulness each matter differently depending on the task.
+
+- **Classic benchmarks have saturated and lost discriminating power.** MMLU, HellaSwag, and HumanEval no longer reveal meaningful capability differences among frontier models.
+
+- **SWE-bench Pro has replaced SWE-bench Verified as the meaningful coding benchmark.** OpenAI officially abandoned Verified (May 2026) due to confirmed contamination; Pro is harder, less gameable, and now the recommended evaluation.
+
+- **Cost per correct answer matters more than raw accuracy in production.** A model that is 5 percentage points less accurate but 77x cheaper per correct answer is the better production choice for most workloads.
+
+- **Completion under Policy (CuP) gates task success on compliance.** A task that succeeds but violates policy scores zero -- expected to become an enterprise standard by 2026-2027.
+
+- **Benchmarks do not measure what matters most in production.** Error recovery, cost efficiency, user satisfaction, reliability, and composability are invisible to public benchmarks -- custom evaluation on your own workload is always the most important metric.
+
+- **Simulation testing with synthetic personas stress-tests agents before deployment.** Generating hundreds of multi-turn conversations with diverse, adversarial personas catches failures that benchmarks and random sampling miss.
 
 ---
 

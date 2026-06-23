@@ -186,6 +186,20 @@ Success criteria for production:
 - Edge cases — processing without errors
 - Load — scalability confirmed
 
+## Key Takeaways
+
+- **RAG evaluation spans four dimensions: retrieval precision, retrieval recall, generation faithfulness, and answer relevance.** Weak performance in any single dimension undermines the entire system.
+
+- **RAGAS provides the standard framework for automated RAG evaluation.** Its core metrics -- faithfulness, answer relevance, context precision, and context recall -- cover the full RAG pipeline from retrieval to generation.
+
+- **BEIR and FreshStack are the key retrieval benchmarks.** BEIR tests zero-shot generalization across 18 diverse domains; FreshStack addresses temporal bias with recent data guaranteed absent from training corpora.
+
+- **Test 8 scenarios before production, not just the happy path.** Out-of-scope queries, ambiguous inputs, multi-hop reasoning, temporal questions, adversarial inputs, and edge cases all reveal failure modes that happy-path testing misses.
+
+- **Faithfulness evaluation decomposes responses into individual claims and verifies each against context.** This claim-level approach provides actionable diagnostics, identifying exactly which statements are unsupported or contradicted.
+
+- **Production RAG evaluation often lacks ground truth.** LLM-as-Judge, user feedback signals (thumbs up/down, rephrasing, follow-up questions), and A/B testing provide quality signals when labeled data is unavailable.
+
 ---
 
 ## Navigation

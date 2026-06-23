@@ -165,6 +165,20 @@ The SimpleLLMMetrics class tracks the total number of calls, input and output to
 
 Production systems extend this approach: thread safety, histograms for distributions, integration with Prometheus/Grafana, specialized metrics for RAG and quality scoring.
 
+## Key Takeaways
+
+- **Quality metrics are primary; speed and throughput are secondary.** A fast system that gives wrong answers causes more harm than a slow system with a high error rate.
+
+- **The metrics hierarchy spans four levels: infrastructure, LLM operational, quality, and business.** Each level answers different questions, from GPU utilization to customer satisfaction and ROI.
+
+- **Token economics vary dramatically by language.** Japanese consumes 2-3x more tokens than English for the same content; a multilingual deployment's annual cost difference can exceed $200K on a frontier model.
+
+- **SLA monitoring for AI systems requires two independent dimensions: response quality and latency.** Sample-based quality evaluation (1-5% of traffic) with consecutive-window alerting provides practical SLA enforcement for non-deterministic systems.
+
+- **Cost attribution must be granular: per-agent, per-user, per-feature.** Without it, you cannot identify which component consumes disproportionate resources or whether a feature's AI spend is justified by its revenue.
+
+- **Anomaly-based alerting outperforms threshold-based alerting for LLM metrics.** High variability in LLM behavior makes static thresholds unreliable; composite alerts ("high latency AND low quality") reduce noise further.
+
 ---
 
 ## Navigation

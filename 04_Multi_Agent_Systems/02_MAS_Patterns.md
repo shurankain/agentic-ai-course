@@ -146,7 +146,7 @@ Not every problem needs multiple agents. Reasoning models (o3, Claude with exten
 - Debugging complexity (tracing decisions across multiple agents)
 - Failure modes multiply (each agent can fail, miscommunicate, or drift)
 
-**The 2026 production trend:** Deterministic orchestration for flow control (the developer designs the sequence of steps) + LLM for bounded decisions within each step (the model decides what to do within each step, not where the flow goes). This is Anthropic's "Level 2 — Workflows" in practice. See [[../../03_AI_Agents_Core/02_Agent_Architectures|Agent Architectures]] for the Augmented-LLM Progression.
+**The 2026 production trend:** Deterministic orchestration for flow control (the developer designs the sequence of steps) + LLM for bounded decisions within each step (the model decides what to do within each step, not where the flow goes). This is Anthropic's "Level 2 — Workflows" in practice. See [[../03_AI_Agents_Core/02_Agent_Architectures|Agent Architectures]] for the Augmented-LLM Progression.
 
 **Decision rule:** Prototype with a single agent + reasoning model first. Add multi-agent orchestration only when you hit clear capability boundaries: the task requires genuinely different expertise (security review ≠ performance review), parallelism provides measurable latency benefit, or the context required exceeds what a single agent can hold.
 

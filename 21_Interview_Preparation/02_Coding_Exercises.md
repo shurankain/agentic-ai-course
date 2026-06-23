@@ -310,6 +310,22 @@ Forgetting numerical stability — softmax overflow, log(zero). Incorrect dimens
 
 Practice on paper — interviews are often on a whiteboard. Know formulas by heart — attention, LSTM gates. Understand why — not just how but why it works. Prepare questions — what batch size to use.
 
+## Key Takeaways
+
+1. **Implementing from scratch proves you understand the algorithm, not just the API.** Interviewers use NumPy-only constraints to test whether you know what happens inside the library calls you use daily.
+
+2. **The attention mechanism is the single most important exercise.** Self-attention, multi-head attention, and scaled dot-product appear in nearly every ML coding interview at frontier companies; know every step and its justification.
+
+3. **Numerical stability is a constant theme.** Subtracting the max before softmax, adding epsilon to denominators, and using proper weight initialization (Xavier/He) separate working code from code that silently produces garbage.
+
+4. **Edge cases matter as much as the happy path.** Empty clusters in K-Means, zero-norm vectors in cosine similarity, and dead ReLU neurons are the details interviewers probe after your initial implementation compiles.
+
+5. **Always test your code with a simple example.** Running through one concrete input end-to-end catches dimension mismatches, off-by-one errors, and incorrect gradient formulas before the interviewer does.
+
+6. **Know the complexity and trade-offs for every algorithm you implement.** Being able to state "attention is O(n^2 d) in time and O(n^2) in space, which is why sparse and linear alternatives exist" shows the depth interviewers expect at Senior/Staff+ level.
+
+7. **Practice all ten exercises until you can write them from memory.** Self-attention, multi-head attention, LSTM, K-Means, backpropagation, BPE tokenizer, cosine similarity search, LoRA, RoPE, and sparse attention form the canonical interview set.
+
 ---
 
 ## Navigation

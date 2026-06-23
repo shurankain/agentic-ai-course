@@ -117,7 +117,7 @@ JSON is the standard structured format, but its overhead is significant: braces,
 
 **When to use TOON / minimal formats:** Internal agent-to-agent communication, intermediate tool results consumed by the next LLM call, structured output that will be immediately parsed and never stored in its serialized form. The key criterion: will this data ever leave the agent system? If no — optimize for tokens. If yes — use JSON.
 
-See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader discussion of token budget management and output format optimization.
+See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader discussion of token budget management and output format optimization.
 
 ---
 

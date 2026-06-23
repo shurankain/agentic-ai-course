@@ -169,6 +169,20 @@ Structured logging records successful calls and errors with trace_id for correla
 
 Key patterns: ThreadLocal context for automatic propagation, MDC integration for automatic trace_id addition, structured logging for JSON logs.
 
+## Key Takeaways
+
+- **LLM observability rests on three pillars -- logs, metrics, and traces -- but LLM-specific span types are essential.** Standard distributed tracing must be extended with LLM spans (tokens, prompts, parameters), tool spans, retrieval spans, and agent step spans.
+
+- **PII masking is not optional for production traces.** A hybrid approach (regex for structured patterns + NER for free text) catches 85-90% of PII; the standard pipeline applies masking before storage to both user inputs and model outputs.
+
+- **Multi-tenant tracing requires namespace isolation, not just access control.** Cross-tenant queries must be architecturally impossible, with per-tenant retention policies and cost attribution to prevent information leakage.
+
+- **Compliance audit trails serve legal requirements, not just debugging.** Immutable, append-only logs with tamper-proof storage (QLDB, S3 Object Lock) are non-negotiable for regulated industries under HIPAA, SOX, or the EU AI Act.
+
+- **Platform selection depends on ecosystem and constraints.** LangSmith for LangChain-native workflows, Langfuse (fully MIT after ClickHouse acquisition) for self-hosting and budget constraints, Arize Phoenix for embedding drift and RAG analysis.
+
+- **Tiered retention balances debugging value and compliance cost.** 7 days of full traces with masked PII, 90 days of aggregated metrics, and indefinite anonymized audit trails is the standard production pattern.
+
 ---
 
 ## Navigation

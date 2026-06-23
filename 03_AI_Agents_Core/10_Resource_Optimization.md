@@ -150,7 +150,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 
 **Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix acts as a stable foundation, while dynamic content varies naturally.
 
-**Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See [[../../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader WSCI framework.
+**Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader WSCI framework.
 
 ---
 
@@ -329,7 +329,7 @@ When agents make 10-20 LLM calls per task, costs with reasoning models spiral qu
 - Quality requirements can be validated automatically (test suites, eval metrics)
 - Latency matters — smaller models are faster
 
-See [[../../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the technical details of distillation training.
+See [[../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the technical details of distillation training.
 
 ---
 
@@ -367,7 +367,7 @@ The decision between building custom agents and buying platform solutions depend
 | **50-200K** | Custom starts winning | Platform per-unit pricing exceeds infrastructure + development cost |
 | **>200K** | Custom wins decisively | Amortization is favorable; full control over quality and cost |
 
-The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See [[../../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the platform landscape.
+The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the platform landscape.
 
 ### The 70/30 Hybrid Model Strategy
 

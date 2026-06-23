@@ -316,7 +316,7 @@ AI assistants embedded in corporate workflows: answering HR policy questions, he
 
 ## No-Code/Low-Code Agent Builders
 
-A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in [[../../07_Frameworks/00_Frameworks_Overview|Module 07]] — they target different audiences and use cases.
+A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in [[../07_Frameworks/00_Frameworks_Overview|Module 07]] — they target different audiences and use cases.
 
 ### Workflow Automation Platforms
 
