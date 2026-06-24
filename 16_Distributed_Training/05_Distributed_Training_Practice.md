@@ -175,7 +175,7 @@ In practice: combine on-demand (1-2 coordinator nodes) + spot (workers). If a sp
 
 ### Right-Sizing
 
-A100-80GB costs $3-4/hour. H100-80GB costs $2-4/hour. B200 (Blackwell) costs $8-12/hour. T4 costs $0.50/hour. For many tasks, T4 is sufficient.
+T4 costs $0.50-1.00/hour. A100-80GB costs $3-5/hour. H100-80GB costs $4.50-8/hour. B200 (Blackwell) costs $8-12/hour (approximate cloud pricing, varies by provider and region). For many tasks, T4 is sufficient.
 
 **Heuristics:**
 - <1B parameters: T4/L4

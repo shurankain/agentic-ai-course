@@ -339,7 +339,7 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 - [[../06_RAG/01_RAG_Basics|RAG Basics]] — the SELECT strategy in detail
 - [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]] — the ISOLATE strategy
 - [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] — the WRITE strategy
-- [[../05_MCP/01_MCP_Basics|MCP Basics]] — standardized context engineering protocol
+- [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]] — standardized context engineering protocol
 
 ---
 

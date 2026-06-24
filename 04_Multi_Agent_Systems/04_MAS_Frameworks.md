@@ -44,7 +44,7 @@ Start with the question: is precise coordination with checkpoints needed? If yes
 
 ## LangGraph: Graph-Oriented Orchestration
 
-LangGraph (now at version 1.0.x) is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them. LangGraph Platform provides managed deployment with persistence, streaming, and a studio UI for debugging.
+LangGraph (now at version 1.2.x, May 2026) is an extension of the LangChain ecosystem, specifically designed for building complex, multi-step agent systems. The central idea is representing the system as a directed graph where nodes are operations (LLM calls, tools, conditions) and edges are transitions between them. LangGraph Platform provides managed deployment with persistence, streaming, and a studio UI for debugging.
 
 ### Graph Philosophy
 
@@ -118,7 +118,7 @@ AutoGen 0.4 is incompatible with version 0.2 — a full code rewrite is required
 
 ## CrewAI: Role-Based Collaboration
 
-CrewAI (now at version ~1.10.x) offers the metaphor of a crew — a group of specialists, each with their own role, working toward a common goal.
+CrewAI (now at version ~1.14.x) offers the metaphor of a crew — a group of specialists, each with their own role, working toward a common goal.
 
 ### Roles and Tasks
 
@@ -297,11 +297,11 @@ Each framework occupies its own niche. The choice depends on the specific requir
 
 Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated significantly in 2025, with clear winners emerging.
 
-LangGraph 1.0 offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility. LangGraph Platform adds managed deployment.
+LangGraph 1.2 offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility. LangGraph Platform adds managed deployment.
 
 OpenAI Agents SDK provides a production-grade handoff-based model evolved from Swarm. Ideal for multi-agent routing on OpenAI models with built-in guardrails and tracing.
 
-CrewAI ~1.10.x uses the metaphor of a crew with roles and tasks. Flows add event-driven orchestration beyond simple sequential/hierarchical patterns, addressing earlier flexibility limitations.
+CrewAI ~1.14.x uses the metaphor of a crew with roles and tasks. Flows add event-driven orchestration beyond simple sequential/hierarchical patterns, addressing earlier flexibility limitations.
 
 Microsoft Agent Framework unifies AutoGen and Semantic Kernel into a single enterprise platform. The recommended path for new Microsoft ecosystem projects.
 

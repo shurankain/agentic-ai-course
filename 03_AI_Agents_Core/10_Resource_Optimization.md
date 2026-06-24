@@ -31,7 +31,7 @@ Not all requests require the most powerful model. Smart routing directs requests
 | Tier | Models | Cost | Use Case |
 |------|--------|------|----------|
 | Tier 1 (Economy) | GPT-5-mini/nano, GPT-4o-mini, Claude Haiku 4.5 | $0.05-1.00/1M | Simple tasks, classification |
-| Tier 2 (Standard) | GPT-5.2, GPT-4o, Claude Sonnet 4.6 | $1.75-15/1M | Most tasks |
+| Tier 2 (Standard) | GPT-5.4, GPT-5.5 Instant, Claude Sonnet 4.6 | $2.50-15/1M | Most tasks |
 | Tier 3 (Premium) | o3, Claude Opus 4.8 | $5-75/1M | Complex reasoning |
 
 ### Routing Strategies
