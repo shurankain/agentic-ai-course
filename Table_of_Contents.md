@@ -81,7 +81,9 @@
   - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4; **Siri AI deal ~$1B/year**)
   - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash — in-house models, Build 2026)
   - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash — open weights MIT)
-  - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer)
+  - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer) + **Nano Omni** (30B omni-modal)
+  - **Kimi K2.7-Code** (June 12, +21.8% vs K2.6); **MiniMax 3** (~$0.53/MTok, 15-30x cheaper)
+  - **Huawei Ascend** ramp: 910C ~600K units, Atlas 950 SuperPoD Q4 2026
   - Meta (Llama)
   - Mistral
 - API structure: common principles
@@ -374,7 +376,7 @@
   - Git-based changes
   - Review before commit
 - **Terminal Agents** — Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
-- **IDE market (mid-June 2026)** — 7 contenders: Claude Code, Cursor, Devin Desktop (ex-Windsurf), Codex, Copilot (usage-based June 1), Kiro (Amazon), Antigravity
+- **IDE market (late June 2026)** — **SpaceX acquires Cursor $60B** (June 22). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
@@ -692,7 +694,7 @@
 - **Key player comparison table**
   - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month; LangGraph 1.2 (as of late May 2026)
   - CrewAI: 47.8K stars, 27M+ downloads, $18M Series A (as of late May 2026)
-  - AutoGen → Microsoft Agent Framework **1.0 GA** (April 3, 2026) — MCP, A2A, DevUI; **Build 2026:** Scout, Work IQ (GA June 16), Agent 365 (preview July)
+  - AutoGen → Microsoft Agent Framework **v1.9.0** (June 18) — Agent Harness GA, Hosted Agents, A2A preview; **Build 2026:** Scout, Work IQ, Agent 365
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
@@ -1297,6 +1299,9 @@
 - **NSA MCP security guidance** (PP-26-1834) — national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
 - **May 2026 CVEs:** CVE-2026-33032 (nginx-ui, CVSS 9.8), CVE-2026-26118 (MS MCP Server), database MCP vulns
 - **First model export controls** (June 13) — Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking** — 20K+ Instagram accounts via AI support chatbot
+- **June 2026 framework CVEs:** LiteLLM CISA KEV (CVSS 9.8), Semantic Kernel (CVSS 10.0), Spring AI (CVSS 8.6), pgAdmin AI Assistant (CVSS 9.0)
+- **AI-powered attacks:** Sophos EDR evasion lab (Cursor+Claude), malicious JetBrains plugins (70K installs), Chrome extensions stealing AI chats (900K installs), FortiBleed (86K devices)
+- **NSA Mythos testimony** — breached "almost all" classified systems; **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **CVE forecast 66,000** (+46%)
 - **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
 - **Claude Mythos cyber capabilities** — 73% on expert cyber simulations; GPT-5.4-Cyber for defense
 - **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
@@ -1589,7 +1594,12 @@
   - GPAI (General Purpose AI) obligations
   - Timeline: February 2025 — August 2028 (extended by Digital Omnibus, May 2026)
 - **Great American AI Act** (June 4, 2026) — 269p discussion draft, 3-year state preemption
-- **China AI Agent Framework** (May 8, 2026) — first national agentic AI policy, risk-tiered
+- **Illinois SB 315** — first US state frontier AI audit law, penalties $3M, effective Jan 2027
+- **Florida sues OpenAI** (June 19) — first US state lawsuit against an AI company
+- **Bartz v. Anthropic: $1.5B copyright settlement** — largest in US history
+- **China AI Agent Framework** (May 8) + **Anthropomorphic AI regulation** (effective July 15, minors protected)
+- **Fable 5 export ban saga**: NSA testimony, G7 "trusted partners", biometric ID July 8
+- **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **International AI Safety Report 2026**
 - **Colorado AI Act** delayed to January 1, 2027 (SB 189), scope narrowed to transparency-only
 - NIST AI Risk Management Framework
   - GOVERN, MAP, MEASURE, MANAGE
@@ -1744,7 +1754,11 @@
 - **Market Landscape (mid-June 2026)** — SaaS $285B shakeout, per-seat→outcome pricing, AI market $601.93B→$3,638B (2033), inference economics as center of gravity
 - **AI, Energy & Sustainability** — ~90 TWh AI-specific, nuclear/SMR procurement (25→45 GW), data center moratoria
 - **Workforce Impact** — augmentation > replacement, 56% AI salary premium, developer productivity ~20-30% (not 10x)
-- **Funding & Market** — Anthropic S-1 filed ($1.75-1.8T target, Oct 2026); SpaceX IPO ($75B, Google $920M/mo deal); Big Tech CapEx **$725B** (+77%)
+- **SpaceX acquires Cursor $60B** (June 22); SPCX ATH $225.64 → corrected to ~$185; **Tim Cook steps down Sept 1**
+- **Visa Agent Score** — first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
+- **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale
+- **FERC fast-tracks AI data centers**: 9-17% US electricity by 2030; 370kW rack densities
+- **Funding & Market** — Anthropic S-1 ($1.75-1.8T); SpaceX IPO ($75B); Big Tech CapEx **$725B** (+77%)
 - **Production Case Studies** — Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
 - **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
 - **Enterprise Integration Patterns** — 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
@@ -1946,6 +1960,7 @@
   - Vision-Language-Action (VLA) models (Gemini Robotics, NVIDIA GR00T, Figure AI)
   - AI for Scientific Discovery (GPT-Rosalind, Fable 5 genomics, clinical digital twins)
   - Automated AI R&D (Karpathy AutoResearch, Agent0 adversarial co-evolution)
+  - **DiffusionGemma** (June 10) — first open-weight diffusion LLM, ~4x faster parallel text generation
 
 ---
 
@@ -2069,7 +2084,7 @@ Each chapter contains a "Practical Code Examples" section with Java implementati
 
 ---
 
-*Generated based on actual course file contents. Last updated: mid-June 2026.*
+*Generated based on actual course file contents. Last updated: late June 2026.*
 
 ---
 
