@@ -155,66 +155,15 @@ Simply increasing model size does not guarantee improved quality. There are "sca
 
 ---
 
-## Scaling Laws: The Science of Growing Models
+## Scaling Laws and Emergent Abilities
 
-### The Phenomenon of Predictable Improvement
+Model quality follows predictable mathematical laws when scaling — larger models trained on more data improve in regular, measurable ways. The Chinchilla law (Google DeepMind, 2022) established that the optimal ratio is approximately 20 tokens per parameter. Modern practice deliberately over-trains smaller models (Llama 3 8B used 2,000 tokens per parameter — 100x the Chinchilla optimum) to reduce inference cost while maintaining quality.
 
-One of the most important discoveries in the LLM field is the remarkable predictability of model behavior when scaling. In 2020, OpenAI researchers found that model quality (measured as loss on test data) follows clear mathematical laws.
+Beyond predictable scaling, models exhibit **emergent abilities** — skills that appear abruptly once a certain scale is reached. Multi-step reasoning, code generation, and complex instruction following do not improve gradually but emerge as qualitative jumps. Whether this reflects genuine phase transitions or measurement artifacts is actively debated.
 
-This means that a model's performance can be predicted before it is even trained, simply by knowing its size and data volume. This discovery has enormous practical significance. Training modern models costs millions of dollars. The ability to predict the outcome before training begins allows for informed decisions about where to invest computational resources.
+A new scaling dimension emerged in 2024-2025: **inference-time compute** (test-time compute). Models like o3 generate chains of reasoning tokens before the final answer, dramatically improving performance on complex tasks. This means quality can be improved by spending more compute at inference, not just at training.
 
-### Chinchilla: Revisiting the Optimal Ratio
-
-In 2022, the DeepMind team published the "Chinchilla" paper, which overturned assumptions about compute-optimal training. They found that previous models were significantly undertrained — they lacked sufficient data relative to their size.
-
-The Chinchilla law states that for optimal training, the number of parameters N and the number of tokens D should grow proportionally: `N_opt ∝ C^0.5,  D_opt ∝ C^0.5`. More simply: when doubling the compute budget, both the model size and data volume should be doubled. The optimal ratio is approximately 20 tokens per parameter.
-
-### Over-Training for Inference Efficiency
-
-Modern practice goes even further than Chinchilla. For production systems, it is beneficial to train models beyond the optimum — using more tokens than the law prescribes. Why?
-
-Training cost is a one-time expense. Inference cost is ongoing and proportional to model size. A smaller model trained longer can achieve the quality of a larger model while being cheaper to run at inference time.
-
-Llama 3 8B was trained on 15 trillion tokens — nearly 2,000 tokens per parameter, 100 times more than the Chinchilla optimum. This was a deliberate decision: the 8B model competes with 30-70B models from the previous generation while costing significantly less to operate.
-
-### Inference-Time Scaling: The New Frontier
-
-While training-time scaling is well understood, inference-time scaling is a new area of research. Models like o1 from OpenAI demonstrate that quality can be improved by giving the model more "thinking time" during inference.
-
-The concept is straightforward: instead of generating an answer immediately, the model generates a chain of reasoning (reasoning tokens) that improve the final answer. The longer the chain, the better the result on complex tasks.
-
----
-
-## Emergent Abilities: When Quantity Becomes Quality
-
-### The Phenomenon of Emergence
-
-One of the most fascinating phenomena in LLM development is the appearance of emergent abilities. These are skills that unexpectedly appear when a certain model scale is reached, even though the model was never explicitly trained for them.
-
-When a model is scaled to a certain size, it suddenly begins to:
-- Perform multi-step mathematical reasoning
-- Understand irony and sarcasm
-- Write working code from descriptions
-- Translate between languages that rarely appeared together in the training data
-- Follow complex multi-step instructions
-
-These abilities do not appear gradually — they emerge abruptly once a certain complexity threshold is crossed.
-
-### Why This Happens: Hypotheses
-
-Several explanations exist for the emergence phenomenon:
-
-**Compositionality hypothesis**: complex skills consist of simpler ones. The model first masters basic patterns (grammar, facts, logical relationships), and upon reaching a critical mass, these patterns begin combining into complex abilities. Like a child who learns words individually for a long time and then suddenly starts constructing sentences.
-
-**Representations hypothesis**: the model gradually forms internal representations of concepts. Upon reaching sufficient "density" of representations, they begin to support reasoning and knowledge transfer.
-
-**Metric hypothesis**: some researchers argue that emergence is a measurement artifact. If continuous metrics are used instead of discrete ones (correct/incorrect), improvement appears smooth. The jump occurs when quality crosses the threshold separating a "bad answer" from a "good one."
-
-### Grokking: Sudden Understanding
-
-A special case of emergence is the "grokking" phenomenon. A model can demonstrate only memorization of training examples without generalization for a long time, and then abruptly "see the light" and begin understanding the underlying structure of the task.
-
-The classic experiment: a model is trained on modular arithmetic (a + b mod p). For a long time, it simply memorizes examples from the training set, showing zero accuracy on the test set. Then, after continued training, a sharp jump occurs — the model "understands" the mathematical structure and generalizes to any examples.
+These topics — scaling laws, emergence, over-training, and inference-time compute — are covered in depth in [[08_Scaling_Laws|Scaling Laws]].
 
 ---
 

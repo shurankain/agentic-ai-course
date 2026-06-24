@@ -412,13 +412,9 @@ Reasoning tasks have distinct scaling laws, different from general tasks:
 
 **Optimal strategy:** A balance between model size and the number of CoT samples/thinking time. Sometimes a 13B model with 10 samples is better than a 70B model with 1 sample — cheaper and higher quality for certain tasks.
 
-### GRPO: A New Scaling Paradigm for Reasoning
+### GRPO and Reinforcement Learning for Reasoning
 
-GRPO (Group Relative Policy Optimization), introduced with DeepSeek R1 (January 2025), represents a new scaling paradigm that changes how reasoning capabilities emerge during training.
-
-**How it scales:** For each prompt, GRPO samples K outputs (K=8-64) from the current policy, computes rewards via a verifier, and normalizes advantages within the group. This replaces both the reward model and value model from PPO with simple group statistics. Training scales with the number of samples per prompt and the quality of the verifier.
-
-**R1-Zero: Reasoning emergence from pure RL.** Applying GRPO with only rule-based rewards (correctness, format compliance) to a base model — without any SFT on reasoning traces — led to spontaneous emergence of chain-of-thought reasoning. This is a fundamental scaling result: the capacity for structured reasoning is latent in pretrained models and scales with RL training.
+DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pure reinforcement learning — GRPO (Group Relative Policy Optimization) replaces the traditional reward model and value model with group-relative advantages computed from sampled outputs (see [[../10_Fine_Tuning/05_RLHF_Alternatives|RLHF Alternatives]] for the full mechanism). The scaling insight: training compute invested in RL-based reasoning yields disproportionate quality gains on math and coding benchmarks, often matching models 10x larger.
 
 **Distillation scaling:** DeepSeek distilled R1's reasoning into smaller models (1.5B, 7B, 8B, 14B, 32B, 70B variants). Distillation follows its own scaling law: smaller distilled models retain a surprising fraction of the teacher's reasoning capability. R1-distill-32B outperforms many larger standard models on reasoning benchmarks, demonstrating that reasoning can be efficiently compressed.
 

@@ -324,83 +324,13 @@ This enables search by description: "sales growth chart" will find a visualizati
 - Cross-modal search: text → image or image → text
 - Indexing presentation slides, infographics, schematics
 
-### ColPali Pipeline: Vision-Language Retrieval
+### ColPali: Vision-Language Retrieval Without OCR
 
-ColPali (ICLR 2025) is a breakthrough approach to Multimodal RAG that completely eliminates OCR from the pipeline.
+ColPali (2024-2025) eliminates OCR from document retrieval entirely. Instead of converting documents to text, it treats each page as an image and uses a vision encoder (PaliGemma-3B) for both retrieval and understanding. The model generates multi-vector representations for each page, scored against queries using MaxSim (the same late interaction mechanism as ColBERT — see [[06_Late_Interaction_Retrieval|Late Interaction Retrieval]] for the full architecture).
 
-**ColPali Architecture:**
+**Key result:** On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines — and handles complex layouts (multi-column, merged cells, mixed text/diagram content) that break traditional OCR.
 
-ColPali uses the vision-language model PaliGemma-3B to process documents directly as images. A document page (PDF or image) is fed into a Vision Encoder based on patch tokenization — the document is divided into visual patches of 14×14 pixels.
-
-Each patch becomes a separate token embedding, creating a multi-vector representation of the document (typically 1024+ tokens per page). A Projection Layer maps these patch tokens into a shared embedding space where they can be compared with text queries.
-
-The result is a multi-vector representation of the document where each vector corresponds to a visual fragment of the page, preserving spatial structure and visual information without OCR losses.
-
-**Key components:**
-
-| Component | Description | Role |
-|-----------|----------|------|
-| **PaliGemma** | Vision-Language model (SigLIP + Gemma 2B) | Base encoder |
-| **Patch Tokenization** | Document → visual patches 14×14 | Preserves spatial layout |
-| **Multi-Vector Output** | Each patch → separate embedding | Late interaction |
-| **MaxSim Scoring** | Max similarity between query and page tokens | Retrieval metric |
-
-**OCR-Free Workflow:**
-
-**Traditional approach vs ColPali:**
-
-The traditional pipeline passes through several stages with information loss: the PDF is processed by OCR for text extraction, the text is split into chunks, and chunks are converted to embeddings and indexed. Problems arise at each stage: OCR makes recognition errors, layout information is lost, and tables become unstructured text.
-
-The ColPali pipeline is much simpler and lossless: the PDF is rendered to an image, the image is processed by the Vision Encoder directly, creating a multi-vector index. The result: no OCR errors (text is not recognized at all), layout is fully preserved in the visual representation, and tables and diagrams are processed natively as visual objects.
-
-**Late Interaction for Visual Content:**
-
-ColPali uses the same Late Interaction principle as ColBERT:
-
-1. **Query encoding:** Text query → token embeddings
-2. **Document encoding:** Page → patch embeddings (multi-vector)
-3. **MaxSim scoring:**
-   $$\text{Score}(Q, D) = \sum_{i} \max_{j} \text{sim}(q_i, d_j)$$
-
-   Each query token finds the most similar patch on the page.
-
-**Advantages for specific document types:**
-
-| Document Type | Traditional Approach | ColPali |
-|---------------|---------------------|---------|
-| **Tables** | OCR loses structure | Structure preserved |
-| **Diagrams** | Cannot extract relationships | Visual relationships preserved |
-| **Formulas** | LaTeX/MathML errors | Native understanding |
-| **Multi-column layout** | Incorrect reading order | Spatial awareness |
-| **Handwritten text** | OCR often fails | Vision model handles it |
-
-**Practical results:**
-
-Benchmarks on ViDoRe (Visual Document Retrieval):
-- ColPali: **81.3** nDCG@5
-- Best OCR+embedding baseline: **67.8** nDCG@5
-- Improvement: **+20%**
-
-**ColPali limitations:**
-
-1. **GPU requirements:** Requires GPU for inference (vision encoder is heavy)
-2. **Index size:** Multi-vector = more storage space
-3. **Preprocessing:** Requires rendering PDF → images
-4. **Query latency:** Late interaction is more expensive than dense retrieval
-
-**When to use ColPali:**
-
-| Scenario | Recommendation |
-|----------|--------------|
-| PDFs with tables/diagrams | ✅ ColPali |
-| Scanned documents | ✅ ColPali |
-| Pure text content | ⚠️ OCR+embedding may suffice |
-| Millions of documents | ⚠️ Consider hybrid (ColPali for complex ones) |
-| Edge deployment without GPU | ❌ Needs cloud inference |
-
-**Integration into RAG pipeline:**
-
-ColPali integrates into the RAG pipeline as follows: the user query goes to the ColPali Retriever, which finds relevant document pages as images. These page images are passed directly to a Vision-LLM (GPT-4o/5, Claude Sonnet 4.6, Gemini 2.5/3), which generates the final answer by visually "reading" the images without intermediate text representation. This allows the model to see the document just as a human would — with all visual structure, formatting, and graphical elements.
+**When to use:** Documents with complex visual layouts, scanned/photographed documents, forms, tables. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See [[06_Late_Interaction_Retrieval|Late Interaction Retrieval]] for ColPali's full architecture, ColQwen variants, and production integration patterns.
 
 ## Temporal RAG
 

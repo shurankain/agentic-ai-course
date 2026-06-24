@@ -222,53 +222,7 @@ Safety rule: Never combine all three factors. If the agent processes untrusted c
 
 ## Production Safety with NeMo Guardrails
 
-NVIDIA NeMo Guardrails is a leading open-source toolkit for production-ready safety. Declarative approach to safety rules, integration with any LLM provider, ready-made modules for common threats.
-
-### Guardrails Architecture
-
-A request passes through a chain of checks: Input Rails → Dialog Rails → Retrieval Rails → Execution Rails → LLM Generation → Output Rails. Each level can block or modify the request.
-
-### Five Types of Rails
-
-**Input Rails** — the first line of defense. Jailbreak detection, topic filtering, PII detection.
-
-**Dialog Rails** — conversation management. Templates for greetings, common questions, malicious requests. Harmful intent — automatic refusal.
-
-**Retrieval Rails** — RAG protection. Checking content from external sources before including it in context. Hidden injection instructions are removed with logging.
-
-**Execution Rails** — agent action control. Validating actions before execution. Whitelisting, parameter checking (restricting email to internal addresses only).
-
-**Output Rails** — final check. System prompt leakage, hallucination check, PII detection and masking in responses.
-
-### Jailbreak Prevention
-
-Heuristic Detection (rule-based for known patterns) + LLM-based Detection (self-check). The combination balances speed and quality.
-
-### PII Masking
-
-Integration with Microsoft Presidio. Supported types: EMAIL_ADDRESS, PHONE_NUMBER, CREDIT_CARD, US_SSN, PERSON, LOCATION.
-
-### Integration with LLM Providers
-
-OpenAI, Anthropic, Azure OpenAI, Google, Cohere, HuggingFace, vLLM, TensorRT-LLM, Any OpenAI-compatible API.
-
-### Comparison with Alternatives
-
-**NeMo Guardrails:** Declarative Colang, native input/output/dialog/retrieval/execution rails, built-in jailbreak detection, Presidio integration, many providers, medium learning curve.
-
-**Guardrails AI:** Programmatic, focus on output validation, limited input rails, no dialog management, some RAG integration, no jailbreak detection, many providers, low learning curve.
-
-**LangChain Guards:** Programmatic, chains for input, limited output rails, dialog via agents, native RAG, tool control via agents, no jailbreak detection, many providers, low learning curve.
-
-**Custom LLM-as-Guard:** Ad-hoc, manual everything, maximum flexibility, depends on provider, low learning curve.
-
-Choose NeMo Guardrails for: full lifecycle control, declarativeness and maintainability, RAG or agent-based systems, enterprise requirements (audit, compliance).
-
-Choose alternatives: Guardrails AI for structured output validation, LangChain for the LangChain ecosystem, Custom for unique requirements.
-
-### Metrics and Monitoring
-
-Block rate (% of blocked requests by rail type), latency overhead (time added by guardrails), false positive rate (legitimate requests incorrectly blocked), jailbreak attempts (count and types of attempts).
+For production-grade multi-layered defense, NVIDIA NeMo Guardrails provides a declarative safety framework with five rail types (input, dialog, retrieval, execution, output), the Colang domain-specific language for defining safety rules, and integration with all major LLM providers. NeMo Guardrails supports both Llama Guard and ShieldGemma as safety classifiers, with configurable thresholds per risk category. See [[05_NeMo_Guardrails|NeMo Guardrails]] for the complete architecture, Colang DSL, production deployment patterns, and comparison with alternatives (Guardrails AI, custom implementations).
 
 ## Key Takeaways
 

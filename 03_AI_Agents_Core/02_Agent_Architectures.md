@@ -519,17 +519,7 @@ The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orch
 
 ## The Karpathy Loop: Universal Optimization Pattern
 
-AutoResearch (Karpathy, April 2026) demonstrated a pattern that extends beyond coding agents into a general-purpose optimization architecture. The **Karpathy Loop** requires three ingredients:
-
-1. **Agent with file access** — the agent can read and modify code, configuration, or any text-based artifact
-2. **One objectively testable metric** — a number that can be measured automatically (training loss, test pass rate, latency, cost per request)
-3. **Fixed time limit** — the agent runs for N hours, explores the search space, and reports the best result
-
-The agent autonomously modifies artifacts, measures the metric, and iterates. No human in the loop during the search. The human role: define the metric, constrain the search space, evaluate whether discovered optimizations are genuinely useful or merely overfitting the metric.
-
-**Architectural view:** The Karpathy Loop is a specialized application of the ReAct pattern where the "observation" is always a numeric metric and the "action" is always a code/config modification. Its power comes from the tight feedback loop: modify → measure → learn → modify — at machine speed.
-
-**Applicability beyond ML:** CI/CD pipeline optimization (metric: build time), infrastructure tuning (metric: cost per request), SQL query optimization (metric: execution time), prompt engineering (metric: eval score). Any domain where a metric can be computed automatically and artifacts can be modified programmatically. See [[09_Agent_Use_Cases|Agent Use Cases]] for the full discussion of AutoResearch.
+AutoResearch (Karpathy, April 2026) demonstrated that the ReAct pattern, when specialized for automated experimentation, becomes a powerful universal optimization architecture. The pattern requires three ingredients: an agent with file access, one objectively testable metric, and a fixed time limit. The agent autonomously modifies artifacts, measures the metric, and iterates at machine speed. Applicable beyond ML to CI/CD optimization, infrastructure tuning, SQL query optimization, and prompt engineering. See [[09_Agent_Use_Cases|Agent Use Cases]] for the full analysis of AutoResearch, including the 700-experiment demonstration and applicability framework.
 
 ---
 

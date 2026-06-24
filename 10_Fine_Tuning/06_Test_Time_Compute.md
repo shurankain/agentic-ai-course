@@ -90,15 +90,9 @@ The optimum depends on task complexity, number of requests, and the current mode
 
 ## DeepSeek-R1: Open-Source Reasoning via GRPO
 
-DeepSeek-R1 (January 2025) demonstrated that reasoning can be achieved through pure RL without supervised fine-tuning on reasoning traces.
+**DeepSeek-R1** demonstrated that reasoning can emerge from pure reinforcement learning using GRPO (see [[04_RLHF_and_Alignment|RLHF and Alignment]] and [[05_RLHF_Alternatives|RLHF Alternatives]] for the algorithm). R1-Zero — trained with GRPO alone, no supervised fine-tuning on reasoning traces — spontaneously developed chain-of-thought, self-verification, and even 'aha moment' patterns. The R1 full pipeline adds supervised fine-tuning on curated reasoning examples, distillation into smaller models (1.5B-70B), and cold-start data to prevent reward hacking.
 
 Results: AIME 15.6% → 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
-
-**GRPO (Group Relative Policy Optimization)** is the training method that made R1 possible. For each prompt, GRPO samples K outputs from the current policy, scores them with a verifier, then computes group-relative advantages (reward_i - group_mean) / group_std. This replaces PPO's separate value model with simple group statistics. The clipped policy gradient update with KL penalty to the reference policy completes the algorithm.
-
-**R1-Zero** — applying GRPO with only rule-based rewards (correctness for math, format compliance) to the DeepSeek-V3-Base model. Without any SFT on reasoning traces, the model independently "discovered" chain-of-thought reasoning, self-verification, and even "aha moments." A fundamental result: reasoning emergence through proper RL incentives, not supervised demonstrations.
-
-**R1 (full)** — R1-Zero followed by SFT on curated reasoning traces and a second round of GRPO. This produces cleaner, more readable reasoning while maintaining the emergent capabilities.
 
 **Distillation** — reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants, demonstrating that even small models can reason impressively when distilled from a strong reasoning teacher.
 
