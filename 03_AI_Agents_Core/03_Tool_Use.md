@@ -504,48 +504,6 @@ Reasoning models benefit from **descriptive tool schemas**: detailed parameter d
 
 ## Practical Code Examples
 
-Below is a minimal but complete example of a search tool demonstrating all key components: name, description with applicability boundaries, detailed parameter schema with enum values, and safe execution with error handling.
-
-**Example of a search tool structure:**
-
-Consider the organization of a typical web search tool. The WebSearchTool class represents a full-featured tool with all necessary components.
-
-The getName method returns the tool's string identifier — in this case "web_search". This name is used by the model when generating calls.
-
-The getDescription method provides a detailed description of the tool's purpose. The description explicitly states what the tool is intended for: searching for current information, fresh news, current prices, and events after the model's training date. The description also contains explicit limitations — the tool should NOT be used for historical facts or stable documentation that the model already knows.
-
-The getParametersSchema method defines the tool's parameter structure. The schema is built via the builder pattern and includes three parameters:
-
-The first parameter "query" has type "string" and is marked as required (required: true). Its description hints to the model: "Search query. Be specific and concise." This guides the model toward forming precise queries.
-
-The second parameter "num_results" has type "integer" and a description "Number of results (1-10)". It has a default value of 3, meaning: if the model does not explicitly specify a count, three results will be used.
-
-The third parameter "time_range" demonstrates the use of enum values. The type is "string", but possible values are restricted to: "day", "week", "month", "year", "all". The default value is "all". Using an enum prevents typos and incorrect values from the model.
-
-The execute method accepts a map of arguments and performs the actual work. First, parameters are extracted from the map: query as a string and num_results with a fallback to the default value of 3. Then, in a try block, the external search API (searchApi.search) is called with these parameters. If the search succeeds, results are formatted and returned as ToolResult.success. If an exception occurs, it is caught and ToolResult.error is returned with a clear error message. This is graceful error handling — the model receives an informative message instead of a raw exception.
-
-**Using LangChain4j annotations:**
-
-LangChain4j provides a declarative approach through annotations that significantly simplifies tool creation. Instead of explicitly defining schemas and metadata, you simply annotate ordinary Java methods.
-
-Consider an example of a Tools class with a computation method. The calculate method has the @Tool annotation with the description "Calculates mathematical expressions." The method parameter — the string expression — is annotated with @P with the description "Expression to evaluate." The method returns a double — the computation result obtained through the expression parser ExpressionParser.evaluate.
-
-Tool registration occurs when building the agent via AiServices.builder. A builder is created for the Assistant interface, the language model is specified via chatLanguageModel(model), and an instance of the Tools class is passed via the .tools(new Tools()) method. Calling build() completes the configuration and creates the ready agent.
-
-The framework automatically discovers all annotated methods, extracts names, descriptions, parameter types from them, and creates corresponding schemas. When the model generates a call to the calculate tool with some expression, the framework automatically routes the call to the corresponding method, performs JSON argument to Java type conversion, and returns the result back to the model. The developer simply writes business logic, and all infrastructure is generated automatically.
-
-
-
----
-
-## Navigation
-**Previous:** [[02_Agent_Architectures|Agent Architectures]]
-**Next:** [[04_Planning|Agent Planning]]
-
----
-
-## Practical Code Examples
-
 Below are full implementation examples of tools in Java using LangChain4j. The examples demonstrate three categories of tools: information retrieval, database operations, and file operations.
 
 ### Example 1: Web Search Tool
@@ -846,3 +804,11 @@ public class AgentApplication {
     }
 }
 ```
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
+**Previous:** [[02_Agent_Architectures|Agent Architectures]]
+**Next:** [[04_Planning|Agent Planning]]
