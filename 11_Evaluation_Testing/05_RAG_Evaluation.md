@@ -190,7 +190,7 @@ Success criteria for production:
 
 - **RAG evaluation spans four dimensions: retrieval precision, retrieval recall, generation faithfulness, and answer relevance.** Weak performance in any single dimension undermines the entire system.
 
-- **RAGAS provides the standard framework for automated RAG evaluation.** Its core metrics -- faithfulness, answer relevance, context precision, and context recall -- cover the full RAG pipeline from retrieval to generation.
+- **RAGAS provides the standard framework for automated RAG evaluation.** Its core metrics — faithfulness, answer relevance, context precision, and context recall — cover the full RAG pipeline from retrieval to generation.
 
 - **BEIR and FreshStack are the key retrieval benchmarks.** BEIR tests zero-shot generalization across 18 diverse domains; FreshStack addresses temporal bias with recent data guaranteed absent from training corpora.
 

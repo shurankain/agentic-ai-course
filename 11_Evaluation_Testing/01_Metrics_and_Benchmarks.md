@@ -258,9 +258,9 @@ The evaluation runner coordinates the process: it accepts a model, a test datase
 
 - **Cost per correct answer matters more than raw accuracy in production.** A model that is 5 percentage points less accurate but 77x cheaper per correct answer is the better production choice for most workloads.
 
-- **Completion under Policy (CuP) gates task success on compliance.** A task that succeeds but violates policy scores zero -- expected to become an enterprise standard by 2026-2027.
+- **Completion under Policy (CuP) gates task success on compliance.** A task that succeeds but violates policy scores zero — expected to become an enterprise standard by 2026-2027.
 
-- **Benchmarks do not measure what matters most in production.** Error recovery, cost efficiency, user satisfaction, reliability, and composability are invisible to public benchmarks -- custom evaluation on your own workload is always the most important metric.
+- **Benchmarks do not measure what matters most in production.** Error recovery, cost efficiency, user satisfaction, reliability, and composability are invisible to public benchmarks — custom evaluation on your own workload is always the most important metric.
 
 - **Simulation testing with synthetic personas stress-tests agents before deployment.** Generating hundreds of multi-turn conversations with diverse, adversarial personas catches failures that benchmarks and random sampling miss.
 

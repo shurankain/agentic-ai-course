@@ -168,13 +168,13 @@ The hypothesis testing system formulates specific testable hypotheses. Instead o
 
 - **A structured problem taxonomy accelerates root-cause analysis.** Categorizing issues into infrastructure, integration, prompt, data quality, and model behavior directs investigation to the right layer immediately.
 
-- **Reproducibility requires fixing the seed, capturing full state snapshots, and logging complete prompts.** Without the ability to reproduce a problem, you cannot confirm a fix -- version control prompts as strictly as code.
+- **Reproducibility requires fixing the seed, capturing full state snapshots, and logging complete prompts.** Without the ability to reproduce a problem, you cannot confirm a fix — version control prompts as strictly as code.
 
 - **Hallucination detection requires multiple layers, not a single metric.** Consistency checks across runs, grounding ratio monitoring, semantic contradiction detection, and domain-specific fact validation each catch a different category.
 
-- **RAG debugging follows a four-stage workflow: retrieval, ranking, context assembly, generation.** Start from Stage 4 (generation) and work backward -- checking the grounding ratio first identifies whether the problem is in context quality or model behavior.
+- **RAG debugging follows a four-stage workflow: retrieval, ranking, context assembly, generation.** Start from Stage 4 (generation) and work backward — checking the grounding ratio first identifies whether the problem is in context quality or model behavior.
 
-- **Statistical anomaly detection methods must be adapted for LLM specifics.** Z-score catches sudden deviations, CUSUM detects slow trends, EWMA tracks recent behavior, and PSI identifies input distribution drift -- each serves a different failure mode.
+- **Statistical anomaly detection methods must be adapted for LLM specifics.** Z-score catches sudden deviations, CUSUM detects slow trends, EWMA tracks recent behavior, and PSI identifies input distribution drift — each serves a different failure mode.
 
 ---
 

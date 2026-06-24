@@ -205,15 +205,15 @@ An emerging evaluation metric that combines task success with compliance: a task
 
 ## Key Takeaways
 
-- **Continuous evaluation transforms quality assurance from a one-time gate into an ongoing process.** Models degrade in production due to data drift, provider updates, and changing user expectations -- one-time evaluation before release is necessary but insufficient.
+- **Continuous evaluation transforms quality assurance from a one-time gate into an ongoing process.** Models degrade in production due to data drift, provider updates, and changing user expectations — one-time evaluation before release is necessary but insufficient.
 
 - **Sampling strategy determines evaluation coverage and cost.** Start with 5-10% random sampling for baseline monitoring, but increase to 100% for high-risk agent actions where the cost of a missed error exceeds the cost of evaluation.
 
 - **A/B testing is the gold standard for comparing variants in production.** Randomize by user (not request), define guardrail metrics that must not deteriorate, and run tests long enough to cover natural variability.
 
-- **Regression detection after silent provider updates is critical.** Shadow evaluation and canary deployments catch quality changes before full rollout -- generic benchmarks do not predict how a model update will behave on your specific prompts.
+- **Regression detection after silent provider updates is critical.** Shadow evaluation and canary deployments catch quality changes before full rollout — generic benchmarks do not predict how a model update will behave on your specific prompts.
 
-- **CuP (Completion under Policy) combines task success with compliance into a single gate metric.** A task that succeeds while violating policy scores zero -- essential for regulated industries where policy violations carry legal consequences.
+- **CuP (Completion under Policy) combines task success with compliance into a single gate metric.** A task that succeeds while violating policy scores zero — essential for regulated industries where policy violations carry legal consequences.
 
 - **Simulation testing with synthetic personas systematically explores the interaction space.** Generating multi-turn conversations with aggressive, confused, and adversarial personas catches edge cases that random sampling and manual testing miss.
 

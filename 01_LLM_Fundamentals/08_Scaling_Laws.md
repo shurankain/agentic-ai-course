@@ -367,7 +367,7 @@ Test-time compute (TTC) emerged in 2024 with OpenAI o1 and is now an established
 
 **All major providers now offer TTC:**
 - **OpenAI o3** (January 2025 GA) and **o4-mini** (April 2025): `reasoning_effort` parameter (low/medium/high). o3 achieves 96.7% on AIME 2024, 87.7% on GPQA Diamond
-- **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Opus 4 / 4.6 with extended thinking competes with o3 on reasoning benchmarks
+- **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Opus 4.6 / 4.7 / 4.8 with extended thinking competes with o3 on reasoning benchmarks
 - **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5/3 Pro with thinking leverages 1M+ token context for reasoning
 - **DeepSeek-R1** (January 2025): open-weight reasoning model achieving o1-level performance at lower cost, trained via GRPO
 

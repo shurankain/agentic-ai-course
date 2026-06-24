@@ -1570,7 +1570,7 @@
   - RadixAttention: KV-cache as a radix tree
   - Up to 3× throughput for chatbots
 - Inference engine comparison
-  - vLLM: PagedAttention reference (v0.18-v0.19, async scheduler, gRPC, GPU NGram speculative decoding)
+  - vLLM: PagedAttention reference (v0.23, DiffusionGemma, Model Runner V2, multi-tier KV cache offloading)
   - SGLang: structured generation + RadixAttention
   - TensorRT-LLM: maximum NVIDIA performance
   - Text Generation Inference (TGI): HuggingFace production
@@ -1753,7 +1753,7 @@
 - **BYOAI paradigm** (WWDC June 2026) — iOS 27 Extensions, model choice = user preference, end of provider lock-in
 - **Market Landscape (mid-June 2026)** — SaaS $285B shakeout, per-seat→outcome pricing, AI market $601.93B→$3,638B (2033), inference economics as center of gravity
 - **AI, Energy & Sustainability** — ~90 TWh AI-specific, nuclear/SMR procurement (25→45 GW), data center moratoria
-- **Workforce Impact** — augmentation > replacement, 56% AI salary premium, developer productivity ~20-30% (not 10x)
+- **Workforce Impact** — augmentation > replacement, 62% AI salary premium, developer productivity ~20-30% (not 10x)
 - **SpaceX acquires Cursor $60B** (June 22); SPCX ATH $225.64 → corrected to ~$185; **Tim Cook steps down Sept 1**
 - **Visa Agent Score** — first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
 - **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale

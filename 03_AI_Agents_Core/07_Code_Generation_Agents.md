@@ -625,9 +625,9 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 7. **Supply chain security is an emerging concern** — AI-generated code introduces new attack vectors (see below)
 
-7. **Trend: convergence toward agent-native tools** — Cursor, Devin Desktop, and Copilot agent mode all moving toward autonomous multi-file editing
+8. **Trend: convergence toward agent-native tools** — Cursor, Devin Desktop, and Copilot agent mode all moving toward autonomous multi-file editing
 
-8. **CLI agents (Claude Code) and cloud agents (Codex)** represent two complementary paradigms: interactive vs. asynchronous
+9. **CLI agents (Claude Code) and cloud agents (Codex)** represent two complementary paradigms: interactive vs. asynchronous
 
 ---
 

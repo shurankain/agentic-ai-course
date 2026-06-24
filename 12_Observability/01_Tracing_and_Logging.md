@@ -171,7 +171,7 @@ Key patterns: ThreadLocal context for automatic propagation, MDC integration for
 
 ## Key Takeaways
 
-- **LLM observability rests on three pillars -- logs, metrics, and traces -- but LLM-specific span types are essential.** Standard distributed tracing must be extended with LLM spans (tokens, prompts, parameters), tool spans, retrieval spans, and agent step spans.
+- **LLM observability rests on three pillars — logs, metrics, and traces — but LLM-specific span types are essential.** Standard distributed tracing must be extended with LLM spans (tokens, prompts, parameters), tool spans, retrieval spans, and agent step spans.
 
 - **PII masking is not optional for production traces.** A hybrid approach (regex for structured patterns + NER for free text) catches 85-90% of PII; the standard pipeline applies masking before storage to both user inputs and model outputs.
 

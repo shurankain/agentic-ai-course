@@ -188,7 +188,7 @@ Test cases define input data, expected results, and success criteria. The evalua
 
 ## Key Takeaways
 
-- **AgentOps is a distinct discipline from MLOps.** The artifact is an agent (model + prompt + tools), behavior is stochastic, debugging requires multi-step traces, and rollback involves prompt + tools + guardrails -- not just a model version.
+- **AgentOps is a distinct discipline from MLOps.** The artifact is an agent (model + prompt + tools), behavior is stochastic, debugging requires multi-step traces, and rollback involves prompt + tools + guardrails — not just a model version.
 
 - **Session-level metrics matter more than request-level metrics.** Session success rate, turns per session, abandonment rate, and loop detection rate capture the user experience that per-call metrics miss.
 

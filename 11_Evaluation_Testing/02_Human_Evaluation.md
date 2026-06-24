@@ -164,7 +164,7 @@ Statistical significance is verified through a binomial test on direct compariso
 
 - **Crowdsourcing scales human evaluation but requires strict quality control.** Attention checks, gold standard questions, minimum time thresholds, and 3-5x redundancy produce crowd annotations that agree with experts 85-90% of the time.
 
-- **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality -- randomization, session limits, and calibration examples are essential countermeasures.
+- **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality — randomization, session limits, and calibration examples are essential countermeasures.
 
 ---
 
