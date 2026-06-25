@@ -65,6 +65,8 @@ Before agents can interact, they must be able to identify each other. A2A define
 
 **Identification levels:**
 
+A2A uses a layered identity model so that agents can be identified at different granularities depending on the context. A globally unique URN identifies the agent type, while instance and session IDs distinguish specific deployments and interactions. This layered approach supports both coarse-grained discovery and fine-grained audit tracking.
+
 | Level | Example | Purpose |
 |-------|---------|---------|
 | **URN** | `urn:agent:hotel-booking:v2` | Globally unique identifier |
@@ -150,7 +152,7 @@ A2A's value proposition strengthens as the industry moves toward truly autonomou
 
 ### A2A Compared to Alternatives
 
-A2A is not the only approach to inter-agent communication. Understanding the alternatives helps evaluate its positioning:
+A2A is not the only approach to inter-agent communication. Understanding the alternatives helps evaluate its positioning. The protocol landscape includes both legacy academic standards and modern purpose-built options, each with distinct trade-offs in transport flexibility, discovery mechanisms, and LLM awareness. The table below compares A2A against the most relevant alternatives.
 
 | Aspect | A2A (Google) | Agent Protocol (AI21) | FIPA-ACL (classic) | Custom gRPC |
 |--------|--------------|----------------------|---------------------|-------------|
@@ -216,6 +218,8 @@ All interactions between agents are logged with detailed information for auditin
 This is critical for enterprise deployments with compliance requirements — it is possible to trace which agent did what, at whose request, and with what data. The audit trail also helps in debugging complex multi-agent workflows where understanding the sequence of events and the causes of failures is important.
 
 ## MCP vs. A2A Comparison
+
+MCP and A2A serve fundamentally different integration layers: MCP connects an agent to tools and data sources, while A2A connects agents to each other. The following table highlights the architectural differences between the two protocols, which explains why production systems often use both simultaneously rather than choosing one over the other.
 
 | Aspect | MCP | A2A |
 |--------|-----|-----|

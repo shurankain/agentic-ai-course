@@ -39,7 +39,7 @@ DoRA can better approximate full fine-tuning with the same number of parameters.
 
 ### Results
 
-Paper-reported results on original LLaMA-7B (2023):
+Paper-reported results on original LLaMA-7B (2023) illustrate DoRA's advantage over standard LoRA at the same parameter budget. The improvement is consistent across both commonsense and arithmetic reasoning tasks, closing much of the gap to full fine-tuning.
 
 | Model | Method | Commonsense | Arithmetic | Avg |
 |-------|--------|-------------|------------|-----|
@@ -67,6 +67,8 @@ Paper-reported results on original LLaMA-7B (2023):
 2. Memory efficiency — comparable to LoRA
 3. No inference overhead — no additional matrices
 
+GaLore achieves quality close to full fine-tuning while using memory comparable to LoRA. The perplexity results below demonstrate that gradient projection preserves more information than weight-space low-rank constraints.
+
 | Method | Memory | LLaMA-7B Perplexity |
 |--------|--------|---------------------|
 | Full Fine-tuning | 58GB | 5.68 |
@@ -74,6 +76,8 @@ Paper-reported results on original LLaMA-7B (2023):
 | GaLore | 22GB | 5.71 |
 
 ### When to Choose
+
+The practical decision between LoRA and GaLore depends on deployment requirements and the maturity of tooling needed. The table below highlights the key trade-offs that drive this choice in production settings.
 
 | Criterion | LoRA | GaLore |
 |-----------|------|--------|
@@ -103,6 +107,8 @@ For configuration, BitsAndBytesConfig is used: load_in_4bit=True, bnb_4bit_quant
 
 Reduces complexity from O(L²) to approximately O(L).
 
+The Shift Short Attention technique enables fine-tuning on context lengths that would cause out-of-memory errors with full attention. The results below show that LongLoRA handles 32K and 100K contexts on a single GPU while maintaining competitive perplexity.
+
 | Context | Method | Memory | Perplexity |
 |---------|--------|--------|------------|
 | 32K | Full Attention | OOM | - |
@@ -112,6 +118,8 @@ Reduces complexity from O(L²) to approximately O(L).
 LongLoRA enables fine-tuning LLaMA-2-7B on 100K context on a single 48GB GPU. Results shown are from the original paper (2023); newer models (Llama 3.x) natively support longer contexts, but the S²-Attn technique remains applicable for extending context beyond native limits.
 
 ## Comparison Table
+
+With several PEFT methods now available, selecting the right one requires weighing memory savings, inference overhead, and production readiness. The table below consolidates these trade-offs across all methods discussed in this lesson, providing a quick reference for architecture decisions.
 
 | Method | Memory | Quality | Inference | Complexity | Maturity |
 |--------|--------|---------|-----------|------------|----------|

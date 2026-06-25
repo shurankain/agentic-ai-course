@@ -91,6 +91,8 @@ Several key metrics are used for quantitative evaluation of red teaming results.
 
 **STRIDE for AI Systems:**
 
+The classic STRIDE threat model translates to AI with domain-specific attack vectors at each category. The table below maps each STRIDE threat to its AI-specific manifestation, providing a structured checklist for threat modeling sessions focused on LLM applications.
+
 | Threat | AI-Specific Example |
 |--------|----------------------|
 | Spoofing | Jailbreak persona, fake system messages |

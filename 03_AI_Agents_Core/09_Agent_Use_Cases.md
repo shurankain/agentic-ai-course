@@ -20,7 +20,7 @@ Understanding agent capabilities helps you correctly identify areas for adoption
 
 ### Maturity vs Potential
 
-Not all agent applications are at the same maturity level. Some already generate billions of dollars in revenue; others remain promising prototypes. Understanding this distinction is essential when planning projects.
+Not all agent applications are at the same maturity level. Some already generate billions of dollars in revenue; others remain promising prototypes. Understanding this distinction is essential when planning projects. The table below maps each major category to its current maturity level, key players, and market indicators to help prioritize where to invest.
 
 | Category | Maturity | Example Companies | Market Size |
 |-----------|----------|------------------|-------------|
@@ -275,6 +275,8 @@ This is not simply "search and summarize" — it is a full research process invo
 **OWL** (CAMEL-AI) — the leading open-source research agent. 69.09% on the GAIA benchmark (#1 open-source, surpassing OpenAI Deep Research by 2.34%). Apache 2.0 license, fully self-hostable. Multi-tool architecture for web browsing, file manipulation, and multi-step reasoning.
 
 ### Difference from Agentic RAG
+
+Deep Research and Agentic RAG are often confused because both involve retrieval and synthesis, but they differ fundamentally in scope, time horizon, and output format. The following comparison clarifies when each approach is appropriate.
 
 | Aspect | Agentic RAG | Deep Research |
 |--------|-------------|---------------|

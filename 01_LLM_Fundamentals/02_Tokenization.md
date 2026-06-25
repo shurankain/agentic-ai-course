@@ -202,6 +202,8 @@ To quantify this inequality, the **Tokenizer Fertility** metric is used — the 
 
 **Fertility = token_count / word_count**
 
+The following table shows how fertility varies across languages for the GPT-4 tokenizer, along with the resulting cost multiplier relative to English. These differences directly affect API budgets and the effective capacity of a fixed-size context window for non-English applications.
+
 | Language | Fertility (GPT-4) | Relative Cost |
 |----------|-------------------|---------------|
 | English | 1.3 | 1.0x (baseline) |

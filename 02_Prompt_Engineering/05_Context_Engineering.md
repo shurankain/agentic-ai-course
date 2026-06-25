@@ -194,6 +194,8 @@ The **Model Context Protocol (MCP)**, introduced by Anthropic in late 2024 and w
 
 **MCP primitives as WSCI enablers:**
 
+Each WSCI strategy maps to a specific MCP primitive, creating a direct bridge between conceptual context management and protocol-level implementation. The table below shows this mapping with concrete examples, illustrating how MCP turns abstract strategies into standardized, interoperable operations.
+
 | WSCI Strategy | MCP Primitive | Example |
 |---------------|---------------|---------|
 | **WRITE** | Tools | Agent writes analysis results to a database via `db_insert` tool |
@@ -221,7 +223,7 @@ This is the SELECT strategy elevated from a pipeline component to an agent capab
 
 ## Karpathy's Context Hierarchy
 
-A practical framework for thinking about the four levels of context that an agent manages, each with different update frequencies and management strategies:
+A practical framework for thinking about the four levels of context that an agent manages, each with different update frequencies and management strategies. The table below organizes these levels from the most stable (system prompt, changed only at deployment) to the most dynamic (agent memory, accumulated across sessions). Recognizing which level a piece of information belongs to determines how it should be cached, compressed, and persisted.
 
 | Level | Analogy | Content | Update Frequency | Management |
 |-------|---------|---------|-----------------|------------|
@@ -262,7 +264,7 @@ In an agentic loop where the LLM is called 10-20 times per task, every wasted to
 
 **Tool description budgeting:** Each tool description consumes 200-500 tokens. A rule of thumb: tool descriptions should not exceed **10% of the available context window**. For a 128K context model, that is 12.8K tokens — roughly 25-60 tools before tool descriptions alone crowd out actual task context. Beyond that threshold, dynamic filtering becomes mandatory.
 
-**Dynamic context filtering** selects which context elements to include based on the current step:
+**Dynamic context filtering** selects which context elements to include based on the current step. The three approaches below trade off speed against filtering accuracy; most production systems use semantic filtering as the best compromise between latency and relevance.
 
 | Filter Type | Mechanism | Speed | Quality |
 |-------------|-----------|-------|---------|
@@ -294,7 +296,7 @@ Five patterns that consistently reduce context costs and improve quality in real
 
 JSON is the default structured output format, but it carries significant overhead: braces, quotes, colons, commas, and key names consume tokens that carry no semantic information. For high-volume applications, this overhead is material.
 
-**TOON (Token-Optimized Output Notation)** is an emerging approach that achieves **69% token reduction** compared to JSON by using minimal delimiters (pipe-separated values, newline-delimited records). The savings come from eliminating repeated key names and structural characters.
+**TOON (Token-Optimized Output Notation)** is an emerging approach that achieves **69% token reduction** compared to JSON by using minimal delimiters (pipe-separated values, newline-delimited records). The savings come from eliminating repeated key names and structural characters. The table below quantifies the difference: at scale, switching internal agent communication from JSON to a minimal format can save over $100K per year.
 
 | Format | Tokens for 10-field record | Relative Cost |
 |--------|---------------------------|---------------|

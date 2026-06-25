@@ -29,7 +29,7 @@ Program synthesis has existed since the 1960s, when researchers began formalizin
 **Given:** Specification S (what the program should do)
 **Find:** Program P such that P ⊨ S (P satisfies S)
 
-The specification can be expressed in different ways:
+The specification can be expressed in different ways, each offering a different level of precision and a different verification cost. The choice of specification type fundamentally shapes the difficulty of the synthesis problem and determines whether correctness can be checked automatically.
 
 | Specification Type | Example | Verification Complexity |
 |-----------------|--------|----------------------|
@@ -112,7 +112,7 @@ Cursor went further by building an IDE around AI:
 
 ### IDE Agents Landscape (2026)
 
-The IDE agent market has expanded significantly beyond the original Copilot/Cursor duopoly:
+The IDE agent market has expanded significantly beyond the original Copilot/Cursor duopoly. As of mid-2026, at least eight major contenders compete across different niches, from privacy-first enterprise tools to open-source community projects. The landscape is evolving rapidly, with acquisitions and rebrandings reshaping competitive dynamics.
 
 | Tool | Key Differentiator | Context | Notable |
 |------|-------------------|---------|---------|
@@ -142,6 +142,8 @@ Windsurf was rebranded from Codeium in late 2024, acquired by Cognition (April 2
 - Transformations (Java upgrades, etc.)
 
 ### IDE Tools Comparison
+
+The following comparison focuses on the core capabilities that differentiate IDE-integrated coding tools. Feature availability has converged rapidly, with most tools now offering some form of agent mode, but the depth and reliability of each capability varies significantly.
 
 | Feature | Copilot | Cursor | Devin Desktop (ex-Windsurf) | Tabnine |
 |---------|---------|--------|----------|---------|
@@ -797,7 +799,7 @@ Beyond the basic iterative agent, several specialized approaches to code generat
 
 ### Choosing a Strategy
 
-The choice of approach depends on context:
+The choice of approach depends on context. Each strategy excels in specific scenarios and performs poorly in others, so matching the strategy to the task type is more important than finding a universally "best" approach.
 
 | Strategy | Best For | Worst For |
 |-----------|-----------|----------|

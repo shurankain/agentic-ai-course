@@ -65,6 +65,8 @@ When integrating LLMs into a reactive pipeline, it is critical not to block the 
 
 **Key operators for LLMs:**
 
+The following table summarizes the most useful reactive operators for building LLM integration pipelines. Each operator addresses a specific concern -- concurrency control, error recovery, or backpressure -- and combining them creates a robust production pipeline.
+
 | Operator | Purpose |
 |----------|---------|
 | `flatMap(fn, concurrency)` | Limiting parallel calls |
@@ -227,7 +229,7 @@ A more advanced approach: instead of looking for an exact match, search for sema
 
 ### Similarity Thresholds: Theory and Practice
 
-Choosing the similarity threshold is a key decision in semantic caching:
+Choosing the similarity threshold is a key decision in semantic caching. Setting it too high yields very few cache hits and minimal savings; setting it too low returns cached responses for queries that are not truly equivalent. The table below maps cosine similarity ranges to their practical trade-offs, helping you find the right balance for your application.
 
 | Threshold (cosine) | Hit Rate | False Positive Risk | Use Case |
 |---------------------|----------|---------------------|----------|

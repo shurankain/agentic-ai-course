@@ -87,6 +87,8 @@ A screenshot passes through several processing stages before the model can "unde
 
 **What the Model "Understands" from UI:**
 
+Vision-language models vary significantly in how well they interpret different aspects of a user interface. The following breakdown reflects current capabilities and common failure modes observed in production computer use deployments.
+
 | Aspect | Understanding Level | Notes |
 |--------|---------------------|-------|
 | On-screen text | High | OCR-like capability is built in |
@@ -159,6 +161,8 @@ OSWorld includes a diverse set of tasks reflecting real computer usage:
 
 **Results by Category (Claude Sonnet 4, 2025):**
 
+Performance improvements have been uneven across task categories, with browser-based tasks seeing the most dramatic gains and multimedia tasks remaining the most challenging. These category-level results reveal where computer use agents are production-ready and where further research is needed.
+
 | Category | Success Rate (2024) | Success Rate (2025) | Note |
 |----------|---------------------|---------------------|------|
 | OS Tasks | ~12% | ~55% | Dramatic improvement |
@@ -178,6 +182,8 @@ A screenshot = a "picture" of the UI; the model must "understand" it visually. B
 The Accessibility Tree is a DOM-like structure that operating systems and applications create for assistive technologies (screen readers, keyboard navigation, etc.). It represents the UI as a hierarchical tree of elements with explicit properties: element type, text, state (focused, clickable, disabled), bounding coordinates.
 
 **Advantages over screenshots:**
+
+Accessibility APIs provide structured, semantic information that eliminates much of the ambiguity inherent in screenshot-based approaches. The trade-offs between the two methods are significant and influence both reliability and cost.
 
 | Aspect | Screenshot | Accessibility API |
 |--------|------------|-------------------|
@@ -364,6 +370,8 @@ An open-source Python framework for building browser automation agents. Browser 
 
 ### Comparison of Computer Use Platforms
 
+Multiple platforms now compete in the computer use space, each targeting different environments and use cases. The table below compares them across key dimensions to help architects select the right platform for their deployment scenario.
+
 | Platform | Environment | Strengths | Model |
 |----------|-------------|-----------|-------|
 | Claude Computer Use | Full desktop | Most capable general-purpose, 61.4%+ OSWorld | Claude Sonnet/Opus 4.6 |
@@ -408,6 +416,8 @@ A Computer Use agent consists of several interconnected components:
 ## Comparison with Other Approaches
 
 ### Computer Use vs Traditional Automation
+
+Choosing between computer use agents and traditional automation tools involves trade-offs across speed, reliability, flexibility, and cost. Computer use agents excel in flexibility and low setup effort, while traditional tools win on speed and robustness for well-defined workflows.
 
 | Aspect | Computer Use | Selenium/Playwright | RPA Tools |
 |--------|--------------|---------------------|-----------|

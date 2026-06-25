@@ -146,6 +146,8 @@ With checkpointing every √L layers, memory is reduced to O(√L) for checkpoin
 
 ### Practical Strategies
 
+The table below compares four gradient checkpointing strategies along the memory-compute trade-off spectrum. In practice, the "every sqrt(L) layers" option offers the best balance for most training scenarios, while selective checkpointing (targeting only attention layers) provides a fine-grained alternative.
+
 | Strategy | Memory | Compute overhead | When to use |
 |-----------|--------|------------------|-------------------|
 | No checkpoint | O(L) | 0% | Memory is sufficient |
@@ -206,6 +208,8 @@ The key mathematical trick is computing softmax incrementally without the full m
 The algorithm splits Q, K, V into blocks (typically 64–128 tokens). For each query block, it iterates over all key/value blocks, computes local attention scores, updates the running max and sum, and accumulates the weighted output. At the end, it normalizes by the accumulated sum.
 
 ### Practical Impact
+
+The following table quantifies the concrete gains from Flash Attention over the standard implementation. The reduction from quadratic to linear memory is the headline improvement, but the 2-4x speed increase on A100 GPUs is equally significant for making long-context training feasible.
 
 | Metric | Standard | Flash Attention |
 |---------|----------|-----------------|

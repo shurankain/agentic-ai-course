@@ -136,6 +136,8 @@ Standard benchmarks measure model capabilities in isolation. Agent benchmarks ev
 
 ### Benchmark Selection for Production
 
+With the proliferation of benchmarks, selecting the right ones for a given evaluation goal is itself a decision. The table below maps common evaluation objectives to the most appropriate benchmarks as of mid-2026, accounting for saturation status and practical relevance.
+
 | What You're Evaluating | Recommended Benchmarks |
 |------------------------|----------------------|
 | General knowledge & reasoning | MMLU-Pro, GPQA Diamond |

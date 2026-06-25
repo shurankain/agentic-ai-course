@@ -78,6 +78,8 @@ This differs drastically from the original OpenAI scaling laws, which recommende
 
 ### Comparing Approaches: The Numbers Speak for Themselves
 
+The table below contrasts pre-Chinchilla and post-Chinchilla models by their data-to-parameter ratio (D/N). Models with a ratio near 1-2x were catastrophically undertrained by modern standards, while a ratio of 20x represents the Chinchilla compute-optimal point. Values above 20x indicate deliberate overtraining for inference efficiency.
+
 | Model | Parameters | Training Tokens | Ratio D/N | Status |
 |--------|-----------|-----------------|-----------|--------|
 | GPT-3 | 175B | 300B | 1.7× | Undertrained |
@@ -121,6 +123,8 @@ Over a year of operation, inference will cost 3.65 billion dollars, while traini
 **Total Cost of Ownership formula:** The total cost of ownership for a model is TCO = Training_cost + Inference_cost × Total_requests. Inference cost is proportional to the number of parameters, context length, and number of tokens in the response. If you expect billions of requests, reducing the model from 70B to 7B (by 10x) yields 10x savings on inference, which quickly recoups any additional training cost.
 
 **When to overtrain a small model:**
+
+The optimal training strategy depends on the deployment scenario. The table below maps four common situations to their recommended approach, illustrating that Chinchilla-optimal is rarely the best choice for production systems with high request volumes or edge constraints.
 
 | Scenario | Strategy | Example |
 |----------|-----------|--------|
@@ -265,6 +269,8 @@ Fine-tuning has radically different scaling laws from pretraining. Understanding
 
 **Key differences from pretraining:**
 
+Fine-tuning operates under fundamentally different scaling dynamics than pretraining. The table below highlights the critical contrasts: fine-tuning requires orders of magnitude less data and compute, saturates much faster, and is bottlenecked by data quality rather than quantity.
+
 | Aspect | Pretraining | Fine-tuning |
 |--------|-------------|-------------|
 | Data requirement | D ∝ N (proportional to parameters) | D << N (100-10K examples sufficient) |
@@ -287,6 +293,8 @@ The key difference from pretraining: exponential saturation. In pretraining, mor
 **LoRA/PEFT scaling laws:** Parameter-efficient fine-tuning (PEFT) methods like LoRA have their own scaling laws. LoRA rank 8 is sufficient for most tasks and yields 80-90% of full fine-tuning quality. Rank 64 is practically indistinguishable from full fine-tuning. Rank above 64 yields diminishing returns — you spend more memory and compute with almost no quality gain. Performance scales approximately as the logarithm of rank up to the saturation point.
 
 **When to use fine-tuning vs prompting:**
+
+The choice between prompting and fine-tuning depends primarily on how much labeled data is available. The table below provides practical guidance for selecting the right approach and LoRA rank at each data scale, from a handful of examples to large curated datasets.
 
 | Fine-tuning Data | Best Approach | Rationale |
 |--------------------|---------------|-------------|
@@ -345,6 +353,8 @@ Example: you additionally spent 5 million dollars on overtraining 7B instead of 
 
 ### When to Increase Model vs Data vs Compute: Decision Matrix
 
+In practice, teams face constrained resources and must decide where to invest next -- in a larger model, more training data, or more compute. The table below provides a decision matrix for the most common resource profiles, showing the recommended strategy and the reasoning behind it.
+
 | Situation | Recommendation | Rationale |
 |----------|--------------|-------------|
 | Abundant data, limited compute | Small model, overtrain | Maximize data usage, compensate for size |
@@ -380,6 +390,8 @@ This dimension of optimization is now well-understood and actively exploited in 
 For a simple request ("Translate 'hello' to French"), you can use C_inference = 1x — minimal thinking, fast response. For a complex request ("Prove Fermat's theorem for n=3"), you can use C_inference = 100x — extended reasoning, deep deliberation.
 
 **Comparing strategies:**
+
+The table below maps the four main compute allocation strategies against their training and inference cost profiles. Each strategy targets a different use case, and understanding these trade-offs is essential for choosing the right architecture for a given deployment scenario.
 
 | Strategy | C_train | C_inference | Use Case | Example |
 |-----------|---------|-------------|----------|--------|

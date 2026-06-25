@@ -271,6 +271,8 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 
 ### Choosing a Safety Model
 
+Dedicated safety models differ significantly in size, latency, and customization capabilities. The table below compares the available options to help architects select the right classifier for their deployment scenario — from on-device edge inference to high-accuracy production filtering.
+
 | Model | Size | Latency | Custom Taxonomy | Best For |
 |-------|------|---------|-----------------|----------|
 | Llama Guard 3 1B | 1B | <50ms | Yes | On-device, edge |

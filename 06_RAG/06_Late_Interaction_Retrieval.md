@@ -14,7 +14,7 @@ The traditional Dense Retrieval approach uses **a single vector** to represent a
 
 ### Single Vector Bottleneck
 
-When an entire document is compressed into a single fixed-dimension vector (typically 768-1536), information is lost:
+When an entire document is compressed into a single fixed-dimension vector (typically 768-1536), information is lost. The severity of this information loss varies by document characteristics: long multi-topic documents suffer the most, while short single-topic passages are represented adequately. The following table categorizes the main failure modes of single-vector representations.
 
 | Problem | Description | Consequences |
 |---------|-------------|--------------|
@@ -38,7 +38,7 @@ A document contains information about Python, JavaScript, and Rust. With single 
 
 ### The Multi-Vector Representation Idea
 
-Instead of a single vector, multiple vectors are created — one per token (or group of tokens).
+Instead of a single vector, multiple vectors are created — one per token (or group of tokens). This preserves fine-grained semantic information that would otherwise be averaged away in a single-vector representation. The key architectural difference lies in both how text is represented and how query-document similarity is computed.
 
 | Approach | Representation | Interaction |
 |----------|----------------|-------------|
@@ -82,6 +82,8 @@ Each word of the query "searches" for the most appropriate word in the document.
 ## Late Interaction Models
 
 ### ColBERT and Its Evolution
+
+ColBERT has spawned a family of models, each extending the original architecture with improvements in compression, multilingual support, or benchmark performance. The ecosystem is now mature enough that practitioners can select a variant optimized for their specific requirements. The table below summarizes the key models in the ColBERT lineage and their target applications.
 
 | Model | Organization | Features | Application |
 |-------|-------------|----------|-------------|
@@ -154,6 +156,8 @@ ColPali processes a PDF page as an image:
 
 ### Advantages
 
+ColPali eliminates the multi-step document processing pipeline that has been the primary source of errors in PDF retrieval. By treating each page as an image, it avoids OCR errors, layout detection failures, and table extraction problems in a single architectural decision. The practical benefits are summarized below.
+
 | Aspect | Traditional Pipeline | ColPali |
 |--------|---------------------|---------|
 | OCR | Required | Not needed |
@@ -193,6 +197,8 @@ PyLate wraps existing ColBERT-style models and provides:
 ---
 
 ## Comparison of Retrieval Approaches
+
+Each retrieval approach occupies a distinct point in the quality-speed-memory trade-off space. In production systems, these approaches are typically combined in a multi-stage pipeline rather than used in isolation: a fast method generates candidates, and a more accurate method reranks the top results. The table below provides a side-by-side comparison to guide architecture decisions.
 
 | Approach | Quality | Speed | Memory | Application |
 |----------|---------|-------|--------|-------------|

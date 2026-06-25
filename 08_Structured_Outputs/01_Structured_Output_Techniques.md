@@ -74,6 +74,8 @@ Different tasks require different levels of guarantees. Excessive complexity cre
 
 ## Provider Comparison for Structured Outputs
 
+Each major LLM provider offers a different mechanism for producing structured output, and the guarantees vary across the stack. The following table summarizes the available options so architects can choose the approach that matches their reliability requirements and deployment constraints.
+
 | Provider | Mechanism | Schema Format | Guarantee Level | Notes |
 |----------|-----------|--------------|-----------------|-------|
 | **OpenAI** | Structured Outputs (`strict: true`) | JSON Schema | Syntactic + structural | Constrained decoding built into API. 200-500ms cold start per new schema |

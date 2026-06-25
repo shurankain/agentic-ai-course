@@ -38,6 +38,8 @@ Choosing a URI scheme is not merely a technical decision but an architectural on
 
 **URI Design Principles:**
 
+Well-designed URIs make the resource system intuitive for both developers and AI models. A predictable URI structure reduces integration friction and simplifies debugging, since a human or model can infer the URI for a resource without consulting documentation. The following principles guide effective URI design in MCP servers.
+
 | Principle | Description | Example |
 |-----------|-------------|---------|
 | **Hierarchy** | URI reflects data structure | `db://mydb/users/123` |
@@ -285,6 +287,8 @@ The client discovers the server's authorization requirements via Protected Resou
 This standardized approach replaces the ad-hoc authentication patterns (API keys in environment variables, custom token headers) that characterized early MCP deployments.
 
 ### Choosing an Authentication Approach
+
+The appropriate authentication mechanism depends on the deployment context: where the server runs, who the clients are, and what compliance constraints apply. Simpler approaches work well for local development, while production remote servers demand standards-based authorization. The following table maps common deployment scenarios to recommended authentication strategies.
 
 | Scenario | Recommended | Why |
 |----------|-------------|-----|

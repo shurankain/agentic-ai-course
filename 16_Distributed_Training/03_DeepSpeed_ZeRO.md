@@ -77,6 +77,8 @@ Communication: AllGather of parameters before forward and backward of each layer
 
 ### Stage Comparison
 
+Each ZeRO stage trades additional communication overhead for greater memory savings. The table below summarizes the memory footprint, communication pattern, and recommended use case for each stage, helping practitioners select the minimum level of sharding needed for their model and hardware.
+
 | Stage | Memory per GPU | Communication | Use case |
 |-------|---------------|---------------|----------|
 | 0 (DDP) | 16N | AllReduce gradients | Baseline |

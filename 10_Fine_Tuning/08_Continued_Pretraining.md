@@ -14,6 +14,8 @@ Continued Pretraining (CPT) is the continuation of pretraining on domain-specifi
 
 CPT continues the pretraining process of an already pretrained model on a new domain-specific corpus. It uses the same objective (next token prediction), but the data is specific to the target domain.
 
+Understanding where CPT sits relative to other training methods clarifies when to use it. Each method in the table below operates at a different depth of model adaptation, from creating a model from scratch to fine-tuning specific behaviors.
+
 | Method | Objective | Data | Depth of Changes |
 |--------|-----------|------|------------------|
 | Pretraining | Next token | General web corpus | Creation from scratch |

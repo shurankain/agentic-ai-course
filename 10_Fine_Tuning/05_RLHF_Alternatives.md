@@ -97,6 +97,8 @@ Standard DPO trains on a static preference dataset collected once. This creates 
 
 ## Comparative Analysis of Methods
 
+The alignment methods described above differ in their data requirements, memory footprint, and implementation complexity. The following table provides a side-by-side comparison to guide method selection based on available resources and the specific alignment task.
+
 | Method | Reference Model | Paired Data | SFT Stage | Memory | Complexity |
 |--------|-----------------|-------------|-----------|--------|------------|
 | RLHF   | ✓ (+ reward + value) | ✓      | ✓         | 4x     | High       |

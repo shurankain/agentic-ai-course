@@ -426,6 +426,8 @@ MCP follows a client-server architecture:
 
 ### MCP Tools vs Native Function Calling
 
+MCP tools and native function calling achieve the same end result (the agent calls an external function), but they differ in portability, discovery, and ecosystem integration. The table below highlights the practical trade-offs that determine which approach to use.
+
 | Aspect | Native Function Calling | MCP Tools |
 |--------|------------------------|-----------|
 | **Definition** | Per-provider JSON schema | Standardized MCP schema |

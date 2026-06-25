@@ -168,6 +168,8 @@ Flash Attention 3 (2024) leverages the capabilities of the Hopper architecture (
 
 **FA3 Benchmarks (H100 SXM):**
 
+The benchmarks below quantify FA3's throughput gains over FA2 across different sequence lengths and precision formats. FP8 results demonstrate that FA3 approaches the theoretical peak of the H100 Transformer Engine, achieving over 1 PFLOPS on a single GPU.
+
 | Sequence Length | FA2 (TFLOPS) | FA3 FP16 (TFLOPS) | FA3 FP8 (TFLOPS) | FA3 vs FA2 |
 |----------------|-------------|-------------------|------------------|------------|
 | 2K | ~300 | ~420 | ~740 | 1.4-2.5x |

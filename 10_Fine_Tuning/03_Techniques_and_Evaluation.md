@@ -54,6 +54,8 @@ QLoRA enables fine-tuning 7B models on GPUs with 4-8GB of memory, and 70B models
 
 ### PEFT Comparison Table
 
+Choosing the right PEFT method depends on the trade-off between memory efficiency, quality, and training speed. The table below summarizes how each method performs across these dimensions, helping practitioners select the approach that fits their hardware constraints and quality requirements.
+
 | Method | Memory | Quality | Training Speed | Best For |
 |-------|--------|---------|----------------|----------|
 | Full FT | 100% | Baseline | Slow | Maximum quality |

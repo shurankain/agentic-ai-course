@@ -54,7 +54,7 @@ MCP does the same for AI. Any MCP client can work with any MCP server. By writin
 
 ### Relationship with Language Server Protocol (LSP)
 
-It is interesting to compare MCP with another successful standardization protocol — LSP (Language Server Protocol) from Microsoft. Both systems solve a similar M×N integration problem:
+It is interesting to compare MCP with another successful standardization protocol — LSP (Language Server Protocol) from Microsoft. Both systems solve a similar M×N integration problem by introducing a middleware layer that decouples clients from providers. The architectural parallels are striking, though the domains differ: LSP targets language tooling while MCP targets AI-service integration. The following table highlights the key structural similarities and differences.
 
 | Aspect | LSP | MCP |
 |--------|-----|-----|
@@ -242,7 +242,7 @@ Three mechanisms for connecting AI to the outside world serve different purposes
 
 ## The Protocol Landscape: MCP, A2A, and ANP
 
-MCP exists alongside two complementary protocols at different layers of the agent communication stack:
+MCP exists alongside two complementary protocols at different layers of the agent communication stack. Each protocol addresses a distinct communication boundary: tool access, inter-agent coordination, and open-network discovery. Understanding which layer a given integration problem falls into prevents overengineering and ensures the right protocol is applied.
 
 | Layer | Protocol | Purpose | Analogy | Maturity (early 2026) |
 |-------|----------|---------|---------|----------------------|

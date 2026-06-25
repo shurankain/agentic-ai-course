@@ -34,7 +34,7 @@ The classical definition views an agent through a cyclical process of perception
 
 **Wooldridge (Multi-Agent Systems, 2009)**
 
-Wooldridge identified four key properties of agents:
+Wooldridge identified four key properties of agents. These properties form a practical checklist for evaluating how "agentic" a system truly is. A simple chatbot may exhibit only reactivity, while a production agent should demonstrate all four properties to varying degrees.
 
 | Property | Description | Manifestation in LLM Agents |
 |----------|-------------|------------------------------|
@@ -63,7 +63,7 @@ These patterns are not mutually exclusive — production agents typically combin
 
 ### Validated Academic Patterns
 
-The most influential research papers that shaped modern architectures:
+The most influential research papers that shaped modern architectures are listed below. Each paper introduced a pattern that has been adopted by production agent frameworks, and several have been combined into hybrid architectures that power today's coding agents and research systems.
 
 | Pattern | Authors (Year) | Key Idea | Citations (as of mid-2025) |
 |---------|----------------|----------|-----------|
@@ -433,6 +433,8 @@ For practitioners, this means: if the model has built-in reasoning (like o1 or C
 
 **Choosing the right architecture:**
 
+The decision of whether to use a reasoning model's built-in search or an explicit external architecture depends on the task structure and the level of control required. The following table provides concrete guidance for common scenarios.
+
 | Scenario | Recommended Approach | Why |
 |----------|---------------------|-----|
 | Complex reasoning, single question | o3 / Claude extended thinking | Built-in search is sufficient; lower orchestration overhead |
@@ -558,6 +560,8 @@ The ACT-R architecture consists of a central production rule system (procedural 
 
 ### How Cognitive Architectures Inspire LLM Agents
 
+The concepts from ACT-R and SOAR map directly onto components found in modern LLM agent systems. Understanding these mappings helps architects recognize that many "new" agent design patterns have well-studied theoretical foundations in cognitive science.
+
 | ACT-R/SOAR Concept | LLM Agent Implementation |
 |-------------------|--------------------------|
 | Declarative Memory | Vector store with embeddings |
@@ -617,6 +621,8 @@ In 2024, Anthropic introduced the concept of **Agent-Computer Interface (ACI)** 
 **3. Semantic Actions** — actions should be semantically meaningful, not low-level. move_mouse(x, y) and click() are brittle and resolution-dependent. click_element(selector="#submit-button") uses semantic identification and is resilient to layout changes.
 
 ### ACI vs Traditional Tool Use
+
+The ACI paradigm differs from traditional tool integration in several fundamental ways. While traditional tools focus on individual API calls, ACI treats the entire computing environment as a unified interface designed for agent consumption.
 
 | Aspect | Traditional Tools | ACI Approach |
 |--------|-------------------|--------------|
@@ -732,6 +738,8 @@ In practice, pure architectures are rare. Successful production systems combine 
 ---
 
 ## Architecture Comparison Table
+
+The following table summarizes the key characteristics of each architecture discussed in this chapter. Use it as a quick reference when selecting an architecture for a specific use case, keeping in mind that production systems often combine elements from multiple rows.
 
 | Architecture | Complexity | Planning | Learning | Best For |
 |--------------|------------|----------|----------|----------|

@@ -28,6 +28,8 @@ Not all requests require the most powerful model. Smart routing directs requests
 
 ### Model Hierarchy
 
+Production AI systems typically serve requests spanning a wide complexity range. The following hierarchy guides routing decisions — matching task complexity to the appropriate model tier minimizes costs while preserving quality where it matters.
+
 | Tier | Models | Cost | Use Case |
 |------|--------|------|----------|
 | Tier 1 (Economy) | GPT-5-mini/nano, GPT-4o-mini, Claude Haiku 4.5 | $0.05-1.00/1M | Simple tasks, classification |
@@ -36,7 +38,8 @@ Not all requests require the most powerful model. Smart routing directs requests
 
 ### Routing Strategies
 
-**Rule-based Routing:**
+**Rule-based Routing:** Simple heuristics on query length and detected intent provide a fast, interpretable first pass. These rules handle the bulk of traffic and require no ML infrastructure.
+
 | Condition | Route |
 |-----------|-------|
 | Query < 50 tokens | Tier 1 |
@@ -122,6 +125,8 @@ Traditional exact-match caching is inefficient for LLMs — identical queries ar
 
 ### Response Caching Tiers
 
+Not all cached data has the same freshness requirements. A tiered strategy assigns different time-to-live (TTL) values based on data stability, balancing cache efficiency against staleness risk.
+
 | Tier | TTL | Invalidation | Use Case |
 |------|-----|--------------|----------|
 | Hot | 1 hour | On update | Frequent queries |
@@ -160,7 +165,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 
 When errors occur, the system should degrade gracefully rather than fail completely.
 
-**Degradation Levels:**
+**Degradation Levels:** A well-designed system defines explicit levels so the team knows exactly what happens at each failure severity and the system degrades predictably rather than failing unpredictably.
 
 | Level | Trigger | Behaviour |
 |-------|---------|-----------|
@@ -170,6 +175,8 @@ When errors occur, the system should degrade gracefully rather than fail complet
 | Minimal | Critical failure | Static responses |
 
 ### Retry Strategies
+
+Different error types call for different retry approaches. Aggressive retries on rate limits waste quota, while a single retry on a transient timeout may recover quickly. The strategy should match the error's likely cause and expected duration.
 
 | Error Type | Strategy | Max Retries |
 |------------|----------|-------------|
@@ -215,6 +222,8 @@ When multiple agents compete for resources:
 
 ### Priority Queue
 
+When multiple agents compete for limited resources, a priority system ensures that critical user-facing work is never starved by background processing. The following tiers provide a practical starting point — tune the boundaries based on actual workload distribution.
+
 | Priority | Criteria | Resources |
 |----------|----------|-----------|
 | Critical | User-facing, real-time | Guaranteed allocation |
@@ -242,6 +251,8 @@ When multiple agents compete for resources:
 
 ### Token-based Rate Limiting
 
+Rate limits prevent runaway costs and ensure fair resource distribution. Three complementary limits — per-call, per-minute, and daily budget — provide defense in depth against both burst traffic and sustained over-consumption.
+
 | Resource | Limit | Window |
 |----------|-------|--------|
 | API calls | 1000/min | Rolling |
@@ -249,6 +260,8 @@ When multiple agents compete for resources:
 | Cost | $100/day | Daily reset |
 
 ### User-level Limits
+
+Different user tiers warrant different resource allocations, aligned with the business model and SLA commitments. These limits should be tuned based on actual usage patterns and adjusted as pricing evolves.
 
 | User Tier | Requests/min | Tokens/day |
 |-----------|--------------|------------|
@@ -271,6 +284,8 @@ When approaching the limit:
 
 ### Key Cost Metrics
 
+Effective cost monitoring requires a small set of actionable metrics. The four below cover cost per interaction, cost per user, token efficiency, and cache utilization — a minimum viable dashboard for any LLM-powered service.
+
 | Metric | Formula | Alert Threshold |
 |--------|---------|-----------------|
 | Cost per query | Total cost / Queries | >$0.10 |
@@ -287,6 +302,8 @@ Tracking expenses by:
 - Time period
 
 ### Budget Alerts
+
+Progressive alert thresholds give the team time to react before budget exhaustion causes a service outage. Each level escalates the response, from passive logging to active request throttling and eventual blocking.
 
 | Level | Threshold | Action |
 |-------|-----------|--------|

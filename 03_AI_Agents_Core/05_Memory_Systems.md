@@ -114,7 +114,7 @@ MemGPT (UC Berkeley, 2023) introduced an influential concept: giving an LLM the 
 
 ## Memory Storage Decision Guide
 
-Choosing the right storage backend depends on scale, access patterns, and infrastructure constraints:
+Choosing the right storage backend depends on scale, access patterns, and infrastructure constraints. The table below maps common deployment scenarios to recommended storage solutions, helping teams avoid over-engineering (choosing a dedicated vector DB for a prototype) or under-engineering (using JSON files at production scale).
 
 | Scenario | Recommended Storage | Why |
 |----------|-------------------|-----|

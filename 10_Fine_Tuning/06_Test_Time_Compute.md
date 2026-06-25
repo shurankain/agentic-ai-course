@@ -18,7 +18,7 @@ This changes the economics of AI systems. For complex tasks, it is cheaper to us
 
 ## OpenAI o-Series: The Reasoning Model Family
 
-o1 (September 2024) demonstrated results that seemed impossible:
+o1 (September 2024) demonstrated results that seemed impossible. The performance leap on mathematical, coding, and scientific reasoning benchmarks was dramatic — well beyond what incremental model scaling alone could explain. These results established test-time compute as a viable alternative to simply training larger models.
 
 | Benchmark | GPT-4o | o1 | o3 | o4-mini |
 |-----------|--------|-----|-----|---------|

@@ -139,7 +139,7 @@ Modern models often use more advanced techniques. **RoPE (Rotary Position Embedd
 
 ## Scale of Modern Models
 
-Modern LLMs are staggering in their scale:
+Modern LLMs are staggering in their scale. The table below compares key architectural parameters across generations of frontier models, illustrating the shift from fully disclosed dense architectures (GPT-3) to opaque Mixture-of-Experts designs where only total and active parameter counts are public. Understanding these numbers helps calibrate expectations about memory requirements, inference cost, and the practical feasibility of self-hosting.
 
 | Model | Parameters | Layers | Dimension | Attention Heads |
 |-------|-----------|--------|-----------|-----------------|

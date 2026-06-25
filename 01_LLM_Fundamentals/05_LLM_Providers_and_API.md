@@ -317,6 +317,8 @@ Google's newest open-weight family (April 2, 2026), distinct from the proprietar
 
 ### Open-Source Comparison Table
 
+The table below provides a side-by-side comparison of the three leading open-source model families across architecture, licensing, and capability dimensions. Use it to quickly identify which model best fits a given deployment scenario -- whether the priority is reasoning strength, multilingual coverage, or licensing flexibility.
+
 | Criterion | DeepSeek R1 | Llama 4 Maverick | Qwen 3 235B |
 |----------|-------------|------------------|-------------|
 | **Architecture** | MoE (671B/37B) | MoE (400B/17B) | MoE (235B/22B) |
@@ -406,6 +408,8 @@ Cost is a critical factor when choosing a provider and model. All providers char
 
 **Reasoning models:**
 
+Reasoning models carry a premium because thinking tokens are billed at output rates and can represent 80-90% of total output for complex queries. The table below lists current pricing for the major reasoning-capable models, enabling direct cost comparison when selecting between providers for reasoning-heavy workloads.
+
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
 | Claude Fable 5 | $10.00 | $50.00 | **Current Anthropic flagship** (Mythos-class), 95.0% SWE-bench Verified, 80.3% Pro |
@@ -421,6 +425,8 @@ Cost is a critical factor when choosing a provider and model. All providers char
 GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), though Claude Fable 5 now leads both Verified (95.0%) and Pro (80.3% vs GPT-5.5's 58.6%) as of mid-June 2026. SWE-bench Verified is approaching saturation — the industry is shifting to Pro and domain-specific benchmarks as the meaningful measures.
 
 **Standard models (as of mid-June 2026):**
+
+Standard models cover the broadest range of use cases -- from general-purpose chat to code generation and document analysis. Prices vary by an order of magnitude, reflecting differences in model size, capability, and provider strategy. DeepSeek V4-Flash stands out as the most cost-efficient frontier option at $0.14/$0.28 per 1M tokens.
 
 | Model | Input | Output |
 |--------|-------|--------|
@@ -447,6 +453,8 @@ GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), though Cla
 | Nemotron 3 Ultra | — | — |
 
 **Budget models:**
+
+Budget models are designed for high-volume, lower-complexity tasks where cost and latency matter more than peak reasoning quality. They are typically 10-50x cheaper than frontier models, making them the default choice for classification, extraction, simple Q&A, and routing layers within agentic systems.
 
 | Model | Input | Output |
 |--------|-------|--------|
@@ -484,6 +492,8 @@ Prompt caching is a mechanism where the provider saves the processing results (K
 - Minimum prefix length: 1024-2048 tokens (depends on the provider)
 
 **Savings by provider:**
+
+The economics of prompt caching vary significantly across providers. Anthropic offers the steepest discount (90%) but with a shorter TTL, while OpenAI provides a more moderate 50% discount. The minimum prefix length determines how long a system prompt must be before caching provides any benefit.
 
 | Provider | Cache hit discount | Min prefix length | TTL |
 |-----------|-------------------|-------------------|-----|
@@ -665,6 +675,8 @@ When designing production systems, understanding the actual provider guarantees 
 
 **Typical SLA metrics:**
 
+When designing production systems, it is important to understand what providers actually guarantee versus what they typically deliver. The table below lists the core SLA dimensions along with representative values observed across major providers. Note that reasoning models have significantly higher latency percentiles than standard models.
+
 | Metric | Description | Typical Values |
 |---------|----------|-------------------|
 | **Availability** | Service uptime | 99.9% - 99.99% |
@@ -693,6 +705,8 @@ What to track:
 5. **Thinking token ratio** — for reasoning models, monitor thinking-to-output ratio
 
 **Degradation strategies:**
+
+A well-designed system defines explicit strategies for each load level, progressing from normal operation through graceful degradation. The table below outlines a four-tier approach that balances user experience against system stability as load increases.
 
 | Load Level | Strategy |
 |------------------|-----------|
@@ -765,7 +779,7 @@ Cloud providers are not always the right choice. In some cases, data cannot be s
 
 ### Hardware Requirements
 
-Modern LLMs require significant resources:
+Modern LLMs require significant resources. The table below maps model size to GPU memory requirements in both full precision (FP16) and quantized (INT4) formats, along with representative models in each category. Quantization reduces requirements by 2-4x, making larger models accessible on consumer hardware at a small quality cost.
 
 | Model Size | GPU RAM (FP16) | GPU RAM (INT4) | Examples |
 |---------------|---------|---------|---------|

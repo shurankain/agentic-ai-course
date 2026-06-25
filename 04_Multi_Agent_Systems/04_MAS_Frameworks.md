@@ -214,6 +214,8 @@ Microsoft Agent Framework 1.0 is the recommended choice for new enterprise proje
 
 ### Migration from AutoGen / Semantic Kernel
 
+Migrating to Microsoft Agent Framework varies in effort depending on the source framework. AutoGen 0.4 users benefit from architectural alignment, while Semantic Kernel plugin models transfer with minimal wrapping. AutoGen 0.2 projects should be treated as greenfield rewrites given the degree of API divergence.
+
 | Source | What Carries Over | What Changes | Migration Effort |
 |--------|------------------|--------------|-----------------|
 | **AutoGen 0.4** | Event-driven patterns, typed messages, agent group concepts | Runtime API, message routing, deployment model | Moderate — architectural concepts map well, but API surface differs |
@@ -262,6 +264,8 @@ Each framework occupies its own niche. The choice depends on the specific requir
 
 ### Reasoning Model Support
 
+Reasoning models (o3, Claude extended thinking, Gemini thinking) have changed the multi-agent calculus by internalizing multi-step logic that previously required agent pipelines. Framework support for these models varies in depth, from native budget controls to passthrough reliance on the provider. The table below summarizes the current state of reasoning model integration across major frameworks.
+
 | Framework | Reasoning Model Support | Notes |
 |-----------|------------------------|-------|
 | **LangGraph** | Full — any model via LangChain integrations | Extended thinking tokens flow through the graph naturally; budget control at node level |
@@ -273,6 +277,8 @@ Each framework occupies its own niche. The choice depends on the specific requir
 **Practical note:** Reasoning models reduce the need for complex multi-agent orchestration on moderate tasks. A single agent with o3 or Claude extended thinking can often replace a 3-4 agent pipeline that was needed with standard models. When evaluating frameworks, consider whether your use case truly needs multi-agent coordination or whether a single reasoning-capable agent suffices.
 
 ## Framework Decision Matrix
+
+Selecting a framework requires weighing pattern expressiveness, ecosystem maturity, and operational fit. The matrix below compares the leading frameworks across the dimensions that matter most in production. Use it as a starting point, then validate against your specific requirements for state management, observability, and deployment infrastructure.
 
 | Criterion | LangGraph | CrewAI | OpenAI Agents SDK | MS Agent Framework | Google ADK |
 |-----------|----------|--------|-------------------|-------------------|-----------|

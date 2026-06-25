@@ -123,6 +123,8 @@ Without overlap: 1200ms (1000ms compute + 200ms comm). With overlap: 1000ms. Spe
 
 ### Connectivity Hierarchy
 
+The performance of distributed training is fundamentally constrained by the bandwidth available between GPUs. The table below ranks interconnect technologies from fastest (on-chip memory) to slowest (inter-node networking), illustrating why parallelism strategy must be matched to the physical topology of the cluster.
+
 | Interconnect | Bandwidth | Generation | Notes |
 |-------------|-----------|------------|-------|
 | HBM3e | 8 TB/s | Blackwell B200 | Baseline for on-chip |

@@ -30,7 +30,7 @@ It is important to understand that the context window is not just what you send 
 
 ## Evolution of Context Sizes
 
-The history of context windows is a story of rapid growth:
+The history of context windows is a story of rapid growth. The table below traces the expansion from GPT-2's modest 1K-token window to the multi-million-token contexts available in 2025-2026 models. Each generation roughly doubled or quadrupled the previous limit, driven by architectural innovations (Flash Attention, Ring Attention, GQA) and hardware advances.
 
 | Model | Year | Context Window |
 |--------|-----|------------------|

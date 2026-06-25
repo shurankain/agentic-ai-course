@@ -35,6 +35,8 @@ According to research, 75% of technical leaders name governance and security as 
 
 **Specific risks:**
 
+Each AI-specific risk category requires its own detection and mitigation approach. The table below catalogs the primary risk types, their mechanisms, and concrete examples to help security teams build an appropriate defense posture.
+
 | Risk | Description | Example |
 |------|-------------|---------|
 | **Prompt Injection** | Attacks through user input | A user forces an agent to ignore its instructions |
@@ -54,6 +56,8 @@ According to research, 75% of technical leaders name governance and security as 
 The EU AI Act has come into effect and establishes strict requirements for high-risk AI systems. The Digital Omnibus (May 2026) delayed high-risk enforcement by 16-24 months (standalone: December 2027, products: August 2028), but the requirements are unchanged. HIPAA, GDPR, and SOC 2 require a specific approach to AI.
 
 **EU AI Act: key categories:**
+
+The EU AI Act classifies AI systems into four risk tiers, each carrying different compliance obligations. Understanding which tier applies to a given use case is the first step in determining the regulatory burden and architectural requirements.
 
 | Category | Description | Requirements |
 |----------|-------------|--------------|
@@ -112,6 +116,8 @@ To effectively measure the return on investment from AI adoption, metrics need t
 
 **Data readiness checklist:**
 
+Before launching any AI initiative, assess data readiness across the dimensions below. Each row represents a potential blocker — a "red light" on any dimension signals that data preparation work is needed before the AI project can proceed.
+
 | Aspect | Question | Green Light |
 |--------|----------|-------------|
 | **Accessibility** | Is the data programmatically accessible? | API, SQL, file export |
@@ -126,6 +132,8 @@ To effectively measure the return on investment from AI adoption, metrics need t
 Statistics reveal a paradox: 73% of employees use AI tools weekly, but only 29% have advanced AI literacy. People use AI without understanding its limitations and best practices.
 
 **Levels of AI literacy:**
+
+AI literacy is not binary — it spans a spectrum from basic awareness to expert-level system building. The distribution below reflects typical enterprise adoption patterns and informs where to focus training investment for the greatest organizational impact.
 
 | Level | Description | Share of Employees |
 |-------|-------------|--------------------|
@@ -174,6 +182,8 @@ Choosing the first AI project is critically important. Success creates momentum;
 
 **Criteria for a good pilot:**
 
+Not every AI use case makes a good first project. The criteria below help filter candidates by evaluating both the probability of success and the organizational conditions needed to sustain momentum after the pilot completes.
+
 | Criterion | Meaning | Why It Matters |
 |-----------|---------|----------------|
 | **Clear ROI** | Measurable business impact | Proof of value |
@@ -200,6 +210,8 @@ Choosing the first AI project is critically important. Success creates momentum;
 A successful pilot is only the beginning. Scaling requires a different approach.
 
 **What changes when scaling:**
+
+The transition from pilot to production is where most AI projects fail. Nearly every dimension of the system must be upgraded, and the table below highlights the specific gaps that teams commonly underestimate.
 
 | Aspect | Pilot | Production |
 |--------|-------|------------|
@@ -404,7 +416,7 @@ For AI architects, this means model efficiency (smaller models, quantization, sp
 
 ### Agent Startup Funding Landscape (as of late May 2026)
 
-The funding environment for agent startups has reached unprecedented levels — but consolidation warnings are emerging:
+The funding environment for agent startups has reached unprecedented levels — but consolidation warnings are emerging. The table below captures the largest recent rounds and acquisitions, illustrating both the scale of capital flowing into the space and the acceleration of market consolidation through platform acquisitions.
 
 | Company | Round | Valuation | ARR | Note |
 |---------|-------|-----------|-----|------|

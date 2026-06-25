@@ -262,7 +262,7 @@ OpenClaw became the fastest-growing open-source project in GitHub history (247K 
 
 ## Advanced Isolation Methods
 
-Container-based sandboxing (Docker) provides baseline isolation but may be insufficient for high-risk agent workloads. More restrictive isolation technologies exist for different threat models:
+Container-based sandboxing (Docker) provides baseline isolation but may be insufficient for high-risk agent workloads. More restrictive isolation technologies exist for different threat models. The table below compares five isolation approaches by their strength, performance overhead, and the scenarios where each is most appropriate — helping architects match isolation level to the trust boundaries of their agent deployment.
 
 | Method | Isolation Level | Overhead | Use Case |
 |--------|----------------|----------|----------|

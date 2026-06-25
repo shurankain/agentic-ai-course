@@ -50,6 +50,8 @@ All steps receive the same failure signal. But steps 1-2 were correct, step 3 wa
 
 **Classical approaches to credit assignment:**
 
+Several methods from reinforcement learning attempt to solve the credit assignment problem, but each faces specific challenges when applied to LLM reasoning chains. Understanding these limitations motivates the need for process-level reward models.
+
 | Approach | Idea | Problem for LLM reasoning |
 |----------|------|---------------------------|
 | **Temporal difference** | Reward differs from bootstrap estimate | Requires a value function for intermediate states |
@@ -145,6 +147,8 @@ OpenAI in "Let's Verify Step by Step" (2023) used a three-level evaluation schem
 
 **Synthetic labeling variants:**
 
+Multiple strategies exist for generating synthetic step-level labels, each trading off between annotation cost, accuracy, and scalability. The choice depends on the available budget and the acceptable noise level in the training signal.
+
 | Method | Description | Trade-off |
 |--------|-------------|-----------|
 | **Direct prompting** | "Rate this step from 0 to 1" | Fast but noisy |
@@ -220,6 +224,8 @@ The release of o3, o4-mini, and DeepSeek R1 in 2024-2025 confirmed the central r
 **Programmatic verification as PRM:** For domains with verifiable outcomes (math, code, logic), programmatic verifiers serve as automated process reward signals. Instead of training a neural PRM, the system executes the code or checks the proof at each step. DeepSeek R1's training pipeline uses execution-based verification for code and math tasks — the reward signal is dense (per-problem) and perfectly accurate (no reward model bias). This is effectively a "perfect PRM" for verifiable domains.
 
 **Practical decision framework:**
+
+Choosing between programmatic verification, trajectory comparison, and neural PRMs requires matching the approach to the domain's characteristics. The following framework provides concrete selection criteria based on verifiability, budget, and the nature of the reasoning being evaluated.
 
 | Approach | Best For | Advantages | Limitations |
 |----------|----------|------------|-------------|
@@ -368,6 +374,8 @@ Each subsequent level requires exponentially more annotation effort but potentia
 In classical RLHF, the reward model is trained on pairwise comparisons of complete responses: "response A is better than response B." PRM generalizes this to: "step A is better than step B in a given context."
 
 **Conceptual comparison:**
+
+The shift from RLHF reward models to process reward models represents a fundamental change in evaluation granularity. While the underlying training methods are similar, the unit of evaluation and the resulting interpretability differ substantially.
 
 | Aspect | RLHF Reward Model | Process Reward Model |
 |--------|-------------------|---------------------|

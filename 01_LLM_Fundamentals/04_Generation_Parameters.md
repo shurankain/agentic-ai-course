@@ -220,6 +220,8 @@ This is **adaptive**: when the model is confident (best token at 90%), the thres
 
 ### Advantages of Min-P
 
+The following table compares the four main sampling methods across two dimensions: whether they adapt to the model's confidence level and whether they account for absolute token probabilities. Min-P is the only method that scores positively on both, which explains its growing popularity for local model inference.
+
 | Method | Adapts to confidence? | Accounts for absolute probabilities? |
 |--------|----------------------|--------------------------------------|
 | Temperature | No | Yes (via scaling) |
@@ -267,7 +269,7 @@ Reasoning models handle temperature differently from standard models. OpenAI's o
 
 **Thinking budget parameter:**
 
-A new parameter unique to reasoning models — controlling how much compute the model spends on reasoning before producing a final answer.
+A new parameter unique to reasoning models — controlling how much compute the model spends on reasoning before producing a final answer. Each provider exposes this control differently, as the table below summarizes. Understanding these differences is essential when building agentic systems that target multiple providers, since the parameter names, value types, and defaults are not interchangeable.
 
 | Provider | Parameter | Values | Default |
 |----------|-----------|--------|---------|

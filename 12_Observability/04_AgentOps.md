@@ -88,6 +88,8 @@ AgentOps.ai (the dedicated agent observability tool) has evolved alongside the b
 
 ### Choosing an Observability Tool
 
+The right observability tool depends on the agent framework in use, deployment model, and whether self-hosting is required. The table below maps common needs to the tool best suited to address them, helping teams avoid evaluating every option in the market.
+
 | Need | Recommended Tool |
 |------|-----------------|
 | LangChain/LangGraph ecosystem | LangSmith + LangGraph Studio |

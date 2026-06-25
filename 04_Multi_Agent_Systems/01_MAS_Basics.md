@@ -98,6 +98,8 @@ Microsoft Agent Framework 1.0 uses an event-driven architecture internally. Auto
 
 **Choosing a communication mechanism:**
 
+The right communication mechanism depends on the system's coordination requirements, scale, and debugging needs. Tighter coupling provides lower latency and easier debugging but limits flexibility, while looser coupling enables scalability at the cost of traceability. The following table summarizes the trade-offs across the four main approaches.
+
 | Mechanism | Coupling | Latency | Debuggability | Best For |
 |-----------|---------|---------|---------------|----------|
 | Direct messages | High | Low | Easy | Small teams, tight coordination |
