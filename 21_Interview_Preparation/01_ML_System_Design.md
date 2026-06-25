@@ -249,6 +249,16 @@ Think out loud — the interviewer wants to understand your thought process. Dra
 - Can draw clear architecture diagrams
 - Practiced 3-5 case studies end-to-end
 
+## ML Debugging Checklist
+
+ML Debugging is a separate interview round at OpenAI and DeepMind.
+
+Main bug categories: Shape Mismatches (broadcasting hides dimension mismatches), Gradient Issues (detach breaks gradient flow, missing residual connections lead to explosion/vanishing), Data Processing (incorrect shuffle, tokenization mismatch, data leakage in data pipeline), Optimizer (creation before setting requires_grad, weight decay on bias/LayerNorm).
+
+Debugging strategy: Reproduce → Hypothesize → Test → Fix.
+
+Interview checklist: check tensor shapes first, verify gradient flow, Cross-entropy expects logits not probs, create Optimizer after requires_grad, effects of eval vs train mode.
+
 ## Key Takeaways
 
 1. **The RESHAPE framework gives you a repeatable structure for any ML system design question.** Requirements, Estimation, Service Architecture, How ML Works, API Design, Production Concerns, and Edge Cases ensure you cover every dimension the interviewer expects.

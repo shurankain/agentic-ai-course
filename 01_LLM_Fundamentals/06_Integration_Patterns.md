@@ -156,37 +156,7 @@ This allows even distribution of load and avoids spikes.
 
 ### Queueing Theory for LLM Serving
 
-For proper capacity planning of LLM systems, understanding the basics of queueing theory is useful.
-
-**Little's Law — the fundamental law:**
-
-The formula `L = λ × W` connects three key metrics:
-- `L` — average number of requests in the system (queue + processing)
-- `λ` — request arrival rate (requests/sec)
-- `W` — average time in the system (queue time + processing time)
-
-**Application example:**
-
-If you have 10 requests per second and each takes 3 seconds to process, then L = 10 × 3 = 30 requests are simultaneously in the system. This means you need at least 30 concurrent connections. But this is the average case. To handle peaks (P99 latency = 15s), you need peak = 10 × 15 = 150 connections. Therefore, capacity planning should target percentile latency, not the average.
-
-**M/M/c Model for Capacity Planning:**
-
-The classic queueing model helps determine system utilization using the formula `Utilization (ρ) = λ / (c × μ)`, where μ is the service rate (requests per second per worker), and c is the number of workers.
-
-**Utilization rules:**
-- ρ > 1 → the queue grows infinitely (system is overloaded)
-- ρ > 0.8 → sharp latency increase (danger zone)
-- ρ = 0.6-0.7 → optimal load
-
-**Practical capacity planning:**
-
-Suppose you need to handle 100 requests per second, and the LLM latency is 3 seconds on average. Service rate per worker = 1/3 = 0.33 requests per second. Minimum workers: 100 / 0.33 = 300. But accounting for a target utilization of ρ = 0.7 for headroom: 300 / 0.7 ≈ 430 concurrent connections. In practice, plan for ~450 connections to account for burst load.
-
-**Why this matters for LLMs:**
-- LLM latency is high (seconds) and variable — unlike microsecond REST APIs
-- Cost of waiting is high — users leave after a few seconds of waiting
-- API rate limits create an artificial ceiling that cannot be overcome simply by adding workers
-- Load spikes require buffer capacity, otherwise the queue overflows
+Proper capacity planning for LLM systems requires understanding Little's Law (L = λ × W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see [[../17_Production_Inference/05_Inference_Cost_Optimization|Inference Cost Optimization]].
 
 ---
 

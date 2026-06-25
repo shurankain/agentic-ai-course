@@ -527,40 +527,19 @@ AutoResearch (Karpathy, April 2026) demonstrated that the ReAct pattern, when sp
 
 ## Cognitive Architectures: Inspired by the Human Mind
 
-### Philosophy
-
-Cognitive architectures attempt to model structures of human thinking in an AI agent. Rather than creating an architecture from scratch, researchers take cognitive psychology models developed over decades of research as their foundation.
+Cognitive architectures attempt to model structures of human thinking in an AI agent. Rather than creating architectures from scratch, researchers take cognitive psychology models developed over decades of research as their foundation.
 
 ### ACT-R: Adaptive Control of Thought
 
-**ACT-R (Adaptive Control of Thought—Rational)** is one of the most influential cognitive architectures, created by John Anderson at Carnegie Mellon. It describes human cognition as an interaction of specialized modules.
+**ACT-R (Adaptive Control of Thought—Rational)**, created by John Anderson at Carnegie Mellon, describes human cognition as an interaction of specialized modules coordinated by a central production rule system. Production rules take the form "IF condition THEN action" and interact with declarative memory (facts stored as "chunks") and a goal module (managing intentions), all coordinated through working memory buffers.
 
-The ACT-R architecture consists of a central production rule system (procedural memory) that coordinates module operation. Production rules take the form "IF condition THEN action" — for example, "IF goal = solve math problem AND type = algebra, THEN retrieve algebra strategy." These rules interact with declarative memory (a store of facts as "chunks") and a goal module (managing intentions). All of this is coordinated through working memory buffers — a limited space for current context that imitates the limits of human attention.
-
-**Key ACT-R concepts for LLM agents:**
-
-1. **Activation-based retrieval** — chunks in memory have activation levels that determine retrieval speed. Activation depends on frequency and recency of use: frequently used recent knowledge is retrieved faster. In LLM agents, this is implemented through scoring during retrieval from a vector store.
-
-2. **Production conflict resolution** — when multiple rules are applicable, the one with the highest utility is selected. Utility is computed as: probability of success × goal value − execution cost. This models rational action selection.
-
-3. **Goal stack** — a hierarchical goal structure where subgoals can be "pushed" and "popped" like a function call stack. This allows temporarily diverting to subtasks and then returning to the main goal.
+Key concepts for LLM agents: **activation-based retrieval** (chunks have activation levels based on frequency and recency, determining retrieval speed — implemented via scoring during vector store retrieval), **production conflict resolution** (when multiple rules apply, the highest-utility one is selected: probability of success × goal value − execution cost), and **goal stack** (hierarchical subgoal management, like a function call stack).
 
 ### SOAR: State, Operator, And Result
 
-**SOAR** is a fundamental cognitive architecture emphasizing problem-solving and learning. If ACT-R focuses on memory, SOAR focuses on overcoming impasses.
+**SOAR** emphasizes problem-solving and learning. Its decision cycle runs: Input → Elaboration → Decision → Application → Output. When an **impasse** arises, SOAR creates a subgoal and solves it recursively. **Chunking** is SOAR's learning mechanism: when a subgoal is resolved, a new rule is created ("IF similar situation THEN apply found solution"), preventing the same impasses in the future. SOAR maps to LLM agents through impasse detection (recognizing insufficient knowledge), subgoaling (Plan-and-Execute decomposition), and chunking (Reflexion-style trajectory saving).
 
-**Key SOAR cycle:** Input (receiving information) → Elaboration (enriching the state with rules) → Decision (selecting an operator) → Application (applying it) → Output (affecting the environment). When an **impasse** (difficulty) arises, SOAR creates a subgoal and solves it recursively.
-
-**Chunking in SOAR** — the learning mechanism. When a subgoal is successfully resolved, SOAR creates a new rule: "IF similar situation THEN apply the found solution." This prevents the same impasses in the future.
-
-**Connection between SOAR and LLM agents:**
-- **Impasse detection** → the agent recognizes insufficient current knowledge
-- **Subgoaling** → task decomposition into subtasks (Plan-and-Execute)
-- **Chunking** → saving successful solutions for reuse (Reflexion)
-
-### How Cognitive Architectures Inspire LLM Agents
-
-The concepts from ACT-R and SOAR map directly onto components found in modern LLM agent systems. Understanding these mappings helps architects recognize that many "new" agent design patterns have well-studied theoretical foundations in cognitive science.
+### Cognitive Architecture to LLM Agent Mapping
 
 | ACT-R/SOAR Concept | LLM Agent Implementation |
 |-------------------|--------------------------|
@@ -572,35 +551,9 @@ The concepts from ACT-R and SOAR map directly onto components found in modern LL
 | Chunking | Saving successful trajectories |
 | Goal stack | Hierarchical planning |
 
-AI agents inspired by these architectures emulate their structure. Each module is implemented as a separate component with its own logic.
+### Applicability
 
-### Modular Structure
-
-Declarative memory stores facts and knowledge. It is not a simple database — the memory has an activation mechanism. Frequently used facts have high activation and are retrieved quickly. Rarely used facts are "forgotten" — their activation decreases over time.
-
-Procedural memory stores skills in the form of production rules: "IF condition, THEN action." When the current situation matches a rule's condition, the rule can be applied. Rules compete with each other, and the most appropriate one is selected.
-
-Working memory is the agent's "RAM." It stores the current context: what is happening now, what goal is being pursued, what intermediate results have been obtained. Working memory is limited in capacity, imitating the limitations of human attention.
-
-The goal module manages the agent's intentions. Goals can be hierarchical: the main goal is broken into subgoals, subgoals into even smaller tasks. Achieving subgoals moves toward the main goal.
-
-### Information Processing Cycle
-
-A cognitive agent operates cyclically. Each cycle iteration includes: perceiving the current situation, retrieving relevant knowledge from memory, selecting an appropriate rule, executing an action, and updating memory and goals.
-
-This cycle resembles human behavior. We perceive a situation, recall similar experience, apply a familiar skill, observe the result, and adjust our actions.
-
-### Reinforcement Learning
-
-An important feature of cognitive architectures is built-in learning. Successful actions are reinforced: their probability of selection in similar situations increases. Unsuccessful actions are weakened.
-
-This does not require an explicit reflection mechanism as in Reflexion. Learning occurs implicitly through gradual changes in weights and activations.
-
-### Applicability and Limitations
-
-Cognitive architectures are most appropriate for long-lived agents that accumulate experience and improve over time. They are well-suited for tasks where personalization and user adaptation are important.
-
-However, implementing a full cognitive architecture is complex. Careful tuning of numerous parameters is required: forgetting rates, activation thresholds, rule weights.
+Cognitive architectures are most appropriate for long-lived agents that accumulate experience and improve over time, particularly where personalization matters. However, full implementation is complex — it requires careful tuning of forgetting rates, activation thresholds, and rule weights.
 
 ---
 

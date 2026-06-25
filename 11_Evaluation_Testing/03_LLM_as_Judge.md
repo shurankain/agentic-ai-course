@@ -133,14 +133,6 @@ Faithfulness for RAG includes source documents, question, response. The task is 
 
 Multi-judge aggregation runs evaluation with several models in parallel via CompletableFuture, collects results, filters parsing errors. For each metric, mean, median, stdDev, min/max are computed. Inter-judge agreement is measured through mean score variance normalized to the scale. Outlier detection identifies judges with systematic deviation (deviation > 1.5).
 
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[02_Human_Evaluation|Human Evaluation]]
-**Next:** [[04_Continuous_Evaluation|Continuous Evaluation]]
-
 ## Key Takeaways
 
 - **LLM-as-Judge bridges the gap between expensive human evaluation and shallow automated metrics.** It provides scalable, explainable scoring at a fraction of human evaluation cost.
@@ -154,8 +146,6 @@ Multi-judge aggregation runs evaluation with several models in parallel via Comp
 - **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.5 + Claude Opus 4.8 + Gemini) and taking the median produces more robust scores than any single judge.
 
 - **Pairwise comparison is the most reliable LLM judge mode.** Randomizing A/B order and averaging two runs eliminates position bias and avoids the scale calibration problem of absolute ratings.
-
----
 
 ## Practical Prompt Examples
 
@@ -301,3 +291,11 @@ RESPONSE FORMAT (JSON):
 
 Analyze the response for each aspect separately and provide a structured evaluation in JSON format.
 ```
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
+**Previous:** [[02_Human_Evaluation|Human Evaluation]]
+**Next:** [[04_Continuous_Evaluation|Continuous Evaluation]]

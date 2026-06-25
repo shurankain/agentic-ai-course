@@ -118,13 +118,7 @@ Canary Analysis compares behavior between canary and stable versions. Degradatio
 
 ## ML Debugging: Key Concepts
 
-ML Debugging is a separate interview round at OpenAI and DeepMind.
-
-Main bug categories: Shape Mismatches (broadcasting hides dimension mismatches), Gradient Issues (detach breaks gradient flow, missing residual connections lead to explosion/vanishing), Data Processing (incorrect shuffle, tokenization mismatch, data leakage in data pipeline), Optimizer (creation before setting requires_grad, weight decay on bias/LayerNorm).
-
-Debugging strategy: Reproduce → Hypothesize → Test → Fix.
-
-Interview checklist: check tensor shapes first, verify gradient flow, Cross-entropy expects logits not probs, create Optimizer after requires_grad, effects of eval vs train mode.
+ML debugging covers systematic approaches to diagnosing tensor shape mismatches, gradient flow issues, data processing errors, and optimizer misconfiguration. For the interview-focused ML debugging checklist (including shape debugging, gradient verification, and common pitfalls at OpenAI/DeepMind), see [[../21_Interview_Preparation/01_ML_System_Design|ML System Design]].
 
 ## Hallucination Detection: From Metric to System
 

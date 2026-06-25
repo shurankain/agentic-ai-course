@@ -405,24 +405,13 @@ Integration with Spring Boot is especially convenient — tools can be Spring be
 
 ## Model Context Protocol (MCP): Standardized Tool Interface
 
-### The Problem MCP Solves
+MCP is the industry standard for agent tool integration (as of mid-2026). It follows a client-server architecture where an MCP Host (IDE, CLI, custom app) connects through MCP Clients to MCP Servers that expose three primitives: **Tools** (executable functions), **Resources** (readable data), and **Prompts** (reusable templates). Transport runs over stdio (local) or Streamable HTTP (remote).
 
-Before MCP, every agent framework defined tools differently. LangChain had its tool format, OpenAI had function calling schemas, Anthropic had its own tool_use format, and custom agents used bespoke interfaces. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, Devin Desktop (formerly Windsurf), Zed, custom agents, and more.
+MCP solves the fragmentation problem: before MCP, every framework defined tools differently. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, VS Code, JetBrains IDEs, and custom agents. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers, 28% of Fortune 500 deploying MCP servers.
 
-### MCP Architecture
+**Security:** Tool descriptions from untrusted MCP servers are a prompt injection vector. Apply trust levels (first-party, verified, unverified) and OAuth 2.1 with PKCE for credential delegation. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for details.
 
-MCP follows a client-server architecture:
-
-**MCP Host** — the application running the agent (IDE, CLI tool, custom app). It manages one or more MCP clients.
-
-**MCP Client** — maintains a 1:1 connection with an MCP server. Handles protocol negotiation, capability discovery, and message transport.
-
-**MCP Server** — exposes capabilities to the client through three primitives:
-- **Tools** — executable functions the model can call (equivalent to function calling)
-- **Resources** — data the model can read (files, database records, API responses)
-- **Prompts** — reusable prompt templates for specific tasks
-
-**Transport:** MCP supports two transport mechanisms — **stdio** (for local servers, spawned as child processes) and **Streamable HTTP** (for remote servers, over HTTP with optional SSE streaming).
+For the full MCP architecture, server development, client integration, and ecosystem details, see [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]].
 
 ### MCP Tools vs Native Function Calling
 
@@ -435,20 +424,6 @@ MCP tools and native function calling achieve the same end result (the agent cal
 | **Reusability** | Framework-specific | Cross-framework, cross-host |
 | **Ecosystem** | Provider-locked | Open ecosystem of servers |
 | **Transport** | In-process | Local (stdio) or remote (HTTP) |
-
-### MCP and Tool Security
-
-MCP introduces specific security considerations (see [[../14_Security_Safety/03_Agent_Security|Agent Security]] for details):
-
-- **Tool descriptions from untrusted MCP servers are a prompt injection vector.** A malicious server can craft tool descriptions that manipulate the agent's behavior.
-- **Trust levels matter:** first-party servers (high trust), verified third-party (medium trust), unverified (low trust, strict sandboxing required).
-- **OAuth 2.1 with PKCE** for credential delegation — agents obtain scoped, short-lived tokens instead of receiving raw user credentials.
-
-### Practical Impact
-
-MCP has become the industry standard for agent tool integration, replacing custom JSON schema definitions as the primary way agents connect to external systems. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers (~9,652 in the official registry), 28% of Fortune 500 deploying MCP servers, 41% of software organizations in production (Stacklok 2026 report), and governance under the Agentic AI Foundation (AAIF, Linux Foundation). Major adopters include all leading AI platforms: Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, JetBrains IDEs, and many others.
-
-For tool designers, MCP means: build your tool as an MCP server once, and it works everywhere. For agent architects, MCP means: access to a vast ecosystem of pre-built tools without custom integration work. The shift from per-framework tool definitions to MCP is analogous to the shift from per-IDE language support to LSP — a one-time industry standardization that benefits everyone.
 
 ## Tool-Integrated Reasoning (2024-2025)
 

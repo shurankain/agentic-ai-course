@@ -252,16 +252,6 @@ Even a carefully constructed prompt has limitations: the context window is finit
 
 **Prompt Chaining** decomposes complex tasks into manageable steps (modularity, debugging).
 
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[01_Prompting_Basics|Introduction to Prompting]]
-**Next:** [[03_Agent_Prompts|Prompts for AI Agents]]
-
----
-
 ## Practical Prompt Examples
 
 ### ReAct Prompt: Reasoning and Action Cycle
@@ -377,3 +367,11 @@ Confidence: HIGH (100% agreement)
 **ReAct** — for tasks involving external tools where reasoning transparency is needed
 **Tree of Thoughts** — when alternatives exist and errors at early stages are critical
 **Self-Consistency** — for tasks with a definitive answer and a high cost of error
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
+**Previous:** [[01_Prompting_Basics|Introduction to Prompting]]
+**Next:** [[03_Agent_Prompts|Prompts for AI Agents]]

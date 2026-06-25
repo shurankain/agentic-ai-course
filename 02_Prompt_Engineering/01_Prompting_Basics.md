@@ -219,16 +219,6 @@ Effective cycle:
 
 6. **Iterative development** is the only path to high-quality prompts
 
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[../01_LLM_Fundamentals/10_Implementation_from_Scratch|Implementing a Transformer from Scratch]]
-**Next:** [[02_Advanced_Prompting|Advanced Prompting Techniques]]
-
----
-
 ## Practical Prompt Examples
 
 ### Example 1: Zero-shot Prompt
@@ -332,3 +322,11 @@ Requirements: PEP 8, type hints, 80%+ test coverage, security
 - Priority: security > style
 - If the code is good, say so
 ```
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
+**Previous:** [[../01_LLM_Fundamentals/10_Implementation_from_Scratch|Implementing a Transformer from Scratch]]
+**Next:** [[02_Advanced_Prompting|Advanced Prompting Techniques]]

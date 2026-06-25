@@ -282,16 +282,6 @@ RAG systems are vulnerable to indirect attacks through poisoned documents. The s
 
 Basic integration: loading configuration from a directory with Colang files, creating LLMRails with that configuration, using generate_async for protected generation. All defined rails are automatically applied to every request.
 
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[../13_Deployment/03_CI_CD_and_Self_Hosted|CI/CD and Self-Hosted Models]]
-**Next:** [[02_Data_Protection|Data Protection]]
-
----
-
 ## Practical Examples
 
 **IMPORTANT:** These examples are provided for educational purposes — to understand defense mechanisms. Using them for attacks is illegal and unethical.
@@ -392,3 +382,11 @@ async def safe_llm_call(user_input: str, system_prompt: str) -> str:
 ```
 
 Metrics: attack blocking >95%, false positives <5%, latency <200ms, prompt leaks 0/month.
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
+**Previous:** [[../13_Deployment/03_CI_CD_and_Self_Hosted|CI/CD and Self-Hosted Models]]
+**Next:** [[02_Data_Protection|Data Protection]]
