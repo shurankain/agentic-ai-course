@@ -421,6 +421,7 @@ Training a probe for a specific layer uses Adam optimizer and CrossEntropyLoss, 
 
 Important: the presence of information does not guarantee the model uses it. Causal analysis requires activation patching.
 
+---
 
 ## Navigation
 

@@ -32,7 +32,7 @@ A typical architecture consists of several layers. The API Gateway provides auth
 
 **Circuit Breaker** prevents cascading failures. When the error threshold is reached (50% over 10 calls), the circuit opens, and subsequent requests immediately return an error. After 30 seconds — a probe call; on success, the circuit closes again.
 
-**Fallback strategies**: switching to an alternative provider (GPT-4o → Claude), degrading to a cheaper model (GPT-4o → GPT-4o-mini), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
+**Fallback strategies**: switching to an alternative provider (GPT-5.4 → Claude), degrading to a cheaper model (GPT-5.4 → GPT-4o-mini), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
 
 ### Multi-Provider Failover Architecture
 

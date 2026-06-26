@@ -98,7 +98,7 @@ Concurrency Issues arise during parallel processing: rate limiting, resource con
 
 Anomaly detection requires statistical methods adapted to the specifics of generative models.
 
-**Z-Score Monitoring** — a basic method for sharp deviations. Computed as: z = (x - μ_baseline) / σ_baseline. Alerts at thresholds |z| > 2.5 (99%) or |z| > 3.0 (99.7%). Applied for monitoring latency, tokens, error rates. Effective for sudden changes but misses gradual drift.
+**Z-Score Monitoring** — a basic method for sharp deviations. Computed as: z = (x - μ_baseline) / σ_baseline. Alerts at thresholds |z| > 2.5 (~98.8%) or |z| > 3.0 (99.7%). Applied for monitoring latency, tokens, error rates. Effective for sudden changes but misses gradual drift.
 
 **CUSUM (Cumulative Sum)** — for detecting slow trends. Accumulates deviations from the target value: S_n = max(0, S_{n-1} + (x_n - μ - k)), where k is the allowable deviation (typically 0.5σ). Alert when threshold h is exceeded (typically 4-5σ). Valuable for detecting gradual quality degradation.
 

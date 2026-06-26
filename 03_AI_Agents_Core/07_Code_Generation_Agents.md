@@ -104,7 +104,7 @@ Cursor went further by building an IDE around AI:
 3. **Composer** — natural language → code with full context
 4. **Terminal integration** — AI can see command output
 
-**Cursor Architecture:** Built as a multi-layered system where the base Monaco editor works together with the AI Sidebar (providing Chat and Cmd+K functionality), relying on a local index with embeddings of the entire project. The system can use different LLM APIs (Claude, GPT-4o, Custom models) depending on the task and user settings.
+**Cursor Architecture:** Built as a multi-layered system where the base Monaco editor works together with the AI Sidebar (providing Chat and Cmd+K functionality), relying on a local index with embeddings of the entire project. The system can use different LLM APIs (Claude, GPT-5.4, Custom models) depending on the task and user settings.
 
 **Cmd+K workflow:** Select code, press Cmd+K, describe the change in natural language, AI generates a diff, you accept/reject/edit.
 
@@ -124,7 +124,7 @@ The IDE agent market has expanded significantly beyond the original Copilot/Curs
 | **OpenCode** | #1 open-source coding agent. 160K+ stars, 7.5M MAU | MIT, 75+ model providers, LSP integration | Terminal TUI, desktop app, IDE extension. Air-gapped deployment. Model-agnostic |
 | **Junie** (JetBrains, GA June 17) | Agentic debugging (drives IDE debugger autonomously) | #1 SWE-Rebench 61.6% (72.7% pass@5) | IntelliJ, WebStorm, PyCharm + CLI. Model-agnostic. Structured planning before coding |
 | **Augment Code** | Context Engine over full codebase | #1 on SWE-Bench Pro | Works as MCP server enriching other tools |
-| **Trae** (ByteDance) | Free frontier model access | GPT-4o + Claude included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
+| **Trae** (ByteDance) | Free frontier model access | GPT-5.4 + Claude included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
 
 **Devin Desktop** (formerly Windsurf, rebranded June 2, 2026):
 Windsurf was rebranded from Codeium in late 2024, acquired by Cognition (April 2026) after Google hired Windsurf's CEO for $2.4B, then rebranded again to Devin Desktop (June 2). The Cascade local agent was rewritten in Rust as "Devin Local" (Cascade EOL July 1, 2026). New features: Agent Command Center (Spaces, Kanban view, multi-agent management), Agent Client Protocol support, Devin Cloud agent on $20 Pro plan. All Windsurf settings auto-ported.

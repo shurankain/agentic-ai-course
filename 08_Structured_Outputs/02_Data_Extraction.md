@@ -68,7 +68,7 @@ Real-world texts are full of ambiguities. A good system handles them explicitly 
 
 ## Multi-Modal Extraction
 
-Extraction is no longer limited to text. Vision-language models (GPT-4o, Claude Sonnet 4.6, Gemini 3 Flash) can extract structured data directly from images, PDFs, and scanned documents.
+Extraction is no longer limited to text. Vision-language models (GPT-5.4, Claude Sonnet 4.6, Gemini 3 Flash) can extract structured data directly from images, PDFs, and scanned documents.
 
 **The OCR problem:** Traditional document processing pipelines depend on OCR (Optical Character Recognition) to convert images to text before extraction. OCR fails on complex layouts: multi-column documents, tables with merged cells, forms with handwriting, documents with mixed text/diagram content. Each failure propagates downstream — if OCR misreads a number, the entire extraction is wrong.
 

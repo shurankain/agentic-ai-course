@@ -247,7 +247,7 @@ This approach requires feedback mechanisms: how does the system know the selecti
 
 ### Parallel Tool Calls: When You Can and When You Cannot
 
-Modern LLM APIs (GPT-4o, Claude, Gemini) support **parallel tool calls** — the model can generate multiple tool calls in a single response. This significantly speeds up execution but requires understanding dependencies.
+Modern LLM APIs (GPT-5.4, Claude, Gemini) support **parallel tool calls** — the model can generate multiple tool calls in a single response. This significantly speeds up execution but requires understanding dependencies.
 
 **Types of dependencies between tools:**
 

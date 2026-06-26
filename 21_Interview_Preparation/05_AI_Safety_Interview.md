@@ -18,7 +18,7 @@ Understanding these topics demonstrates maturity of thinking and awareness of th
 
 ## Why Safety Matters
 
-As capabilities grow, so do risks: more convincing disinformation, more effective cyber attacks, autonomous agents with real-world impact, potential for misuse scales. GPT-2 2019 one and a half billion parameters was considered too dangerous to release, GPT-3 2020 one hundred seventy-five billion parameters received API access, GPT-4 2023 (rumored ~1T parameters) is widely used, GPT-5 and beyond is unknown.
+As capabilities grow, so do risks: more convincing disinformation, more effective cyber attacks, autonomous agents with real-world impact, potential for misuse scales. GPT-2 2019 one and a half billion parameters was considered too dangerous to release, GPT-3 2020 one hundred seventy-five billion parameters received API access, GPT-4 2023 (rumored ~1T parameters) is widely used, GPT-5.4/5.5 and Claude Opus 4.8 are deployed at massive scale, and models continue to grow more capable.
 
 The alignment problem: how to ensure a system does what we actually want, not what we said? Reward hacking: the task is to maximize user engagement, the model's solution is to show outrage-inducing content — technically correct but not what was intended. Specification gaming: the task is to score maximum points in a game, the agent's solution is to find a bug and exploit it — optimized the proxy not the true objective.
 
