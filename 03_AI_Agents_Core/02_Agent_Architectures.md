@@ -495,6 +495,16 @@ Most teams that skip to Level 3 prematurely discover that 80% of their use cases
 
 Every agent architecture discussed in this chapter — ReAct, Plan-and-Execute, Reflexion, LATS — shares a common foundation: a loop that calls an LLM, executes actions, and iterates. The patterns below are production-critical for any agent loop, regardless of architecture. They are the difference between a demo and a system that runs reliably in production.
 
+**How the loop plays out in practice differs by architecture:**
+
+**ReAct loop example:** User asks "What is the weather in Paris?" The agent generates Thought: "I need current weather data, which is not in my training set." Action: call weather_api(city="Paris"). Observation: 22C, partly cloudy. Thought: "I have the answer." Response: "It is 22C and partly cloudy in Paris." Each iteration is a single thought-action-observation cycle; the agent decides the next step based only on what it just observed.
+
+**Plan-and-Execute loop example:** User asks "Compare revenue of Apple and Microsoft for Q3 2025." The planner produces a plan: [1. Search Apple Q3 2025 revenue, 2. Search Microsoft Q3 2025 revenue, 3. Compare figures and format a table]. The executor then works through each step sequentially, passing results forward. The loop is two-phase: one LLM call for planning, then N tool calls for execution, with optional replanning if a step fails.
+
+**Reflexion loop example:** An agent writes a Python function. Unit tests fail on empty input. The reflector analyzes: "The function does not handle the edge case for empty input — it raises an IndexError instead of returning an empty list." The actor revises the code to handle the edge case. Tests pass. The lesson ("always guard for empty collections in list-processing functions") is stored in episodic memory for future tasks.
+
+The underlying pattern is the same across all architectures — observe, think, act — but the balance between planning depth and execution speed varies. ReAct optimizes for fast iteration with no upfront planning. Plan-and-Execute invests in a plan to reduce wasted iterations. Reflexion invests in post-hoc analysis to improve future iterations. Understanding this shared loop makes it easier to combine architectures: a Plan-and-Execute outer loop with ReAct inner execution and Reflexion meta-learning is a common production pattern.
+
 **Max iterations — enforced in code, not in the prompt.** A prompt instruction like "stop after 10 steps" is not reliable — the model may ignore it. Set a hard iteration cap in the orchestration code: 10-15 iterations for typical tasks, up to 25 for research/exploration. When the limit is hit, the agent reports its intermediate results rather than failing silently.
 
 **Loop detection.** Track the sequence of (tool, arguments, result) tuples. If the agent calls the same tool with the same arguments three times in a row and gets the same error, it is stuck in a loop. Abort and report the stuck state. Without this, agents can burn through token budgets repeating the same failed action indefinitely.

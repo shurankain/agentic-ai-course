@@ -264,6 +264,34 @@ A special role is the **reviewer agent**, which checks other agents' results aga
 
 **Missing stop conditions** — "Repeat until you get a result" can run indefinitely. Solution: explicit stop criteria (task completed, step limit reached, approaches exhausted, user canceled).
 
+### Before/After Examples
+
+The difference between a fragile agent prompt and a robust one often comes down to specificity. The following examples illustrate common anti-patterns with concrete fixes.
+
+**1. Vague tool instructions**
+
+Before: "Use the search tool when needed."
+
+After: "Use the search_web tool when the user asks about events after January 2026 or requests real-time data. Do NOT use search_web for general knowledge questions that the model can answer directly. For internal company documentation, use search_docs instead."
+
+Why it matters: The model needs explicit criteria for tool selection, not vague guidance. Without clear conditions, the agent either over-uses the tool (searching for facts it already knows, wasting tokens and latency) or under-uses it (hallucinating answers that require real-time data).
+
+**2. Missing failure handling**
+
+Before: "Search for the answer and respond to the user."
+
+After: "Search for the answer. If the search returns no results, tell the user you could not find the information and suggest alternative queries. If the search returns results but none are relevant, summarize what you found and explain why it does not answer the question. Never fabricate an answer when search fails."
+
+Why it matters: Without explicit failure paths, the model defaults to generating a plausible-sounding answer — hallucinating. Specifying what to do on each failure mode (no results, irrelevant results, API error) prevents the most common source of agent unreliability.
+
+**3. Overloaded system prompts**
+
+Before: A 3000-token system prompt that tries to cover every possible edge case, user persona, and tool interaction in a single monolithic block.
+
+After: A 500-token core prompt that defines identity, safety constraints, and the default workflow. Task-specific instructions are injected dynamically based on the classified intent: the customer-refund handler gets refund rules, the technical-support handler gets debugging procedures, and the general handler gets a minimal fallback prompt.
+
+Why it matters: Excessively long system prompts dilute attention — the model treats all instructions as equally important, which means critical safety constraints compete with formatting preferences for attention weight. Keep the core identity tight and inject task-specific context dynamically.
+
 ---
 
 ## Prompt Injection Resistance: Protecting Agent Systems

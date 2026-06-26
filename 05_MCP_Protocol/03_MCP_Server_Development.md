@@ -166,15 +166,23 @@ Special attention should be paid to injection protection. If parameters are used
 
 ### Authorization and Authentication
 
-The MCP specification now includes an OAuth 2.1 authorization framework with PKCE, Protected Resource Metadata (RFC 9728), and support for enterprise-managed authorization. For simpler deployments, the server may also use tokens, certificates, or other mechanisms.
+The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks — critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and enterprise-managed authorization for organizational deployments.
 
-Authorization determines which operations are permitted for the client. The server can restrict access to specific resources or tools based on client identity.
+**Token scoping.** Scope tokens to the minimum permissions required. An MCP server exposing a database should request read-only scope unless the tool explicitly performs writes. Use separate scopes for different tool categories (e.g., `tools:read`, `tools:write`, `admin:manage`). The principle of least privilege applies directly — a compromised token with narrow scope limits the blast radius. Short-lived tokens (minutes rather than hours) with refresh token rotation further reduce exposure from token theft.
+
+**Local server authentication.** For stdio-based local servers, authentication is implicit — the server runs as a child process of the host application, inheriting the user's OS-level permissions. No additional auth layer is needed. However, if the local server accesses external APIs, it should manage its own API keys securely (environment variables, system keychain, OS credential stores) rather than receiving them from the MCP client. Passing secrets through the MCP protocol exposes them to any component that can inspect the message stream.
+
+**Multi-tenant server authentication.** Production MCP servers serving multiple users must validate that each request is authorized for the specific user's data. Extract the user identity from the OAuth token, apply row-level security or data isolation at the storage layer, and audit all access. Tenant isolation failures in MCP servers are a data breach vector — a single missing authorization check can expose one user's data to another user's agent. Test tenant isolation explicitly: verify that User A's token cannot access User B's resources through any tool or resource endpoint.
 
 ### Isolation and Sandboxing
 
-Where possible, server operations should be executed in an isolated environment. A server for code execution should use containers or sandboxes. A server for file operations should restrict access to specific directories.
+MCP servers execute code on behalf of AI agents. A malicious or buggy tool can read sensitive files, make unauthorized network requests, or modify system state in ways the user never intended. Sandboxing constrains what the server process can do, limiting the blast radius of compromised or misbehaving tools. This is especially critical for servers that accept input from untrusted sources or execute generated code.
 
-Isolation protects both the host system from malicious actions and different requests from each other.
+**Container-based sandboxing.** Run each MCP server in a separate container with minimal capabilities. Drop all Linux capabilities except those explicitly needed (e.g., keep only `NET_BIND_SERVICE` if the server needs to listen on a port). Use a read-only root filesystem, the `no-new-privileges` flag, and seccomp profiles to restrict available syscalls. For filesystem tools, mount only the specific directories the tool needs as bind mounts with read-only or read-write permissions as appropriate. Network-isolated containers (--network=none) prevent tools from making unauthorized external requests — add explicit network rules only for the specific endpoints the tool requires.
+
+**Process-level sandboxing.** For lightweight isolation without containers, use OS-level sandboxing mechanisms: Linux namespaces (PID, network, mount) to restrict visibility, seccomp-bpf for syscall filtering, or macOS Sandbox profiles for Apple platforms. The stdio transport naturally provides some isolation because the server runs as a child process of the host application, but this alone is insufficient for untrusted servers. Additional restrictions — filesystem access limits, network controls, resource quotas — are needed to prevent a compromised server from affecting the host system.
+
+**Trust tiers.** Implement a tiered trust model for MCP servers: **first-party** servers (developed by your organization) receive full trust with minimal sandboxing; **verified third-party** servers (audited packages from known publishers, listed in the official MCP registry) receive moderate sandboxing with restricted filesystem and network access; **unverified** servers (community-contributed, unknown provenance) receive strict sandboxing with no network access and limited filesystem visibility. The host application should enforce these tiers automatically and warn users when connecting to unverified servers. Tool descriptions from unverified servers should be treated as potential prompt injection vectors.
 
 ## Testing MCP Servers
 
@@ -184,17 +192,27 @@ Individual server components — resource, tool, and prompt handlers — are tes
 
 Unit tests are fast and stable. They codify the contract of each component and help prevent regressions.
 
+Each tool handler is fundamentally a function that takes structured input and returns structured output — standard unit testing applies directly. Mock the MCP protocol layer and external dependencies (databases, APIs, third-party services) to test tool logic without network calls or protocol overhead. Validate input schema enforcement, error handling for invalid parameters, and edge cases such as empty inputs, excessively large payloads, and Unicode handling. Because tool handlers are pure functions with well-defined contracts, achieving high unit test coverage is straightforward and should be the foundation of the testing strategy.
+
 ### Integration Testing
 
 Integration tests verify component interactions and protocol correctness. A test client simulating real interaction is used.
 
 These tests connect to the server, execute request sequences, and verify responses. They are slower but catch integration issues.
 
+The MCP Inspector (the official testing tool from the MCP project) is invaluable for integration testing. It connects to your server and lets you interactively test tool discovery, parameter validation, and execution. Inspector displays the full protocol exchange (JSON-RPC messages), making it easy to debug schema mismatches, incorrect response formats, and capability negotiation issues. Run Inspector against your server in CI to catch protocol compliance regressions automatically — any change that breaks the JSON-RPC contract will surface immediately. Inspector also validates that tool descriptions, parameter schemas, and return types conform to the MCP specification, which is important because schema errors that are silently ignored by one client may cause failures in another.
+
 ### End-to-End Testing
 
 Full testing involves real external systems and real clients. This is the most accurate verification but also the most complex to set up.
 
 E2E tests are especially important before release, when it is necessary to confirm the entire system is working correctly.
+
+The ultimate test for an MCP server is whether a real LLM actually uses your tools correctly. Create test scenarios with known expected tool calls, run them against a real model, and verify that the model selects the right tools with the right parameters. This catches tool description quality issues that unit and integration tests cannot detect — a tool may be technically correct but poorly described, causing the model to ignore it or misuse it. Use a deterministic model configuration (temperature=0) for reproducibility. Compare tool call traces against expected sequences to detect both false positives (model calls the wrong tool) and false negatives (model fails to call the tool when it should).
+
+### Automated Regression Testing
+
+Record successful tool call traces (input-output pairs) from production or integration tests and replay them in CI. Any change in tool behavior — different output for the same input, changed error codes, altered response schemas — triggers an alert. This catches unintended side effects of refactoring, dependency upgrades, or configuration changes. Regression trace libraries should grow over time: every production bug that is root-caused becomes a new regression test case.
 
 ## Monitoring and Observability
 

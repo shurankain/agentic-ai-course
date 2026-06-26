@@ -126,7 +126,17 @@ Think of the context as a stack of documents. The model "remembers" the top and 
 
 This has practical implications for prompt design and RAG systems. If you load 20 documents into the context and ask a question, the model is more likely to find the answer in the first and last documents, even if the most relevant one is somewhere in the middle.
 
-Mitigation strategy: place critically important information at the beginning of the context (right after the system prompt) or at the end (immediately before the user's query).
+### Mitigation Strategies
+
+**Document reordering.** Place the most important documents at the beginning and end of the context, not in the middle. This exploits the U-shaped attention curve — position the highest-relevance content where the model pays the most attention.
+
+**Reciprocal rank fusion.** When combining results from multiple retrieval sources, use reciprocal rank fusion to ensure the most relevant results appear in positions with the highest attention (beginning of context). This is especially important in multi-source RAG pipelines where document ordering is otherwise arbitrary.
+
+**Chunking with overlap.** Overlapping chunks ensure that important information at chunk boundaries is not lost. A sentence split across two non-overlapping chunks may be missed entirely; a 10-20% overlap eliminates this failure mode.
+
+**Explicit citations.** Instruct the model to cite specific document IDs or section numbers when answering. This forces attention to all provided documents, partially mitigating the middle-neglect effect. When the model must justify its answer with references, it scans the context more thoroughly.
+
+**Frontier model improvements.** Models with the latest architectures (Gemini 3.5, Claude Opus 4.8 with 1M context) have significantly reduced but not eliminated this effect (as of mid-2026). Testing on your specific workload remains essential — do not assume that a larger context window automatically solves the problem.
 
 ---
 

@@ -171,7 +171,17 @@ These topics — scaling laws, emergence, over-training, and inference-time comp
 
 Another remarkable ability of modern LLMs is in-context learning. The model can "learn" a new task during query processing, without modifying its weights.
 
-Show the model a few examples of a new response format — and it starts following that format. Give it a few examples of translation into a rare language — and it continues translating in the same style. This is called few-shot learning.
+This capability manifests in three progressively powerful forms:
+
+**Zero-shot learning** — the model receives only a task description, with no examples. "Classify the following review as positive or negative." The model relies entirely on knowledge acquired during pretraining.
+
+**One-shot learning** — a single example is provided alongside the task. "Review: 'Great product!' → Positive. Now classify: 'Terrible experience.'" One example is often enough to establish the expected format and reasoning pattern.
+
+**Few-shot learning** — 2-8 examples demonstrate the desired input-output mapping. Show the model a few examples of translation into a rare language — and it continues translating in the same style. Few-shot is the most reliable form of in-context learning for complex or ambiguous tasks.
+
+Why does in-context learning work at all, given that the model's weights remain frozen? The leading hypothesis: during pretraining on trillions of tokens, the model learns to recognize and continue patterns. Few-shot examples activate the relevant "skill circuit" already encoded in the model's weights — this is not learning new information but retrieving and activating existing capabilities. The examples serve as a kind of address into the model's latent skill space, steering it toward the right behavior.
+
+A practical insight: performance scales with example quality more than quantity. Three well-chosen, diverse examples that clearly illustrate the pattern often outperform ten mediocre or redundant ones. Selecting examples that cover edge cases and represent the true distribution of inputs matters more than simply adding more demonstrations.
 
 In-context learning is the foundation of prompting techniques. Instead of fine-tuning the model for each task (which is expensive and complex), the prompt can simply be formulated with the appropriate examples. This democratized AI usage — one no longer needs to be an ML engineer to adapt a model to specific needs.
 

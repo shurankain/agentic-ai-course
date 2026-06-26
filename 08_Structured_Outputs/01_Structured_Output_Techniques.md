@@ -123,6 +123,38 @@ See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for 
 
 ---
 
+## Streaming with Structured Output
+
+### The Challenge
+
+Streaming returns tokens one by one, enabling the user to see output as it is generated — reducing perceived latency. Structured output (JSON) is only valid when complete. Partial JSON is unparseable: `{"name": "Jo` is not a valid object. This creates a fundamental tension between low latency (streaming) and reliability (structured output).
+
+In conversational chat, streaming is straightforward — each token extends the visible text. But when the output must be a valid JSON object consumed by downstream code, showing partial results requires special handling.
+
+### Provider Solutions (as of mid-2026)
+
+**OpenAI.** Streaming with `response_format: { type: "json_schema" }` produces valid partial JSON. Each streamed chunk is guaranteed to be a prefix of the final valid JSON object. Developers can parse progressively — field values become available as soon as the closing delimiter for that field is emitted. This works with both Structured Outputs (`strict: true`) and basic JSON Mode.
+
+**Anthropic.** Tool use results are returned as complete JSON after the stream ends. The streamed events include `content_block_delta` updates, but the tool input JSON is assembled server-side and delivered as a complete object. For streaming structured data outside of tool use, the recommended pattern is text blocks with explicit JSON formatting instructions followed by post-stream parsing.
+
+**Google Gemini.** Supports streaming with `response_mime_type: "application/json"` and an optional `response_schema`. Behavior is similar to OpenAI — the model streams valid partial JSON that can be progressively parsed.
+
+### Progressive Parsing Pattern
+
+For streaming JSON, use an incremental JSON parser that emits events as key-value pairs arrive. Libraries like `partial-json-parser` (JavaScript) or `ijson` (Python) enable this pattern. The UX benefit is significant: display fields as they arrive. For example, show the title and summary to the user while the detailed body is still streaming. This is particularly effective for structured objects with multiple fields where early fields carry high informational value.
+
+The implementation follows a pipeline: receive streamed token chunks, feed them to the incremental parser, emit field-complete events to the UI, and assemble the final validated object when the stream ends.
+
+### When to Use Which Approach
+
+**Streaming + structured output** — user-facing applications where perceived latency matters and output is JSON (dashboards, search results, form auto-fill). The user sees fields populating progressively.
+
+**Non-streaming structured output** — backend pipelines, tool calls, batch processing, agent-to-agent communication where latency is less critical and the consumer is code, not a human. Simpler to implement and debug.
+
+**Streaming + plain text** — conversational chat where structured output is not needed. The standard approach for chatbots and assistants where the output is natural language.
+
+---
+
 ## Key Takeaways
 
 Structured output is the bridge between language model text and program data structures. Without it, LLM integration into enterprise systems is fragile and unreliable.

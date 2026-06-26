@@ -122,6 +122,26 @@ GPU nodes are expensive and scarce. Efficient management directly impacts cost.
 
 **Bin-packing for GPU utilization.** A single A100-80GB can serve multiple small models simultaneously (if total VRAM fits). vLLM supports serving multiple models on one GPU through model multiplexing. The scheduler should pack small models onto shared GPUs before allocating dedicated GPUs. Target: >70% GPU memory utilization across the cluster. Monitor with NVIDIA DCGM — if average utilization is below 50%, you are overpaying.
 
+### NVIDIA GPU Operator
+
+Setting up GPU nodes manually requires installing NVIDIA drivers on each node, configuring the NVIDIA Container Toolkit, deploying the device plugin, and managing driver version compatibility across the cluster. The NVIDIA GPU Operator automates all of this through a single Helm chart. It deploys the driver container (compiles the driver for the node's kernel), the container toolkit (nvidia-container-runtime), the device plugin (exposes GPUs as Kubernetes resources), DCGM exporter (GPU metrics for Prometheus), and the GPU Feature Discovery daemon (labels nodes with GPU model, driver version, and capabilities). The result: adding a GPU node to the cluster requires zero manual configuration — the Operator detects the GPU hardware and provisions everything automatically, making GPU nodes as operationally simple as CPU nodes.
+
+### Multi-Instance GPU (MIG)
+
+NVIDIA A100 and H100 GPUs support Multi-Instance GPU — hardware-level partitioning of a single physical GPU into up to 7 isolated instances, each with dedicated compute units, memory, and memory bandwidth. Unlike software-based sharing, MIG provides full isolation: a workload in one MIG instance cannot access the memory or affect the performance of another instance. For inference workloads, MIG enables running multiple small models on a single expensive GPU. A single H100 (80GB) can be split into 7 instances of approximately 10GB each, serving 7 independent inference endpoints. Kubernetes supports MIG through extended resource types: instead of requesting `nvidia.com/gpu: 1` (a full GPU), a pod requests `nvidia.com/mig-1g.10gb: 1` (one MIG instance with 1 compute slice and 10GB memory). The GPU Operator's MIG manager handles partition creation and lifecycle.
+
+### Time-Slicing vs MIG
+
+Time-slicing shares a GPU across multiple pods by alternating access — similar to how a CPU time-shares across processes. It is simpler to configure (a single ConfigMap sets the replica count) and works on any NVIDIA GPU, not just A100+. However, time-slicing provides no memory isolation: all pods sharing the GPU see the full GPU memory, and a pod that allocates too much VRAM can cause out-of-memory errors that crash other pods on the same GPU. Performance is also unpredictable — pods contend for compute cycles.
+
+MIG provides full hardware isolation but requires supported hardware (A100, H100, and newer) and reduces flexibility because partition sizes are fixed to predefined profiles (1g.10gb, 2g.20gb, 3g.40gb, etc.). Changing partitions requires draining workloads from the GPU.
+
+The practical rule: use time-slicing for development and testing environments where isolation is not critical and cost savings from GPU sharing outweigh stability risks. Use MIG for production inference where workload isolation and predictable performance are requirements.
+
+### Practical GPU Scheduling
+
+In pod specifications, request GPU resources through `resources.limits` with `nvidia.com/gpu: 1` for a full GPU or `nvidia.com/mig-1g.10gb: 1` for a MIG partition. GPU resources in Kubernetes are limit-only — there is no concept of GPU "requests" separate from "limits," so every GPU resource specified is guaranteed exclusively to the pod. Always pair GPU allocation with explicit memory limits on the container (`resources.limits.memory`) to prevent the application from consuming node memory beyond what the GPU workload requires. For clusters with mixed GPU types, use node selectors (`nvidia.com/gpu.product: NVIDIA-H100-80GB-HBM3`) or node affinity rules to direct workloads to the correct hardware, preventing a lightweight inference task from being scheduled on a premium GPU node.
+
 ## Key Takeaways
 
 Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection significantly impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.

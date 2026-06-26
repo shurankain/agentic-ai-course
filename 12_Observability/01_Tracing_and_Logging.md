@@ -74,7 +74,11 @@ MDC allows automatically adding trace_id and user_id to all logs within a reques
 
 OpenTelemetry is the de facto standard for distributed tracing. It requires adaptation for LLM use cases.
 
-Semantic conventions for LLM: gen_ai.system (provider), gen_ai.request.model, gen_ai.usage.input_tokens, gen_ai.usage.output_tokens.
+**Semantic conventions for GenAI.** OpenTelemetry has defined semantic conventions specifically for generative AI under the `gen_ai.*` namespace. Key attributes include: `gen_ai.system` (provider name — "openai", "anthropic", "google"), `gen_ai.request.model` (model identifier — "gpt-4o", "claude-sonnet-4-20250514"), `gen_ai.usage.input_tokens` and `gen_ai.usage.output_tokens` (token consumption per call), and `gen_ai.response.finish_reason` ("stop", "length", "tool_calls"). These standardized attributes enable cross-provider dashboards — a single Grafana panel can show token consumption and latency across OpenAI, Anthropic, and self-hosted models because the attribute names are identical.
+
+**Span structure for agent traces.** A typical agent trace has a hierarchical span structure: root span (the full user request) contains an agent loop span, which in turn contains LLM call spans and tool call spans. Each LLM call span captures: model name, prompt hash (not the full prompt text, to preserve privacy and reduce storage), token usage (input and output), latency, and finish reason. Tool call spans capture: tool name, input parameters (with PII masking applied), execution duration, and success or failure status. For multi-step agents, each iteration of the agent loop is a child span, making it straightforward to identify which iteration caused a failure or consumed excessive tokens.
+
+**Practical integration.** Most LLM frameworks ship OpenTelemetry instrumentation libraries: LangChain via `opentelemetry-instrumentation-langchain`, LlamaIndex via its built-in callback handler, and Spring AI via Micrometer-to-OTLP bridge. For custom agents, wrap each LLM call and tool call in a span, set the `gen_ai.*` semantic attributes, and export to your preferred backend (Jaeger, Grafana Tempo, Datadog, or New Relic). The key derived metric to track is **tokens per successful task completion** — this efficiency metric combines cost and quality into a single number. A rising tokens-per-task trend signals prompt degradation, unnecessary tool calls, or agent loops growing longer over time.
 
 Propagation passes trace context between services.
 

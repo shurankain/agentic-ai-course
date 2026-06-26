@@ -72,6 +72,23 @@ An A/B test without statistical analysis is not a test — it is guessing. Requi
 
 Without statistical rigor, you risk accepting random fluctuations as real improvements.
 
+### Worked Example: Customer Support Agent
+
+Consider a concrete scenario. You have a customer support agent and want to test whether a more detailed system prompt improves response quality.
+
+- **Variant A** (control): Current system prompt — 200 tokens, basic role and tone instructions
+- **Variant B** (treatment): Expanded prompt with explicit tone guidelines, escalation rules, and two example responses — 450 tokens
+
+**Metric:** Customer satisfaction score (1-5) collected after each interaction.
+
+**Sample size:** Use a statistical power calculator. To detect a 0.3-point improvement with 80% power and alpha = 0.05, you need approximately 175 interactions per variant (350 total).
+
+**Duration:** Run for at least 2 weeks to account for day-of-week and time-of-day effects. Customer behavior on Monday morning differs from Friday afternoon — a test that runs only on weekdays may miss important patterns.
+
+**Key pitfall — cost vs. quality trade-off:** Variant A uses 200 tokens per call; Variant B uses 450. Even if Variant B scores higher, calculate whether the quality improvement justifies the token cost increase. A prompt that scores 4.2 at $0.02/call may be a better business decision than one scoring 4.4 at $0.05/call, depending on volume. At 100K calls/month, the difference is $3,000/month for a 0.2-point quality gain.
+
+**One variable at a time:** Always test a single variable — prompt text, temperature, or model — to isolate the effect. Changing both the prompt and the model simultaneously makes it impossible to attribute the improvement.
+
 ---
 
 ## Token Optimization

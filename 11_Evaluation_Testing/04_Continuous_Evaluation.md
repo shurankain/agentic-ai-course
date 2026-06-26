@@ -203,6 +203,38 @@ An emerging evaluation metric that combines task success with compliance: a task
 
 **Expected adoption:** CuP is expected to become an enterprise standard metric by 2026-2027, particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
 
+## Multi-Agent Evaluation
+
+Evaluating multi-agent systems is fundamentally harder than single-agent evaluation. Individual agents may perform well in isolation but fail when coordinating with other agents. The evaluation must capture both individual agent quality and system-level behavior — communication efficiency, task completion rate, coordination overhead, and emergent failure modes that arise only from agent interactions.
+
+### Metrics for Multi-Agent Systems
+
+**Task completion rate** — does the system solve the end-to-end task? This is the primary metric. An individual agent may execute its subtask flawlessly, but if the orchestration fails to combine subtask results correctly, the system fails.
+
+**Coordination overhead** — the ratio of coordination tokens (agent-to-agent communication, delegation messages, status updates) to productive tokens (actual work output). High overhead indicates architectural problems — too many handoffs, unclear task boundaries, or excessive confirmation loops. Well-designed multi-agent systems keep coordination overhead below 20% of total tokens.
+
+**Individual agent accuracy** — evaluate each agent independently on its subtask. This identifies the weakest link in the pipeline and determines where improvement effort should be focused.
+
+**Cascade failure rate** — how often does one agent's failure propagate to downstream agents? Measures system resilience. A robust multi-agent system isolates failures; a fragile one amplifies them.
+
+**Time to completion** — wall-clock time including all agent interactions and handoffs. Important for latency-sensitive applications where sequential agent coordination creates unacceptable delays.
+
+**Cost per task** — total tokens consumed by all agents for a single task. Multi-agent systems can be 3-10x more expensive than single-agent approaches due to coordination overhead, duplicated context, and inter-agent communication.
+
+### Evaluation Approaches
+
+**Scenario-based testing** — define end-to-end scenarios with expected outcomes and run the full multi-agent system against them. Verify the final result, not just intermediate outputs. This is the most realistic evaluation method but also the most expensive, as it requires all agents to be running and interacting.
+
+**Agent-in-the-loop testing** — replace one agent with a deterministic mock that produces known outputs, isolating the behavior of the agent under test. This is useful for debugging coordination issues: if Agent B fails only when Agent A provides real (variable) output, the problem is in how B handles A's output variability.
+
+**Communication protocol testing** — verify that agents exchange well-formed messages, respect turn-taking conventions, handle unexpected responses gracefully, and recover from communication failures. This tests the integration layer independently of task quality.
+
+**Regression testing** — record successful multi-agent traces (the full sequence of inter-agent messages and tool calls) and replay them periodically. Any deviation in outcome signals a regression. This catches subtle changes in agent behavior that do not surface in individual agent testing.
+
+### Practical Recommendation
+
+Start with end-to-end task completion rate as the primary metric. Add coordination overhead and cascade failure rate once the system is stable and the basic success rate is satisfactory. Most multi-agent failures are coordination failures, not individual agent failures — evaluate the system as a whole, not just its parts. When a multi-agent system underperforms, the first diagnostic question should be "is the orchestration failing?" rather than "is an individual agent failing?"
+
 ## Key Takeaways
 
 - **Continuous evaluation transforms quality assurance from a one-time gate into an ongoing process.** Models degrade in production due to data drift, provider updates, and changing user expectations — one-time evaluation before release is necessary but insufficient.
@@ -216,6 +248,8 @@ An emerging evaluation metric that combines task success with compliance: a task
 - **CuP (Completion under Policy) combines task success with compliance into a single gate metric.** A task that succeeds while violating policy scores zero — essential for regulated industries where policy violations carry legal consequences.
 
 - **Simulation testing with synthetic personas systematically explores the interaction space.** Generating multi-turn conversations with aggressive, confused, and adversarial personas catches edge cases that random sampling and manual testing miss.
+
+- **Multi-agent evaluation requires system-level metrics beyond individual agent accuracy.** Task completion rate, coordination overhead, cascade failure rate, and cost per task capture the coordination dynamics that determine whether a multi-agent system succeeds or fails.
 
 ---
 
