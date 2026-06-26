@@ -205,6 +205,8 @@ Kubernetes HorizontalPodAutoscaler with custom metrics (llm_queue_depth). Queue 
 **Fallback:**
 Primary service (SGLang) with a short timeout (5s) → fallback to backup (vLLM) with increased timeout → last resort external API (OpenAI, Anthropic). High availability at reasonable cost.
 
+With production infrastructure understood — from GPU architecture to inference serving — Module 18 addresses the governance, regulatory, and organizational constraints that shape how these systems are deployed in enterprises.
+
 ---
 
 ## Navigation

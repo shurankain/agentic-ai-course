@@ -309,6 +309,8 @@ Multi-head attention runs multiple such attention mechanisms in parallel with di
 
 **Text Generation with Top-p Sampling** works autoregressively: at each generation step, all previous tokens are fed into the model to obtain logits for the next token, which are divided by temperature to control randomness. Probabilities are computed via softmax, then sorted in descending order to find the cutoff — the smallest set of tokens with cumulative probability ≥ p. The next token is sampled from this nucleus with renormalized probabilities. The token is appended to the sequence, and the process repeats until max_tokens is reached or an EOS token is generated.
 
+Now that you understand how LLMs work internally — from transformer architecture and attention mechanisms to scaling laws and implementation details — Module 2 teaches you to communicate with them effectively through prompt engineering.
+
 ---
 
 ## Navigation

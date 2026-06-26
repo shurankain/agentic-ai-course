@@ -249,6 +249,8 @@ Security in A2A is implemented through a capability-based model with mutual agen
 
 Understanding the complementary nature of MCP and A2A is critically important: MCP provides vertical integration (agent → data and tools), while A2A implements horizontal integration (agent → agent). Together they form a complete ecosystem for building complex multi-agent systems.
 
+With protocols in place for agents to use tools (MCP) and coordinate with each other (A2A), Module 6 addresses the most common data pattern these protocols serve: Retrieval-Augmented Generation (RAG).
+
 ---
 
 ## Navigation

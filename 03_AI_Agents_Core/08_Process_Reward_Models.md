@@ -353,7 +353,9 @@ This matters for inference-time search, where many paths need to be evaluated.
 
 ## Connection to RLHF
 
-PRM is an extension of RLHF ideas (see [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]) to the level of individual reasoning steps. Understanding this connection helps situate PRM within the evolution of alignment methods.
+> **Preview:** This section discusses how PRM extends RLHF concepts. The full RLHF pipeline — PPO, DPO, reward model training — is covered in [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]. The overview below provides enough context to understand PRM's role without requiring prior RLHF knowledge.
+
+PRM is an extension of RLHF ideas to the level of individual reasoning steps. Understanding this connection helps situate PRM within the evolution of alignment methods.
 
 ### Evolution of Reward Signals in LLMs
 

@@ -423,6 +423,8 @@ Rails should be tested like any security-critical code:
 
 **Real-world application:** Financial services require compliance rails (GDPR, disclaimers), healthcare requires hallucination prevention and escalation rules, e-commerce requires brand protection and fraud prevention. Rails adapt to domain-specific risks.
 
+With security and safety patterns established, Modules 15-17 cover the hardware and infrastructure that production agents run on — GPU architecture, distributed training, and inference optimization.
+
 ---
 
 ## Navigation

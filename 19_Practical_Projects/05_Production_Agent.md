@@ -246,6 +246,8 @@ Continuous Improvement: A/B testing for data-driven decisions, feedback loop for
 
 Production is the beginning of a continuous improvement process. The agent generates data that makes it better. Monitoring detects issues before users do. Experiments prove that changes work.
 
+Module 20 explores the research frontiers that will shape the next generation of these systems — from mixture of experts and state space models to autonomous agents and AI alignment.
+
 ---
 
 ## Navigation
