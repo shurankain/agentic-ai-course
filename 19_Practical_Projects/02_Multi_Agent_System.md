@@ -72,7 +72,7 @@ Before writing code, the critical decisions are architectural. A multi-agent cod
 
 **How to manage state?** Two options. Shared state (LangGraph): all reviewers read from and write to a shared state object containing the PR diff, metadata, and accumulated findings. Simple to implement, single source of truth, but requires reducer logic for concurrent writes. Isolated state with message passing: each reviewer maintains its own context, the orchestrator collects results via messages. Cleaner separation but more boilerplate. For code review, shared state is simpler — the reviewers read the same PR and write non-overlapping findings.
 
-**Model selection per agent.** Not all reviewers need the same model. The Security Reviewer benefits from a frontier model (Claude Opus 4.8 or Fable 5) because security analysis requires deep reasoning about attack vectors. The Style Reviewer works well with a cheaper model (Claude Sonnet 4.6 or Haiku 4.5) because style checks are pattern-matching. The Orchestrator can use a fast model (Haiku) — it routes and synthesizes, it does not analyze. This tiered approach reduces cost by 40-60% compared to using a frontier model for all agents.
+**Model selection per agent.** Not all reviewers need the same model. The Security Reviewer benefits from a frontier model (Claude Opus 4.8) because security analysis requires deep reasoning about attack vectors. The Style Reviewer works well with a cheaper model (Claude Sonnet 4.6 or Haiku 4.5) because style checks are pattern-matching. The Orchestrator can use a fast model (Haiku) — it routes and synthesizes, it does not analyze. This tiered approach reduces cost by 40-60% compared to using a frontier model for all agents.
 
 ## Evaluation: How to Know If Multi-Agent Is Worth It
 

@@ -752,7 +752,7 @@ public class AgentApplication {
         // Initialize the language model
         ChatLanguageModel model = OpenAiChatModel.builder()
             .apiKey(System.getenv("OPENAI_API_KEY"))
-            .modelName("gpt-4o")
+            .modelName("gpt-5.4")
             .temperature(0.7)
             .build();
 

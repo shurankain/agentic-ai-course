@@ -170,12 +170,6 @@ Support for multiple programming languages and model providers ensures flexibili
 
 **Migration path:** Semantic Kernel's plugin/function model is preserved in Microsoft Agent Framework. Existing plugins require minimal changes. The main additions are multi-agent orchestration, event-driven architecture, and Azure AI Agent Service deployment. Organizations should plan gradual migration: new agent features through Microsoft Agent Framework, existing SK integrations continue as-is until a natural migration point.
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[02_Spring_AI|Spring AI]]
-**Next:** [[04_JAX_Ecosystem|JAX Ecosystem]]
-
 ## Practical Code Examples
 
 ### Kernel Creation and Configuration
@@ -338,3 +332,11 @@ System.out.println("Answer: " + answer.getResult());
 ```
 
 These examples demonstrate the key capabilities of the Semantic Kernel Java SDK: kernel creation and configuration, defining reusable plugins with detailed function descriptions, and explicit and automatic function invocation through the model. The `@DefineKernelFunction` and `@KernelFunctionParameter` annotations provide the metadata required for function calling.
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
+**Previous:** [[02_Spring_AI|Spring AI]]
+**Next:** [[04_JAX_Ecosystem|JAX Ecosystem]]

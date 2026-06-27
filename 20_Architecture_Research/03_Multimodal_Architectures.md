@@ -330,7 +330,7 @@ Image/video generation is converging with understanding. Unified architectures t
 
 The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers — expected to reach production between 2026-2028 — will define the next generation of AI applications beyond text and code.
 
-This is a rapidly evolving field. GPT-5.4/5.5, Gemini 2.5/3, Claude Sonnet 4.6/Fable 5, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
+This is a rapidly evolving field. GPT-5.4/5.5, Gemini 2.5/3, Claude Opus 4.8/Sonnet 4.6, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
 
 ---
 

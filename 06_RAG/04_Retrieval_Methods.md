@@ -334,6 +334,8 @@ The recursive process starts with the original query. At each iteration, a vecto
 
 If continuation is needed, the LLM generates a follow-up query based on the original query and found documents. The new query is used for the next iteration. The process continues until the maximum number of hops is reached or sufficient information is obtained. All results from all hops are aggregated, deduplicated, and sorted by relevance.
 
+---
+
 ## Navigation
 
 **Module:** [[../Table_of_Contents|Course Contents]] → RAG

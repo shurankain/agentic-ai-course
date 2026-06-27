@@ -258,7 +258,7 @@ Problem: extending open-weight models to native multimodality and extreme contex
 
 Key idea: mixture-of-experts architecture with native vision, 10M token context via iRoPE (interleaved RoPE without position encodings in some layers).
 
-Results: Llama 4 Scout (17B active / 109B total, 16 experts), Llama 4 Maverick (17B active / 400B total, 128 experts). Scout achieves 10M context — the longest of any open model. Maverick competitive with GPT-4o and Gemini 2.0 Flash.
+Results: Llama 4 Scout (17B active / 109B total, 16 experts), Llama 4 Maverick (17B active / 400B total, 128 experts). Scout achieves 10M context — the longest of any open model. Maverick competitive with GPT-4o and Gemini 2.5 Flash.
 
 Discussion points: MoE trade-offs for open models (memory vs compute), iRoPE for extreme context lengths, distillation from Llama 4 Behemoth (288B active / 2T total), early-fusion multimodality.
 

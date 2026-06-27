@@ -128,7 +128,7 @@ Strict flow requirements. Compliance and audit. Complex state machines. Full con
 
 **Creating the simplest agent**: a basic agent in Strands is created in just a few lines. You import the Agent class and the @tool decorator, define a tool function using the decorator, then create an agent instance passing a list of available tools. After that, you can call the agent like a regular function, passing a text query. The agent automatically decides whether to use a tool to answer.
 
-**Agent configuration with system prompt**: for more complex scenarios, an agent can be assigned a specific role via the system_prompt parameter, a model can be specified (e.g., anthropic.claude-3-sonnet), and multiple specialized tools can be provided. For example, for a research assistant, you can create tools for database search and document summarization, and specify in the system prompt that the agent should always cite sources.
+**Agent configuration with system prompt**: for more complex scenarios, an agent can be assigned a specific role via the system_prompt parameter, a model can be specified (e.g., anthropic.claude-sonnet-4-6), and multiple specialized tools can be provided. For example, for a research assistant, you can create tools for database search and document summarization, and specify in the system prompt that the agent should always cite sources.
 
 ### Implementing Multi-Agent Patterns
 

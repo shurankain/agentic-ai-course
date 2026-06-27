@@ -244,7 +244,7 @@ ADK is the natural choice for organizations in the GCP ecosystem, especially whe
 
 Each framework occupies its own niche. The choice depends on the specific requirements of the project.
 
-**LangGraph** — choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.0 with managed deployment via LangGraph Platform.
+**LangGraph** — choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.2.x with managed deployment via LangGraph Platform.
 
 **OpenAI Agents SDK** — for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
 
@@ -301,7 +301,7 @@ Selecting a framework requires weighing pattern expressiveness, ecosystem maturi
 
 ## Key Takeaways
 
-Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated significantly in 2025, with clear winners emerging.
+Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated significantly in 2025-2026, with clear winners emerging.
 
 LangGraph 1.2 offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility. LangGraph Platform adds managed deployment.
 

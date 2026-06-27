@@ -160,12 +160,6 @@ Streaming responses improve perceived latency. The user sees progress and does n
 
 ---
 
-## Navigation
-**Previous:** [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]
-**Next:** [[02_Multi_Agent_System|Multi-Agent System]]
-
----
-
 ## Practical Code Examples
 
 ### Minimal RAG Pipeline on Spring AI
@@ -517,3 +511,9 @@ public class QdrantVectorStore {
     }
 }
 ```
+
+---
+
+## Navigation
+**Previous:** [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]
+**Next:** [[02_Multi_Agent_System|Multi-Agent System]]

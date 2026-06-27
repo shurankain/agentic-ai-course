@@ -74,7 +74,7 @@ Adversarial system: agents take opposing positions, challenge each other, and a 
 
 Use cases: tasks requiring high reliability (financial analysis: "bull" vs. "bear"), generation and verification (code author vs. reviewer), factual accuracy on contested or ambiguous topics where a single model might commit to a wrong answer confidently.
 
-**Real-world example:** Perplexity Computer's **Model Council** sends the same query to multiple LLMs simultaneously, compares their answers, and selects the best response (or synthesizes from multiple). This is the Debate Pattern applied at the model level — using diversity of models as the source of independent perspectives.
+**Real-world example:** Perplexity's **Model Council** sends the same query to multiple LLMs simultaneously, compares their answers, and selects the best response (or synthesizes from multiple). This is the Debate Pattern applied at the model level — using diversity of models as the source of independent perspectives.
 
 **Quantified benefit:** Research consistently shows 15-30% improvement in factual accuracy through adversarial review. The mechanism: a single agent commits to an answer and defends it even when wrong (confidence bias). Two opposing agents surface weaknesses that a single agent would overlook. The judge sees both sides and makes a more informed decision.
 

@@ -124,7 +124,7 @@ In 2022, OpenAI introduced **tiktoken** — a new tokenization library written i
 |----------------|---------------|----------|
 | Language | C++ | Rust |
 | Speed | Baseline | 3-6x faster |
-| Models | Llama, T5 | GPT-4o, GPT-5, o3 |
+| Models | Llama, T5 | GPT-5.4, GPT-5.5, o3, o4-mini |
 | Algorithms | BPE, Unigram | Byte-level BPE |
 
 For working with OpenAI models, use tiktoken. For Llama and open-source models, use SentencePiece or their specific tokenizers via HuggingFace Transformers.

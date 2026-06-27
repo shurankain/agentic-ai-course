@@ -427,14 +427,6 @@ With security and safety patterns established, Modules 15-17 cover the hardware 
 
 ---
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[04_Moderation_and_Compliance|Moderation and Compliance]]
-**Next:** [[../15_GPU_Architecture/01_GPU_Architecture|GPU Architecture]]
-
----
-
 ## Practical Colang Examples
 
 > **Note:** The examples below use **Colang 1.0 syntax**. Colang 2.0 (recommended for new projects) uses Python-like syntax with `@flow` decorators, `await`/`send` event patterns, and improved control flow. Colang 1.0 remains supported but Colang 2.0 is the standard for new deployments.
@@ -556,3 +548,11 @@ async def verify_user_identity(context: dict):
 async def check_fraud_risk(context: dict):
     return await fraud_api.analyze(context.get("user_data"))
 ```
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
+**Previous:** [[04_Moderation_and_Compliance|Moderation and Compliance]]
+**Next:** [[../15_GPU_Architecture/01_GPU_Architecture|GPU Architecture]]

@@ -231,7 +231,7 @@ An effective AI red team requires diverse skills:
 
 ## Multi-Modal Red Teaming (2024-2025)
 
-With vision-language models (GPT-4V, Claude 3.5, Gemini), red teaming must extend beyond text:
+With vision-language models (GPT-4V, Claude Sonnet 4.6, Gemini), red teaming must extend beyond text:
 
 ### Image-Based Attacks
 

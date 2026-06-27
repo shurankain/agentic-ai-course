@@ -170,14 +170,6 @@ Key advantages of the framework: broad provider support, declarative approach th
 
 For Java teams building AI applications, LangChain4j is the natural choice, combining the capabilities of modern LLMs with familiar Java patterns and tools.
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[00_Frameworks_Overview|AI Frameworks Overview]]
-**Next:** [[02_Spring_AI|Spring AI]]
-
----
-
 ## Practical Code Examples
 
 ### 1. Defining an AI Service with Annotations
@@ -387,3 +379,11 @@ public class LangChain4jDemo {
 **Structured output**: By returning typed objects (record, POJO), you automatically get JSON parsing. The framework generates the JSON Schema and instructs the model on its own.
 
 **Modularity**: Components (model, memory, tools) are created separately and assembled via the builder pattern, ensuring flexibility and testability.
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
+**Previous:** [[00_Frameworks_Overview|AI Frameworks Overview]]
+**Next:** [[02_Spring_AI|Spring AI]]

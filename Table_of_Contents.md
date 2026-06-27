@@ -409,7 +409,7 @@
 - **Browser Automation** — Browser Use (50-78K+ stars), Stagehand, Playwright MCP. 80/20 production pattern
 - **Automated Research Agents (Karpathy Loop)** — AutoResearch: 630 lines, 700 experiments, universal optimization pattern
 - **Deep Research** — Gemini, OpenAI, OWL (69.09% GAIA, #1 open-source)
-- **No-Code/Low-Code Builders** — n8n (150K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
+- **No-Code/Low-Code Builders** — n8n (186K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
 - **Code Review / Data Analysis / Internal Employee Agents**
 - Criteria for choosing a use case
 
