@@ -381,7 +381,7 @@ This format reflects the conversation structure and allows the model to understa
 ### Core Request Parameters
 
 A typical API request includes:
-- **model** — model identifier (e.g., "gpt-4o", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
+- **model** — model identifier (e.g., "gpt-5.4", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
 - **messages** — array of messages
 - **temperature** — degree of randomness in responses (0-2; note: some reasoning models fix this)
 - **max_tokens** — maximum response length
@@ -827,7 +827,7 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON, providing 100% parsing reliability.
 
-**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) × inputPrice + (outputTokens / 1,000,000) × outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) × outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-4o would cost approximately $600/month, whereas GPT-4o-mini would be only about $27/month — a 22x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request — making selective routing essential.
+**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) × inputPrice + (outputTokens / 1,000,000) × outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) × outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120) — an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request — making selective routing essential.
 
 ---
 

@@ -395,7 +395,7 @@ The table below maps the four main compute allocation strategies against their t
 
 | Strategy | C_train | C_inference | Use Case | Example |
 |-----------|---------|-------------|----------|--------|
-| Traditional LLM | High | Fixed (low) | General tasks | GPT-4o, Claude Sonnet 4.6 |
+| Traditional LLM | High | Fixed (low) | General tasks | GPT-5.4, Claude Sonnet 4.6 |
 | Reasoning model | Medium | Variable (high) | Reasoning tasks | o3, Claude extended thinking |
 | Small + TTC | Low | Very high | Quality-critical | o4-mini, R1-distill-7B |
 | Large + minimal | Very high | Low | Latency-critical | Large model, instant responses |

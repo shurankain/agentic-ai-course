@@ -328,14 +328,6 @@ Practice on paper — interviews are often on a whiteboard. Know formulas by hea
 
 ---
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[01_ML_System_Design|ML System Design]]
-**Next:** [[03_Papers_Reading_Guide|Papers Reading Guide]]
-
----
-
 ## Practical Code Examples
 
 ### 1. Self-Attention Mechanism
@@ -512,3 +504,11 @@ print(f"True weights: {true_weights}")
 print(f"Found weights: {weights}")
 print(f"Final loss: {losses[-1]:.4f}")
 ```
+
+---
+
+## Navigation
+
+**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
+**Previous:** [[01_ML_System_Design|ML System Design]]
+**Next:** [[03_Papers_Reading_Guide|Papers Reading Guide]]

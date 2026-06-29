@@ -190,7 +190,7 @@ OpenAIAsyncClient client = new OpenAIClientBuilder()
 // Create chat completion service
 ChatCompletionService chatService = ChatCompletionService.builder()
     .withOpenAIAsyncClient(client)
-    .withModelId("gpt-4o")
+    .withModelId("gpt-5.4")
     .build();
 
 // Build Kernel with service registration

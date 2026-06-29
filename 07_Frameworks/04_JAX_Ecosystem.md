@@ -164,6 +164,8 @@ The Flax, Optax, and Orbax ecosystem provides the necessary tools for building a
 
 JAX is particularly strong for research and TPU workloads. It powers the training infrastructure for Claude and Gemini — the frontier models most AI architects build on. PyTorch remains the leader for rapid prototyping, agent development, and production deployment thanks to its mature ecosystem and CUDA integration.
 
+---
+
 ## Navigation
 
 **Module:** [[../Table_of_Contents|Course Contents]] → Frameworks

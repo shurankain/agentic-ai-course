@@ -500,7 +500,7 @@ define flow handle denied topic
 
 ```yaml
 models:
-  - {type: main, engine: openai, model: gpt-4o}
+  - {type: main, engine: openai, model: gpt-5.4}
 
 rails:
   input:

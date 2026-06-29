@@ -306,7 +306,7 @@ Speech recognition integration requires audio preprocessing (volume normalizatio
 
 Speech synthesis converts the text response into natural speech. APIs provide multiple voices with different characteristics. Optimization includes caching frequently used phrases (greetings, confirmations) and streaming synthesis for long texts (splitting into sentences, playback as segments become ready).
 
-Computer vision integration uses a multimodal language model (GPT-5.4, Claude Sonnet 4.6) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
+Computer vision integration uses a multimodal language model (GPT-5.5, Claude Opus 4.8) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
 
 Multimodal memory stores conversation history including images and their context. Direct storage of all images requires significant memory. Summarization strategy: a VLM creates a text description of the image that is stored instead of the full image, and thumbnails are stored for quick access.
 

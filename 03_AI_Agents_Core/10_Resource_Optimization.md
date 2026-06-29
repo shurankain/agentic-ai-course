@@ -486,7 +486,7 @@ The MODEL_CONFIGS dictionary maps each tier to a specific configuration:
 
 The ECONOMY tier uses the gpt-4o-mini model at a cost of $0.00015 per thousand input tokens and $0.0006 per thousand output tokens. The maximum context is 128,000 tokens. This model is optimal for simple tasks such as classification and short question-answer exchanges.
 
-The STANDARD tier uses the gpt-4o model at a cost of $0.0025 per thousand input tokens and $0.01 per thousand output tokens. The maximum context is also 128,000 tokens. This is the primary workhorse for the majority of tasks.
+The STANDARD tier uses the gpt-5.4 model at a cost of $0.0025 per thousand input tokens and $0.015 per thousand output tokens. The maximum context is also 128,000 tokens. This is the primary workhorse for the majority of tasks.
 
 The PREMIUM tier uses a reasoning model such as o3 at a cost of $0.01 per thousand input tokens and $0.04 per thousand output tokens. These models support large contexts (200K tokens) and deliver the highest reasoning quality. They are used for complex analytical tasks.
 

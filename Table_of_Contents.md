@@ -1968,7 +1968,7 @@
 
 ### 21.1 ML System Design (`01_ML_System_Design.md`)
 - RESHAPE Framework for system design
-  - Requirements, Estimation, System, High-level, API, Productionization, Evaluation
+  - Requirements, Estimation, Service Architecture, How ML Works, API Design, Production Concerns, Edge Cases
 - Case Study 1: Enterprise RAG System
   - Requirements gathering
   - Capacity estimation

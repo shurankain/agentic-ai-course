@@ -498,6 +498,10 @@ An uncalibrated model may systematically inflate or deflate scores. Calibration 
 
 Temperature scaling is a post-processing technique for improving calibration: divide the model's logits by a temperature T before applying sigmoid/softmax. The optimal temperature is found through grid search, minimizing negative log-likelihood on a validation set. T > 1 makes the model less confident (smooths the distribution), T < 1 makes it more confident.
 
+**Related materials:**
+- [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]
+- [[../01_LLM_Fundamentals/08_Scaling_Laws|Inference-time compute and o1-style reasoning]]
+
 ---
 
 ## Navigation
@@ -505,7 +509,3 @@ Temperature scaling is a post-processing technique for improving calibration: di
 **Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
 **Previous:** [[07_Code_Generation_Agents|Code Generation Agents]]
 **Next:** [[09_Agent_Use_Cases|Practical Use Cases]]
-
-**Related materials:**
-- [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]
-- [[../01_LLM_Fundamentals/08_Scaling_Laws|Inference-time compute and o1-style reasoning]]

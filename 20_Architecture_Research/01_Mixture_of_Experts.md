@@ -88,13 +88,13 @@ Specifications: 671B total parameters, 37B activated per token, training cost of
 
 GPT-4o: approximately 1.8T total/unknown active params (unconfirmed estimate based on industry speculation — OpenAI has not disclosed architecture details), estimated $100M+ training cost (no official source), 128K context, 88.7 MMLU.
 Claude 3.5: unknown params, unknown cost, 200K context, 88.7 MMLU.
-LLaMA 3.1 405B: 405B total/405B active, approximately $50M cost, 128K context, 88.6 MMLU.
+Llama 3.1 405B: 405B total/405B active, approximately $50M cost, 128K context, 88.6 MMLU.
 DeepSeek V3: 671B total/37B active, $5.5M cost, 128K context, 88.5 MMLU.
 Mixtral 8x22B: 141B total/39B active, unknown cost, 64K context, 77.8 MMLU.
 
 **Practical Implications:**
 
-Inference efficiency: 37B active params is comparable to LLaMA-70B in compute, but quality is at the 405B level.
+Inference efficiency: 37B active params is comparable to Llama 2 70B in compute, but quality is at the 405B level.
 
 Memory requirements: Full precision approximately 1.3TB, INT8 approximately 670GB, INT4 approximately 340GB. Requires multi-GPU setup, but MLA reduces KV cache overhead.
 

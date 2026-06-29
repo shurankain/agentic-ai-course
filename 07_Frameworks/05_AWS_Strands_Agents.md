@@ -174,6 +174,8 @@ Multi-Agent patterns include Agents-as-Tools for hierarchy, Handoffs for control
 
 Native MCP provides integration with the MCP server ecosystem. For Enterprise, Bedrock AgentCore offers a managed service for production.
 
+---
+
 ## Navigation
 
 **Module:** [[../Table_of_Contents|Course Contents]] → Frameworks

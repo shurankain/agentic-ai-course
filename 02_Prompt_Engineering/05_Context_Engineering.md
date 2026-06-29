@@ -12,7 +12,7 @@
 
 In 2025, Andrej Karpathy proposed the term **Context Engineering**, which was quickly adopted by the industry as a more accurate description of working with LLMs. Harrison Chase (CEO of LangChain) formalized the shift further: "When agents mess up, they mess up because they don't have the right context; when they succeed, they succeed because they have the right context."
 
-This is not merely a rebranding. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context — not from model limitations.** The same Claude Sonnet 4.5 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
+This is not merely a rebranding. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context — not from model limitations.** The same Claude Sonnet 4.6 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
 
 ### Why Context, not Prompt?
 
