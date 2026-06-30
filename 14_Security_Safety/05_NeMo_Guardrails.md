@@ -440,7 +440,8 @@ define user ask about product
 
 define user ask harmful question
   "How to hack a system?"
-  pattern "(?i)(bypass|exploit|hack)"
+  "How to bypass authentication?"
+  "How to exploit a vulnerability?"
 
 # Bot Responses - response templates
 define bot explain product
@@ -460,7 +461,7 @@ define bot offer human support
 define flow handle harmful input
   user ask harmful question
   bot refuse internal info
-  stop
+  abort
 
 # Output Rail: disclaimer for financial topics
 define flow financial disclaimer
@@ -472,7 +473,7 @@ define flow financial disclaimer
 define flow prevent loops
   when same_question_count > 2
     bot offer human support
-    stop
+    abort
 
 # Retrieval Rail: document access control
 define flow check document access
@@ -512,7 +513,7 @@ rails:
   retrieval:
     flows: [check document access]
 
-self_check_input: {enabled: true, llm: {model: gpt-4o-mini, temperature: 0.0}}
+self_check_input: {enabled: true, llm: {model: gpt-4.1-mini, temperature: 0.0}}
 jailbreak_detection: {enabled: true, threshold: 0.85}
 ```
 
@@ -529,10 +530,10 @@ define flow verify user and process
     else
       bot say "Verification required."
       execute trigger_manual_review
-      stop
+      abort
   else
     bot refuse internal info
-    stop
+    abort
 ```
 
 Python code (actions/custom_actions.py):

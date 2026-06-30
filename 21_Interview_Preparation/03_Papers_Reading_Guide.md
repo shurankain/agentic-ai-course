@@ -84,7 +84,7 @@ Pipeline: SFT (fine-tune on demonstrations from humans), Reward Model (train a m
 
 Results: 1.3 billion InstructGPT outperforms 175 billion GPT-3 by human preference, fewer toxic outputs.
 
-Discussion points: reward hacking (the model optimizes a proxy not the true objective), why the KL penalty from the SFT model (preserve capabilities), alternatives DPO, KTO.
+Discussion points: reward hacking (the model optimizes a proxy not the true objective), why the KL penalty from the SFT model (preserve capabilities), alternatives DPO, KTO. For the full treatment, see [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]] and [[../10_Fine_Tuning/05_RLHF_Alternatives|RLHF Alternatives]].
 
 ### 5. Constitutional AI (2022)
 

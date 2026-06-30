@@ -165,8 +165,8 @@ Streaming responses improve perceived latency. The user sees progress and does n
 ### Minimal RAG Pipeline on Spring AI
 
 ```java
-import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -206,7 +206,7 @@ public class RagChatbotService {
 
     public RagChatbotService(EmbeddingModel embeddingModel) {
         // Initialize in-memory vector store
-        this.vectorStore = new SimpleVectorStore(embeddingModel);
+        this.vectorStore = SimpleVectorStore.builder(embeddingModel).build();
     }
 
     /**
@@ -217,7 +217,7 @@ public class RagChatbotService {
     public void indexDocuments(List<Path> documentPaths) {
         // Configure text splitting strategy
         // 512 tokens per chunk, overlap of 64 tokens (12.5%)
-        TokenTextSplitter textSplitter = new TokenTextSplitter(512, 64);
+        TokenTextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(512).build();
 
         for (Path path : documentPaths) {
             try {
@@ -255,7 +255,7 @@ public class RagChatbotService {
      */
     public List<Document> retrieveRelevantDocuments(String query, int topK) {
         // Semantic search via embeddings
-        return vectorStore.similaritySearch(query, topK);
+        return vectorStore.similaritySearch(SearchRequest.builder().query(query).topK(topK).build());
     }
 
     /**
@@ -444,7 +444,7 @@ public class QdrantVectorStore {
         documents.forEach(doc -> {
             try {
                 // Generate embedding for the document
-                List<Double> embedding = embeddingModel.embed(doc.getContent());
+                float[] embedding = embeddingModel.embed(doc.getContent());
 
                 // Prepare point with metadata for filtering
                 PointStruct point = PointStruct.newBuilder()
@@ -481,7 +481,7 @@ public class QdrantVectorStore {
             throws ExecutionException, InterruptedException {
 
         // Generate embedding for the query
-        List<Double> queryEmbedding = embeddingModel.embed(query);
+        float[] queryEmbedding = embeddingModel.embed(query);
 
         // Build metadata filter (if specified)
         Filter.Builder filterBuilder = Filter.newBuilder();

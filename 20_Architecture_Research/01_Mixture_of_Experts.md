@@ -272,7 +272,7 @@ The frontier models converge on several patterns:
 
 Distributed Training (section 16): Expert parallelism is a specific type of model parallelism. AllToAll communication requires optimization just like AllReduce.
 
-Scaling Laws (section 01): MoE changes scaling laws — parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
+Scaling Laws (see [[../01_LLM_Fundamentals/08_Scaling_Laws|Scaling Laws]]): MoE changes scaling laws — parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
 
 Inference (section 17): MoE inference requires loading all experts (memory), AllToAll for distributed inference, and specific KV cache management.
 

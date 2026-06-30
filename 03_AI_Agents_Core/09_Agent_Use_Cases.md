@@ -35,7 +35,7 @@ Not all agent applications are at the same maturity level. Some already generate
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
 | **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
 | **Internal Employee** | Production | Glean, custom RAG agents | Corporate knowledge + tools |
-| **No-Code/Low-Code Builders** | Production | n8n, Dify, Lovable, Bolt.new | n8n 186K+ stars, Dify $180M valuation, Lovable $100M ARR (as of early 2026) |
+| **No-Code/Low-Code Builders** | Production | n8n, Dify, Lovable, Bolt.new | n8n 194K+ stars, Dify $180M valuation, Lovable $100M ARR (as of late June 2026) |
 
 ---
 
@@ -322,7 +322,7 @@ A rapidly growing segment that allows non-developers (and developers seeking rap
 
 ### Workflow Automation Platforms
 
-**n8n** — 186K+ GitHub stars (as of mid-2026), 400+ integrations, open-source with self-hosted option. n8n 2.0 (January 2026) added sandboxed execution, persistent agent memory, 70+ AI nodes, and full traceability for every reasoning step. The self-hosted option is critical for enterprise scenarios with data sovereignty requirements. Native MCP support connects agents to the growing MCP server ecosystem.
+**n8n** — 194K+ GitHub stars (as of late June 2026), 400+ integrations, open-source with self-hosted option. n8n 2.0 (January 2026) added sandboxed execution, persistent agent memory, 70+ AI nodes, and full traceability for every reasoning step. The self-hosted option is critical for enterprise scenarios with data sovereignty requirements. Native MCP support connects agents to the growing MCP server ecosystem.
 
 **Dify** — 93K+ GitHub stars, $30M raised at $180M valuation, 1.4M installations (as of early 2026). Drag-and-drop visual canvas for building agentic workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Occupies the middle ground between pure no-code (Flowise) and full frameworks (LangGraph) — visual building with code escape hatches.
 

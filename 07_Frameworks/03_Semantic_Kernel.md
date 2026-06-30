@@ -188,7 +188,7 @@ OpenAIAsyncClient client = new OpenAIClientBuilder()
     .buildAsyncClient();
 
 // Create chat completion service
-ChatCompletionService chatService = ChatCompletionService.builder()
+ChatCompletionService chatService = OpenAIChatCompletion.builder()
     .withOpenAIAsyncClient(client)
     .withModelId("gpt-5.4")
     .build();
@@ -255,7 +255,7 @@ public class TimePlugin {
 ```java
 // Import plugin into Kernel
 TimePlugin timePlugin = new TimePlugin();
-kernel.importPluginFromObject(timePlugin, "TimePlugin");
+// Plugin registered at build time via Kernel.builder().withPlugin(...)
 
 // Create function arguments
 KernelFunctionArguments arguments = KernelFunctionArguments.builder()
@@ -304,14 +304,14 @@ public class WeatherPlugin {
 
 // Register the plugin
 WeatherPlugin weatherPlugin = new WeatherPlugin();
-kernel.importPluginFromObject(weatherPlugin, "WeatherPlugin");
+// Plugin registered at build time via Kernel.builder().withPlugin(...)
 
 // Configure automatic function calling
 PromptExecutionSettings settings = PromptExecutionSettings.builder()
     .withTemperature(0.7)
     .withMaxTokens(500)
-    .withFunctionCallBehavior(
-        FunctionCallBehavior.allowAllFunctions(true)
+    .withFunctionChoiceBehavior(
+        FunctionChoiceBehavior.auto(true)
     )
     .build();
 

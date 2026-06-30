@@ -296,6 +296,8 @@ Why it matters: Excessively long system prompts dilute attention — the model t
 
 ## Prompt Injection Resistance: Protecting Agent Systems
 
+For the full technical treatment of prompt injection attacks and multi-layered defenses, see [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]].
+
 ### Why Agents Are Especially Vulnerable
 
 Unlike simple LLM applications, agents pose a particular threat under prompt injection attacks. A compromised agent can: execute malicious commands through tools, extract confidential data, modify or delete files, perform transactions on behalf of the user.
@@ -400,7 +402,14 @@ A standardized tool description format with parameters, return values, and examp
   },
   "returns": {
     "type": "array",
-    "items": {"file": "string", "line": "integer", "match": "string"}
+    "items": {
+      "type": "object",
+      "properties": {
+        "file": {"type": "string"},
+        "line": {"type": "integer"},
+        "match": {"type": "string"}
+      }
+    }
   },
   "examples": [
     {"call": "search_codebase('def authenticate')", "scenario": "Find authentication functions"}

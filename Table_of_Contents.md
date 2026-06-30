@@ -376,7 +376,7 @@
   - Git-based changes
   - Review before commit
 - **Terminal Agents** — Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
-- **IDE market (late June 2026)** — **SpaceX acquires Cursor $60B** (June 22). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
+- **IDE market (late June 2026)** — **SpaceX acquires Cursor $60B** (June 16). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
@@ -409,7 +409,7 @@
 - **Browser Automation** — Browser Use (50-78K+ stars), Stagehand, Playwright MCP. 80/20 production pattern
 - **Automated Research Agents (Karpathy Loop)** — AutoResearch: 630 lines, 700 experiments, universal optimization pattern
 - **Deep Research** — Gemini, OpenAI, OWL (69.09% GAIA, #1 open-source)
-- **No-Code/Low-Code Builders** — n8n (186K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
+- **No-Code/Low-Code Builders** — n8n (194K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
 - **Code Review / Data Analysis / Internal Employee Agents**
 - Criteria for choosing a use case
 
@@ -1754,7 +1754,7 @@
 - **Market Landscape (mid-June 2026)** — SaaS $285B shakeout, per-seat→outcome pricing, AI market $601.93B→$3,638B (2033), inference economics as center of gravity
 - **AI, Energy & Sustainability** — ~90 TWh AI-specific, nuclear/SMR procurement (25→45 GW), data center moratoria
 - **Workforce Impact** — augmentation > replacement, 62% AI salary premium, developer productivity ~20-30% (not 10x)
-- **SpaceX acquires Cursor $60B** (June 22); SPCX ATH $225.64 → corrected to ~$185; **Tim Cook steps down Sept 1**
+- **SpaceX acquires Cursor $60B** (June 16); SPCX ATH $225.64 → corrected to ~$185; **Tim Cook steps down Sept 1**
 - **Visa Agent Score** — first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
 - **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale
 - **FERC fast-tracks AI data centers**: 9-17% US electricity by 2030; 370kW rack densities

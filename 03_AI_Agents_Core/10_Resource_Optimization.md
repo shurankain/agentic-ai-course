@@ -406,7 +406,7 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 **Anthropic** planned to separate Agent SDK credits from general usage on June 15, 2026 — but **the change was paused** and never took effect. All programmatic usage continues drawing from existing subscription limits. Teams using Claude Code in CI/automation pipelines do not need to change billing arrangements (as of late June 2026).
 
-**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 22 — pricing and model-neutrality implications unclear.
+**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 16 — pricing and model-neutrality implications unclear.
 
 **GitHub Copilot** transitioned to **usage-based billing (June 1, 2026)** — all plans now use AI Credits ($0.01/credit). Pro includes $10/month in credits, Pro+ includes $39/month. Usage calculated by token consumption including input, output, and cached tokens. Annual Pro/Pro+ plans remain on legacy request-based pricing until expiration. The era of flat-rate "unlimited" AI coding assistance is ending.
 

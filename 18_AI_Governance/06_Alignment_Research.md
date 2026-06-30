@@ -102,7 +102,7 @@ However, interpretability is still far from solving alignment. Current methods w
 
 ### The Problem: Humans Cannot Keep Up with AI
 
-RLHF works as long as human labelers can evaluate the quality of model responses. But what happens when the model generates:
+RLHF (see [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]] for the technical details) works as long as human labelers can evaluate the quality of model responses. But what happens when the model generates:
 - Complex code that a labeler cannot verify?
 - Scientific research requiring expertise the labeler lacks?
 - Long-form reasoning where an error may be deeply hidden?

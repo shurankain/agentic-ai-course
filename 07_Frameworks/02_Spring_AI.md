@@ -298,9 +298,10 @@ public class RagConfiguration {
         // Creating a QuestionAnswerAdvisor for automatic context enrichment
         QuestionAnswerAdvisor qaAdvisor = new QuestionAnswerAdvisor(
             vectorStore,
-            SearchRequest.defaults()
-                .withTopK(5)                    // Top 5 most relevant documents
-                .withSimilarityThreshold(0.7)   // Similarity threshold of 0.7
+            SearchRequest.builder()
+                .topK(5)                    // Top 5 most relevant documents
+                .similarityThreshold(0.7)   // Similarity threshold of 0.7
+                .build()
         );
 
         return builder

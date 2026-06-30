@@ -146,7 +146,7 @@ For agents, authorization at the tool and data level is important. Different use
 
 Validation of size, format, characters. But for agents this is not enough.
 
-Prompt injection is the main threat. Defense: system prompt with clear instructions and constraints, input/output filtering of known patterns, monitoring for anomalous behavior.
+Prompt injection is the main threat (see [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]] for the full taxonomy and defenses). Defense: system prompt with clear instructions and constraints, input/output filtering of known patterns, monitoring for anomalous behavior.
 
 Sensitive data in the system prompt, inaccessible to the user. Do not include internal instructions in the response. Exercise caution with RAG — documents can also contain injection.
 

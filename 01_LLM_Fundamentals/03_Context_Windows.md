@@ -283,7 +283,7 @@ Instead of loading the entire document, load only relevant fragments.
 4. Only the retrieved fragments are loaded into the context
 5. The model answers the question with access to the relevant information
 
-RAG is the standard approach for working with large knowledge bases. It allows "scaling" the agent's knowledge beyond the context window.
+RAG is the standard approach for working with large knowledge bases. It allows "scaling" the agent's knowledge beyond the context window (see [[../06_RAG/01_RAG_Basics|RAG Basics]] for the full pipeline).
 
 ---
 

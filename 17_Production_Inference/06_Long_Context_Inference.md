@@ -101,7 +101,7 @@ A well-documented phenomenon: information placed in the middle of a long context
 No pipeline complexity, full context for reasoning, no information loss from chunking, simple deployment. Works when documents fit, the task requires cross-document reasoning, low latency is critical, data is static.
 
 **RAG — when to use:**
-Scales to terabytes, cheaper (only relevant chunks), updatable, explainability. Works for massive corpora, frequent updates, cost-sensitivity, source attribution.
+Scales to terabytes, cheaper (only relevant chunks), updatable, explainability. Works for massive corpora, frequent updates, cost-sensitivity, source attribution (see [[../06_RAG/01_RAG_Basics|RAG Basics]] for the full RAG pipeline).
 
 **Cost comparison for a concrete scenario.** Processing a 200-page technical manual (approximately 80K tokens) to answer user questions. Long context approach: $0.20 per query (80K input tokens at $2.50/MTok). RAG approach: $0.005 per query (2K retrieved tokens). At 1,000 queries/day: long context costs $200/day, RAG costs $5/day — a 40x difference. The trade-off: RAG requires an indexing pipeline (one-time setup cost) and may miss cross-document relationships. Long context provides better reasoning quality but at dramatically higher per-query cost.
 

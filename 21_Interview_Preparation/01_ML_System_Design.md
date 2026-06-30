@@ -42,6 +42,8 @@ Requirements five to seven minutes (scope clarification, constraints), Estimatio
 
 ## Case Study 1: Enterprise RAG System
 
+For background on RAG architectures and techniques referenced in this case study, see [[../06_RAG/05_Advanced_RAG|Advanced RAG]].
+
 ### Problem Statement
 
 Design a RAG system for a large enterprise with 10M documents, supporting 1000 QPS with sub-second latency.

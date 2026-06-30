@@ -39,7 +39,7 @@ Wooldridge identified four key properties of agents. These properties form a pra
 | Property | Description | Manifestation in LLM Agents |
 |----------|-------------|------------------------------|
 | **Autonomy** | Acts without direct intervention | Agent independently selects the next step |
-| **Social Ability** | Interacts with other agents | Multi-agent systems, A2A/MCP protocols |
+| **Social Ability** | Interacts with other agents | Multi-agent systems, A2A (Agent-to-Agent Protocol)/MCP protocols |
 | **Reactivity** | Responds to environmental changes | Processing tool outputs, error recovery |
 | **Proactivity** | Initiates actions toward goals | Goal-directed planning |
 

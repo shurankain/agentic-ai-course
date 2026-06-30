@@ -58,6 +58,8 @@ For context issues, check the availability of necessary information. Critical in
 
 ## Debugging RAG Systems
 
+For the foundational RAG pipeline concepts referenced below, see [[../06_RAG/01_RAG_Basics|RAG Basics]].
+
 Retrieval Debugging: are we finding the right documents? Logging queries to the vector store, visualizing similarity scores, checking top-k for relevance. If needed documents do not appear in top-k, the problem is in embedding, chunking, or data.
 
 Chunking Issues: relevant information is split between chunks or context is lost. Reviewing source documents and chunks, checking overlap, analyzing chunk sizes.
