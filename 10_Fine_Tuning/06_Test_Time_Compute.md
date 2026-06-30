@@ -184,6 +184,10 @@ Cost modeling becomes more complex — thinking tokens add variable inference co
 
 Architectural implications: routing, caching, async are critical. Budget control (reasoning_effort, budget_tokens) enables cost-quality trade-offs per request.
 
+More thinking tokens do not guarantee better answers — correct solutions are often shorter than incorrect ones. Use `reasoning_effort` / `budget_tokens` as quality controls, not just cost controls.
+
+Chain-of-thought reasoning may not faithfully represent the model's actual decision process (reasoning illegibility). Do not rely on monitoring reasoning chains as the sole safety mechanism — use defense in depth.
+
 ---
 
 ## Navigation

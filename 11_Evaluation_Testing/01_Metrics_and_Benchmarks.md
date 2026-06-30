@@ -183,7 +183,7 @@ Model A is **77x cheaper per correct answer** despite being 5 percentage points 
 
 A task is scored as complete **only** if completed without policy violations. A customer service agent that resolves a ticket but leaks PII scores **zero** — the task is failed regardless of the outcome.
 
-This mirrors CI/CD pipelines where a build that passes functional tests but fails a security scan is still a failed build. CuP combines task success and policy compliance into a single gate metric. Expected to become an enterprise standard by 2026-2027.
+This mirrors CI/CD pipelines where a build that passes functional tests but fails a security scan is still a failed build. CuP combines task success and policy compliance into a single gate metric. Adoption is growing in enterprise settings (as of mid-2026).
 
 ### Simulation Testing
 

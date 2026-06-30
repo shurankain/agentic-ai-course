@@ -735,7 +735,7 @@ The following table summarizes the key characteristics of each architecture disc
 
 8. **O1-style reasoning blurs the boundary** between model and agent. When the model itself can "think longer," external agent architectures can be simplified.
 
-9. **MCTS + LLM is a powerful combination** of classical search algorithms and neural evaluation. The UCB formula balances exploitation and exploration.
+9. **The Augmented-LLM Progression** — start at Level 1 (single LLM + tools), escalate to Level 2 (deterministic workflows) only when needed, Level 3 (autonomous agents) only for dynamic decision-making. 80% of use cases are solved at L1-L2.
 
 10. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
 
@@ -836,8 +836,6 @@ Cognitive architectures model human thinking structure through a system of speci
 **Processing cycle:** The agent perceives the current state (perceive), retrieves relevant chunks from declarative memory (retrieve), finds applicable production rules (match), selects the rule with the highest utility (select), executes the action (execute), updates activations and potentially creates new chunks (learn), checks goal achievement, and updates the goal stack via pop/push operations.
 
 **Applicability:** Long-lived agents that accumulate experience. Personalization and learning user preferences are important. Tasks require contextual adaptation. Resources for complex implementation are available. Examples: personal assistants, tutoring systems, adaptive NPCs.
-
-
 
 ---
 

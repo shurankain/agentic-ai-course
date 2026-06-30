@@ -98,7 +98,7 @@ Google offers models through Vertex AI (enterprise) and Google AI Studio (for de
 - **Gemini Omni** — video output with physics understanding, SynthID watermark on all outputs (Google I/O 2026).
 - **Gemini 2.5 Pro** — previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
 - **Gemini 2.5 Flash** — optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
-- **Gemini 2.0 Flash** — budget model for high-volume workloads. Retires June 1, 2026.
+- **Gemini 2.0 Flash** — budget model for high-volume workloads. Retired June 1, 2026.
 
 The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 
@@ -470,7 +470,7 @@ Budget models are designed for high-volume, lower-complexity tasks where cost an
 
 ### Factors Affecting Actual Cost
 
-**Input/output ratio:** Output tokens are typically 3-5x more expensive than input tokens. For tasks with long prompts and short responses (classification, data extraction), this works in your favor. For generating long texts, output becomes the primary expense.
+**Input/output ratio:** Output tokens are typically 4-6x more expensive than input tokens. For tasks with long prompts and short responses (classification, data extraction), this works in your favor. For generating long texts, output becomes the primary expense.
 
 **Thinking token overhead:** Reasoning models may generate 5-50x more thinking tokens than visible output tokens. A 100-token answer might require 5,000 thinking tokens. The `reasoning_effort` parameter helps control this.
 
@@ -801,7 +801,7 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 3. **Model choice depends on the task.** Complex reasoning requires reasoning models; standard tasks require standard models; simple tasks require budget models. The right routing strategy saves 70%+ on costs.
 
-4. **Cost is determined by tokens.** Output tokens are 3-5x more expensive than input. Thinking tokens in reasoning models can dominate costs. Caching, batching, and routing can reduce costs by several times.
+4. **Cost is determined by tokens.** Output tokens are 4-6x more expensive than input. Thinking tokens in reasoning models can dominate costs. Caching, batching, and routing can reduce costs by several times.
 
 5. **Open-source models have reached parity.** DeepSeek V4, Llama 4, Qwen 3, Kimi K2.6, and NVIDIA Nemotron 3 Ultra compete with proprietary models. MoE architecture dominates the frontier. Nemotron 3 Ultra introduces hybrid Mamba-Transformer design for efficient long-context inference.
 

@@ -294,10 +294,8 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | Claude Opus 4.7 | 87.6% | April 2026 |
 | GPT-5.3-Codex | 85.0% | 2026 |
 | **DeepSeek V4** | **80.6%** | April 2026 (open weights, MIT) |
-| Mistral Medium 3.5 | 77.6% | May 2026 |
-| Human (estimated) | ~75-90% | — |
 | Claude Opus 4.6 Thinking | 79.2% | Early 2026 |
-| Gemini 3 Flash | 76.2% | Early 2026 |
+| Mistral Medium 3.5 | 77.6% | May 2026 |
 | GPT-5.2 | 75.4% | Early 2026 |
 | Claude Sonnet 4 (*retired June 15*) | 72.7% | Mid-2025 |
 | Claude Opus 4 (*retired June 15*) | 72.0% | Mid-2025 |
@@ -615,7 +613,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 1. **IDE tools (Copilot, Cursor, Devin Desktop) augment the developer** — agent modes now enable multi-file autonomous editing alongside traditional autocomplete
 
-2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 80%+ on SWE-bench Verified, they are at or near human-level on real GitHub issues
+2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** — with 88-95% on SWE-bench Verified, they are at or near human-level on real GitHub issues
 
 3. **SWE-bench Verified is saturated** (Fable 5 at 95.0%, June 2026). **SWE-bench Pro** is now the meaningful benchmark (Fable 5 at 80.3%). The convergence: "the argument is mostly over" — AI coding agents work
 
@@ -625,7 +623,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 6. **Security concerns remain:** code injection, secrets, dependencies, hallucinated packages
 
-7. **Supply chain security is an emerging concern** — AI-generated code introduces new attack vectors (see below)
+7. **Supply chain security is an emerging concern** — AI-generated code introduces new attack vectors, including hallucinated package attacks where LLMs suggest non-existent packages that attackers register with malware
 
 8. **Trend: convergence toward agent-native tools** — Cursor, Devin Desktop, and Copilot agent mode all moving toward autonomous multi-file editing
 

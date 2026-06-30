@@ -10,7 +10,7 @@
 
 ## What is AgentOps
 
-AgentOps is an emerging discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined not only by code but also by the model, prompts, tools, and dynamic context.
+AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined not only by code but also by the model, prompts, tools, and dynamic context.
 
 **Evolution:** 2000s DevOps (Code → Deployment), 2010s MLOps (Models → Production), 2020s LLMOps (LLM APIs → Applications), 2024+ AgentOps (Agents → Autonomous systems).
 

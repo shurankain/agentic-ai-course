@@ -201,7 +201,7 @@ An emerging evaluation metric that combines task success with compliance: a task
 
 **Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study ([[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]) for an example where an agent's "successful" response created a legal liability.
 
-**Expected adoption:** CuP is expected to become an enterprise standard metric by 2026-2027, particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
+**Expected adoption:** Adoption is growing in enterprise settings (as of mid-2026), particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
 
 ## Multi-Agent Evaluation
 

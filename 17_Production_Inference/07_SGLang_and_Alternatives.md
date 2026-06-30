@@ -207,6 +207,18 @@ Primary service (SGLang) with a short timeout (5s) → fallback to backup (vLLM)
 
 With production infrastructure understood — from GPU architecture to inference serving — Module 18 addresses the governance, regulatory, and organizational constraints that shape how these systems are deployed in enterprises.
 
+## Key Takeaways
+
+1. **SGLang's RadixAttention** organizes cached prefixes in a radix tree, enabling efficient KV-cache reuse across multi-turn conversations — up to 3x throughput for chatbots and agent loops with shared system prompts.
+
+2. **TensorRT-LLM delivers maximum single-GPU throughput** (5-20% over vLLM) through custom CUDA kernels and graph compilation, at the cost of higher operational complexity and a required model conversion step.
+
+3. **Decision framework: vLLM for general purpose, SGLang for multi-turn agents, TRT-LLM for maximum throughput.** Start with vLLM as the default; switch to SGLang when multi-turn prefix reuse or constrained decoding matters; switch to TRT-LLM only when peak performance justifies the operational overhead.
+
+4. **NVIDIA Dynamo separates prefill and decode** onto hardware optimized for each workload. Combined with Blackwell GPUs, disaggregated serving enables 4-10x cost-per-token reduction and is now the default architecture for new production deployments.
+
+5. **Production infrastructure requires Prometheus monitoring, HPA scaling on queue depth, and multi-service fallback.** Queue depth growth signals the need to scale; a primary-backup-API fallback chain (SGLang with 5s timeout, vLLM backup, external API last resort) provides high availability at reasonable cost.
+
 ---
 
 ## Navigation

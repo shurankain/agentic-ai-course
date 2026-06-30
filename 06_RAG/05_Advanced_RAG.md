@@ -586,7 +586,7 @@ The GraphRAG landscape now offers a spectrum of complexity-cost trade-offs. Stan
 
 **Practical guidance:** Start without a graph (Hybrid RAG + Contextual Retrieval). Add GraphRAG only when you have multi-hop questions that require connecting entities across documents. If you add it, start with LazyGraphRAG to avoid upfront indexing costs. Graduate to full GraphRAG only for stable corpora with high query volumes where precomputation amortizes well.
 
-## Latest Techniques (2024-2025)
+## Key Techniques (2024-2025)
 
 RAG continues to evolve. Several techniques from 2024 significantly change the approach to building systems.
 
@@ -667,7 +667,7 @@ Advanced RAG goes beyond simple "find and answer." Main directions of developmen
 
 **Production landscape (mid-2026):** Adaptive RAG has become the dominant production pattern — a query classifier routes requests by complexity: simple factual queries to direct retrieval, multi-hop queries to agentic RAG, entity-relationship queries to GraphRAG. Microsoft and Thomson Reuters run GraphRAG in production for legal and compliance workflows. Continuous ingestion is replacing batch reindexing — documents are embedded and indexed on arrival, not in nightly batches. Agentic memory (persistent cross-session memory for agents) is now table stakes, not a differentiator.
 
-**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier → pipeline selection) is the recommended starting point for production systems (as of mid-June 2026).
+**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier → pipeline selection) is the recommended starting point for production systems (as of mid-June 2026). Long context (1M+ tokens) reduces RAG complexity for small corpora but does not replace RAG at scale — the 40x cost difference and need for citations keep RAG essential for production.
 
 ---
 

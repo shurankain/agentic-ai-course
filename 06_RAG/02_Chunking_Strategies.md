@@ -178,7 +178,7 @@ Each chunk is not just text but a structured object with metadata that improves 
 
 **Summary Chunks:** An advanced technique — creating additional summary chunks for large sections. The LLM generates a brief (100-200 token) section description, the summary is indexed alongside regular chunks, useful for overview questions, contains references to detailed chunks for drill-down.
 
-## Key Takeaways and Practical Recommendations
+## Key Takeaways
 
 Chunking is a critical RAG system component that directly affects quality. Incorrect chunking can render even the best embedding model and generator useless.
 

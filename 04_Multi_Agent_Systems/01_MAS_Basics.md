@@ -163,7 +163,7 @@ Excessive complexity turns a simple task into a debugging nightmare.
 
 **4. Auditability requirements?** In finance, medicine, and law, tracking who made a decision is important. Splitting into agents creates accountability boundaries.
 
-**5. Are the costs justified?** Multi-agent is more expensive: tokens x2-10, latency x2-5, debugging x5-20, infrastructure x2-5.
+**5. Are the costs justified?** Multi-agent is more expensive: tokens x3-15, latency x2-5, debugging x5-20, infrastructure x2-5.
 
 **Additional cost-focused criteria (2026):**
 

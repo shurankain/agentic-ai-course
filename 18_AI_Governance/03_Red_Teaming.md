@@ -166,7 +166,7 @@ Garak includes:
 - **Generators** — integration with various LLM providers
 - **Reporting** — structured output for analysis
 
-Installation is done via pip install garak. A basic scan is launched with a command specifying the model type (openai), model name (gpt-4o-mini or gpt-4o), and the set of checks. The --probes all parameter runs all available checks, but a targeted scan can be specified with specific categories: encoding (encoding-based attacks), dan (DAN-type jailbreaks), promptinject (prompt injection).
+Installation is done via pip install garak. A basic scan is launched with a command specifying the model type (openai), model name (gpt-4o-mini or gpt-5.4), and the set of checks. The --probes all parameter runs all available checks, but a targeted scan can be specified with specific categories: encoding (encoding-based attacks), dan (DAN-type jailbreaks), promptinject (prompt injection).
 
 ### Microsoft Counterfit
 

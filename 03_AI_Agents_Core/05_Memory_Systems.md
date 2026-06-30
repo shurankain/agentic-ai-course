@@ -332,9 +332,9 @@ This pattern represents the evolution from framework-specific memory implementat
 
 6. **Forgetting is a feature, not a bug**. Outdated information is harmful. Decay and active deletion mechanisms keep memory clean and current.
 
-7. **File-based memory works for developer tools**. Claude Code's CLAUDE.md pattern demonstrates that plain text files — human-readable, git-versioned — are an effective memory system when the memory scale is modest.
+7. **File-based memory and MCP standardize production patterns**. Claude Code's CLAUDE.md pattern works for developer tools at modest scale; MCP exposes memory as resources (read) and tools (write) for backend-agnostic, composable memory across agents.
 
-8. **MCP standardizes memory interfaces**. Exposing memory as MCP resources (read) and tools (write) enables backend-agnostic, composable, and shareable memory across agents.
+8. **Dreaming (Anthropic, 2026) enables offline memory optimization** — agents analyze past sessions and self-improve between runs, the first continual learning approach for production agents without model retraining.
 
 ---
 
@@ -383,8 +383,6 @@ If importance falls below the threshold of 0.1, the item is marked for archival 
 This mechanism keeps memory clean and relevant, imitating the natural forgetting of unused information.
 
 This example demonstrates the key patterns: building context from different memory types, prioritization through scoring, consolidation from short-term to long-term, and forgetting via decay.
-
-
 
 ---
 

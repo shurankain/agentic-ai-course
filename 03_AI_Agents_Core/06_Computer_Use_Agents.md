@@ -10,11 +10,11 @@
 
 ## Introduction: When the Agent Goes Beyond Text
 
-Until recently, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use — a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
+Before late 2024, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use — a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
 
 This is a qualitative shift. The agent is no longer limited to what the developer explicitly implemented as a tool. It can use any software the same way a human does — through a graphical interface. Fill out a form in a browser, edit a document in Word, run a script in the terminal.
 
-However, with this power comes complexity: security, reliability, speed. Computer Use is an emerging capability, and understanding its possibilities and limitations is critical for an AI systems architect.
+However, with this power comes complexity: security, reliability, speed. Computer Use is a rapidly maturing capability, and understanding its possibilities and limitations is critical for an AI systems architect.
 
 ---
 

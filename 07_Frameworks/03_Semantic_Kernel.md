@@ -138,7 +138,7 @@ Integration with standard logging frameworks simplifies correlating AI logs with
 
 The basic architecture of a Semantic Kernel application includes several key patterns.
 
-**Kernel Creation and Initialization:** The Kernel is created through a builder pattern specifying the AI service provider. Basic initialization includes connecting to OpenAI or Azure OpenAI with a model (e.g., gpt-4o) and an API key from environment variables. Once the service is created, it is registered in the Kernel. The ready Kernel is used to execute prompts asynchronously.
+**Kernel Creation and Initialization:** The Kernel is created through a builder pattern specifying the AI service provider. Basic initialization includes connecting to OpenAI or Azure OpenAI with a model (e.g., gpt-5.4) and an API key from environment variables. Once the service is created, it is registered in the Kernel. The ready Kernel is used to execute prompts asynchronously.
 
 **Working with Prompt Templates:** Semantic Kernel supports parameterized templates with placeholders. Variables are passed through a KernelFunctionArguments object. This allows reusing prompts with different input data without modifying their text.
 

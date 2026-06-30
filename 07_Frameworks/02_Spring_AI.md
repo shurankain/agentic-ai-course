@@ -122,7 +122,7 @@ This means a Spring AI application can simultaneously act as an MCP client (cons
 
 Spring AI is fully configured through standard Spring mechanisms — application.properties or YAML files. You define the provider, model, and generation parameters declaratively using structured configuration keys.
 
-A typical configuration includes the provider API key (usually via environment variables for security), the specific model selection (e.g., gpt-4o or claude-sonnet-4-6), and generation parameters such as temperature for controlling creativity, max-tokens for limiting length, or top-p for nucleus sampling.
+A typical configuration includes the provider API key (usually via environment variables for security), the specific model selection (e.g., gpt-5.4 or claude-sonnet-4-6), and generation parameters such as temperature for controlling creativity, max-tokens for limiting length, or top-p for nucleus sampling.
 
 This enables the powerful Spring profiles mechanism for different environments. Local development can use free Ollama with local models. A staging environment can use Azure OpenAI for corporate security. Production can use OpenAI or Anthropic directly for the best quality. Switching between environments requires only changing the active profile; the code remains unchanged.
 

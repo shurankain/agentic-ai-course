@@ -73,6 +73,7 @@ Without controls, an agent can spend an unlimited number of tokens:
 ### Budget Allocation Strategy
 
 **Per-Session Budget:**
+
 | Category | Budget | Allocation |
 |-----------|--------|------------|
 | System prompt | Fixed | 500-1000 tokens |
@@ -488,7 +489,7 @@ The ECONOMY tier uses the gpt-4o-mini model at a cost of $0.00015 per thousand i
 
 The STANDARD tier uses the gpt-5.4 model at a cost of $0.0025 per thousand input tokens and $0.015 per thousand output tokens. The maximum context is also 128,000 tokens. This is the primary workhorse for the majority of tasks.
 
-The PREMIUM tier uses a reasoning model such as o3 at a cost of $0.01 per thousand input tokens and $0.04 per thousand output tokens. These models support large contexts (200K tokens) and deliver the highest reasoning quality. They are used for complex analytical tasks.
+The PREMIUM tier uses a reasoning model such as o3 at a cost of $0.002 per thousand input tokens and $0.008 per thousand output tokens. These models support large contexts (200K tokens) and deliver the highest reasoning quality. They are used for complex analytical tasks.
 
 The CostAwareRouter class implements request routing logic. During initialization, it accepts an optional complexity classifier for more advanced strategies.
 
@@ -558,9 +559,6 @@ The get_status method returns a detailed budget status report as a dictionary wi
 The count_tokens method performs a simplified token count estimate based on text length. It uses the heuristic of "4 characters per token", which yields an approximate estimate. For production systems, precise tokenizers such as tiktoken are recommended.
 
 This system enables precise control over token expenditure, prevents runaway consumption, and ensures predictable request costs.
-
-
-
 
 ---
 
