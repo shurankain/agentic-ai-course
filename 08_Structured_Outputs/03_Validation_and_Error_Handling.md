@@ -113,5 +113,3 @@ Production monitoring is critical. Track metrics, log errors, configure alerts. 
 **Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
 **Previous:** [[02_Data_Extraction|Data Extraction from Unstructured Text]]
 **Next:** [[../09_Conversational_AI/01_Dialog_Management|Dialog Management]]
-
----

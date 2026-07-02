@@ -115,5 +115,3 @@ Ambiguities are inevitable. A good system handles them explicitly: returns optio
 **Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
 **Previous:** [[01_Structured_Output_Techniques|Structured Output Techniques]]
 **Next:** [[03_Validation_and_Error_Handling|Validation and Error Handling]]
-
----

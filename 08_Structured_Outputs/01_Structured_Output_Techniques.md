@@ -172,5 +172,3 @@ Java ecosystem: LangChain4j AI Services (declarative approach), Spring AI (Sprin
 **Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
 **Previous:** [[../07_Frameworks/05_AWS_Strands_Agents|AWS Strands Agents]]
 **Next:** [[02_Data_Extraction|Extracting Data from Unstructured Text]]
-
----

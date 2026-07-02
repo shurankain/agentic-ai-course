@@ -172,7 +172,7 @@ Modern long-context models (Claude, Gemini) use combinations of these techniques
 
 ### How 1M+ Context Is Achieved: Ring Attention and Sequence Parallelism
 
-Gemini 1.5 and other models with million-token contexts use advanced distributed computing techniques:
+Gemini 2.5 Pro, Gemini 3 Flash, and other models with million-token contexts use advanced distributed computing techniques:
 
 **Ring Attention** (2023): Distributes attention computation across multiple GPUs organized in a "ring." Imagine four GPUs connected in a cycle: the first is linked to the second, the second to the third, the third to the fourth, and the fourth loops back to the first. Each GPU holds only a portion of the KV-cache and its own portion of Query requests. During computation, KV data blocks are sequentially passed around the ring from one GPU to the next, allowing each processor to compute attention with all tokens in the sequence. This is like a relay race: each runner passes the baton to the next, and ultimately all participants contribute to achieving the common goal. The technology enables processing sequences that physically do not fit in the memory of a single GPU.
 

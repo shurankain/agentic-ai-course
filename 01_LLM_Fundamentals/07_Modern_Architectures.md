@@ -64,7 +64,7 @@ MoE is not a new idea. The concept appeared in 1991, long before the deep learni
 
 **Training techniques:** Training MoE models requires sophisticated load balancing between experts. Without auxiliary loss functions and capacity constraints, the model "collapses" — all tokens are routed to one or two experts, negating the advantages of the architecture. These techniques were developed only in 2020-2023.
 
-**Inference infrastructure:** Efficient MoE deployment requires expert parallelism — placing different experts on different GPUs. This differs from standard tensor parallelism and requires all-to-all communication patterns. Frameworks like DeepSpeed and Megatron-LM learned to do this efficiently only recently.
+**Inference infrastructure:** Efficient MoE deployment requires expert parallelism — placing different experts on different GPUs. This differs from standard tensor parallelism and requires all-to-all communication patterns. Frameworks like DeepSpeed and Megatron-LM developed efficient support for this in 2023-2024.
 
 **Production validation:** Before Mixtral (December 2023), there was no widely available open-source MoE model demonstrating production-ready quality. Mixtral opened the door, and by 2025, MoE is the default for frontier models. DeepSeek V3 (December 2024) proved that MoE + architectural innovations can match GPT-4o quality at $5.5M training cost. Llama 4 (April 2025) demonstrated MoE with native multimodal early fusion and 10M token context (Scout variant). Every major frontier model now uses some form of sparse computation.
 

@@ -10,7 +10,7 @@
 
 ## The Quadratic Complexity Problem of Attention
 
-The attention mechanism in Transformer requires computing interactions between every pair of positions — N² values. At N = 512, that is 262 thousand values. At N = 4096 — 16 million. At N = 32768 — over a billion. At N = 128000 (Claude, GPT-4 Turbo) — 16 billion.
+The attention mechanism in Transformer requires computing interactions between every pair of positions — N² values. At N = 512, that is 262 thousand values. At N = 4096 — 16 million. At N = 32768 — over a billion. At N = 128000 (Claude, GPT-5) — 16 billion.
 
 Quadratic complexity created a dual problem: computation time grew quadratically, and memory for storing the attention matrix also grew quadratically. For a 32K token sequence, the attention matrix occupied gigabytes of memory for each layer, for each head.
 

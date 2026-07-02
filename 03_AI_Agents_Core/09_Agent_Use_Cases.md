@@ -30,7 +30,7 @@ Not all agent applications are at the same maturity level. Some already generate
 | **Voice Agents** | Production | ElevenLabs, VAPI, Retell | 75ms latency achieved |
 | **Computer Use Agents** | Beta | Anthropic, ChatGPT agent (formerly Operator) | Active development |
 | **Browser Automation** | Production | Browser Use, Stagehand, Playwright MCP | 50-78K+ stars Browser Use (as of early 2026) |
-| **Automated Research** | Emerging | AutoResearch (Karpathy), custom agents | Universal optimization pattern |
+| **Automated Research** | Production | AutoResearch (Karpathy), custom agents | Universal optimization pattern |
 | **Deep Research** | Production | Gemini Deep Research, OpenAI, OWL | OWL 69.09% on GAIA (#1 open-source, Apache 2.0) |
 | **Code Review** | Production | CodeRabbit, Sourcery, custom | Integrated into CI/CD |
 | **Data Analysis** | Production | Julius AI, Code Interpreter | Natural language → SQL/viz |
@@ -147,7 +147,7 @@ Voice agents long remained a "tomorrow's technology" due to high latency. A 2-3 
 
 **Speech-to-Text.** Whisper (OpenAI), Deepgram, AssemblyAI. Real-time transcription with low latency.
 
-**LLM Processing.** Fast models — Claude Haiku 4.5, GPT-4o mini. Time-to-first-token is critical.
+**LLM Processing.** Fast models — Claude Haiku 4.5, GPT-4o-mini. Time-to-first-token is critical.
 
 **Text-to-Speech.** ElevenLabs, PlayHT, LMNT. High-quality synthesis with expression control.
 
@@ -392,7 +392,7 @@ Exercise caution if:
 
 4. **Voice Agents** — the latency breakthrough unlocked production use cases
 
-5. **Computer Use and Browser Automation** — emerging categories, justified when no API exists
+5. **Computer Use** — maturing capability. **Browser Automation** — production-ready, justified when no API exists
 
 6. **Deep Research** — autonomous multi-hour investigation
 

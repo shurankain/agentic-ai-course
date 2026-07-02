@@ -619,7 +619,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 4. **Context management is critical** — the agent must understand the codebase, not just the current file
 
-5. **Spec-driven development** is emerging as a powerful workflow: human writes spec, agent implements
+5. **Spec-driven development** has become a powerful workflow: human writes spec, agent implements
 
 6. **Security concerns remain:** code injection, secrets, dependencies, hallucinated packages
 

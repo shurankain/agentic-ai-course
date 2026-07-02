@@ -191,5 +191,3 @@ LLMs are used for intent recognition and slot extraction from natural language u
 **Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
 **Previous:** [[../08_Structured_Outputs/03_Validation_and_Error_Handling|Validation and Error Handling]]
 **Next:** [[02_Conversation_Design|Conversation Design]]
-
----

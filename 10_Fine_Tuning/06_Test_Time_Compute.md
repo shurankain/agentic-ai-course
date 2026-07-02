@@ -138,7 +138,7 @@ A growing concern in safety research (as of late May 2026): **chain-of-thought r
 
 ## Reasoning for Verification, Not Generation
 
-An emerging cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch — a narrower cognitive task that needs fewer reasoning tokens.
+An established cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch — a narrower cognitive task that needs fewer reasoning tokens.
 
 **The pattern:**
 1. A cheap model (Claude Haiku 4.5, GPT-4o-mini) generates N candidate responses

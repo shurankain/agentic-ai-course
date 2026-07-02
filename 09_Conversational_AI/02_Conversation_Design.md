@@ -210,5 +210,3 @@ Tone adaptation analyzes the user's communication style from their history (form
 **Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
 **Previous:** [[01_Dialog_Management|Dialog Management]]
 **Next:** [[03_Voice_and_Multimodality|Voice and Multimodality]]
-
----

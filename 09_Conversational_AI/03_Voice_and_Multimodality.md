@@ -68,7 +68,7 @@ The API uses a **session-based model**: create a session with configuration (voi
 
 **Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min — the cheapest production STT available from a frontier provider.
 
-**Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant is also available at ~$10/$20 per 1M tokens. No waitlist — available to all developers.
+**Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant existed during the beta period but was deprecated with the Realtime API Beta (May 12, 2026). No waitlist — available to all developers.
 
 **Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
 
@@ -319,5 +319,3 @@ Adapting responses for voice differs from text: long responses are shortened, Ma
 **Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
 **Previous:** [[02_Conversation_Design|Conversation Design]]
 **Next:** [[../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]]
-
----

@@ -463,7 +463,7 @@ Budget models are designed for high-volume, lower-complexity tasks where cost an
 | GPT-4o-mini | $0.15 | $0.60 |
 | Claude Haiku 4.5 | $0.25 | $1.25 |
 | Gemini 2.5 Flash | $0.15 | $0.60 |
-| Gemini 2.0 Flash | $0.10 | $0.40 |
+| Gemini 2.0 Flash *(retired)* | $0.10 | $0.40 |
 | Mistral Small 3 | $0.10 | $0.30 |
 
 **Note:** Reasoning model costs can be deceptive. A query that costs $0.01 with a standard model might cost $0.10-0.50 with a reasoning model due to thinking tokens. Always account for thinking token overhead in cost estimates.
@@ -569,7 +569,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 - Claude Opus 4.8 (88.6% Verified, 69.2% Pro — accessible flagship while Fable 5 is offline)
 - Claude Sonnet 4.6 (consistently strong on coding benchmarks)
 - GPT-5.5 Instant (88.7% Verified)
-- GPT-5.2-Codex / GPT-5.3-Codex (specialized agentic coding models)
+- GPT-5.3-Codex (specialized agentic coding models)
 - Gemini 3.5 Flash (76.2% Terminal-Bench, fastest frontier model)
 - DeepSeek V4 (80.6% SWE-bench Verified, MIT license)
 - Devstral 2 (Mistral, open-weight)
@@ -591,7 +591,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 **Recommended models:**
 - Gemini 3.1 Pro Preview / 3 Flash (1M+ token context)
 - Claude Sonnet 4.6 (200K tokens, 1M on Opus 4.6 / 4.7 / 4.8)
-- GPT-5.2 / GPT-5 (128K-1M context)
+- GPT-5.5 / GPT-5.4 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
 
