@@ -1,13 +1,5 @@
 # 3D Parallelism: Scaling to Trillions
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[03_DeepSpeed_ZeRO|DeepSpeed ZeRO: Zero Redundancy Optimizer]]
-**Next:** [[05_Distributed_Training_Practice|Practice: Distributed Training]]
-
----
-
 ## When One Type Is Not Enough
 
 Data parallelism scales the batch, but the model must fit on a single GPU. Tensor parallelism creates intensive communication. Pipeline has bubble overhead.
@@ -196,11 +188,3 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 **Complexity is significant.** 3D parallelism requires careful configuration, debugging, monitoring.
 
 **Tools help.** Megatron-LM, DeepSpeed, FSDP2 make 3D parallelism more accessible.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[03_DeepSpeed_ZeRO|DeepSpeed ZeRO: Zero Redundancy Optimizer]]
-**Next:** [[05_Distributed_Training_Practice|Practice: Distributed Training]]

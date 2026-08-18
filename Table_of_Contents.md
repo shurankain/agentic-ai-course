@@ -1,12 +1,5 @@
 # AI Agents Course — Full Contents
 
-## Navigation
-
-**Module:** Course Contents
-**Home:** [[00_Home|Course Home Page]]
-
----
-
 > Detailed table of contents for all topics covered in the course.
 > The structure maps exactly to the course files.
 
@@ -2085,10 +2078,3 @@ Each chapter contains a "Practical Code Examples" section with Java implementati
 ---
 
 *Generated based on actual course file contents. Last updated: late June 2026.*
-
----
-
-## Navigation
-
-**Module:** Course Contents
-**Home:** [[00_Home|Course Home Page]]

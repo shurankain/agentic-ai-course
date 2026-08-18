@@ -1,13 +1,5 @@
 # Prompts for AI Agents
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[02_Advanced_Prompting|Advanced Techniques]]
-**Next:** [[04_Prompt_Optimization|Prompt Optimization]]
-
----
-
 ## The Distinct Nature of Agent Prompts
 
 Prompts for AI agents are fundamentally different from regular prompts. A regular prompt governs a single interaction: question → answer. An agent prompt programs the **behavior** of a system that will operate autonomously, make decisions, and use tools across many steps.
@@ -296,7 +288,7 @@ Why it matters: Excessively long system prompts dilute attention — the model t
 
 ## Prompt Injection Resistance: Protecting Agent Systems
 
-For the full technical treatment of prompt injection attacks and multi-layered defenses, see [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]].
+For the full technical treatment of prompt injection attacks and multi-layered defenses, see Module 14, Prompt Injection.
 
 ### Why Agents Are Especially Vulnerable
 
@@ -505,11 +497,3 @@ If 3 attempts are exhausted:
 
 IMPORTANT: Each iteration = a DIFFERENT approach, not a repeat of the same one.
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[02_Advanced_Prompting|Advanced Techniques]]
-**Next:** [[04_Prompt_Optimization|Prompt Optimization]]

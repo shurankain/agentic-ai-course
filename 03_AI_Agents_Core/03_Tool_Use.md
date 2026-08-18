@@ -1,13 +1,5 @@
 # Tool Use
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[02_Agent_Architectures|Agent Architectures]]
-**Next:** [[04_Planning|Agent Planning]]
-
----
-
 ## Introduction
 
 A language model on its own is a scholar locked in an ivory tower. It knows many facts, can reason and generate text, but it is cut off from the real world. Its knowledge is frozen at the time of training. It cannot check the current weather, look up a stock price, or send an email.
@@ -409,9 +401,9 @@ MCP is the industry standard for agent tool integration (as of mid-2026). It fol
 
 MCP solves the fragmentation problem: before MCP, every framework defined tools differently. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, VS Code, JetBrains IDEs, and custom agents. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers, 28% of Fortune 500 deploying MCP servers.
 
-**Security:** Tool descriptions from untrusted MCP servers are a prompt injection vector. Apply trust levels (first-party, verified, unverified) and OAuth 2.1 with PKCE for credential delegation. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for details.
+**Security:** Tool descriptions from untrusted MCP servers are a prompt injection vector. Apply trust levels (first-party, verified, unverified) and OAuth 2.1 with PKCE for credential delegation. See Module 14, Agent Security for details.
 
-For the full MCP architecture, server development, client integration, and ecosystem details, see [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]].
+For the full MCP architecture, server development, client integration, and ecosystem details, see Module 05, MCP Basics.
 
 ### MCP Tools vs Native Function Calling
 
@@ -781,11 +773,3 @@ public class AgentApplication {
     }
 }
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[02_Agent_Architectures|Agent Architectures]]
-**Next:** [[04_Planning|Agent Planning]]

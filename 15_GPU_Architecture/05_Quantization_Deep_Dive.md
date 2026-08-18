@@ -1,13 +1,5 @@
 # Quantization: Model Compression Without Quality Loss
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[04_GPU_Profiling|GPU Profiling and Optimization]]
-**Next:** [[../16_Distributed_Training/01_Distributed_Training_Basics|Distributed Training Fundamentals]]
-
----
-
 ## Introduction: Why Quantization Is Critical
 
 Modern LLMs are staggering in size. LLaMA-70B requires 140 GB of memory just for weights in FP16. GPT-4 presumably contains over a trillion parameters. Running such models on commodity hardware would seem impossible — if not for quantization.
@@ -472,12 +464,4 @@ This code demonstrates the core mechanics: divide the tensor into groups, find t
 
 **Do not use quantization for**: training (except QAT), critical tasks where the slightest degradation is unacceptable (medical, legal), models smaller than 7B (they are already small; the overhead from quantization is not justified).
 
-For deployment-oriented guidance — hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks — see [[../17_Production_Inference/04_Model_Quantization|Model Quantization for Production]].
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[04_GPU_Profiling|GPU Profiling and Optimization]]
-**Next:** [[../16_Distributed_Training/01_Distributed_Training_Basics|Distributed Training Fundamentals]]
+For deployment-oriented guidance — hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks — see Module 17, Model Quantization for Production.

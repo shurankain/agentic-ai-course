@@ -1,13 +1,5 @@
 # Practice: Distributed Training
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[04_3D_Parallelism|3D Parallelism: Tensor, Pipeline, Data]]
-**Next:** [[../17_Production_Inference/01_Inference_Architecture|Production Inference Architecture]]
-
----
-
 ## From Theory to Practice
 
 Distributed training gains meaning when you see it in action. This practice guide will take you from a first multi-GPU experiment to a production-ready pipeline.
@@ -252,11 +244,3 @@ Practical distributed training is a balance of performance, cost, and reliabilit
 **Debug methodically.** When problems arise, simplify to the minimum, isolate the issue, use NCCL_DEBUG and verification utilities.
 
 **Optimize costs.** Spot instances, right-sizing, and efficient code reduce expenses by 50%+ without sacrificing quality.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[04_3D_Parallelism|3D Parallelism: Tensor, Pipeline, Data]]
-**Next:** [[../17_Production_Inference/01_Inference_Architecture|Production Inference Architecture]]

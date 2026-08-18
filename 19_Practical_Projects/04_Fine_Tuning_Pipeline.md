@@ -1,13 +1,5 @@
 # Project: End-to-End Fine-Tuning Pipeline
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Practical Projects
-**Previous:** [[03_MCP_Server|MCP Server]]
-**Next:** [[05_Production_Agent|Production Agent]]
-
----
-
 ## Project Overview
 
 A complete pipeline for fine-tuning a model — from data collection to deployment. A specialized model for customer support that understands product specifics and responds in the appropriate tone.
@@ -169,9 +161,3 @@ Evaluation is multi-faceted: automatic metrics (fast iteration), LLM-as-Judge (s
 Iterative improvement — fine-tuning is not one-shot. Error analysis → data improvement → retrain → evaluate → repeat.
 
 Production deployment requires a proper registry, serving infrastructure, and continuous monitoring to catch degradation.
-
----
-
-## Navigation
-**Previous:** [[03_MCP_Server|MCP Server]]
-**Next:** [[05_Production_Agent|Production Agent]]

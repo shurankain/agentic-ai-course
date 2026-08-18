@@ -1,13 +1,5 @@
 # Computer Use Agents: Controlling the Computer Through AI
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[05_Memory_Systems|Agent Memory Systems]]
-**Next:** [[07_Code_Generation_Agents|Code Generation Agents]]
-
----
-
 ## Introduction: When the Agent Goes Beyond Text
 
 Before late 2024, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use — a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
@@ -593,9 +585,3 @@ The orchestrator generates detailed reports:
 - Execution duration
 - Number of checkpoints created
 - Screenshots of critical moments
-
----
-
-## Navigation
-**Previous:** [[05_Memory_Systems|Agent Memory Systems]]
-**Next:** [[07_Code_Generation_Agents|Code Generation Agents]]

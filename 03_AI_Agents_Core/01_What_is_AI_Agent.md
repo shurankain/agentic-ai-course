@@ -1,13 +1,5 @@
 # What is an AI Agent
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]
-**Next:** [[02_Agent_Architectures|Agent Architectures]]
-
----
-
 ## From Chatbots to Autonomous Systems
 
 A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were essentially "smart chatbots" — systems that answer questions in a "question → answer" format — modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
@@ -233,11 +225,3 @@ This approach reduces risk, accelerates time-to-value, and avoids unnecessary co
 5. **Agents excel** at multi-step tasks with external interactions and clear goals
 
 6. **Limitations** (hallucinations, cost, unpredictability, security) require mitigation strategies
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]
-**Next:** [[02_Agent_Architectures|Agent Architectures]]

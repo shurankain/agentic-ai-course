@@ -1,13 +1,5 @@
 # Late Interaction Models
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[05_Advanced_RAG|Advanced RAG Techniques]]
-**Next:** [[../07_Frameworks/00_Frameworks_Overview|AI Frameworks Overview]]
-
----
-
 ## Problems with Dense Retrieval
 
 The traditional Dense Retrieval approach uses **a single vector** to represent a document or query. This creates fundamental limitations.
@@ -252,10 +244,10 @@ For documents with visual content:
 
 ## Related Topics
 
-- [[04_Retrieval_Methods|Retrieval Methods]] — basic search approaches
-- [[05_Advanced_RAG|Advanced RAG]] — taxonomy of RAG architectures
-- [[03_Embeddings_and_Vector_Stores|Embeddings and Vector Stores]] — vector storage
-- [[../11_Evaluation_Testing/05_RAG_Evaluation|RAG Evaluation]] — retrieval quality metrics
+- Retrieval Methods — basic search approaches
+- Advanced RAG — taxonomy of RAG architectures
+- Embeddings and Vector Stores — vector storage
+- Module 11, RAG Evaluation — retrieval quality metrics
 
 ---
 
@@ -303,11 +295,3 @@ The final step is computing scores via the rank.colbert_score function, which ta
 **Visual Document Store:** For PDF indexing, a dictionary is created where the key is `{pdf_path}:page_{i}` and the value is the multi-vector embeddings of the page. Each page is converted to an image, processed through ColPali, and the embeddings are stored. During search, the text query is encoded, a score is computed with each page via MaxSim, and results are sorted by relevance.
 
 **Efficient storage:** PyLate provides `indexes.ColBERTIndex` with support for residual compression and quantization (`n_bits=2`), which significantly reduces memory requirements. The index is created with a specified path and compression parameters, then documents are added in batches, and search is performed via the `search()` method returning (doc_id, score) pairs.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[05_Advanced_RAG|Advanced RAG Techniques]]
-**Next:** [[../07_Frameworks/00_Frameworks_Overview|AI Frameworks Overview]]

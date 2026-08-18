@@ -1,13 +1,5 @@
 # Semantic Kernel: AI Framework by Microsoft
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[02_Spring_AI|Spring AI]]
-**Next:** [[04_JAX_Ecosystem|JAX Ecosystem]]
-
----
-
 ## Introduction to Semantic Kernel
 
 > **Status (February 2026): Transitioning to Maintenance Mode.** Microsoft has consolidated its agent framework strategy into **Microsoft Agent Framework**, which unifies concepts from Semantic Kernel and AutoGen. Semantic Kernel continues to receive security updates and bug fixes, and its core abstractions (plugins, functions, kernel) carry forward into the new framework. Existing SK applications remain fully functional. For **new projects**, Microsoft recommends evaluating Microsoft Agent Framework, which provides the same plugin/function model plus multi-agent orchestration, event-driven architecture, and deeper Azure AI Agent Service integration.
@@ -332,11 +324,3 @@ System.out.println("Answer: " + answer.getResult());
 ```
 
 These examples demonstrate the key capabilities of the Semantic Kernel Java SDK: kernel creation and configuration, defining reusable plugins with detailed function descriptions, and explicit and automatic function invocation through the model. The `@DefineKernelFunction` and `@KernelFunctionParameter` annotations provide the metadata required for function calling.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[02_Spring_AI|Spring AI]]
-**Next:** [[04_JAX_Ecosystem|JAX Ecosystem]]

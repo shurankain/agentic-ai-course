@@ -1,13 +1,5 @@
 # Document Chunking Strategies
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[01_RAG_Basics|RAG Basics]]
-**Next:** [[03_Embeddings_and_Vector_Stores|Embeddings and Vector Stores]]
-
----
-
 ## Introduction to Chunking
 
 Document chunking critically affects retrieval quality in a RAG system. Chunking is a balance between fragment size and context preservation.
@@ -193,11 +185,3 @@ Chunking is a critical RAG system component that directly affects quality. Incor
 **Common mistakes:** Using a single strategy for all content types, ignoring overlap, chunks that are too small or too large, breaking logical units, missing metadata.
 
 Investing in quality chunking pays off through improvements across the entire RAG system. It is the foundation on which effective retrieval and generation are built.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[01_RAG_Basics|RAG Basics]]
-**Next:** [[03_Embeddings_and_Vector_Stores|Embeddings and Vector Stores]]

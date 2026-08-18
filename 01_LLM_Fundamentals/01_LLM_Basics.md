@@ -1,13 +1,5 @@
 # Large Language Model (LLM) Fundamentals
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[../00_Home|Home Page]]
-**Next:** [[02_Tokenization|Tokenization: How Text Becomes Numbers]]
-
----
-
 Imagine a library that doesn't just store texts but has "absorbed" their content, internalized language patterns, authorial styles, and reasoning logic. That is essentially what a large language model is — a system that has learned to understand and generate human language.
 
 Large Language Models (LLMs) have become a revolution in artificial intelligence. They form the foundation of modern AI agents and determine their ability to understand user queries, reason, generate code, and interact with the external world.
@@ -163,7 +155,7 @@ Beyond predictable scaling, models exhibit **emergent abilities** — skills tha
 
 A new scaling dimension emerged in 2024-2025: **inference-time compute** (test-time compute). Models like o3 generate chains of reasoning tokens before the final answer, dramatically improving performance on complex tasks. This means quality can be improved by spending more compute at inference, not just at training.
 
-These topics — scaling laws, emergence, over-training, and inference-time compute — are covered in depth in [[08_Scaling_Laws|Scaling Laws]].
+These topics — scaling laws, emergence, over-training, and inference-time compute — are covered in depth in Scaling Laws.
 
 ---
 
@@ -214,11 +206,3 @@ Understanding the Transformer architecture is critically important for developin
 5. **Scaling produces emergent abilities**. Upon reaching a certain size, models begin demonstrating skills they were never explicitly taught.
 
 6. **In-context learning** allows adapting the model to new tasks directly in the prompt, without modifying weights.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[../00_Home|Home Page]]
-**Next:** [[02_Tokenization|Tokenization: How Text Becomes Numbers]]

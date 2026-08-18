@@ -1,13 +1,5 @@
 # Triton: Custom Kernels in Python
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[02_Flash_Attention|Flash Attention and Mixed-Precision]]
-**Next:** [[04_GPU_Profiling|GPU Profiling and Optimization]]
-
----
-
 ## Why Write Custom GPU Kernels
 
 In an ideal world, libraries like PyTorch would cover all needs. In reality, even the most advanced frameworks cannot anticipate every scenario.
@@ -251,11 +243,3 @@ To demonstrate the full Triton kernel development cycle, consider a softmax impl
 - Performance benchmark: Triton version is often faster thanks to fusion
 
 This pattern (forward kernel + backward kernel + autograd wrapper) is applicable to any differentiable operation in Triton.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[02_Flash_Attention|Flash Attention and Mixed-Precision]]
-**Next:** [[04_GPU_Profiling|GPU Profiling and Optimization]]

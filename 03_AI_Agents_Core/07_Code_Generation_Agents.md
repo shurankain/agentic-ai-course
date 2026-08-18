@@ -1,13 +1,5 @@
 # Code Generation Agents: From Autocomplete to Autonomous Development
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[06_Computer_Use_Agents|Computer Use Agents]]
-**Next:** [[08_Process_Reward_Models|Process Reward Models]]
-
----
-
 ## Introduction: Evolution of AI in Software Development
 
 The history of AI assistants in programming began with simple autocomplete — suggesting the next few characters based on code statistics. Copilot raised the bar by generating entire functions. But the real revolution happened when AI systems started not just writing code, but fully solving tasks: understanding requirements, exploring the codebase, making changes across multiple files, running tests, and iterating until success.
@@ -303,7 +295,7 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
 
-*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026) → 88.6-88.7% (late May 2026) → **95.0% (Fable 5, June 2026)**. SWE-bench Verified is now effectively saturated. **SWE-bench Pro is the meaningful benchmark:** Fable 5 at **80.3%** (+11pp, vendor-reported), Mythos Preview at 77.8%, Opus 4.8 at 69.2%, GPT-5.5 at 58.6%. The Verified-Pro gap for Fable 5 is ~15pp (down from 19pp for Opus 4.8), suggesting genuine capability improvement. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination. See [[../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]] for full analysis.
+*Note:* The acceleration is remarkable: 13.86% (2024) → 72% (mid-2025) → 79.2% (early 2026) → 87.6% (April 2026) → 88.6-88.7% (late May 2026) → **95.0% (Fable 5, June 2026)**. SWE-bench Verified is now effectively saturated. **SWE-bench Pro is the meaningful benchmark:** Fable 5 at **80.3%** (+11pp, vendor-reported), Mythos Preview at 77.8%, Opus 4.8 at 69.2%, GPT-5.5 at 58.6%. The Verified-Pro gap for Fable 5 is ~15pp (down from 19pp for Opus 4.8), suggesting genuine capability improvement. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination. See Module 11, Metrics and Benchmarks for full analysis.
 
 ### SWE-bench Pro (2025)
 
@@ -469,7 +461,6 @@ A Coding Agent consists of three main top-level modules: **Context Manager** (ma
 **Pattern 3: AI for Tedious Tasks** — The human defines a repetitive task (bulk tests, migrations, boilerplate), AI generates code en masse, the human spot-checks quality, AI fixes identified issues. Saves time on routine work.
 
 **Pattern 4: Autonomous with Checkpoints** — AI works autonomously on a defined task, reaches a checkpoint → requests review, the human checks progress and provides direction, AI continues to the next checkpoint, the human gives final approval. Maximum autonomy with quality control.
-
 
 ### Security Considerations
 
@@ -660,7 +651,7 @@ A defense pattern gaining traction: use one AI agent to security-review code pro
 
 ### MCP Tool Description Injection
 
-Coding agents that use MCP servers to access tools (file systems, databases, APIs) are vulnerable to tool description injection. A malicious MCP server can craft tool descriptions that manipulate the agent into executing unintended operations. The CurXecute attack (CVE-2025-54135) demonstrated this: a malicious VS Code extension used crafted MCP tool descriptions to hijack a coding agent's actions. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for MCP security incidents and mitigations.
+Coding agents that use MCP servers to access tools (file systems, databases, APIs) are vulnerable to tool description injection. A malicious MCP server can craft tool descriptions that manipulate the agent into executing unintended operations. The CurXecute attack (CVE-2025-54135) demonstrated this: a malicious VS Code extension used crafted MCP tool descriptions to hijack a coding agent's actions. See Module 14, Agent Security for MCP security incidents and mitigations.
 
 ---
 
@@ -808,11 +799,3 @@ The choice of approach depends on context. Each strategy excels in specific scen
 | **Incremental Refinement** | Complex features, new architectures | Minor bugfixes |
 
 In practice, hybrid approaches are often used — for example, RAG for context gathering + TDD for implementation + Multi-Agent for final review.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[06_Computer_Use_Agents|Computer Use Agents]]
-**Next:** [[08_Process_Reward_Models|Process Reward Models]]

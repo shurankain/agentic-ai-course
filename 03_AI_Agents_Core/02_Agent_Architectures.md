@@ -1,13 +1,5 @@
 # AI Agent Architectures
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[01_What_is_AI_Agent|What is an AI Agent]]
-**Next:** [[03_Tool_Use|Tool Use]]
-
----
-
 ## Introduction
 
 If an AI agent is an autonomous system capable of solving tasks, then the agent architecture is its internal design that determines how it thinks, plans, and acts. Over the past several years, researchers have developed numerous architectural patterns, each embodying a distinct philosophy for approaching problem-solving.
@@ -531,7 +523,7 @@ The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orch
 
 ## The Karpathy Loop: Universal Optimization Pattern
 
-AutoResearch (Karpathy, April 2026) demonstrated that the ReAct pattern, when specialized for automated experimentation, becomes a powerful universal optimization architecture. The pattern requires three ingredients: an agent with file access, one objectively testable metric, and a fixed time limit. The agent autonomously modifies artifacts, measures the metric, and iterates at machine speed. Applicable beyond ML to CI/CD optimization, infrastructure tuning, SQL query optimization, and prompt engineering. See [[09_Agent_Use_Cases|Agent Use Cases]] for the full analysis of AutoResearch, including the 700-experiment demonstration and applicability framework.
+AutoResearch (Karpathy, April 2026) demonstrated that the ReAct pattern, when specialized for automated experimentation, becomes a powerful universal optimization architecture. The pattern requires three ingredients: an agent with file access, one objectively testable metric, and a fixed time limit. The agent autonomously modifies artifacts, measures the metric, and iterates at machine speed. Applicable beyond ML to CI/CD optimization, infrastructure tuning, SQL query optimization, and prompt engineering. See Agent Use Cases for the full analysis of AutoResearch, including the 700-experiment demonstration and applicability framework.
 
 ---
 
@@ -739,7 +731,7 @@ The following table summarizes the key characteristics of each architecture disc
 
 10. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
 
-**Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles — tool use integration in [[03_Tool_Use|Tool Use]], planning implications in [[04_Planning|Planning]], process reward models and verification in [[08_Process_Reward_Models|Process Reward Models]], and code generation applications in [[07_Code_Generation_Agents|Code Generation Agents]]. For the underlying test-time compute mechanisms, see [[../10_Fine_Tuning/06_Test_Time_Compute|Test-Time Compute]].
+**Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles — tool use integration in Tool Use, planning implications in Planning, process reward models and verification in Process Reward Models, and code generation applications in Code Generation Agents. For the underlying test-time compute mechanisms, see Module 10, Test-Time Compute.
 
 ---
 
@@ -836,9 +828,3 @@ Cognitive architectures model human thinking structure through a system of speci
 **Processing cycle:** The agent perceives the current state (perceive), retrieves relevant chunks from declarative memory (retrieve), finds applicable production rules (match), selects the rule with the highest utility (select), executes the action (execute), updates activations and potentially creates new chunks (learn), checks goal achievement, and updates the goal stack via pop/push operations.
 
 **Applicability:** Long-lived agents that accumulate experience. Personalization and learning user preferences are important. Tasks require contextual adaptation. Resources for complex implementation are available. Examples: personal assistants, tutoring systems, adaptive NPCs.
-
----
-
-## Navigation
-**Previous:** [[01_What_is_AI_Agent|What is an AI Agent]]
-**Next:** [[03_Tool_Use|Tool Use]]

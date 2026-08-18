@@ -1,13 +1,5 @@
 # Human Evaluation of LLMs
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[01_Metrics_and_Benchmarks|Metrics and Benchmarks]]
-**Next:** [[03_LLM_as_Judge|LLM as Judge]]
-
----
-
 ## The Gold Standard of Evaluation
 
 The end consumer of model outputs is a human. No metric can fully model human perception of usefulness, appropriateness, and quality.
@@ -165,11 +157,3 @@ Statistical significance is verified through a binomial test on direct compariso
 - **Crowdsourcing scales human evaluation but requires strict quality control.** Attention checks, gold standard questions, minimum time thresholds, and 3-5x redundancy produce crowd annotations that agree with experts 85-90% of the time.
 
 - **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality — randomization, session limits, and calibration examples are essential countermeasures.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[01_Metrics_and_Benchmarks|Metrics and Benchmarks]]
-**Next:** [[03_LLM_as_Judge|LLM as Judge]]

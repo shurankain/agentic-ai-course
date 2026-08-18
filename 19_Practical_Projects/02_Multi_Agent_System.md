@@ -1,13 +1,5 @@
 # Project: Multi-Agent Code Review System
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Practical Projects
-**Previous:** [[01_RAG_Chatbot|RAG Chatbot]]
-**Next:** [[03_MCP_Server|MCP Server]]
-
----
-
 ## Project Overview
 
 A multi-agent system for automated code review — a team of specialized agents, each focusing on its own aspect: security, performance, style, architecture.
@@ -68,7 +60,7 @@ Before writing code, the critical decisions are architectural. A multi-agent cod
 
 **How many agents and what specializations?** Start with the minimum viable set: Security + Performance + Style + Orchestrator = 4 agents. Add Architecture and Test Coverage reviewers only if the team explicitly values these dimensions and is willing to pay the token cost. Each additional agent multiplies cost by ~1.3x (not 2x — the orchestrator and synthesis overhead is shared). A 4-agent system costs approximately 4x a single-agent review; a 6-agent system costs approximately 5.5x.
 
-**Which communication pattern?** For code review, the Fan-Out/Fan-In pattern is optimal (see [[../04_Multi_Agent_Systems/02_MAS_Patterns|MAS Patterns]]). The orchestrator fans out the PR to all reviewers in parallel, then fans in the results for synthesis. This is preferred over sequential (too slow — each reviewer adds 10-30 seconds) or debate (unnecessary — reviewers analyze different dimensions, not opposing positions). The parallel execution means total latency equals the slowest reviewer, not the sum.
+**Which communication pattern?** For code review, the Fan-Out/Fan-In pattern is optimal (see Module 04, MAS Patterns). The orchestrator fans out the PR to all reviewers in parallel, then fans in the results for synthesis. This is preferred over sequential (too slow — each reviewer adds 10-30 seconds) or debate (unnecessary — reviewers analyze different dimensions, not opposing positions). The parallel execution means total latency equals the slowest reviewer, not the sum.
 
 **How to manage state?** Two options. Shared state (LangGraph): all reviewers read from and write to a shared state object containing the PR diff, metadata, and accumulated findings. Simple to implement, single source of truth, but requires reducer logic for concurrent writes. Isolated state with message passing: each reviewer maintains its own context, the orchestrator collects results via messages. Cleaner separation but more boilerplate. For code review, shared state is simpler — the reviewers read the same PR and write non-overlapping findings.
 
@@ -158,9 +150,3 @@ The Orchestrator coordinates parallel execution and conflict resolution for cons
 GitHub integration makes AI review part of the natural workflow.
 
 A feedback loop and analytics ensure improvement over time, adapting to the codebase and preferences.
-
----
-
-## Navigation
-**Previous:** [[01_RAG_Chatbot|RAG Chatbot]]
-**Next:** [[03_MCP_Server|MCP Server]]

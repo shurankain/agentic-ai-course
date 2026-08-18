@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[01_Fine_Tuning_Basics|Fine-Tuning Basics]]
-**Next:** [[03_Techniques_and_Evaluation|Techniques and Evaluation]]
-
----
-
 # Data Preparation for Fine-Tuning
 
 ## Importance of Data Quality
@@ -129,11 +121,3 @@ Validate at every stage.
 Document everything.
 
 A held-out test set is mandatory.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[01_Fine_Tuning_Basics|Fine-Tuning Basics]]
-**Next:** [[03_Techniques_and_Evaluation|Techniques and Evaluation]]

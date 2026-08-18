@@ -1,13 +1,5 @@
 # Enterprise RAG: Governance and Security
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[03_Red_Teaming|Red Teaming]]
-**Next:** [[05_Governance_Frameworks|Governance Frameworks]]
-
----
-
 ## Introduction: Why Enterprise RAG Differs from a Prototype
 
 Building a working RAG prototype is a weekend project: load documents into a vector store, connect an LLM, get answers to questions. But between a prototype and an enterprise-ready system lies a chasm filled with questions of security, compliance, and governance.
@@ -243,11 +235,3 @@ Security architecture follows the defense in depth principle: network isolation,
 ## Implementation Notes
 
 The multi-tenant RAG architecture, document-level access control, PII detection pipeline, and audit logging patterns described above provide the specification for production implementation. Key implementation decisions: use Microsoft Presidio for PII detection, implement ACL checks at query time (not indexing time) for flexibility, store audit events in an append-only log with cryptographic chaining, and apply the principle of "deny by default" for cross-tenant data access.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[03_Red_Teaming|Red Teaming]]
-**Next:** [[05_Governance_Frameworks|Governance Frameworks]]

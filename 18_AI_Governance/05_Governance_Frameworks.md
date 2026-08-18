@@ -1,13 +1,5 @@
 # AI Governance Frameworks: Organizational Structures
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[04_Enterprise_RAG|Enterprise RAG]]
-**Next:** [[06_Alignment_Research|Alignment Research]]
-
----
-
 ## Introduction: From Technology to Organizational Maturity
 
 AI technical capabilities outpace organizational readiness to use them. A company can deploy a frontier model like GPT-5.4 in a day, but building a governance framework for responsible AI use takes years. The gap between technical capability and governance maturity creates risks that materialize in headlines about AI failures, bias scandals, and privacy breaches.
@@ -398,11 +390,3 @@ Organizations preparing for compliance encounter recurring challenges:
 ## Implementation Notes
 
 The governance platform, approval workflows, and model registry patterns described above are enterprise-standard patterns implemented by tools like MLflow (model registry), Weights & Biases (experiment tracking), and custom governance dashboards built on standard web frameworks. The key architectural decision: centralize governance metadata (risk scores, approval status, model cards) in a single queryable system, even if the AI systems themselves are distributed across teams.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[04_Enterprise_RAG|Enterprise RAG]]
-**Next:** [[06_Alignment_Research|Alignment Research]]

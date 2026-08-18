@@ -1,13 +1,5 @@
 # Generation Parameters: Controlling Model Behavior
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[03_Context_Windows|Context Windows and Managing Them]]
-**Next:** [[05_LLM_Providers_and_API|LLM Providers and Working with APIs]]
-
----
-
 Imagine a writer standing before the choice of the next word in a novel. Sometimes precision is required — when drafting a legal document or a technical manual. Sometimes creativity matters — in poetry or a film script. And sometimes balance is needed — vivid language without drifting into absurdity.
 
 Generation parameters in language models are exactly these "tuning knobs" that control the degree of creativity and predictability in responses. Understanding these parameters is critically important for an AI agent developer: tool selection demands precision, while responding to a user demands lively language.
@@ -423,11 +415,3 @@ In agentic systems, it is critically important to use different generation param
 **User response mode**: Temperature is raised to 0.7 for natural language. Top-p = 0.95 provides more freedom in word choice. Max_tokens up to 2000 for detailed explanations. Stop sequences are empty — the model decides when to finish. Repetition penalties are more significant (presence = 0.5, frequency = 0.3) to keep the text from becoming monotonous.
 
 This differentiation of parameters allows the agent to be precise where precision is needed and natural where fluent communication matters.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[03_Context_Windows|Context Windows and Managing Them]]
-**Next:** [[05_LLM_Providers_and_API|LLM Providers and Working with APIs]]

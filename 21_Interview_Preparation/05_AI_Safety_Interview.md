@@ -1,13 +1,5 @@
 # AI Safety Interview Preparation
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[04_Behavioral_Staff_Plus|Behavioral for Staff+]]
-**Course completed!** → [[../00_Home|Home Page]]
-
----
-
 ## Introduction
 
 AI Safety is a critically important topic for interviews at frontier AI companies: Anthropic (safety as core mission), OpenAI (alignment research), Google DeepMind (AI safety team), Meta AI, Google AI Principles.
@@ -229,10 +221,3 @@ Demonstrating awareness of safety shows maturity as an engineer, long-term think
 6. **Know the open problems and be ready to state your position.** Scalable oversight, deceptive alignment, the open-source proliferation trade-off, and multi-agent safety are active debates; interviewers at frontier companies expect you to engage with nuance rather than recite definitions.
 
 7. **Anthropic's RSP and ASL levels are required knowledge for safety interviews.** Understanding how capability evaluations trigger progressively stricter security and deployment requirements demonstrates that you grasp the governance side of safety, not just the technical side.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[04_Behavioral_Staff_Plus|Behavioral for Staff+]]

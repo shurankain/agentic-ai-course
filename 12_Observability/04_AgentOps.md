@@ -1,13 +1,5 @@
 # AgentOps: Operations for AI Agents
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[03_LLM_Debugging|LLM Debugging]]
-**Next:** [[../13_Deployment/01_Deployment_Strategies|Deployment Strategies]]
-
----
-
 ## What is AgentOps
 
 AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined not only by code but also by the model, prompts, tools, and dynamic context.
@@ -201,11 +193,3 @@ Test cases define input data, expected results, and success criteria. The evalua
 - **Agent health scoring enables fleet-level management.** A composite 0-100 score combining success rate (40%), efficiency (20%), cost (20%), and safety (20%) provides a traffic-light dashboard for rapid operational awareness across agent fleets.
 
 - **Incident response for agents requires specialized runbooks.** Prompt leaks, tool abuse, safety violations, cost spikes, and hallucination surges each demand specific detection, triage, and mitigation steps beyond traditional DevOps playbooks.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[03_LLM_Debugging|LLM Debugging]]
-**Next:** [[../13_Deployment/01_Deployment_Strategies|Deployment Strategies]]

@@ -1,13 +1,5 @@
 # Embeddings and Vector Stores
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[02_Chunking_Strategies|Document Chunking Strategies]]
-**Next:** [[04_Retrieval_Methods|Information Retrieval Methods]]
-
----
-
 ## The Nature of Embeddings
 
 Embeddings are numerical representations of text in a multidimensional space. Converting text into vectors enables semantic search in RAG.
@@ -255,11 +247,3 @@ Vector stores are optimized for nearest-neighbor search. The choice depends on s
 Hybrid search combines semantic and lexical approaches, compensating for the limitations of each.
 
 Optimization includes dimensionality selection, quantization, filtering, and caching. Metric monitoring provides observability and quality control.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[02_Chunking_Strategies|Document Chunking Strategies]]
-**Next:** [[04_Retrieval_Methods|Information Retrieval Methods]]

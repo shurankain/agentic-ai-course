@@ -1,13 +1,5 @@
 # Agent Security
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[02_Data_Protection|Data Protection]]
-**Next:** [[04_Moderation_and_Compliance|Moderation and Compliance]]
-
----
-
 ## Autonomy as a Source of Risk
 
 Autonomous agents represent a fundamentally new level of risk. While a chatbot can give a wrong answer, an agent can perform a wrong action: delete data, send an email, execute code, spend money. The consequences of errors are material and often irreversible.
@@ -161,7 +153,7 @@ MCP's rapid adoption (97M+ monthly SDK downloads, 9,400+ verified servers as of 
 | **Model Misbinding** | Agent connects to a spoofed or wrong MCP server | Attacker serves malicious tools that mimic legitimate ones; agent trusts them implicitly |
 | **Context Spoofing** | Manipulated resource content injected into agent context | Poisoned data from MCP resources enters the LLM's reasoning without sanitization |
 
-Tool Poisoning deserves special attention because it exploits a fundamental design assumption: tool descriptions are treated as trusted, system-level content. A malicious server provides tools that function correctly — but whose descriptions contain hidden instructions that redirect the agent's behavior when it reads them during tool selection. Unlike prompt injection through user input, this attack vector operates at the infrastructure level. See [[../05_MCP_Protocol/03_MCP_Server_Development|MCP Server Development]] for server-side security practices.
+Tool Poisoning deserves special attention because it exploits a fundamental design assumption: tool descriptions are treated as trusted, system-level content. A malicious server provides tools that function correctly — but whose descriptions contain hidden instructions that redirect the agent's behavior when it reads them during tool selection. Unlike prompt injection through user input, this attack vector operates at the infrastructure level. See Module 05, MCP Server Development for server-side security practices.
 
 ## MCP Security Incidents (2025-2026)
 
@@ -211,11 +203,11 @@ Real-world incidents demonstrate that MCP security risks are not theoretical:
 
 Beyond MCP-specific vulnerabilities, several critical CVEs in widely-used AI frameworks emerged in June 2026 — affecting tools recommended elsewhere in this course.
 
-**LiteLLM CVE-2026-42271 (CISA KEV, June 9, CVSS 9.8):** MCP command injection in LiteLLM test endpoints — `POST /mcp-rest/test/connection` and `POST /mcp-rest/test/tools/list`. Chains with CVE-2026-48710 (Starlette Host header bypass) to become a fully unauthenticated, internet-exploitable RCE. Added to CISA's Known Exploited Vulnerabilities catalog with a federal patch deadline of June 22. Patched in LiteLLM 1.83.7. This is significant because LiteLLM is recommended as the unified proxy layer for multi-provider failover (see [[../13_Deployment/01_Deployment_Strategies|Deployment Strategies]]) — a vulnerability in the proxy affects every application behind it. Pin versions, monitor advisories, and treat proxy libraries as critical infrastructure.
+**LiteLLM CVE-2026-42271 (CISA KEV, June 9, CVSS 9.8):** MCP command injection in LiteLLM test endpoints — `POST /mcp-rest/test/connection` and `POST /mcp-rest/test/tools/list`. Chains with CVE-2026-48710 (Starlette Host header bypass) to become a fully unauthenticated, internet-exploitable RCE. Added to CISA's Known Exploited Vulnerabilities catalog with a federal patch deadline of June 22. Patched in LiteLLM 1.83.7. This is significant because LiteLLM is recommended as the unified proxy layer for multi-provider failover (see Module 13, Deployment Strategies) — a vulnerability in the proxy affects every application behind it. Pin versions, monitor advisories, and treat proxy libraries as critical infrastructure.
 
 **Microsoft Semantic Kernel CVE-2026-25592 (CVSS 10.0, .NET):** A prompt-injected agent escaped its Azure Container Apps sandbox via an accidentally exposed `DownloadFileAsync` kernel function with no path validation. The maximum CVSS score reflects the severity: any Semantic Kernel agent with file download capabilities could be fully compromised through prompt injection. Patched in semantic-kernel 1.71.0 (.NET). **CVE-2026-26030 (CVSS 9.8, Python):** Unsafe `eval()` in vector store filter functions allows attacker-controlled code execution. Patched in semantic-kernel 1.39.4 (Python). These demonstrate that even Microsoft-maintained agent frameworks can contain critical vulnerabilities — and that the "prompts become shells" attack pattern (where prompt injection escalates to OS-level code execution) is becoming a standard attack class.
 
-**Spring AI CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. A user-controlled metadata filter could bypass the intended query sandbox and execute arbitrary database queries. Patched in Spring AI 1.0.9, 1.1.8, and 2.0.0 GA. Relevant for any Spring AI application using vector store metadata filters in production — see [[../07_Frameworks/02_Spring_AI|Spring AI]].
+**Spring AI CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. A user-controlled metadata filter could bypass the intended query sandbox and execute arbitrary database queries. Patched in Spring AI 1.0.9, 1.1.8, and 2.0.0 GA. Relevant for any Spring AI application using vector store metadata filters in production — see Module 07, Spring AI.
 
 **pgAdmin 4 AI Assistant CVE-2026-12045 (CVSS 9.0):** The AI Assistant feature in pgAdmin 4 (versions 9.13-9.15) had a read-only transaction bypass. An attacker who could write to any database object the assistant reads could inject a payload that terminated the `BEGIN TRANSACTION READ ONLY` wrapper, then executed arbitrary SQL including `COPY ... TO PROGRAM` for OS-level RCE. Patched in pgAdmin 9.16. This demonstrates a pattern: AI assistants with database access need defense-in-depth beyond transaction isolation.
 
@@ -325,11 +317,3 @@ Multi-agent systems introduce privilege escalation risks: enforce scope reductio
 Plugin/skill ecosystems require security architecture from day one. The OpenClaw incident (1 in 12 marketplace packages malicious) demonstrates the cost of treating plugin security as an afterthought.
 
 Agent governance at scale requires dedicated tooling (Microsoft Agent Governance Toolkit, NVIDIA 9 controls) and organizational commitment — the gap between deployment (80.9%) and security approval (14.4%) is the defining risk of enterprise agent adoption in 2026.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[02_Data_Protection|Data Protection]]
-**Next:** [[04_Moderation_and_Compliance|Moderation and Compliance]]

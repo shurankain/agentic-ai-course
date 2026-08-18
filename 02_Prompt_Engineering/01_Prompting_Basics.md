@@ -1,13 +1,5 @@
 # Introduction to Prompt Engineering
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[../01_LLM_Fundamentals/10_Implementation_from_Scratch|Implementing a Transformer from Scratch]]
-**Next:** [[02_Advanced_Prompting|Advanced Prompting Techniques]]
-
----
-
 ## The Prompt as a Natural Language Program
 
 When large language models began demonstrating remarkable capabilities in the 2020s, researchers faced an unusual problem: how exactly should one "talk" to these systems to obtain desired results? The answer was a new discipline — **Prompt Engineering**, the art and science of formulating queries for language models.
@@ -322,11 +314,3 @@ Requirements: PEP 8, type hints, 80%+ test coverage, security
 - Priority: security > style
 - If the code is good, say so
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[../01_LLM_Fundamentals/10_Implementation_from_Scratch|Implementing a Transformer from Scratch]]
-**Next:** [[02_Advanced_Prompting|Advanced Prompting Techniques]]

@@ -1,13 +1,5 @@
 # Prompt Injection: Attacks and Defense
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[../13_Deployment/03_CI_CD_and_Self_Hosted|CI/CD and Self-Hosted Models]]
-**Next:** [[02_Data_Protection|Data Protection]]
-
----
-
 ## A New Class of Vulnerabilities
 
 Prompt injection is a fundamentally new class of vulnerabilities in the LLM era. Language models do not distinguish between "system instructions" and "user input" at a fundamental level. To the model, everything is text. The system prompt and user message are processed identically. The model is trained to follow instructions but cannot reliably tell "real" ones from "fake" ones injected by an attacker.
@@ -41,7 +33,7 @@ In December 2025, OWASP released a separate framework specifically for autonomou
 |------|------|-------------|
 | ASI01 | **Agent Goal Hijacking** | Attackers manipulate an agent's objectives through poisoned inputs (emails, documents, web content). Agents cannot reliably distinguish instructions from data |
 | ASI02 | **Tool Misuse & Exploitation** | Agents misuse or abuse tools through unsafe composition, recursion, or excessive execution, causing harmful side effects despite having valid permissions |
-| ASI03 | **Supply Chain Risks** | Compromised dependencies, malicious MCP servers, poisoned plugins in agent ecosystems (see OpenClaw incident in [[03_Agent_Security|Agent Security]]) |
+| ASI03 | **Supply Chain Risks** | Compromised dependencies, malicious MCP servers, poisoned plugins in agent ecosystems (see OpenClaw incident in Agent Security) |
 | ASI04 | **Unexpected Code Execution** | Agent-generated or agent-invoked code executes with insufficient sandboxing, enabling escape from intended boundaries |
 | ASI05 | **Credential Exposure** | Agents leak, mishandle, or over-share credentials and tokens across tool boundaries or in logs |
 | ASI06 | **Excessive Permissions** | Agents operate with broader privileges than the task requires, amplifying the impact of any compromise |
@@ -52,7 +44,7 @@ In December 2025, OWASP released a separate framework specifically for autonomou
 
 The framework was developed through collaboration with over 100 industry experts, researchers, and practitioners. As of early 2026, 48% of cybersecurity professionals identify agentic AI as the number-one attack vector, yet only 34% of enterprises have AI-specific security controls in place.
 
-Three of the top four risks (ASI01, ASI02, ASI04) revolve around the boundary between what an agent intends to do and what it actually does — a category of risk that simply does not exist for non-agentic LLM applications. Defending against these requires architectural decisions (sandboxing, permission systems, human-in-the-loop) rather than input/output filtering alone. See [[03_Agent_Security|Agent Security]] for implementation patterns.
+Three of the top four risks (ASI01, ASI02, ASI04) revolve around the boundary between what an agent intends to do and what it actually does — a category of risk that simply does not exist for non-agentic LLM applications. Defending against these requires architectural decisions (sandboxing, permission systems, human-in-the-loop) rather than input/output filtering alone. See Agent Security for implementation patterns.
 
 **The frontier of AI cyber capability (April-May 2026):** Anthropic's **Claude Mythos Preview** demonstrates what happens when agent capabilities extend into the security domain — the model achieves 73% success on expert-level cyber-attack simulations that no model could complete before April 2025. Anthropic restricted access to 12 founding partners due to "the scale and sophistication of the cyberattacks it could enable." OpenAI responded with **GPT-5.4-Cyber**, a model specialized for cyber defense with access gated through Trusted Access for Cyber (TAC). This development validates ASI04 (Unexpected Code Execution) and ASI06 (Excessive Permissions) as critical risks: frontier models are becoming more capable attackers, not just targets. The security community must now contend with models that can autonomously discover and exploit vulnerabilities — making the Agentic Top 10 more urgent, not less.
 
@@ -222,7 +214,7 @@ Safety rule: Never combine all three factors. If the agent processes untrusted c
 
 ## Production Safety with NeMo Guardrails
 
-For production-grade multi-layered defense, NVIDIA NeMo Guardrails provides a declarative safety framework with five rail types (input, dialog, retrieval, execution, output), the Colang domain-specific language for defining safety rules, and integration with all major LLM providers. NeMo Guardrails supports both Llama Guard and ShieldGemma as safety classifiers, with configurable thresholds per risk category. See [[05_NeMo_Guardrails|NeMo Guardrails]] for the complete architecture, Colang DSL, production deployment patterns, and comparison with alternatives (Guardrails AI, custom implementations).
+For production-grade multi-layered defense, NVIDIA NeMo Guardrails provides a declarative safety framework with five rail types (input, dialog, retrieval, execution, output), the Colang domain-specific language for defining safety rules, and integration with all major LLM providers. NeMo Guardrails supports both Llama Guard and ShieldGemma as safety classifiers, with configurable thresholds per risk category. See NeMo Guardrails for the complete architecture, Colang DSL, production deployment patterns, and comparison with alternatives (Guardrails AI, custom implementations).
 
 ## Key Takeaways
 
@@ -382,11 +374,3 @@ async def safe_llm_call(user_input: str, system_prompt: str) -> str:
 ```
 
 Metrics: attack blocking >95%, false positives <5%, latency <200ms, prompt leaks 0/month.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[../13_Deployment/03_CI_CD_and_Self_Hosted|CI/CD and Self-Hosted Models]]
-**Next:** [[02_Data_Protection|Data Protection]]

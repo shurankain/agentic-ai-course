@@ -1,13 +1,5 @@
 # Project: Production-Ready RAG Chatbot
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Practical Projects
-**Previous:** [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]
-**Next:** [[02_Multi_Agent_System|Multi-Agent System]]
-
----
-
 ## Project Overview
 
 We will build a full-featured RAG chatbot for enterprise documentation — from document ingestion to production deployment. The system processes thousands of documents, supports multiple users, and operates reliably in production.
@@ -511,9 +503,3 @@ public class QdrantVectorStore {
     }
 }
 ```
-
----
-
-## Navigation
-**Previous:** [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]
-**Next:** [[02_Multi_Agent_System|Multi-Agent System]]

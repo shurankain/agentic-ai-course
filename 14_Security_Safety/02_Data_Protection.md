@@ -1,13 +1,5 @@
 # Data Protection in LLM Systems
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[01_Prompt_Injection|Prompt Injection]]
-**Next:** [[03_Agent_Security|Agent Security]]
-
----
-
 ## New Dimensions of the Privacy Problem
 
 LLM applications create unique challenges for data protection. Every request potentially contains confidential information: personal data, business secrets, financial details. Leakage channels: the LLM provider itself gains access to the context, the model's response may contain sensitive information, logs and metrics retain data.
@@ -117,11 +109,3 @@ Encryption at rest, in transit, and at the application level protects data at al
 Audit logging records all actions for compliance. Immutability and tamper detection ensure log reliability.
 
 When using external LLM providers, the following are critical: DPA, data usage policies, and residency requirements. Self-hosted models eliminate data transfer but create operational obligations.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[01_Prompt_Injection|Prompt Injection]]
-**Next:** [[03_Agent_Security|Agent Security]]

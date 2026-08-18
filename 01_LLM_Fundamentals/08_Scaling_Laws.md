@@ -1,13 +1,5 @@
 # Scaling Laws: The Science of Model Scaling
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[07_Modern_Architectures|Modern Architectures: MoE, SSM]]
-**Next:** [[09_Interpretability|LLM Interpretability]]
-
----
-
 ## Introduction: When Bigger Really Is Better
 
 In 2020, OpenAI researchers published a paper that changed the industry. They discovered that language model performance follows remarkably predictable mathematical laws: increasing the number of parameters, data, and compute leads to quality improvements along strict power-law relationships.
@@ -426,7 +418,7 @@ Reasoning tasks have distinct scaling laws, different from general tasks:
 
 ### GRPO and Reinforcement Learning for Reasoning
 
-DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pure reinforcement learning — GRPO (Group Relative Policy Optimization) replaces the traditional reward model and value model with group-relative advantages computed from sampled outputs (see [[../10_Fine_Tuning/05_RLHF_Alternatives|RLHF Alternatives]] for the full mechanism). The scaling insight: training compute invested in RL-based reasoning yields disproportionate quality gains on math and coding benchmarks, often matching models 10x larger.
+DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pure reinforcement learning — GRPO (Group Relative Policy Optimization) replaces the traditional reward model and value model with group-relative advantages computed from sampled outputs (see Module 10, RLHF Alternatives for the full mechanism). The scaling insight: training compute invested in RL-based reasoning yields disproportionate quality gains on math and coding benchmarks, often matching models 10x larger.
 
 **Distillation scaling:** DeepSeek distilled R1's reasoning into smaller models (1.5B, 7B, 8B, 14B, 32B, 70B variants). Distillation follows its own scaling law: smaller distilled models retain a surprising fraction of the teacher's reasoning capability. R1-distill-32B outperforms many larger standard models on reasoning benchmarks, demonstrating that reasoning can be efficiently compressed.
 
@@ -457,11 +449,3 @@ DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pu
 **Data is becoming the main bottleneck** — with Chinchilla-optimal scaling, a 70B model requires 1.4 trillion tokens of quality data. High-quality text is not infinite. The industry is moving toward synthetic data, aggressive filtering, and multimodal data to overcome this limitation.
 
 **Fine-tuning has different scaling laws** — saturation occurs quickly (10K-100K examples), base model quality matters more than the volume of fine-tuning data, and knowledge absent from the base model cannot be added. Understanding these differences is critical for efficient resource utilization.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[07_Modern_Architectures|Modern Architectures: MoE, SSM]]
-**Next:** [[09_Interpretability|LLM Interpretability]]

@@ -1,13 +1,5 @@
 # Prompt Optimization
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[03_Agent_Prompts|Prompts for Agents]]
-**Next:** [[05_Context_Engineering|Context Engineering]]
-
----
-
 ## From a Working Prompt to Production-Ready
 
 Writing a prompt that works on a few examples is straightforward. Creating a prompt that reliably works in production, is cost-efficient, fast, and maintainable — that is an engineering discipline.
@@ -397,11 +389,3 @@ The optimal path: Start with prompting (quickly validate the idea) → Improve p
 8. **Prompt robustness is critical**: small changes can radically affect results
 
 9. **Prompting vs Fine-tuning** is not a binary choice but a spectrum: start with prompts, transition to fine-tuning when the task has stabilized
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[03_Agent_Prompts|Prompts for Agents]]
-**Next:** [[05_Context_Engineering|Context Engineering]]

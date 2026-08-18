@@ -1,13 +1,5 @@
 # Debugging LLM Applications
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[02_Metrics_and_Dashboards|Metrics and Dashboards]]
-**Next:** [[04_AgentOps|AgentOps]]
-
----
-
 ## The Unique Nature of Bugs in LLM Systems
 
 Debugging LLMs differs radically from traditional development. In classical programming, a bug is deterministic: identical inputs always produce the same incorrect result. LLMs break this paradigm: identical prompts yield different results, "correctness" is subjective, and the problem may lie in data, prompts, or the model itself rather than in the code.
@@ -58,7 +50,7 @@ For context issues, check the availability of necessary information. Critical in
 
 ## Debugging RAG Systems
 
-For the foundational RAG pipeline concepts referenced below, see [[../06_RAG/01_RAG_Basics|RAG Basics]].
+For the foundational RAG pipeline concepts referenced below, see Module 06, RAG Basics.
 
 Retrieval Debugging: are we finding the right documents? Logging queries to the vector store, visualizing similarity scores, checking top-k for relevance. If needed documents do not appear in top-k, the problem is in embedding, chunking, or data.
 
@@ -120,7 +112,7 @@ Canary Analysis compares behavior between canary and stable versions. Degradatio
 
 ## ML Debugging: Key Concepts
 
-ML debugging covers systematic approaches to diagnosing tensor shape mismatches, gradient flow issues, data processing errors, and optimizer misconfiguration. For the interview-focused ML debugging checklist (including shape debugging, gradient verification, and common pitfalls at OpenAI/DeepMind), see [[../21_Interview_Preparation/01_ML_System_Design|ML System Design]].
+ML debugging covers systematic approaches to diagnosing tensor shape mismatches, gradient flow issues, data processing errors, and optimizer misconfiguration. For the interview-focused ML debugging checklist (including shape debugging, gradient verification, and common pitfalls at OpenAI/DeepMind), see Module 21, ML System Design.
 
 ## Hallucination Detection: From Metric to System
 
@@ -171,11 +163,3 @@ The hypothesis testing system formulates specific testable hypotheses. Instead o
 - **RAG debugging follows a four-stage workflow: retrieval, ranking, context assembly, generation.** Start from Stage 4 (generation) and work backward — checking the grounding ratio first identifies whether the problem is in context quality or model behavior.
 
 - **Statistical anomaly detection methods must be adapted for LLM specifics.** Z-score catches sudden deviations, CUSUM detects slow trends, EWMA tracks recent behavior, and PSI identifies input distribution drift — each serves a different failure mode.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[02_Metrics_and_Dashboards|Metrics and Dashboards]]
-**Next:** [[04_AgentOps|AgentOps]]

@@ -1,13 +1,5 @@
 # Cost Optimization Strategies
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[04_Model_Quantization|Quantization: Memory vs Quality]]
-**Next:** [[06_Long_Context_Inference|Long Context Inference]]
-
----
-
 ## LLM Inference Economics
 
 Inference requires significant expenditure. A single GPT-5.4 request with long context costs several cents. At millions of requests per day, costs reach hundreds of thousands of dollars per month.
@@ -211,7 +203,7 @@ For API-based inference (as opposed to self-hosted), **prompt caching** is one o
 
 **Batching API** offers a complementary optimization: 50% discount on all tokens for deferred processing (24-hour SLA). Suitable for evaluation runs, document processing, and any workload that does not require real-time response. Combine prompt caching (for real-time) with batching (for async) for maximum savings.
 
-See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader context management framework, including KV-cache management patterns for agent identity stability.
+See Module 02, Context Engineering for the broader context management framework, including KV-cache management patterns for agent identity stability.
 
 ## Queueing Theory for Capacity Planning
 
@@ -267,12 +259,4 @@ Prompt caching is free optimization for API users — structure prompts with sta
 
 **Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) → $0.006/1K tokens (mid-2026) = 10x in 18 months**. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference — hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally — overall spending often remains flat or grows.
 
-**Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026) — AWS Trainium handles prefill, Cerebras WSE-3 handles decode — achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see [[07_SGLang_and_Alternatives|SGLang and Alternatives]] for benchmarks).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[04_Model_Quantization|Quantization: Memory vs Quality]]
-**Next:** [[06_Long_Context_Inference|Long Context Inference]]
+**Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026) — AWS Trainium handles prefill, Cerebras WSE-3 handles decode — achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see SGLang and Alternatives for benchmarks).

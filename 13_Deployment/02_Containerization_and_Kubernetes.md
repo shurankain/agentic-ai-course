@@ -1,13 +1,5 @@
 # Containerization and Kubernetes for LLM Applications
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Deployment
-**Previous:** [[01_Deployment_Strategies|Deployment Strategies]]
-**Next:** [[03_CI_CD_and_Self_Hosted|CI/CD and Self Hosted]]
-
----
-
 ## Containerization as the Foundation of Deployment
 
 Docker ensures environment reproducibility: the application runs identically on a developer's machine, in CI, and in production. This is critical for LLM applications due to complex dependencies: provider client libraries, ML libraries, vector store clients. Containerization solves the "works on my machine" problem, but LLM systems have specifics: large images due to ML dependencies, less predictable memory consumption, increased cold start time.
@@ -147,11 +139,3 @@ In pod specifications, request GPU resources through `resources.limits` with `nv
 Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection significantly impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.
 
 Kubernetes Deployment with proper resources, probes, and affinity ensures stability. Pod Anti-Affinity is critical for high availability. HPA with custom metrics reflects load better than CPU-based scaling. Behavior configuration prevents flapping. Ingress requires timeout adjustments for long-running operations. The standard 60 seconds is insufficient. Secrets management requires encryption at rest, external secret management, and rotation procedures.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Deployment
-**Previous:** [[01_Deployment_Strategies|Deployment Strategies]]
-**Next:** [[03_CI_CD_and_Self_Hosted|CI/CD and Self Hosted]]

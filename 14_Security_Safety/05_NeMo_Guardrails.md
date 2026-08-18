@@ -1,13 +1,5 @@
 # NeMo Guardrails
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[04_Moderation_and_Compliance|Moderation and Compliance]]
-**Next:** [[../15_GPU_Architecture/01_GPU_Architecture|GPU Architecture]]
-
----
-
 ## Introduction
 
 NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection, providing a programmatic control layer on top of probabilistic models.
@@ -549,11 +541,3 @@ async def verify_user_identity(context: dict):
 async def check_fraud_risk(context: dict):
     return await fraud_api.analyze(context.get("user_data"))
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[04_Moderation_and_Compliance|Moderation and Compliance]]
-**Next:** [[../15_GPU_Architecture/01_GPU_Architecture|GPU Architecture]]

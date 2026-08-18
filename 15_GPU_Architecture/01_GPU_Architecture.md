@@ -1,13 +1,5 @@
 # GPU Architecture and Memory Hierarchy
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[../14_Security_Safety/05_NeMo_Guardrails|NeMo Guardrails]]
-**Next:** [[02_Flash_Attention|Flash Attention and Mixed-Precision]]
-
----
-
 ## Why GPUs Dominate AI
 
 Graphics processors turned out to be ideal for neural network computations thanks to massive parallelism.
@@ -197,7 +189,7 @@ Gradient accumulation allows emulating a large batch size: gradients are accumul
 
 **The GPU landscape is no longer NVIDIA-only.** AMD MI300X offers competitive memory capacity and bandwidth. Grace Hopper's unified memory simplifies large-model workloads. Blackwell's dual-GPU modules change the multi-GPU boundary. Choose hardware based on workload: training favors NVIDIA (CUDA ecosystem maturity), inference can benefit from AMD's memory advantage.
 
-**Energy is becoming a constraint, not just a cost.** A single NVL72 rack draws ~120 kW. Data centers are projected to consume ~1,000 TWh by 2026 (IEA). Hyperscalers are procuring nuclear (SMR pipeline: 25→45 GW in 16 months) and geothermal to power AI infrastructure. Performance-per-watt (Vera Rubin: 10x over Grace Blackwell) is now an accelerator selection criterion alongside raw throughput. See [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the full energy landscape.
+**Energy is becoming a constraint, not just a cost.** A single NVL72 rack draws ~120 kW. Data centers are projected to consume ~1,000 TWh by 2026 (IEA). Hyperscalers are procuring nuclear (SMR pipeline: 25→45 GW in 16 months) and geothermal to power AI infrastructure. Performance-per-watt (Vera Rubin: 10x over Grace Blackwell) is now an accelerator selection criterion alongside raw throughput. See Module 18, Enterprise AI Adoption for the full energy landscape.
 
 **Profiling reveals real bottlenecks.** Only profiling shows the true picture. torch.profiler and Nsight are essential tools.
 
@@ -218,11 +210,3 @@ Enabling TF32 via torch.backends.cuda.matmul.allow_tf32 and torch.backends.cudnn
 torch.profiler is used for performance analysis with CPU and CUDA time tracking, tensor shapes, and memory usage. Results are exported to TensorBoard or Chrome trace viewer.
 
 Arithmetic intensity determines the type of bottleneck: operations with intensity below the ridge point are memory-bound, above — compute-bound. The ridge point for modern GPUs typically falls in the 20-50 FLOP/byte range.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[../14_Security_Safety/05_NeMo_Guardrails|NeMo Guardrails]]
-**Next:** [[02_Flash_Attention|Flash Attention and Mixed-Precision]]

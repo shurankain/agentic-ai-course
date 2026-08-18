@@ -1,13 +1,5 @@
 # Dialog Management
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[../08_Structured_Outputs/03_Validation_and_Error_Handling|Validation and Error Handling]]
-**Next:** [[02_Conversation_Design|Conversation Design]]
-
----
-
 ## Introduction: Conversation as a Dance
 
 Dialog is not a series of isolated utterances but a coherent dance. Topics flow into one another, the unsaid is implied, and references to prior context are understood without explanation. Building an AI system capable of participating in this dance is an extremely challenging task. A simple chatbot answers questions in isolation. A true dialog system remembers context, understands intents, and steers the conversation toward a goal.
@@ -150,7 +142,7 @@ Short conversations fit comfortably in a context window. But production dialog s
 
 **Sliding window with anchors.** Keep the last N turns in full context, plus "anchor" messages that are always retained: the initial user request (defines the overall goal), any messages containing confirmed slot values, and messages where the system made commitments ("I'll send the confirmation email"). Anchors prevent the system from contradicting earlier commitments when old context is summarized away.
 
-**Hierarchical memory for long conversations.** For multi-day sessions (ongoing projects, iterative work): Level 1 (in-context): last 10-20 turns, full fidelity. Level 2 (summary): summarized earlier turns, refreshed periodically. Level 3 (persistent): key facts, decisions, and preferences stored in a database (see [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]]). The dialog manager queries Level 3 for relevant facts before each response, ensuring consistency even weeks into a conversation.
+**Hierarchical memory for long conversations.** For multi-day sessions (ongoing projects, iterative work): Level 1 (in-context): last 10-20 turns, full fidelity. Level 2 (summary): summarized earlier turns, refreshed periodically. Level 3 (persistent): key facts, decisions, and preferences stored in a database (see Module 03, Memory Systems). The dialog manager queries Level 3 for relevant facts before each response, ensuring consistency even weeks into a conversation.
 
 ## Handoff Patterns
 
@@ -158,7 +150,7 @@ Conversations cross boundaries — from bot to human, from one agent to another,
 
 **Bot-to-human handoff.** Triggered by: repeated failures (3+ failed understanding attempts), explicit user request ("talk to a human"), detected frustration (sentiment analysis or escalation keywords), high-stakes decisions (the bot cannot authorize a refund above $500). The handoff must include: full conversation transcript, extracted intent and slot values, the specific point of failure, and any system-side context (user account details, order history). The human agent should never ask the user to repeat information.
 
-**Agent-to-agent handoff.** In multi-agent systems, one agent may need to transfer the conversation to a specialist. The triage agent determines that this is a billing issue and hands off to the billing agent. The handoff contract: the receiving agent gets the conversation history, the current state (intent, filled slots), and a handoff reason. The receiving agent should acknowledge the handoff: "I see you have a billing question about order #12345. Let me help with that." Not: "Hi! How can I help you?" — which signals context loss and erodes trust. See [[../04_Multi_Agent_Systems/02_MAS_Patterns|MAS Patterns]] for the handoff pattern in multi-agent systems.
+**Agent-to-agent handoff.** In multi-agent systems, one agent may need to transfer the conversation to a specialist. The triage agent determines that this is a billing issue and hands off to the billing agent. The handoff contract: the receiving agent gets the conversation history, the current state (intent, filled slots), and a handoff reason. The receiving agent should acknowledge the handoff: "I see you have a billing question about order #12345. Let me help with that." Not: "Hi! How can I help you?" — which signals context loss and erodes trust. See Module 04, MAS Patterns for the handoff pattern in multi-agent systems.
 
 **Cross-channel handoff.** User starts on web chat, continues on the phone. The context must follow. Implementation: store the session state in a channel-agnostic format (not tied to WebSocket session or HTTP request), index by user identity, and load it when the user is authenticated on any channel. The user experience: "I see you were chatting with us about your delivery. Let me pick up where we left off."
 
@@ -183,11 +175,3 @@ Handoff patterns (bot-to-human, agent-to-agent, cross-channel) must preserve ful
 The dialog manager controls the conversation state through phases: intent detection, slot filling, confirmation, execution. State includes intent, slots, history, and the current phase. The system transitions between phases based on information completeness. Upon detecting an intent, slots are extracted from context. If all slots are filled, the system moves to confirmation. Upon positive confirmation, the action is executed.
 
 LLMs are used for intent recognition and slot extraction from natural language utterances. The model analyzes the message in the context of the history and determines the intent and slots simultaneously. For production systems, state persistence, error handling, more sophisticated transitions, and multiple intent handling are added.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[../08_Structured_Outputs/03_Validation_and_Error_Handling|Validation and Error Handling]]
-**Next:** [[02_Conversation_Design|Conversation Design]]

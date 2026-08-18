@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[02_MCP_Components|MCP Components]]
-**Next:** [[04_MCP_Client_Integration|MCP Client Integration]]
-
----
-
 # MCP Server Development
 
 ## Introduction to Server Development
@@ -270,7 +262,7 @@ In November 2024, Anthropic launched MCP. Throughout 2025, all major AI provider
 
 ### Security Considerations
 
-For MCP ecosystem security statistics (88% require credentials but 53% use insecure static secrets, only 8.5% implement OAuth), known incidents (mcp-remote RCE, Anthropic Git MCP CVEs), and the OWASP MCP Top 10 threat taxonomy, see [[../14_Security_Safety/03_Agent_Security|Agent Security]].
+For MCP ecosystem security statistics (88% require credentials but 53% use insecure static secrets, only 8.5% implement OAuth), known incidents (mcp-remote RCE, Anthropic Git MCP CVEs), and the OWASP MCP Top 10 threat taxonomy, see Module 14, Agent Security.
 
 When developing MCP servers, consider several critical security aspects:
 
@@ -313,11 +305,3 @@ The choice of transport depends on the use case. Stdio is suitable for local too
 Security is not an option but a mandatory requirement. Input validation, authorization, and isolation protect the system from abuse.
 
 Testing and monitoring ensure server quality and reliability in production. Investment in these areas pays off with stability and ease of maintenance.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[02_MCP_Components|MCP Components]]
-**Next:** [[04_MCP_Client_Integration|MCP Client Integration]]

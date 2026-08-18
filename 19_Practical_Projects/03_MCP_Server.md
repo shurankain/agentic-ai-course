@@ -1,13 +1,5 @@
 # Project: MCP Server for a Knowledge Base
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Practical Projects
-**Previous:** [[02_Multi_Agent_System|Multi-Agent System]]
-**Next:** [[04_Fine_Tuning_Pipeline|Fine-Tuning Pipeline]]
-
----
-
 ## Project Overview
 
 An MCP (Model Context Protocol) server provides an AI model with access to a corporate knowledge base. It is a standard protocol by Anthropic for connecting external data and tools to LLM applications.
@@ -124,7 +116,7 @@ Moving from a working prototype to a production-ready MCP server requires addres
 
 **Input validation beyond JSON Schema.** JSON Schema validates types and required fields, but not business logic. Additional validation: string length limits (prevent 1MB article titles), allowed characters (prevent injection), referential integrity (article_id must exist), and content sanitization (strip scripts from user-provided content). Fail fast with a descriptive error — do not let invalid data reach the database.
 
-**Monitoring and alerting.** Log every tool call with: timestamp, user/session ID, tool name, input parameters (PII-masked), execution time, result status (success/error). Alert on: error rate exceeding 5% over a 5-minute window, P95 latency exceeding 2 seconds, rate limit violations (potential abuse), and tool calls from unexpected clients (security incident). Integrate with the observability stack — see [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]] for patterns.
+**Monitoring and alerting.** Log every tool call with: timestamp, user/session ID, tool name, input parameters (PII-masked), execution time, result status (success/error). Alert on: error rate exceeding 5% over a 5-minute window, P95 latency exceeding 2 seconds, rate limit violations (potential abuse), and tool calls from unexpected clients (security incident). Integrate with the observability stack — see Module 12, Tracing and Logging for patterns.
 
 **Graceful degradation.** When the database is slow or unavailable, the server should: return cached results for read operations (with a staleness warning), queue write operations for retry, and return a service degradation error for operations that cannot be cached or queued. The model (and user) should receive a clear message: "The knowledge base is temporarily operating in read-only mode. New articles cannot be created until the issue is resolved."
 
@@ -179,9 +171,3 @@ OAuth 2.1 authorization enables secure multi-tenant MCP servers with scoped acce
 Production-readiness requires more than a basic implementation — logging, progress reporting, caching, security measures.
 
 Extensibility — easy to add new resources and tools. Start with the basics (search, read), then add features.
-
----
-
-## Navigation
-**Previous:** [[02_Multi_Agent_System|Multi-Agent System]]
-**Next:** [[04_Fine_Tuning_Pipeline|Fine-Tuning Pipeline]]

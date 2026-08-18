@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[03_MCP_Server_Development|MCP Server Development]]
-**Next:** [[05_A2A_Protocol|A2A Protocol]]
-
----
-
 # MCP Client Integration
 
 ## Introduction to Client Integration
@@ -216,7 +208,7 @@ MCP security is a shared responsibility between client and server. The client's 
 
 ### Server Trust Levels
 
-Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector — a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for the CurXecute CVE and Tool Poisoning attack taxonomy.
+Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector — a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See Module 14, Agent Security for the CurXecute CVE and Tool Poisoning attack taxonomy.
 
 ### OAuth 2.1 Integration
 
@@ -228,7 +220,7 @@ The STDIO transport (MCP servers running as child processes communicating via st
 
 ### Audit and Logging
 
-All interactions with servers should be logged: who called which tool, when, with what parameters, and with what result. These logs serve security (detecting suspicious tool usage patterns), debugging (tracing failures across the client-server boundary), compliance (demonstrating what actions the agent took and why), and cost attribution (tracking which servers consume the most resources). Sensitive data in logs must be masked — see [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]] for PII masking patterns.
+All interactions with servers should be logged: who called which tool, when, with what parameters, and with what result. These logs serve security (detecting suspicious tool usage patterns), debugging (tracing failures across the client-server boundary), compliance (demonstrating what actions the agent took and why), and cost attribution (tracking which servers consume the most resources). Sensitive data in logs must be masked — see Module 12, Tracing and Logging for PII masking patterns.
 
 ## Key Takeaways
 
@@ -243,11 +235,3 @@ Integration with language models requires proper tool representation and efficie
 The user interface provides transparency and control. The user understands what the AI is doing and can influence the process.
 
 Security is a cross-cutting concern of the client implementation. From server validation to operation audit — every aspect requires attention.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[03_MCP_Server_Development|MCP Server Development]]
-**Next:** [[05_A2A_Protocol|A2A Protocol]]

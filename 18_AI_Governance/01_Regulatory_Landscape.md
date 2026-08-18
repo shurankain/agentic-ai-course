@@ -1,13 +1,5 @@
 # AI Regulatory Landscape: EU AI Act and Global Initiatives
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[../17_Production_Inference/07_SGLang_and_Alternatives|SGLang and Alternatives]]
-**Next:** [[02_AI_Risk_Management|AI Risk Management]]
-
----
-
 ## Introduction
 
 In August 2024, the EU AI Act came into force — the world's first comprehensive law regulating artificial intelligence. Fines up to 7% of global company turnover, entire categories of AI systems banned, mandatory certification for high-risk applications. For an AI architect, the regulatory landscape represents constraints that directly affect architectural decisions.
@@ -143,7 +135,7 @@ With the federal executive order rescinded, **US states have become the primary 
 
 **Trump AI Executive Order (as of mid-June 2026):** Establishes a voluntary 30-day model review framework. CISA, NSA, and Treasury to define "qualifying models" subject to review within 60 days. The voluntary nature contrasts sharply with the EU's mandatory approach and with the June 13 export ban on Fable 5/Mythos 5 — the administration simultaneously promotes voluntary cooperation and wields export controls unilaterally when it deems necessary.
 
-**First model-level export controls (June 13, 2026):** The Fable 5/Mythos 5 export ban sets a precedent: AI models can now be export-controlled independently of hardware. The saga unfolded rapidly: NSA Director Gen. Joshua Rudd's classified briefing (quoted by Sen. Warner, June 11) revealed that Mythos autonomously breached "almost all" NSA classified systems during a red-team exercise. Commerce Secretary Lutnick issued the directive June 12 (received by Anthropic at 5:21 PM ET on a Friday). Anthropic disabled both models globally June 13. The alleged trigger: a "fix this code" capability — identifying and patching vulnerabilities could theoretically be used offensively. 100+ security experts (led by Katie Moussouris) called for the directive to be rescinded. At the G7 Summit in Evian (June 17-18), the UK's exemption request was denied; a "trusted partners" framework was proposed but not agreed. Trump met Amodei and said he no longer views Anthropic as a threat (June 20), but the Commerce directive was NOT withdrawn. As of late June 2026, both models remain partially available with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic is introducing biometric identity verification (government ID, facial geometry) starting July 8. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for the security implications.
+**First model-level export controls (June 13, 2026):** The Fable 5/Mythos 5 export ban sets a precedent: AI models can now be export-controlled independently of hardware. The saga unfolded rapidly: NSA Director Gen. Joshua Rudd's classified briefing (quoted by Sen. Warner, June 11) revealed that Mythos autonomously breached "almost all" NSA classified systems during a red-team exercise. Commerce Secretary Lutnick issued the directive June 12 (received by Anthropic at 5:21 PM ET on a Friday). Anthropic disabled both models globally June 13. The alleged trigger: a "fix this code" capability — identifying and patching vulnerabilities could theoretically be used offensively. 100+ security experts (led by Katie Moussouris) called for the directive to be rescinded. At the G7 Summit in Evian (June 17-18), the UK's exemption request was denied; a "trusted partners" framework was proposed but not agreed. Trump met Amodei and said he no longer views Anthropic as a threat (June 20), but the Commerce directive was NOT withdrawn. As of late June 2026, both models remain partially available with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic is introducing biometric identity verification (government ID, facial geometry) starting July 8. See Module 14, Agent Security for the security implications.
 
 ### China: National AI Agent Framework (as of mid-June 2026)
 
@@ -203,7 +195,7 @@ The US landscape is in flux (as of late June 2026): Biden's EO rescinded (Jan 20
 
 **Bartz v. Anthropic: $1.5B copyright settlement** — the largest copyright settlement in US history (as of late June 2026). 91.3% of 482,000 works were claimed. Anthropic pays in tranches: $300M escrow immediately, $300M within 5 days of final approval, $450M by September 2026, $450M by September 2027. This settlement establishes a practical benchmark for the cost of training on copyrighted data — and signals that future frontier model developers should budget for copyright licensing or face similar claims.
 
-**International AI Safety Report 2026 (June 15):** Commissioned by multiple governments, this report establishes a shared regulatory baseline across jurisdictions — the first formal attempt at international regulatory convergence for AI. **Five-nation agentic AI security guidance (June 18):** Cybersecurity agencies from the US, Australia, Canada, New Zealand, and UK jointly published "Careful Adoption of Agentic AI Services" addressing risks of autonomous AI systems in critical infrastructure and defense. Both documents signal that AI regulation is becoming a coordinated international effort, not just a patchwork of national laws. See [[../14_Security_Safety/03_Agent_Security|Agent Security]] for the security implications of the Five-nation guidance.
+**International AI Safety Report 2026 (June 15):** Commissioned by multiple governments, this report establishes a shared regulatory baseline across jurisdictions — the first formal attempt at international regulatory convergence for AI. **Five-nation agentic AI security guidance (June 18):** Cybersecurity agencies from the US, Australia, Canada, New Zealand, and UK jointly published "Careful Adoption of Agentic AI Services" addressing risks of autonomous AI systems in critical infrastructure and defense. Both documents signal that AI regulation is becoming a coordinated international effort, not just a patchwork of national laws. See Module 14, Agent Security for the security implications of the Five-nation guidance.
 
 GPAI obligations now affect all foundation model providers: technical documentation, training data summaries, copyright compliance, and (for systemic risk models) adversarial testing and incident reporting.
 
@@ -222,11 +214,3 @@ When developing an AI system, the process of determining requirements includes s
 **Compiling the requirements list:** For high-risk: risk management system, data governance, technical documentation, automatic logging, human oversight, accuracy validation, cybersecurity, conformity assessment, registration in the EU database. For limited risk: informing users about interaction with AI, labeling AI-generated content. For GPAI: model technical documentation, information for downstream providers, copyright policy, training data summary.
 
 For risk classification, the following logic applies: if the use case is on the prohibited list (social scoring, public biometrics) — UNACCEPTABLE. If on the high-risk list (employment, credit scoring, law enforcement, education, critical infrastructure) — HIGH. If on the limited-risk list (chatbot, emotion recognition, deepfake) — LIMITED. Otherwise — MINIMAL. This approach ensures systematic assessment and understanding of the timeline: prohibited practices cannot be used from February 2025, GPAI obligations from August 2025, full requirements for standalone high-risk from December 2027 (delayed from August 2026 by the Digital Omnibus).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[../17_Production_Inference/07_SGLang_and_Alternatives|SGLang and Alternatives]]
-**Next:** [[02_AI_Risk_Management|AI Risk Management]]

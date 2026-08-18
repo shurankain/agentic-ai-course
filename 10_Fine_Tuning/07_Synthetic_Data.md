@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[06_Test_Time_Compute|Test-Time Compute]]
-**Next:** [[08_Continued_Pretraining|Continued Pretraining]]
-
----
-
 # Synthetic Data for Fine-Tuning
 
 ## Introduction: Data as a Bottleneck
@@ -153,11 +145,3 @@ Verification where possible — for code/math, verify programmatically.
 Diversity matters more than quantity — 10K diverse examples are better than 100K similar ones.
 
 Synthetic reasoning data is a new frontier (2024-2025). Programmatic verifiers replace human annotators for code and math. Distillation from reasoning models (R1 → R1-distill) is remarkably effective. GRPO with programmatic rewards simplifies the RLHF pipeline.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[06_Test_Time_Compute|Test-Time Compute]]
-**Next:** [[08_Continued_Pretraining|Continued Pretraining]]

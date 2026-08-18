@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[../03_AI_Agents_Core/10_Resource_Optimization|Resource Optimization]]
-**Next:** [[02_MAS_Patterns|Multi-Agent System Patterns]]
-
----
-
 # Multi-Agent System Fundamentals
 
 ## Introduction to Multiple Agents
@@ -90,9 +82,9 @@ Microsoft Agent Framework 1.0 uses an event-driven architecture internally. Auto
 
 ### Modern Protocol Stack
 
-**A2A (Agent-to-Agent Protocol, v1.0.0 stable)** — the standard for inter-agent communication across organizational and framework boundaries. Agent Cards describe capabilities, Tasks manage long-running work, and streaming delivers progressive results. A2A is designed for agents that need to discover and coordinate with each other without sharing a runtime — for example, a travel agent built on LangGraph coordinating with a hotel agent built on CrewAI. See [[../05_MCP_Protocol/05_A2A_Protocol|A2A Protocol]] for architecture details.
+**A2A (Agent-to-Agent Protocol, v1.0.0 stable)** — the standard for inter-agent communication across organizational and framework boundaries. Agent Cards describe capabilities, Tasks manage long-running work, and streaming delivers progressive results. A2A is designed for agents that need to discover and coordinate with each other without sharing a runtime — for example, a travel agent built on LangGraph coordinating with a hotel agent built on CrewAI. See Module 05, A2A Protocol for architecture details.
 
-**MCP (Model Context Protocol)** — the standard for agent-to-tool integration. While not a communication protocol between agents, MCP is critical for multi-agent systems because every agent needs tools. A shared MCP server ecosystem means agents built on different frameworks can access the same tools through a standardized interface. See [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]].
+**MCP (Model Context Protocol)** — the standard for agent-to-tool integration. While not a communication protocol between agents, MCP is critical for multi-agent systems because every agent needs tools. A shared MCP server ecosystem means agents built on different frameworks can access the same tools through a standardized interface. See Module 05, MCP Basics.
 
 **FIPA-ACL** — a historical standard for agent message structure from the 1990s (Foundation for Intelligent Physical Agents). While important for establishing the vocabulary of agent communication (communicative acts: inform, request, query, propose, accept/reject), FIPA-ACL saw limited adoption in practice. Modern LLM agent systems use the lighter-weight A2A and MCP protocols.
 
@@ -208,11 +200,3 @@ Multi-agent is justified for: distinct expertise domains (security ≠ performan
 Communication mechanisms range from tightly coupled (direct messages) to loosely coupled (event bus, A2A). Modern production systems use MCP for tool access and A2A for cross-framework agent coordination. Hierarchy is natural but creates single points of failure. Flat structures are more resilient but harder to coordinate.
 
 Real-world deployments (Microsoft IQ, Salesforce Agentforce, Amazon Bedrock AgentCore) confirm: most enterprise multi-agent value comes from well-defined patterns (fan-out/fan-in, router + specialists) rather than complex emergent coordination. Start with established patterns, not novel architectures.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[../03_AI_Agents_Core/10_Resource_Optimization|Resource Optimization]]
-**Next:** [[02_MAS_Patterns|Multi-Agent System Patterns]]

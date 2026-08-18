@@ -1,13 +1,5 @@
 # Tokenization: How Text Becomes Numbers
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[01_LLM_Basics|Large Language Model (LLM) Fundamentals]]
-**Next:** [[03_Context_Windows|Context Windows and Their Management]]
-
----
-
 Imagine you are trying to teach a computer to read a book. Computers do not understand letters and words — they only work with numbers. How do you bridge this gap? The answer lies in tokenization — converting human text into a sequence of numbers that a neural network can process.
 
 Tokenization is the first and arguably one of the most underappreciated stages in any language model's operation. How text is split into tokens affects virtually everything: API request costs, context window limits, prompt efficiency, and even some "strange" errors that LLMs produce.
@@ -358,11 +350,3 @@ When working with chat models, it is important to understand how messages of dif
 Correct formatting is critical for proper model behavior — incorrectly placed tokens can lead to misinterpreted roles or loss of dialogue structure.
 
 **A basic token counting utility** is created by initializing the tokenizer for a specific model (e.g., OpenAiTokenizer) and providing methods for counting tokens in text. The counting method accepts a string and returns the token count after tokenization. An additional efficiency analysis method computes the character-to-token ratio, which helps optimize prompts.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[01_LLM_Basics|Large Language Model (LLM) Fundamentals]]
-**Next:** [[03_Context_Windows|Context Windows and Their Management]]

@@ -1,13 +1,5 @@
 # Resource-Aware Optimization
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[09_Agent_Use_Cases|Practical Agent Use Cases]]
-**Next:** [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Systems Fundamentals]]
-
----
-
 ## Introduction
 
 AI agents consume significant resources: tokens, compute, time. In a production environment, uncontrolled consumption leads to:
@@ -156,7 +148,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 
 **Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix acts as a stable foundation, while dynamic content varies naturally.
 
-**Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader WSCI framework.
+**Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See Module 02, Context Engineering for the broader WSCI framework.
 
 ---
 
@@ -347,7 +339,7 @@ When agents make 10-20 LLM calls per task, costs with reasoning models spiral qu
 - Quality requirements can be validated automatically (test suites, eval metrics)
 - Latency matters — smaller models are faster
 
-See [[../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]] for the technical details of distillation training.
+See Module 10, Fine-Tuning Basics for the technical details of distillation training.
 
 ---
 
@@ -385,7 +377,7 @@ The decision between building custom agents and buying platform solutions depend
 | **50-200K** | Custom starts winning | Platform per-unit pricing exceeds infrastructure + development cost |
 | **>200K** | Custom wins decisively | Amortization is favorable; full control over quality and cost |
 
-The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for the platform landscape.
+The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See Module 18, Enterprise AI Adoption for the platform landscape.
 
 ### The 70/30 Hybrid Model Strategy
 
@@ -427,10 +419,10 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 ## Related Topics
 
-- [[04_Planning|Planning]] — efficient planning conserves resources
-- [[05_Memory_Systems|Memory Systems]] — memory vs re-computation trade-off
-- [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Fundamentals]] — resource sharing between agents
-- [[../12_Observability/02_Metrics_and_Dashboards|Metrics and Dashboards]] — resource monitoring
+- Planning — efficient planning conserves resources
+- Memory Systems — memory vs re-computation trade-off
+- Module 04, Multi-Agent Fundamentals — resource sharing between agents
+- Module 12, Metrics and Dashboards — resource monitoring
 
 ---
 
@@ -559,9 +551,3 @@ The get_status method returns a detailed budget status report as a dictionary wi
 The count_tokens method performs a simplified token count estimate based on text length. It uses the heuristic of "4 characters per token", which yields an approximate estimate. For production systems, precise tokenizers such as tiktoken are recommended.
 
 This system enables precise control over token expenditure, prevents runaway consumption, and ensures predictable request costs.
-
----
-
-## Navigation
-**Previous:** [[09_Agent_Use_Cases|Practical Agent Use Cases]]
-**Next:** [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Systems Fundamentals]]

@@ -1,13 +1,5 @@
 # Papers Reading Guide
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[02_Coding_Exercises|Coding Exercises]]
-**Next:** [[04_Behavioral_Staff_Plus|Behavioral for Staff+]]
-
----
-
 ## Introduction
 
 Senior/Staff+ interviews often involve discussing research papers. This tests depth of understanding of fundamental ideas, the ability to critically analyze approaches, and awareness of the current state of the field.
@@ -84,7 +76,7 @@ Pipeline: SFT (fine-tune on demonstrations from humans), Reward Model (train a m
 
 Results: 1.3 billion InstructGPT outperforms 175 billion GPT-3 by human preference, fewer toxic outputs.
 
-Discussion points: reward hacking (the model optimizes a proxy not the true objective), why the KL penalty from the SFT model (preserve capabilities), alternatives DPO, KTO. For the full treatment, see [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]] and [[../10_Fine_Tuning/05_RLHF_Alternatives|RLHF Alternatives]].
+Discussion points: reward hacking (the model optimizes a proxy not the true objective), why the KL penalty from the SFT model (preserve capabilities), alternatives DPO, KTO. For the full treatment, see Module 10, RLHF and Alignment and Module 10, RLHF Alternatives.
 
 ### 5. Constitutional AI (2022)
 
@@ -347,11 +339,3 @@ Reading groups: start your own with colleagues, one paper per week, discussion t
 5. **Recent papers (2024-2025) signal that you stay current.** DeepSeek R1, Scaling Monosemanticity, Llama 4, KTO, ORPO, and Mamba-2 are expected knowledge at frontier AI companies and demonstrate ongoing engagement with the field.
 
 6. **Keep structured notes for every paper you read.** Recording the problem, key idea, method, results, and limitations in a consistent format builds a personal reference you can review the night before an interview.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[02_Coding_Exercises|Coding Exercises]]
-**Next:** [[04_Behavioral_Staff_Plus|Behavioral for Staff+]]

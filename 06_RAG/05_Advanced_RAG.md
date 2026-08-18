@@ -1,13 +1,5 @@
 # Advanced RAG Techniques
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[04_Retrieval_Methods|Information Retrieval Methods]]
-**Next:** [[06_Late_Interaction_Retrieval|Late Interaction Models]]
-
----
-
 ## Beyond Basic RAG
 
 Basic RAG works well for simple scenarios, but production applications demand advanced techniques: handling complex questions that require synthesis from multiple sources, adapting to data changes, and continuously improving quality.
@@ -53,7 +45,7 @@ What distinguishes a true agentic RAG system from a pipeline with a few extra st
 1. **Orchestrator** — a ReAct or CoT-based agent that decides the retrieval strategy for each query. It determines whether to search, which sources to query, and in what order.
 2. **Specialized retriever agents** — different sources require different retrieval strategies. A vector search agent for the knowledge base, a SQL agent for structured data, a web search agent for current information. The orchestrator delegates to the right specialist.
 3. **Short-term memory** — the current workflow state: what has been retrieved so far, which queries have been tried, what gaps remain. This prevents redundant searches and enables the agent to build on previous results.
-4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]].
+4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See Module 03, Memory Systems.
 5. **Evaluation and refinement loop** — the agent assesses whether retrieved context is sufficient and relevant before generating an answer. If not, it iterates. This fifth component is what creates the accuracy jump: the system does not assume that retrieval always works.
 
 Basic RAG (components 1-2 only) handles simple single-hop queries well. Adding components 3-5 is what enables the 34%→78% improvement on complex queries — and is what makes the system genuinely agentic.
@@ -336,11 +328,11 @@ This enables search by description: "sales growth chart" will find a visualizati
 
 ### ColPali: Vision-Language Retrieval Without OCR
 
-ColPali (2024-2025) eliminates OCR from document retrieval entirely. Instead of converting documents to text, it treats each page as an image and uses a vision encoder (PaliGemma-3B) for both retrieval and understanding. The model generates multi-vector representations for each page, scored against queries using MaxSim (the same late interaction mechanism as ColBERT — see [[06_Late_Interaction_Retrieval|Late Interaction Retrieval]] for the full architecture).
+ColPali (2024-2025) eliminates OCR from document retrieval entirely. Instead of converting documents to text, it treats each page as an image and uses a vision encoder (PaliGemma-3B) for both retrieval and understanding. The model generates multi-vector representations for each page, scored against queries using MaxSim (the same late interaction mechanism as ColBERT — see Late Interaction Retrieval for the full architecture).
 
 **Key result:** On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines — and handles complex layouts (multi-column, merged cells, mixed text/diagram content) that break traditional OCR.
 
-**When to use:** Documents with complex visual layouts, scanned/photographed documents, forms, tables. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See [[06_Late_Interaction_Retrieval|Late Interaction Retrieval]] for ColPali's full architecture, ColQwen variants, and production integration patterns.
+**When to use:** Documents with complex visual layouts, scanned/photographed documents, forms, tables. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See Late Interaction Retrieval for ColPali's full architecture, ColQwen variants, and production integration patterns.
 
 ## Temporal RAG
 
@@ -485,7 +477,7 @@ The optimal strategy combines both approaches: RAG filters the corpus (1M docs) 
 
 **Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
 
-**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the Lost-in-the-Middle analysis.
+**"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See Module 02, Context Engineering for the Lost-in-the-Middle analysis.
 
 ---
 
@@ -698,11 +690,3 @@ The final result is returned as a structured object with three fields: answer co
 **Graph RAG** works through extracting entities from the question, searching for those entities in the knowledge graph, traversing the graph 1-2 hops to obtain related entities and facts, retrieving documents linked to this subgraph, and generating an answer considering the graph structure. This enables answering multi-hop questions that require connecting multiple entities.
 
 **Evaluation with RAGAS** is implemented by computing four key metrics for each example: faithfulness (is the answer based on the context?), answer relevance (does the answer address the question?), context precision (is the context relevant?), and context recall (was all necessary context found?). Metrics are computed using the LLM-as-judge approach — a prompt with evaluation criteria returning a score from 0 to 1. Results are aggregated for an overall system assessment.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[04_Retrieval_Methods|Information Retrieval Methods]]
-**Next:** [[06_Late_Interaction_Retrieval|Late Interaction Models]]

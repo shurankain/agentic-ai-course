@@ -1,13 +1,5 @@
 # Conversation Design
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[01_Dialog_Management|Dialog Management]]
-**Next:** [[03_Voice_and_Multimodality|Voice and Multimodality]]
-
----
-
 ## Introduction: The Art of Dialogue
 
 Technology is only half the equation. You can build a flawless infrastructure, but if the conversations are poorly designed, users will be frustrated. Conversation design is the art of creating pleasant, efficient, and human-like interactions. It is not programming but scriptwriting. Not algorithms but empathy.
@@ -89,7 +81,7 @@ Tone adapts to the specific user. If users write formally, respond formally. If 
 
 ### Emotional Intelligence
 
-The assistant recognizes emotions and responds accordingly. Is the user upset? Start with empathy: "I understand this is a frustrating situation," then address the problem. Is the user happy? Share in the joy: "Glad everything worked out." A lack of emotional awareness is the cardinal sin of automated systems. Voice agents (see [[03_Voice_and_Multimodality|Voice and Multimodality]]) have an advantage here — Retell AI and similar platforms detect frustration, satisfaction, and confusion from voice signals in real time, enabling automated escalation based on emotional state.
+The assistant recognizes emotions and responds accordingly. Is the user upset? Start with empathy: "I understand this is a frustrating situation," then address the problem. Is the user happy? Share in the joy: "Glad everything worked out." A lack of emotional awareness is the cardinal sin of automated systems. Voice agents (see Voice and Multimodality) have an advantage here — Retell AI and similar platforms detect frustration, satisfaction, and confusion from voice signals in real time, enabling automated escalation based on emotional state.
 
 ## Greetings and Farewells
 
@@ -202,11 +194,3 @@ Handling misunderstanding is built on progressive escalation. On the first failu
 Generating clarifying questions uses an LLM to create natural follow-up questions based on possible interpretations. The model receives the user's message and a list of possible intents, then formulates a question to resolve the ambiguity.
 
 Tone adaptation analyzes the user's communication style from their history (formality, level of detail, technical level) and applies the corresponding style to system responses. This creates a sense of mutual understanding and improves interaction comfort.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[01_Dialog_Management|Dialog Management]]
-**Next:** [[03_Voice_and_Multimodality|Voice and Multimodality]]

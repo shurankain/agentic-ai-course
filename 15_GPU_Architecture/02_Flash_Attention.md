@@ -1,13 +1,5 @@
 # Flash Attention: A Revolution in Efficiency
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[01_GPU_Architecture|GPU Architecture and Memory Hierarchy]]
-**Next:** [[03_Triton_Programming|Triton: GPU Programming in Python]]
-
----
-
 ## The Quadratic Complexity Problem of Attention
 
 The attention mechanism in Transformer requires computing interactions between every pair of positions — N² values. At N = 512, that is 262 thousand values. At N = 4096 — 16 million. At N = 32768 — over a billion. At N = 128000 (Claude, GPT-5) — 16 billion.
@@ -392,11 +384,3 @@ Key metrics:
 - GPU utilization: target utilization >80% for long sequences
 
 Memory savings grow quadratically with sequence length: for seq_len=4096, savings reach 90%+ compared to a naive implementation. This allows increasing batch size by 2-4x or using significantly longer contexts.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[01_GPU_Architecture|GPU Architecture and Memory Hierarchy]]
-**Next:** [[03_Triton_Programming|Triton: GPU Programming in Python]]

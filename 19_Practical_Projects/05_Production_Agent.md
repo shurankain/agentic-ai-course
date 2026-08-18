@@ -1,13 +1,5 @@
 # Project: Production-Ready AI Agent
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Practical Projects
-**Previous:** [[04_Fine_Tuning_Pipeline|Fine-Tuning Pipeline]]
-**Next:** [[../20_Architecture_Research/01_Mixture_of_Experts|Mixture of Experts]]
-
----
-
 ## Project Overview
 
 A production-ready agent is a complex engineering challenge: infrastructure, scaling, fault tolerance, monitoring, security, continuous improvement. We will build a support service assistant agent.
@@ -146,7 +138,7 @@ For agents, authorization at the tool and data level is important. Different use
 
 Validation of size, format, characters. But for agents this is not enough.
 
-Prompt injection is the main threat (see [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]] for the full taxonomy and defenses). Defense: system prompt with clear instructions and constraints, input/output filtering of known patterns, monitoring for anomalous behavior.
+Prompt injection is the main threat (see Module 14, Prompt Injection for the full taxonomy and defenses). Defense: system prompt with clear instructions and constraints, input/output filtering of known patterns, monitoring for anomalous behavior.
 
 Sensitive data in the system prompt, inaccessible to the user. Do not include internal instructions in the response. Exercise caution with RAG — documents can also contain injection.
 
@@ -247,9 +239,3 @@ Continuous Improvement: A/B testing for data-driven decisions, feedback loop for
 Production is the beginning of a continuous improvement process. The agent generates data that makes it better. Monitoring detects issues before users do. Experiments prove that changes work.
 
 Module 20 explores the research frontiers that will shape the next generation of these systems — from mixture of experts and state space models to autonomous agents and AI alignment.
-
----
-
-## Navigation
-**Previous:** [[04_Fine_Tuning_Pipeline|Fine-Tuning Pipeline]]
-**Next:** [[../20_Architecture_Research/01_Mixture_of_Experts|Mixture of Experts]]

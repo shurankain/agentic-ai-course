@@ -1,13 +1,5 @@
 # DoRA and Advanced PEFT Methods
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[09_Preference_Data|Preference Data]]
-**Next:** [[../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]]
-
----
-
 ## Introduction
 
 LoRA revolutionized fine-tuning, but research continues to advance. New methods offer improvements:
@@ -162,11 +154,3 @@ LongLoRA uses Shift Short Attention — efficient fine-tuning on long context (1
 LoRA remains the production-proven default; DoRA for improved quality; GaLore for the closest approximation to full fine-tuning.
 
 Method selection is driven by trade-offs: multi-adapter serving (LoRA/DoRA), maximum quality (GaLore), limited memory (QLoRA), long context (LongLoRA).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[09_Preference_Data|Preference Data]]
-**Next:** [[../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]]

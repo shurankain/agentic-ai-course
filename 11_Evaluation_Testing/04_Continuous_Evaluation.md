@@ -1,13 +1,5 @@
 # Continuous Evaluation and A/B Testing
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[03_LLM_as_Judge|LLM as Judge]]
-**Next:** [[05_RAG_Evaluation|RAG Evaluation]]
-
----
-
 ## From One-Time Evaluation to Continuous Monitoring
 
 One-time evaluation before release is necessary but insufficient. A model can degrade in production due to input data drift, changing user expectations, and external dependency updates.
@@ -199,7 +191,7 @@ An emerging evaluation metric that combines task success with compliance: a task
 - The task was completed successfully (goal achieved)
 - AND no policy violations occurred during execution (no PII leaks, no safety violations, no unauthorized actions, no regulatory breaches)
 
-**Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study ([[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]]) for an example where an agent's "successful" response created a legal liability.
+**Why this matters for enterprise agents:** In regulated industries (finance, healthcare, legal), a task that succeeds while violating policy is worse than a task that fails cleanly — the failure can be retried, but the policy violation may have legal consequences. See the Air Canada case study (Module 18, Enterprise AI Adoption) for an example where an agent's "successful" response created a legal liability.
 
 **Expected adoption:** Adoption is growing in enterprise settings (as of mid-2026), particularly in industries where regulatory compliance is non-negotiable. It aligns agent evaluation with what enterprise buyers actually care about: reliable outcomes within policy boundaries.
 
@@ -250,11 +242,3 @@ Start with end-to-end task completion rate as the primary metric. Add coordinati
 - **Simulation testing with synthetic personas systematically explores the interaction space.** Generating multi-turn conversations with aggressive, confused, and adversarial personas catches edge cases that random sampling and manual testing miss.
 
 - **Multi-agent evaluation requires system-level metrics beyond individual agent accuracy.** Task completion rate, coordination overhead, cascade failure rate, and cost per task capture the coordination dynamics that determine whether a multi-agent system succeeds or fails.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[03_LLM_as_Judge|LLM as Judge]]
-**Next:** [[05_RAG_Evaluation|RAG Evaluation]]

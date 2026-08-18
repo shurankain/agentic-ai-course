@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[05_RLHF_Alternatives|RLHF Alternatives]]
-**Next:** [[07_Synthetic_Data|Synthetic Data]]
-
----
-
 # Test-Time Compute: A New Dimension of Scaling
 
 ## Introduction
@@ -90,7 +82,7 @@ The optimum depends on task complexity, number of requests, and the current mode
 
 ## DeepSeek-R1: Open-Source Reasoning via GRPO
 
-**DeepSeek-R1** demonstrated that reasoning can emerge from pure reinforcement learning using GRPO (see [[04_RLHF_and_Alignment|RLHF and Alignment]] and [[05_RLHF_Alternatives|RLHF Alternatives]] for the algorithm). R1-Zero — trained with GRPO alone, no supervised fine-tuning on reasoning traces — spontaneously developed chain-of-thought, self-verification, and even 'aha moment' patterns. The R1 full pipeline adds supervised fine-tuning on curated reasoning examples, distillation into smaller models (1.5B-70B), and cold-start data to prevent reward hacking.
+**DeepSeek-R1** demonstrated that reasoning can emerge from pure reinforcement learning using GRPO (see RLHF and Alignment and RLHF Alternatives for the algorithm). R1-Zero — trained with GRPO alone, no supervised fine-tuning on reasoning traces — spontaneously developed chain-of-thought, self-verification, and even 'aha moment' patterns. The R1 full pipeline adds supervised fine-tuning on curated reasoning examples, distillation into smaller models (1.5B-70B), and cold-start data to prevent reward hacking.
 
 Results: AIME 15.6% → 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
 
@@ -187,11 +179,3 @@ Architectural implications: routing, caching, async are critical. Budget control
 More thinking tokens do not guarantee better answers — correct solutions are often shorter than incorrect ones. Use `reasoning_effort` / `budget_tokens` as quality controls, not just cost controls.
 
 Chain-of-thought reasoning may not faithfully represent the model's actual decision process (reasoning illegibility). Do not rely on monitoring reasoning chains as the sole safety mechanism — use defense in depth.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[05_RLHF_Alternatives|RLHF Alternatives]]
-**Next:** [[07_Synthetic_Data|Synthetic Data]]

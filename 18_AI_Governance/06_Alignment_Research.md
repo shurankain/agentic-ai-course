@@ -1,13 +1,5 @@
 # Alignment Research: From Theory to Practice
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[05_Governance_Frameworks|Governance Frameworks]]
-**Next:** [[07_Enterprise_AI_Adoption|Enterprise AI Adoption]]
-
----
-
 ## Introduction: Why Alignment Is the Central Problem of AI
 
 Alignment is not simply a technical task of making a model "obedient." It is a fundamental question of how to create systems that understand our intentions, share our values, and act in our interests even in situations we did not foresee. As AI systems become more powerful, the cost of alignment failures grows exponentially.
@@ -102,7 +94,7 @@ However, interpretability is still far from solving alignment. Current methods w
 
 ### The Problem: Humans Cannot Keep Up with AI
 
-RLHF (see [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]] for the technical details) works as long as human labelers can evaluate the quality of model responses. But what happens when the model generates:
+RLHF (see Module 10, RLHF and Alignment for the technical details) works as long as human labelers can evaluate the quality of model responses. But what happens when the model generates:
 - Complex code that a labeler cannot verify?
 - Scientific research requiring expertise the labeler lacks?
 - Long-form reasoning where an error may be deeply hidden?
@@ -473,7 +465,7 @@ No approach is satisfactory. Value learning remains fundamentally hard.
 
 ## Interview Preparation
 
-For safety and alignment interview preparation — including Anthropic-specific format, required readings, sample questions, and preparation strategies — see [[../21_Interview_Preparation/05_AI_Safety_Interview|AI Safety Interview]]. That lesson provides comprehensive coverage of RSP/ASL levels, METR evaluations, alignment faking, and multi-agent safety topics commonly assessed in safety-focused interviews.
+For safety and alignment interview preparation — including Anthropic-specific format, required readings, sample questions, and preparation strategies — see Module 21, AI Safety Interview. That lesson provides comprehensive coverage of RSP/ASL levels, METR evaluations, alignment faking, and multi-agent safety topics commonly assessed in safety-focused interviews.
 
 ## Key Takeaways
 
@@ -506,11 +498,3 @@ For safety and alignment interview preparation — including Anthropic-specific 
 ## Further Reading
 
 For hands-on implementation of the concepts in this lesson: Sparse Autoencoders (TransformerLens library, Anthropic's SAE training code), Debate frameworks (Anthropic's debate research), Constitutional AI (the original Bai et al. paper provides implementation details). The interpretability techniques above (activation patching, feature steering, probing) are implemented in the TransformerLens and nnsight libraries.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[05_Governance_Frameworks|Governance Frameworks]]
-**Next:** [[07_Enterprise_AI_Adoption|Enterprise AI Adoption]]

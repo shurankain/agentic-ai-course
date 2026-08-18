@@ -1,13 +1,5 @@
 # Coding Exercises for Interviews
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[01_ML_System_Design|ML System Design]]
-**Next:** [[03_Papers_Reading_Guide|Papers Reading Guide]]
-
----
-
 ## Introduction
 
 ML/AI interviews often require implementing basic algorithms from scratch — without using PyTorch, TensorFlow, or sklearn. This tests depth of understanding, not the ability to call APIs.
@@ -504,11 +496,3 @@ print(f"True weights: {true_weights}")
 print(f"Found weights: {weights}")
 print(f"Final loss: {losses[-1]:.4f}")
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[01_ML_System_Design|ML System Design]]
-**Next:** [[03_Papers_Reading_Guide|Papers Reading Guide]]

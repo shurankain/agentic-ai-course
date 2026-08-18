@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[04_MCP_Client_Integration|MCP Client Integration]]
-**Next:** [[../06_RAG/01_RAG_Basics|RAG Basics]]
-
----
-
 # Agent-to-Agent Protocol (A2A)
 
 ## Introduction: Inter-Agent Communication
@@ -250,11 +242,3 @@ Security in A2A is implemented through a capability-based model with mutual agen
 Understanding the complementary nature of MCP and A2A is critically important: MCP provides vertical integration (agent → data and tools), while A2A implements horizontal integration (agent → agent). Together they form a complete ecosystem for building complex multi-agent systems.
 
 With protocols in place for agents to use tools (MCP) and coordinate with each other (A2A), Module 6 addresses the most common data pattern these protocols serve: Retrieval-Augmented Generation (RAG).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[04_MCP_Client_Integration|MCP Client Integration]]
-**Next:** [[../06_RAG/01_RAG_Basics|RAG Basics]]

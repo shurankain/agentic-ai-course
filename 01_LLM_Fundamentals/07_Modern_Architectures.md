@@ -1,13 +1,5 @@
 # Modern LLM Architectures
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[06_Integration_Patterns|LLM Integration Patterns]]
-**Next:** [[08_Scaling_Laws|Scaling Laws]]
-
----
-
 ## Introduction: Beyond the Classic Transformer
 
 The Transformer architecture, introduced in 2017, revolutionized natural language processing and became the foundation for all large language models. However, over seven years of its dominance, researchers have identified a number of fundamental limitations that become increasingly critical as model scale grows.
@@ -459,11 +451,3 @@ All modern architectures use a unified API through the Transformers library. The
 **Long-context benchmarking:** For a correct comparison of SSM and Transformer on long sequences, test across various lengths (1K, 4K, 16K, 32K tokens). Always perform a warm-up run to initialize CUDA kernels, then use `torch.cuda.synchronize()` before and after timing for accuracy. SSM will show constant or near-linear processing time, while Transformers demonstrate quadratic growth with increasing context length.
 
 **Memory footprint analysis:** For MoE models, it is important to distinguish total from active parameters. Compute the total parameter count via `sum(p.numel() for p in model.parameters())`, then for MoE check for the `num_experts_per_tok` attribute in config. Active parameters are a fraction of total: shared parameters (attention, embeddings) plus only selected experts. This explains why Mixtral with 47B parameters uses only ~13B during inference, delivering the efficiency of a smaller model with the capacity of a larger one.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[06_Integration_Patterns|LLM Integration Patterns]]
-**Next:** [[08_Scaling_Laws|Scaling Laws]]

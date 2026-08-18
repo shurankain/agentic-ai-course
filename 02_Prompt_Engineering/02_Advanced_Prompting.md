@@ -1,13 +1,5 @@
 # Advanced Prompting Techniques
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[01_Prompting_Basics|Introduction to Prompting]]
-**Next:** [[03_Agent_Prompts|Prompts for AI Agents]]
-
----
-
 ## From Basic Techniques to Mastery
 
 After mastering zero-shot, few-shot, and Chain-of-Thought, the question arises: how do you solve tasks where even CoT fails to produce reliable results?
@@ -367,11 +359,3 @@ Confidence: HIGH (100% agreement)
 **ReAct** — for tasks involving external tools where reasoning transparency is needed
 **Tree of Thoughts** — when alternatives exist and errors at early stages are critical
 **Self-Consistency** — for tasks with a definitive answer and a high cost of error
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[01_Prompting_Basics|Introduction to Prompting]]
-**Next:** [[03_Agent_Prompts|Prompts for AI Agents]]

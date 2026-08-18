@@ -1,13 +1,5 @@
 # Process Reward Models: Evaluating Reasoning Step by Step
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[07_Code_Generation_Agents|Code Generation Agents]]
-**Next:** [[09_Agent_Use_Cases|Practical Use Cases]]
-
----
-
 ## Introduction
 
 When a human solves a complex problem, they don't simply produce an answer — they go through a series of intermediate steps. Each step can be correct or erroneous, and an error at an early stage often leads to an incorrect final result. Traditional evaluation systems look only at the final answer: correct or not. But what if we could evaluate each reasoning step?
@@ -353,7 +345,7 @@ This matters for inference-time search, where many paths need to be evaluated.
 
 ## Connection to RLHF
 
-> **Preview:** This section discusses how PRM extends RLHF concepts. The full RLHF pipeline — PPO, DPO, reward model training — is covered in [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]. The overview below provides enough context to understand PRM's role without requiring prior RLHF knowledge.
+> **Preview:** This section discusses how PRM extends RLHF concepts. The full RLHF pipeline — PPO, DPO, reward model training — is covered in Module 10, RLHF and Alignment. The overview below provides enough context to understand PRM's role without requiring prior RLHF knowledge.
 
 PRM is an extension of RLHF ideas to the level of individual reasoning steps. Understanding this connection helps situate PRM within the evolution of alignment methods.
 
@@ -499,13 +491,5 @@ An uncalibrated model may systematically inflate or deflate scores. Calibration 
 Temperature scaling is a post-processing technique for improving calibration: divide the model's logits by a temperature T before applying sigmoid/softmax. The optimal temperature is found through grid search, minimizing negative log-likelihood on a validation set. T > 1 makes the model less confident (smooths the distribution), T < 1 makes it more confident.
 
 **Related materials:**
-- [[../10_Fine_Tuning/04_RLHF_and_Alignment|RLHF and Alignment]]
-- [[../01_LLM_Fundamentals/08_Scaling_Laws|Inference-time compute and o1-style reasoning]]
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[07_Code_Generation_Agents|Code Generation Agents]]
-**Next:** [[09_Agent_Use_Cases|Practical Use Cases]]
+- Module 10, RLHF and Alignment
+- Module 01, Inference-time compute and o1-style reasoning

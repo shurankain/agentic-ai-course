@@ -1,13 +1,5 @@
 # Production Inference Architecture
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[../16_Distributed_Training/05_Distributed_Training_Practice|Practice: Distributed Training]]
-**Next:** [[02_vLLM_internals|vLLM internals: PagedAttention and KV-cache]]
-
----
-
 ## LLM Inference Characteristics
 
 LLMs generate text token by token — each new token requires a full forward pass through the model. A 500-token response requires 500 sequential forward passes.
@@ -92,7 +84,7 @@ Not all inference workloads are the same. The right architecture depends on volu
 
 **Multiple replicas (data parallelism):** Independent model copies behind a load balancer. High throughput, fault tolerance, linear scaling. The production standard for self-hosted inference at scale.
 
-**Disaggregated serving:** Prefill and decode on separate clusters. Prefill is compute-intensive (powerful GPUs), decode is memory-intensive (high memory bandwidth). Amazon-Cerebras alliance uses AWS Trainium for prefill + Cerebras WSE-3 for decode, achieving 5x throughput improvement. NVIDIA Dynamo provides a framework for disaggregated serving. This is now a production-standard approach for high-volume deployments — see [[07_SGLang_and_Alternatives|SGLang and Alternatives]].
+**Disaggregated serving:** Prefill and decode on separate clusters. Prefill is compute-intensive (powerful GPUs), decode is memory-intensive (high memory bandwidth). Amazon-Cerebras alliance uses AWS Trainium for prefill + Cerebras WSE-3 for decode, achieving 5x throughput improvement. NVIDIA Dynamo provides a framework for disaggregated serving. This is now a production-standard approach for high-volume deployments — see SGLang and Alternatives.
 
 | Pattern | Latency | Cost | Ops Complexity | Data Privacy | Best For |
 |---------|---------|------|---------------|-------------|----------|
@@ -127,11 +119,3 @@ Understanding what happens between "user sends a prompt" and "user receives a re
 - KV-cache grows linearly with context and can exceed the model size
 - The trade-off between throughput and latency is inevitable
 - Continuous batching is critical for production
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[../16_Distributed_Training/05_Distributed_Training_Practice|Practice: Distributed Training]]
-**Next:** [[02_vLLM_internals|vLLM internals: PagedAttention and KV-cache]]

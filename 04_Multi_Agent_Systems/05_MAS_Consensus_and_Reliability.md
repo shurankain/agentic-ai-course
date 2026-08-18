@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[04_MAS_Frameworks|Frameworks for Multi-Agent Systems]]
-**Next:** [[../05_MCP_Protocol/01_MCP_Basics|Model Context Protocol Basics]]
-
----
-
 # Consensus and Reliability of Multi-Agent Systems
 
 ## The Problem of Decision Alignment
@@ -419,11 +411,3 @@ Half-open window (halfOpenWindow): time during which the recovery decision is ma
 ### Implementation Example
 
 A weighted voting system is created with a set of agents and a learning rate. Each agent votes by specifying an answer variant and confidence level. The system weights votes based on agents' historical accuracy, selects the winning variant, and computes overall confidence. After receiving the correct answer, the system updates agent weights using exponential moving average for smooth adaptation to performance changes.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[04_MAS_Frameworks|Frameworks for Multi-Agent Systems]]
-**Next:** [[../05_MCP_Protocol/01_MCP_Basics|Model Context Protocol Basics]]

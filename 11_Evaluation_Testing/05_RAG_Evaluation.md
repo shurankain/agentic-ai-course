@@ -1,13 +1,5 @@
 # RAG Evaluation
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[04_Continuous_Evaluation|Continuous Evaluation]]
-**Next:** [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]]
-
----
-
 ## Problems with Current Benchmarks
 
 **MS MARCO became outdated by 2024:**
@@ -199,11 +191,3 @@ Success criteria for production:
 - **Faithfulness evaluation decomposes responses into individual claims and verifies each against context.** This claim-level approach provides actionable diagnostics, identifying exactly which statements are unsupported or contradicted.
 
 - **Production RAG evaluation often lacks ground truth.** LLM-as-Judge, user feedback signals (thumbs up/down, rephrasing, follow-up questions), and A/B testing provide quality signals when labeled data is unavailable.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[04_Continuous_Evaluation|Continuous Evaluation]]
-**Next:** [[../12_Observability/01_Tracing_and_Logging|Tracing and Logging]]

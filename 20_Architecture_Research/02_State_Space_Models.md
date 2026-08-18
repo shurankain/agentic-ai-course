@@ -1,13 +1,5 @@
 # State Space Models: Beyond Quadratic Complexity
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[01_Mixture_of_Experts|Mixture of Experts]]
-**Next:** [[03_Multimodal_Architectures|Multimodal Architectures]]
-
----
-
 ## The Fundamental Problem of the Transformer
 
 Attention is a brilliant mechanism, but with a costly secret: each token must "look" at all previous tokens. This creates quadratic complexity O(n²) with respect to sequence length.
@@ -237,11 +229,3 @@ Hardware efficiency is improving. Mamba-2's SSD formulation enables better GPU t
 The choice depends on the task. Long context streaming — SSM/Hybrid. Few-shot reasoning — Transformer. General purpose — Hybrid with tunable SSM/Attention ratio.
 
 State size is the fundamental trade-off. Fixed memory vs growing KV cache. Compression vs exact storage. Periodic attention layers in hybrids mitigate this limitation.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[01_Mixture_of_Experts|Mixture of Experts]]
-**Next:** [[03_Multimodal_Architectures|Multimodal Architectures]]

@@ -15,7 +15,7 @@ Open an [issue](https://github.com/shurankain/agentic-ai-course/issues) with a c
 ### Fix Errors
 - Typos, grammar, formatting
 - Incorrect code examples
-- Broken wiki-style links between lessons
+- Cross-references that name the wrong module or a lesson that no longer exists
 
 ### Improve Existing Content
 - Clarify complex explanations
@@ -41,7 +41,7 @@ Open an [issue](https://github.com/shurankain/agentic-ai-course/issues) with a c
 - **Keep it practical.** Prefer concrete examples over abstract theory.
 - **Stay current.** Reference the latest versions of tools, frameworks, and papers.
 - **Be concise.** Respect the reader's time. Say it once, say it clearly.
-- **Follow existing structure.** Each lesson has Navigation headers, consistent formatting, and Previous/Next links.
+- **Follow existing structure.** A lesson opens on its H1 and closes with Key Takeaways. Do not add navigation blocks, Previous and Next lines, or `[[wiki-links]]`: GitHub does not render them and they break on every rename. Point at another lesson in plain prose, for example "see Module 14, Prompt Injection". Only `00_Home.md` and `Table_of_Contents.md` carry Markdown links.
 - **Code examples** should be in Java (primary), Rust, or Python. Use realistic scenarios, not toy examples.
 - **No placeholder API keys.** Always use environment variables in examples (e.g., `OPENAI_API_KEY`).
 

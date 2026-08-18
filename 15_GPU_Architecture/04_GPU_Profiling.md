@@ -1,13 +1,5 @@
 # GPU Profiling and Optimization
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[03_Triton_Programming|Triton: GPU Programming in Python]]
-**Next:** [[05_Quantization_Deep_Dive|Quantization: A Deep Dive]]
-
----
-
 ## The Art of Performance Measurement
 
 Optimization without measurement is guesswork. Intuition fails even experienced developers: an operation that seems slow may account for a fraction of a percent of total time, while "fast" code may be the bottleneck of the entire pipeline.
@@ -321,11 +313,3 @@ For accurate inference latency measurement:
 - Warm up the GPU before measurements (50+ iterations) to stabilize frequencies and fill caches
 - Test various batch sizes to assess GPU utilization and determine the optimal operating range
 - With good utilization, latency should grow sublinearly with batch size (throughput grows faster than latency)
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → GPU Architecture
-**Previous:** [[03_Triton_Programming|Triton: GPU Programming in Python]]
-**Next:** [[05_Quantization_Deep_Dive|Quantization: A Deep Dive]]

@@ -1,13 +1,5 @@
 # Enterprise AI Adoption: CTO's Guide
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[06_Alignment_Research|Alignment Research]]
-**Next:** [[../19_Practical_Projects/01_RAG_Chatbot|RAG Chatbot]]
-
----
-
 ## Introduction: The Reality of AI Transformation
 
 While the previous chapters of this course were technical, this chapter is strategic. It is addressed to those who make decisions about AI adoption in organizations: CTOs, VPs of Engineering, technical directors. Here we will discuss what happens in practice when an enterprise begins AI transformation, what problems arise, and how to avoid them.
@@ -364,7 +356,7 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 xAI ceased to exist as a separate company on May 6, 2026 — it is now the SpaceXAI division. **SpaceX IPO completed June 12:** ticker SPCX on Nasdaq, raised $75B at $135/share (record-breaking — more than double Saudi Aramco's $29.4B in 2019), +19% on first day closing at $161. Valuation: ~$1.75T. SPCX hit an all-time high of **$225.64** (June 16), then corrected to ~$185 by June 22 — volatile and "not trading on fundamentals" per market analysts. **Google signed a $920M/month compute deal** with SpaceX (June 5) — ~$30B total through June 2029, providing 110,000 NVIDIA GPUs. SpaceX Q1 2026 loss: $4.27B. Anthropic Cloud Services Agreement at $1.25B/month through May 2029 for Colossus/Colossus II superclusters.
 
-**SpaceX acquires Cursor for ~$60B** (June 16, 2026) — the largest acquisition of a VC-backed startup in history. Cursor (Anysphere) had $4B ARR, 1M+ paying users, and 64% of Fortune 500 as customers. The all-stock deal made Musk's net worth exceed $1 trillion. This is a seismic shift in the AI tooling landscape: the #2 IDE coding agent is now owned by SpaceX/xAI, raising questions about model neutrality (will Cursor favor Grok over Claude/GPT?), data access (5,000+ enterprise codebases), and competitive dynamics. See [[../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]] for the coding agent market impact.
+**SpaceX acquires Cursor for ~$60B** (June 16, 2026) — the largest acquisition of a VC-backed startup in history. Cursor (Anysphere) had $4B ARR, 1M+ paying users, and 64% of Fortune 500 as customers. The all-stock deal made Musk's net worth exceed $1 trillion. This is a seismic shift in the AI tooling landscape: the #2 IDE coding agent is now owned by SpaceX/xAI, raising questions about model neutrality (will Cursor favor Grok over Claude/GPT?), data access (5,000+ enterprise codebases), and competitive dynamics. See Module 03, Code Generation Agents for the coding agent market impact.
 
 ### Emerging Enterprise Patterns
 
@@ -455,7 +447,7 @@ Goldman Sachs piloted Devin with 12,000 developers, reporting approximately 20% 
 
 Air Canada's chatbot hallucinated an entirely fictitious bereavement fare policy — detailed, plausible, and completely wrong. A customer relied on this information and was denied the refund the chatbot had "promised." The Canadian tribunal ruled that the company is responsible for what its AI says, and a disclaimer stating the chatbot might be inaccurate does NOT protect the company. The award was small (CAD $650.88 plus interest), but the precedent is massive: agent outputs can create legally binding obligations.
 
-**The lesson:** Guardrails are not optional. See [[../14_Security_Safety/04_Moderation_and_Compliance|Moderation and Compliance]] for compliance architecture.
+**The lesson:** Guardrails are not optional. See Module 14, Moderation and Compliance for compliance architecture.
 
 ### Additional Failure Cases
 
@@ -485,7 +477,7 @@ Five patterns address different integration scenarios, roughly ordered from most
 
 **4. Event-Driven Integration** — agents subscribe to event streams (Kafka, RabbitMQ, SQS) and react to business events. Suitable for real-time workflows: order processing, alert handling, escalation routing. The agent is triggered by events rather than user requests.
 
-**5. Screen Scraping with Vision** — the last resort. Computer use agents (Claude Computer Use, GPT Operator) interact with applications through screenshots and mouse/keyboard actions. Useful for the most hopeless legacy systems with no API, no database access, and no event stream. See [[../03_AI_Agents_Core/06_Computer_Use_Agents|Computer Use Agents]].
+**5. Screen Scraping with Vision** — the last resort. Computer use agents (Claude Computer Use, GPT Operator) interact with applications through screenshots and mouse/keyboard actions. Useful for the most hopeless legacy systems with no API, no database access, and no event stream. See Module 03, Computer Use Agents.
 
 **MCP-First Architecture:** Each integration pattern above can be wrapped as an MCP server, creating a unified agent-facing interface. The agent does not need to know whether it is calling a REST API, an RPA robot, or a database query — it sees MCP tools with standardized descriptions. With 6,000+ pre-built MCP integrations (as of April 2026), many common enterprise systems already have MCP servers available.
 
@@ -506,13 +498,13 @@ A frequently overlooked compliance issue: **vector DB embeddings containing pers
 - Audit trail with masked PII — log what the agent did, not the personal data it processed
 - Human-in-the-loop for decisions with material impact on individuals
 
-**Cross-border strategy:** "Build under the EU AI Act — it covers all other jurisdictions" is increasingly the pragmatic compliance approach. EU AI Act requirements are the strictest; meeting them typically satisfies HIPAA, CCPA, and other frameworks as a side effect. See [[01_Regulatory_Landscape|AI Regulatory Landscape]] and [[../14_Security_Safety/04_Moderation_and_Compliance|Moderation and Compliance]] for regulatory details.
+**Cross-border strategy:** "Build under the EU AI Act — it covers all other jurisdictions" is increasingly the pragmatic compliance approach. EU AI Act requirements are the strictest; meeting them typically satisfies HIPAA, CCPA, and other frameworks as a side effect. See AI Regulatory Landscape and Module 14, Moderation and Compliance for regulatory details.
 
 ---
 
 ## Workforce Impact: Augmentation, New Roles, and the Productivity Reality (as of mid-June 2026)
 
-The course has covered developer productivity extensively (see [[../03_AI_Agents_Core/07_Code_Generation_Agents|Code Generation Agents]]). This section addresses the broader workforce impact beyond software development.
+The course has covered developer productivity extensively (see Module 03, Code Generation Agents). This section addresses the broader workforce impact beyond software development.
 
 **Augmentation over replacement — but with caveats.** BCG and Goldman Sachs research consistently shows that AI primarily augments rather than replaces workers. Senior professionals benefit most — they have the domain knowledge to direct AI effectively, verify its output, and correct its mistakes. Gartner projects that by 2030, 75% of IT work will involve humans collaborating with AI, while 25% will be handled by AI alone. The augmentation narrative is real but incomplete: it describes the near-term equilibrium, not the long-term trajectory. Claude Cowork's launch triggered a $285B SaaS selloff precisely because the market sees AI replacing not workers directly, but the software tools workers use — which has the same economic effect on per-seat pricing.
 
@@ -530,14 +522,14 @@ The statistics are sobering: **88% of agent projects fail to reach production** 
 
 **61% of failures trace to scope creep and data quality.** The pilot works on clean demo data; production data is messy, inconsistent, and incomplete. The 80/20 rule applies brutally: getting from a working demo to 80% production coverage takes 20% of effort; the remaining 20% of edge cases consumes the other 80%.
 
-**Budgets miss real costs by 40-60%.** Development is only 25-35% of three-year TCO — operations (inference, monitoring, maintenance, incident response) consume the rest. See [[../03_AI_Agents_Core/10_Resource_Optimization|Resource Optimization]] for the full cost framework.
+**Budgets miss real costs by 40-60%.** Development is only 25-35% of three-year TCO — operations (inference, monitoring, maintenance, incident response) consume the rest. See Module 03, Resource Optimization for the full cost framework.
 
 **<20% of pilots scale to production within 18 months** (McKinsey). The gap between "it works in a demo" and "it works reliably at scale with real users" is consistently underestimated.
 
 **What separates the 12% that succeed:**
-- Evaluation from day one — not added after launch (see [[../11_Evaluation_Testing/01_Metrics_and_Benchmarks|Metrics and Benchmarks]])
-- Guardrails built into the architecture, not bolted on (see [[../14_Security_Safety/03_Agent_Security|Agent Security]])
-- Observability that tracks agent decisions, not just latency (see [[../12_Observability/04_AgentOps|AgentOps]])
+- Evaluation from day one — not added after launch (see Module 11, Metrics and Benchmarks)
+- Guardrails built into the architecture, not bolted on (see Module 14, Agent Security)
+- Observability that tracks agent decisions, not just latency (see Module 12, AgentOps)
 - Human-in-the-loop for edge cases, with graceful handoff from the start
 - Scope discipline: solve one workflow well before expanding
 
@@ -545,15 +537,7 @@ The statistics are sobering: **88% of agent projects fail to reach production** 
 
 ## Related Materials
 
-- [[01_Regulatory_Landscape|AI Regulatory Landscape]]
-- [[02_AI_Risk_Management|AI Risk Management]]
-- [[05_Governance_Frameworks|Governance Frameworks]]
-- [[../03_AI_Agents_Core/09_Agent_Use_Cases|Practical AI Agent Use Cases]]
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[06_Alignment_Research|Alignment Research]]
-**Next:** [[../19_Practical_Projects/01_RAG_Chatbot|RAG Chatbot]]
+- AI Regulatory Landscape
+- AI Risk Management
+- Governance Frameworks
+- Module 03, Practical AI Agent Use Cases

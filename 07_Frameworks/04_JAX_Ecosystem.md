@@ -1,13 +1,5 @@
 # JAX Ecosystem
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[03_Semantic_Kernel|Semantic Kernel]]
-**Next:** [[05_AWS_Strands_Agents|AWS Strands Agents]]
-
----
-
 ## Introduction
 
 JAX is a library from Google used by DeepMind and Anthropic for their flagship models. If you are targeting positions at these companies or want to understand the cutting edge of ML research, familiarity with JAX is essential.
@@ -163,11 +155,3 @@ JAX represents a functional paradigm for deep learning with an emphasis on compo
 The Flax, Optax, and Orbax ecosystem provides the necessary tools for building and training neural networks in a functional style. Explicit state and random key management requires adaptation from PyTorch developers but offers advantages in determinism and parallelization.
 
 JAX is particularly strong for research and TPU workloads. It powers the training infrastructure for Claude and Gemini — the frontier models most AI architects build on. PyTorch remains the leader for rapid prototyping, agent development, and production deployment thanks to its mature ecosystem and CUDA integration.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[03_Semantic_Kernel|Semantic Kernel]]
-**Next:** [[05_AWS_Strands_Agents|AWS Strands Agents]]

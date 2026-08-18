@@ -1,13 +1,5 @@
 # PyTorch FSDP2: The Modern Standard
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[01_Distributed_Training_Basics|Distributed Training Basics]]
-**Next:** [[03_DeepSpeed_ZeRO|DeepSpeed ZeRO: Zero Redundancy Optimizer]]
-
----
-
 ## Evolution from DDP to FSDP
 
 DDP replicates the full model on each GPU. For a 10 GB model on 8 GPUs, 80 GB is required, even though 10 GB total would suffice.
@@ -131,11 +123,3 @@ FSDP2 is the modern standard for large models in PyTorch.
 **Checkpointing enables larger batches.** Recomputation is cheaper than OOM.
 
 **Proper wrapping matters.** One unit per transformer layer is a good starting point.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[01_Distributed_Training_Basics|Distributed Training Basics]]
-**Next:** [[03_DeepSpeed_ZeRO|DeepSpeed ZeRO: Zero Redundancy Optimizer]]

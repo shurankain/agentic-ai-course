@@ -1,13 +1,5 @@
 # Agent Memory Systems
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[04_Planning|Agent Planning]]
-**Next:** [[06_Computer_Use_Agents|Computer Use Agents]]
-
----
-
 ## Introduction
 
 Memory is what transforms a set of isolated interactions into a coherent experience. Without memory, an agent is like a person with amnesia: every conversation starts from scratch, every mistake is repeated, every lesson is instantly forgotten.
@@ -136,7 +128,7 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 **The LLM-as-Operating-System paradigm:** Letta treats the LLM as a CPU managing its own memory hierarchy. Three tiers of memory map to hardware analogy: **Core Memory** (always loaded in prompt — analogous to CPU registers), **Recall Memory** (searchable conversation history — analogous to RAM), and **Archival Memory** (large-scale vector-indexed storage — analogous to disk). The agent accesses all three tiers through explicit tool calls.
 
-**The key differentiator: agent editability.** Unlike systems where memory is written by the application and read by the agent, Letta agents actively **update, delete, and reorganize** their own memory blocks. The agent decides what is worth remembering, what is outdated, and how to structure its knowledge. This is self-directed context engineering at the memory level — see [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]].
+**The key differentiator: agent editability.** Unlike systems where memory is written by the application and read by the agent, Letta agents actively **update, delete, and reorganize** their own memory blocks. The agent decides what is worth remembering, what is outdated, and how to structure its knowledge. This is self-directed context engineering at the memory level — see Module 02, Context Engineering.
 
 **Core Memory** consists of named blocks (persona, human, goals, preferences) that are version-controlled. The agent modifies these blocks as it learns. For example, after discovering a user prefers concise answers, the agent updates its "human" block. This update persists across sessions and influences all future interactions.
 
@@ -383,9 +375,3 @@ If importance falls below the threshold of 0.1, the item is marked for archival 
 This mechanism keeps memory clean and relevant, imitating the natural forgetting of unused information.
 
 This example demonstrates the key patterns: building context from different memory types, prioritization through scoring, consolidation from short-term to long-term, and forgetting via decay.
-
----
-
-## Navigation
-**Previous:** [[04_Planning|Agent Planning]]
-**Next:** [[06_Computer_Use_Agents|Computer Use Agents]]

@@ -1,13 +1,5 @@
 # Information Retrieval Methods
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[03_Embeddings_and_Vector_Stores|Embeddings and Vector Stores]]
-**Next:** [[05_Advanced_RAG|Advanced RAG Techniques]]
-
----
-
 ## The Role of Retrieval in RAG
 
 Retrieval is the heart of a RAG system. No matter how powerful the generative model is, it is helpless without high-quality context. The "garbage in, garbage out" principle applies here in full: if the retriever finds irrelevant documents, even GPT-5.4 cannot produce a useful answer.
@@ -333,11 +325,3 @@ During search, relevant sentences are found. For each found sentence, a window i
 The recursive process starts with the original query. At each iteration, a vector search is performed on the current query. Found documents are filtered against those already seen in previous iterations. The LLM evaluates whether the information is sufficient or another hop is needed.
 
 If continuation is needed, the LLM generates a follow-up query based on the original query and found documents. The new query is used for the next iteration. The process continues until the maximum number of hops is reached or sufficient information is obtained. All results from all hops are aggregated, deduplicated, and sorted by relevance.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → RAG
-**Previous:** [[03_Embeddings_and_Vector_Stores|Embeddings and Vector Stores]]
-**Next:** [[05_Advanced_RAG|Advanced RAG Techniques]]

@@ -1,13 +1,5 @@
 # Practical AI Agent Use Cases
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[08_Process_Reward_Models|Process Reward Models]]
-**Next:** [[10_Resource_Optimization|Resource-Aware Optimization]]
-
----
-
 ## Introduction: From Theory to Practice
 
 AI agents have been solving real-world problems in production environments since 2021. This chapter provides a practical map of applications: major use case categories, key players, technology maturity levels, and deployment examples.
@@ -292,7 +284,7 @@ Deep Research and Agentic RAG are often confused because both involve retrieval 
 
 ### Code Review Agents
 
-Specialized multi-agent systems that review pull requests for security vulnerabilities, performance issues, style violations, and architectural concerns. Each agent focuses on a narrow domain (see [[../19_Practical_Projects/02_Multi_Agent_System|Multi-Agent Code Review Project]] for a detailed implementation).
+Specialized multi-agent systems that review pull requests for security vulnerabilities, performance issues, style violations, and architectural concerns. Each agent focuses on a narrow domain (see Module 19, Multi-Agent Code Review Project for a detailed implementation).
 
 **Maturity:** Production-ready. GitHub, GitLab, and third-party tools (CodeRabbit, Sourcery) offer automated AI code review. Enterprise teams deploy custom agents tuned to their coding standards.
 
@@ -318,7 +310,7 @@ AI assistants embedded in corporate workflows: answering HR policy questions, he
 
 ## No-Code/Low-Code Agent Builders
 
-A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in [[../07_Frameworks/00_Frameworks_Overview|Module 07]] — they target different audiences and use cases.
+A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in Module 07, Module 07 — they target different audiences and use cases.
 
 ### Workflow Automation Platforms
 
@@ -404,14 +396,8 @@ Exercise caution if:
 
 ## Related Materials
 
-- [[01_What_is_AI_Agent|What Is an AI Agent]]
-- [[02_Agent_Architectures|Agent Architectures]]
-- [[07_Code_Generation_Agents|Coding Agents: Code Generation]]
-- [[06_Computer_Use_Agents|Computer Use Agents]]
-- [[../06_RAG/05_Advanced_RAG|Advanced RAG]]
-
----
-
-## Navigation
-**Previous:** [[08_Process_Reward_Models|Process Reward Models]]
-**Next:** [[10_Resource_Optimization|Resource-Aware Optimization]]
+- What Is an AI Agent
+- Agent Architectures
+- Coding Agents: Code Generation
+- Computer Use Agents
+- Module 06, Advanced RAG

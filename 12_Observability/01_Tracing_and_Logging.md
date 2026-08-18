@@ -1,13 +1,5 @@
 # Tracing and Logging for LLM Applications
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[../11_Evaluation_Testing/05_RAG_Evaluation|RAG Evaluation]]
-**Next:** [[02_Metrics_and_Dashboards|Metrics and Dashboards]]
-
----
-
 ## Unique Observability Challenges of LLM Systems
 
 Observability of LLM applications differs from traditional systems. Non-determinism means that identical inputs produce different outputs. Understanding a problem requires knowing exactly what happened in a specific request: prompt, context, parameters, response.
@@ -186,11 +178,3 @@ Key patterns: ThreadLocal context for automatic propagation, MDC integration for
 - **Platform selection depends on ecosystem and constraints.** LangSmith for LangChain-native workflows, Langfuse (fully MIT after ClickHouse acquisition) for self-hosting and budget constraints, Arize Phoenix for embedding drift and RAG analysis.
 
 - **Tiered retention balances debugging value and compliance cost.** 7 days of full traces with masked PII, 90 days of aggregated metrics, and indefinite anonymized audit trails is the standard production pattern.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[../11_Evaluation_Testing/05_RAG_Evaluation|RAG Evaluation]]
-**Next:** [[02_Metrics_and_Dashboards|Metrics and Dashboards]]

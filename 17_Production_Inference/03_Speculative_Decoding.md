@@ -1,13 +1,5 @@
 # Speculative Decoding: Accelerating Generation
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[02_vLLM_internals|vLLM: Modern Inference Engine]]
-**Next:** [[04_Model_Quantization|Quantization: Memory vs Quality]]
-
----
-
 ## Idea
 
 Autoregressive generation has a fundamental limitation: each token requires a full pass through the model. The next token depends on the previous one — parallelism is impossible.
@@ -142,11 +134,3 @@ Optimal for specific workloads — single-user, long-form. Large batch does not 
 Trade-off: memory for latency — 10-30% memory overhead for 1.5-3× latency reduction.
 
 Production-ready in vLLM — simple activation, built-in monitoring.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[02_vLLM_internals|vLLM: Modern Inference Engine]]
-**Next:** [[04_Model_Quantization|Quantization: Memory vs Quality]]

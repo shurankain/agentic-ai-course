@@ -1,13 +1,5 @@
 # Structured Output Techniques
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[../07_Frameworks/05_AWS_Strands_Agents|AWS Strands Agents]]
-**Next:** [[02_Data_Extraction|Extracting Data from Unstructured Text]]
-
----
-
 ## Introduction: When Text Is Not Enough
 
 Consider an automated resume processing system. A candidate uploads a document, and the system must extract the name, contacts, experience, education, skills, and store them in a database for filtering and analysis. GPT-5.4 returns a response: "John Smith is an experienced developer with 10 years of experience. He worked at Google and Microsoft..." Excellent text for a human. But how do you structure it for programmatic processing?
@@ -119,7 +111,7 @@ JSON is the standard structured format, but its overhead is significant: braces,
 
 **When to use TOON / minimal formats:** Internal agent-to-agent communication, intermediate tool results consumed by the next LLM call, structured output that will be immediately parsed and never stored in its serialized form. The key criterion: will this data ever leave the agent system? If no — optimize for tokens. If yes — use JSON.
 
-See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for the broader discussion of token budget management and output format optimization.
+See Module 02, Context Engineering for the broader discussion of token budget management and output format optimization.
 
 ---
 
@@ -164,11 +156,3 @@ Guarantee levels: prompt engineering (hope only), JSON Mode (syntax), Function C
 The choice depends on criticality: prototypes — prompts, integrations — Function Calling, critical systems — full stack with validation.
 
 Java ecosystem: LangChain4j AI Services (declarative approach), Spring AI (Spring integration). They hide the complexity of working with JSON Schema and parsing.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[../07_Frameworks/05_AWS_Strands_Agents|AWS Strands Agents]]
-**Next:** [[02_Data_Extraction|Extracting Data from Unstructured Text]]

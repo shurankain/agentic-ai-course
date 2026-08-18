@@ -1,13 +1,5 @@
 # AWS Strands Agents
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[04_JAX_Ecosystem|JAX Ecosystem]]
-**Next:** [[../08_Structured_Outputs/01_Structured_Output_Techniques|Structured Output Techniques]]
-
----
-
 ## Introduction
 
 AWS Strands Agents SDK is an open-source framework from AWS for building AI agents. Strands implements a model-driven approach, contrasting with the graph-driven architecture of LangGraph.
@@ -173,11 +165,3 @@ Model-Driven approach means the LLM makes workflow decisions with minimal code. 
 Multi-Agent patterns include Agents-as-Tools for hierarchy, Handoffs for control transfer, Swarm for peer collaboration, and Graph when control is needed.
 
 Native MCP provides integration with the MCP server ecosystem. For Enterprise, Bedrock AgentCore offers a managed service for production.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[04_JAX_Ecosystem|JAX Ecosystem]]
-**Next:** [[../08_Structured_Outputs/01_Structured_Output_Techniques|Structured Output Techniques]]

@@ -1,13 +1,5 @@
 # LangChain4j: LLM Framework for Java
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[00_Frameworks_Overview|AI Frameworks Overview]]
-**Next:** [[02_Spring_AI|Spring AI]]
-
----
-
 ## Introduction to LangChain4j
 
 LangChain4j is a full-featured framework for developing applications based on language models within the Java ecosystem. The project emerged as a response to the need of Java developers for tools comparable to the Python ecosystem, where LangChain has long been the de facto standard.
@@ -379,11 +371,3 @@ public class LangChain4jDemo {
 **Structured output**: By returning typed objects (record, POJO), you automatically get JSON parsing. The framework generates the JSON Schema and instructs the model on its own.
 
 **Modularity**: Components (model, memory, tools) are created separately and assembled via the builder pattern, ensuring flexibility and testability.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[00_Frameworks_Overview|AI Frameworks Overview]]
-**Next:** [[02_Spring_AI|Spring AI]]

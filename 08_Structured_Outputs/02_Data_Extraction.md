@@ -1,13 +1,5 @@
 # Data Extraction from Unstructured Text
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[01_Structured_Output_Techniques|Structured Output Techniques]]
-**Next:** [[03_Validation_and_Error_Handling|Validation and Error Handling]]
-
----
-
 ## Introduction: Turning Chaos into Order
 
 Terabytes of unstructured data are created daily — emails, documents, reports, news, reviews, social media. Humans easily understand this text, but for automated processing it is virtually useless.
@@ -76,7 +68,7 @@ Extraction is no longer limited to text. Vision-language models (GPT-5.4, Claude
 
 **Practical applications:** Invoice processing (extracting line items, totals, vendor info from scanned invoices), form data extraction (insurance claims, government forms), table extraction from PDFs where the table structure is visual rather than semantic. In all cases, the vision model "sees" the layout as a human would, rather than trying to reconstruct it from OCR text.
 
-**When to use multi-modal extraction:** Documents with complex visual layouts, scanned/photographed documents, forms, tables, and any document where OCR accuracy is insufficient. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See [[../06_RAG/05_Advanced_RAG|Advanced RAG]] for ColPali's retrieval capabilities beyond extraction.
+**When to use multi-modal extraction:** Documents with complex visual layouts, scanned/photographed documents, forms, tables, and any document where OCR accuracy is insufficient. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See Module 06, Advanced RAG for ColPali's retrieval capabilities beyond extraction.
 
 ---
 
@@ -107,11 +99,3 @@ Strategies range from direct approaches to complex pipelines with verification a
 Context is critically important: anaphora, domain, time. Provide the model with enough information for correct interpretation.
 
 Ambiguities are inevitable. A good system handles them explicitly: returns options with confidence scores, flags incompleteness, detects contradictions.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[01_Structured_Output_Techniques|Structured Output Techniques]]
-**Next:** [[03_Validation_and_Error_Handling|Validation and Error Handling]]

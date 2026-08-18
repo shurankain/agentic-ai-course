@@ -1,13 +1,5 @@
 # Content Moderation and Compliance
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[03_Agent_Security|Agent Security]]
-**Next:** [[05_NeMo_Guardrails|NeMo Guardrails]]
-
----
-
 ## Content Responsibility
 
 LLM systems generate content for which the system operator bears responsibility, not the model developer. If a chatbot insults users, spreads misinformation, or gives dangerous advice, the company that deployed the bot is liable. Content moderation is a mandatory component of any production application.
@@ -193,11 +185,3 @@ Data retention policies differ for conversation data, audit logs, and training d
 Security monitoring and an incident response plan are necessary for detecting and responding to incidents.
 
 Transparency through privacy policy, AI disclosure, and appeal process ensures accountability and trust.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Security and Safety
-**Previous:** [[03_Agent_Security|Agent Security]]
-**Next:** [[05_NeMo_Guardrails|NeMo Guardrails]]

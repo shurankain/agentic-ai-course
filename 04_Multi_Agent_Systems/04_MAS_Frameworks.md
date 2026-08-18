@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[03_Agent_Orchestration|Agent Orchestration]]
-**Next:** [[05_MAS_Consensus_and_Reliability|MAS Consensus and Reliability]]
-
----
-
 # Frameworks for Multi-Agent Systems
 
 ## Why Frameworks Are Needed
@@ -150,7 +142,7 @@ CrewAI is well-suited for content-generation workflows: topic research, article 
 
 ## Semantic Kernel: Enterprise Orchestration from Microsoft (Transitioning)
 
-> **Note (February 2026):** Semantic Kernel is transitioning to maintenance mode as Microsoft consolidates its agent framework strategy into Microsoft Agent Framework. Existing SK applications continue to work, and the plugin/function model carries forward into the new framework. See the dedicated [[../07_Frameworks/03_Semantic_Kernel|Semantic Kernel]] lesson for migration guidance.
+> **Note (February 2026):** Semantic Kernel is transitioning to maintenance mode as Microsoft consolidates its agent framework strategy into Microsoft Agent Framework. Existing SK applications continue to work, and the plugin/function model carries forward into the new framework. See the dedicated Module 07, Semantic Kernel lesson for migration guidance.
 
 Semantic Kernel is an SDK from Microsoft for integrating AI into enterprise applications. Unlike more experimental frameworks, Semantic Kernel is oriented toward production-ready use in enterprise environments.
 
@@ -234,7 +226,7 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 
 **ADK for Go 1.0** (April 2026) — production-ready Go SDK with native OpenTelemetry integration for deep tracing, a plugin system for self-healing logic, human-in-the-loop confirmations for sensitive operations, and YAML-based configurations for rapid iteration. Google's ADK is now the **only Big Tech framework supporting 4 languages** (Python, TypeScript, Java, Go).
 
-**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]]).
+**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see Module 02, Context Engineering).
 
 ### When to Use
 
@@ -316,11 +308,3 @@ Google ADK integrates deeply with Gemini models and the GCP ecosystem, with nati
 AutoGen and Semantic Kernel have entered maintenance mode. Existing systems continue to work, but new projects should use their successors.
 
 When choosing a framework, consider not only current requirements but also the ecosystem alignment. The trend is toward provider-aligned SDKs (OpenAI Agents SDK, Google ADK, Microsoft Agent Framework) alongside provider-agnostic options (LangGraph, CrewAI).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[03_Agent_Orchestration|Agent Orchestration]]
-**Next:** [[05_MAS_Consensus_and_Reliability|MAS Consensus and Reliability]]

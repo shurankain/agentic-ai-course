@@ -1,13 +1,5 @@
 # Context Windows and Managing Them
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[02_Tokenization|Tokenization: How Text Becomes Numbers]]
-**Next:** [[04_Generation_Parameters|Generation Parameters: Controlling Model Behavior]]
-
----
-
 Imagine you are having a conversation through a note that can hold only a certain number of words. Anything that does not fit is forgotten. Each time you respond, you can only rely on the information that fits on that note. This is exactly how a context window works in language models — it is the AI's "working memory," limited by the number of tokens the model can process at once.
 
 The context window is one of the key constraints of LLMs, directly affecting the architecture of AI agents. Understanding this constraint, its causes, and ways to work with it is critically important for building effective agentic systems.
@@ -81,7 +73,7 @@ Several KV-cache compression techniques have been developed for working with lon
 
 **PagedAttention** (vLLM, 2023): Manages the KV-cache like virtual memory — allocates blocks on demand, avoiding fragmentation. Allows serving more requests simultaneously but does not reduce per-token cache size.
 
-**GQA/MQA** (see [[01_LLM_Basics|LLM Basics]]): Multiple Query heads share a single Key-Value pair. Llama 2 70B uses GQA with 8 KV-heads instead of 64, reducing the cache by 8x.
+**GQA/MQA** (see LLM Basics): Multiple Query heads share a single Key-Value pair. Llama 2 70B uses GQA with 8 KV-heads instead of 64, reducing the cache by 8x.
 
 **Multi-head Latent Attention (MLA)** — a breakthrough by DeepSeek (2024): Instead of storing full Key and Value matrices, it stores their **compressed latent representations**. During processing, it projects them back into the full space.
 
@@ -283,7 +275,7 @@ Instead of loading the entire document, load only relevant fragments.
 4. Only the retrieved fragments are loaded into the context
 5. The model answers the question with access to the relevant information
 
-RAG is the standard approach for working with large knowledge bases. It allows "scaling" the agent's knowledge beyond the context window (see [[../06_RAG/01_RAG_Basics|RAG Basics]] for the full pipeline).
+RAG is the standard approach for working with large knowledge bases. It allows "scaling" the agent's knowledge beyond the context window (see Module 06, RAG Basics for the full pipeline).
 
 ---
 
@@ -357,11 +349,3 @@ Next, the history is divided into two parts: old messages for summarization and 
 The old messages are combined into a textual conversation representation (each message in "role: content" format), which is sent to a language model with a request to create a brief summary in 2–3 sentences. The resulting summary is wrapped in a special system message labeled "Summary of previous conversation," placed at the beginning of the final list, followed by all recent messages in full.
 
 This approach preserves key information from the entire interaction history while consuming significantly fewer tokens than the full history would. The disadvantage is an additional LLM call to create the summary, which increases latency and cost.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[02_Tokenization|Tokenization: How Text Becomes Numbers]]
-**Next:** [[04_Generation_Parameters|Generation Parameters: Controlling Model Behavior]]

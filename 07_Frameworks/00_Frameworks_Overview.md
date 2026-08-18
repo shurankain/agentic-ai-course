@@ -1,13 +1,5 @@
 # AI Frameworks Overview
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[../06_RAG/06_Late_Interaction_Retrieval|Late Interaction Retrieval]]
-**Next:** [[01_LangChain4j|LangChain4j for Java]]
-
----
-
 ## Introduction
 
 The ecosystem of frameworks for developing AI agents and LLM applications is evolving rapidly. New tools appear monthly, existing ones undergo radical changes, and some merge or become discontinued. This chapter provides an overview of the current state of the industry and helps select the right tool for a specific task.
@@ -272,16 +264,8 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 
 ## Related Materials
 
-- [[01_LangChain4j|LangChain4j for Java]]
-- [[02_Spring_AI|Spring AI]]
-- [[03_Semantic_Kernel|Semantic Kernel]]
-- [[../05_MCP_Protocol/01_MCP_Basics|MCP Protocol]]
-- [[../03_AI_Agents_Core/09_Agent_Use_Cases|AI Agent Use Cases]]
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[../06_RAG/06_Late_Interaction_Retrieval|Late Interaction Retrieval]]
-**Next:** [[01_LangChain4j|LangChain4j for Java]]
+- LangChain4j for Java
+- Spring AI
+- Semantic Kernel
+- Module 05, MCP Protocol
+- Module 03, AI Agent Use Cases

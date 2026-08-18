@@ -1,13 +1,5 @@
 # LLM Evaluation Metrics and Benchmarks
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[../10_Fine_Tuning/10_DoRA_and_Beyond|DoRA and Advanced PEFT Methods]]
-**Next:** [[02_Human_Evaluation|Human Evaluation]]
-
----
-
 ## The Fundamental Problem of LLM Evaluation
 
 Evaluating language models differs from testing traditional software. For the question "Explain quantum entanglement," there exists an infinite set of correct answers of varying quality. The traditional unit-testing approach does not work — a model may produce an answer semantically equivalent to the reference but worded differently, or even better than the reference.
@@ -94,7 +86,7 @@ As classic benchmarks saturate, the community has shifted to harder, more discri
 
 **GPQA Diamond** — Graduate-level Professional Quality Assurance. 198 extremely difficult questions written by domain experts (PhDs) in physics, chemistry, and biology. Questions are validated to be answerable by experts but not by skilled non-experts. Frontier model scores have risen rapidly: latest reasoning models reach 90%+ (Claude Opus 4.6: 91.3%, Gemini 3.1 Pro: 94.1%), up from o3's 87.7% in early 2025. GPT-4o 53.6%. Approaching saturation for the strongest reasoning models.
 
-**SWE-bench Verified** — evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. The acceleration of scores has been dramatic: 72% (mid-2025) → 79.2% (early 2026) → 87.6% (Claude Opus 4.7, April 2026) → 88.7% (GPT-5.5 Instant, May 2026) → 88.6% (Claude Opus 4.8, May 28 2026) → **95.0%** (Claude Fable 5, June 9 2026, independently confirmed by vals.ai; **model suspended June 13 due to export controls** — see [[../14_Security_Safety/03_Agent_Security|Agent Security]]). DeepSeek V4 scores 80.6% (open weights, MIT). Mistral Medium 3.5 scores 77.6%. Fable 5 at 95% means the benchmark is approaching its practical ceiling — with solution leakage in ~33% of tasks and pretraining contamination in ~94%, the remaining 5% gap likely reflects benchmark noise more than model limitation. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination — see Benchmark Reliability section.
+**SWE-bench Verified** — evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. The acceleration of scores has been dramatic: 72% (mid-2025) → 79.2% (early 2026) → 87.6% (Claude Opus 4.7, April 2026) → 88.7% (GPT-5.5 Instant, May 2026) → 88.6% (Claude Opus 4.8, May 28 2026) → **95.0%** (Claude Fable 5, June 9 2026, independently confirmed by vals.ai; **model suspended June 13 due to export controls** — see Module 14, Agent Security). DeepSeek V4 scores 80.6% (open weights, MIT). Mistral Medium 3.5 scores 77.6%. Fable 5 at 95% means the benchmark is approaching its practical ceiling — with solution leakage in ~33% of tasks and pretraining contamination in ~94%, the remaining 5% gap likely reflects benchmark noise more than model limitation. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination — see Benchmark Reliability section.
 
 **SWE-bench Pro** — a harder variant introduced to address Verified's reliability issues, now the recommended replacement after OpenAI abandoned Verified (May 2026). Claude Fable 5 leads at **80.3%** (vendor-reported, +11pp over Opus 4.8's 69.2% — the largest single-model jump in Pro history). Previous leaders: Claude Opus 4.8 at 69.2%, Claude Mythos Preview at 77.8%, GPT-5.4 (xHigh) at 59.1%, GPT-5.5 Instant at 58.6%. The gap between Verified and Pro for Fable 5 is ~15 points (95.0% Verified vs 80.3% Pro) — significantly narrower than the ~19 point gap for Opus 4.8, suggesting genuine capability improvement rather than benchmark contamination. Fable 5 at 80.3% Pro means the model autonomously solves 4 out of 5 real GitHub issues end-to-end on harder, less contaminated tasks — a landmark result. Note: the 80.3% figure comes from Anthropic's system card using their own scaffolding; independent evaluation has not yet been published (as of mid-June 2026).
 
@@ -162,7 +154,7 @@ Benchmarks are treated as objective truth, but several systematic issues undermi
 
 **OpenAI officially abandoned SWE-bench Verified** (May 2026), citing confirmed contamination. OpenAI now recommends SWE-bench Pro as the replacement benchmark. This validation from a major provider strengthens the case that all Verified scores in this course — and the industry — should be interpreted as upper bounds, not real-world capability measures.
 
-**Scaffolding matters more than model.** The same Claude Sonnet 4.6 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See [[../02_Prompt_Engineering/05_Context_Engineering|Context Engineering]] for why context harness determines more than model quality.
+**Scaffolding matters more than model.** The same Claude Sonnet 4.6 model scores 17 tasks differently on SWE-bench Verified depending solely on the agent harness wrapping it (Augment, Cursor, Claude Code — same model, different frameworks). This means a "better SWE-bench score" may reflect better scaffolding, not a better model. See Module 02, Context Engineering for why context harness determines more than model quality.
 
 **Lesson for practitioners:** Use benchmarks for **relative comparison** (model A vs model B on the same benchmark), not for absolute capability claims ("this model can solve 80% of real bugs"). Always validate benchmark results with a custom evaluation set on your actual workload. And when evaluating coding agents, test with issues from your own repositories — not public benchmarks that may be contaminated.
 
@@ -265,11 +257,3 @@ The evaluation runner coordinates the process: it accepts a model, a test datase
 - **Benchmarks do not measure what matters most in production.** Error recovery, cost efficiency, user satisfaction, reliability, and composability are invisible to public benchmarks — custom evaluation on your own workload is always the most important metric.
 
 - **Simulation testing with synthetic personas stress-tests agents before deployment.** Generating hundreds of multi-turn conversations with diverse, adversarial personas catches failures that benchmarks and random sampling miss.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[../10_Fine_Tuning/10_DoRA_and_Beyond|DoRA and Advanced PEFT Methods]]
-**Next:** [[02_Human_Evaluation|Human Evaluation]]

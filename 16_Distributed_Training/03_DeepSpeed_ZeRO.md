@@ -1,13 +1,5 @@
 # DeepSpeed ZeRO: An Alternative Approach
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[02_PyTorch_FSDP2|PyTorch FSDP2: Fully Sharded Data Parallel]]
-**Next:** [[04_3D_Parallelism|3D Parallelism: Tensor, Pipeline, Data]]
-
----
-
 ## Origins and Philosophy of DeepSpeed
 
 Microsoft Research (2020) introduced DeepSpeed with the central innovation ZeRO (Zero Redundancy Optimizer). Turing-NLG 17B, then Megatron-Turing 530B parameters.
@@ -177,11 +169,3 @@ DeepSpeed ZeRO is a powerful alternative to FSDP with unique capabilities.
 **Ecosystem matters.** Integration with Hugging Face simplifies adoption for NLP.
 
 **Both solutions are valid.** FSDP and DeepSpeed solve the same problem through different approaches. The choice depends on requirements.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[02_PyTorch_FSDP2|PyTorch FSDP2: Fully Sharded Data Parallel]]
-**Next:** [[04_3D_Parallelism|3D Parallelism: Tensor, Pipeline, Data]]

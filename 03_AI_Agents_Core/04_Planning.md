@@ -1,13 +1,5 @@
 # Agent Planning
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Agents: Core Concepts
-**Previous:** [[03_Tool_Use|Tool Use]]
-**Next:** [[05_Memory_Systems|Agent Memory Systems]]
-
----
-
 ## Introduction
 
 Planning is the capability that separates primitive reactive systems from genuinely intelligent agents. A simple agent reacts to a stimulus, performs an action, and moves on to the next stimulus. A planning agent sees further: it analyzes the task, breaks it into steps, anticipates obstacles, and builds a strategy for reaching the goal.
@@ -441,10 +433,3 @@ After processing all steps, the method returns the final execution result contai
 - Exponential backoff on retries to avoid overloading
 
 This approach combines the flexibility of LLM planning with the reliability of adaptive execution, ensuring resilience to errors and changes during operation.
-
-
----
-
-## Navigation
-**Previous:** [[03_Tool_Use|Tool Use]]
-**Next:** [[05_Memory_Systems|Agent Memory Systems]]

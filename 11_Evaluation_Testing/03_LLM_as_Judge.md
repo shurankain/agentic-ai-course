@@ -1,13 +1,5 @@
 # LLM as Judge
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[02_Human_Evaluation|Human Evaluation]]
-**Next:** [[04_Continuous_Evaluation|Continuous Evaluation]]
-
----
-
 ## LLM-as-Judge Concept
 
 Human evaluation is reliable but expensive and slow. Automated metrics are fast but do not correlate with quality. LLM-as-a-Judge is an intermediate approach that combines the advantages of both.
@@ -291,11 +283,3 @@ RESPONSE FORMAT (JSON):
 
 Analyze the response for each aspect separately and provide a structured evaluation in JSON format.
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Evaluation and Testing
-**Previous:** [[02_Human_Evaluation|Human Evaluation]]
-**Next:** [[04_Continuous_Evaluation|Continuous Evaluation]]

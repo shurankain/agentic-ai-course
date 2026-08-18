@@ -1,13 +1,5 @@
 # Metrics and Dashboards for LLM Systems
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[01_Tracing_and_Logging|Tracing and Logging]]
-**Next:** [[03_LLM_Debugging|LLM Debugging]]
-
----
-
 ## Philosophy of Metrics in the World of Language Models
 
 Traditional metrics — response time, request count, error rate — remain important but insufficient. LLMs introduce new dimensions: token cost, generation quality, hallucinations, context relevance. A system that responds quickly and does not crash but gives incorrect answers causes more harm than a system with a high error rate. Quality metrics become primary.
@@ -178,11 +170,3 @@ Production systems extend this approach: thread safety, histograms for distribut
 - **Cost attribution must be granular: per-agent, per-user, per-feature.** Without it, you cannot identify which component consumes disproportionate resources or whether a feature's AI spend is justified by its revenue.
 
 - **Anomaly-based alerting outperforms threshold-based alerting for LLM metrics.** High variability in LLM behavior makes static thresholds unreliable; composite alerts ("high latency AND low quality") reduce noise further.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Observability
-**Previous:** [[01_Tracing_and_Logging|Tracing and Logging]]
-**Next:** [[03_LLM_Debugging|LLM Debugging]]

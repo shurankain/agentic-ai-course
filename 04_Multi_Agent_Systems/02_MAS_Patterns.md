@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[01_MAS_Basics|Multi-Agent Systems Basics]]
-**Next:** [[03_Agent_Orchestration|Agent Orchestration]]
-
----
-
 # Multi-Agent System Patterns
 
 ## Architectural Patterns as a Design Language
@@ -138,7 +130,7 @@ Dispatch subtasks to multiple agents in parallel, then aggregate results. The pa
 
 ## When Single-Agent Suffices
 
-Before selecting a pattern, verify that multi-agent is justified — see the decision framework in [[01_MAS_Basics|MAS Basics]]. A single agent with a reasoning model handles most production use cases (~57% of deployed agent systems are single-agent). Multi-agent adds ~3-15x cost and is justified only when you hit clear capability boundaries: genuinely distinct expertise domains, measurable parallelism benefit, or context that exceeds a single agent's window.
+Before selecting a pattern, verify that multi-agent is justified — see the decision framework in MAS Basics. A single agent with a reasoning model handles most production use cases (~57% of deployed agent systems are single-agent). Multi-agent adds ~3-15x cost and is justified only when you hit clear capability boundaries: genuinely distinct expertise domains, measurable parallelism benefit, or context that exceeds a single agent's window.
 
 ---
 
@@ -174,11 +166,3 @@ Choosing a pattern is an architectural decision with direct cost, latency, and r
 **Fan-Out/Fan-In** — parallel dispatch + aggregation. For independent subtasks needing speed.
 
 The best systems combine patterns. But first, verify that a single agent with a reasoning model cannot solve the problem — multi-agent adds 10x cost and significant complexity.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[01_MAS_Basics|Multi-Agent Systems Basics]]
-**Next:** [[03_Agent_Orchestration|Agent Orchestration]]

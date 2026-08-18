@@ -1,13 +1,5 @@
 # ML System Design for Interviews
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[../20_Architecture_Research/03_Multimodal_Architectures|Multimodal Architectures]]
-**Next:** [[02_Coding_Exercises|Coding Exercises]]
-
----
-
 ## Introduction
 
 ML System Design is one of the most challenging stages of interviews for Senior/Staff+ positions. It combines understanding of distributed systems with deep knowledge of ML/AI specifics.
@@ -42,7 +34,7 @@ Requirements five to seven minutes (scope clarification, constraints), Estimatio
 
 ## Case Study 1: Enterprise RAG System
 
-For background on RAG architectures and techniques referenced in this case study, see [[../06_RAG/05_Advanced_RAG|Advanced RAG]].
+For background on RAG architectures and techniques referenced in this case study, see Module 06, Advanced RAG.
 
 ### Problem Statement
 
@@ -276,11 +268,3 @@ Interview checklist: check tensor shapes first, verify gradient flow, Cross-entr
 6. **Common mistakes are predictable and avoidable.** Ignoring scale differences, forgetting LLM cost modeling, over-engineering before validating with an MVP, and omitting failure modes are the patterns interviewers watch for.
 
 7. **Practice end-to-end case studies under time pressure.** Working through three to five full cases (RAG, LLM serving, content moderation, recommendations) with the 45-60 minute timing builds the muscle memory needed on interview day.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[../20_Architecture_Research/03_Multimodal_Architectures|Multimodal Architectures]]
-**Next:** [[02_Coding_Exercises|Coding Exercises]]

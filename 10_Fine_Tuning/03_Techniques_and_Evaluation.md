@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[02_Data_Preparation|Data Preparation]]
-**Next:** [[04_RLHF_and_Alignment|RLHF and Alignment]]
-
----
-
 # Fine-Tuning Techniques and Model Evaluation
 
 ## Full Fine-Tuning vs Parameter-Efficient Methods
@@ -149,11 +141,3 @@ Iterations are inevitable. Plan for 3-5 iterations to achieve production quality
 Monitoring does not end at deployment. A model in production requires constant attention.
 
 Versioning and reproducibility are a necessity, not a luxury.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[02_Data_Preparation|Data Preparation]]
-**Next:** [[04_RLHF_and_Alignment|RLHF and Alignment]]

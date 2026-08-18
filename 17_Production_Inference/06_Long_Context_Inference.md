@@ -1,13 +1,5 @@
 # Long Context Inference
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[05_Inference_Cost_Optimization|Cost Optimization Strategies]]
-**Next:** [[07_SGLang_and_Alternatives|SGLang and vLLM Alternatives]]
-
----
-
 ## The Problem
 
 Modern LLMs strive for enormous contexts: Claude 4.6/4.7 200K (1M on Opus 4.6/4.7), GPT-5.4 128K–1M, Gemini 3 Flash/3.1 Pro up to 1M, Llama 4 Scout up to 10M. The problem: classical attention is quadratic in complexity.
@@ -61,7 +53,7 @@ LLaMA-70B (64 KV heads / MHA, dim=128, 80 layers), per request:
 - 4K tokens: 13.4 GB
 - 128K tokens: 419 GB (larger than the model!)
 
-Note: these are per-request figures with full MHA (64 KV heads). With GQA (8 KV heads, as in LLaMA-2-70B), sizes drop ~10x. For batched serving, multiply by concurrent requests — see [[../15_GPU_Architecture/05_Quantization_Deep_Dive|KV-Cache Quantization]] for production batched calculations.
+Note: these are per-request figures with full MHA (64 KV heads). With GQA (8 KV heads, as in LLaMA-2-70B), sizes drop ~10x. For batched serving, multiply by concurrent requests — see Module 15, KV-Cache Quantization for production batched calculations.
 
 **Optimizations:**
 
@@ -101,7 +93,7 @@ A well-documented phenomenon: information placed in the middle of a long context
 No pipeline complexity, full context for reasoning, no information loss from chunking, simple deployment. Works when documents fit, the task requires cross-document reasoning, low latency is critical, data is static.
 
 **RAG — when to use:**
-Scales to terabytes, cheaper (only relevant chunks), updatable, explainability. Works for massive corpora, frequent updates, cost-sensitivity, source attribution (see [[../06_RAG/01_RAG_Basics|RAG Basics]] for the full RAG pipeline).
+Scales to terabytes, cheaper (only relevant chunks), updatable, explainability. Works for massive corpora, frequent updates, cost-sensitivity, source attribution (see Module 06, RAG Basics for the full RAG pipeline).
 
 **Cost comparison for a concrete scenario.** Processing a 200-page technical manual (approximately 80K tokens) to answer user questions. Long context approach: $0.20 per query (80K input tokens at $2.50/MTok). RAG approach: $0.005 per query (2K retrieved tokens). At 1,000 queries/day: long context costs $200/day, RAG costs $5/day — a 40x difference. The trade-off: RAG requires an indexing pipeline (one-time setup cost) and may miss cross-document relationships. Long context provides better reasoning quality but at dramatically higher per-query cost.
 
@@ -143,11 +135,3 @@ Long context vs RAG is not a binary choice. Hybrid approaches combine scalabilit
 Hardware requirements grow rapidly. 128K requires enterprise GPUs or multi-GPU setups.
 
 Prefill latency scales linearly — this determines practical limits for real-time applications.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[05_Inference_Cost_Optimization|Cost Optimization Strategies]]
-**Next:** [[07_SGLang_and_Alternatives|SGLang and vLLM Alternatives]]

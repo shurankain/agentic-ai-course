@@ -1,13 +1,5 @@
 # Behavioral Interview for Staff+ Positions
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[03_Papers_Reading_Guide|Papers Reading Guide]]
-**Next:** [[05_AI_Safety_Interview|AI Safety Interview]]
-
----
-
 ## Introduction
 
 At Senior/Staff+ positions, technical skills are table stakes. The deciding factor becomes behavioral interviews, where they evaluate leadership (influence without authority), impact (scale of achievements), judgment (decisions under uncertainty), communication (conveying complex ideas), collaboration (working with teams).
@@ -169,11 +161,3 @@ Red Flags in answers: "we" without "I" (your role is unclear), no specific numbe
 5. **Failure stories are mandatory and must include genuine learnings.** Prepare two to three stories where you honestly describe your role in the failure, what you learned, and how you applied that learning in a subsequent project.
 
 6. **ML-specific behavioral questions require bridging technical and business language.** Explaining uncertainty in ML timelines, framing ethical concerns as business risks, and translating abstract metrics into stakeholder-friendly examples are skills interviewers explicitly evaluate.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Interview Preparation
-**Previous:** [[03_Papers_Reading_Guide|Papers Reading Guide]]
-**Next:** [[05_AI_Safety_Interview|AI Safety Interview]]

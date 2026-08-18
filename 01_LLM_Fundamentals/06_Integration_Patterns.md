@@ -1,13 +1,5 @@
 # LLM Integration Patterns
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[05_LLM_Providers_and_API|LLM Providers and API Usage]]
-**Next:** [[07_Modern_Architectures|Modern LLM Architectures]]
-
----
-
 Imagine building a bridge between two banks of a river. One side is your application with its requirements for speed, reliability, and scalability. The other is the LLM API with its characteristics: long-running requests, unpredictable latency, rate limits, and potential errors. Integration patterns are the structural design of this bridge, determining how request flows will move between the two sides.
 
 Integrating LLMs into production systems is fundamentally different from experimenting in a Jupyter notebook. In the real world, requests arrive concurrently, users expect fast responses, errors must be handled gracefully, and the API budget must remain under control. This chapter covers patterns that address these challenges.
@@ -156,7 +148,7 @@ This allows even distribution of load and avoids spikes.
 
 ### Queueing Theory for LLM Serving
 
-Proper capacity planning for LLM systems requires understanding Little's Law (L = λ × W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see [[../17_Production_Inference/05_Inference_Cost_Optimization|Inference Cost Optimization]].
+Proper capacity planning for LLM systems requires understanding Little's Law (L = λ × W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
 
 ---
 
@@ -388,11 +380,3 @@ A **production-ready LLM client** combines several critical patterns. The class 
 The asynchronous generation method first checks the cache by prompt hash, returning the stored result on a match. If there is no cache hit, the request is executed asynchronously via CompletableFuture: first, the rate limiter is acquired to respect limits, then the circuit breaker executes the request with retry logic and exponential backoff, and finally the result is stored in the cache before being returned.
 
 This approach provides asynchronous execution for scalability, caching for cost reduction, rate limiting for API compliance, circuit breaker for fault tolerance, and retry for handling transient failures.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[05_LLM_Providers_and_API|LLM Providers and API Usage]]
-**Next:** [[07_Modern_Architectures|Modern LLM Architectures]]

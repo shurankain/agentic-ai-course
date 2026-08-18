@@ -1,13 +1,5 @@
 # Language Model Interpretability
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[08_Scaling_Laws|Scaling Laws and Emergent Abilities]]
-**Next:** [[10_Implementation_from_Scratch|Implementing Transformer from Scratch]]
-
----
-
 Imagine you hired a brilliant consultant who solves the most complex problems but categorically refuses to explain his reasoning. You do not know whether he bases decisions on deep analysis or on spurious correlations. You cannot predict when he will make a mistake. This is exactly the situation we face with modern language models.
 
 Interpretability is a research field aimed at understanding *how* and *why* neural networks make decisions. For LLMs, this is not merely academic interest: understanding internal mechanisms is critical for safety, reliability, and targeted model improvement.
@@ -420,11 +412,3 @@ Training a probe for a specific layer uses Adam optimizer and CrossEntropyLoss, 
 **Interpretation:** If a probe achieves high accuracy (>90%) on layer N, information about POS is clearly encoded linearly in that layer. Low accuracy (<60%) indicates the absence of information or nonlinear encoding. Comparing across layers reveals where syntactic understanding forms — typically early layers for syntax and deep layers for semantics.
 
 Important: the presence of information does not guarantee the model uses it. Causal analysis requires activation patching.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → LLM Fundamentals
-**Previous:** [[08_Scaling_Laws|Scaling Laws and Emergent Abilities]]
-**Next:** [[10_Implementation_from_Scratch|Implementing Transformer from Scratch]]

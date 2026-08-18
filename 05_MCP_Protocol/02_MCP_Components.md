@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[01_MCP_Basics|MCP Basics]]
-**Next:** [[03_MCP_Server_Development|MCP Server Development]]
-
----
-
 # MCP Components: Resources, Tools, Prompts, and Sampling
 
 ## Introduction to the MCP Component Model
@@ -367,11 +359,3 @@ Sampling adds a reverse model invocation capability, allowing servers to delegat
 OAuth 2.1 authorization provides a standardized security framework for remote MCP connections, replacing ad-hoc authentication patterns.
 
 Understanding these components and their proper use is the key to building effective MCP servers that elegantly integrate into the AI ecosystem.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Model Context Protocol
-**Previous:** [[01_MCP_Basics|MCP Basics]]
-**Next:** [[03_MCP_Server_Development|MCP Server Development]]

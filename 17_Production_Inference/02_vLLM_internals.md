@@ -1,13 +1,5 @@
 # vLLM: Modern Inference Engine
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[01_Inference_Architecture|Production Inference Architecture]]
-**Next:** [[03_Speculative_Decoding|Speculative Decoding: Accelerating Generation]]
-
----
-
 ## Why vLLM Became the Standard
 
 vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention — an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of late June 2026, vLLM is at **v0.23** (released June 13 — 408 commits, 200 contributors). Key v0.23 additions: DiffusionGemma support (first diffusion LLM natively served), DeepSeek-V4 hardening, Model Runner V2 as default for Llama/Mistral dense models, multi-tier KV cache offloading, unified parser for reasoning + tool-call, and Transformers v5 compatibility.
@@ -171,11 +163,3 @@ Production-ready out of the box with an OpenAI-compatible API.
 vLLM V1 extends capabilities: multi-modal serving (images, audio, video), multi-LoRA serving (hundreds of fine-tuned variants on shared base), disaggregated prefill/decode, structured output enforcement, and speculative decoding integration.
 
 **Disaggregated serving maturity (as of early 2026):** What was initially a 30-60% throughput gain has matured significantly. Across both vLLM and SGLang, disaggregated prefill-decode implementations now demonstrate **up to 6.4x throughput improvements and 20x reduction in latency variance**. The technique is no longer experimental — it is a production feature that most high-throughput deployments should evaluate. The core insight remains: prefill is compute-bound (benefits from high-FLOPS GPUs), while decode is memory-bandwidth-bound (benefits from high-bandwidth memory). Running them on separate, appropriately configured GPU pools eliminates the resource contention that degrades both phases when they share hardware.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[01_Inference_Architecture|Production Inference Architecture]]
-**Next:** [[03_Speculative_Decoding|Speculative Decoding: Accelerating Generation]]

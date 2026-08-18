@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[03_Techniques_and_Evaluation|Techniques and Evaluation]]
-**Next:** [[05_RLHF_Alternatives|RLHF Alternatives]]
-
----
-
 # RLHF and Alignment
 
 ## Why Classical Fine-Tuning Is Not Enough
@@ -88,7 +80,7 @@ DPO is less flexible than RLHF with an explicit Reward Model.
 
 **SimPO** removes the reference model, adding length normalization and margin-based loss.
 
-**GRPO (Group Relative Policy Optimization)** eliminates both the reward model and value model from the RLHF pipeline. Instead of training a separate reward model, GRPO samples K outputs from the current policy and uses group-relative advantages as the reward signal. The full mechanism and its significance — including the R1-Zero emergent reasoning breakthrough — are covered in [[05_RLHF_Alternatives|RLHF Alternatives]]. GRPO's key insight: reasoning can emerge from pure RL without supervised reasoning traces.
+**GRPO (Group Relative Policy Optimization)** eliminates both the reward model and value model from the RLHF pipeline. Instead of training a separate reward model, GRPO samples K outputs from the current policy and uses group-relative advantages as the reward signal. The full mechanism and its significance — including the R1-Zero emergent reasoning breakthrough — are covered in RLHF Alternatives. GRPO's key insight: reasoning can emerge from pure RL without supervised reasoning traces.
 
 ## RLAIF: AI as Annotator
 
@@ -117,11 +109,3 @@ RLAIF scales the process by replacing humans with AI.
 For applied tasks, full-scale RLHF is excessive. Best-of-N, rejection sampling, DPO on synthetic data are more practical.
 
 Alignment is broader than RLHF and includes architecture, prompts, and guardrails.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[03_Techniques_and_Evaluation|Techniques and Evaluation]]
-**Next:** [[05_RLHF_Alternatives|RLHF Alternatives]]

@@ -1,13 +1,5 @@
 # Mixture of Experts: Scaling Through Sparsity
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[../19_Practical_Projects/05_Production_Agent|Production Agent]]
-**Next:** [[02_State_Space_Models|State Space Models]]
-
----
-
 ## The Problem of Scaling Dense Models
 
 Scaling laws demonstrated a direct relationship: more parameters equals better quality. However, dense models, where every parameter participates in every computation, hit a fundamental limitation — compute grows linearly with the number of parameters.
@@ -272,7 +264,7 @@ The frontier models converge on several patterns:
 
 Distributed Training (section 16): Expert parallelism is a specific type of model parallelism. AllToAll communication requires optimization just like AllReduce.
 
-Scaling Laws (see [[../01_LLM_Fundamentals/08_Scaling_Laws|Scaling Laws]]): MoE changes scaling laws — parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
+Scaling Laws (see Module 01, Scaling Laws): MoE changes scaling laws — parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
 
 Inference (section 17): MoE inference requires loading all experts (memory), AllToAll for distributed inference, and specific KV cache management.
 
@@ -303,11 +295,3 @@ Memory footprint remains high. All experts must reside in memory, even if only a
 MoE + reasoning is a powerful combination. DeepSeek R1 showed that MoE's large parameter count (knowledge capacity) combined with GRPO-style RL training produces strong reasoning models.
 
 Design patterns are converging. Shared + routed experts, fine-grained expert counts, auxiliary-loss-free balancing, and native multimodal fusion (Llama 4) represent the emerging standard.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[../19_Practical_Projects/05_Production_Agent|Production Agent]]
-**Next:** [[02_State_Space_Models|State Space Models]]

@@ -1,13 +1,5 @@
 # AI Risk Management
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[01_Regulatory_Landscape|Regulatory Landscape]]
-**Next:** [[03_Red_Teaming|Red Teaming]]
-
----
-
 ## Introduction: Why AI Systems Require a Special Approach to Risk
 
 Traditional risk management methodologies were developed for deterministic systems — software either works correctly or contains a bug that can be found and fixed. AI systems break this paradigm. A model can produce excellent results on 99% of inputs but fail catastrophically on the remaining percent — and it is impossible to determine in advance which inputs will cause the failure.
@@ -163,11 +155,3 @@ Continuous monitoring is critically important for AI systems. Unlike traditional
 ## Further Reading
 
 For production implementation of AI risk assessment frameworks, see the NIST AI RMF Playbook and ISO/IEC 23894 standard. The concepts above (risk scoring, continuous monitoring, audit trails) translate directly to code — the risk scoring formula, monitoring thresholds, and hash-chain audit patterns described in this lesson provide the specification that your implementation should follow.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → AI Governance
-**Previous:** [[01_Regulatory_Landscape|Regulatory Landscape]]
-**Next:** [[03_Red_Teaming|Red Teaming]]

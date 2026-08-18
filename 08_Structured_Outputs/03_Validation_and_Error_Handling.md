@@ -1,13 +1,5 @@
 # Validation and Error Handling
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[02_Data_Extraction|Data Extraction from Unstructured Text]]
-**Next:** [[../09_Conversational_AI/01_Dialog_Management|Dialog Management]]
-
----
-
 ## Introduction: Why the Model Is Not Always Right
 
 There is a temptation to treat language model output as truth. The model is trained on trillions of tokens, knows more than any individual person, and its answers sound confident and authoritative. But this temptation is dangerous.
@@ -105,11 +97,3 @@ Feedback loops are a powerful mechanism. Inform the model about errors, ask for 
 Edge cases are inevitable: missing data, multiple values, ambiguities, noise. Each requires thoughtful handling.
 
 Production monitoring is critical. Track metrics, log errors, configure alerts. Understanding what is happening is the key to reliability.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Structured Output
-**Previous:** [[02_Data_Extraction|Data Extraction from Unstructured Text]]
-**Next:** [[../09_Conversational_AI/01_Dialog_Management|Dialog Management]]

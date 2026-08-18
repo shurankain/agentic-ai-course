@@ -1,13 +1,5 @@
 # Context Engineering
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[04_Prompt_Optimization|Prompt Optimization]]
-**Next:** [[../03_AI_Agents_Core/01_What_is_AI_Agent|What is an AI Agent]]
-
----
-
 ## Evolution: from Prompt Engineering to Context Engineering
 
 In 2025, Andrej Karpathy proposed the term **Context Engineering**, which was quickly adopted by the industry as a more accurate description of working with LLMs. Harrison Chase (CEO of LangChain) formalized the shift further: "When agents mess up, they mess up because they don't have the right context; when they succeed, they succeed because they have the right context."
@@ -67,7 +59,7 @@ Karpathy and his followers identified four core context management strategies �
 - **Scratchpads** — temporary agent notes for complex computations
 - **MCP memory servers** — standardized read/write interface, backend-agnostic (can use files, SQL, or vector DB behind the protocol)
 - **Vector DBs** — semantic search over memory for RAG systems, scales to millions of items
-- **MemGPT / Letta** — one of the early approaches (2023) to automatic paged memory management for long dialogues, inspired by OS virtual memory. The concept (self-directed memory via tool calls, tiered storage) has been broadly influential, though simpler patterns often suffice in production — see [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for a detailed comparison
+- **MemGPT / Letta** — one of the early approaches (2023) to automatic paged memory management for long dialogues, inspired by OS virtual memory. The concept (self-directed memory via tool calls, tiered storage) has been broadly influential, though simpler patterns often suffice in production — see Module 03, Memory Systems for a detailed comparison
 
 ---
 
@@ -180,7 +172,7 @@ Adaptive context assembly for each query, balance between completeness and relev
 
 ## MCP as Context Engineering Infrastructure
 
-The **Model Context Protocol (MCP)** maps directly to the WSCI framework: MCP Resources enable SELECT (discovering and retrieving external context), MCP Tools enable WRITE (persisting results to external systems), and MCP Prompts enable COMPRESS (pre-structured context templates). MCP standardizes context engineering across tools, IDEs, and agent frameworks — the same MCP server works identically in Claude Code, Cursor, or any custom agent. For the full MCP architecture and ecosystem, see [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]].
+The **Model Context Protocol (MCP)** maps directly to the WSCI framework: MCP Resources enable SELECT (discovering and retrieving external context), MCP Tools enable WRITE (persisting results to external systems), and MCP Prompts enable COMPRESS (pre-structured context templates). MCP standardizes context engineering across tools, IDEs, and agent frameworks — the same MCP server works identically in Claude Code, Cursor, or any custom agent. For the full MCP architecture and ecosystem, see Module 05, MCP Basics.
 
 ### Agentic Search as Context Engineering
 
@@ -209,7 +201,7 @@ A practical framework for thinking about the four levels of context that an agen
 | **Level 3: Conversation Context** | Working memory | Current dialog, recent messages | Per turn | Sliding window, summarization |
 | **Level 4: Agent Memory** | Long-term experience | Facts learned, user preferences, past decisions | Across sessions | WRITE strategy, vector DB, Letta |
 
-The hierarchy implies a management strategy: Level 1 is stable and cacheable (ideal for prefix caching). Level 2 is dynamic but scoped to the current task. Level 3 requires active compression as conversations grow. Level 4 requires a persistence layer (see [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]]).
+The hierarchy implies a management strategy: Level 1 is stable and cacheable (ideal for prefix caching). Level 2 is dynamic but scoped to the current task. Level 3 requires active compression as conversations grow. Level 4 requires a persistence layer (see Module 03, Memory Systems).
 
 ---
 
@@ -219,15 +211,15 @@ The most significant trend in 2026 context engineering is the shift from static 
 
 In traditional RAG, the context assembly pipeline is fixed: query → embed → retrieve → inject into prompt. The same pipeline runs for every query regardless of what the agent actually needs. Self-directed context engineering gives the agent control over its own context.
 
-**Letta's LLM-as-OS paradigm** takes this furthest: the agent manages a three-tier memory system (Core Memory always in prompt, Archival Memory out-of-context, agent-editable via tool calls). The agent decides when to write to memory, when to search its archives, and when to forget — through explicit tool calls, not pipeline logic. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for details.
+**Letta's LLM-as-OS paradigm** takes this furthest: the agent manages a three-tier memory system (Core Memory always in prompt, Archival Memory out-of-context, agent-editable via tool calls). The agent decides when to write to memory, when to search its archives, and when to forget — through explicit tool calls, not pipeline logic. See Module 03, Memory Systems for details.
 
 **Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context, enabling effectively infinite-length sessions within a finite window.
 
-**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience — not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] for details.
+**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience — not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See Module 03, Memory Systems for details.
 
 **Claude Messages API: inline system records (Opus 4.8+, Fable 5).** The Claude Messages API now accepts `system` records inside the `messages[]` array — not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
 
-**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering — see [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]].
+**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering — see Module 04, Multi-Agent Basics.
 
 The common thread: context engineering is shifting from something engineers build around the model to something the agent manages for itself. The agent is becoming its own context engineer.
 
@@ -306,7 +298,7 @@ In April 2026, Karpathy published **LLM Wiki** — a concept that quickly went v
 
 **When LLM Wiki beats RAG:** For small-to-medium knowledge bases (hundreds to low thousands of documents) where questions require synthesis across multiple sources. A compiled wiki with pre-computed cross-references enables answers that naive RAG — which retrieves individual chunks without understanding their relationships — simply cannot produce. Karpathy's key insight: "The tedious part of maintaining a knowledge base is not the reading or the thinking — it's the bookkeeping." LLMs do not tire of bookkeeping.
 
-**When RAG still wins:** Large corpora (millions of documents), real-time data that changes continuously, cases where provenance and citation to exact source passages are required, and any scenario where the knowledge base does not fit in the context window even as a compiled wiki. See [[../06_RAG/05_Advanced_RAG|Advanced RAG]] for the full taxonomy.
+**When RAG still wins:** Large corpora (millions of documents), real-time data that changes continuously, cases where provenance and citation to exact source passages are required, and any scenario where the knowledge base does not fit in the context window even as a compiled wiki. See Module 06, Advanced RAG for the full taxonomy.
 
 The two approaches are complementary: LLM Wiki for curated, synthesis-heavy knowledge; RAG for large-scale, real-time retrieval. Some production systems use both — a wiki for core domain knowledge and RAG for long-tail queries.
 
@@ -314,11 +306,11 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 
 ## Related Topics
 
-- [[04_Prompt_Optimization|Prompt Optimization]] — foundational prompt techniques
-- [[../06_RAG/01_RAG_Basics|RAG Basics]] — the SELECT strategy in detail
-- [[../04_Multi_Agent_Systems/01_MAS_Basics|Multi-Agent Basics]] — the ISOLATE strategy
-- [[../03_AI_Agents_Core/05_Memory_Systems|Memory Systems]] — the WRITE strategy
-- [[../05_MCP_Protocol/01_MCP_Basics|MCP Basics]] — standardized context engineering protocol
+- Prompt Optimization — foundational prompt techniques
+- Module 06, RAG Basics — the SELECT strategy in detail
+- Module 04, Multi-Agent Basics — the ISOLATE strategy
+- Module 03, Memory Systems — the WRITE strategy
+- Module 05, MCP Basics — standardized context engineering protocol
 
 ---
 
@@ -337,11 +329,3 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 6. **LLM Wiki is the anti-RAG pattern** for curated, synthesis-heavy knowledge bases. RAG wins for large corpora and real-time data. Both are complementary.
 
 7. **MCP is the industry-standard context engineering protocol.** 97M+ monthly downloads, 9,400+ verified servers, 28% F500 deployed. WSCI maps directly to MCP primitives.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Prompt Engineering
-**Previous:** [[04_Prompt_Optimization|Prompt Optimization]]
-**Next:** [[../03_AI_Agents_Core/01_What_is_AI_Agent|What is an AI Agent]]

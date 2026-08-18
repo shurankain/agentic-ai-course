@@ -1,13 +1,5 @@
 # Multimodal Architectures: When LLM Sees the World
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[02_State_Space_Models|State Space Models]]
-**Next:** [[../21_Interview_Preparation/01_ML_System_Design|ML System Design]]
-
----
-
 ## Why Text Is Not Enough
 
 Human understanding of the world is multimodal. We read text, see images, hear sounds — and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
@@ -331,11 +323,3 @@ Image/video generation is converging with understanding. Unified architectures t
 The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers — expected to reach production between 2026-2028 — will define the next generation of AI applications beyond text and code.
 
 This is a rapidly evolving field. GPT-5.4/5.5, Gemini 2.5/3, Claude Opus 4.8/Sonnet 4.6, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Architecture Research
-**Previous:** [[02_State_Space_Models|State Space Models]]
-**Next:** [[../21_Interview_Preparation/01_ML_System_Design|ML System Design]]

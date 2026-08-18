@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[04_RLHF_and_Alignment|RLHF and Alignment]]
-**Next:** [[06_Test_Time_Compute|Test-Time Compute]]
-
----
-
 # RLHF Alternatives: DPO, KTO, ORPO, and SimPO
 
 ## Introduction: Evolution of Alignment Methods
@@ -166,11 +158,3 @@ Method choice depends on data, task type, and constraints — GRPO for reasoning
 TRL provides a unified API — easy to experiment.
 
 Data quality matters more than method choice — all methods require high-quality signals (preferences or reward functions).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[04_RLHF_and_Alignment|RLHF and Alignment]]
-**Next:** [[06_Test_Time_Compute|Test-Time Compute]]

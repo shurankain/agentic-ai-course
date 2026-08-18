@@ -1,13 +1,5 @@
 # Preference Data: The Foundation of Alignment
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[08_Continued_Pretraining|Continued Pretraining]]
-**Next:** [[10_DoRA_and_Beyond|DoRA and Advanced PEFT Methods]]
-
----
-
 RLHF and DPO rely on preference data — comparisons of "A is better than B". The quality of this data directly determines the quality of the trained model.
 
 ## Bradley-Terry Model: The Mathematics of Preferences
@@ -108,11 +100,3 @@ Systematic bias is more dangerous than noise: length bias, verbosity preference,
 RLAIF is scalable but requires careful prompting and validation on human data.
 
 A hybrid approach is optimal: AI for speed and scale, human for quality and edge cases.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[08_Continued_Pretraining|Continued Pretraining]]
-**Next:** [[10_DoRA_and_Beyond|DoRA and Advanced PEFT Methods]]

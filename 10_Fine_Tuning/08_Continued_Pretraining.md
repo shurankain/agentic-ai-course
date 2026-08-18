@@ -1,11 +1,3 @@
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[07_Synthetic_Data|Synthetic Data]]
-**Next:** [[09_Preference_Data|Preference Data]]
-
----
-
 # Continued Pretraining: Domain Adaptation
 
 Continued Pretraining (CPT) is the continuation of pretraining on domain-specific data that deeply adapts a model to a new domain while preserving general capabilities.
@@ -142,11 +134,3 @@ Learning rate is critical: 1e-5 to 5e-5 with warmup and decay.
 CPT + SFT is the typical pipeline: deep understanding through CPT, behavioral adaptation through SFT.
 
 Monitoring is mandatory: domain perplexity (decreasing), general perplexity (not increasing significantly).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[07_Synthetic_Data|Synthetic Data]]
-**Next:** [[09_Preference_Data|Preference Data]]

@@ -1,13 +1,5 @@
 # Distributed Training Basics
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[../15_GPU_Architecture/05_Quantization_Deep_Dive|Quantization: Deep Dive]]
-**Next:** [[02_PyTorch_FSDP2|PyTorch FSDP2: Fully Sharded Data Parallel]]
-
----
-
 ## Why a Single GPU Is Not Enough
 
 Models grow exponentially. GPT-3 with 175 billion parameters requires 500+ GB of memory for training (weights, gradients, optimizer states). H100 has 80 GB.
@@ -218,11 +210,3 @@ Distributed training is a necessity for modern AI.
 **Start simple, scale complexity.** DDP → FSDP → Tensor → Pipeline → 3D → +CP. Each step adds complexity.
 
 **Measure, don't guess.** Profile communication overhead, scaling efficiency, GPU utilization.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Distributed Training
-**Previous:** [[../15_GPU_Architecture/05_Quantization_Deep_Dive|Quantization: Deep Dive]]
-**Next:** [[02_PyTorch_FSDP2|PyTorch FSDP2: Fully Sharded Data Parallel]]

@@ -1,13 +1,5 @@
 # Voice and Multimodality
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[02_Conversation_Design|Conversation Design]]
-**Next:** [[../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]]
-
----
-
 ## Introduction to Multimodal Interfaces
 
 Human communication is multimodal: we use voice with intonation, gestures, facial expressions, and show images. Conversational AI systems limited to text miss a vast layer of information. Multimodality refers to a system's ability to perceive and generate information through various channels: text, speech, images, and video. This represents a qualitative leap in interaction naturalness.
@@ -272,7 +264,7 @@ The voice agent market has organized into four tiers (as of mid-June 2026): full
 
 The cost range spans approximately 10x from cheapest to most expensive. The choice depends on three factors: voice quality requirements (ElevenLabs leads), volume and cost sensitivity (LiveKit at scale), and compliance needs (Bland AI for regulated industries).
 
-**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See [[../18_AI_Governance/07_Enterprise_AI_Adoption|Enterprise AI Adoption]] for production case studies.
+**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
 
 **Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month — evaluate build effort vs managed pricing.
 
@@ -311,11 +303,3 @@ Computer vision integration uses a multimodal language model (GPT-5.5, Claude Op
 Multimodal memory stores conversation history including images and their context. Direct storage of all images requires significant memory. Summarization strategy: a VLM creates a text description of the image that is stored instead of the full image, and thumbnails are stored for quick access.
 
 Adapting responses for voice differs from text: long responses are shortened, Markdown formatting is removed, natural pauses are added through punctuation, and the agent's persona style is applied (formal, friendly, empathetic).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Conversational AI
-**Previous:** [[02_Conversation_Design|Conversation Design]]
-**Next:** [[../10_Fine_Tuning/01_Fine_Tuning_Basics|Fine-Tuning Basics]]

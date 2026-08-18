@@ -1,13 +1,5 @@
 # Quantization: Memory vs Quality
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[03_Speculative_Decoding|Speculative Decoding: Accelerating Generation]]
-**Next:** [[05_Inference_Cost_Optimization|Cost Optimization Strategies]]
-
----
-
 ## Why Quantize
 
 LLaMA-70B in FP16 takes 140 GB — more than any consumer GPU and even a datacenter A100-80GB. Inference requires an expensive multi-GPU setup.
@@ -51,7 +43,7 @@ Activation-aware Weight Quantization. Identifies and protects "salient" weights 
 **GGUF:**
 Format for CPU and hybrid inference (llama.cpp). Supports mixed precision and efficient memory mapping. Q4_K_M (4-bit) is the most popular variant for local deployment.
 
-For mathematical foundations and algorithm internals of these methods, see [[../15_GPU_Architecture/05_Quantization_Deep_Dive|Quantization Deep Dive]].
+For mathematical foundations and algorithm internals of these methods, see Module 15, Quantization Deep Dive.
 
 ## Trade-offs
 
@@ -151,11 +143,3 @@ GGUF IQ methods push the frontier to 2-bit quantization for consumer hardware. I
 Test on your task — sensitivity varies, benchmark on your use cases.
 
 Tools are mature — vLLM, TensorRT-LLM make quantization straightforward.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Production Inference
-**Previous:** [[03_Speculative_Decoding|Speculative Decoding: Accelerating Generation]]
-**Next:** [[05_Inference_Cost_Optimization|Cost Optimization Strategies]]

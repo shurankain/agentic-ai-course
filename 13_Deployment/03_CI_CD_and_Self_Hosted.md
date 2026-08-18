@@ -1,13 +1,5 @@
 # CI/CD and Self-Hosted Models
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Deployment
-**Previous:** [[02_Containerization_and_Kubernetes|Containerization and Kubernetes]]
-**Next:** [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]]
-
----
-
 ## Continuous Integration for LLM Applications
 
 Continuous Integration for LLM projects introduces additional challenges. Beyond standard tests, it is necessary to test interactions with LLM APIs, prompt quality, and behavior under various model responses. These tests are more expensive in the literal sense — each call costs money.
@@ -158,7 +150,7 @@ Traditional disaster recovery focuses on database backups and application state.
 
 **What to back up and how often.** Model weights: back up once after each deployment (they do not change between deployments). Use object storage (S3, GCS) with versioning. For self-hosted models, the HuggingFace cache directory is the backup target. Vector stores: continuous replication for production (pgvector replication, Qdrant snapshots, Pinecone managed backups). RPO target: <1 hour — a stale knowledge base gives wrong answers, not errors. Conversation history and agent state: continuous replication (PostgreSQL streaming replication, Redis persistence). RPO target: <5 minutes for active sessions. Prompts and configuration: version-controlled in git — recovery is a git checkout.
 
-**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic → OpenAI → self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern — it is a disaster recovery strategy. See [[01_Deployment_Strategies|Deployment Strategies]] for multi-provider failover architecture.
+**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic → OpenAI → self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern — it is a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
 
 **Provider outage scenario.** On June 13, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive — at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical — it is the canonical case for why multi-provider failover is mandatory for production AI systems.
 
@@ -169,11 +161,3 @@ The CI pipeline for LLM applications balances coverage and cost. Extensive unit 
 Self-hosted models are justified for: privacy/compliance requirements, high-load systems, specialized fine-tuned models, and eliminating provider dependencies. vLLM with PagedAttention provides high-performance inference. The OpenAI-compatible API simplifies migration. GPU infrastructure requires: device plugins, adequate shared memory, model caching, and correct resource limits.
 
 The hybrid approach combines the advantages of self-hosted (cost, privacy) and cloud (capability, simplicity) models. A router directs requests based on their characteristics. Quantization (INT8, INT4) reduces GPU memory requirements at the cost of minimal quality loss. It enables running larger models on smaller GPUs.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Deployment
-**Previous:** [[02_Containerization_and_Kubernetes|Containerization and Kubernetes]]
-**Next:** [[../14_Security_Safety/01_Prompt_Injection|Prompt Injection]]

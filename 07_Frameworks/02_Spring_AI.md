@@ -1,13 +1,5 @@
 # Spring AI: The Official AI Framework of the Spring Ecosystem
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[01_LangChain4j|LangChain4j]]
-**Next:** [[03_Semantic_Kernel|Semantic Kernel]]
-
----
-
 ## Introduction to Spring AI
 
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
@@ -421,11 +413,3 @@ public class AssistantController {
     }
 }
 ```
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Frameworks
-**Previous:** [[01_LangChain4j|LangChain4j]]
-**Next:** [[03_Semantic_Kernel|Semantic Kernel]]

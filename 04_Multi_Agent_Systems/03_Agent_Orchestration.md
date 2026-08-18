@@ -1,13 +1,5 @@
 # Multi-Agent System Orchestration
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[02_MAS_Patterns|Multi-Agent System Patterns]]
-**Next:** [[04_MAS_Frameworks|Frameworks for Multi-Agent Systems]]
-
----
-
 ## Coordinating Autonomous Agents
 
 Multi-agent system orchestration is the coordination of multiple autonomous agents to achieve shared goals. The orchestrator ensures that the right agents receive the right tasks at the right time, results are correctly collected and combined, and the system functions as a unified organism.
@@ -219,11 +211,3 @@ Consensus ensures consistency in a distributed system. Centralized protocols are
 Lifecycle management includes creating, monitoring, and terminating agents. Dynamic creation provides flexibility, health checks ensure reliability, graceful degradation preserves operability during failures.
 
 Scaling - vertical (more powerful machines), horizontal (more agents), with sharding (independent segments), and automatic (in response to load).
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Multi-Agent Systems
-**Previous:** [[02_MAS_Patterns|Multi-Agent System Patterns]]
-**Next:** [[04_MAS_Frameworks|Frameworks for Multi-Agent Systems]]

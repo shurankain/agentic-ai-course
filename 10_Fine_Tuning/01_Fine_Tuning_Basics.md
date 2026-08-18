@@ -1,13 +1,5 @@
 # Fine-Tuning Basics
 
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[../09_Conversational_AI/03_Voice_and_Multimodality|Voice and Multimodality]]
-**Next:** [[02_Data_Preparation|Data Preparation]]
-
----
-
 ## What Is Fine-Tuning
 
 Fine-tuning is the process of additionally training a pre-trained language model on a specific dataset. Instead of training from scratch, it uses a model that already possesses general knowledge of language and the ability to follow instructions.
@@ -99,11 +91,3 @@ Data quality determines result quality.
 A combination of methods is often optimal: RAG for knowledge, fine-tuning for style.
 
 Evaluate ROI honestly: cost includes not only compute but also data preparation time.
-
----
-
-## Navigation
-
-**Module:** [[../Table_of_Contents|Course Contents]] → Fine-Tuning
-**Previous:** [[../09_Conversational_AI/03_Voice_and_Multimodality|Voice and Multimodality]]
-**Next:** [[02_Data_Preparation|Data Preparation]]
