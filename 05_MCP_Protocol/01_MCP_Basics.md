@@ -8,7 +8,7 @@ Model Context Protocol (MCP) is an open standard: originally created by Anthropi
 
 MCP has rapidly become the cross-industry standard for AI tool integration. As of mid-June 2026, the ecosystem includes **97M+ monthly SDK downloads**, **9,400+ verified servers** (~9,652 in the official registry by late May), and native support from all major AI platforms (Claude, ChatGPT, Gemini, Copilot, Cursor, VS Code, and many others). Enterprise adoption: **28% of Fortune 500** companies have deployed dedicated MCP servers for production AI workflows. For context: 80% of F500 use AI agents in production generally: MCP is the dominant but not the only integration mechanism. **41% of surveyed software organizations** are in limited or broad MCP production (Stacklok 2026 report). ~1,000 new servers appear monthly. The official MCP Registry: now governed by the Linux Foundation's Agentic AI Foundation (AAIF, with Block and OpenAI as co-stewards): catalogs 500+ verified public servers with namespace verification via GitHub OAuth/OIDC and DNS/HTTP domain verification to prevent impersonation. MCP has transitioned from experiment to enterprise infrastructure.
 
-**SDK version warning (as of late June 2026):** MCP Python SDK **v2.0.0a1** was published June 11: a breaking alpha. FastMCP has been renamed to `MCPServer`. The protocol becomes stateless at the protocol layer (no handshake, no session pinning). Beta is targeted for June 30, stable v2 for July 27. **Pin your dependency to `mcp>=1.27,<2`** for production stability. The TypeScript SDK v1.29.0 dropped Zod from peerDependencies in favor of Standard Schema support (Zod v4, Valibot, ArkType) and added a Fastify middleware adapter.
+**SDK version warning (as of August 2026):** the 2026-07-28 specification landed with support in all four Tier 1 SDKs on publication day, and the Python SDK v2 line carries the breaking changes: FastMCP renamed to `MCPServer`, no handshake, no session pinning. Migrating is a real project, not a version bump, so **pin your dependency** and move deliberately. The TypeScript SDK v1.29.0 dropped Zod from peerDependencies in favor of Standard Schema support (Zod v4, Valibot, ArkType) and added a Fastify middleware adapter.
 
 This chapter covers MCP architecture, the problems it solves, and its impact on AI application development.
 
@@ -80,7 +80,7 @@ MCP developers followed several fundamental principles that shaped the protocol'
 
 **Extensibility Principle.** The protocol supports experimental capabilities and custom extensions. New features can be added without breaking compatibility with existing implementations.
 
-**Symmetry Principle Where Appropriate.** Although MCP follows the client-server model, some aspects are symmetric: both can send notifications, both participate in the handshake. Sampling even "reverses" the roles: the server becomes the call initiator.
+**Symmetry Principle Where Appropriate.** Although MCP follows the client-server model, some aspects are symmetric: both sides can send notifications. Sampling used to reverse the roles outright, letting the server initiate a call back into the client. The 2026-07-28 specification deprecated Sampling and replaced server-initiated requests with MRTR, where the server asks for what it needs in its result and the client retries. The symmetry is now in the message shapes rather than in who may call whom.
 
 These principles reflect lessons learned from other protocols: LSP, gRPC, GraphQL. MCP does not reinvent the wheel but applies proven patterns to a new challenge, integrating AI with the external world.
 
@@ -120,11 +120,11 @@ This structure ensures reliability: it is always clear what was requested and wh
 
 ### Capability Negotiation
 
-Upon connection, a three-phase handshake occurs. The client sends an initialize message with the protocol version and its capabilities. The server responds with its capabilities and metadata. The client confirms readiness with an initialized notification.
+Until the 2026-07-28 specification, connecting meant a three-phase handshake: the client sent `initialize` with its protocol version and capabilities, the server answered with its own, and the client confirmed with an `initialized` notification. That handshake is gone.
 
-Capability negotiation works on the intersection principle: a feature is active only if both sides support it. The client can declare readiness for sampling or experimental features. The server declares its resources, tools, and prompts with optional subscription and notification flags.
+Capabilities now travel inline. Every request carries the protocol version and the client's capabilities in its `_meta` field, and every result carries the server's identity in the same place. A server must also implement `server/discover`, which a client may call once for up-front version selection, though it is not required to.
 
-Protocol versioning ensures compatibility. If versions do not match, the connection is terminated. The mechanism allows older clients to work with newer servers and vice versa by ignoring unknown capabilities.
+Negotiation still works on the intersection principle: a feature is active only if both sides support it, and unknown capabilities are ignored so that older clients and newer servers keep working. What changed is where the agreement lives. It used to be connection state held by both parties. It is now a property of each individual message, which is precisely what allows any request to reach any server instance.
 
 ## Benefits of MCP
 
@@ -186,27 +186,45 @@ This is analogous to OpenAPI specification files for REST APIs: a machine-readab
 
 ## MCP Tasks: Long-Running Operations
 
-**MCP Tasks** (formalized as SEP-1686) provide first-class support for long-running asynchronous operations, a critical capability for agent orchestration where tool calls may take minutes or hours rather than milliseconds.
+**MCP Tasks** provide support for long-running asynchronous operations, needed wherever a tool call takes minutes or hours rather than milliseconds. As of the 2026-07-28 specification, Tasks live in the official `io.modelcontextprotocol/tasks` extension rather than in the core protocol, so a simple synchronous server stays lightweight and does not implement them at all.
 
-A Task represents an operation with a lifecycle: created, then running, then completed (or failed/cancelled). During execution, the server sends **progress updates** (percentage complete, status messages) and can produce **partial results** (intermediate outputs available before final completion). The client can **cancel** a running task if it is no longer needed.
+A Task represents an operation with a lifecycle: created, then running, then completed (or failed or cancelled). The client polls with `tasks/get` rather than blocking on a `tasks/result` call, sends input back through `tasks/update`, and cancels with `tasks/cancel`. Servers may hand back a task handle unsolicited, without the client opting in per request. There is no `tasks/list`: enumeration was removed, so a client tracks the handles it holds.
 
 **Why this matters for agents:** Without Tasks, an agent calling a long-running tool (generating a report, running a CI pipeline, processing a large document set) must either block (wasting context window time) or implement custom polling logic. Tasks make this a protocol-level concern, the agent issues a tool call, receives a task ID, and can continue other work while monitoring progress asynchronously.
 
-## MCP 2026-07-28 Release Candidate (May 21, 2026)
+## MCP 2026-07-28: the stateless specification
 
-The biggest revision since MCP's launch was published as a Release Candidate on May 21, 2026, with the final specification targeted for July 28, 2026. Key changes (as of late May 2026):
+The largest revision since MCP launched was published as final on **July 28, 2026**, replacing 2025-11-25 after a ten-week release-candidate period. All four Tier 1 SDKs shipped support on publication day. If you run an MCP server in production, this section is a list of what breaks.
 
-**Stateless core.** The protocol moves to HTTP-level operation without mandatory sessions. Servers no longer need to track client session state. This enables horizontal scaling behind standard load balancers without sticky sessions. This is the most architecturally significant change. It transforms MCP from a session-oriented protocol into a stateless one suitable for cloud-native deployment.
+**Stateless core (SEP-2575).** The `initialize` and `notifications/initialized` handshake is gone. Every request now carries its own protocol version and client capabilities in `_meta`, under `io.modelcontextprotocol/protocolVersion` and `io.modelcontextprotocol/clientCapabilities`. Clients should identify themselves on each request, servers should identify themselves in each result's `_meta`, and a version mismatch returns `UnsupportedProtocolVersionError`.
 
-**MCP Apps.** Servers can now return interactive HTML UI rendered in a sandboxed iframe within the host application. A database MCP server can return a filterable table; a monitoring server can return a live chart; a workflow server can return an approval form. This formalizes and extends the MCP Apps concept introduced earlier.
+**Sessions removed (SEP-2567).** The `Mcp-Session-Id` header is retired and list endpoints no longer vary per connection. A server that needs state across calls now mints an explicit handle and passes it back as an ordinary tool argument. That is the migration path, and it is where most existing servers break: state that used to live implicitly in a session must become an explicit value the client carries.
 
-**Tasks as extension.** The Tasks primitive (formalized from SEP-1686) becomes an official protocol extension rather than a core requirement. Servers that need long-running operation support opt into the Tasks extension; simple synchronous servers remain lightweight.
+**`server/discover`.** Servers **must** implement this RPC, advertising supported protocol versions, capabilities, and identity. Clients **may** call it before anything else for version selection, or use it as a backward-compatibility probe on stdio. Mandatory server-side, optional client-side.
 
-**Formal deprecation policy.** The specification now includes explicit rules for deprecating protocol features, transport mechanisms, and capability versions. This gives stability guarantees for production deployments.
+**Subscriptions redesigned.** The HTTP GET endpoint and the `resources/subscribe` and `resources/unsubscribe` methods are replaced by `subscriptions/listen`, a single long-lived POST-response stream. Clients opt into specific notification types (`toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions`) and the server tags notifications with `io.modelcontextprotocol/subscriptionId`. Request-scoped notifications such as `notifications/progress` still flow on the response stream of the request they belong to.
 
-**OAuth/OIDC alignment.** Authentication aligns with standard OAuth 2.0 and OpenID Connect flows, simplifying integration with enterprise identity providers.
+**Removed outright:** `ping`, `logging/setLevel`, and `notifications/roots/list_changed`. Log level is now set per request through `io.modelcontextprotocol/logLevel` in `_meta`, and a server must not emit `notifications/message` for a request that omitted that field.
 
-**Transport default: stateless Streamable HTTP.** MCP is moving to stateless Streamable HTTP as the default transport. This enables horizontal scaling without sticky sessions, critical for production deployments where MCP servers must handle thousands of concurrent clients behind load balancers. The STDIO transport remains supported for local development.
+**Tasks moved to an extension (SEP-2663).** Tasks left the core protocol and became the official `io.modelcontextprotocol/tasks` extension. The blocking `tasks/result` method is replaced by polling through `tasks/get`, `tasks/update` was added for client-to-server input, `tasks/list` was removed, and servers may now return task handles unsolicited rather than requiring per-request opt-in.
+
+**MRTR replaces server-initiated requests (SEP-2322).** Multi Round-Trip Requests remove the need for a server to call back into the client. Instead of `roots/list`, `sampling/createMessage`, or `elicitation/create`, the server returns an `InputRequiredResult` with `resultType: "input_required"` whose `inputRequests` field lists what it needs. The client retries the original request with `inputResponses` attached. Every result now carries a required `resultType`, either `"complete"` or `"input_required"`, and clients must treat a missing field from an older server as `"complete"`.
+
+**SSE resumability removed.** `Last-Event-ID` and SSE event IDs are gone from Streamable HTTP. A broken response stream loses the in-flight request, and the client must re-issue it as a new request with a new request ID.
+
+That last change has a consequence worth stating plainly, because the specification will not state it for you. **Retry safety is now entirely your application's problem.** A re-issued `create_invoice`, payment, or merge will execute twice unless you prevent it. Statelessness at the protocol layer removes session bookkeeping; it does not remove the need for idempotency keys, deduplication, and transaction boundaries above it. A protocol that makes retries easy makes idempotency mandatory.
+
+**Caching becomes mandatory (SEP-2549).** Results from `tools/list`, `prompts/list`, `resources/list`, `resources/read`, and `resources/templates/list` must carry `ttlMs` (a freshness hint in milliseconds) and `cacheScope` (`"public"` or `"private"`, controlling whether shared intermediaries may cache the response).
+
+**Routing headers (SEP-2243).** `Mcp-Method` and `Mcp-Name` are now required on Streamable HTTP POSTs, so a proxy, firewall, or rate limiter can classify a call without parsing the request body. Combined with the stateless core, this is what lets MCP sit behind a plain round-robin load balancer.
+
+**OpenTelemetry trace context (SEP-414).** Conventions for `traceparent`, `tracestate`, and `baggage` in `_meta` are now documented. This is the first standardized way to propagate trace context across an MCP boundary, and Module 12 covers what to do with it.
+
+**Deprecated with a twelve-month minimum window (SEP-2577, SEP-2596).** Roots, Sampling, and Logging are deprecated with documented migrations: pass directories through tool parameters, resource URIs, or server configuration instead of Roots; integrate directly with a provider API instead of Sampling; log to `stderr` or use OpenTelemetry instead of Logging. Also deprecated: the HTTP+SSE transport, the `includeContext` values `"thisServer"` and `"allServers"`, and OAuth 2.0 Dynamic Client Registration in favour of Client ID Metadata Documents.
+
+**A formal feature lifecycle.** The specification now defines Active, Deprecated, and Removed states, a minimum twelve-month deprecation window, and a public registry of deprecated features. For a protocol two years old and carrying production traffic, adopting a deprecation policy is a larger signal of maturity than any individual feature in this list.
+
+**MCP Apps and Enterprise Managed Authorization** join Tasks as official extensions under the same framework, which is what makes the core small enough to be stateless.
 
 ---
 
@@ -254,7 +272,7 @@ The three protocols are complementary: MCP for what an agent can do (tools), A2A
 
 Model Context Protocol has become the industry standard for AI tool integration. Instead of chaotic individual integrations, MCP provides a common language for interaction between AI applications and external services: now adopted by all major AI platforms and backed by cross-industry governance under the AAIF.
 
-MCP architecture follows proven principles: separation of clients and servers, a standard message protocol (JSON-RPC 2.0), and a capability negotiation mechanism for compatibility.
+MCP architecture follows proven principles: separation of clients and servers, a standard message protocol (JSON-RPC 2.0), and capability declaration. The 2026-07-28 specification made the core stateless, removing the handshake and sessions so that any request can be served by any instance. The trade is explicit: the protocol stopped carrying state, and the application now carries it, including the idempotency that retries demand. Capability declaration mechanism for compatibility.
 
 Key benefits of standardization: a radical reduction in integration costs (N + M instead of N x M), uniform security, and the ability to form an ecosystem with reusable components.
 

@@ -64,9 +64,11 @@ This concept is borrowed from web development, where URL templates are widely us
 
 ### Subscriptions and Notifications
 
-MCP provides a mechanism for subscribing to resource changes. A client can subscribe to a specific resource and receive notifications when it is updated. This is especially useful for monitoring log files, tracking database changes, or observing system metrics.
+MCP provides a mechanism for subscribing to resource changes, useful for monitoring log files, tracking database changes, or observing system metrics.
 
-The subscription mechanism transforms MCP from a simple request-response protocol into a system with support for reactive patterns. The server can proactively inform the client about important changes without waiting for a request.
+The 2026-07-28 specification reworked how those notifications arrive. The HTTP GET endpoint and the `resources/subscribe` and `resources/unsubscribe` methods are gone, replaced by `subscriptions/listen`: a single long-lived POST-response stream. The client opts into specific notification types (`toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions`), the server acknowledges, and each notification carries an `io.modelcontextprotocol/subscriptionId` tag. Notifications scoped to one request, such as `notifications/progress`, still travel on that request's own response stream rather than the shared one.
+
+The subscription mechanism keeps MCP from being purely request-response: a server can inform a client about a change without waiting to be asked. What changed is that one stream now carries every subscription instead of one endpoint per resource.
 
 ## Tools: Performing Actions
 
@@ -132,9 +134,9 @@ This integration between prompts and resources creates powerful compositional ca
 
 ### The Uniqueness of the Sampling Mechanism
 
-Sampling is the most innovative component of MCP. While resources, tools, and prompts follow the "client requests, server responds" model, Sampling reverses this model.
+**Sampling is deprecated as of the 2026-07-28 specification** (SEP-2577), with a twelve-month minimum removal window. It remains functional, and new implementations should not adopt it. The suggested migration is to integrate directly with a provider API instead. Read this section to understand existing servers and the design idea; do not build on it.
 
-With Sampling, the server requests the client to perform a language model call. This means the server can use AI capabilities without direct access to the model, delegating intellectual operations to the client.
+While resources, tools, and prompts follow the "client requests, server responds" model, Sampling reversed it. The server asked the client to perform a language model call, so the server could use AI capabilities without direct access to a model, delegating the reasoning to whoever held the connection.
 
 Why does this matter? Imagine an MCP server that needs to analyze text, generate a response, or make a decision based on unstructured data. Without Sampling, the server would have to integrate directly with a language model API, manage authentication, handle limits and billing.
 
@@ -196,15 +198,17 @@ Uncontrolled invocations are prevented by the client's ability to require explic
 
 ### The Need for User Interaction
 
-Elicitation, introduced in the June 2025 MCP specification update, addresses a fundamental gap: servers sometimes need information that only the user can provide. Before Elicitation, a server had no standard way to ask the user a question at runtime.
+Elicitation addresses a real gap: servers sometimes need information only the user can provide. It arrived in the June 2025 specification as a server-initiated request, and the 2026-07-28 specification changed the mechanism while keeping the need. Read the scenarios below for what Elicitation is for, and the MRTR section for how it now works.
 
 Consider an MCP server connecting to a database. During the connection process, it may need the user to select a specific schema, confirm a destructive migration, or provide a one-time password. Without Elicitation, the server would either have to require all such information upfront in configuration or fail with an error asking the user to restart with additional parameters.
 
 ### How Elicitation Works
 
-The server sends an `elicitation/create` request to the client, specifying a message (the question to present to the user) and a JSON Schema describing the expected response format. The client displays this to the user and returns their input.
+Until 2026-07-28 the server sent an `elicitation/create` request to the client. That method is gone, along with `notifications/elicitation/complete` and the `elicitationId` correlation field, because the protocol no longer lets a server call into a client at all.
 
-The response schema supports text input, numeric input, boolean (yes/no) confirmations, and enumerated choices. The client has full control over the user experience. It can present the elicitation as a dialog, inline prompt, or any appropriate UI element.
+The replacement is **MRTR, Multi Round-Trip Requests** (SEP-2322). When a server cannot finish a request without more information, it returns an `InputRequiredResult` with `resultType: "input_required"`, whose `inputRequests` field carries the questions and their JSON Schemas. The client asks the user, then **retries the original request** with `inputResponses` attached. A server that needs to correlate an out-of-band interaction across retries encodes its own identifier in `requestState`.
+
+The schema still supports text, numeric, boolean confirmations, and enumerated choices, and the client still owns the user experience. The structural change is that the interaction is now a retry loop on one request rather than a callback, which is what allows the whole protocol to stay stateless.
 
 **Security considerations:** The client can reject elicitation requests, modify the presentation, or require user approval before showing them. Servers must not assume elicitation will always succeed, the user may dismiss the request, the client may not support it, or the host policy may prohibit it.
 
@@ -221,21 +225,25 @@ Without Elicitation, servers either fail with an error requiring restart with ne
 
 ### Elicitation vs. Sampling
 
-Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response. It is a machine-to-machine interaction. Elicitation asks the human user for input: it is a machine-to-human interaction. Both "reverse" the typical request flow (server initiates instead of client), but they address different needs. Elicitation is for decisions that require human judgment, while Sampling is for tasks that require AI reasoning.
+Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response, a machine-to-machine interaction. Elicitation asks the human user for input, a machine-to-human one. Elicitation is for decisions that need human judgment; Sampling is for work that needs model reasoning.
+
+Both used to reverse the request flow, with the server initiating. Neither does now. Sampling is deprecated in favour of integrating directly with a provider API, and both mechanisms route through MRTR, where the server states what it needs and the client comes back with it.
 
 ## Tasks: Long-Running Operations
 
 ### The Problem of Asynchronous Work
 
-Tasks, introduced in the November 2025 MCP specification update, address long-running operations that cannot return results within a single request-response cycle. Before Tasks, MCP tool calls were synchronous: the client waited for the server to complete the operation and return a result.
+Tasks address long-running operations that cannot return a result inside a single request-response cycle. Before Tasks, MCP tool calls were synchronous and the client simply waited.
+
+Tasks arrived in the November 2025 specification as a core feature. The 2026-07-28 revision moved them out of the core and into the official `io.modelcontextprotocol/tasks` extension (SEP-2663), so a server that only does fast synchronous work never implements them.
 
 Many real-world operations take significant time: running a CI/CD pipeline, processing a large dataset, training a model, generating a complex report, or waiting for external approval. Forcing these into a synchronous model either required long timeouts or artificial workarounds.
 
 ### Task Lifecycle
 
-A Task goes through a defined lifecycle: the server creates a task when a long-running operation begins. This gives a unique task ID. The client can poll for status or subscribe to updates. The server sends progress notifications with percentage complete, status messages, and partial results.
+A Task goes through a defined lifecycle. The server creates one when a long-running operation begins and returns a handle. Under the redesigned extension it may return that handle unsolicited, without the client opting in on the request. The client then drives the task: `tasks/get` to poll status, `tasks/update` to send input back, `tasks/cancel` to stop it. The blocking `tasks/result` method was removed in favour of polling, and so was `tasks/list`, so a client tracks the handles it holds rather than asking the server to enumerate them.
 
-Task states include: `pending` (created but not started), `running` (in progress), `completed` (finished successfully), `failed` (finished with error), and `cancelled` (aborted by client request).
+Task states include `pending` (created but not started), `running` (in progress), `completed` (finished successfully), `failed` (finished with error), and `cancelled` (aborted by client request).
 
 ### Task Capabilities
 
@@ -314,9 +322,9 @@ Use Sampling cautiously. Each Sampling call is a request to a language model, wh
 
 ### Capabilities and Negotiation
 
-During connection establishment, the client and server exchange information about supported capabilities. The server declares which components it provides: resources, tools, prompts, Sampling.
+There is no connection establishment left to negotiate during. Since 2026-07-28 the client's capabilities ride in `_meta` on every request, under `io.modelcontextprotocol/clientCapabilities`, and the server's identity comes back in each result's `_meta`. A server must implement `server/discover`, which a client may call once to learn supported protocol versions and capabilities up front, or use as a compatibility probe on stdio.
 
-The client also declares its capabilities: for example, support for resource subscriptions or willingness to handle Sampling requests. This negotiation ensures that both sides understand the available functionality.
+Both sides also declare extensions. `ClientCapabilities` and `ServerCapabilities` gained an `extensions` field, which is how Tasks, MCP Apps, and Enterprise Managed Authorization are advertised now that they sit outside the core protocol.
 
 ### Dynamic Discovery
 
@@ -352,7 +360,7 @@ Tools represent active interaction with side effects. Strict typing through JSON
 
 Prompts standardize typical scenarios, lowering the entry barrier for users and ensuring interaction quality.
 
-Sampling adds a reverse model invocation capability. This allows servers to delegate intellectual operations to the client. Elicitation enables servers to request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
+Sampling and Elicitation both let a server ask for something it could not produce alone, and neither works by calling into the client any more. As of 2026-07-28 Sampling is deprecated in favour of integrating with a provider API directly, and server-initiated requests are replaced by MRTR: the server returns `input_required` with what it needs, and the client retries. Elicitation still covers the case where servers request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
 
 OAuth 2.1 authorization provides a standardized security framework for remote MCP connections, replacing ad-hoc authentication patterns.
 

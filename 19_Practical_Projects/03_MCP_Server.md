@@ -36,7 +36,7 @@ JSON-RPC 2.0: jsonrpc (version "2.0"), id (unique request identifier), method (m
 
 ### Lifecycle
 
-Initialization: the client sends an initialize request with capabilities, the server responds with its own capabilities. Confirmation: the client sends an initialized notification. Working phase: resource requests, tool calls, prompt retrieval. Termination: shutdown request, resource cleanup.
+Since the 2026-07-28 specification there is no initialization phase. A client may call `server/discover` once to learn supported versions and capabilities, then sends resource requests, tool calls, and prompt retrievals directly, each carrying its protocol version and capabilities in `_meta`. Termination is a transport concern rather than a protocol one, so the server has no session to tear down.
 
 ## Resources
 
@@ -144,7 +144,7 @@ The MCP specification added OAuth 2.1 as the standard authorization mechanism fo
 
 **Server as Resource Server:** The MCP server validates OAuth 2.1 access tokens on incoming requests. Tokens carry scopes that map to specific tools and resources: a token with scope `kb:read` can access resources but not mutating tools.
 
-**Authorization flow:** The MCP client discovers the server's authorization requirements during the initialize handshake. If authorization is required, the client redirects the user through the standard OAuth 2.1 authorization code flow (with PKCE). The client stores the refresh token for transparent token renewal.
+**Authorization flow:** The MCP client discovers the server's authorization requirements through `server/discover`, since the initialize handshake was removed in the 2026-07-28 specification. If authorization is required, the client redirects the user through the standard OAuth 2.1 authorization code flow (with PKCE). The client stores the refresh token for transparent token renewal.
 
 **Scopes and permissions:** Define granular scopes for your knowledge base server: `kb:read` (read resources), `kb:search` (use search tools), `kb:write` (create/update articles), `kb:admin` (statistics, management). Map OAuth scopes to MCP capabilities.
 

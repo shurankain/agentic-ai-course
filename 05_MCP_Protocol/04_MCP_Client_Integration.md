@@ -42,11 +42,11 @@ Some implementations support "embedded" servers implemented within the client pr
 
 ### Connection Procedure
 
-After establishing the transport connection, the client performs MCP initialization. It sends an `initialize` request with information about itself and its capabilities. The server responds with its own information and capabilities.
+There is no initialization step. The 2026-07-28 specification removed the `initialize` request and the `initialized` notification, so a client opens a transport and issues real requests immediately.
 
-At this stage, protocol version negotiation occurs. The client and server must agree on the MCP version in use. If the versions are incompatible, the connection is terminated.
+Each request carries what used to be negotiated: the protocol version and the client's capabilities in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`), plus client identity that the client should send on every request. Results come back with the server's identity in their own `_meta`. A version the server cannot serve returns `UnsupportedProtocolVersionError` for that request rather than tearing down a connection.
 
-After successful initialization, the client sends an `initialized` notification, signaling readiness to work. From this point on, the server's resources, tools, and prompts can be used.
+A client that wants to know what it is talking to before committing may call `server/discover`, which every server must implement. It returns supported protocol versions, capabilities, and identity. On stdio it doubles as a backward-compatibility probe against older servers.
 
 ### Capability Discovery
 
@@ -54,7 +54,9 @@ An initialized client queries the server for available components. The `resource
 
 This information is cached by the client and provided to the language model. The model sees all available tools and can select the appropriate ones for solving the task.
 
-Servers can notify about changes through the notifications mechanism. Upon receiving a `notifications/resources/list_changed` notification, the client re-requests the resource list and updates the cache.
+Caching is no longer left to the client's judgement. List results now carry two required fields: `ttlMs`, a freshness hint in milliseconds, and `cacheScope`, either `"public"` or `"private"`, which says whether a shared intermediary may cache the response. Servers should also return tools in a deterministic order, because a stable ordering keeps the client's cache valid and improves prompt-cache hit rates on the model side.
+
+For change notifications the client opens `subscriptions/listen`, a single long-lived POST-response stream, and opts into the types it cares about (`toolsListChanged`, `promptsListChanged`, `resourcesListChanged`, `resourceSubscriptions`). The older per-resource `resources/subscribe` and `resources/unsubscribe` methods and the HTTP GET endpoint were removed.
 
 ### Handling Disconnections
 
@@ -62,7 +64,9 @@ Network connections are unreliable. A server can crash, the network can drop, a 
 
 The reconnection strategy typically includes exponential backoff. After the first failure, the client waits several seconds, then tries to reconnect. If the attempt fails, the interval increases. This prevents overload during system issues.
 
-Upon reconnection, the client performs initialization again. The previous connection state is reset, and subscriptions are restored.
+Reconnection got simpler and more dangerous at the same time. Simpler because there is no initialization to redo: the client just starts sending requests again, and any instance can serve them. Dangerous because stream resumability was removed. `Last-Event-ID` and SSE event IDs are gone, so a broken response stream loses the in-flight request and the client **must** re-issue it as a new request with a new request ID.
+
+That re-issue is a real retry against a server that may already have done the work. Before a client retries anything with a side effect, it needs an idempotency key the server honours, or an explicit check of whether the operation completed. A client that blindly retries a payment or a merge on connection loss will duplicate it. Subscriptions also need re-establishing through `subscriptions/listen`, since the stream carried them.
 
 ## Multi-Server Aggregation
 
@@ -144,11 +148,13 @@ The call result is returned to the model in the next dialog message. The model a
 
 This cycle (call generation, execution, result return) can repeat multiple times within a single user request.
 
-### Sampling Processing
+### Handling servers that need something back
 
-If a server uses the Sampling mechanism for callbacks to the model, the client must handle these requests. It receives a request from the server, sends it to the model, and returns the response to the server.
+A server can no longer call into a client. Sampling is deprecated as of 2026-07-28, and the pattern it served is now MRTR: the server returns an `InputRequiredResult` with `resultType: "input_required"` whose `inputRequests` field lists what it needs, and the client retries the original request with `inputResponses` attached.
 
-The client can filter or modify Sampling requests according to security policies. This provides control over which requests reach the model.
+For a client this changes the shape of the work. Instead of listening for inbound server requests, the client checks `resultType` on every result and drives a retry loop when it sees `"input_required"`. A result from an older server that omits the field must be treated as `"complete"`.
+
+The control point survives the redesign. A client still decides what reaches the model or the user, can filter or modify what a server asks for, and can refuse. It just enforces that policy while preparing a retry rather than while answering a callback.
 
 ### Context Limitations
 
@@ -204,6 +210,12 @@ Building an MCP client that works in development is straightforward. Building on
 
 MCP security is a shared responsibility between client and server. The client's security posture determines whether the agent is protected from malicious or compromised servers.
 
+### Where policy can see an MCP call
+
+Three parties see different parts of an MCP call, and no single one of them can enforce policy alone. The network sees the route and the metadata: since 2026-07-28 the required `Mcp-Method` and `Mcp-Name` headers let a proxy or firewall classify a call without opening the body, and Cloudflare ships detection of MCP traffic by protocol headers on TLS-inspected connections. The client knows the user's intent and which tool the model chose. The server knows what the arguments mean and what side effect they will cause.
+
+A policy built at only one of those layers has a blind spot. The same tooling also flags **Shadow MCP**, meaning servers reachable outside the managed portal, which is the MCP form of a problem every platform team already knows: the inventory you govern is not the inventory that exists.
+
 ### Server Trust Levels
 
 Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector: a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See Module 14, Agent Security for the CurXecute CVE and Tool Poisoning attack taxonomy.
@@ -224,7 +236,7 @@ All interactions with servers should be logged: who called which tool, when, wit
 
 MCP client integration is a broad task requiring attention to many aspects. The architecture must be modular and extensible. This allows the addition of new servers and transports.
 
-Connection management includes initialization, keepalive, and recovery after failures. The client must be resilient to problems with individual servers.
+Connection management lost its initialization step in the 2026-07-28 specification and gained a harder recovery problem. Without stream resumability, a dropped connection means re-issuing the request rather than resuming it, so a client that retries a write without an idempotency key will duplicate it.
 
 Multi-server aggregation creates a unified interface for the AI model. Conflict resolution and request routing occur transparently to the upper layers.
 

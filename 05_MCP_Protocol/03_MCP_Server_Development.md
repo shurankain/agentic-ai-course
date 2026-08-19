@@ -28,6 +28,8 @@ For read operations, idempotency is natural. For write operations, it can often 
 
 If an operation cannot be idempotent by nature (for example, sending a message), this should be explicitly stated in the documentation and tool annotations.
 
+The 2026-07-28 specification raised the stakes here. Stream resumability was removed from Streamable HTTP: `Last-Event-ID` and SSE event IDs are gone, and a broken response stream loses the in-flight request, which the client **must** re-issue as a new request with a new request ID. The protocol used to offer a chance of resuming; now it guarantees a retry. A non-idempotent `create_invoice` or `deploy` will therefore run twice on any connection blip unless your handler prevents it. Idempotency keys, a deduplication window, and a transaction boundary are no longer good practice on this protocol. They are the only thing standing between a dropped TCP connection and a duplicate side effect.
+
 ### Principle of Least Privilege
 
 A server should request only the access rights necessary to perform its functions. If a server only needs to read data, it should not have write permissions.
@@ -42,15 +44,15 @@ On startup, the server performs a series of preparatory operations. Configuratio
 
 It is important for the server to properly handle initialization errors. If a critical resource is unavailable, the server should report this rather than silently continue operating in an inoperable state.
 
-After successful initialization, the server is ready to accept client connections. Each new connection begins with a capability negotiation procedure.
+After successful initialization the server is ready to accept requests. Since the 2026-07-28 specification there is no per-connection setup to perform: a server does not wait for a handshake and does not hold connection state.
 
 ### Capability Negotiation
 
-When a client connects to the server, an exchange of information about supported capabilities takes place. The server declares which primitives it provides: resources, tools, prompts, Sampling support.
+A server declares which primitives it provides through `server/discover`, an RPC it **must** implement, returning supported protocol versions, capabilities, and identity. Clients may call it once for up-front version selection, and may skip it entirely.
 
-The client, in turn, reports its capabilities: support for subscriptions, file system roots, experimental features. This negotiation allows both sides to adapt their behavior.
+Per request, the client's protocol version and capabilities arrive in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`), and the server puts its own identity in each result's `_meta`. A version the server cannot serve returns `UnsupportedProtocolVersionError`.
 
-Protocol versioning also occurs at this stage. The client and server agree on the MCP version to use. This ensures compatibility.
+The practical consequence for server design is worth stating: because every request is self-describing, any request can be handled by any instance. That is what allows an MCP server to sit behind a plain round-robin load balancer with no sticky sessions and no shared session store. Business state has not disappeared, and the section on idempotency below covers where it went.
 
 ### Request Processing
 
@@ -86,9 +88,11 @@ The limitation of stdio is the inability to provide remote access. The server mu
 
 For remote access, MCP uses Streamable HTTP transport (introduced March 2025). Unlike the earlier SSE transport, Streamable HTTP supports bidirectional communication over a single HTTP connection. The client sends JSON-RPC requests via HTTP POST, and the server can respond with either a single JSON response or an SSE stream for progressive results.
 
-Streamable HTTP is compatible with standard HTTP infrastructure: proxies, load balancers, CDNs: without requiring persistent connections. It supports session management through the `Mcp-Session-Id` header for stateful interactions.
+Streamable HTTP works with standard HTTP infrastructure (proxies, load balancers, CDNs) without persistent connections. As of 2026-07-28 it no longer carries sessions at all: the `Mcp-Session-Id` header was removed, and a server needing state across calls mints an explicit handle and passes it back as an ordinary tool argument.
 
-**Note:** The earlier SSE-based HTTP transport (two endpoints: one for SSE events, one for POST requests) was deprecated in March 2025. Existing servers using SSE should migrate to Streamable HTTP. The WebSocket transport that appeared in some implementations was never standardized in the official MCP specification.
+Two headers became required on POST requests in the same revision: `Mcp-Method` and `Mcp-Name`. They let a proxy, firewall, or rate limiter classify a call without parsing the request body, which is what makes routing and policy enforcement possible at the network layer rather than only inside the handler.
+
+**Note:** The earlier SSE-based HTTP transport (two endpoints: one for SSE events, one for POST requests) has been deprecated since March 2025 and was reclassified as formally Deprecated under the feature lifecycle policy in 2026-07-28, putting it on a removal clock. Migrate to Streamable HTTP. The WebSocket transport that appeared in some implementations was never standardized.
 
 ### Choosing a Transport
 
@@ -156,7 +160,7 @@ Special attention should be paid to injection protection. If parameters are used
 
 ### Authorization and Authentication
 
-The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks: critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and enterprise-managed authorization for organizational deployments.
+The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks: critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and Enterprise Managed Authorization, which is now an official extension. Two changes arrived with 2026-07-28: authorization servers should include the `iss` parameter in responses per RFC 9207, and clients must validate it against the recorded issuer before redeeming the code. Dynamic Client Registration (RFC 7591) is deprecated in favour of Client ID Metadata Documents, remaining available only for authorization servers that do not support them. Client credentials are also bound to the issuer that granted them: key them by issuer identifier, never reuse them with a different authorization server, and re-register when the authorization server changes. This is for organizational deployments.
 
 **Token scoping.** Scope tokens to the minimum permissions required. An MCP server exposing a database should request read-only scope unless the tool explicitly performs writes. Use separate scopes for different tool categories (e.g., `tools:read`, `tools:write`, `admin:manage`). The principle of least privilege applies directly: a compromised token with narrow scope limits the blast radius. Short-lived tokens (minutes rather than hours) with refresh token rotation further reduce exposure from token theft.
 
@@ -291,6 +295,21 @@ The `claude_desktop_config.json` configuration file is located in different plac
 4. **Log everything**: MCP supports structured logging
 5. **Test via Inspector**: before integrating with clients
 6. **Version your API**: for backwards compatibility
+
+### Migrating an existing server to 2026-07-28
+
+If you already run an MCP server, work this list in order. The first three items are the ones that break silently.
+
+1. **Find every use of session state.** Anything that relied on `Mcp-Session-Id` needs a server-minted handle passed back as an ordinary tool argument. This is the largest change and the one that fails least visibly, because a single-instance deployment keeps working right up to the moment you add a second replica.
+2. **Audit every non-idempotent tool.** Stream resumability is gone, so a dropped connection produces a retry rather than a resume. Each write path needs an idempotency key, a deduplication window, or an explicit completion check.
+3. **Implement `server/discover`.** It is mandatory, not optional, and a client may probe with it before anything else.
+4. **Stop reading capabilities from a handshake.** They arrive in `_meta` on every request instead.
+5. **Return `resultType` on every result**, `"complete"` or `"input_required"`.
+6. **Add `ttlMs` and `cacheScope`** to every list result. They are required fields now.
+7. **Emit `Mcp-Method` and `Mcp-Name`** on Streamable HTTP POSTs so infrastructure can route and rate-limit without parsing bodies.
+8. **Replace server-initiated calls with MRTR.** Anything using `elicitation/create`, `sampling/createMessage`, or `roots/list` returns an `InputRequiredResult` now.
+9. **Move long-running work to the Tasks extension**, replacing `tasks/result` with `tasks/get` polling. There is no `tasks/list` to fall back on.
+10. **Plan off the deprecated features.** Roots, Sampling, Logging, HTTP+SSE, and Dynamic Client Registration all have at least twelve months, and the registry of deprecated features tells you how long is left.
 
 ## Key Takeaways
 
