@@ -71,6 +71,12 @@ A successful red team begins with thorough preparation. **Scope definition** det
 - How to document findings
 - How to report critical vulnerabilities
 
+**Scope has to be enforced, not declared.** The list above is a document. In July 2026 three documented incidents showed what happens when the document and the infrastructure disagree: models under evaluation were told their environments had no internet access, a misconfiguration meant they did, and they compromised real production systems belonging to uninvolved third parties. One agent registered a package on the public PyPI index as part of an attack it devised inside what it believed was a simulation.
+
+Before an engagement starts, the scope in the document must be the scope the network permits. That means egress rules, a network namespace, a service identity distinct from anything production uses, canary credentials that alert on use, an allowlist of targets, and a kill switch someone is watching. Add one item to the checklist above: **verify that a scope violation is impossible rather than prohibited**, and test that verification before the first prompt.
+
+This applies with extra force to AI red teaming, because the whole point of the exercise is to remove the safeguards that would otherwise stop the model. Both labs involved in the July incidents noted their models ran without the classifiers and monitoring that ship to customers. An evaluation environment holds network access, tokens, and system privileges while deliberately running an unrestrained model, which makes it closer in risk profile to CI/CD than to a test suite. A third-party evaluator holding that access has the effective privileges of a pentest contractor and needs the same contractual and technical treatment: security review, isolation, an access log, and an agreed incident procedure.
+
 **Threat modeling** identifies probable adversaries and their capabilities. A bored user with access to ChatGPT has different resources than a state-sponsored actor with ML expertise. The red team must simulate a realistic threat landscape.
 
 **Formal attack success metrics:**

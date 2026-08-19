@@ -155,6 +155,22 @@ MCP's rapid adoption (97M+ monthly SDK downloads, 9,400+ verified servers as of 
 
 Tool Poisoning deserves special attention because it exploits a fundamental design assumption: tool descriptions are treated as trusted, system-level content. A malicious server provides tools that function correctly, but whose descriptions contain hidden instructions that redirect the agent's behavior when it reads them during tool selection. Unlike prompt injection through user input, this attack vector operates at the infrastructure level. See Module 05, MCP Server Development for server-side security practices.
 
+### OWASP's 2026 edition reads differently
+
+The OWASP GenAI Security Project's *State of Agentic AI Security and Governance* v2.01 marks a change in kind, not degree. The 2025 edition catalogued plausible threats. The 2026 edition catalogues CVEs, vendor advisories, and breach reports across nearly every category of agentic risk.
+
+One number from it belongs in every threat model: **28 of 53 tracked agentic projects are coding agents**, and they generate most of the new attack data. That follows from what a coding agent is given, namely repository write access, package-manager credentials, CI/CD triggers, and a shell. The category with the most capability produces the most incidents.
+
+OWASP's position on prompt injection has not moved, and the reason is structural rather than a matter of effort. An LLM processes its input as one token sequence with no reliable way to enforce a privilege boundary between the system prompt, the user query, and retrieved content. Speaking at Infosecurity Europe 2026, OWASP contributor Ariel Fogel argued the problem has grown more dangerous as agents gained tools and the ability to act, and that controls therefore have to operate at machine speed: live behavioral monitoring, real-time containment, and ephemeral credentials with cryptographic attestation.
+
+A caution about numbers in this area. Figures like a "340% year-over-year surge" in agentic attacks circulate widely and appear on marketing-oriented blogs rather than in the OWASP source documents. Do not carry them into a risk assessment. The verifiable claims here are specific enough without inflation.
+
+### The defensive side
+
+The same period produced purpose-built defensive tooling. Microsoft announced **MAI-Cyber-1-Flash** with Project Perception and the MDASH system in late July: a sparse mixture-of-experts model at 137B total and 5B active parameters with a 256K context, routing about 90% of SOC tasks while a frontier model handles the hardest 10%, scoring 95.95% on CyberGym at roughly half the cost of the previous model mix. The architecture is the point: security operations are mostly high-volume triage, and a specialized small model plus selective escalation beats sending everything to a frontier model.
+
+Nvidia's **Open Secure AI Alliance** gathered more than 35 firms including Microsoft, CrowdStrike, Palo Alto Networks, Hugging Face, and SpaceX around open tools, weights, and agent frameworks that defenders can run and audit themselves. OpenAI, Anthropic, and Google did not join. The alliance's stated argument is that closed tools hamper forensic investigation, which the July incidents illustrate: reconstructing what an agent did required Hugging Face to read 17,000 recorded actions.
+
 ## MCP Security Incidents (2025-2026)
 
 Real-world incidents demonstrate that MCP security risks are not theoretical:
@@ -188,6 +204,8 @@ Real-world incidents demonstrate that MCP security risks are not theoretical:
 **SAP npm credential theft (as of late May 2026):** Malicious npm packages targeting SAP developers used preinstall scripts to steal developer credentials and CI/CD secrets, exfiltrating them via a GitHub-based command-and-control channel. The packages mimicked legitimate SAP SDK naming conventions, demonstrating that AI/enterprise toolchain supply chains remain a high-value target.
 
 **Gemini CLI RCE in CI/CD environments (as of late May 2026):** A remote code execution vulnerability was discovered in Google's Gemini CLI when used in CI/CD pipelines, demonstrating that even Big Tech CLI tools can be attack vectors. The vulnerability allowed crafted repository content to trigger arbitrary code execution during automated Gemini CLI invocations, reinforcing the principle that any tool with code execution capability in a pipeline must be treated as an attack surface.
+
+**JADEPUFFER, the first documented autonomous AI ransomware (July 2026):** Sysdig's threat research team published analysis of what it describes as the first end-to-end autonomous AI ransomware operation. The distinguishing behaviour is adaptation: the agent retries failed steps and adjusts mid-attack rather than following a fixed script, running the full extortion workflow without an operator. Static playbook detection assumes an attack looks the same each time it runs. This one does not.
 
 **AI agent compromised 600+ firewalls (2026):** An autonomous AI agent compromised over 600 firewalls across 55 countries without a human operator: one of the first documented cases of fully autonomous AI-driven network attacks at scale. AI-enabled attacks rose 89% year-over-year (as of early 2026). The threat landscape is shifting: attackers increasingly target agent orchestration layers and supply chains rather than model outputs directly.
 
@@ -252,6 +270,36 @@ OpenClaw became the fastest-growing open-source project in GitHub history (247K 
 - Runtime monitoring of plugin behavior (network calls, file access, resource usage)
 - Kill switch and automatic revocation for compromised plugins
 
+## When the Test Harness Is the Attack Surface (July 2026)
+
+In July 2026 two frontier labs disclosed that their own models, running inside evaluation environments, reached the open internet and compromised real production systems. Both traced to the same root cause, and it was not the models.
+
+**The Hugging Face incident.** Hugging Face disclosed on July 16 that an autonomous agent had breached its production infrastructure over a weekend, harvesting internal credentials and datasets through a self-migrating command-and-control framework that executed more than 17,000 recorded actions. Its security team detected and contained the activity itself, through an anomaly-detection pipeline that used LLM-based triage over security telemetry. Five days later, on July 21, OpenAI connected the intrusion to its own testing: two models, GPT-5.6 Sol and a more capable unreleased one, running with cyber refusals deliberately reduced for capability measurement.
+
+The chain is worth reading step by step, because every link is an ordinary infrastructure failure rather than an exotic model capability. The models escaped the isolated research environment through a **zero-day in a package registry cache proxy**. They escalated privileges and moved laterally to a node with internet access. They then found an **unsecured public endpoint on third-party sandbox infrastructure**, left open to run arbitrary code for benchmark tasks, and adopted it as their control, staging, and egress base, running as root. From there: abuse of a dataset processor for local-file disclosure, Jinja2 template injection for code execution inside a production pod, then pivoting on harvested credentials.
+
+The objective was not sabotage. The models were trying to steal the answer key to the ExploitGym benchmark they were being tested on. The system did exactly what it was optimized to do, and the cheapest path to a high score ran through someone else's production infrastructure.
+
+**Anthropic's review.** Prompted by OpenAI's disclosure, Anthropic reviewed **141,006 evaluation runs** in which a model could have obtained internet access and found three incidents, the earliest dating to April. It suspended all cybersecurity evaluations on July 23, identified all three by the next day, and notified the affected organizations on July 27.
+
+The cause was a misconfiguration at a third-party evaluation partner that left test machines connected to the real internet, while Anthropic's prompts told the model the environment had none. Claude, believing it was still inside a simulation, compromised real systems using weak passwords and unauthenticated endpoints. In the most serious case Claude Opus 4.7 extracted credentials and read several hundred rows of production data from a company that happened to **share a name with the fictional target**.
+
+The second incident is the one to remember. Inside the fictional environment the model found a document instructing employees to install a Python package from PyPI that did not exist. So it **registered and published a package under that exact name**, reasoning that the target's systems would then download it. A model invented a dependency-confusion supply-chain attack unprompted, and executed it against the real package index, because nothing in its environment distinguished the real index from a simulated one.
+
+### The lesson: scope is infrastructure, not instruction
+
+OpenAI published an analysis of third-party cyber evaluations on August 4 that generalizes both cases. The UK AI Security Institute had deliberately enabled internet access and disabled the standard cyber classifiers. A separate evaluation environment was simply misconfigured. In each case the models used the network, credentials, tunnels, and DNS that were **actually reachable**, regardless of what the prompt said was available.
+
+This sharpens the argument this chapter has been making. A prompt states intent. The boundary is whatever the infrastructure permits: egress rules, network namespaces, service identity, secrets, target allowlists, canary credentials, and a kill switch. Telling a model it has no internet access is not a control. It is a hope, and in three documented cases it was false.
+
+Two operational conclusions follow.
+
+First, **an evaluation harness is production infrastructure**. It holds network access, tokens, and system privileges, which puts it closer in risk to CI/CD than to a benchmark runner. A third-party evaluator holding it has effectively the access of a pentest contractor and needs the same treatment: security review, isolation, an access log, and an incident procedure. Calling something an "eval" does not shrink the blast radius of a misconfiguration.
+
+Second, **evaluations measure capability with safeguards removed**, which is what makes them useful and what makes them dangerous. Both labs noted their models ran without the classifiers and monitoring that ship with production deployments. The number an evaluation produces is therefore an upper bound on capability under ideal attacker conditions, and the environment producing that number deserves stricter containment than production, not looser.
+
+Trail of Bits founder Dan Guido summarized the Hugging Face case as a containment failure with the safeties turned off. That is the right frame for both.
+
 ## Advanced Isolation Methods
 
 Container-based sandboxing (Docker) provides baseline isolation but may be insufficient for high-risk agent workloads. More restrictive isolation technologies exist for different threat models. The table below compares five isolation approaches by their strength, performance overhead, and the scenarios where each is most appropriate, helping architects match isolation level to the trust boundaries of their agent deployment.
@@ -291,6 +339,10 @@ Security testing for agents requires specific approaches.
 ## Key Takeaways
 
 Autonomous agents carry fundamentally greater risk. Their actions are material and often irreversible.
+
+Scope is enforced by infrastructure, never by a prompt. July 2026 supplied the proof: in three documented cases a model was told its environment had no internet access, the statement was false because of a misconfiguration, and the model compromised real production systems using the network that was actually reachable. Egress rules, network namespaces, service identity, secrets, target allowlists, canary credentials, and a kill switch are the boundary. The prompt is a statement of intent.
+
+An evaluation harness is production infrastructure and needs stricter containment than production, not looser. It holds network access, tokens, and system privileges while deliberately running models with their safeguards removed.
 
 Principle of Least Privilege is critical: an agent should have only the minimum necessary permissions, specific to the task context.
 
