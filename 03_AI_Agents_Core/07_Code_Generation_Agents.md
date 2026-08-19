@@ -279,7 +279,12 @@ Curated subset with verified solutions (500 tasks, manually verified):
 
 | Model/Agent | Score | Date |
 |-------------|-------|------|
-| **Claude Fable 5** | **95.0%** | June 2026 (Mythos-class, independently confirmed; **model suspended June 13**) |
+| **Claude Opus 5** | **about 96%** | July 2026 (96.0% vendor, 97.0% vals.ai) |
+| **GPT-5.6 Sol** | **about 96.2%** | July 2026 |
+| **DeepSeek V4 Pro 0813** | **about 96.4%** | August 2026 (open weights, vals.ai) |
+| Claude Mythos 5 | 95.5% | June 2026 (restricted access) |
+| **Claude Fable 5** | **95.0%** | June 2026 (Mythos-class, independently confirmed) |
+| Kimi K3 | about 93.4% | July 2026 (open weights, custom license) |
 | Claude Mythos Preview | 93.9% | April 2026 (restricted access) |
 | GPT-5.5 Instant | 88.7% | May 2026 |
 | Claude Opus 4.8 | 88.6% | May 2026 |
@@ -295,15 +300,15 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
 
-*Note:* The acceleration is remarkable: 13.86% (2024), then 72% (mid-2025), then 79.2% (early 2026), then 87.6% (April 2026), then 88.6-88.7% (late May 2026), then **95.0% (Fable 5, June 2026)**. SWE-bench Verified is now effectively saturated. **SWE-bench Pro is the meaningful benchmark:** Fable 5 at **80.3%** (+11pp, vendor-reported), Mythos Preview at 77.8%, Opus 4.8 at 69.2%, GPT-5.5 at 58.6%. The Verified-Pro gap for Fable 5 is ~15pp (down from 19pp for Opus 4.8), suggesting genuine capability improvement. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination. See Module 11, Metrics and Benchmarks for full analysis.
+*Note:* The acceleration ran 13.86% (2024), then 72% (mid-2025), then 79.2% (early 2026), then 87.6% (April 2026), then 88.6-88.7% (late May 2026), then 95.0% (Fable 5, June 2026), then about 96% (Opus 5, July 2026). It has now stopped mattering. The top six entries span two points and include two open-weight models, on a benchmark with documented solution leakage in about a third of tasks. OpenAI stopped reporting Verified scores in May 2026 citing confirmed contamination.
+
+Read the table as a record of when a benchmark died, not as a ranking. Module 11 covers what replaced it, including why a SWE-bench Pro score means nothing without naming the harness that produced it.
 
 ### SWE-bench Pro (2025)
 
-A more realistic version:
-- Harder than Verified
-- Less "data contamination"
-- Multi-file changes required
-- Integration testing
+A more realistic version: harder than Verified, less data contamination, multi-file changes required, integration testing. It uses actively maintained repositories with no public ground-truth leakage.
+
+One rule when quoting it. Three numbers circulate as the best Pro score, and they differ by more than 30 points because they come from different harnesses: 80.3% on vendor-reported aggregates where each lab uses its own scaffolding, 59.1% on Scale's standardized public set, and 47.1% on Scale's private commercial set. Name the harness or the number is meaningless. Module 11 has the full breakdown.
 
 ### HumanEval: Basic Coding
 
@@ -543,7 +548,7 @@ A distinct category emerged in 2025-2026: agents that operate directly in the te
 
 **Why terminal agents?** IDE agents are constrained by the editor paradigm. They operate on files the user has open. Terminal agents operate on entire repositories: they can read any file, run any command, execute tests, install dependencies, interact with Git, and iterate autonomously. This makes them closer to "agentic engineering" (Karpathy's term for the successor to vibe coding) than to autocomplete.
 
-**Claude Code** (Anthropic): the most capable terminal agent (as of mid-June 2026). Now defaults to **Claude Fable 5** (Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro) with multi-day agentic coding sessions. 1M token context (GA March 2026), 128K output. Key features: Agent Teams (multiple Claude Code instances coordinating on a task), `/loop` (cron-like mechanism for recurring tasks), `/goal` command (goal-oriented execution), `claude agents` dashboard for managing multiple background sessions, compaction (automatic context summarization for infinite-length sessions), MCP extensibility. Opus 4.8 fast mode is 3x cheaper than previous models. $1B+ ARR within six months of availability: one of the fastest B2B product launches in enterprise software history. Average developer cost ~$6/day. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming** (background self-optimization between sessions), **Outcomes** (goal-oriented execution until success criteria are met), and the Claude Code Desktop redesign with Agent View.
+**Claude Code** (Anthropic): the most capable terminal agent (as of August 2026). Runs on **Claude Opus 5** by default (about 96% SWE-bench Verified, 79.2% Pro vendor-reported), with **Claude Fable 5** available on Max and Team Premium plans for multi-day agentic sessions. 1M token context (GA March 2026), 128K output. Key features: Agent Teams (multiple Claude Code instances coordinating on a task), `/loop` (cron-like mechanism for recurring tasks), `/goal` command (goal-oriented execution), `claude agents` dashboard for managing multiple background sessions, compaction (automatic context summarization for infinite-length sessions), MCP extensibility. Opus 4.8 fast mode is 3x cheaper than previous models. $1B+ ARR within six months of availability: one of the fastest B2B product launches in enterprise software history. Average developer cost ~$6/day. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming** (background self-optimization between sessions), **Outcomes** (goal-oriented execution until success criteria are met), and the Claude Code Desktop redesign with Agent View.
 
 **Codex CLI** (OpenAI): open-source terminal agent written in Rust. Full-screen terminal UI, multimodal inputs (screenshots, diagrams, Figma mockups), powered by GPT-5.4 (GPT-5.5 for Pro subscribers). **5M weekly active users** (June 2026, up from 4M). Codex expanded beyond coding to knowledge work (June 2, 2026): data analysis (+110% WoW), research (+37%), reports/spreadsheets (+36%). Non-developer users now 20% and growing 3x faster than developers. Role-specific plugins for banking, sales, and other verticals. Included in existing ChatGPT subscriptions (20M+ paying users get access at no additional cost). Represents OpenAI's bet on distribution, bundling agent capability with the consumer platform. **Codex subagents GA (May 2026):** manager-worker model with up to 8 parallel agents. Multi-day automations (persistent execution across sessions), Codex Mobile (May 14) for remote monitoring and approval, **Goal Mode GA** for goal-oriented autonomous execution. Token-based billing (as of late May 2026).
 
@@ -604,9 +609,9 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 1. **IDE tools (Copilot, Cursor, Devin Desktop) augment the developer**: agent modes now enable multi-file autonomous editing alongside traditional autocomplete
 
-2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end**: with 88-95% on SWE-bench Verified, they are at or near human-level on real GitHub issues
+2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** on the tasks these benchmarks contain. Verified scores of 95-96% say more about the benchmark than about the agents: under standardized scaffolding on unseen repositories the same class of system solves closer to half
 
-3. **SWE-bench Verified is saturated** (Fable 5 at 95.0%, June 2026). **SWE-bench Pro** is now the meaningful benchmark (Fable 5 at 80.3%). The convergence: "the argument is mostly over": AI coding agents work
+3. **SWE-bench Verified is saturated**: six models within two points at about 95-96%, two of them open-weight. **SWE-bench Pro** replaced it, and a Pro score is only meaningful with its harness named, since the reported best ranges from 47.1% to 80.3% depending on which one ran it
 
 4. **Context management is critical**: the agent must understand the codebase, not just the current file
 

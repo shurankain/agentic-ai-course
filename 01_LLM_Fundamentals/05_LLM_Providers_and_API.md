@@ -57,7 +57,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 
 **Claude model family (latest generation):**
 - **Claude Fable 5**: the Mythos-class flagship (launched June 9, 2026). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to a lower tier. Knowledge cutoff January 2026. Access was suspended June 12 under an export-control directive and restored globally on July 1, 2026 after the Department of Commerce lifted it. The outage ran 19 days; see the export controls section below. From July 20, Max and Team Premium include Fable 5 up to 50% of weekly limits, while Pro and Team Standard reach it through usage credits.
-- **Claude Opus 5**: current Opus tier (July 24, 2026), at unchanged Opus pricing of $5/$25 per 1M tokens. Anthropic positions it as approaching Fable 5's intelligence at half the price, and it now leads SWE-bench Verified at roughly 96%. 1M context, 128K max output, adaptive thinking by default, and a five-level effort dial. Fast mode runs about 2.5x faster at twice the base price. Default model for Claude Max. Two features matter for agent architecture rather than for a spec sheet: automatic fallback routing, and tool swapping mid-conversation without breaking the prompt cache.
+- **Claude Opus 5**: current Opus tier (July 24, 2026), at unchanged Opus pricing of $5/$25 per 1M tokens. Anthropic positions it as approaching Fable 5's intelligence at half the price, and it scores about 96% on SWE-bench Verified, at the top of a cluster where the leaderboard has stopped separating models. 1M context, 128K max output, adaptive thinking by default, and a five-level effort dial. Fast mode runs about 2.5x faster at twice the base price. Default model for Claude Max. Two features matter for agent architecture rather than for a spec sheet: automatic fallback routing, and tool swapping mid-conversation without breaking the prompt cache.
 - **Claude Sonnet 5**: current Sonnet tier (June 30, 2026) and the most agentic Sonnet so far. 1M-token context, 63.2% SWE-bench Pro, 81.2% OSWorld on computer use, and it edges Opus 4.8 on GDPval knowledge work. Anthropic reports lower rates of hallucination, sycophancy, and susceptibility to prompt injection than Sonnet 4.6. Became the default for Free and Pro users on July 1. Introductory pricing of $2/$10 per 1M tokens runs through August 31, 2026, after which the standard $3/$15 applies.
 - **Claude Haiku 4.5**: fast and cost-effective model for high-volume, simpler tasks.
 - **Claude Opus 4.8**: superseded by Opus 5 (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro, 74.6% Terminal-Bench 2.1. Sharper judgement: the model is more likely to flag uncertainties and less likely to make unsupported claims. $5/$25 per 1M tokens. Messages API accepts `system` records inside `messages[]`. This allows mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
@@ -444,7 +444,7 @@ Reasoning models carry a premium because thinking tokens are billed at output ra
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
 | Claude Fable 5 | $10.00 | $50.00 | Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro |
-| Claude Opus 5 | $5.00 | $25.00 | **Current SWE-bench Verified leader**, about 96% |
+| Claude Opus 5 | $5.00 | $25.00 | About 96% SWE-bench Verified, top of a saturated cluster |
 | GPT-5.6 Sol | $5.00 | $30.00 | Frontier tier for coding, science, cyber |
 | GPT-5.5 (full API) | $5.00 | $30.00 | Pro config: $30/$180 |
 | o3 | $2.00 | $8.00 | 80% price cut since launch (June 2025) |
@@ -453,7 +453,7 @@ Reasoning models carry a premium because thinking tokens are billed at output ra
 | Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Google's most capable published reasoning model |
 | Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
-The ranking moved twice in two months. Claude Fable 5 took SWE-bench Verified at 95.0% in June, then Claude Opus 5 passed it at about 96% in July at half the price, with GPT-5.6 Sol at roughly 96.2%. The top four models now sit inside about one point of each other. Treat Verified as saturated and read Module 11 before quoting a SWE-bench Pro number, because that benchmark reports three different "best" scores depending on the harness.
+The ranking moved twice in two months. Claude Fable 5 took SWE-bench Verified at 95.0% in June, then Claude Opus 5 passed it at about 96% in July at half the price, with GPT-5.6 Sol at roughly 96.2% and the open-weight DeepSeek V4 Pro at about 96.4% on vals.ai. Six models now sit inside two points of each other, which means the order depends on which harness you read. Treat Verified as saturated and read Module 11 before quoting a SWE-bench Pro number, because that benchmark reports three different "best" scores depending on the harness.
 
 **Standard models (as of August 2026):**
 
@@ -586,7 +586,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Complex Reasoning and Analysis
 
 **Recommended models:**
-- Claude Opus 5 (leads SWE-bench Verified at about 96%, at half the Fable 5 price)
+- Claude Opus 5 (about 96% SWE-bench Verified, at half the Fable 5 price)
 - Claude Fable 5 (Mythos-class, strongest on multi-day agentic sessions)
 - GPT-5.6 Sol (frontier tier for science and long-horizon work)
 - o3 / o4-mini (OpenAI reasoning)
@@ -597,7 +597,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Code Generation
 
 **Recommended models:**
-- Claude Opus 5 (about 96% SWE-bench Verified, the current leader)
+- Claude Opus 5 (about 96% SWE-bench Verified)
 - GPT-5.6 Sol (about 96.2% Verified, roughly 54% more token-efficient on coding than GPT-5.5)
 - Claude Fable 5 (95.0% Verified, 80.3% Pro)
 - Claude Sonnet 5 (63.2% SWE-bench Pro at a fraction of flagship cost)
@@ -838,7 +838,7 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 5. **Open weights lead on some benchmarks, not just match.** DeepSeek V4 Pro scores about 96.4% on SWE-bench Verified and Kimi K3 took first place on Arena.ai's Frontend Code Arena, both ahead of Claude Opus 4.8. Two caveats travel with that: licenses have diverged from MIT and Apache 2.0 toward custom terms, and serving capacity limits real availability, as Moonshot showed by pausing Kimi K3 signups when demand outran compute.
 
-6. **A model's tier no longer predicts its ranking.** Claude Opus 5 leads SWE-bench Verified from a tier below Claude Fable 5, at half the price. Read the current numbers rather than the price list.
+6. **A model's tier no longer predicts its ranking.** Claude Opus 5 outscores Claude Fable 5 on SWE-bench Verified from a tier below it, at half the price, and two open-weight models sit in the same cluster. Read the current numbers rather than the price list, and check which harness produced them.
 
 7. **Quoted prices expire.** GPT-5.6 Luna dropped 80% three weeks after general availability, Sonnet 5 promotional pricing ends September 1, 2026, Gemini 3.7 Flash rises January 1, 2027, and Grok 4.6 doubles above 200K tokens. Put rates in configuration, not in a spreadsheet.
 
