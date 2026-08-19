@@ -385,7 +385,7 @@ Organizations preparing for compliance encounter recurring challenges:
 1. **Sign the GPAI Code of Practice** if you are a model provider: the presumption of compliance is worth the effort
 2. **Build documentation into the development process**: retrofitting is 10x harder than building it in
 3. **Classify risk at design time**: before building, not after deploying
-4. **Treat December 2027 as the high-risk deadline** (delayed from August 2026 by the Digital Omnibus, May 2026): standalone high-risk (Annex III) requirements will be the first enforcement actions with real penalties. Product-embedded high-risk (Annex I): August 2028
+4. **December 2027 is the high-risk deadline, and August 2, 2026 was the one that already passed.** Regulation (EU) 2026/1744 moved standalone high-risk (Annex III) to December 2, 2027 and product-embedded (Annex I) to August 2, 2028. What it did not move is Article 50 transparency and GPAI penalty powers, both enforceable since August 2, 2026 at up to 15 million euro or 3% of worldwide turnover. Plan for 2027, but check first whether you are already exposed on transparency
 
 ## Implementation Notes
 
