@@ -1291,7 +1291,7 @@
 - **April 2026 incidents:** Vercel/Context.ai breach (AI tool supply chain), Mercor/LiteLLM (dependency compromise), AI agent hit 600+ firewalls autonomously
 - **NSA MCP security guidance** (PP-26-1834): national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
 - **May 2026 CVEs:** CVE-2026-33032 (nginx-ui, CVSS 9.8), CVE-2026-26118 (MS MCP Server), database MCP vulns
-- **First model export controls** (June 13), Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking**: 20K+ Instagram accounts via AI support chatbot
+- **First model export controls** (June 12, lifted June 30), Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking**: 20K+ Instagram accounts via AI support chatbot
 - **June 2026 framework CVEs:** LiteLLM CISA KEV (CVSS 9.8), Semantic Kernel (CVSS 10.0), Spring AI (CVSS 8.6), pgAdmin AI Assistant (CVSS 9.0)
 - **AI-powered attacks:** Sophos EDR evasion lab (Cursor+Claude), malicious JetBrains plugins (70K installs), Chrome extensions stealing AI chats (900K installs), FortiBleed (86K devices)
 - **NSA Mythos testimony**: breached "almost all" classified systems; **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **CVE forecast 66,000** (+46%)

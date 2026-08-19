@@ -419,7 +419,7 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 - Planning: efficient planning conserves resources
 - Memory Systems: memory vs re-computation trade-off
-- Module 04, Multi-Agent Fundamentals: resource sharing between agents
+- Module 04, Multi-Agent System Fundamentals: resource sharing between agents
 - Module 12, Metrics and Dashboards: resource monitoring
 
 ---

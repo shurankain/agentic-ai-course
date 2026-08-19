@@ -152,7 +152,7 @@ Traditional disaster recovery focuses on database backups and application state.
 
 **RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic, then OpenAI, then self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern. It is a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
 
-**Provider outage scenario.** On June 13, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive: at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical. It is the canonical case for why multi-provider failover is mandatory for production AI systems.
+**Provider outage scenario.** On June 12, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive: at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical. It is the canonical case for why multi-provider failover is mandatory for production AI systems.
 
 ## Key Takeaways
 

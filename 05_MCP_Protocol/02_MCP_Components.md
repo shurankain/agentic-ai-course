@@ -334,7 +334,7 @@ The server can notify about changes to the component list. If the server adds a 
 
 ### MCP Registry and Discovery
 
-The MCP ecosystem has matured rapidly. The official MCP Registry launched in September 2025. This gives a centralized catalog of approximately 2,000 verified servers. By early 2026, over 10,000 community MCP servers exist across GitHub, npm, and PyPI.
+The MCP ecosystem has matured rapidly. The official MCP Registry launched in September 2025 with roughly 2,000 verified servers and reached about 9,652 by late May 2026. Counting beyond the registry, over 10,000 community MCP servers exist across GitHub, npm, and PyPI.
 
 **Server Discovery Models:**
 

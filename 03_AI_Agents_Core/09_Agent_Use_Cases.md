@@ -284,7 +284,7 @@ Deep Research and Agentic RAG are often confused because both involve retrieval 
 
 ### Code Review Agents
 
-Specialized multi-agent systems that review pull requests for security vulnerabilities, performance issues, style violations, and architectural concerns. Each agent focuses on a narrow domain (see Module 19, Multi-Agent Code Review Project for a detailed implementation).
+Specialized multi-agent systems that review pull requests for security vulnerabilities, performance issues, style violations, and architectural concerns. Each agent focuses on a narrow domain (see Module 19, Multi-Agent System for a detailed implementation).
 
 **Maturity:** Production-ready. GitHub, GitLab, and third-party tools (CodeRabbit, Sourcery) offer automated AI code review. Enterprise teams deploy custom agents tuned to their coding standards.
 
@@ -310,7 +310,7 @@ AI assistants embedded in corporate workflows: answering HR policy questions, he
 
 ## No-Code/Low-Code Agent Builders
 
-A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in Module 07, Module 07: they target different audiences and use cases.
+A rapidly growing segment that allows non-developers (and developers seeking rapid iteration) to build agent workflows through visual interfaces rather than code. These platforms are complementary to the developer frameworks covered in Module 07: they target different audiences and use cases.
 
 ### Workflow Automation Platforms
 
