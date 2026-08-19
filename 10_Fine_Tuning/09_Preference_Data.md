@@ -79,7 +79,7 @@ Collecting preference data is expensive. Active learning selects the most inform
 **When human evaluation is necessary:** subjective preferences, safety-critical domains, novel/edge cases, final validation.
 
 **Best practices:**
-- Model selection: the judge must be significantly more powerful than the student model
+- Model selection: the judge must be more powerful than the student model
 - Prompting for consistency: clear criteria, structured output
 - Reducing position bias: compare twice with reversed order
 

@@ -116,7 +116,7 @@ Advantages: Pretrained encoders can be used as-is, less compute (each encoder is
 
 ### Middle Fusion
 
-A hybrid: partial processing separately, then combination. The image passes through several early vision layers, text through several early LLM layers, then their representations are combined and processed by joint layers to produce the final output. BLIP-2 uses "frozen" vision and language models with a trainable Q-Former between them, which serves as an adapter-bridge between modalities.
+A hybrid: partial processing separately, then combination. The image passes through several early vision layers, text through several early LLM layers, then their representations are combined and processed by joint layers to produce the final output. BLIP-2 uses "frozen" vision and language models with a trainable Q-Former between them, which is an adapter-bridge between modalities.
 
 ## Visual Instruction Tuning
 
@@ -210,7 +210,7 @@ The field has undergone a fundamental shift from adapter-based to native multimo
 
 A major development in 2024-2025 is the integration of audio/speech as a first-class modality:
 
-**Real-time voice conversation:** GPT-4o and Gemini enable real-time spoken dialogue without the traditional pipeline of ASR, then LLM, then TTS. The model processes audio tokens directly, enabling natural turn-taking, emotion understanding, and voice style control.
+**Real-time voice conversation:** GPT-4o and Gemini enable real-time spoken dialogue without the traditional pipeline of ASR, then LLM, then TTS. The model processes audio tokens directly. This enables natural turn-taking, emotion understanding, and voice style control.
 
 **Audio understanding:** Models can transcribe, translate, analyze audio content (music, environmental sounds), and reason about audio events. Gemini 2.5 Pro can process hours of audio input.
 
@@ -232,7 +232,7 @@ The line between "understanding" and "generation" models is blurring:
 
 **Why this matters architecturally.** Autoregressive generation is inherently sequential: each token depends on all previous tokens. DiffusionGemma breaks this constraint by generating blocks of tokens simultaneously, achieving approximately **4x faster generation** in practice. The model received day-0 serving support from vLLM (v0.23), SGLang, HuggingFace Transformers, and Apple MLX, indicating broad ecosystem confidence in the paradigm.
 
-**Implications for the field.** If diffusion-based text generation proves robust at scale, it represents the most significant architectural alternative to autoregressive generation since the Transformer itself. The trade-off: diffusion models require multiple refinement passes (adding latency per block) but parallelize within each block (reducing latency per token). For long-form generation where the total output is many tokens, the net effect is significantly faster. For short responses where the overhead of denoising dominates, autoregressive models remain faster.
+**Implications for the field.** If diffusion-based text generation proves robust at scale, it represents the most significant architectural alternative to autoregressive generation since the Transformer itself. The trade-off: diffusion models require multiple refinement passes (adding latency per block) but parallelize within each block (reducing latency per token). For long-form generation where the total output is many tokens, the net effect is faster. For short responses where the overhead of denoising dominates, autoregressive models remain faster.
 
 ### Architectural Implications
 

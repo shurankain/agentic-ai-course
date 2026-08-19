@@ -36,7 +36,7 @@ By early 2026, agentic RAG is no longer an advanced option. It is the **producti
 
 Traditional RAG is passive: receive a query, find documents, generate an answer. Agentic RAG transforms the system into an active researcher capable of planning, iterating, and adapting. The agent analyzes the question and determines a search strategy. It decomposes complex questions into parts. When information is insufficient, it refines the query and searches again. When data is contradictory, it seeks additional sources for resolution.
 
-Agentic RAG uses the LLM not only for answer generation but also for managing the search process. The model decides which tools to use, what queries to formulate, and when to stop.
+Agentic RAG uses the LLM for answer generation and for managing the search process. The model decides which tools to use, what queries to formulate, and when to stop.
 
 ### Five Components of Agentic RAG
 
@@ -88,7 +88,7 @@ This refinement process can use a separate critic model or the same LLM with a d
 
 ### Fallback Strategies
 
-CRAG defines fallback scenarios for various situations:
+CRAG defines fallback scenarios for situations:
 - Documents are partially relevant: use with caveats
 - Documents are irrelevant: try a different approach
 - No information available: honestly inform the user
@@ -119,7 +119,7 @@ The model is trained to generate special tokens signaling the need for retrieval
 
 ### Self-Reflection
 
-Self-RAG includes a self-assessment mechanism. The model not only generates an answer but also evaluates its quality. If the evaluation is low, the system can try a different approach.
+Self-RAG includes a self-assessment mechanism. The model generates an answer and evaluates its quality. If the evaluation is low, the system can try a different approach.
 
 **Formal Decision Model of Self-RAG:**
 
@@ -204,7 +204,7 @@ Microsoft introduced GraphRAG, a production-ready approach to Graph RAG that bec
 
 **Key innovations:**
 
-Microsoft GraphRAG introduced four architectural components that together enable both entity-level precision and corpus-level summarization. Hierarchical clustering via the Leiden algorithm is the critical differentiator, allowing the system to answer questions at multiple levels of abstraction.
+Microsoft GraphRAG introduced four architectural components that together enable both entity-level precision and corpus-level summarization. Hierarchical clustering via the Leiden algorithm is the critical differentiator. This allows the system to answer questions at multiple levels of abstraction.
 
 | Component | Description |
 |-----------|----------|
@@ -258,7 +258,7 @@ RAPTOR creates a multi-level abstraction structure of the document. The base lev
 
 The system then clusters semantically similar chunks and summarizes each cluster, creating the second level (Level 2) of summaries. This process repeats recursively: Level 2 summaries are again clustered and summarized, forming the third level (Level 3), an overall summary of the entire document.
 
-All levels are indexed into a single vector store, allowing retrieval to find both detailed chunks for specific questions and high-level summaries for overview queries.
+All levels are indexed into a single vector store. This allows retrieval to find both detailed chunks for specific questions and high-level summaries for overview queries.
 
 ### RAPTOR Algorithm
 
@@ -475,7 +475,7 @@ Modern models support contexts of 100K-1M+ tokens. Is RAG still needed?
 
 The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100, then reranker narrows to top-20, then all 20 are loaded into long context (40K tokens), then LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
 
-**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8), making the tradeoff more nuanced than it was at 128K, but the 40x cost difference remains significant at scale.
+**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8). This makes the tradeoff more nuanced than it was at 128K, but the 40x cost difference remains significant at scale.
 
 **"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See Module 02, Context Engineering for the Lost-in-the-Middle analysis.
 
@@ -580,7 +580,7 @@ The GraphRAG landscape now offers a spectrum of complexity-cost trade-offs. Stan
 
 ## Key Techniques (2024-2025)
 
-RAG continues to evolve. Several techniques from 2024 significantly change the approach to building systems.
+RAG continues to evolve. Several techniques from 2024 change the approach to building systems.
 
 ### CAG: Cache-Augmented Generation
 
@@ -675,7 +675,7 @@ The query processing method takes a user question and two parameters: top_k dete
 
 The first stage, hybrid retrieval, performs parallel search across two channels. Dense retrieval via vector_store finds top_k/2 semantically similar documents (10 in this case) using cosine similarity of embeddings. Simultaneously, sparse retrieval via bm25_index finds top_k/2 documents (10) with maximum lexical term overlap. Results from both searches are combined by the merge_results method, which removes duplicates and can apply weighting coefficients to scores from different sources, forming a unified candidate list.
 
-The second stage, reranking: passes all candidates along with the question to the reranker, which typically uses a cross-encoder model. The cross-encoder processes each (question, candidate document) pair jointly through a transformer, obtaining a precise relevance score. This is significantly more accurate than simply comparing vectors but is feasible only for a small set of candidates due to computational complexity. The result is the top rerank_k most relevant documents (5).
+The second stage, reranking: passes all candidates along with the question to the reranker, which typically uses a cross-encoder model. The cross-encoder processes each (question, candidate document) pair jointly through a transformer, obtaining a precise relevance score. This is more accurate than simply comparing vectors but is feasible only for a small set of candidates due to computational complexity. The result is the top rerank_k most relevant documents (5).
 
 The third stage: generation: formats the reranked documents into context via format_context, which can combine document texts with their metadata. This context along with the original question is passed to the LLM for answer generation. The LLM synthesizes information from the provided context, creating a coherent answer.
 

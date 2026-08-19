@@ -34,7 +34,7 @@ The Synthesizer combines findings, eliminates duplicates, prioritizes issues, an
 
 This project can be implemented with several modern agent frameworks:
 
-**LangGraph**: graph-driven orchestration with explicit state machines. The code review workflow is well-defined (parse, then route, then review, then synthesize), making explicit control valuable. LangGraph's checkpointing enables resumable reviews for large PRs. Best when: you need fine-grained control over the execution flow, custom error handling per step, or observability via LangSmith.
+**LangGraph**: graph-driven orchestration with explicit state machines. The code review workflow is well-defined (parse, then route, then review, then synthesize). This makes explicit control valuable. LangGraph's checkpointing enables resumable reviews for large PRs. Best when: you need fine-grained control over the execution flow, custom error handling per step, or observability via LangSmith.
 
 **CrewAI**: role-based multi-agent coordination with built-in delegation. The specialized reviewer pattern maps naturally to CrewAI's role/goal/backstory model. CrewAI's sequential and hierarchical process types match the orchestrator-reviewer architecture. Best when: you want to get a working prototype quickly with minimal boilerplate, and the workflow is straightforward enough that implicit orchestration suffices.
 
@@ -143,7 +143,7 @@ Modern frameworks (LangGraph, CrewAI, Strands) provide ready-made multi-agent or
 
 MCP integration gives review agents access to external tools (linters, analyzers, repo context) for deeper analysis than LLM reasoning alone.
 
-Separation of roles ensures comprehensive coverage without cognitive overload.
+Separation of roles ensures coverage without cognitive overload.
 
 The Orchestrator coordinates parallel execution and conflict resolution for consistent results.
 

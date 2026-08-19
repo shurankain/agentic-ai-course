@@ -1,8 +1,8 @@
 # Modern LLM Architectures
 
-## Introduction: Beyond the Classic Transformer
+## Beyond the Classic Transformer
 
-The Transformer architecture, introduced in 2017, revolutionized natural language processing and became the foundation for all large language models. However, over seven years of its dominance, researchers have identified a number of fundamental limitations that become increasingly critical as model scale grows.
+The Transformer architecture, introduced in 2017, reshaped natural language processing and became the foundation for all large language models. However, over seven years of its dominance, researchers have identified a number of fundamental limitations that become increasingly critical as model scale grows.
 
 ### Fundamental Limitations of the Classic Approach
 
@@ -34,7 +34,7 @@ Architecture selection is not an academic question. It determines:
 - **Latency profile**: system responsiveness
 - **Infrastructure complexity**: difficulty of deployment and scaling
 
-A senior engineer or AI lead must understand not only "how attention works" but also "why MoE could reduce costs by 60% for our use case, but would require reworking the infrastructure." This knowledge distinguishes "we use the GPT-4 API" from "we built a cost-effective system with the right architectural trade-offs."
+A senior engineer or AI lead must understand "how attention works" and "why MoE could reduce costs by 60% for our use case, but would require reworking the infrastructure." This knowledge distinguishes "we use the GPT-4 API" from "we built a cost-effective system with the right architectural trade-offs."
 
 ---
 
@@ -160,7 +160,7 @@ Mamba makes parameters B, C, and Δ (discretization step) input-dependent:
 
 **Key insight:** A selective SSM can emulate attention-like behavior: "paying attention" to important tokens by retaining them in the state with higher weight, and ignoring noise. All while maintaining O(n) complexity instead of O(n²).
 
-**Practical result:** Comparable quality with Transformers on many tasks with significantly better performance on long sequences. This is not a theoretical possibility: Mamba models demonstrate this in practice.
+**Practical result:** Comparable quality with Transformers on many tasks with better performance on long sequences. This is not a theoretical possibility: Mamba models demonstrate this in practice.
 
 ### Mamba-2: Structured State Space Duality
 
@@ -214,7 +214,7 @@ RWKV (Receptance Weighted Key Value) is another approach to linear complexity, d
 - Few-shot learning: dynamic adaptation through examples in the prompt
 - Mature tooling ecosystem, debugging, optimization, deployment
 
-**Empirical reality:** On standard benchmarks, Mamba is roughly on par with a Transformer of the same size. On long context (>32K), Mamba significantly outperforms Transformers in efficiency. On precise information retrieval, Transformers significantly outperform Mamba. The choice depends on the distribution of your specific use cases.
+**Empirical reality:** On standard benchmarks, Mamba is roughly on par with a Transformer of the same size. On long context (>32K), Mamba outperforms Transformers in efficiency. On precise information retrieval, Transformers outperform Mamba. The choice depends on the distribution of your specific use cases.
 
 ---
 
@@ -264,7 +264,7 @@ AI21 Labs introduced Jamba (March 2024), the first production-ready hybrid model
 
 **Going deeper: task characteristics determine the choice**
 
-Precise retrieval ("find and quote line 47 from the contract") requires attention: SSMs compress history and lose exact positions. But semantic summarization of a long document works well on SSMs at significantly lower cost.
+Precise retrieval ("find and quote line 47 from the contract") requires attention: SSMs compress history and lose exact positions. But semantic summarization of a long document works well on SSMs at lower cost.
 
 Streaming applications (real-time chat, live transcription) are a natural fit for SSMs: O(1) per token means constant latency regardless of history length. Transformers require recomputation of the entire history for each new token.
 
@@ -272,7 +272,7 @@ High-throughput scenarios with short queries benefit from Transformers, batching
 
 **Infrastructure realities**
 
-GPU memory < 24GB: Dense 7B with quantization: deployment simplicity matters more than cutting-edge architecture.
+GPU memory < 24GB: Dense 7B with quantization: deployment simplicity matters more than architectural novelty.
 
 GPU memory 80GB+: MoE (best quality/compute ratio) or large dense models become feasible.
 
@@ -316,7 +316,7 @@ MoE models require not just "more memory" but specific infrastructure. If you ha
 
 **3. Team expertise: an often-ignored factor**
 
-Debugging MoE routing issues or SSM state corruption requires deep understanding of internals. If you do not have ML researchers on the team, experiments with cutting-edge architectures can turn into months of debugging.
+Debugging MoE routing issues or SSM state corruption requires deep understanding of internals. If you do not have ML researchers on the team, experiments with the newest architectures can turn into months of debugging.
 
 **Rule of thumb:** If your team is comfortable working with huggingface/transformers but has no experience modifying training loops, start with Dense or a well-supported MoE (Mixtral). Leave SSM and hybrids for teams with strong research backgrounds.
 
@@ -366,9 +366,9 @@ Debugging MoE routing issues or SSM state corruption requires deep understanding
 
 **Trade-offs are inevitable:** MoE provides more capacity with less compute but requires more memory. SSMs deliver linear complexity but handle precise information retrieval less well. Hybrids balance these factors but are harder to deploy. There is no universally best choice.
 
-**Business impact:** Architectural decisions determine not only technical characteristics but the economics of the entire system. The right choice can reduce costs by 50-70% or enable previously impossible use cases (256K+ token context).
+**Business impact:** Architectural decisions determine technical characteristics and the economics of the entire system. The right choice can reduce costs by 50-70% or enable previously impossible use cases (256K+ token context).
 
-**The senior engineer's responsibility:** Understanding these trade-offs distinguishes experienced engineering from simply "using an API." You need to know not only "how Mamba works" but also "why Mamba could save $200K per month for our use case, but would require 3 months of infrastructure work."
+**The senior engineer's responsibility:** Understanding these trade-offs distinguishes experienced engineering from simply "using an API." You need to know "how Mamba works" and "why Mamba could save $200K per month for our use case, but would require 3 months of infrastructure work."
 
 **Tooling gap:** New architectures have less mature tooling. Be prepared for additional engineering investment, or accept the conservative choice (Dense Transformer) with full awareness of the missed opportunities.
 
@@ -410,7 +410,7 @@ For correct benchmarking:
 
 Dense Transformer (e.g., Mistral 7B) has 7B active parameters out of 7B total, requires approximately 14GB of memory in bf16 format, generates roughly 150 tokens per second at 4K context, with a Time to First Token of approximately 50ms.
 
-MoE architecture (Mixtral 8x7B) activates 13B parameters out of 47B total, requiring significantly more memory: approximately 94GB in bf16 or ~24GB with 4-bit quantization. Generation speed is approximately 100 tokens per second at 4K context with a TTFT of approximately 40ms. Key point: more total parameters yield better quality, but active parameters determine inference speed.
+MoE architecture (Mixtral 8x7B) activates 13B parameters out of 47B total, requiring more memory: approximately 94GB in bf16 or ~24GB with 4-bit quantization. Generation speed is approximately 100 tokens per second at 4K context with a TTFT of approximately 40ms. Key point: more total parameters yield better quality, but active parameters determine inference speed.
 
 SSM models (Mamba 2.8B) demonstrate the best efficiency for their size: 2.8B parameters, only ~6GB of memory, speeds up to 200 tokens per second on short context with a TTFT of just ~20ms. The critical advantage emerges on long context: at 32K tokens, Mamba maintains ~180 tok/s, while a comparable Transformer drops to ~30 tok/s due to the quadratic complexity of attention.
 
@@ -438,7 +438,7 @@ If you lack a dedicated ML infrastructure team: start with Dense Transformer. Ma
 
 If you have ML engineers and willingness to optimize: SSM or MoE can deliver significant gains in performance and cost.
 
-Only for teams with strong research competencies, experiment with hybrid architectures. Cutting-edge technology, but limited production experience.
+Only for teams with strong research competencies, experiment with hybrid architectures. Newer technology, but limited production experience.
 
 ## Brief Code Example
 
@@ -446,8 +446,8 @@ Only for teams with strong research competencies, experiment with hybrid archite
 
 All modern architectures use a unified API through the Transformers library. The basic loading and generation pattern is identical: use `AutoTokenizer` and `AutoModelForCausalLM`, specify `torch_dtype=torch.bfloat16` for memory efficiency, and `device_map="auto"` for automatic GPU distribution. For Dense models, load a model such as "mistralai/Mistral-7B-v0.1"; for MoE, "mistralai/Mixtral-8x7B-v0.1"; for SSM, "state-spaces/mamba-2.8b-hf". After tokenizing the input, call `model.generate()` with specified maximum length and temperature to control diversity.
 
-**Quantizing MoE for consumer GPUs:** Running Mixtral on consumer hardware requires 4-bit quantization via BitsAndBytesConfig. It reduces memory from ~94GB (bf16) to ~24GB, allowing the model to fit on a single consumer GPU. Use the parameters `load_in_4bit=True`, `bnb_4bit_compute_dtype=torch.bfloat16` for computation precision, and `bnb_4bit_quant_type="nf4"` for the optimal balance of quality and compression.
+**Quantizing MoE for consumer GPUs:** Running Mixtral on consumer hardware requires 4-bit quantization via BitsAndBytesConfig. It reduces memory from ~94GB (bf16) to ~24GB. This allows the model to fit on a single consumer GPU. Use the parameters `load_in_4bit=True`, `bnb_4bit_compute_dtype=torch.bfloat16` for computation precision, and `bnb_4bit_quant_type="nf4"` for the optimal balance of quality and compression.
 
-**Long-context benchmarking:** For a correct comparison of SSM and Transformer on long sequences, test across various lengths (1K, 4K, 16K, 32K tokens). Always perform a warm-up run to initialize CUDA kernels, then use `torch.cuda.synchronize()` before and after timing for accuracy. SSM will show constant or near-linear processing time, while Transformers demonstrate quadratic growth with increasing context length.
+**Long-context benchmarking:** For a correct comparison of SSM and Transformer on long sequences, test across lengths (1K, 4K, 16K, 32K tokens). Always perform a warm-up run to initialize CUDA kernels, then use `torch.cuda.synchronize()` before and after timing for accuracy. SSM will show constant or near-linear processing time, while Transformers demonstrate quadratic growth with increasing context length.
 
 **Memory footprint analysis:** For MoE models, it is important to distinguish total from active parameters. Compute the total parameter count via `sum(p.numel() for p in model.parameters())`, then for MoE check for the `num_experts_per_tok` attribute in config. Active parameters are a fraction of total: shared parameters (attention, embeddings) plus only selected experts. This explains why Mixtral with 47B parameters uses only ~13B during inference, delivering the efficiency of a smaller model with the capacity of a larger one.

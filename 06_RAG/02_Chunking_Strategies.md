@@ -1,12 +1,10 @@
 # Document Chunking Strategies
 
-## Introduction to Chunking
-
 Document chunking critically affects retrieval quality in a RAG system. Chunking is a balance between fragment size and context preservation.
 
 Fragments that are too small lose context and semantic integrity. Fragments that are too large dilute relevance and inefficiently use the model's context window. The optimal size depends on the nature of the documents, the types of questions, and system capabilities.
 
-**Why chunking is critical for RAG:** Chunking defines the unit of relevance. When a user asks "How do I configure authentication?", the system searches not the entire document but specific fragments. If a fragment is too small, it may not contain the complete answer. If too large, most of the information will be irrelevant, making the LLM's job harder.
+**Why chunking is critical for RAG:** Chunking defines the unit of relevance. When a user asks "How do I configure authentication?", the system searches not the entire document but specific fragments. If a fragment is too small, it may not contain the complete answer. If too large, most of the information will be irrelevant. This makes the LLM's job harder.
 
 Chunking quality affects three key aspects: retrieval accuracy (will the system find the exact fragment containing the answer), context completeness (will there be enough information for understanding), and generation efficiency (will the LLM be overwhelmed with irrelevant data).
 
@@ -26,7 +24,7 @@ Chunk size determines how much information each retrieval unit contains. Typical
 
 From an information theory perspective, the optimal chunk size balances utility and cost. Utility is determined by fragment relevance and topic coverage completeness. Costs include noise and context processing overhead.
 
-**Factors affecting optimal size:** Technical constraints: the embedding model has a maximum context length, the LLM context window determines how many chunks can be passed, computational cost of processing large fragments. Content characteristics: information density in technical documents requires smaller chunks, sparseness of fiction requires more context, document structure facilitates splitting into natural fragments. Usage patterns: question types (factoid vs. exploratory), precision vs. recall priority, update frequency.
+**Factors affecting optimal size:** Technical constraints: the embedding model has a maximum context length, the LLM context window determines how many chunks can be passed, computational cost of processing large fragments. Content characteristics: information density in technical documents requires smaller chunks, sparseness of fiction requires more context, document structure supports splitting into natural fragments. Usage patterns: question types (factoid vs. exploratory), precision vs. recall priority, update frequency.
 
 **Empirical recommendations by content type:** FAQ and Q&A, 200-500 tokens, each question-answer pair is a self-contained unit. Technical documentation: 500-1000 tokens, a section with examples balancing completeness and focus. Scientific papers: 800-1500 tokens, a paragraph or several related paragraphs with logical coherence. Code: 100-500 tokens, a function or method with documentation and syntactic integrity. Legal documents: 500-1000 tokens, a clause or article in full with accuracy and completeness.
 

@@ -1400,7 +1400,7 @@
   - Comparison with GPTQ
 - GGML/GGUF formats
   - CPU-optimized quantization
-  - Support for various types (Q4_0, Q4_K_M, Q8_0)
+ - Support for types (Q4_0, Q4_K_M, Q8_0)
 - Quantization-Aware Training (QAT)
   - Fake quantization during training
   - When QAT is better than PTQ
@@ -1580,7 +1580,7 @@
 
 ### 18.1 Regulatory Landscape (`01_Regulatory_Landscape.md`)
 - Introduction: AI at the intersection of law and technology
-- EU AI Act: the first comprehensive law
+- EU AI Act: the first law
   - Risk-based framework (4 risk levels)
   - Unacceptable risk: prohibited practices
   - High-risk AI: conformity assessment requirements
@@ -2000,7 +2000,7 @@
   - Flash Attention
   - Chain-of-Thought / ReAct
   - RAG
-- Cutting-Edge Papers
+- Recent Papers
   - DPO, o1/o3, Mamba, DeepSeek V3
 - How to discuss papers in interviews
 - Paper note template

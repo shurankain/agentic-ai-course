@@ -1,7 +1,5 @@
 # Agent Memory Systems
 
-## Introduction
-
 Memory is what transforms a set of isolated interactions into a coherent experience. Without memory, an agent is like a person with amnesia: every conversation starts from scratch, every mistake is repeated, every lesson is instantly forgotten.
 
 Imagine an assistant that asks your name every day, does not remember your preferences, and repeats the same mistakes. Formally it functions, but its usefulness is minimal. Now imagine an assistant that remembers the context of your projects, knows your preferences, learns from its mistakes, and accumulates expertise. The difference is memory.

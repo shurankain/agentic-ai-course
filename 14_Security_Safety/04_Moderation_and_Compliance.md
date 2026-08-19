@@ -68,7 +68,7 @@ Domain restrictions: prohibiting content generation in particularly sensitive ar
 
 ## Compliance Frameworks
 
-Regulatory requirements define minimum standards for data and content processing. The landscape has evolved significantly in 2024-2025 with the EU AI Act becoming actively enforced and US states stepping in.
+Regulatory requirements define minimum standards for data and content processing. The landscape has evolved in 2024-2025 with the EU AI Act becoming actively enforced and US states stepping in.
 
 ### EU AI Act: Now Actively Enforced
 
@@ -88,9 +88,9 @@ The EU AI Act is no longer future regulation. It is active law with enforcement:
 
 **State level, the new regulatory frontier:**
 
-**Colorado AI Act (SB 24-205):** Originally the first comprehensive US state AI law (signed May 2024). Delayed to January 1, 2027 and significantly narrowed by SB 189 (signed May 14, 2026): the risk-based framework was replaced with a transparency-only approach, eliminating the duty of care and most deployer obligations. The first comprehensive US state AI law was substantially weakened before enforcement.
+**Colorado AI Act (SB 24-205):** Originally the first comprehensive US state AI law (signed May 2024). Delayed to January 1, 2027 and narrowed by SB 189 (signed May 14, 2026): the risk-based framework was replaced with a transparency-only approach, eliminating the duty of care and most deployer obligations. The first comprehensive US state AI law was substantially weakened before enforcement.
 
-**California:** SB-1047 was vetoed (September 2024), but California subsequently passed **SB-53** (signed into law September 2024): a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
+**California:** SB-1047 was vetoed (September 2024), but California passed **SB-53** (signed into law September 2024): a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
 
 **Other states:** Illinois (AI Video Interview Act), Texas, Connecticut: sector-specific AI legislation is proliferating. The trend: in the absence of federal legislation, states are creating a patchwork of requirements.
 
@@ -180,7 +180,7 @@ The EU AI Act is actively enforced: prohibited practices banned (Feb 2025), GPAI
 
 Runtime safety controls are shifting from application-level to organizational-level enforcement (as of late May 2026): AWS Bedrock Guardrails now enforce cross-account at the Organizations level; Anthropic runtime controls block dangerous actions at the execution layer, not just at the generation layer.
 
-Data retention policies differ for conversation data, audit logs, and training data. Right to be forgotten requires comprehensive deletion.
+Data retention policies differ for conversation data, audit logs, and training data. Right to be forgotten requires deletion.
 
 Security monitoring and an incident response plan are necessary for detecting and responding to incidents.
 

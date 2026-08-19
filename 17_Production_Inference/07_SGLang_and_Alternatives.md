@@ -1,7 +1,5 @@
 # SGLang and vLLM Alternatives
 
-## Introduction
-
 vLLM is the de facto standard, but not the only option. Alternatives offer significant advantages depending on the use case:
 
 - **SGLang:** Up to 3x throughput for chatbots via RadixAttention
@@ -32,7 +30,7 @@ Practice: critical for production systems that require guaranteed correct format
 - Constrained Decoding: vLLM supports JSON mode and guided decoding (via outlines), SGLang full regex/CFG with GPU-accelerated FSM
 - Throughput chat: SGLang up to 3x
 - Throughput batch: comparable
-- Maturity: both production-ready; vLLM has broader adoption, SGLang (v0.5.9+) has matured significantly and matches vLLM in stability
+- Maturity: both production-ready; vLLM has broader adoption, SGLang (v0.5.9+) has matured and matches vLLM in stability
 
 **When to choose:**
 Ideal: chatbots with long history, applications with frequent similar prefixes, structured output (JSON, code), multi-turn agents. Less suitable: one-off batch, very short prompts, maximum stability required.
@@ -63,7 +61,7 @@ Production-grade platform from NVIDIA. Accepts requests, routes them to the Tens
 - Flexibility: vLLM high, TensorRT limited
 - FP8: vLLM via parameter, TensorRT native
 
-**Simplification in 2025:** TensorRT-LLM has progressively improved its developer experience. The high-level Python `LLM` API (introduced in late 2024, stabilized in 2025) reduces the model conversion and deployment process from dozens of steps to a few lines of code, with automatic quantization and engine building. The API now explicitly labels stable vs. unstable components, making it clearer what is production-ready. While still more complex than vLLM, the gap has narrowed significantly.
+**Simplification in 2025:** TensorRT-LLM has progressively improved its developer experience. The high-level Python `LLM` API (introduced in late 2024, stabilized in 2025) reduces the model conversion and deployment process from dozens of steps to a few lines of code, with automatic quantization and engine building. The API now explicitly labels stable vs. Unstable components. This makes it clearer what is production-ready. While still more complex than vLLM, the gap has narrowed.
 
 **When to choose:**
 Ideal: maximum performance is critical, NVIDIA GPUs (especially Hopper+), stable production model, cost optimization at scale. Less suitable: rapid prototyping, frequent model changes, limited DevOps resources.
@@ -139,7 +137,7 @@ vLLM is imperative (LLM object, generate method). SGLang is declarative (backend
 ## Benchmarking
 
 **What to measure:**
-1. Throughput (tokens/sec at various batch sizes)
+1. Throughput (tokens/sec at batch sizes)
 2. Latency (TTFT, ITL)
 3. Memory (peak GPU usage)
 4. Quality (output identical or equivalent)
@@ -172,7 +170,7 @@ Dynamo complements the Amazon+Cerebras disaggregated approach (AWS Trainium for 
 
 **Cloudflare Infire** (as of late May 2026) is the first major production-grade Rust-based LLM inference engine. Cloudflare built Infire from scratch, motivated by "lack of control in the Python-based vLLM stack": Python's GIL, garbage collection pauses, and difficulty debugging production issues at scale drove the decision to rewrite in Rust.
 
-**Performance:** Up to 7% faster than vLLM 0.10 on H100 NVL benchmarks, with significantly lower CPU overhead. The Rust implementation eliminates Python's GIL contention and provides deterministic memory management, resulting in more consistent latency under load.
+**Performance:** Up to 7% faster than vLLM 0.10 on H100 NVL benchmarks, with lower CPU overhead. The Rust implementation eliminates Python's GIL contention and provides deterministic memory management, resulting in more consistent latency under load.
 
 **Significance:** Infire represents a potential inflection point for inference infrastructure. While vLLM and SGLang dominate the Python ecosystem, a production-validated Rust alternative opens the door for performance-critical deployments where Python's overhead is unacceptable. Cloudflare runs Infire in production for their Workers AI platform, serving millions of inference requests.
 
@@ -201,7 +199,7 @@ With production infrastructure understood: from GPU architecture to inference se
 
 ## Key Takeaways
 
-1. **SGLang's RadixAttention** organizes cached prefixes in a radix tree, enabling efficient KV-cache reuse across multi-turn conversations: up to 3x throughput for chatbots and agent loops with shared system prompts.
+1. **SGLang's RadixAttention** organizes cached prefixes in a radix tree. This enables efficient KV-cache reuse across multi-turn conversations: up to 3x throughput for chatbots and agent loops with shared system prompts.
 
 2. **TensorRT-LLM delivers maximum single-GPU throughput** (5-20% over vLLM) through custom CUDA kernels and graph compilation, at the cost of higher operational complexity and a required model conversion step.
 

@@ -1,7 +1,5 @@
 # Tool Use
 
-## Introduction
-
 A language model on its own is a scholar locked in an ivory tower. It knows many facts, can reason and generate text, but it is cut off from the real world. Its knowledge is frozen at the time of training. It cannot check the current weather, look up a stock price, or send an email.
 
 Tools are the windows and doors that open this tower to the outside world. Each tool gives the agent a new capability: a search tool enables finding up-to-date information, a calculator enables precise computations, an API client enables interaction with external services.
@@ -44,7 +42,7 @@ To understand the capabilities and limitations of tool use, it helps to know how
 
 The ability of models to use tools evolved gradually. Early approaches relied on zero-shot and few-shot prompting: models received tool descriptions in the prompt and "hoped" to understand the format. Quality was low, with many JSON format errors.
 
-The breakthrough came with supervised fine-tuning specifically for tool use. Models were fine-tuned on datasets with examples of correct tool calls. Special tokens were introduced for marking calls and results. This significantly improved accuracy.
+The breakthrough came with supervised fine-tuning specifically for tool use. Models were fine-tuned on datasets with examples of correct tool calls. Special tokens were introduced for marking calls and results. This improved accuracy.
 
 Modern models use RLHF (reinforcement learning from human feedback) to optimize tool selection and usage. A reward model evaluates how correctly the model selected a tool and filled in parameters.
 
@@ -73,17 +71,17 @@ Every tool consists of four inseparably linked parts: name, description, paramet
 
 **Name**: a unique identifier for the tool. The model uses it when generating a call. The name should be short but informative: `web_search`, `send_email`, `query_database`. Avoid overly generic names (`do_task`) or overly long ones (`search_the_web_for_information`).
 
-A good tool name is self-documenting and reflects its purpose. Use snake_case for compatibility with various LLM APIs. The name must be unique within your toolset to avoid confusion during selection. If you have several similar tools, use prefixes for categorization: `db_query`, `db_insert`, `file_read`, `file_write`.
+A good tool name is self-documenting and reflects its purpose. Use snake_case for compatibility with LLM APIs. The name must be unique within your toolset to avoid confusion during selection. If you have several similar tools, use prefixes for categorization: `db_query`, `db_insert`, `file_read`, `file_write`.
 
 **Description**: a critically important element that is often underestimated. It is an instruction for the model: when to use this tool, what tasks it is designed for, and what tasks it is not designed for. A good description contains examples of appropriate use and explicit limitations.
 
-The tool description is your primary communication channel with the model. Through it you explain not only what the tool does, but also when to apply it. A poor description leads to the model either ignoring a useful tool, using it incorrectly, or applying it in situations it was not designed for.
+The tool description is your primary communication channel with the model. Through it you explain what the tool does and when to apply it. A poor description leads to the model either ignoring a useful tool, using it incorrectly, or applying it in situations it was not designed for.
 
 An effective description follows this structure: brief purpose (one sentence), typical use cases (2-3 examples), explicit limitations (what the tool does NOT do), important details (input data format, expected output format). Use language close to user queries. This improves semantic matching during tool selection.
 
 **Parameter schema** defines what arguments the tool accepts. This is not just a list of names. It is a full specification with types, descriptions, default values, and constraints. The more precise the schema, the more correctly the model will fill in parameters.
 
-The parameter schema works as a two-sided contract: it helps the model understand what data to provide and simultaneously serves as a basis for validation on the execution side. A well-designed schema minimizes the number of validation errors, saving tokens and time on retries.
+The parameter schema works as a two-sided contract: it helps the model understand what data to provide and simultaneously is a basis for validation on the execution side. A well-designed schema minimizes the number of validation errors, saving tokens and time on retries.
 
 For each parameter, specify: the exact data type (string, number, boolean, array, object), a semantic description (not just "city" but "City name in English, e.g., 'Kyiv', 'London'"), whether it is required (required: true/false), a default value if applicable, and constraints (enum for fixed values, minimum/maximum for numbers, pattern for strings).
 
@@ -183,7 +181,7 @@ Computation tools are especially useful for data science agents, financial analy
 
 Before discussing practical strategies, it is important to understand: **how does the model decide which tool to use?**
 
-When the model "sees" tool descriptions, it processes them as part of the context. Tool selection is essentially a classification task solved by the attention mechanism. The model determines the semantic match between the user's request and each tool's capabilities, then generates the most probable call.
+When the model "sees" tool descriptions, it processes them as part of the context. Tool selection is a classification task solved by the attention mechanism. The model determines the semantic match between the user's request and each tool's capabilities, then generates the most probable call.
 
 **Factors influencing selection:**
 
@@ -239,7 +237,7 @@ This approach requires feedback mechanisms: how does the system know the selecti
 
 ### Parallel Tool Calls: When You Can and When You Cannot
 
-Modern LLM APIs (GPT-5.4, Claude, Gemini) support **parallel tool calls**: the model can generate multiple tool calls in a single response. This significantly speeds up execution but requires understanding dependencies.
+Modern LLM APIs (GPT-5.4, Claude, Gemini) support **parallel tool calls**: the model can generate multiple tool calls in a single response. This speeds up execution but requires understanding dependencies.
 
 **Types of dependencies between tools:**
 
@@ -271,7 +269,7 @@ The Executor verifies that the requested tool exists and is available. It valida
 
 The Executor can also log all operations for auditing, check user permissions, and limit call frequency (rate limiting).
 
-The Executor acts as a circuit breaker for tools. If a particular tool systematically fails, the Executor can temporarily disable it, preventing cascading errors. This is especially important when interacting with external APIs that may be unstable.
+The Executor is a circuit breaker for tools. If a particular tool systematically fails, the Executor can temporarily disable it, preventing cascading errors. This is especially important when interacting with external APIs that may be unstable.
 
 Execution metrics are collected by the Executor automatically: latency of each call, success rate, error types, result sizes. These metrics are critical for monitoring system health and optimizing performance.
 

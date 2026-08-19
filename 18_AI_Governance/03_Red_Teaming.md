@@ -1,6 +1,6 @@
 # Red Teaming for AI Systems
 
-## Introduction: From Penetration Testing to AI Red Teaming
+## From Penetration Testing to AI Red Teaming
 
 Traditional penetration testing focuses on technical infrastructure: finding vulnerabilities in networks, exploiting misconfigurations, gaining unauthorized access. AI red teaming reimagines this paradigm for systems where a "vulnerability" can mean hallucination, bias, jailbreak, or unintended behavior.
 
@@ -83,7 +83,7 @@ Several key metrics are used for quantitative evaluation of red teaming results.
 
 **STRIDE for AI Systems:**
 
-The classic STRIDE threat model translates to AI with domain-specific attack vectors at each category. The table below maps each STRIDE threat to its AI-specific manifestation, providing a structured checklist for threat modeling sessions focused on LLM applications.
+The classic STRIDE threat model translates to AI with domain-specific attack vectors at each category. The table below maps each STRIDE threat to its AI-specific manifestation. This gives a structured checklist for threat modeling sessions focused on LLM applications.
 
 | Threat | AI-Specific Example |
 |--------|----------------------|
@@ -155,7 +155,7 @@ Garak (Generative AI Red-teaming And Assessment Kit) is an open-source framework
 Garak includes:
 - **Probes**: sets of attacking prompts organized by category
 - **Detectors**: classifiers for determining successful attacks
-- **Generators**: integration with various LLM providers
+- **Generators**: integration with LLM providers
 - **Reporting**: structured output for analysis
 
 Installation is done via pip install garak. A basic scan is launched with a command specifying the model type (openai), model name (gpt-4o-mini or gpt-5.4), and the set of checks. The --probes all parameter runs all available checks, but a targeted scan can be specified with specific categories: encoding (encoding-based attacks), dan (DAN-type jailbreaks), promptinject (prompt injection).
@@ -172,7 +172,7 @@ Features:
 
 ### Adversarial Robustness Toolbox (ART)
 
-ART from IBM is a comprehensive library for ML security research. It supports attacks, defenses, and robustness metrics for a wide range of models.
+ART from IBM is a library for ML security research. It supports attacks, defenses, and robustness metrics for a wide range of models.
 
 A typical workflow with ART includes creating a classifier wrapper (PyTorchClassifier or an equivalent for other frameworks), initializing the attack (e.g., FastGradientMethod with an epsilon parameter controlling the perturbation strength), and generating adversarial examples via the generate() method. The library supports dozens of attack algorithms (FGSM, PGD, C&W, DeepFool) and defenses (adversarial training, feature squeezing, certified defenses).
 
@@ -263,7 +263,7 @@ AI agents with tool access introduce attack surfaces beyond traditional LLM vuln
 
 The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-standard threat taxonomy. See Module 14, Prompt Injection for the full list. Key items for red-team test plans: Prompt Injection (LLM01), Sensitive Information Disclosure (LLM06), Excessive Agency (LLM08), and Unbounded Consumption (LLM10).
 
-**Use in red teaming:** Map your test plan to OWASP categories for comprehensive coverage. Report findings using OWASP categories for standardized communication with security teams.
+**Use in red teaming:** Map your test plan to OWASP categories for coverage. Report findings using OWASP categories for standardized communication with security teams.
 
 ## HarmBench (2024)
 
@@ -275,7 +275,7 @@ The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-stan
 
 **Usage for red teams:** Use HarmBench as a baseline: if your model fails on HarmBench attacks, it has basic safety gaps. Then go beyond HarmBench with creative manual testing and domain-specific attacks. Report results using HarmBench metrics for comparability.
 
-**Connection to METR:** While HarmBench tests content safety (will the model generate harmful text?), METR tests dangerous capabilities (can the model autonomously cause harm?). Both are needed for comprehensive safety evaluation.
+**Connection to METR:** While HarmBench tests content safety (will the model generate harmful text?), METR tests dangerous capabilities (can the model autonomously cause harm?). Both are needed for safety evaluation.
 
 ## Red Teaming Process for LLM Applications
 
@@ -296,7 +296,7 @@ The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-stan
 
 ### Post-Engagement
 
-1. **Detailed report**: comprehensive documentation
+1. **Detailed report**: documentation
 2. **Debriefing**: knowledge transfer to development team
 3. **Remediation tracking**: verify fixes
 4. **Lessons learned**: improve future testing

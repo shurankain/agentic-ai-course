@@ -120,7 +120,7 @@ Current SOTA on BEIR benchmark:
 
 ## ColPali: Vision + Late Interaction
 
-**ColPali** and **ColQwen** are groundbreaking models for working with documents as images.
+**ColPali** and **ColQwen** are the first models for working with documents as images.
 
 ### The Problem with the Traditional Approach
 
@@ -278,7 +278,7 @@ For documents with visual content:
 
 To work with ColBERT through the PyLate library, you need to import the models and rank modules. The process begins with loading a pretrained ColBERT model, for example "colbert-ir/colbertv2.0" from Hugging Face Hub, which is initialized via the models.ColBERT constructor with the model identifier.
 
-A list of documents is prepared for indexing. These can be strings of various content, such as text about the Python and Rust programming languages. Document encoding is performed using the encode method with the mandatory parameter is_query=False, which signals the model to use document processing mode. The batch_size parameter controls the batch size when processing multiple documents; for example, a value of 32 allows processing 32 documents simultaneously for faster throughput.
+A list of documents is prepared for indexing. These can be strings of content, such as text about the Python and Rust programming languages. Document encoding is performed using the encode method with the mandatory parameter is_query=False, which signals the model to use document processing mode. The batch_size parameter controls the batch size when processing multiple documents; for example, a value of 32 allows processing 32 documents simultaneously for faster throughput.
 
 The result of document encoding is a multi-vector representation where each document is represented not by a single vector but by a set of vectors (one per token). Similarly, the query is encoded using the encode method but with is_query=True, which switches the model to query processing mode. The query is also transformed into a set of token embeddings.
 
@@ -294,4 +294,4 @@ The final step is computing scores via the rank.colbert_score function, which ta
 
 **Visual Document Store:** For PDF indexing, a dictionary is created where the key is `{pdf_path}:page_{i}` and the value is the multi-vector embeddings of the page. Each page is converted to an image, processed through ColPali, and the embeddings are stored. During search, the text query is encoded, a score is computed with each page via MaxSim, and results are sorted by relevance.
 
-**Efficient storage:** PyLate provides `indexes.ColBERTIndex` with support for residual compression and quantization (`n_bits=2`), which significantly reduces memory requirements. The index is created with a specified path and compression parameters, then documents are added in batches, and search is performed via the `search()` method returning (doc_id, score) pairs.
+**Efficient storage:** PyLate provides `indexes.ColBERTIndex` with support for residual compression and quantization (`n_bits=2`), which reduces memory requirements. The index is created with a specified path and compression parameters, then documents are added in batches, and search is performed via the `search()` method returning (doc_id, score) pairs.

@@ -1,6 +1,6 @@
 # Synthetic Data for Fine-Tuning
 
-## Introduction: Data as a Bottleneck
+## Data as a Bottleneck
 
 By the mid-2020s, compute is getting cheaper, models are scaling, but high-quality data is becoming a scarce resource. According to Epoch AI estimates, high-quality text data on the internet will be exhausted by 2026-2028.
 

@@ -198,7 +198,7 @@ APE results are impressive: on many tasks it outperforms human-written prompts, 
 
 ### Limitations of Automation
 
-Automatic optimization is not a silver bullet: it requires a good test suite (garbage in = garbage out), it may find a local optimum rather than a global one, the result may be uninterpretable, and it is expensive in terms of API calls.
+Automatic optimization does not fit every case: it requires a good test suite (garbage in = garbage out), it may find a local optimum rather than a global one, the result may be uninterpretable, and it is expensive in terms of API calls.
 
 Recommendation: use automation for exploration and ideas, but the final prompt should be understandable by a human.
 
@@ -336,7 +336,7 @@ Research shows that changing a single word can shift accuracy by 10-20%.
 
 **Adversarial testing:** contradictory instructions, edge case inputs, prompt injection attempts.
 
-If a prompt breaks from minor perturbations, it is not robust enough for production.
+If a prompt breaks from minor perturbations, it will not hold in production.
 
 ---
 

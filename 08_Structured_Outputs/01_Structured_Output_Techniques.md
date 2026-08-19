@@ -1,6 +1,6 @@
 # Structured Output Techniques
 
-## Introduction: When Text Is Not Enough
+## When Text Is Not Enough
 
 Consider an automated resume processing system. A candidate uploads a document, and the system must extract the name, contacts, experience, education, skills, and store them in a database for filtering and analysis. GPT-5.4 returns a response: "John Smith is an experienced developer with 10 years of experience. He worked at Google and Microsoft..." Excellent text for a human. But how do you structure it for programmatic processing?
 
@@ -14,7 +14,7 @@ Free-form text is flexible and expressive but creates serious challenges for mac
 
 **Unpredictable structure.** The model adds introductory sentences, concluding remarks, and breaks information into sub-items. Each request is a format lottery. Even with temperature=0, structure changes depending on context. For database integration, predictability is required: the "age" field must contain a number, not "thirty-two years of youth and enthusiasm."
 
-**Structure hallucinations.** The model hallucinates not only facts but also structure. You requested three fields: it returned five. You expected an array: you got an object. You wanted a number, you got a string with explanations. Code crashes with an exception, or worse, silently accepts incorrect data, breaking downstream processes.
+**Structure hallucinations.** The model hallucinates facts and structure. You requested three fields: it returned five. You expected an array: you got an object. You wanted a number, you got a string with explanations. Code crashes with an exception, or worse, silently accepts incorrect data, breaking downstream processes.
 
 ## Levels of Structured Output Guarantees
 
@@ -90,9 +90,9 @@ Beyond provider APIs, three libraries have emerged as the standard toolkit for s
 
 **Outlines**: constrained decoding via finite state machine, running directly on the inference server (vLLM, HuggingFace). Guarantees valid output at the token level with zero retry overhead. Best for cost-critical self-hosted inference where every wasted token matters.
 
-**Decision guide:** Instructor for development and rapid iteration. BAML for production systems with strict reliability requirements. Outlines + vLLM for high-volume self-hosted inference where cost optimization is paramount.
+**Decision guide:** Instructor for development and rapid iteration. BAML for production systems with strict reliability requirements. Outlines + vLLM for high-volume self-hosted inference where cost optimization decides the design.
 
-**Token overhead awareness:** JSON structural tokens (braces, quotes, colons, commas) cost approximately 24 tokens per object. At scale, this overhead is material: field name compression (e.g., `customer_satisfaction_score` -> `css`) can save 3-5 tokens per field. For internal agent-to-agent communication where human readability is not required, minimal-delimiter formats reduce overhead significantly, see TOON below.
+**Token overhead awareness:** JSON structural tokens (braces, quotes, colons, commas) cost approximately 24 tokens per object. At scale, this overhead is material: field name compression (e.g., `customer_satisfaction_score` -> `css`) can save 3-5 tokens per field. For internal agent-to-agent communication where human readability is not required, minimal-delimiter formats reduce overhead, see TOON below.
 
 ---
 
@@ -119,7 +119,7 @@ See Module 02, Context Engineering for the broader discussion of token budget ma
 
 ### The Challenge
 
-Streaming returns tokens one by one, enabling the user to see output as it is generated, reducing perceived latency. Structured output (JSON) is only valid when complete. Partial JSON is unparseable: `{"name": "Jo` is not a valid object. This creates a fundamental tension between low latency (streaming) and reliability (structured output).
+Streaming returns tokens one by one. This enables the user to see output as it is generated, reducing perceived latency. Structured output (JSON) is only valid when complete. Partial JSON is unparseable: `{"name": "Jo` is not a valid object. This creates a fundamental tension between low latency (streaming) and reliability (structured output).
 
 In conversational chat, streaming is straightforward, each token extends the visible text. But when the output must be a valid JSON object consumed by downstream code, showing partial results requires special handling.
 

@@ -1,6 +1,6 @@
 # Scaling Laws: The Science of Model Scaling
 
-## Introduction: When Bigger Really Is Better
+## When Bigger Really Is Better
 
 In 2020, OpenAI researchers published a paper that changed the industry. They discovered that language model performance follows remarkably predictable mathematical laws: increasing the number of parameters, data, and compute leads to quality improvements along strict power-law relationships.
 
@@ -56,7 +56,7 @@ However, everything changed in 2022.
 
 In March 2022, DeepMind published the paper "Training Compute-Optimal Large Language Models," known as the "Chinchilla paper." Their conclusions differed radically from OpenAI's recommendations and literally turned the industry upside down within months.
 
-**Key insight:** Most existing models were severely undertrained. GPT-3, Gopher, PaLM: all these giants with hundreds of billions of parameters were trained for too little time. With optimal distribution of compute between parameters and data, training needed to go significantly longer: tens of times longer than was previously practiced.
+**Key insight:** Most existing models were severely undertrained. GPT-3, Gopher, PaLM: all these giants with hundreds of billions of parameters were trained for too little time. With optimal distribution of compute between parameters and data, training needed to go longer: tens of times longer than was previously practiced.
 
 This was a shocking discovery. The industry had spent hundreds of millions of dollars training enormous models that were suboptimal. It turned out that better results could be achieved with a model 4 times smaller, simply by training it properly.
 
@@ -197,7 +197,7 @@ The debate continues, but a practical consensus is forming:
 
 ### Grokking: Delayed Learning
 
-A separate mysterious phenomenon is grokking: an ability appears significantly later than when training loss reaches its minimum. The model may "memorize" the training data (loss drops to zero) but not generalize (test accuracy remains low). Then, after hundreds or thousands of additional training epochs, test accuracy suddenly surges.
+A separate mysterious phenomenon is grokking: an ability appears later than when training loss reaches its minimum. The model may "memorize" the training data (loss drops to zero) but not generalize (test accuracy remains low). Then, after hundreds or thousands of additional training epochs, test accuracy suddenly surges.
 
 The typical grokking pattern: training loss drops quickly in the first epochs and reaches near zero. Test accuracy remains at the level of random guessing. Many more epochs pass without visible progress. And suddenly, for example at epoch 3000, test accuracy begins to rise and reaches 90%+ within a few epochs.
 
@@ -225,7 +225,7 @@ The good news: scaling laws work for downstream tasks too. The bad news: they wo
 
 **Linear relationship in log-log scale is preserved:** If you plot "model size" (on the X-axis in logarithmic scale) against "task quality" (on the Y-axis in logarithmic scale), you get an approximately straight line. This indicates a power-law relationship, just as with perplexity.
 
-**Different exponents for different tasks:** Some tasks scale aggressively (doubling the model significantly improves quality), others slowly. For example, simple sentiment classification scales well: a 7B model is already close to the maximum. Complex reasoning scales slowly: even 70B models are far from ideal.
+**Different exponents for different tasks:** Some tasks scale aggressively (doubling the model improves quality), others slowly. For example, simple sentiment classification scales well: a 7B model is already close to the maximum. Complex reasoning scales slowly: even 70B models are far from ideal.
 
 **Task-specific thresholds:** For some tasks, there is a minimum size below which the model cannot cope at all. For example, reasonable-quality code generation requires a minimum of 3-7B parameters. Smaller models generate syntactically valid but logically meaningless code.
 
@@ -370,7 +370,7 @@ Test-time compute (TTC) emerged in 2024 with OpenAI o1 and is now an established
 **All major providers now offer TTC:**
 - **OpenAI o3** (January 2025 GA) and **o4-mini** (April 2025): `reasoning_effort` parameter (low/medium/high). o3 achieves 96.7% on AIME 2024, 87.7% on GPQA Diamond
 - **Claude extended thinking** (2024-2025): transparent `<thinking>` blocks with `budget_tokens` for fine-grained control. Claude Opus 4.6 / 4.7 / 4.8 with extended thinking competes with o3 on reasoning benchmarks
-- **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5/3 Pro with thinking leverages 1M+ token context for reasoning
+- **Gemini thinking** (2025): `thinkingBudget` parameter. Gemini 2.5/3 Pro with thinking uses 1M+ token context for reasoning
 - **DeepSeek-R1** (January 2025): open-weight reasoning model achieving o1-level performance at lower cost, trained via GRPO
 
 ### Train-Time vs Test-Time Compute Trade-off
@@ -434,7 +434,7 @@ DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pu
 
 ## Key Takeaways
 
-**Scaling laws are predictable power-law relationships** between compute, parameters, data, and quality. This is not merely an empirical observation but a fundamental property of neural network training, enabling model development planning with mathematical precision. If you know the budget, you can predict quality before training begins.
+**Scaling laws are predictable power-law relationships** between compute, parameters, data, and quality. This is not merely an empirical observation but a fundamental property of neural network training. This enables model development planning with mathematical precision. If you know the budget, you can predict quality before training begins.
 
 **Chinchilla optimal: D ≈ 20N**: for compute-optimal training, the number of tokens should be approximately 20 times the number of parameters. This radically changed the industry in 2022, showing that GPT-3 and other models were catastrophically undertrained. Modern models follow this rule or deliberately deviate from it for economic reasons.
 

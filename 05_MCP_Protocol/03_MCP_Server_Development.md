@@ -1,7 +1,5 @@
 # MCP Server Development
 
-## Introduction to Server Development
-
 An MCP server provides communication between an AI model and external systems (databases, APIs, file systems). An effective server exposes system capabilities in a format optimized for the language model.
 
 ## Architectural Principles
@@ -52,7 +50,7 @@ When a client connects to the server, an exchange of information about supported
 
 The client, in turn, reports its capabilities: support for subscriptions, file system roots, experimental features. This negotiation allows both sides to adapt their behavior.
 
-Protocol versioning also occurs at this stage. The client and server agree on the MCP version to use, ensuring compatibility.
+Protocol versioning also occurs at this stage. The client and server agree on the MCP version to use. This ensures compatibility.
 
 ### Request Processing
 
@@ -96,7 +94,7 @@ Streamable HTTP is compatible with standard HTTP infrastructure: proxies, load b
 
 The choice of transport depends on the use case. For local tools and IDE integrations, stdio is the obvious choice, simple, no network setup required. For remote servers, cloud services, and multi-user deployments, Streamable HTTP is the standard choice.
 
-A well-designed server abstracts the transport layer, allowing the same code to be used with different transports.
+A well-designed server abstracts the transport layer. This allows the same code to be used with different transports.
 
 ### Transport Layer Security
 
@@ -192,7 +190,7 @@ Integration tests verify component interactions and protocol correctness. A test
 
 These tests connect to the server, execute request sequences, and verify responses. They are slower but catch integration issues.
 
-The MCP Inspector (the official testing tool from the MCP project) is invaluable for integration testing. It connects to your server and lets you interactively test tool discovery, parameter validation, and execution. Inspector displays the full protocol exchange (JSON-RPC messages), making it easy to debug schema mismatches, incorrect response formats, and capability negotiation issues. Run Inspector against your server in CI to catch protocol compliance regressions automatically: any change that breaks the JSON-RPC contract will surface immediately. Inspector also validates that tool descriptions, parameter schemas, and return types conform to the MCP specification, which is important because schema errors that are silently ignored by one client may cause failures in another.
+The MCP Inspector (the official testing tool from the MCP project) saves hours of integration testing. It connects to your server and lets you interactively test tool discovery, parameter validation, and execution. Inspector displays the full protocol exchange (JSON-RPC messages). This makes it easy to debug schema mismatches, incorrect response formats, and capability negotiation issues. Run Inspector against your server in CI to catch protocol compliance regressions automatically: any change that breaks the JSON-RPC contract will surface immediately. Inspector also validates that tool descriptions, parameter schemas, and return types conform to the MCP specification, which is important because schema errors that are silently ignored by one client may cause failures in another.
 
 ### End-to-End Testing
 
@@ -244,10 +242,10 @@ The `@mcp.tool()` decorator registers a function as a tool: a function that perf
 MCP Inspector is the official tool for testing and debugging MCP servers. It allows interactive communication with the server, viewing available components, and testing calls.
 
 **Installation and Launch:**
-Inspector is installed via npx with the command `npx @anthropic-ai/mcp-inspector` for Node.js environments, or via pip with the command `pip install mcp-inspector` for the Python wrapper. It is critically important to use version 0.14.1 or higher, as earlier versions contained a serious security vulnerability (CVE-2025-49596), a Remote Code Execution (RCE) flaw where connecting to an untrusted MCP server via Inspector could allow the server to execute arbitrary code on the developer's machine. The vulnerability exploited insufficient input sanitization in Inspector's rendering of server-provided content. This incident underscores a fundamental MCP security principle: never connect development tools to untrusted servers without sandboxing.
+Inspector is installed via npx with the command `npx @anthropic-ai/mcp-inspector` for Node.js environments, or via pip with the command `pip install mcp-inspector` for the Python wrapper. It is critically important to use version 0.14.1 or higher, as earlier versions contained a serious security vulnerability (CVE-2025-49596), a Remote Code Execution (RCE) flaw where connecting to an untrusted MCP server via Inspector could allow the server to execute arbitrary code on the developer's machine. The vulnerability exploited insufficient input sanitization in Inspector's rendering of server-provided content. This incident shows a fundamental MCP security principle: never connect development tools to untrusted servers without sandboxing.
 
 **Inspector Capabilities:**
-Inspector provides viewing of the complete list of registered tools, resources, and prompts on the server. It allows interactive invocation of tools with various parameters to test their behavior. It displays all JSON-RPC messages for debugging protocol interactions. It performs schema validation, checking that parameters and responses conform to declared types.
+Inspector provides viewing of the complete list of registered tools, resources, and prompts on the server. It allows interactive invocation of tools with parameters to test their behavior. It displays all JSON-RPC messages for debugging protocol interactions. It performs schema validation, checking that parameters and responses conform to declared types.
 
 ### Current Ecosystem State
 
@@ -296,7 +294,7 @@ The `claude_desktop_config.json` configuration file is located in different plac
 
 ## Key Takeaways
 
-MCP server development is a balance between functionality, security, and usability. A good server follows the principles of single responsibility and least privilege, providing a clear and documented API.
+MCP server development is a balance between functionality, security, and usability. A good server follows the principles of single responsibility and least privilege. This gives a clear and documented API.
 
 The server lifecycle includes initialization, capability negotiation, request processing, and graceful shutdown. Each stage requires attention to detail and error handling.
 

@@ -16,7 +16,7 @@ An error in a regular prompt leads to a poor answer. An error in an agent prompt
 
 The system prompt is the first thing an agent "sees" during each interaction. It shapes the model's "initial state," determining which behavioral patterns will be activated.
 
-A well-written system prompt creates an agent that consistently fulfills its role, reacts predictably to various situations, uses tools correctly, and adheres to established constraints.
+A well-written system prompt creates an agent that consistently fulfills its role, reacts predictably to situations, uses tools correctly, and adheres to established constraints.
 
 ### Anatomy of an Agent System Prompt
 
@@ -137,7 +137,7 @@ The relationship is non-linear, a "sweet spot" exists:
 
 **Negative Examples Improve Selection**
 
-Adding information about when NOT to use a tool significantly improves accuracy. Example: search_web for current information and recent events. Do NOT use for internal company documentation or project code. Prefer search_docs for FAQs and company policies.
+Adding information about when NOT to use a tool improves accuracy. Example: search_web for current information and recent events. Do NOT use for internal company documentation or project code. Prefer search_docs for FAQs and company policies.
 
 Adding negative examples reduces "wrong tool" errors by 30-40%.
 
@@ -258,7 +258,7 @@ A special role is the **reviewer agent**, which checks other agents' results aga
 
 ### Before/After Examples
 
-The difference between a fragile agent prompt and a robust one often comes down to specificity. The following examples illustrate common anti-patterns with concrete fixes.
+The difference between a fragile agent prompt and one that holds often comes down to specificity. The following examples illustrate common anti-patterns with concrete fixes.
 
 **1. Vague tool instructions**
 

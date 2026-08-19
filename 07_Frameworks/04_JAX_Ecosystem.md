@@ -1,7 +1,5 @@
 # JAX Ecosystem
 
-## Introduction
-
 JAX is a library from Google used by DeepMind and Anthropic for their flagship models. If you are targeting positions at these companies or want to understand the cutting edge of ML research, familiarity with JAX is essential.
 
 **Who uses JAX**: DeepMind builds AlphaFold and Gemini on JAX. Anthropic uses JAX for the Claude training infrastructure. Google Research develops PaLM and Gemma. Many research labs such as Stanford and Berkeley use JAX for research.
@@ -16,7 +14,7 @@ JAX can be described by a simple formula: JAX = NumPy API + Automatic Differenti
 
 **NumPy API** provides a familiar interface for working with arrays. You import jax.numpy as jnp and work with it exactly as with regular NumPy: create arrays, perform multiplication and addition operations, compute dot products. This makes porting existing NumPy code extremely simple: just replace the import.
 
-**Automatic Differentiation** allows automatic computation of gradients for any Python functions. You wrap your function in grad(), and JAX returns a new function that computes the derivative. For example, for a quadratic function f(x) = x² + 3x + 1, the gradient is 2x + 3. JAX can compute not only first derivatives but also higher-order derivatives: simply call grad(grad(f)) for the second derivative or use hessian() for the Hessian matrix.
+**Automatic Differentiation** allows automatic computation of gradients for any Python functions. You wrap your function in grad(), and JAX returns a new function that computes the derivative. For example, for a quadratic function f(x) = x² + 3x + 1, the gradient is 2x + 3. JAX can compute first derivatives and higher-order derivatives: simply call grad(grad(f)) for the second derivative or use hessian() for the Hessian matrix.
 
 **XLA Compilation** (Accelerated Linear Algebra) is a just-in-time compiler that optimizes your code. You decorate a function with @jit, and on the first call JAX compiles it into optimized machine code. Subsequent calls execute tens of times faster. The first call may take 100ms (compilation + execution), but all subsequent ones take only 1ms (execution only).
 

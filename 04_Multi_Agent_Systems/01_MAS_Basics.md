@@ -1,8 +1,6 @@
 # Multi-Agent System Fundamentals
 
-## Introduction to Multiple Agents
-
-Multi-agent systems use a specialized team of agents instead of a single general-purpose agent. A research agent finds information, an analyst processes it, a writer converts conclusions into readable text. Each agent focuses on its area of expertise, enabling solutions to problems that are beyond the reach of individual agents.
+Multi-agent systems use a specialized team of agents instead of a single general-purpose agent. A research agent finds information, an analyst processes it, a writer converts conclusions into readable text. Each agent focuses on its area of expertise. This enables solutions to problems that are beyond the reach of individual agents.
 
 ## When Multi-Agent vs Single-Agent: The Decision Framework
 
@@ -72,7 +70,7 @@ Synchronous passing (sender waits for a response) is simpler but creates bottlen
 
 Shared memory where agents write to and read from. Advantages: publish-subscribe pattern, persistent context, simplified debugging: any agent can inspect what other agents have produced. Disadvantages: synchronization under concurrent access, performance bottleneck, and the risk of state corruption when multiple agents write simultaneously.
 
-The blackboard architecture is a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order. LangGraph's shared state model is a modern implementation of this pattern: the graph state serves as the blackboard, and nodes are knowledge sources.
+The blackboard architecture is a three-component system: the board (multi-level data structure), Knowledge Sources (specialist agents that activate on relevant data), and Scheduler (selects the agent to activate). Effective for tasks with an unknown processing order. LangGraph's shared state model is a modern implementation of this pattern: the graph state is the blackboard, and nodes are knowledge sources.
 
 ### Event Bus
 

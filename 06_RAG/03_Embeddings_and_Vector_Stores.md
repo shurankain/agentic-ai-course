@@ -78,7 +78,7 @@ Cost and licensing are practical considerations. Cloud APIs charge per thousand 
 
 OpenAI text-embedding-3-small and text-embedding-3-large remain a strong cloud-based choice. Advantages: excellent quality on diverse tasks, simple integration via API, reliability and scalability of OpenAI. Disadvantages: dependency on an external service, variable cost, network latency.
 
-Open-source models have significantly closed the gap. The latest generation: bge-m3 (multilingual, hybrid retrieval), GTE-Qwen2 (strong MTEB scores), NV-Embed-v2 (NVIDIA, top MTEB at launch), and Jina Embeddings v3 (late interaction, multilingual): rivals or exceeds commercial options on many benchmarks. Classic Sentence Transformers (all-MiniLM-L6, all-mpnet-base-v2) remain useful for lightweight, low-latency scenarios. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
+Open-source models have closed the gap. The latest generation: bge-m3 (multilingual, hybrid retrieval), GTE-Qwen2 (strong MTEB scores), NV-Embed-v2 (NVIDIA, top MTEB at launch), and Jina Embeddings v3 (late interaction, multilingual): rivals or exceeds commercial options on many benchmarks. Classic Sentence Transformers (all-MiniLM-L6, all-mpnet-base-v2) remain useful for lightweight, low-latency scenarios. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
 
 Cohere Embed is an alternative to OpenAI with emphasis on multilingual support and enterprise features. Particularly strong in tasks requiring support for dozens of languages simultaneously.
 
@@ -90,7 +90,7 @@ General-purpose models were trained on vast, diverse corpora: web pages, books, 
 
 Specialized models were trained (or fine-tuned) on narrow domains. CodeBERT and StarEncoder understand programming syntax and recognize code patterns. SciBERT and PubMedBERT are optimized for academic publications with their specific terminology and structure.
 
-When should you choose a specialized model? When your domain differs significantly from the general-language corpus. Medical texts are filled with Latin terminology. Legal documents use archaic constructions. Source code is a formal language with strict syntax. In these cases, a specialized model can outperform a general-purpose one by 10-20% on search metrics.
+When should you choose a specialized model? When your domain differs from the general-language corpus. Medical texts are filled with Latin terminology. Legal documents use archaic constructions. Source code is a formal language with strict syntax. In these cases, a specialized model can outperform a general-purpose one by 10-20% on search metrics.
 
 But specialization comes at a cost: a model for code will perform poorly on regular text. If your system needs to handle code, documentation, and user questions, a general-purpose model may be the better trade-off.
 
@@ -104,7 +104,7 @@ For millions of vectors, brute-force search is unacceptably slow. Specialized ve
 
 ### Index Types
 
-Different ANN algorithms offer various trade-offs between speed, accuracy, and memory consumption.
+Different ANN algorithms offer trade-offs between speed, accuracy, and memory consumption.
 
 **HNSW (Hierarchical Navigable Small World)** is a popular graph-based algorithm. It builds a hierarchical structure of multiple layers: upper layers are sparse and contain few nodes for fast navigation, the bottom layer is dense and contains all vectors. Search starts from the top layer and greedily descends, refining results at each level.
 
@@ -118,7 +118,7 @@ Tuning parameters: nlist sets the number of clusters (more clusters = more accur
 
 IVF is best for massive data volumes (billions of vectors), limited memory, situations where some accuracy can be sacrificed, and frequently updated data.
 
-**PQ (Product Quantization)** compresses vectors, significantly reducing memory usage. The idea is to split the vector into subvectors, each quantized separately. A 128-dimensional vector is divided into 8 subvectors of 16 dimensions each. Each subvector is encoded through a lookup table with 256 centroids, requiring only 1 byte. The result is 64x compression. Distance between vectors is computed via precomputed lookup tables.
+**PQ (Product Quantization)** compresses vectors, reducing memory usage. The idea is to split the vector into subvectors, each quantized separately. A 128-dimensional vector is divided into 8 subvectors of 16 dimensions each. Each subvector is encoded through a lookup table with 256 centroids, requiring only 1 byte. The result is 64x compression. Distance between vectors is computed via precomputed lookup tables.
 
 Combined indexes (IVFPQ, IVFHNSW) merge the advantages of different approaches.
 
@@ -192,7 +192,7 @@ Matryoshka embeddings are an innovative approach to training embeddings that all
 
 In traditional embeddings, the model generates a vector of fixed dimensionality (e.g., 768 dimensions), and you either use all dimensions or none. Matryoshka embeddings work differently: the same 768-dimensional vector can be used partially. The first 64 dimensions give a coarse representation, the first 128 are better, the first 256 are better still, and all 768 give full quality.
 
-The loss function is computed as a weighted sum of contrastive loss for different vector prefixes: 64, 128, 256, 512, 768 dimensions. Each prefix is trained to be useful independently of the rest, allowing flexible dimensionality selection at inference time.
+The loss function is computed as a weighted sum of contrastive loss for different vector prefixes: 64, 128, 256, 512, 768 dimensions. Each prefix is trained to be useful independently of the rest. This allows flexible dimensionality selection at inference time.
 
 Practical applications: initial recall with 64-128 dimensions for speed and coarse filtering, final ranking with the full 768 dimensions for quality and precise ordering, mobile/edge with 128-256 for limited memory, production trade-off with 256-512 for balance.
 

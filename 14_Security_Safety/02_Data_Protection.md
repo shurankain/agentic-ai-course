@@ -6,7 +6,7 @@ LLM applications create unique challenges for data protection. Every request pot
 
 Traditional measures (encryption at rest/in transit, access control, audit logging) are necessary but insufficient. LLM adds a new vector: the model can "memorize" information from training data and "leak" it in responses. Even if the data was not in the training set, the model makes inferences based on patterns.
 
-Example: a user asks a support chatbot about order status, providing an order number and email. The data enters the prompt, gets sent to the API provider, and is stored in logs. Each point is a potential leak. With RAG, the volume of transmitted data increases dramatically.
+Example: a user asks a support chatbot about order status. This gives an order number and email. The data enters the prompt, gets sent to the API provider, and is stored in logs. Each point is a potential leak. With RAG, the volume of transmitted data increases dramatically.
 
 ## PII Detection
 

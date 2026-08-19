@@ -1,6 +1,6 @@
 # Data Extraction from Unstructured Text
 
-## Introduction: Turning Chaos into Order
+## Turning Chaos into Order
 
 Terabytes of unstructured data are created daily: emails, documents, reports, news, reviews, social media. Humans easily understand this text, but for automated processing it is virtually useless.
 
@@ -52,7 +52,7 @@ Real-world texts are full of ambiguities. A good system handles them explicitly 
 
 ## Scaling Extraction
 
-**Batching and Parallelism.** Processing documents one at a time is slow. Grouping into batches and sending them to the API in parallel speeds up the process significantly. Considerations: contexts from different documents must not mix, API rate limits require management, errors in one document must not halt the rest.
+**Batching and Parallelism.** Processing documents one at a time is slow. Grouping into batches and sending them to the API in parallel speeds up the process. Considerations: contexts from different documents must not mix, API rate limits require management, errors in one document must not halt the rest.
 
 **Incremental Processing.** When new documents are added, there is no need to reprocess everything. The system processes only what is new, maintaining and updating the overall knowledge graph.
 
@@ -84,7 +84,7 @@ The ValidatedExtractionService performs extraction in three stages:
 
 3. **Self-Correction**: the model receives feedback describing the problems along with the document text again. It analyzes the errors and performs re-extraction taking the feedback into account.
 
-The key pattern is the feedback loop. Instead of simple repetition, the model receives a specific description of what went wrong. This significantly increases the likelihood of successful correction. The approach ensures reliability for critical documents where accuracy of every field matters.
+The key pattern is the feedback loop. Instead of simple repetition, the model receives a specific description of what went wrong. This increases the likelihood of successful correction. The approach ensures reliability for critical documents where accuracy of every field matters.
 
 ## Key Takeaways
 

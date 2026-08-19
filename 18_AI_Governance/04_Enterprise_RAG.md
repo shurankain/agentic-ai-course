@@ -1,12 +1,12 @@
 # Enterprise RAG: Governance and Security
 
-## Introduction: Why Enterprise RAG Differs from a Prototype
+## Why Enterprise RAG Differs from a Prototype
 
 Building a working RAG prototype is a weekend project: load documents into a vector store, connect an LLM, get answers to questions. But between a prototype and an enterprise-ready system lies a chasm filled with questions of security, compliance, and governance.
 
 In an enterprise context, a RAG system operates on confidential documents: financial reports, legal contracts, employee personal data, trade secrets. Leaking any of these documents is not just an inconvenience but a potential catastrophe with legal, financial, and reputational consequences.
 
-Moreover, enterprise RAG must serve multiple users with different access levels. A sales manager should not see HR documents about colleagues' salaries. A junior developer should not gain access to architectural documents of client projects under NDA. The system must not just "know" these restrictions. It must enforce them on every request.
+Enterprise RAG must serve multiple users with different access levels. A sales manager should not see HR documents about colleagues' salaries. A junior developer should not gain access to architectural documents of client projects under NDA. The system must not just "know" these restrictions. It must enforce them on every request.
 
 ## Multi-Tenancy Architectures
 
@@ -56,7 +56,7 @@ RAG works with chunks, not whole documents. This creates unique challenges:
 
 **Inheritance**: a chunk inherits permissions from the parent document. But what if a document contains sections with different classification levels? A Word document may have a public summary and a confidential appendix.
 
-**Context preservation**: a chunk without context may be harmless, but in combination with other chunks it can reveal sensitive information. Access control must account for not only individual chunks but also their combinations.
+**Context preservation**: a chunk without context may be harmless, but in combination with other chunks it can reveal sensitive information. Access control must account for individual chunks and their combinations.
 
 **Chunk boundaries**: if sensitive information is "spread" across chunks, each chunk individually may pass access control, but their combination may not.
 

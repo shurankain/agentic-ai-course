@@ -20,7 +20,7 @@ Triton changed this equation. Developed at OpenAI, Triton provides a Python-like
 
 CUDA is the native language of GPU programming. It gives full control over every aspect of execution: thread scheduling, memory layout, synchronization, hardware intrinsics. An experienced CUDA programmer can squeeze out every percent of performance.
 
-But this power comes at a cost. A CUDA kernel for a simple matrix multiply takes hundreds of lines of code. You need to manually manage data partitioning into tiles, loading into shared memory with coalescing, synchronization between threads, avoiding bank conflicts, optimizing occupancy, and utilizing Tensor Cores.
+But this power comes at a cost. A CUDA kernel for a simple matrix multiply takes hundreds of lines of code. You need to manually manage data partitioning into tiles, loading into shared memory with coalescing, synchronization between threads, avoiding bank conflicts, optimizing occupancy, and using Tensor Cores.
 
 Debugging CUDA is a separate nightmare. Race conditions, uninitialized memory, implicit type conversions: bugs manifest as incorrect results or spontaneous crashes, often non-reproducible.
 
@@ -39,7 +39,7 @@ The Triton compiler analyzes the code and generates optimized PTX (assembly for 
 
 ### Trade-offs
 
-Triton is not a silver bullet. There are scenarios where CUDA wins:
+Triton does not fit every case. There are scenarios where CUDA wins:
 
 **Extreme optimization.** For performance-critical kernels (Flash Attention, cuBLAS-level matrix multiply), hand-written CUDA can provide a 10-20% advantage.
 
@@ -124,7 +124,7 @@ Critical details: proper choice of block sizes affects the balance between data 
 
 ### The Parameter Selection Problem
 
-GPU kernel performance depends on numerous parameters: block sizes, number of warps, pipelining stages. Optimal values depend on the specific GPU (A100 vs H100 vs RTX 4090), input data sizes, memory access patterns, and occupancy trade-offs.
+GPU kernel performance depends on parameters: block sizes, number of warps, pipelining stages. Optimal values depend on the specific GPU (A100 vs H100 vs RTX 4090), input data sizes, memory access patterns, and occupancy trade-offs.
 
 Manual parameter tuning is tedious and not portable across hardware. Triton provides a built-in autotuning mechanism.
 
@@ -154,13 +154,13 @@ Practical approach: start with a small set of "standard" configurations, then ex
 
 Triton kernels integrate with torch.profiler for basic profiling. You can wrap the kernel call in a profiler context and obtain timing information showing your kernel's time compared to other operations.
 
-For detailed analysis, use NVIDIA Nsight Compute, a professional tool that shows low-level metrics: achieved occupancy, memory throughput, instruction mix, L1/L2 cache hit rates, and register usage. Nsight Compute can pinpoint bottlenecks: whether the kernel is memory-bound or compute-bound, whether there are bank conflicts, and whether Tensor Cores are being utilized.
+For detailed analysis, use NVIDIA Nsight Compute, a professional tool that shows low-level metrics: achieved occupancy, memory throughput, instruction mix, L1/L2 cache hit rates, and register usage. Nsight Compute can pinpoint bottlenecks: whether the kernel is memory-bound or compute-bound, whether there are bank conflicts, and whether Tensor Cores are being used.
 
 ### Debugging Tips
 
 **Verify correctness first.** Before optimizing, ensure the kernel produces correct results. Compare with a PyTorch reference implementation.
 
-**Print intermediate values.** Triton supports tl.device_print for debugging (use with caution, it significantly slows execution).
+**Print intermediate values.** Triton supports tl.device_print for debugging (use with caution, it slows execution).
 
 **Test edge cases.** Check boundary conditions: sizes not divisible by BLOCK_SIZE, very small and very large inputs.
 

@@ -1,6 +1,6 @@
 # Model Context Protocol (MCP) Basics
 
-## Introduction: A New Standard for AI Interaction
+## A New Standard for AI Interaction
 
 Every application, service, and database uses its own API. Integrating an AI assistant with a calendar requires one integration code, email requires another, and the file system requires a third. Developers create unique adapters for each tool.
 
@@ -18,7 +18,7 @@ To appreciate the significance of MCP, it is important to understand the problem
 
 ### Integration Chaos
 
-A modern AI assistant must be capable of many things: searching the internet, working with files, querying databases, managing calendars, sending emails, and interacting with APIs of various services. Each of these capabilities requires an integration.
+A modern AI assistant must be capable of many things: searching the internet, working with files, querying databases, managing calendars, sending emails, and interacting with APIs of services. Each of these capabilities requires an integration.
 
 The traditional approach: function calling or tool use: only partially solves this problem. Yes, the model can call functions. But each function is implemented individually. A Slack integration looks different from a Discord integration. Working with PostgreSQL differs from working with MongoDB. Every new tool requires new code.
 
@@ -96,7 +96,7 @@ MCP is built around several key concepts.
 
 **Transport**: the mechanism for transmitting messages between client and server. MCP supports several transports: stdio (standard input/output, for local servers) and Streamable HTTP (for remote servers). The earlier SSE-based HTTP transport was deprecated in March 2025 in favor of Streamable HTTP. The reason: SSE is unidirectional (server, then client only), requiring a separate HTTP endpoint for client, then server messages. Streamable HTTP provides true bidirectional communication over a single HTTP connection, simplifying deployment and enabling server-initiated messages (Sampling, Elicitation) to flow naturally.
 
-**STDIO transport security warning (May 2026):** A critical vulnerability (CVSS 9.8) was discovered in the STDIO transport mechanism, enabling arbitrary OS command execution. The vulnerability affects all MCP SDK implementations and puts an estimated 200,000+ servers at risk. This is a fundamental design issue in the transport layer, not an implementation bug in a specific SDK. A separate NGINX integration flaw (also CVSS 9.8) was discovered around the same time. These are the first serious architectural vulnerabilities in a protocol that had already become an industry standard: a classic example of adoption outpacing security review. Production deployments using STDIO transport should implement defense-in-depth: sandboxing, network policies, and input validation at every boundary. See Module 14, Agent Security for detailed MCP security analysis.
+**STDIO transport security warning (May 2026):** A critical vulnerability (CVSS 9.8) was discovered in the STDIO transport mechanism. This enables arbitrary OS command execution. The vulnerability affects all MCP SDK implementations and puts an estimated 200,000+ servers at risk. This is a fundamental design issue in the transport layer, not an implementation bug in a specific SDK. A separate NGINX integration flaw (also CVSS 9.8) was discovered around the same time. These are the first serious architectural vulnerabilities in a protocol that had already become an industry standard: a classic example of adoption outpacing security review. Production deployments using STDIO transport should implement defense-in-depth: sandboxing, network policies, and input validation at every boundary. See Module 14, Agent Security for detailed MCP security analysis.
 
 ## MCP Architecture
 
@@ -128,7 +128,7 @@ Protocol versioning ensures compatibility. If versions do not match, the connect
 
 ## Benefits of MCP
 
-Adopting a standardized protocol brings numerous benefits.
+Adopting a standardized protocol brings benefits.
 
 ### Universality and Reusability
 
@@ -160,7 +160,7 @@ The agent queries the MCP client for a list of available resources, selects the 
 
 ### Action Execution
 
-An agent must be able to not only read but also act: creating files, sending messages, placing orders. MCP server tools provide these capabilities.
+An agent must be able to read and act: creating files, sending messages, placing orders. MCP server tools provide these capabilities.
 
 Each tool is described by a schema: what parameters it accepts, what it returns, and what errors are possible. The agent can analyze available tools, select the appropriate ones for the task, and call them with the correct parameters.
 
@@ -182,7 +182,7 @@ MCP Apps represent the evolution of MCP from a data protocol to an **application
 
 As the MCP ecosystem grew to 9,400+ verified servers (mid-June 2026), discovering the right server for a task became a challenge. **MCP Server Cards** address this by providing a standard for exposing structured server metadata via a `.well-known` URL. A browser, crawler, or registry can discover a server's capabilities: what tools it provides, what resources it exposes, what authentication it requires, without connecting to it or starting a session.
 
-This is analogous to OpenAPI specification files for REST APIs: a machine-readable description of capabilities that enables automated discovery and cataloging. The **MCP Registry** (launched in the second half of 2025) serves as the single source of truth for available MCP servers, supporting both public servers and private sub-registries that organizations can customize for their specific needs.
+This is analogous to OpenAPI specification files for REST APIs: a machine-readable description of capabilities that enables automated discovery and cataloging. The **MCP Registry** (launched in the second half of 2025) is the single source of truth for available MCP servers, supporting both public servers and private sub-registries that organizations can customize for their specific needs.
 
 ## MCP Tasks: Long-Running Operations
 
@@ -196,13 +196,13 @@ A Task represents an operation with a lifecycle: created, then running, then com
 
 The biggest revision since MCP's launch was published as a Release Candidate on May 21, 2026, with the final specification targeted for July 28, 2026. Key changes (as of late May 2026):
 
-**Stateless core.** The protocol moves to HTTP-level operation without mandatory sessions. Servers no longer need to track client session state, enabling horizontal scaling behind standard load balancers without sticky sessions. This is the most architecturally significant change. It transforms MCP from a session-oriented protocol into a stateless one suitable for cloud-native deployment.
+**Stateless core.** The protocol moves to HTTP-level operation without mandatory sessions. Servers no longer need to track client session state. This enables horizontal scaling behind standard load balancers without sticky sessions. This is the most architecturally significant change. It transforms MCP from a session-oriented protocol into a stateless one suitable for cloud-native deployment.
 
 **MCP Apps.** Servers can now return interactive HTML UI rendered in a sandboxed iframe within the host application. A database MCP server can return a filterable table; a monitoring server can return a live chart; a workflow server can return an approval form. This formalizes and extends the MCP Apps concept introduced earlier.
 
 **Tasks as extension.** The Tasks primitive (formalized from SEP-1686) becomes an official protocol extension rather than a core requirement. Servers that need long-running operation support opt into the Tasks extension; simple synchronous servers remain lightweight.
 
-**Formal deprecation policy.** The specification now includes explicit rules for deprecating protocol features, transport mechanisms, and capability versions, providing stability guarantees for production deployments.
+**Formal deprecation policy.** The specification now includes explicit rules for deprecating protocol features, transport mechanisms, and capability versions. This gives stability guarantees for production deployments.
 
 **OAuth/OIDC alignment.** Authentication aligns with standard OAuth 2.0 and OpenID Connect flows, simplifying integration with enterprise identity providers.
 
@@ -212,7 +212,7 @@ The biggest revision since MCP's launch was published as a Release Candidate on 
 
 ## Why MCP Won: The Adoption Story
 
-MCP's dominance was not inevitable. When Anthropic launched the protocol in November 2024, it was one of several competing approaches to AI tool integration: alongside OpenAI's function calling, Google's Vertex AI tools, and various custom frameworks. By mid-2026, MCP became the universal standard. Understanding why illuminates what makes a protocol succeed.
+MCP's dominance was not inevitable. When Anthropic launched the protocol in November 2024, it was one of several competing approaches to AI tool integration: alongside OpenAI's function calling, Google's Vertex AI tools, and custom frameworks. By mid-2026, MCP became the universal standard. Understanding why illuminates what makes a protocol succeed.
 
 **The USB moment.** MCP solved a real pain point at the right time. By late 2024, every team building AI agents was writing custom integration code, different formats for LangChain tools, OpenAI function schemas, Anthropic tool_use, and framework-specific interfaces. The same GitHub integration was written dozens of times in slightly different ways. MCP provided "write once, use everywhere": a single server works with Claude, ChatGPT, Gemini, Copilot, Cursor, and any custom agent. The value proposition was immediately obvious.
 
@@ -258,6 +258,6 @@ MCP architecture follows proven principles: separation of clients and servers, a
 
 Key benefits of standardization: a radical reduction in integration costs (N + M instead of N x M), uniform security, and the ability to form an ecosystem with reusable components.
 
-For agentic systems, MCP is particularly valuable, providing unified access to data (resources) and the ability to execute actions (tools) through a standard interface.
+For agentic systems, MCP is particularly valuable. This gives unified access to data (resources) and the ability to execute actions (tools) through a standard interface.
 
 MCP is no longer an emerging standard. It is the established foundation on which AI tools freely combine and interact, much like USB devices work with any computer.

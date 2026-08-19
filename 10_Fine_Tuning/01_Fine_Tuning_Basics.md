@@ -6,7 +6,7 @@ Fine-tuning is the process of additionally training a pre-trained language model
 
 ### Transfer Learning Theory
 
-Low-level features (tokenization, syntax) are universal and transfer with almost no changes. Middle layers (semantics, concepts) partially adapt. Upper layers change significantly to match task specifics.
+Low-level features (tokenization, syntax) are universal and transfer with almost no changes. Middle layers (semantics, concepts) partially adapt. Upper layers change to match task specifics.
 
 **Catastrophic Forgetting** is the main risk during fine-tuning. The model may "forget" general knowledge while concentrating on the new task. Mitigation: add replay data, early stopping, low learning rate with warmup.
 
@@ -90,4 +90,4 @@ Data quality determines result quality.
 
 A combination of methods is often optimal: RAG for knowledge, fine-tuning for style.
 
-Evaluate ROI honestly: cost includes not only compute but also data preparation time.
+Evaluate ROI honestly: cost includes compute and data preparation time.

@@ -50,7 +50,7 @@ Secrets (API keys, tokens, passwords) in specialized solutions: HashiCorp Vault,
 
 REST for synchronous operations, WebSockets/SSE for streaming. Versioning (/api/v1/chat): old clients are not broken as the API evolves. Support the previous version for migration.
 
-Every request contains a request_id/correlation_id that permeates logs and metrics. Tracing the path through the system is invaluable when issues arise.
+Every request contains a request_id/correlation_id that permeates logs and metrics. Tracing the path through the system is what turns an outage into a bug report.
 
 ### Rate Limiting
 
@@ -162,7 +162,7 @@ Instead of hardcoding tool implementations, expose them as MCP servers:
 
 ### MCP vs Native Function Calling
 
-For production agents, prefer MCP when: tools are shared across multiple agents or AI clients, tools need independent versioning and deployment, you want to leverage the existing MCP ecosystem. Use native function calling when: tools are tightly coupled to the agent logic, minimal latency is required (MCP adds transport overhead), the tool is a simple computation.
+For production agents, prefer MCP when: tools are shared across multiple agents or AI clients, tools need independent versioning and deployment, you want to use the existing MCP ecosystem. Use native function calling when: tools are tightly coupled to the agent logic, minimal latency is required (MCP adds transport overhead), the tool is a simple computation.
 
 ## Cost Management
 

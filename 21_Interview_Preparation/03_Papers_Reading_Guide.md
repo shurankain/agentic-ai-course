@@ -1,7 +1,5 @@
 # Papers Reading Guide
 
-## Introduction
-
 Senior/Staff+ interviews often involve discussing research papers. This tests depth of understanding of fundamental ideas, the ability to critically analyze approaches, and awareness of the current state of the field.
 
 You do not need to know every paper by heart, but you need to be able to discuss the key ones at this level: what problem it solves, what approach is proposed, what the key results are, and what the limitations are.
@@ -236,7 +234,7 @@ Discussion points: practical safety applications (monitoring deception features)
 
 ### 17. The Llama 3 Herd of Models (Meta, 2024)
 
-Problem: open-weight models lagged significantly behind proprietary frontier models.
+Problem: open-weight models lagged behind proprietary frontier models.
 
 Key idea: scale open-weight training with massive data (15T tokens) and careful post-training (SFT + DPO + safety fine-tuning).
 
@@ -278,7 +276,7 @@ Discussion points: why single-stage works (SFT objective + preference penalty), 
 
 Problem: pure SSM (Mamba) and pure Transformer each have limitations, SSMs struggle with recall, Transformers are quadratic.
 
-Key idea: Mamba-2 connects SSMs to structured masked attention, enabling efficient hardware implementation. Hybrid architectures (Jamba, Zamba) combine Transformer and Mamba layers.
+Key idea: Mamba-2 connects SSMs to structured masked attention. This enables efficient hardware implementation. Hybrid architectures (Jamba, Zamba) combine Transformer and Mamba layers.
 
 Results: Mamba-2 achieves 2-8x speedup over Mamba-1 with competitive quality. Jamba (AI21, 52B MoE) combines attention layers with Mamba layers: 256K context with linear memory scaling. Zamba (Zyphra) uses similar hybridization for edge deployment.
 

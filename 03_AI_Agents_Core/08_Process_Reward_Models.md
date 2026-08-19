@@ -1,10 +1,8 @@
 # Process Reward Models: Evaluating Reasoning Step by Step
 
-## Introduction
-
 When a human solves a complex problem, they don't simply produce an answer: they go through a series of intermediate steps. Each step can be correct or erroneous, and an error at an early stage often leads to an incorrect final result. Traditional evaluation systems look only at the final answer: correct or not. But what if we could evaluate each reasoning step?
 
-This is exactly the idea behind Process Reward Models (PRM), models that evaluate not only the final result but also the quality of each intermediate step. This is a fundamental shift in how we train and guide AI agents.
+This is exactly the idea behind Process Reward Models (PRM), models that evaluate the final result and the quality of each intermediate step. This is a fundamental shift in how we train and guide AI agents.
 
 Consider a math teacher grading a student's work. A poor teacher looks only at the answer: "42: wrong, you fail." A good teacher analyzes the solution: "The first three steps are correct, but on the fourth you flipped the sign. Fix that, and the answer will be correct." PRM is that good teacher for AI.
 
@@ -209,7 +207,7 @@ PRM can be viewed as an explicit, separate model for what o1-style models do imp
 
 The release of o3, o4-mini, and DeepSeek R1 in 2024-2025 confirmed the central role of process-level reward signals in training reasoning models.
 
-**DeepSeek R1 and GRPO:** DeepSeek R1 demonstrated that Group Relative Policy Optimization (GRPO), which compares multiple reasoning trajectories and rewards those leading to correct outcomes, functions as an implicit form of process reward. The R1-Zero experiment showed that reasoning behaviors (self-verification, backtracking, exploration) emerge purely from outcome-based RL, but the group comparison mechanism provides denser signal than simple ORM. This blurs the boundary between ORM and PRM: GRPO uses outcome rewards but applies them at a trajectory level, providing richer credit assignment than single-score ORM.
+**DeepSeek R1 and GRPO:** DeepSeek R1 demonstrated that Group Relative Policy Optimization (GRPO), which compares multiple reasoning trajectories and rewards those leading to correct outcomes, functions as an implicit form of process reward. The R1-Zero experiment showed that reasoning behaviors (self-verification, backtracking, exploration) emerge purely from outcome-based RL, but the group comparison mechanism provides denser signal than simple ORM. This blurs the boundary between ORM and PRM: GRPO uses outcome rewards but applies them at a trajectory level. This gives richer credit assignment than single-score ORM.
 
 **o3 and tool-use integration:** OpenAI's o3 model integrates tool use (code execution, web search) directly into the reasoning chain. This creates a new dimension for process reward: not just "is this reasoning step correct?" but "was this tool call well-chosen and well-timed?" Training models to evaluate tool-use decisions within reasoning chains requires PRM-like signals that understand both logical correctness and tool appropriateness.
 

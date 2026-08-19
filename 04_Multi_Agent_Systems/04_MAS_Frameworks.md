@@ -104,7 +104,7 @@ AutoGen 0.4 introduced a completely redesigned architecture that was the last ma
 
 **Modular Components:** the 0.4 architecture is divided into five key components: Agent (base actor with managed lifecycle), Runtime (manages execution and message routing), Memory (pluggable memory stores), Tools (standardized tool interface), Teams (high-level orchestration of agent groups).
 
-**Improved Testability:** the new architecture significantly simplifies testing. Mock runtimes allow writing isolated unit tests for agents. Deterministic execution mode guarantees reproducible results. Replay capabilities allow recording real interactions and replaying them for debugging.
+**Improved Testability:** the new architecture simplifies testing. Mock runtimes allow writing isolated unit tests for agents. Deterministic execution mode guarantees reproducible results. Replay capabilities allow recording real interactions and replaying them for debugging.
 
 AutoGen 0.4 is incompatible with version 0.2: a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
 
@@ -148,7 +148,7 @@ Semantic Kernel is an SDK from Microsoft for integrating AI into enterprise appl
 
 ### Plugins and Functions
 
-The main abstraction in Semantic Kernel is plugins containing a set of functions. Functions can be native (regular code in C#, Python, or Java) or semantic (prompts to an LLM). The Kernel orchestrates function calls, manages context, and provides integration with various LLM providers.
+The main abstraction in Semantic Kernel is plugins containing a set of functions. Functions can be native (regular code in C#, Python, or Java) or semantic (prompts to an LLM). The Kernel orchestrates function calls, manages context, and provides integration with LLM providers.
 
 This approach allows gradually adding AI capabilities to existing applications. There is no need to rewrite everything from scratch. It is enough to wrap existing services in plugins and add semantic functions for new functionality.
 
@@ -202,7 +202,7 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration: the 1.0 API is now locked for servicing.
 
-**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout**: an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ**, a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake serves as the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform, leveraging 500M+ M365 users for distribution.
+**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout**: an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ**, a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake is the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform, leveraging 500M+ M365 users for distribution.
 
 ### Migration from AutoGen / Semantic Kernel
 
@@ -293,7 +293,7 @@ Selecting a framework requires weighing pattern expressiveness, ecosystem maturi
 
 ## Key Takeaways
 
-Frameworks for multi-agent systems significantly accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated significantly in 2025-2026, with clear winners emerging.
+Frameworks for multi-agent systems accelerate development by providing ready-made solutions for common orchestration, communication, and state management tasks. The landscape has consolidated in 2025-2026, with clear winners emerging.
 
 LangGraph 1.2 offers a graph-oriented approach with explicit state management. Well-suited for complex, nonlinear flows requiring reproducibility. LangGraph Platform adds managed deployment.
 
@@ -307,4 +307,4 @@ Google ADK integrates deeply with Gemini models and the GCP ecosystem, with nati
 
 AutoGen and Semantic Kernel have entered maintenance mode. Existing systems continue to work, but new projects should use their successors.
 
-When choosing a framework, consider not only current requirements but also the ecosystem alignment. The trend is toward provider-aligned SDKs (OpenAI Agents SDK, Google ADK, Microsoft Agent Framework) alongside provider-agnostic options (LangGraph, CrewAI).
+When choosing a framework, consider current requirements and the ecosystem alignment. The trend is toward provider-aligned SDKs (OpenAI Agents SDK, Google ADK, Microsoft Agent Framework) alongside provider-agnostic options (LangGraph, CrewAI).

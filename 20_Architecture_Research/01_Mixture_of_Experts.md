@@ -68,7 +68,7 @@ Specifications: 671B total parameters, 37B activated per token, training cost of
 
 **Architectural Innovations:**
 
-**Multi-Head Latent Attention (MLA):** Standard Multi-Head Attention requires storing K and V for each head: KV cache for 128K context x 70B model amounts to hundreds of GB of memory. MLA compresses KV representation through a learned projection into a latent space of much smaller dimensionality. Result: KV cache is reduced by 5-10x with minimal quality loss, enabling long context without proportional memory growth, making inference on 128K context practical.
+**Multi-Head Latent Attention (MLA):** Standard Multi-Head Attention requires storing K and V for each head: KV cache for 128K context x 70B model amounts to hundreds of GB of memory. MLA compresses KV representation through a learned projection into a latent space of much smaller dimensionality. Result: KV cache is reduced by 5-10x with minimal quality loss. This enables long context without proportional memory growth. This makes inference on 128K context practical.
 
 **Multi-Token Prediction (MTP):** Instead of predicting a single next token, the model predicts several simultaneously, probability distributions for tokens at positions t+1, t+2, and beyond given the context. During training, additional prediction heads are trained in parallel, predicting future tokens at different horizons. During inference, a speculative-like approach is used where the model predicts multiple tokens, then verifies them and accepts or rejects. Result: up to 60 tokens/sec while maintaining quality: a 1.8x speedup compared to the standard autoregressive approach.
 
@@ -152,7 +152,7 @@ Tensor parallelism: A single expert is split across GPUs. AllReduce after each e
 
 Expert parallelism: Each expert resides entirely on its own GPU. AllToAll for routing.
 
-For MoE with a large number of experts, EP is generally more efficient: less communication (AllToAll vs numerous AllReduce operations), linear scaling with the number of experts, and simpler implementation.
+For MoE with a large number of experts, EP is generally more efficient: less communication (AllToAll vs AllReduce operations), linear scaling with the number of experts, and simpler implementation.
 
 ### AllToAll Communication
 
@@ -208,7 +208,7 @@ Expert activation patterns: For each token, activated experts are recorded, then
 
 Expert probing: Linear classifiers are trained on hidden states within each expert to verify what information they store, for example whether an expert can determine part of speech or sentiment.
 
-Ablation studies: An expert is completely disabled, then the model's quality drop is measured on various tasks to understand what that expert is responsible for.
+Ablation studies: An expert is completely disabled, then the model's quality drop is measured on tasks to understand what that expert is responsible for.
 
 ### Practical Observations
 
@@ -234,7 +234,7 @@ DeepSeek R1 (January 2025) combined the MoE architecture of DeepSeek V3 (671B to
 
 ### Llama 4: MoE with Native Multimodal Fusion
 
-Meta's Llama 4 (April 2025) advanced MoE architecture significantly:
+Meta's Llama 4 (April 2025) advanced MoE architecture:
 
 **Scout** (109B total, 17B active): 16 experts per MoE layer. Achieves a 10M token context window through an interleaved attention pattern that alternates between local and global attention. Uses a shared expert (always active for base capabilities) plus routed experts.
 

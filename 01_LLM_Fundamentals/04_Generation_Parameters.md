@@ -360,7 +360,7 @@ The final response should be lively and natural, but not overly creative. Optima
 
 ## Impact on Cost and Performance
 
-Generation parameters affect not only quality but also economics:
+Generation parameters affect quality and economics:
 
 **max_tokens**: Directly impacts the cost of output tokens. Setting a reasonable limit is a direct cost saving.
 
@@ -392,7 +392,7 @@ Generation parameters affect not only quality but also economics:
 
 ### How Parameters Are Applied in a Real Sampler
 
-In production systems, all parameters are applied sequentially in a strict order. First, temperature scales the logits, making the distribution more or less "sharp". Then softmax converts logits into probabilities. After that, top-k removes all tokens except the k most probable. Next, top-p finds the minimal set of tokens covering the specified probability mass. Finally, a random selection is made from the remaining tokens according to their probabilities.
+In production systems, all parameters are applied sequentially in a strict order. First, temperature scales the logits. This makes the distribution more or less "sharp". Then softmax converts logits into probabilities. After that, top-k removes all tokens except the k most probable. Next, top-p finds the minimal set of tokens covering the specified probability mass. Finally, a random selection is made from the remaining tokens according to their probabilities.
 
 The key point: at temperature = 0, all other parameters are ignored, and the system simply selects the token with the maximum logit (greedy decoding). This guarantees determinism and reproducibility of results.
 

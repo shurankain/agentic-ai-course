@@ -46,7 +46,7 @@ Environment variables manage configuration. API keys via environment, never hard
 
 Kubernetes orchestrates containers: manages deployments, service discovery, scaling, self-healing. For LLM, high availability and elastic scaling under variable loads are critical.
 
-Deployment defines the desired state: replica count, image, resources. Rolling update upgrades pods gradually, ensuring zero-downtime. Resource requests and limits define guaranteed and maximum resources. Too small requests: eviction under resource pressure. Too large: inefficient cluster utilization. Pod Anti-Affinity distributes replicas across different nodes, improving availability. Annotations for Prometheus enable automatic metrics collection.
+Deployment defines the desired state: replica count, image, resources. Rolling update upgrades pods gradually. This ensures zero-downtime. Resource requests and limits define guaranteed and maximum resources. Too small requests: eviction under resource pressure. Too large: inefficient cluster utilization. Pod Anti-Affinity distributes replicas across different nodes, improving availability. Annotations for Prometheus enable automatic metrics collection.
 
 **Rolling update:** MaxSurge defines additional pods during the update. A value of 1 with 3 replicas allows a maximum of 4 pods. MaxUnavailable defines unavailable pods. A value of 0 guarantees the new pod is ready before removing the old one. TerminationGracePeriodSeconds for LLM agents should be 180-300 seconds.
 
@@ -60,7 +60,7 @@ Ingress provides HTTP(S) access from outside the cluster. Ingress Controller (ng
 
 Timeout annotations are controller-specific. Nginx: proxy-read-timeout, proxy-send-timeout. For streaming, disable buffering: proxy-buffering: "off". Without this, SSE and WebSocket work incorrectly.
 
-**Session affinity:** for stateful interactions, sessionAffinity: ClientIP may be required, requests from the same IP go to the same pod. For production, external session storage (Redis) is preferable, allowing any pod to handle any request. Rate limiting on Ingress protects against abuse: limit-rps restricts requests per second per IP. CORS settings allow cross-origin requests: specific origins instead of wildcard for production.
+**Session affinity:** for stateful interactions, sessionAffinity: ClientIP may be required, requests from the same IP go to the same pod. For production, external session storage (Redis) is preferable. This allows any pod to handle any request. Rate limiting on Ingress protects against abuse: limit-rps restricts requests per second per IP. CORS settings allow cross-origin requests: specific origins instead of wildcard for production.
 
 ## Horizontal Pod Autoscaler
 
@@ -108,7 +108,7 @@ AI workloads have unique multi-region considerations beyond traditional applicat
 
 GPU nodes are expensive and scarce. Efficient management directly impacts cost.
 
-**Spot/preemptible instances for inference.** GPU spot instances cost 60-70% less than on-demand. For inference workloads that can tolerate brief interruptions (batch processing, async agents), spot instances dramatically reduce cost. The pattern: a baseline of on-demand GPU nodes for latency-sensitive real-time inference, plus spot GPU nodes for batch processing and async agent workloads. When a spot node is reclaimed, in-flight requests are retried on another node (agent checkpointing makes this seamless).
+**Spot/preemptible instances for inference.** GPU spot instances cost 60-70% less than on-demand. For inference workloads that can tolerate brief interruptions (batch processing, async agents), spot instances dramatically reduce cost. The pattern: a baseline of on-demand GPU nodes for latency-sensitive real-time inference, plus spot GPU nodes for batch processing and async agent workloads. When a spot node is reclaimed, in-flight requests are retried on another node (agent checkpointing makes this automatic).
 
 **Node pools for different GPU types.** Not all workloads need the same GPU. A small classification model runs fine on an L4 ($0.70/hr); a 70B model requires an A100-80GB ($4/hr). Create separate node pools: a "small-gpu" pool with L4/T4 for lightweight models, a "large-gpu" pool with A100/H100 for frontier models. Use node selectors and tolerations to direct workloads to the appropriate pool. This prevents a $0.01/query classification task from occupying a $4/hr A100.
 
@@ -116,7 +116,7 @@ GPU nodes are expensive and scarce. Efficient management directly impacts cost.
 
 ### NVIDIA GPU Operator
 
-Setting up GPU nodes manually requires installing NVIDIA drivers on each node, configuring the NVIDIA Container Toolkit, deploying the device plugin, and managing driver version compatibility across the cluster. The NVIDIA GPU Operator automates all of this through a single Helm chart. It deploys the driver container (compiles the driver for the node's kernel), the container toolkit (nvidia-container-runtime), the device plugin (exposes GPUs as Kubernetes resources), DCGM exporter (GPU metrics for Prometheus), and the GPU Feature Discovery daemon (labels nodes with GPU model, driver version, and capabilities). The result: adding a GPU node to the cluster requires zero manual configuration, the Operator detects the GPU hardware and provisions everything automatically, making GPU nodes as operationally simple as CPU nodes.
+Setting up GPU nodes manually requires installing NVIDIA drivers on each node, configuring the NVIDIA Container Toolkit, deploying the device plugin, and managing driver version compatibility across the cluster. The NVIDIA GPU Operator automates all of this through a single Helm chart. It deploys the driver container (compiles the driver for the node's kernel), the container toolkit (nvidia-container-runtime), the device plugin (exposes GPUs as Kubernetes resources), DCGM exporter (GPU metrics for Prometheus), and the GPU Feature Discovery daemon (labels nodes with GPU model, driver version, and capabilities). The result: adding a GPU node to the cluster requires zero manual configuration, the Operator detects the GPU hardware and provisions everything automatically. This makes GPU nodes as operationally simple as CPU nodes.
 
 ### Multi-Instance GPU (MIG)
 
@@ -136,6 +136,6 @@ In pod specifications, request GPU resources through `resources.limits` with `nv
 
 ## Key Takeaways
 
-Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection significantly impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.
+Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.
 
 Kubernetes Deployment with proper resources, probes, and affinity ensures stability. Pod Anti-Affinity is critical for high availability. HPA with custom metrics reflects load better than CPU-based scaling. Behavior configuration prevents flapping. Ingress requires timeout adjustments for long-running operations. The standard 60 seconds is insufficient. Secrets management requires encryption at rest, external secret management, and rotation procedures.

@@ -2,9 +2,9 @@
 
 ## From Chatbots to Autonomous Systems
 
-A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were essentially "smart chatbots", systems that answer questions in a "question becomes answer" format: modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
+A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were "smart chatbots", systems that answer questions in a "question becomes answer" format: modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
 
-An **AI agent** is a software system that uses a large language model for autonomous task execution through perceiving the environment, making decisions, and performing actions to achieve specified goals.
+An **AI agent** is a software system that uses a large language model for autonomous task execution through perceiving the environment. This makes decisions, and performing actions to achieve specified goals.
 
 ### Formal Definition of Agency: The BDI Model
 
@@ -34,7 +34,7 @@ Consider the simplest chatbot: a user asks a question, the model generates an an
 
 An AI agent removes these limitations. When a user provides a task, the agent does not simply generate a response, it analyzes the task, creates a plan, iteratively executes steps, calls external tools as needed, observes results, and adjusts course.
 
-This is similar to the difference between a calculator and a programmer. A calculator gives an answer to a specific expression. A programmer understands the problem, breaks it down into subtasks, uses various tools, tests intermediate results, and changes approach when necessary.
+This is similar to the difference between a calculator and a programmer. A calculator gives an answer to a specific expression. A programmer understands the problem, breaks it down into subtasks, uses tools, tests intermediate results, and changes approach when necessary.
 
 ### Connection to Classical AI Planning
 
@@ -126,7 +126,7 @@ When the agent receives a task, the orchestrator launches the processing cycle. 
 
 AI agents are not universal. Different task types require different agent configurations:
 
-**Research**: searching and synthesizing information from various sources. The agent needs web search tools, the ability to analyze and compare information, and good memory for accumulating findings.
+**Research**: searching and synthesizing information from sources. The agent needs web search tools, the ability to analyze and compare information, and good memory for accumulating findings.
 
 **Data Analysis**: processing and analyzing structured data. Requires tools for working with databases, statistical calculations, and visualization.
 

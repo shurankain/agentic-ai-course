@@ -177,7 +177,7 @@ Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtr
 
 **Quantization is highly effective for MoE:** Since most parameters are expert weights that activate sparsely, aggressive quantization (INT4, even INT2 for inactive experts) has less impact on quality than for dense models. DeepSeek V3 in INT4 fits on 4x A100 80GB with minimal quality loss.
 
-**KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache significantly, 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
+**KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache, 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
 
 **vLLM and SGLang support:** Both support MoE model serving with tensor parallelism. vLLM's V1 engine added optimized MoE routing kernels. SGLang supports expert parallelism (EP) for distributing experts across GPUs independently of tensor parallelism.
 
@@ -209,7 +209,7 @@ See Module 02, Context Engineering for the broader context management framework,
 
 **Little's Law: the fundamental law:**
 
-The formula `L = λ x W` connects three key metrics:
+The formula `L = lambda * W` connects three key metrics:
 - `L`: average number of requests in the system (queue + processing)
 - `λ`: request arrival rate (requests/sec)
 - `W`: average time in the system (queue time + processing time)

@@ -1,6 +1,6 @@
 # Validation and Error Handling
 
-## Introduction: Why the Model Is Not Always Right
+## Why the Model Is Not Always Right
 
 There is a temptation to treat language model output as truth. The model is trained on trillions of tokens, knows more than any individual person, and its answers sound confident and authoritative. But this temptation is dangerous.
 

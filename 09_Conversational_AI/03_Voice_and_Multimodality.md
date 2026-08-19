@@ -1,8 +1,6 @@
 # Voice and Multimodality
 
-## Introduction to Multimodal Interfaces
-
-Human communication is multimodal: we use voice with intonation, gestures, facial expressions, and show images. Conversational AI systems limited to text miss a vast layer of information. Multimodality refers to a system's ability to perceive and generate information through various channels: text, speech, images, and video. This represents a qualitative leap in interaction naturalness.
+Human communication is multimodal: we use voice with intonation, gestures, facial expressions, and show images. Conversational AI systems limited to text miss a vast layer of information. Multimodality refers to a system's ability to perceive and generate information through channels: text, speech, images, and video. This represents a qualitative leap in interaction naturalness.
 
 ## Voice Interface: From Sound to Meaning
 
@@ -50,9 +48,9 @@ The traditional voice agent architecture, ASR, then LLM, then TTS, is being disr
 - **Voice style control**: choose from preset voices or define tone characteristics
 - **Interruption handling**: native barge-in detection at the model level
 - **WebSocket-based streaming**: persistent bidirectional connection for real-time conversation
-- **MCP server support and image input**: added post-launch, enabling richer agent workflows
+- **MCP server support and image input**: added post-launch. This enables richer agent workflows
 
-The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems. Async tool calls allow long-running functions without blocking the conversation.
+The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation. This enables voice-driven agents that book appointments, look up data, or control systems. Async tool calls allow long-running functions without blocking the conversation.
 
 **GPT-Realtime-2 (May 7, 2026, GA):** The next generation brings GPT-5-class reasoning to voice interactions (as of late May 2026). Key advances: 128K context window (up from 32K), parallel tool calls with narration (the model explains what it is doing while tools execute), preambles during tool calls to maintain conversational flow, native MCP server support for agent tool access, and SIP phone calling for direct enterprise telephony integration. Pricing: $32/M input audio tokens, $64/M output audio tokens. **Case study:** Zillow deployed GPT-Realtime-2 for property inquiry calls: success rate increased from 69% to 95%.
 
@@ -126,7 +124,7 @@ Minimization strategies:
 
 ### From Text to Multimodal Understanding
 
-Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-5.5, Claude Opus 4.8 (with high-resolution vision), and Gemini 3.5 Flash open new possibilities. Users can not only describe a problem but also show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
+Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-5.5, Claude Opus 4.8 (with high-resolution vision), and Gemini 3.5 Flash open new possibilities. Users can describe a problem and show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
 
 Typical scenarios: screenshot analysis for technical support, document recognition and processing, product identification from photos, chart and diagram analysis, design assistance.
 
@@ -140,7 +138,7 @@ Understanding spatial relationships: "the button to the right of the input field
 
 ### Visual Content Generation
 
-Modern AI systems can generate images. DALL-E, Midjourney, and Stable Diffusion create images from text descriptions. Integration into agents opens new possibilities: an agent not only describes a solution but also draws a diagram; not only recommends a design but also creates a prototype.
+Modern AI systems can generate images. DALL-E, Midjourney, and Stable Diffusion create images from text descriptions. Integration into agents opens new possibilities: an agent describes a solution and draws a diagram; recommends a design and creates a prototype.
 
 Image generation requires caution: models can create unwanted content, violate copyrights, or generate images of real people without consent. Filters and policies are necessary.
 
@@ -174,7 +172,7 @@ Preserving connections between modalities is important. "That photo I showed yes
 
 Voice agents that perform real-world actions (booking appointments, querying databases, controlling smart devices) need tool access. MCP (Model Context Protocol) provides the standard interface for connecting voice agents to external capabilities.
 
-**Architecture pattern:** The voice model (OpenAI Realtime, Gemini Live) receives audio, determines intent, and invokes MCP tools via function calling. Results flow back as audio responses. OpenAI's Realtime API added MCP server support directly, enabling voice-driven tool use without a separate orchestration layer.
+**Architecture pattern:** The voice model (OpenAI Realtime, Gemini Live) receives audio, determines intent, and invokes MCP tools via function calling. Results flow back as audio responses. OpenAI's Realtime API added MCP server support directly. This enables voice-driven tool use without a separate orchestration layer.
 
 **Voice-specific considerations for MCP tools:**
 - **Latency budget:** Tool calls add latency to voice responses. Fast tools (local lookups, cached data) work well; slow tools (multi-step API chains) should use async patterns where the model continues speaking ("Let me look that up...") while the tool executes in the background.
@@ -188,7 +186,7 @@ Voice agents that perform real-world actions (booking appointments, querying dat
 
 Voice interfaces require a distinct approach. What reads naturally may be difficult to perceive by ear.
 
-**Brevity** is the key principle. Voice responses are significantly shorter than text responses. Where text contains five points, voice limits to three. Long lists are broken into parts with confirmation: "Would you like to hear the remaining options?"
+**Brevity** is the key principle. Voice responses are shorter than text responses. Where text contains five points, voice limits to three. Long lists are broken into parts with confirmation: "Would you like to hear the remaining options?"
 
 **Structure** aids comprehension: "I found three options. First... Second... Third..." Transitional phrases ("moving on," "on another note," "in conclusion") help orient the listener within the speech flow.
 
@@ -250,7 +248,7 @@ The voice agent market has organized into four tiers (as of mid-June 2026): full
 
 | Tier | Provider | Pricing | Latency | Best For |
 |------|----------|---------|---------|----------|
-| **Full-Stack** | ElevenLabs | Premium | <100ms (Flash v2.5) | Best-in-class voice quality, 70+ languages, custom brand voices, voice cloning |
+| **Full-Stack** | ElevenLabs | Premium | <100ms (Flash v2.5) | Highest rated voice quality in blind tests, 70+ languages, custom brand voices, voice cloning |
 | **Orchestration** | Vapi, Retell AI | $0.05-0.13/min | ~200ms | **Vapi:** 1B+ cumulative calls, 1-5M/day, $500M valuation (Series B, May 2026). 14+ TTS providers |
 | **Developer Framework** | LiveKit | $0.004/min audio | Varies | Open-source core, up to 80% cheaper at scale, on-premise possible |
 | **Enterprise Phone** | Bland AI | $0.07-0.12/min | ~200ms | Up to 1M parallel calls, SOC2/GDPR/HIPAA, enterprise telephony |
@@ -288,13 +286,13 @@ Safety and ethics gain a new dimension. Voice and images are biometric data requ
 
 The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI, not platforms.
 
-Technical challenges: minimizing latency, ensuring operation in noisy conditions, adapting to various accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
+Technical challenges: minimizing latency. This ensures operation in noisy conditions, adapting to accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
 
 ## Practical Implementation
 
 A multimodal agent combines speech recognition, a language model with image support, and speech synthesis. The processing pipeline includes: audio transcription via a recognition API (Whisper), multimodal query formation combining text and images, response generation via a vision model, and speech synthesis from the text response.
 
-Speech recognition integration requires audio preprocessing (volume normalization, noise suppression, format conversion), asynchronous processing with timeouts, and retries. The result contains not only text but also metadata: language, confidence level, and temporal segments.
+Speech recognition integration requires audio preprocessing (volume normalization, noise suppression, format conversion), asynchronous processing with timeouts, and retries. The result contains text and metadata: language, confidence level, and temporal segments.
 
 Speech synthesis converts the text response into natural speech. APIs provide multiple voices with different characteristics. Optimization includes caching frequently used phrases (greetings, confirmations) and streaming synthesis for long texts (splitting into sentences, playback as segments become ready).
 

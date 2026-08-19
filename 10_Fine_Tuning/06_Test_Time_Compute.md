@@ -1,7 +1,5 @@
 # Test-Time Compute: A New Dimension of Scaling
 
-## Introduction
-
 For decades, AI improvement followed the formula: more data, parameters, training compute. In 2024, a shift occurred: OpenAI o1 demonstrated that computation during inference dramatically improves quality.
 
 Test-Time Compute (TTC) represents a new optimization axis. Instead of a fixed answer in a single forward pass, the model can "think longer", generating chains of reasoning, verifying hypotheses, correcting errors.
@@ -22,7 +20,7 @@ Architecture: user prompt, then hidden chain of reasoning (hundreds/thousands of
 
 Key features: extended thinking, self-correction, verification, backtracking.
 
-**o3** (announced January 2025, initially limited release, broadly available by mid-2025) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small, cost-efficient reasoning models with sufficient TTC outperform larger standard models: scores above are from OpenAI's published benchmarks at launch.
+**o3** (announced January 2025, initially limited release, broadly available by mid-2025) improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small, cost-efficient reasoning models with sufficient TTC outperform larger standard models: scores above are from OpenAI's published benchmarks at launch.
 
 API parameters: `reasoning_effort` ("low", "medium", "high") controls thinking depth. Higher effort = more thinking tokens = better quality but higher cost and latency.
 

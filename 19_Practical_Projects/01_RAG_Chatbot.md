@@ -22,7 +22,7 @@ We will build a full-featured RAG chatbot for enterprise documentation, from doc
 
 ## Architecture
 
-The Document Ingestion Pipeline loads and normalizes documents of various formats. The Chunking and Embedding module splits text into semantically meaningful fragments of 512 tokens with an overlap of 64 tokens, generating vector representations via text-embedding-3-small.
+The Document Ingestion Pipeline loads and normalizes documents of formats. The Chunking and Embedding module splits text into semantically meaningful fragments of 512 tokens with an overlap of 64 tokens, generating vector representations via text-embedding-3-small.
 
 The Vector Store (Qdrant) provides fast similarity search. The Retrieval Service performs hybrid search (dense + sparse) with reranking. LLM Generation (Claude) produces answers based on retrieved context. Response Formatting adds source citations. Conversation Memory provides context for multi-turn dialogs.
 
@@ -140,7 +140,7 @@ In production, track proxy metrics: user satisfaction (thumbs up/down), follow-u
 
 Production RAG requires attention to every layer. Document processing is underestimated, chunking strategy, metadata extraction, and embedding quality affect results more than LLM selection.
 
-Hybrid retrieval (dense + sparse + reranking) significantly outperforms naive semantic search. Query expansion and HyDE further improve quality.
+Hybrid retrieval (dense + sparse + reranking) outperforms naive semantic search. Query expansion and HyDE further improve quality.
 
 Evaluation is essential: RAGAS provides RAG-specific metrics (faithfulness, relevancy, precision, recall). Automate evaluation as a quality gate in the deployment pipeline.
 

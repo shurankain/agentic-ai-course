@@ -1,7 +1,5 @@
 # Retrieval-Augmented Generation (RAG) Basics
 
-## Introduction to RAG
-
 Retrieval-Augmented Generation (RAG) solves a fundamental problem of language models: training data is limited to a specific cutoff date and lacks access to domain-specific information.
 
 RAG gives the model access to up-to-date external information at the time of response generation. The model finds relevant facts in the provided context instead of extracting them from network parameters.
@@ -12,7 +10,7 @@ RAG gives the model access to up-to-date external information at the time of res
 
 Language models are trained on data collected up to a certain date. Everything that happened after that cutoff date is unknown to the model. For many practical applications: from technical support to legal consulting: information freshness is critically important.
 
-Moreover, even for events before the cutoff date, the model may have incomplete or distorted knowledge. Training data is uneven: popular topics are better represented, niche topics are worse. Internal company documentation, specific procedures, private knowledge bases. All of this is absent from the model by definition.
+Even for events before the cutoff date, the model may have incomplete or distorted knowledge. Training data is uneven: popular topics are better represented, niche topics are worse. Internal company documentation, specific procedures, private knowledge bases. All of this is absent from the model by definition.
 
 RAG overcomes these limitations by connecting the model to up-to-date data sources. Instead of retraining the model every time documentation is updated, we simply update the knowledge base that the model queries.
 
@@ -22,9 +20,9 @@ RAG overcomes these limitations by connecting the model to up-to-date data sourc
 
 Language models are prone to hallucinations, generating plausible-sounding but factually incorrect information. The model is optimized for producing coherent text, not factual accuracy. It can confidently assert nonexistent facts, confuse dates, and fabricate quotes.
 
-RAG significantly reduces this problem by grounding responses in specific documents. When the model generates a response based on provided context, it is less likely to fabricate facts. Additionally, verification becomes possible: one can reference the source and verify the information.
+RAG reduces this problem by grounding responses in specific documents. When the model generates a response based on provided context, it is less likely to fabricate facts. Verification becomes possible: one can reference the source and verify the information.
 
-This does not mean complete elimination of hallucinations: the model can still misinterpret context or mix information from different sources. However, the problem becomes manageable, and responses become significantly more reliable.
+This does not mean complete elimination of hallucinations: the model can still misinterpret context or mix information from different sources. However, the problem becomes manageable, and responses become more reliable.
 
 ### Specialization Without Retraining
 
@@ -48,11 +46,11 @@ This simple scheme has many variations and refinements, but the basic principle 
 
 Before a RAG system can answer questions, the knowledge base must be prepared. This process is called indexing and includes several stages.
 
-The first stage is document collection. These can be files in various formats: PDF, Word, HTML, Markdown, text files. They can also be data from databases, APIs, and content management systems.
+The first stage is document collection. These can be files in formats: PDF, Word, HTML, Markdown, text files. They can also be data from databases, APIs, and content management systems.
 
 The second stage is text extraction. Textual content is extracted from heterogeneous formats. Preserving structure and metadata is important here: headings, authors, dates, categories.
 
-The third stage is chunking. Documents are split into appropriately sized parts. Chunk size and splitting strategy significantly affect retrieval quality.
+The third stage is chunking. Documents are split into appropriately sized parts. Chunk size and splitting strategy affect retrieval quality.
 
 The fourth stage is vectorization. Each chunk is converted into a numerical vector representing its semantic meaning.
 
@@ -92,7 +90,7 @@ Response quality depends on both the quality of the retrieved context and the mo
 
 A modern production-ready pipeline uses specialized solutions at each stage.
 
-**Stage 1: Ingest**: Firecrawl, Crawl4AI, or Unstructured.io collect data from web pages, PDF documents, APIs, and databases. Firecrawl is a commercial web scraper with JavaScript support that automatically extracts clean markdown. Crawl4AI is an open-source alternative with an LLM-first approach. Unstructured.io processes various formats. LlamaHub provides a collection of 100+ loaders for various data sources.
+**Stage 1: Ingest**: Firecrawl, Crawl4AI, or Unstructured.io collect data from web pages, PDF documents, APIs, and databases. Firecrawl is a commercial web scraper with JavaScript support that automatically extracts clean markdown. Crawl4AI is an open-source alternative with an LLM-first approach. Unstructured.io processes formats. LlamaHub provides a collection of 100+ loaders for data sources.
 
 **Stage 2: Chunk**: LlamaIndex or LangChain split documents into optimally sized parts. LlamaIndex offers semantic chunking and sentence splitter with a rich selection of strategies. LangChain provides RecursiveCharacterTextSplitter and SemanticChunker with flexible overlap settings. Jina AI Segmenter uses Late Chunking, chunking after embedding the entire document.
 
@@ -104,7 +102,7 @@ A modern production-ready pipeline uses specialized solutions at each stage.
 
 A typical pattern: first retrieve top-100 documents using fast embedding search, then rerank them with a cross-encoder down to top-10 for passing to the LLM.
 
-**Stage 6: Evaluate**: RAGAS evaluates Context Relevancy, Faithfulness, and Answer Relevancy. LangSmith provides tracing, evaluation datasets, and A/B tests. Phoenix offers LLM observability and tracing. TruLens provides comprehensive RAG evaluation with feedback functions.
+**Stage 6: Evaluate**: RAGAS evaluates Context Relevancy, Faithfulness, and Answer Relevancy. LangSmith provides tracing, evaluation datasets, and A/B tests. Phoenix offers LLM observability and tracing. TruLens provides RAG evaluation with feedback functions.
 
 A typical production RAG pipeline: Ingest, then Chunk, then Embed, then Store, then Retrieve (hybrid search), then Rerank, then Generate, then Evaluate, then Observe.
 
@@ -172,7 +170,7 @@ Creating a high-quality test set is a critical investment. The set should cover 
 
 RAG is a powerful paradigm that extends language model capabilities through access to external knowledge. The technology addresses key LLM problems: time-limited knowledge, hallucinations, and difficulty of specialization.
 
-RAG architecture separates retrieval and generation tasks, allowing each component to be optimized independently. Indexing prepares the knowledge base, the retriever finds relevant context, and the generator forms a response based on what was found.
+RAG architecture separates retrieval and generation tasks. This allows each component to be optimized independently. Indexing prepares the knowledge base, the retriever finds relevant context, and the generator forms a response based on what was found.
 
 RAG does not exclude other approaches but complements them. Combining it with fine-tuning allows model behavior to be customized. Long contexts in modern models increase the volume of usable information.
 

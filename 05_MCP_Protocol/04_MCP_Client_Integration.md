@@ -1,7 +1,5 @@
 # MCP Client Integration
 
-## Introduction to Client Integration
-
 If MCP servers are bridges to external systems, then clients are orchestrators that coordinate interaction between the user, the language model, and multiple servers. Understanding the client side of MCP is critically important for building fully functional AI applications.
 
 An MCP client performs several key functions. First, it manages connections to servers, establishing, maintaining, and restoring them after failures. Second, it aggregates capabilities of all connected servers and presents them to the language model in an understandable format. Third, it routes model requests to the appropriate servers and returns results.
@@ -36,7 +34,7 @@ Concurrency requires attention to synchronization. Updating shared state (the ca
 
 ### Server Launch Methods
 
-An MCP client can connect to servers in various ways. The most common is launching a server as a child process with data exchange via stdio. The client specifies the launch command and arguments, then establishes the connection.
+An MCP client can connect to servers in ways. The most common is launching a server as a child process with data exchange via stdio. The client specifies the launch command and arguments, then establishes the connection.
 
 For remote servers, **Streamable HTTP** is the standard network transport (the earlier SSE transport was deprecated in March 2025). The client connects to the specified URL and begins message exchange.
 
@@ -82,7 +80,7 @@ There are four main naming strategies:
 
 **Capability-based naming** groups tools by semantic categories using a hierarchical structure: file.read, db.query, email.send. This approach provides logical tool organization regardless of which server provides them. It is useful when multiple servers can offer similar capabilities.
 
-**URI-style** uses full URIs for tool identification, for example mcp://filesystem/tools/read_file. This ensures global uniqueness and extensibility, allowing inclusion of versioning, hosts, and other metadata. This approach is most versatile for large distributed systems.
+**URI-style** uses full URIs for tool identification, for example mcp://filesystem/tools/read_file. This ensures global uniqueness and extensibility. This allows inclusion of versioning, hosts, and other metadata. This approach is most versatile for large distributed systems.
 
 ### Multi-Server Architecture
 
@@ -172,7 +170,7 @@ The user must understand what is happening in the system. When the AI calls a to
 
 Such transparency is important for trust. The user knows what actions the AI is performing and can intervene if necessary.
 
-Additionally, transparency helps diagnose problems. If the result does not meet expectations, the call chain can be traced to find the cause.
+Transparency helps diagnose problems. If the result does not meet expectations, the call chain can be traced to find the cause.
 
 ### Confirmation of Dangerous Operations
 
@@ -224,7 +222,7 @@ All interactions with servers should be logged: who called which tool, when, wit
 
 ## Key Takeaways
 
-MCP client integration is a comprehensive task requiring attention to many aspects. The architecture must be modular and extensible, allowing the addition of new servers and transports.
+MCP client integration is a broad task requiring attention to many aspects. The architecture must be modular and extensible. This allows the addition of new servers and transports.
 
 Connection management includes initialization, keepalive, and recovery after failures. The client must be resilient to problems with individual servers.
 

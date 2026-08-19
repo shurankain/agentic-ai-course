@@ -21,7 +21,7 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 **NVIDIA Grace Hopper (GH200)**: a CPU-GPU superchip combining the Grace ARM CPU with the H100 GPU via NVLink-C2C (900 GB/s CPU-GPU bandwidth). 624 GB unified memory (96 GB HBM3 + 528 GB LPDDR5X) with coherent memory access: the GPU can directly access CPU memory and vice versa without explicit copies. Designed for workloads that exceed GPU memory: very large models, large KV caches, data preprocessing pipelines. The unified memory model simplifies programming for memory-intensive AI workloads.
 
 **NVIDIA Blackwell B200/GB200 (in production, 2025+)**: a generational leap:
-- **Fifth-generation Tensor Cores** with FP4 support, doubles throughput over FP8, enabling 4-bit inference at near-FP8 quality with proper calibration
+- **Fifth-generation Tensor Cores** with FP4 support, doubles throughput over FP8. This enables 4-bit inference at near-FP8 quality with proper calibration
 - **HBM3e memory**: 192 GB per GPU (vs H100's 80 GB), 8 TB/s bandwidth (vs 3.35 TB/s)
 - **Second-generation Transformer Engine**: dynamic per-layer precision selection now includes FP4, FP8, BF16
 - **Dual-GPU NVLink module**: two B200 GPUs connected as a single logical GPU with 384 GB aggregate HBM (192 GB per GPU) and 1.8 TB/s bisection bandwidth. This is the key innovation: models that previously required multi-GPU tensor parallelism now fit in a single module
@@ -35,7 +35,7 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 - CDNA 3 architecture with dedicated matrix cores
 - ROCm software stack (open-source alternative to CUDA)
 - Adopted by several cloud providers and AI labs for inference workloads where the large memory capacity enables serving larger models without multi-GPU setups
-- Key advantage: memory capacity per dollar is competitive with NVIDIA, making it attractive for inference-heavy deployments
+- Key advantage: memory capacity per dollar is competitive with NVIDIA. This makes it attractive for inference-heavy deployments
 - Key limitation: the ROCm ecosystem is less mature than CUDA: fewer optimized libraries, less community support, and some framework features (Flash Attention, custom kernels) may lag behind
 
 **AMD MI325X (Q4 2024)**: 256 GB HBM3e (vs MI300X's 192 GB), improved memory bandwidth. Drop-in replacement for MI300X in existing deployments.
@@ -80,7 +80,7 @@ H100 performs ~1000 teraflops in FP16. HBM3 memory provides ~3.35 TB/s. To feed 
 
 **High Bandwidth Memory (HBM)**: the main GPU memory. HBM3 in H100 provides ~3.35 TB/s with 80 GB capacity.
 
-**L2 Cache**: an intermediate level between HBM and compute units. H100 has 50 MB of L2. Data in L2 is accessible significantly faster than in HBM.
+**L2 Cache**: an intermediate level between HBM and compute units. H100 has 50 MB of L2. Data in L2 is accessible faster than in HBM.
 
 **Shared Memory / L1 Cache**: the fastest memory at the SM level. H100: 256 KB of combined shared/L1 memory per SM with ~19 TB/s bandwidth, nearly an order of magnitude higher than HBM.
 

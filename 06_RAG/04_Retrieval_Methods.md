@@ -4,9 +4,9 @@
 
 Retrieval is the heart of a RAG system. No matter how powerful the generative model is, it is helpless without high-quality context. The "garbage in, garbage out" principle applies here in full: if the retriever finds irrelevant documents, even GPT-5.4 cannot produce a useful answer.
 
-The task of retrieval seems simple at first glance: find documents most relevant to the user's query. In practice, this is a complex multifaceted problem. Relevance is subjective and context-dependent. The same document may be relevant to one aspect of a question and irrelevant to another. The user may be looking for a specific fact or a general understanding of a topic.
+The task of retrieval seems simple at first glance: find documents most relevant to the user's query. In practice, this is a complex problem. Relevance is subjective and context-dependent. The same document may be relevant to one aspect of a question and irrelevant to another. The user may be looking for a specific fact or a general understanding of a topic.
 
-Effective retrieval requires understanding not only the technical aspects of search but also query semantics, document structure, and domain-specific characteristics. The following covers various methods and techniques for building a high-quality information retrieval system.
+Effective retrieval requires understanding the technical aspects of search and query semantics, document structure, and domain-specific characteristics. The following covers methods and techniques for building a high-quality information retrieval system.
 
 ## Basic Search Methods
 
@@ -58,9 +58,9 @@ HyDE is an innovative approach where an LLM first generates a hypothetical answe
 
 **Why hypothetical documents work:**
 
-Consider the Query-Document Gap problem. When a user asks "How does GC work in Java?", an embedding is created from a short, general, interrogative text. Meanwhile, the document contains a declarative, detailed description: "The Garbage Collector in Java uses a generational approach with Young and Old Gen..." These different text styles land in different regions of the vector space, making retrieval harder.
+Consider the Query-Document Gap problem. When a user asks "How does GC work in Java?", an embedding is created from a short, general, interrogative text. Meanwhile, the document contains a declarative, detailed description: "The Garbage Collector in Java uses a generational approach with Young and Old Gen..." These different text styles land in different regions of the vector space. This makes retrieval harder.
 
-The HyDE solution: the question is first passed to an LLM, which generates a hypothetical answer in a documentation style ("GC in Java uses a generational..."). The embedding of this hypothetical answer ends up much closer to the embeddings of the actual documents, significantly improving search quality.
+The HyDE solution: the question is first passed to an LLM, which generates a hypothetical answer in a documentation style ("GC in Java uses a generational..."). The embedding of this hypothetical answer ends up much closer to the embeddings of the actual documents, improving search quality.
 
 **Theoretical justification:**
 
@@ -68,7 +68,7 @@ Embedding models were trained predominantly on declarative texts: articles, docu
 
 **When HyDE is most effective:**
 
-The method shows the best results when user questions differ significantly in style from the documents in the knowledge base. It is especially useful for technical knowledge bases where documentation is written in formal language, while users phrase queries informally, in a conversational style.
+The method shows the best results when user questions differ in style from the documents in the knowledge base. It is especially useful for technical knowledge bases where documentation is written in formal language, while users phrase queries informally, in a conversational style.
 
 The main limitation is that the additional LLM call for generating the hypothetical answer increases system latency and cost. The quality gains must be weighed against these costs.
 
@@ -108,7 +108,7 @@ Critical drawback: no interaction between the query and document at the model le
 
 The cross-encoder combines the query and document into a single input: "[CLS] Query [SEP] Document [SEP]". This combined sequence passes through a transformer, where the cross-attention mechanism allows query tokens to interact with document tokens directly. The final [CLS] token then passes through an MLP layer to produce a relevance score.
 
-This full interaction between query and document provides significantly higher accuracy compared to the bi-encoder. The model sees both texts simultaneously and can capture subtle nuances of correspondence.
+This full interaction between query and document provides higher accuracy compared to the bi-encoder. The model sees both texts simultaneously and can capture subtle nuances of correspondence.
 
 Critical limitation: O(n) complexity: a separate forward pass through the neural network is required for each document. With millions of documents, this makes cross-encoders unsuitable for initial search but ideal for reranking a small set of candidates.
 
@@ -116,7 +116,7 @@ Critical limitation: O(n) complexity: a separate forward pass through the neural
 
 For indexing, a bi-encoder processes each document in a single pass; a cross-encoder is not applicable for indexing. Search speed for a bi-encoder is constant with an ANN index; for a cross-encoder, it is linear in the number of documents. Ranking quality for a bi-encoder is good; for a cross-encoder, it is excellent. A bi-encoder scales to millions of documents; a cross-encoder is applicable only for reranking small sets.
 
-Popular cross-encoder models include ms-marco-MiniLM and various reranking models from the sentence-transformers library.
+Popular cross-encoder models include ms-marco-MiniLM and reranking models from the sentence-transformers library.
 
 ### ColBERT: Late Interaction (2020-2024)
 
@@ -124,7 +124,7 @@ ColBERT represents a trade-off between bi-encoder and cross-encoder through the 
 
 **Architectural idea:**
 
-Instead of creating a single vector for the entire document, ColBERT creates a separate embedding for each token. Query tokens q1, q2, q3 are converted into embeddings e1, e2, e3. Document tokens d1, d2, d3, d4, d5 are converted into embeddings f1, f2, f3, f4, f5. Importantly, these embeddings are not pooled into a single vector but remain separate.
+Instead of creating a single vector for the entire document, ColBERT creates a separate embedding for each token. Query tokens q1, q2, q3 are converted into embeddings e1, e2, e3. Document tokens d1, d2, d3, d4, d5 are converted into embeddings f1, f2, f3, f4, f5. These embeddings are not pooled into a single vector but remain separate.
 
 At the search stage, the MaxSim (Maximum Similarity) mechanism is applied: for each query token qi, the maximum cosine similarity with the document tokens is found. The final score is the sum of these maximums across all query tokens. In effect, each query token searches for its best match among the document tokens.
 
@@ -146,7 +146,7 @@ An LLM can be used for ranking by asking it to evaluate the relevance of each do
 
 The advantage is understanding nuances and the ability to follow complex relevance criteria. You can specify what matters more: freshness, authoritativeness, or completeness.
 
-The disadvantage is cost and latency. Calling an LLM for dozens of documents significantly increases system cost.
+The disadvantage is cost and latency. Calling an LLM for dozens of documents increases system cost.
 
 ### Ensemble reranking
 
@@ -224,7 +224,7 @@ The LLM coordinates the chain, formulating intermediate queries based on the inf
 
 ## Reranker Evolution (2024-2025)
 
-The reranker landscape has evolved significantly, with new models and approaches becoming available.
+The reranker landscape has evolved, with new models and approaches becoming available.
 
 ### Modern Reranker Models
 
@@ -250,11 +250,11 @@ The reranker landscape has evolved significantly, with new models and approaches
 
 ## Key Takeaways
 
-High-quality retrieval is the key to a successful RAG system. Numerous techniques allow improving basic vector search.
+High-quality retrieval is the key to a successful RAG system. Techniques allow improving basic vector search.
 
 Hybrid search combines the semantic understanding of dense retrieval with the precision of sparse retrieval. Query transformation (expansion, decomposition, HyDE) improves query formulation.
 
-Reranking refines initial results with more powerful models. Cross-encoders and LLM-based ranking significantly improve the quality of top-K results. Modern rerankers (Cohere v3, Jina v2, BGE v2.5) provide production-ready options for both hosted and self-hosted deployment.
+Reranking refines initial results with more powerful models. Cross-encoders and LLM-based ranking improve the quality of top-K results. Modern rerankers (Cohere v3, Jina v2, BGE v2.5) provide production-ready options for both hosted and self-hosted deployment.
 
 Contextual retrieval addresses the problem of context loss during chunking. Parent documents and sentence windows provide both precision and context.
 
@@ -276,7 +276,7 @@ The public search method takes two parameters: a string query (the user's query 
 
 In the first stage, a fast vector search is performed using a bi-encoder architecture. The text query is converted into a numerical vector (float array) by calling the embedSingle method of the embedding service. This vector represents the semantic content of the query in a multi-dimensional space. Then a search is performed in the vector store via the search method, which receives the query embedding and the number of candidates. An important detail: topK multiplied by 3 is requested, i.e., three times the final count. This is because the vector search is optimized for recall rather than precision, and the subsequent reranking will filter out less relevant results.
 
-In the second stage, precise reranking is applied via a cross-encoder. The rerank method receives the original text query (not the embedding), the list of candidate documents from the first stage, and the final topK count. The cross-encoder processes each (query, candidate document) pair jointly through a neural network, allowing the model to see the full interaction between the texts and compute more accurate relevance scores. The result is sorted by score in descending order, the top topK documents are selected and returned as the final result.
+In the second stage, precise reranking is applied via a cross-encoder. The rerank method receives the original text query (not the embedding), the list of candidate documents from the first stage, and the final topK count. The cross-encoder processes each (query, candidate document) pair jointly through a neural network. This allows the model to see the full interaction between the texts and compute more accurate relevance scores. The result is sorted by score in descending order, the top topK documents are selected and returned as the final result.
 
 This architecture provides a balance between speed (fast vector search across the entire database) and quality (precise reranking of a small set of candidates).
 

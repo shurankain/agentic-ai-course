@@ -1,6 +1,6 @@
 # AI Governance Frameworks: Organizational Structures
 
-## Introduction: From Technology to Organizational Maturity
+## From Technology to Organizational Maturity
 
 AI technical capabilities outpace organizational readiness to use them. A company can deploy a frontier model like GPT-5.4 in a day, but building a governance framework for responsible AI use takes years. The gap between technical capability and governance maturity creates risks that materialize in headlines about AI failures, bias scandals, and privacy breaches.
 
@@ -122,7 +122,7 @@ Comprehensive policies covering:
 - **Ethical considerations**: potential harms, mitigations
 - **Maintenance**: owner, update schedule, deprecation plan
 
-Model cards ensure transparency and accountability. They help users understand a model's capabilities and limitations. They facilitate audits and regulatory compliance.
+Model cards ensure transparency and accountability. They help users understand a model's capabilities and limitations. They support audits and regulatory compliance.
 
 ### Model Lifecycle Management
 
@@ -348,9 +348,9 @@ AI Governance is not bureaucratic overhead but a competitive advantage. Organiza
 
 Organizational models range from centralized (AI CoE) to federated (distributed with coordination) to hybrid (hub and spoke). The choice depends on organization size, regulatory environment, and AI maturity.
 
-Key framework components include an AI Ethics Board, a comprehensive policy framework, model cards for documentation, and lifecycle management.
+Key framework components include an AI Ethics Board, a policy framework, model cards for documentation, and lifecycle management.
 
-Risk-based tiering directs appropriate oversight to appropriate cases. Low-risk use cases receive streamlined approval; high-risk ones get full Ethics Board review.
+Risk-based tiering directs appropriate oversight to appropriate cases. Low-risk use cases receive simplified approval; high-risk ones get full Ethics Board review.
 
 A stage-gate process with clear gates from ideation to production ensures quality and accountability. Exception handling mechanisms provide flexibility without undermining governance.
 

@@ -53,7 +53,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 
 **Claude model family (latest generation):**
 - **Claude Fable 5**: the Mythos-class flagship (launched June 9, 2026; **suspended June 13 due to export controls**: see below). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (+11pp over Opus 4.8, vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to Claude Opus 4.8. Knowledge cutoff January 2026. **Availability (as of late June 2026):** partially restored with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic introducing biometric identity verification (government ID, facial geometry) starting July 8.
-- **Claude Opus 4.8**: previous flagship (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro (+4.9% over 4.7, significant Pro jump), 74.6% Terminal-Bench 2.1. Sharper judgement: the model is more likely to flag uncertainties and less likely to make unsupported claims. Dynamic workflows for large-scale problems. Fast mode now 3x cheaper than previous models. $5/$25 per 1M tokens. Beats GPT-5.5 on 12+ benchmarks. Messages API now accepts `system` records inside `messages[]`, allowing mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
+- **Claude Opus 4.8**: previous flagship (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro (+4.9% over 4.7, significant Pro jump), 74.6% Terminal-Bench 2.1. Sharper judgement: the model is more likely to flag uncertainties and less likely to make unsupported claims. Dynamic workflows for large-scale problems. Fast mode now 3x cheaper than previous models. $5/$25 per 1M tokens. Beats GPT-5.5 on 12+ benchmarks. Messages API now accepts `system` records inside `messages[]`. This allows mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
 - **Claude Opus 4.7**: previous flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP: first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning: the model decides how much to think based on task complexity.
 - **Claude Opus 4.6**: previous flagship. Still widely deployed. Deep reasoning, complex analysis, extended autonomous workflows. $5/$25 per 1M tokens.
 - **Claude Sonnet 4.6**: the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
@@ -85,7 +85,7 @@ Google offers models through Vertex AI (enterprise) and Google AI Studio (for de
 
 **Gemini family:**
 - **Gemini 3.5 Flash**: new frontier-quality model at Flash speed (May 19, Google I/O 2026). $1.50/$9 per 1M tokens, 1.05M context. 280+ output tok/sec (4x faster than other frontier models). Terminal-Bench 2.1 76.2%, MCP Atlas 83.6%. `thinking_level` enum replaces `thinking_budget` int. Gemini 3.5 Pro in internal testing, expected June 2026.
-- **Gemini 3.1 Pro Preview**: the most advanced Google reasoning model (February 2026). State-of-the-art reasoning and multimodal capabilities.
+- **Gemini 3.1 Pro Preview**: the most advanced Google reasoning model (February 2026). Leads on reasoning and multimodal benchmarks.
 - **Gemini 3 Flash**: default Gemini model (December 2025). Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
 - **Gemini Omni**: video output with physics understanding, SynthID watermark on all outputs (Google I/O 2026).
 - **Gemini 2.5 Pro**: previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
@@ -199,7 +199,7 @@ A Chinese lab that has repeatedly disrupted the industry, first with V3's traini
 
 **DeepSeek V4** (April 24, 2026): the latest generation. V4-Pro: 1.6T parameters / 49B active. V4-Flash: 284B / 13B active. 1M context. Hybrid CSA+HCA attention achieving 27% inference FLOPs vs V3.2 on 1M context. Open weights under MIT license. SWE-bench Verified 80.6%, GPQA Diamond 90.1%. V4-Flash pricing: $0.14/$0.28 per 1M tokens. The R1 reasoning line has been discontinued, reasoning is now folded into V4 as a mode. **V4-Pro permanent price cut** (May 22, 2026): 75% reduction made permanent: $0.435/$0.87 per 1M tokens. Cached input: $0.003625/MTok (lowest frontier cache-hit price). DeepSeek raised $7.4B at $52-59B valuation.
 
-**DeepSeek V3**: 671B parameters, 37B active (Mixture of Experts). Revolutionized training economics. Superseded by V4.
+**DeepSeek V3**: 671B parameters, 37B active (Mixture of Experts). Cut training cost by activating 37B of 671B parameters per token. Superseded by V4.
 
 **Key innovations:**
 - **Multi-head Latent Attention (MLA)**: KV-cache compression via low-rank projections: 93% memory savings
@@ -400,7 +400,7 @@ Cost is a critical factor when choosing a provider and model. All providers char
 
 **Reasoning models:**
 
-Reasoning models carry a premium because thinking tokens are billed at output rates and can represent 80-90% of total output for complex queries. The table below lists current pricing for the major reasoning-capable models, enabling direct cost comparison when selecting between providers for reasoning-heavy workloads.
+Reasoning models carry a premium because thinking tokens are billed at output rates and can represent 80-90% of total output for complex queries. The table below lists current pricing for the major reasoning-capable models. This enables direct cost comparison when selecting between providers for reasoning-heavy workloads.
 
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
@@ -446,7 +446,7 @@ Standard models cover the broadest range of use cases -- from general-purpose ch
 
 **Budget models:**
 
-Budget models are designed for high-volume, lower-complexity tasks where cost and latency matter more than peak reasoning quality. They are typically 10-50x cheaper than frontier models, making them the default choice for classification, extraction, simple Q&A, and routing layers within agentic systems.
+Budget models are designed for high-volume, lower-complexity tasks where cost and latency matter more than peak reasoning quality. They are typically 10-50x cheaper than frontier models. This makes them the default choice for classification, extraction, simple Q&A, and routing layers within agentic systems.
 
 | Model | Input | Output |
 |--------|-------|--------|
@@ -485,7 +485,7 @@ Prompt caching is a mechanism where the provider saves the processing results (K
 
 **Savings by provider:**
 
-The economics of prompt caching vary significantly across providers. Anthropic offers the steepest discount (90%) but with a shorter TTL, while OpenAI provides a more moderate 50% discount. The minimum prefix length determines how long a system prompt must be before caching provides any benefit.
+The economics of prompt caching vary across providers. Anthropic offers the steepest discount (90%) but with a shorter TTL, while OpenAI provides a more moderate 50% discount. The minimum prefix length determines how long a system prompt must be before caching provides any benefit.
 
 | Provider | Cache hit discount | Min prefix length | TTL |
 |-----------|-------------------|-------------------|-----|
@@ -667,7 +667,7 @@ When designing production systems, understanding the actual provider guarantees 
 
 **Typical SLA metrics:**
 
-When designing production systems, it is important to understand what providers actually guarantee versus what they typically deliver. The table below lists the core SLA dimensions along with representative values observed across major providers. Note that reasoning models have significantly higher latency percentiles than standard models.
+When designing production systems, it is important to understand what providers actually guarantee versus what they typically deliver. The table below lists the core SLA dimensions along with representative values observed across major providers. Note that reasoning models have higher latency percentiles than standard models.
 
 | Metric | Description | Typical Values |
 |---------|----------|-------------------|
@@ -771,7 +771,7 @@ Cloud providers are not always the right choice. In some cases, data cannot be s
 
 ### Hardware Requirements
 
-Modern LLMs require significant resources. The table below maps model size to GPU memory requirements in both full precision (FP16) and quantized (INT4) formats, along with representative models in each category. Quantization reduces requirements by 2-4x, making larger models accessible on consumer hardware at a small quality cost.
+Modern LLMs require significant resources. The table below maps model size to GPU memory requirements in both full precision (FP16) and quantized (INT4) formats, along with representative models in each category. Quantization reduces requirements by 2-4x. This makes larger models accessible on consumer hardware at a small quality cost.
 
 | Model Size | GPU RAM (FP16) | GPU RAM (INT4) | Examples |
 |---------------|---------|---------|---------|
@@ -817,6 +817,6 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Tool Use via AI Services:** LangChain4j provides a declarative way to create agents with tools. Tools are defined as regular Java methods annotated with `@Tool`, which contains the function description. Method parameters are annotated with `@P` including a description for the model. Then an agent interface is created with a `chat(String message)` method, and `AiServices.builder()` is used to automatically generate the implementation. The model independently analyzes the user's request, decides which tools are needed, invokes them with the correct parameters, and forms the final response based on the results.
 
-**Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON, providing 100% parsing reliability.
+**Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON. This gives 100% parsing reliability.
 
-**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) x inputPrice + (outputTokens / 1,000,000) x outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) x outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120): an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request, making selective routing essential.
+**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) x inputPrice + (outputTokens / 1,000,000) x outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) x outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120): an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request. This makes selective routing essential.

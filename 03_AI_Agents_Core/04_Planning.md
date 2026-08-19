@@ -1,7 +1,5 @@
 # Agent Planning
 
-## Introduction
-
 Planning is the capability that separates primitive reactive systems from genuinely intelligent agents. A simple agent reacts to a stimulus, performs an action, and moves on to the next stimulus. A planning agent sees further: it analyzes the task, breaks it into steps, anticipates obstacles, and builds a strategy for reaching the goal.
 
 Consider the difference between a navigator that shows only the next turn and one that builds a complete route accounting for traffic, fuel stops, and arrival time. Both perform navigation, but the second provides a qualitatively different level of utility.
@@ -24,7 +22,7 @@ Consider the example: "Analyze competitors and prepare a report." This is a vagu
 5. Formulate recommendations
 6. Prepare the final report
 
-Each step is now concrete and actionable. Moreover, dependencies become visible: you cannot analyze competitors without first gathering information about them; you cannot formulate recommendations without performing a comparison.
+Each step is now concrete. Dependencies become visible: you cannot analyze competitors without first gathering information about them; you cannot formulate recommendations without performing a comparison.
 
 ### Principles of Effective Decomposition
 
@@ -42,7 +40,7 @@ Good decomposition follows several principles.
 
 Not all subtasks are equal. Some are trivial, others require significant effort. Complexity assessment helps allocate resources properly and set realistic expectations.
 
-Complexity can be measured on various scales: the number of tools required, the volume of data to process, the probability of errors, the execution time. An agent can use these estimates for prioritization: start with simple tasks for quick wins, or conversely, tackle complex tasks while resources are available.
+Complexity can be measured on scales: the number of tools required, the volume of data to process, the probability of errors, the execution time. An agent can use these estimates for prioritization: start with simple tasks for quick wins, or conversely, tackle complex tasks while resources are available.
 
 ---
 
@@ -211,7 +209,7 @@ Model-Based RL builds a transition model and plans on top of it (Dyna, MCTS, MuZ
 
 ### LLM as a World Model
 
-The LLM acts as a world model: predicting action outcomes, estimating their value. Why this works: pretraining provides implicit world knowledge, in-context learning adapts the model, Chain-of-Thought functions as a rollout in the world model.
+The LLM is a world model: predicting action outcomes, estimating their value. Why this works: pretraining provides implicit world knowledge, in-context learning adapts the model, Chain-of-Thought functions as a rollout in the world model.
 
 ### Monte Carlo Tree Search and LLMs
 
@@ -267,7 +265,7 @@ When a plan step fails, the agent has four primary strategies. The choice depend
 
 Sometimes a plan needs refinement not because of errors but because new information makes subsequent steps more precise.
 
-**Example:** The agent identified competitors and discovered: there are not 5 but 20; some are startups with minimal information, others are corporations with extensive reports. This affects the plan: narrow to top 5, split the analysis (overview of all + deep dive for the important ones), adapt collection methods (social media for startups, financial reports for corporations).
+**Example:** The agent identified competitors and discovered: there are not 5 but 20; some are startups with minimal information, others are corporations with extensive reports. This affects the plan: narrow to top 5, split the analysis (overview of all + detailed analysis for the important ones), adapt collection methods (social media for startups, financial reports for corporations).
 
 **Principle:** The plan evolves based on accumulated knowledge. Each step provides information for refining the remaining steps. This is not rewriting but organic evolution.
 
@@ -368,7 +366,7 @@ The prompt is built from several clearly separated sections:
 
 For each plan step, the model must specify four mandatory elements:
 
-First: a concrete and actionable action. Not an abstract "process data" but a specific "extract email addresses from the CSV file."
+First: a concrete action. Not an abstract "process data" but a specific "extract email addresses from the CSV file."
 
 Second: the tool needed to perform the action. If the action does not require a tool (e.g., it is a logical reasoning step), "none" is specified.
 
@@ -432,4 +430,4 @@ After processing all steps, the method returns the final execution result contai
 - Accumulation of results for use during replanning
 - Exponential backoff on retries to avoid overloading
 
-This approach combines the flexibility of LLM planning with the reliability of adaptive execution, ensuring resilience to errors and changes during operation.
+This approach combines the flexibility of LLM planning with the reliability of adaptive execution. This ensures resilience to errors and changes during operation.

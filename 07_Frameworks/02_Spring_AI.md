@@ -1,14 +1,12 @@
 # Spring AI: The Official AI Framework of the Spring Ecosystem
 
-## Introduction to Spring AI
-
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
 
 **Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations. **Spring AI 2.0.0 GA** was released on **June 12, 2026**, a major version requiring **Spring Boot 4.0/4.1** and **Spring Framework 7.0**. Key 2.0 additions: **ToolSearchToolCallingAdvisor** for progressive tool disclosure (indexes all tools per session, exposes only a built-in `toolSearchTool` for on-demand retrieval: three ToolIndex implementations: vector store, Lucene, regex), enhanced observability for chat models, and improved OpenAI options builder pattern. Spring AI 1.0.9 and 1.1.8 were also released on June 12 as security patches.
 
-**Security: CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. Affects Spring AI versions prior to 1.0.9/1.1.8/2.0.0. Patch: upgrade to 1.0.9, 1.1.8, or 2.0.0 GA. If you use vector store metadata filters in production, patch immediately.
+**Security: CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. Affects Spring AI versions before 1.0.9/1.1.8/2.0.0. Patch: upgrade to 1.0.9, 1.1.8, or 2.0.0 GA. If you use vector store metadata filters in production, patch immediately.
 
-Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud streamlined cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
+Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud simplified cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
 
 The key value of Spring AI lies in its deep integration with the Spring ecosystem. It is not a standalone library but an organic part of the Spring platform. Auto-configuration, dependency injection, configuration profiles, actuator metrics: all of these work with AI components just as naturally as with any other Spring beans.
 
@@ -74,7 +72,7 @@ Advisors are request and response interceptors that allow modifying the behavior
 
 The analogy with traditional AOP is very direct. In classic Spring AOP, you use annotations like @Around to intercept business logic method execution, applying cross-cutting concerns, logging, security, transactions. In Spring AI, Advisors intercept calls to language models in exactly the same way.
 
-The join point in Spring AOP is method execution. In Spring AI, it is the LLM call. Around advice wraps execution, providing control before and after. An Advisor does the same with the prompt (before) and the response (after). A pointcut defines which methods to intercept. In the AI context, this is the advisor chain configuration for a specific ChatClient.
+The join point in Spring AOP is method execution. In Spring AI, it is the LLM call. Around advice wraps execution. This gives control before and after. An Advisor does the same with the prompt (before) and the response (after). A pointcut defines which methods to intercept. In the AI context, this is the advisor chain configuration for a specific ChatClient.
 
 **Cross-Cutting Concerns Reimagined for AI:**
 
@@ -100,7 +98,7 @@ DocumentReader and DocumentTransformer form the document processing pipeline bef
 
 Spring AI 1.0 includes MCP (Model Context Protocol) client and server support:
 
-**MCP Client:** Spring AI applications can connect to MCP servers to discover and use external tools and resources. MCP tools are automatically registered as Spring AI function callbacks, making them available to ChatClient without additional wiring.
+**MCP Client:** Spring AI applications can connect to MCP servers to discover and use external tools and resources. MCP tools are automatically registered as Spring AI function callbacks. This makes them available to ChatClient without additional wiring.
 
 **MCP Server:** Spring Boot applications can expose their own capabilities as MCP servers. Spring beans annotated with `@Tool` are automatically published as MCP tools. Resources and prompts are similarly exposed through standard Spring patterns.
 
@@ -154,7 +152,7 @@ This is important for security, not all functions should be accessible to all us
 
 ### RAG Components
 
-Spring AI provides a complete set of components for RAG. DocumentReader loads documents in various formats. DocumentSplitter breaks them into chunks. EmbeddingModel generates embeddings. VectorStore stores and searches.
+Spring AI provides a complete set of components for RAG. DocumentReader loads documents in formats. DocumentSplitter breaks them into chunks. EmbeddingModel generates embeddings. VectorStore stores and searches.
 
 QuestionAnswerAdvisor combines these components, automatically enriching queries with relevant context.
 
@@ -166,7 +164,7 @@ The pipeline is configured declaratively. A typical setup includes the document 
 
 ### Search and Ranking
 
-Spring AI supports various search strategies. Similarity search is the basic vector search. Hybrid search combines it with keyword search. Metadata filtering filters by document attributes.
+Spring AI supports search strategies. Similarity search is the basic vector search. Hybrid search combines it with keyword search. Metadata filtering filters by document attributes.
 
 Search results are ranked by relevance. Thresholds and the number of returned documents can be configured.
 
@@ -202,7 +200,7 @@ The configuration creates a ChatClient via a builder specifying a VectorStore fo
 
 ## API Evolution
 
-**Pre-1.0 to 1.0 changes:** The API stabilized significantly for the 1.0 GA release. Key renames: `EmbeddingClient` -> `EmbeddingModel` (aligning with the `*Model` naming convention), `AiClient` -> `ChatClient` (early alpha rename). The `ChatClient` fluent API became the primary entry point, replacing direct `ChatModel.call()` for most use cases.
+**Pre-1.0 to 1.0 changes:** The API stabilized for the 1.0 GA release. Key renames: `EmbeddingClient` -> `EmbeddingModel` (aligning with the `*Model` naming convention), `AiClient` -> `ChatClient` (early alpha rename). The `ChatClient` fluent API became the primary entry point, replacing direct `ChatModel.call()` for most use cases.
 
 **ChatClient vs ChatModel:** `ChatModel` is the low-level interface (provider implementations). `ChatClient` is the high-level fluent API with advisor chains, structured output, and function calling integration. Production code should use `ChatClient`; `ChatModel` is for framework extensions and custom providers.
 

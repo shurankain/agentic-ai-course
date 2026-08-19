@@ -123,7 +123,7 @@ The reconstruction component uses MSE(x, x̂) to preserve information: the model
 
 The dead features problem occurs when some SAE neurons never activate after initialization. They "die" and do not participate in training. The solution is to periodically check activation counters for each feature: if the feature_activation_count falls below a threshold, reinitialize the corresponding encoder and decoder weights with random values.
 
-Feature shrinkage occurs because the L1 penalty systematically reduces all activation values. This can lead to numerical underflow. An alternative solution is to use TopK sparsity instead of L1 regularization: select only the k largest activations and zero out the rest, providing precise sparsity control without the shrinkage effect.
+Feature shrinkage occurs because the L1 penalty systematically reduces all activation values. This can lead to numerical underflow. An alternative solution is to use TopK sparsity instead of L1 regularization: select only the k largest activations and zero out the rest. This gives precise sparsity control without the shrinkage effect.
 
 The reconstruction-sparsity trade-off requires careful balancing. Too high a λ₁ results in excessive sparsity with information loss and poor reconstruction. Too low a λ₁ yields good reconstruction, but without sparsity, interpretability is lost. The optimal λ₁ coefficient is determined experimentally with target metrics: the average number of active features (L0) should be 10-50 out of 10,000+ possible, and reconstruction loss should not exceed 5% of the variance of the original activations.
 
@@ -136,7 +136,7 @@ Anthropic researchers applied SAE to Claude and discovered thousands of interpre
 - **Deception feature**: activates on texts about deception or manipulation
 - **Sycophancy feature**: activates on excessively agreeable responses
 
-Importantly, these features can not only be detected but also **modified**. Amplifying the "Golden Gate Bridge feature" causes the model to mention the bridge more frequently (the famous "Golden Gate Claude" experiment).
+Importantly, these features can be detected and **modified**. Amplifying the "Golden Gate Bridge feature" causes the model to mention the bridge more frequently (the famous "Golden Gate Claude" experiment).
 
 ### SAE Limitations
 
@@ -167,7 +167,7 @@ Clamping features demonstrates a causal relationship with behavior. Amplifying t
 
 **Practical implications for AI safety:**
 
-Interpretability scales: production models with billions of parameters can be analyzed. Safety-relevant features are detectable and can be monitored in real time. Feature steering works: undesirable behavior can be corrected without retraining. However, understanding is far from complete: significantly more research is required.
+Interpretability scales: production models with billions of parameters can be analyzed. Safety-relevant features are detectable and can be monitored in real time. Feature steering works: undesirable behavior can be corrected without retraining. However, understanding is far from complete: more research is required.
 
 **Open questions after Scaling Monosemanticity:**
 - How are features related to capabilities?
@@ -267,7 +267,7 @@ The step-by-step causal analysis process precisely identifies which model compon
 
 **Step 1: Preparing contrastive examples**
 
-Create a pair of examples differing at a critical point. Clean input: "John gave Mary a book. John gave her a flower". Corrupted input: "John gave Bob a book. John gave her a flower". The only difference is the name (Mary becomes Bob). The goal: the prediction of "flower" should change, allowing us to trace which components transmit name information.
+Create a pair of examples differing at a critical point. Clean input: "John gave Mary a book. John gave her a flower". Corrupted input: "John gave Bob a book. John gave her a flower". The only difference is the name (Mary becomes Bob). The goal: the prediction of "flower" should change. This allows us to trace which components transmit name information.
 
 **Step 2: Choosing granularity**
 

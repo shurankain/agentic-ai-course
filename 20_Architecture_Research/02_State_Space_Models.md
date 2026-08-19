@@ -58,7 +58,7 @@ For each input token the model dynamically computes these parameters via linear 
 
 This allows the model to selectively decide what to remember: a large Delta value forces the system to forget the previous state more aggressively and pay more attention to the current token, while a small Delta preserves history and reduces the influence of the current input.
 
-Mamba Block architecture: The input token passes through two parallel processing branches. The first branch expands dimensionality via a linear projection, then applies a 1D convolution for local context, after which data is fed into the selective SSM module. The second branch also expands dimensionality via a separate linear projection and serves as a gating mechanism. Outputs from both branches are multiplied element-wise, allowing the model to selectively pass information. A final linear projection returns the dimensionality to the original size, and the result is added to the input via a residual connection.
+Mamba Block architecture: The input token passes through two parallel processing branches. The first branch expands dimensionality via a linear projection, then applies a 1D convolution for local context, after which data is fed into the selective SSM module. The second branch also expands dimensionality via a separate linear projection and is a gating mechanism. Outputs from both branches are multiplied element-wise. This allows the model to selectively pass information. A final linear projection returns the dimensionality to the original size, and the result is added to the input via a residual connection.
 
 Complexity comparison: Transformer has O(n²) for training and inference, O(n x d) memory for KV cache. Mamba has O(n) for training, O(1) per token for inference, O(d_state) memory where d_state is approximately 16.
 
@@ -86,7 +86,7 @@ Quadratic complexity of attention is due to softmax: the standard formula Attent
 
 Linear Attention: Replace the exponential of the product of q and k with the product of phi(q) transposed and phi(k) for some feature map phi. Linear Attention(Q, K, V) equals phi(Q) times phi(K) transposed times V.
 
-Computational trick: Normally the product QK transposed times V has complexity O(n²d). The linear product Q times K transposed times V has complexity O(nd²) if you first compute S equals K transposed times V. When d is much less than n (typically d=64, n=4096), linear attention is significantly faster.
+Computational trick: Normally the product QK transposed times V has complexity O(n²d). The linear product Q times K transposed times V has complexity O(nd²) if you first compute S equals K transposed times V. When d is much less than n (typically d=64, n=4096), linear attention is faster.
 
 Feature Maps: ReLU where phi(x) equals ReLU(x) (problem: loss of negative values), ELU + 1 where phi(x) equals ELU(x) plus 1 (guarantees positivity), Random Fourier Features where phi(x) equals exponential of x transposed omega divided by square root of m (approximates the softmax kernel), Polynomial where phi(x) equals (1, x, x²,...) Taylor expansion of softmax.
 
@@ -110,7 +110,7 @@ Jamba (2024) from AI21 is the first production-ready hybrid model.
 
 Architectural features: Jamba uses a 4:1 ratio between Mamba and Attention layers: for every four Mamba layers there is one Attention layer. The model additionally integrates Expert mixture (MoE) for capacity scaling: the total parameter count is 52B, but only 12B are active at any given time. The repeating block structure: four sequential Mamba layers, then one Attention layer, and the block concludes with an MoE module.
 
-Component synergy: Mamba layers efficiently process "background" information and long sequences with linear complexity, Attention layers focus on critical data points (entities, relationships) where precise retrieval is required, MoE modules add model capacity without proportional increase in computational cost since only a subset of experts is activated.
+How the components combine: Mamba layers efficiently process "background" information and long sequences with linear complexity, Attention layers focus on critical data points (entities, relationships) where precise retrieval is required, MoE modules add model capacity without proportional increase in computational cost since only a subset of experts is activated.
 
 Results: 256K context with quality comparable to Mixtral at lower compute.
 
@@ -152,7 +152,7 @@ Long document summarization: SSM/Hybrid. Code generation: Transformer. Conversat
 
 xLSTM (2024), from Sepp Hochreiter (the original LSTM inventor), revisits recurrent architectures with modern techniques.
 
-**sLSTM (scalar LSTM):** Introduces exponential gating: the forget gate uses an exponential function instead of sigmoid, enabling more aggressive memory management. A new memory mixing mechanism allows separate memory cells to interact.
+**sLSTM (scalar LSTM):** Introduces exponential gating: the forget gate uses an exponential function instead of sigmoid. This enables more aggressive memory management. A new memory mixing mechanism allows separate memory cells to interact.
 
 **mLSTM (matrix LSTM):** Replaces the scalar memory cell with a matrix, dramatically increasing state capacity. The update rule resembles a form of linear attention: C_t = f_t · C_{t-1} + i_t · v_t · k_t^T. This creates a connection between LSTMs and linear attention models.
 
@@ -162,11 +162,11 @@ xLSTM (2024), from Sepp Hochreiter (the original LSTM inventor), revisits recurr
 
 Google Research introduced Griffin and Hawk (2024) as hybrid architectures that combine recurrent layers with local attention.
 
-**Hawk** uses a simple recurrent layer (real-gated linear recurrence): essentially a simplified SSM without the structured state space formulation. Each layer processes tokens with O(1) cost per token.
+**Hawk** uses a simple recurrent layer (real-gated linear recurrence): a simplified SSM without the structured state space formulation. Each layer processes tokens with O(1) cost per token.
 
 **Griffin** adds local attention windows (typically 1024 tokens) to the recurrent backbone. This addresses the retrieval weakness of pure recurrent models while keeping the overall complexity sub-quadratic.
 
-**Key finding:** Griffin matches Transformer quality on language modeling benchmarks up to 7B parameters while being significantly more efficient on long sequences. The local attention windows are sufficient for most retrieval needs: global attention is rarely necessary.
+**Key finding:** Griffin matches Transformer quality on language modeling benchmarks up to 7B parameters while being more efficient on long sequences. The local attention windows are sufficient for most retrieval needs: global attention is rarely necessary.
 
 ### RWKV-6: Evolution and Community
 
@@ -182,7 +182,7 @@ RWKV-6 (2024) brought significant improvements over RWKV-5:
 
 By 2025, a clear consensus has emerged: **pure SSMs will not replace Transformers, but hybrid architectures are the practical future.**
 
-**Evidence:** No pure SSM has matched Transformer quality on broad benchmarks at scale. But hybrids (Jamba, Griffin, NVIDIA Bamba, IBM Granite 4.0) consistently demonstrate 70-90% of Transformer quality at significantly lower compute cost on long sequences.
+**Evidence:** No pure SSM has matched Transformer quality on broad benchmarks at scale. But hybrids (Jamba, Griffin, NVIDIA Bamba, IBM Granite 4.0) consistently demonstrate 70-90% of Transformer quality at lower compute cost on long sequences.
 
 **Why pure SSMs fall short:** The fundamental limitation is fixed state size. No matter how sophisticated the selection mechanism, compressing an arbitrarily long history into a fixed-size state inevitably loses information. Periodic attention layers act as "checkpoints" that preserve critical information.
 
@@ -194,7 +194,7 @@ Limitation 1 Fixed state size: The state h has a fixed size. The entire history 
 
 Limitation 2 Training stability: SSMs are more sensitive to learning rate (require smaller LR), initialization (HiPPO or special initialization is mandatory), and precision (BF16 is sometimes problematic).
 
-Limitation 3 Hardware efficiency: Despite theoretical linearity, in practice selective scan poorly utilizes tensor cores, is memory bandwidth limited (not compute), and requires custom CUDA kernels.
+Limitation 3 Hardware efficiency: Despite theoretical linearity, in practice selective scan poorly uses tensor cores, is memory bandwidth limited (not compute), and requires custom CUDA kernels.
 
 Limitation 4 Ecosystem: Transformer has optimized libraries (FlashAttention and others), proven training recipes, and extensive community experience. SSM still lags behind in tooling and established practices.
 
@@ -206,7 +206,7 @@ Long Context Inference (Section 17): SSM is an alternative to RoPE scaling and s
 
 Distributed Training (Section 16): SSMs are easier to shard: no attention matrices between GPUs. Sequence parallelism is simpler.
 
-Scaling Laws (Section 01): SSMs have different scaling properties. Compute scales linearly with context, enabling exploration of regimes inaccessible to Transformer.
+Scaling Laws (Section 01): SSMs have different scaling properties. Compute scales linearly with context. This enables exploration of regimes inaccessible to Transformer.
 
 ## Key Takeaways
 

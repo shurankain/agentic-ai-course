@@ -2,7 +2,7 @@
 
 ## Continuous Integration for LLM Applications
 
-Continuous Integration for LLM projects introduces additional challenges. Beyond standard tests, it is necessary to test interactions with LLM APIs, prompt quality, and behavior under various model responses. These tests are more expensive in the literal sense. Each call costs money.
+Continuous Integration for LLM projects introduces additional challenges. Beyond standard tests, it is necessary to test interactions with LLM APIs, prompt quality, and behavior under model responses. These tests are more expensive in the literal sense. Each call costs money.
 
 The strategy balances coverage and cost. Unit tests with mocked LLM responses are fast and free but do not catch changes in real model behavior. Integration tests with real APIs are more accurate but expensive and slower. A sensible approach: extensive unit tests with mocks for processing logic, a limited set of integration tests for critical paths.
 
@@ -70,13 +70,13 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-5.4. At a million requests per day with an average of 500 tokens: hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
 
-**Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are significantly better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-5.4, but with limited control over the process. Self-hosted Llama 3.x/4, Mistral, and Qwen 2.5/3 can be fully fine-tuned with complete control over hyperparameters, data, and training process.
+**Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-5.4, but with limited control over the process. Self-hosted Llama 3.x/4, Mistral, and Qwen 2.5/3 can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 
 **Control over availability.** Dependence on an external provider is a risk. An OpenAI outage means an outage of your service. Historical examples: an OpenAI outage in November 2023 lasting several hours, Anthropic rate limiting during peak loads. For critical systems (emergency response, financial trading, production control), such dependence is unacceptable. A self-hosted model with proper redundancy guarantees availability under your control.
 
 ## vLLM: High-Performance Inference
 
-vLLM is one of the most efficient solutions for inference. It implements PagedAttention: a memory management technique that significantly increases throughput. Traditional implementations allocate memory for the maximum context length per request, even if the actual length is shorter. PagedAttention allocates memory dynamically, similar to how an OS manages memory pages. This allows serving more concurrent requests on the same GPU.
+VLLM is one of the most efficient solutions for inference. It implements PagedAttention: a memory management technique that increases throughput. Traditional implementations allocate memory for the maximum context length per request, even if the actual length is shorter. PagedAttention allocates memory dynamically, similar to how an OS manages memory pages. This allows serving more concurrent requests on the same GPU.
 
 The mechanism: the KV-cache is split into fixed-size blocks (typically 16 tokens). Blocks are allocated as needed. When a request completes, blocks are freed and reused. This eliminates fragmentation and enables near-optimal memory utilization.
 
@@ -102,7 +102,7 @@ PyTorch DataLoader with num_workers > 0 uses shared memory. vLLM uses it for com
 
 Model caching saves startup time. Models are downloaded from HuggingFace Hub on first launch, which takes minutes. A PersistentVolume for cache allows reusing weights between restarts. Llama-70B weighs ~140GB; downloading over the network takes 10-20 minutes. On every restart or rolling update, this is downtime. A PersistentVolumeClaim on fast SSD (100-200GB) mounted to ~/.cache/huggingface means the model is downloaded once, and subsequent starts use cache, pod ready in 2-3 minutes instead of 20.
 
-Memory utilization in vLLM is controlled by --gpu-memory-utilization. A value of 0.9 means 90% of available GPU memory is allocated to KV-cache. The remaining 10% serves as a buffer. Too high (0.95-0.99) leads to OOM during peak loads. Too low (0.7-0.8) underutilizes the GPU, reducing throughput. The optimum depends on the workload: short requests tolerate high utilization, while long contexts require headroom.
+Memory utilization in vLLM is controlled by --gpu-memory-utilization. A value of 0.9 means 90% of available GPU memory is allocated to KV-cache. The remaining 10% is a buffer. Too high (0.95-0.99) leads to OOM during peak loads. Too low (0.7-0.8) underutilizes the GPU, reducing throughput. The optimum depends on the workload: short requests tolerate high utilization, while long contexts require headroom.
 
 ## Inference Optimization
 

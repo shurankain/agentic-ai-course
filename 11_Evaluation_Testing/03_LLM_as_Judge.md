@@ -135,7 +135,7 @@ Multi-judge aggregation runs evaluation with several models in parallel via Comp
 
 - **Calibration against human evaluations is non-negotiable.** Run a human-annotated dataset through the LLM judge regularly to verify correlation; without this, judge scores are uninterpretable.
 
-- **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.5 + Claude Opus 4.8 + Gemini) and taking the median produces more robust scores than any single judge.
+- **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.5 + Claude Opus 4.8 + Gemini) and taking the median produces more stable scores than any single judge.
 
 - **Pairwise comparison is the most reliable LLM judge mode.** Randomizing A/B order and averaging two runs eliminates position bias and avoids the scale calibration problem of absolute ratings.
 

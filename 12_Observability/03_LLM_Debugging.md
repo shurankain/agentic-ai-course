@@ -96,7 +96,7 @@ Anomaly detection requires statistical methods adapted to the specifics of gener
 
 **CUSUM (Cumulative Sum)**: for detecting slow trends. Accumulates deviations from the target value: S_n = max(0, S_{n-1} + (x_n - μ - k)), where k is the allowable deviation (typically 0.5σ). Alert when threshold h is exceeded (typically 4-5σ). Valuable for detecting gradual quality degradation.
 
-**EWMA (Exponential Weighted Moving Average)**: smoothed tracking with priority on recent data. Formula: EWMA_t = λ x x_t + (1-λ) x EWMA_{t-1}, where λ (typically 0.2-0.3 for LLMs). Balances between fast response and noise resilience.
+**EWMA (Exponential Weighted Moving Average)**: smoothed tracking with priority on recent data. Formula: `EWMA_t = lambda * x_t + (1 - lambda) * EWMA_{t-1}`, where lambda (typically 0.2-0.3 for LLMs). Balances between fast response and noise resilience.
 
 **PSI (Population Stability Index)**: detection of changes in input data distribution. Computed as: PSI = Σᵢ (Actual_i - Expected_i) x ln(Actual_i / Expected_i). Interpretation: PSI < 0.1: no changes, 0.1 ≤ PSI < 0.2: moderate changes require investigation, PSI ≥ 0.2: significant changes require action. Critical for RAG systems, where query drift indicates the need to update the knowledge base.
 

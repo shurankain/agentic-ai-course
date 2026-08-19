@@ -26,7 +26,7 @@ How many words exist in the English language? Estimates range from 170,000 to ov
 
 But even a massive vocabulary does not solve the main problem: new words. "ChatGPT" did not exist in any vocabulary before 2022. "Covidiot" is a 2020 neologism. What do you do with such words? Mark them as "unknown" and lose all information? That is unacceptable.
 
-Furthermore, word-level tokenization ignores morphology. Words like "run," "runs," "running," "ran" are semantically related concepts but four entirely different tokens. It becomes harder for the model to capture these relationships.
+Word-level tokenization ignores morphology. Words like "run," "runs," "running," "ran" are semantically related concepts but four entirely different tokens. It becomes harder for the model to capture these relationships.
 
 ### The Middle Ground: Subword Tokenization
 
@@ -59,7 +59,7 @@ Suppose the sequence "th" appears frequently in the text. After several iteratio
 
 An important property of BPE is determinism. The same text is always tokenized identically. This is critical for experiment reproducibility and predictable model behavior.
 
-Moreover, merge rules are preserved in the order they were created. When tokenizing new text, the rules are applied in the same order, guaranteeing consistency between model training and inference.
+Merge rules are preserved in the order they were created. When tokenizing new text, the rules are applied in the same order, guaranteeing consistency between model training and inference.
 
 ### Byte-Level BPE: Why GPT Works with Bytes
 
@@ -86,7 +86,7 @@ Character-level BPE (as in early models) is easier to understand, but byte-level
 
 WordPiece is used in BERT and other Google models. The main difference from BPE is the criterion for selecting pairs to merge. Instead of simple frequency, WordPiece selects the pair that maximizes the likelihood of the training data under the language model.
 
-This is a "smarter" selection that accounts not only for frequency but also for impact on model quality. In practice, BPE and WordPiece results are often similar, but WordPiece can be more effective for certain tasks.
+This is a "smarter" selection that accounts for frequency and for impact on model quality. In practice, BPE and WordPiece results are often similar, but WordPiece can be more effective for certain tasks.
 
 A distinctive feature of WordPiece is the "##" prefix for word continuations. The word "embedding" may be tokenized as ["em", "##bed", "##ding"]. The prefix indicates that the token is a continuation of the previous one rather than the start of a new word.
 
@@ -96,7 +96,7 @@ Google's SentencePiece addresses an important problem: language dependence. Trad
 
 SentencePiece works directly with "raw" Unicode text without prior segmentation. Spaces are treated as regular characters, represented by the special symbol "▁". This makes the tokenizer truly language-independent.
 
-The text "Hello world" may become ["▁Hello", "▁world"]. The "▁" symbol marks the beginning of a word (or the space before it), enabling exact reconstruction of the original text during detokenization.
+The text "Hello world" may become ["▁Hello", "▁world"]. The "▁" symbol marks the beginning of a word (or the space before it). This enables exact reconstruction of the original text during detokenization.
 
 ### Tiktoken: OpenAI's Modern Choice
 

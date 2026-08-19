@@ -114,7 +114,7 @@ GGUF IQ (Importance Quantization) methods in llama.cpp go beyond standard k-quan
 
 **How IQ works:** Weights are vector-quantized using codebooks derived from lattice structures (E8 lattice for IQ2). The codebook entries are optimized for the actual weight distribution rather than being uniformly spaced. Importance weighting ensures that more critical layers receive higher precision.
 
-**Practical impact:** IQ methods enable running 70B models on 16 GB RAM (IQ2), making frontier models accessible on consumer hardware. Quality degrades gracefully: IQ4_XS ≈ Q4_K_M quality at slightly smaller size, IQ3_XXS enables running models that otherwise wouldn't fit.
+**Practical impact:** IQ methods enable running 70B models on 16 GB RAM (IQ2). This makes frontier models accessible on consumer hardware. Quality degrades gracefully: IQ4_XS ≈ Q4_K_M quality at slightly smaller size, IQ3_XXS enables running models that otherwise wouldn't fit.
 
 ## Marlin Kernels
 
@@ -136,7 +136,7 @@ FP8 is the standard on H100 with native support and minimal quality loss. FP4 on
 
 KV-cache quantization (INT8/FP8) doubles concurrent users or context length, one of the highest-ROI production optimizations.
 
-Method matters: GPTQ, AWQ are significantly better than naive quantization. Marlin kernels extract near-ideal speedup from INT4 weights.
+Method matters: GPTQ, AWQ are better than naive quantization. Marlin kernels extract near-ideal speedup from INT4 weights.
 
 GGUF IQ methods push the frontier to 2-bit quantization for consumer hardware. IQ2 enables 70B models on 16 GB RAM.
 

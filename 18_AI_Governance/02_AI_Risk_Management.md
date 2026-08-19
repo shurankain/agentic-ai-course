@@ -1,6 +1,6 @@
 # AI Risk Management
 
-## Introduction: Why AI Systems Require a Special Approach to Risk
+## Why AI Systems Require a Special Approach to Risk
 
 Traditional risk management methodologies were developed for deterministic systems: software either works correctly or contains a bug that can be found and fixed. AI systems break this paradigm. A model can produce excellent results on 99% of inputs but fail catastrophically on the remaining percent, and it is impossible to determine in advance which inputs will cause the failure.
 
@@ -22,7 +22,7 @@ The first category covers risks associated with the technology itself. **Halluci
 
 **Algorithmic bias** is one of the most studied and still unsolved problems. AI systems absorb and amplify biases contained in training data. A credit scoring system discriminates by race not because race is included as a feature, but because ZIP code correlates with race, and the model learned this proxy.
 
-The classic COMPAS study showed that the recidivism assessment algorithm erroneously assigned high risk to African Americans twice as often as to white individuals. The system's developers had no intention of creating a discriminatory algorithm, the bias arose from historical arrest data, which itself reflected systemic racism in the law enforcement system.
+The classic COMPAS study showed that the recidivism assessment algorithm erroneously assigned high risk to African Americans twice as often as to white people. The system's developers had no intention of creating a discriminatory algorithm, the bias arose from historical arrest data, which itself reflected systemic racism in the law enforcement system.
 
 **The trade-off between fairness and accuracy** creates an ethical dilemma: improving fairness by one metric can worsen it by another. Equalized odds, demographic parity, and individual fairness are incompatible goals, and the choice among them is not a technical but a values-based question.
 
@@ -54,9 +54,9 @@ The NIST AI RMF, released in January 2023, represents the most mature framework 
 
 **GOVERN** establishes the organizational culture and structures for AI risk management. This includes defining roles and responsibilities, creating policies, and ensuring accountability at the C-suite level. Critically: AI governance is not an IT function but an enterprise-wide capability.
 
-**MAP**: identification and analysis of the AI usage context. What decisions does the system make? Who is affected by those decisions? What are the consequences of errors? At this stage, a comprehensive picture of AI usage across the entire organization is created. Many companies discover "shadow AI": employee use of AI tools without the IT department's knowledge.
+**MAP**: identification and analysis of the AI usage context. What decisions does the system make? Who is affected by those decisions? What are the consequences of errors? At this stage, a picture of AI usage across the entire organization is created. Many companies discover "shadow AI": employee use of AI tools without the IT department's knowledge.
 
-**MEASURE**: risk assessment using quantitative and qualitative methods. NIST emphasizes the importance of measuring not only technical characteristics (accuracy, latency) but also trustworthiness attributes: bias, explainability, privacy, robustness. Measurement must be continuous, not a one-time event.
+**MEASURE**: risk assessment using quantitative and qualitative methods. NIST emphasizes the importance of measuring technical characteristics (accuracy, latency) and trustworthiness attributes: bias, explainability, privacy, robustness. Measurement must be continuous, not a one-time event.
 
 **MANAGE**: making decisions about risks and their mitigation. The four classic strategies (avoid, mitigate, transfer, accept) apply to AI risks as well, but with specific considerations. Some AI risks cannot be fully mitigated, and the organization must explicitly accept residual risk.
 
@@ -82,7 +82,7 @@ The international standard ISO/IEC 23894 (2023) provides guidelines for integrat
 
 ### Risk Identification
 
-The process begins with comprehensive mapping of all AI use cases in the organization. This includes:
+The process begins with mapping of all AI use cases in the organization. This includes:
 
 **AI System Inventory**: a centralized registry of all AI systems, including vendor solutions, custom models, and shadow AI. For each system, the following is recorded: purpose, input/output, users, decisions affected, data used, model type.
 
@@ -144,7 +144,7 @@ When working with AI vendors:
 
 AI risks fundamentally differ from traditional IT risks. The stochastic nature of AI systems, emergent behaviors, and the ability to absorb biases from data require specialized approaches to risk management.
 
-The NIST AI RMF provides a comprehensive framework with four functions: GOVERN, MAP, MEASURE, MANAGE. It emphasizes that AI governance is an enterprise-wide capability, not exclusively a technical function.
+The NIST AI RMF provides a framework with four functions: GOVERN, MAP, MEASURE, MANAGE. It emphasizes that AI governance is an enterprise-wide capability, not exclusively a technical function.
 
 The AI risk taxonomy covers technical (hallucinations, adversarial attacks, drift), ethical (bias, privacy), operational (vendor lock-in, cost unpredictability), and strategic (competitive displacement) categories.
 

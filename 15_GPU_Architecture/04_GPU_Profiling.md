@@ -4,7 +4,7 @@
 
 Optimization without measurement is guesswork. Intuition fails even experienced developers: an operation that seems slow may account for a fraction of a percent of total time, while "fast" code may be the bottleneck of the entire pipeline.
 
-GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, instruction mix: numerous factors affect performance.
+GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, instruction mix: factors affect performance.
 
 The modern toolkit spans several levels: from the high-level PyTorch profiler to the low-level NVIDIA Nsight. Each tool provides its own view of performance, and the ability to combine them is a key skill for an optimization engineer.
 
@@ -34,7 +34,7 @@ Profiling training requires a special approach: the first iterations are "cold" 
 
 The schedule mechanism controls exactly when to collect metrics. A typical strategy: skip the first iteration (wait=1), warm up on the next one (warmup=1), then actively profile several iterations (active=3), and repeat the cycle as needed (repeat). Within the training loop, prof.step() is called after each step to notify the profiler.
 
-The on_trace_ready parameter accepts a callback function. tensorboard_trace_handler('./log/') saves the trace in TensorBoard format. Chrome trace viewer (chrome://tracing in Chrome) also reads these files, providing an interactive timeline of all operations.
+The on_trace_ready parameter accepts a callback function. tensorboard_trace_handler('./log/') saves the trace in TensorBoard format. Chrome trace viewer (chrome://tracing in Chrome) also reads these files. This gives an interactive timeline of all operations.
 
 ### Interpreting Results
 
@@ -116,7 +116,7 @@ Nsight Compute provides:
 - Memory access patterns
 - Roofline analysis
 
-This is a heavyweight tool: profiling a single kernel can take seconds. It is used for deep dives into critical kernels.
+This is a heavyweight tool: profiling a single kernel can take seconds. It is used for detailed analysis of critical kernels.
 
 ### Roofline Model
 
@@ -140,7 +140,7 @@ The position of your kernel on the roofline shows:
 - Too much shared memory per block
 - A small grid (insufficient blocks)
 
-**Memory Throughput**: how much data per second is read/written. Compare with the GPU's peak bandwidth. If significantly lower: non-coalesced access or other issues.
+**Memory Throughput**: how much data per second is read/written. Compare with the GPU's peak bandwidth. If lower: non-coalesced access or other issues.
 
 **Compute Throughput**: how many operations per second. For FP16 on H100, the peak is ~1000 TFLOPS. If your kernel shows 100 TFLOPS. It is far from optimal.
 
@@ -193,7 +193,7 @@ Fusion is the primary source of speedup for memory-bound operations. By combinin
 
 **torch.compile** provides automatic fusion. When decorating a function with @torch.compile, PyTorch analyzes the computation graph and generates optimized fused kernels. For example, a sequence of layer_norm, then matmul, then bias_add, then gelu can be combined into one or several kernels, eliminating intermediate writes to global memory. This is especially effective for element-wise operations and small matrix transformations.
 
-**Manual fusion** is used when torch.compile is insufficient. For specific patterns, you can use Triton or write custom CUDA kernels, providing full control over shared memory and register file usage.
+**Manual fusion** is used when torch.compile is insufficient. For specific patterns, you can use Triton or write custom CUDA kernels. This gives full control over shared memory and register file usage.
 
 ### Memory Optimization
 
@@ -201,7 +201,7 @@ Fusion is the primary source of speedup for memory-bound operations. By combinin
 
 **Mixed precision**: using FP16 or BF16 instead of FP32. Benefits: half the memory for tensor storage, double the effective memory bandwidth, plus the ability to use Tensor Core acceleration. torch.autocast automatically selects the appropriate precision for each operation, preserving numerical stability where it is critical. A context manager with parameters device_type='cuda' and dtype=torch.float16 activates mixed precision for all operations within the block.
 
-**Efficient data layouts**: using contiguous tensors and specialized memory formats. Channels-last format for convolutions provides better access locality. Non-contiguous tensors require scatter/gather operations during reads, significantly reducing effective bandwidth. Calling.contiguous() before intensive operations can significantly speed up execution.
+**Efficient data layouts**: using contiguous tensors and specialized memory formats. Channels-last format for convolutions provides better access locality. Non-contiguous tensors require scatter/gather operations during reads, reducing effective bandwidth. Calling.contiguous() before intensive operations can speed up execution.
 
 ### Reducing Synchronization
 
@@ -271,7 +271,7 @@ Result: 4x improvement in throughput for batch inference.
 
 **Measure, do not guess.** Performance intuition is often wrong. Only measurements reveal the real bottlenecks.
 
-**Use the right tool for the job.** torch.profiler for quick analysis, Nsight Systems for a system-level view, Nsight Compute for deep dives into specific kernels.
+**Use the right tool for the job.** torch.profiler for quick analysis, Nsight Systems for a system-level view, Nsight Compute for detailed analysis of specific kernels.
 
 **Understand compute-bound vs memory-bound.** Identifying the type of bottleneck determines the optimization strategy.
 
@@ -285,7 +285,7 @@ Result: 4x improvement in throughput for batch inference.
 
 ### Comprehensive Profiling
 
-Full training loop profiling involves initializing the profiler with specified activities (CPU and CUDA), a schedule (skipping cold iterations, warmup, active profiling), and callbacks for saving results. The training loop calls prof.step() after each iteration. Results are analyzed via prof.key_averages().table() sorted by various metrics: CUDA time, CPU time, memory usage. Data is exported to Chrome trace format (export_chrome_trace) and stack traces (export_stacks) for detailed analysis in visual tools.
+Full training loop profiling involves initializing the profiler with specified activities (CPU and CUDA), a schedule (skipping cold iterations, warmup, active profiling), and callbacks for saving results. The training loop calls prof.step() after each iteration. Results are analyzed via prof.key_averages().table() sorted by metrics: CUDA time, CPU time, memory usage. Data is exported to Chrome trace format (export_chrome_trace) and stack traces (export_stacks) for detailed analysis in visual tools.
 
 The with_flops=True parameter enables FLOPS counting for operations, helping assess arithmetic intensity and identify the type of bottleneck.
 
@@ -311,5 +311,5 @@ Comparing with and without gradient checkpointing demonstrates the trade-off: ch
 For accurate inference latency measurement:
 - Use CUDA Events (torch.cuda.Event()) instead of time.perf_counter(), this excludes CPU overhead and measures pure GPU time
 - Warm up the GPU before measurements (50+ iterations) to stabilize frequencies and fill caches
-- Test various batch sizes to assess GPU utilization and determine the optimal operating range
+- Test batch sizes to assess GPU utilization and determine the optimal operating range
 - With good utilization, latency should grow sublinearly with batch size (throughput grows faster than latency)

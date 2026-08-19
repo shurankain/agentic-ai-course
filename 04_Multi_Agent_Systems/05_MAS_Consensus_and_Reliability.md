@@ -20,13 +20,13 @@ Relatively simple mechanisms work here: voting, averaging confidence scores, sel
 
 A more complex case: agents must agree on what to do. Which strategy to choose? Which tool to use? How to decompose the task?
 
-There is no single correct answer here. Different strategies can be equally valid. Consensus mechanisms must not only select one option but also ensure that all agents will follow the chosen plan.
+There is no single correct answer here. Different strategies can be equally valid. Consensus mechanisms must select one option and ensure that all agents will follow the chosen plan.
 
 ### Consensus on State
 
 The most technically complex case: agents must have a consistent view of the system state. Which tasks have already been completed? Which resources are occupied? What is the current conversation context?
 
-This is a classic distributed systems problem, complicated by the fact that LLM agents can "forget" or distort information. Not only synchronization protocols are needed, but also state verification mechanisms.
+This is a classic distributed systems problem, complicated by the fact that LLM agents can "forget" or distort information. Synchronization protocols are needed, and so are state verification mechanisms.
 
 ---
 
@@ -160,7 +160,7 @@ Full-scale BFT protocols are rarely needed in typical AI systems. They are compl
 
 **Verification**: the result of one agent is checked by another agent (or several).
 
-**Audit trails**: all actions are logged with cryptographic protection against tampering, allowing detection of incorrect behavior after the fact.
+**Audit trails**: all actions are logged with cryptographic protection against tampering. This allows detection of incorrect behavior after the fact.
 
 ---
 
@@ -264,9 +264,9 @@ For multi-agent systems, metrics are needed at several levels: for individual ag
 
 **Precision/Recall/F1**: for classification or extraction tasks. Precision shows how many of the returned results are relevant. Recall shows how many of the relevant results were found.
 
-**Latency**: time from receiving a request to producing an answer. It is important to measure not only the mean but also percentiles (p95, p99).
+**Latency**: time from receiving a request to producing an answer. It is important to measure the mean and percentiles (p95, p99).
 
-**Cost**: execution cost (tokens, API calls, compute). In systems with different models, this can vary significantly.
+**Cost**: execution cost (tokens, API calls, compute). In systems with different models, this can vary.
 
 **Reliability**: the proportion of requests completed without errors. An agent with high accuracy but crashing in 30% of cases may be less useful than a less accurate but stable one.
 
@@ -290,7 +290,7 @@ For multi-agent systems, metrics are needed at several levels: for individual ag
 
 **Throughput**: the number of requests the system can process per unit of time.
 
-**Availability**: the proportion of time the system is operational. This accounts not only for individual agent failures but also their impact on the system as a whole.
+**Availability**: the proportion of time the system is operational. This accounts for individual agent failures and their impact on the system as a whole.
 
 **Cost per request**: total cost of processing one request by all agents in the system.
 
@@ -342,7 +342,7 @@ A weighted voting system automatically adjusts each agent's influence based on i
 
 **Weight updates** occur after receiving ground truth (the correct answer). Exponential moving average is used: new accuracy equals old accuracy multiplied by (1 - learning_rate) plus the correctness indicator (1.0 or 0.0) multiplied by learning_rate. Learning rate is typically 0.1-0.2, which ensures smooth but stable updates.
 
-**Result transparency:** the system returns not only the final decision but also voting details for each variant: list of votes, total weight, percentage breakdown. This enables auditing and understanding why a particular decision was made.
+**Result transparency:** the system returns the final decision and voting details for each variant: list of votes, total weight, percentage breakdown. This enables auditing and understanding why a particular decision was made.
 
 ### Agent Debate System
 
@@ -360,7 +360,7 @@ Final round (judge): an independent agent receives the complete debate transcrip
 
 **Consensus detection:** in rare cases, debaters may reach agreement early. The system checks whether both sides acknowledge each other's validity (searching for phrases like "valid point", "agree that"). When consensus is detected, the debate ends early.
 
-**Advantages of the approach:** identifying weak points in argumentation through active challenging, avoiding confirmation bias (each side is forced to consider the alternative), making all reasoning steps explicit.
+**Advantages of the approach:** identifying weak points in argumentation through active challenging, avoiding confirmation bias (each side is forced to consider the alternative). This makes all reasoning steps explicit.
 
 **Limitations:** high cost (6+ LLM calls per question), need for an independent judge, possibility of "convincing lies" (agents can generate plausible but false arguments).
 
@@ -376,7 +376,7 @@ The provenance system tracks the origin of every fact in a multi-agent system, w
 
 **Finding affected facts:** when an error is discovered in fact X, the system finds all facts that directly or indirectly depend on X. For each fact Y, it checks whether a dependency path exists from Y to X. The result is a set of facts that may be compromised by the error.
 
-**Fact invalidation:** when an error is discovered, not only the erroneous fact is invalidated but also all facts dependent on it. The metadata of each affected fact records an invalidation flag, the reason (reference to the original error), and the invalidation time. This prevents the use of potentially erroneous data.
+**Fact invalidation:** when an error is discovered, the erroneous fact is invalidated and all facts dependent on it. The metadata of each affected fact records an invalidation flag, the reason (reference to the original error), and the invalidation time. This prevents the use of potentially erroneous data.
 
 **Audit report generation:** for any fact, a complete report on its origin can be generated, including the full dependency chain, confidence metrics at each step, and source information. This is critically important for decision explainability in high-risk applications.
 
@@ -398,7 +398,7 @@ The execute method accepts an operation and a fallback strategy. If the circuit 
 
 **Advantages for MAS:**
 
-Failure isolation: a non-functional agent does not infect the entire system with its errors. Automatic recovery: the system periodically checks whether the agent has recovered. Graceful degradation: the system continues operating in a limited mode instead of complete failure. Monitoring: state transitions are logged, providing a signal about problems.
+Failure isolation: a non-functional agent does not infect the entire system with its errors. Automatic recovery: the system periodically checks whether the agent has recovered. Graceful degradation: the system continues operating in a limited mode instead of complete failure. Monitoring: state transitions are logged. This gives a signal about problems.
 
 **Parameter tuning:**
 

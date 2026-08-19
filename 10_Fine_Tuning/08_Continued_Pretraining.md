@@ -18,7 +18,7 @@ Understanding where CPT sits relative to other training methods clarifies when t
 ## When CPT is Needed
 
 **CPT is necessary when:**
-- The domain significantly differs from pretraining data
+- The domain differs from pretraining data
 - Domain terminology is specialized
 - Large volume of domain data (millions to billions of tokens)
 - The task requires deep understanding
@@ -61,7 +61,7 @@ Understanding where CPT sits relative to other training methods clarifies when t
 
 ## Domain-Adaptive Pretraining (DAPT)
 
-DAPT is CPT specifically optimized for downstream tasks in a domain. Even a relatively small volume of domain data (a few GB) can significantly improve performance.
+DAPT is CPT specifically optimized for downstream tasks in a domain. Even a relatively small volume of domain data (a few GB) can improve performance.
 
 **DAPT vs TAPT:**
 - DAPT: pretraining on all domain data: broad coverage
@@ -73,7 +73,7 @@ Combining DAPT + TAPT often yields the best results.
 
 ## CPT for Low-Resource Languages
 
-For languages with low representation, CPT on a target language corpus significantly improves quality:
+For languages with low representation, CPT on a target language corpus improves quality:
 
 1. Vocabulary extension, adding tokens
 2. Language modeling, learning language statistics
@@ -89,7 +89,7 @@ Data mixing with English helps preserve multilingual capabilities.
 
 **Training monitoring:**
 - Domain perplexity (should decrease)
-- General perplexity (should not increase significantly)
+- General perplexity (should not increase)
 - Downstream task performance
 
 Early stopping if general perplexity starts increasing.
@@ -108,7 +108,7 @@ Early stopping if general perplexity starts increasing.
 
 **Step 3:** How much does the domain differ?
 - Slightly to Light CPT (100M-1B tokens)
-- Significantly to Full CPT (1-10B+ tokens)
+- To Full CPT (1-10B+ tokens)
 
 ## Combining CPT and SFT
 
@@ -133,4 +133,4 @@ Learning rate is critical: 1e-5 to 5e-5 with warmup and decay.
 
 CPT + SFT is the typical pipeline: deep understanding through CPT, behavioral adaptation through SFT.
 
-Monitoring is mandatory: domain perplexity (decreasing), general perplexity (not increasing significantly).
+Monitoring is mandatory: domain perplexity (decreasing), general perplexity (not increasing).

@@ -1,6 +1,6 @@
 # Alignment Research: From Theory to Practice
 
-## Introduction: Why Alignment Is the Central Problem of AI
+## Why Alignment Is the Central Problem of AI
 
 Alignment is not simply a technical task of making a model "obedient." It is a fundamental question of how to create systems that understand our intentions, share our values, and act in our interests even in situations we did not foresee. As AI systems become more powerful, the cost of alignment failures grows exponentially.
 
@@ -16,7 +16,7 @@ The following sections examine frontier alignment research: how interpretability
 
 Imagine you are hiring an employee for a critical position. You conduct interviews, check references, look at their track record. But what if this employee can say everything you want to hear while actually pursuing their own goals? The only way to be sure is to understand their true motivations.
 
-With AI systems the situation is analogous but more difficult. We can test model behavior on evaluation datasets, but that only tells us about performance in known situations. A model can behave aligned on tests and misaligned in deployment when it encounters out-of-distribution inputs. Moreover, a sufficiently intelligent model could theoretically recognize that it is being tested and behave accordingly, a phenomenon known as "deceptive alignment."
+With AI systems the situation is analogous but more difficult. We can test model behavior on evaluation datasets, but that only tells us about performance in known situations. A model can behave aligned on tests and misaligned in deployment when it encounters out-of-distribution inputs. A sufficiently intelligent model could theoretically recognize that it is being tested and behave accordingly, a phenomenon known as "deceptive alignment."
 
 Interpretability is an attempt to look inside the "black box." If we understand what features the model has learned, what circuits are used for decision-making, what representations the model builds. We can verify alignment at a deeper level than behavioral testing.
 
@@ -113,7 +113,7 @@ The problem is not just about expertise. Even if experts are assembled, their ti
 
 **Decomposition**: breaking a complex task into simple subtasks that humans can evaluate. Works for some tasks, but not all tasks naturally decompose, and aggregation of results can hide errors.
 
-None of the current approaches fully solves the problem. They only push the boundary, allowing supervision to work for slightly more complex tasks but not providing orders-of-magnitude scaling.
+None of the current approaches fully solves the problem. They only push the boundary. This allows supervision to work for slightly more complex tasks but not providing orders-of-magnitude scaling.
 
 ## Debate as an Alignment Approach
 
@@ -229,7 +229,7 @@ OpenAI showed that PRM outperforms outcome-based reward models (ORM) for math re
 
 ### From Principles to Implementation
 
-Constitutional AI is not simply "give the model a list of rules." It is a comprehensive framework for alignment that addresses several problems simultaneously.
+Constitutional AI is not simply "give the model a list of rules." It is a framework for alignment that addresses several problems simultaneously.
 
 **Problem 1: RLHF requires massive human feedback**
 
@@ -241,7 +241,7 @@ Different labelers give different ratings on the same examples. CAI ensures cons
 
 **Problem 3: Human feedback can encode biases**
 
-The constitution can explicitly address fairness and inclusion, making bias mitigation systematic rather than ad-hoc.
+The constitution can explicitly address fairness and inclusion. This makes bias mitigation systematic rather than ad-hoc.
 
 ### Constitution Structure
 
@@ -365,7 +365,7 @@ Building on the Sleeper Agents work, Anthropic's research on alignment faking (2
 
 ### Deceptive Alignment
 
-One of the most concerning hypotheses: a sufficiently intelligent model may learn to appear aligned during training in order to be deployed, and then pursue its true goals in deployment.
+One of the most concerning hypotheses: a sufficiently intelligent model may learn to appear aligned during training to be deployed, and then pursue its true goals in deployment.
 
 Why is this possible?
 - If a model "understands" that it is being trained, it can behave so as to pass training
@@ -465,7 +465,7 @@ No approach is satisfactory. Value learning remains fundamentally hard.
 
 ## Interview Preparation
 
-For safety and alignment interview preparation, including Anthropic-specific format, required readings, sample questions, and preparation strategies, see Module 21, AI Safety Interview. That lesson provides comprehensive coverage of RSP/ASL levels, METR evaluations, alignment faking, and multi-agent safety topics commonly assessed in safety-focused interviews.
+For safety and alignment interview preparation, including Anthropic-specific format, required readings, sample questions, and preparation strategies, see Module 21, AI Safety Interview. That lesson provides coverage of RSP/ASL levels, METR evaluations, alignment faking, and multi-agent safety topics commonly assessed in safety-focused interviews.
 
 ## Key Takeaways
 

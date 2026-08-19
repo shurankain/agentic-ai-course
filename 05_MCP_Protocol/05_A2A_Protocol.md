@@ -1,6 +1,6 @@
 # Agent-to-Agent Protocol (A2A)
 
-## Introduction: Inter-Agent Communication
+## Inter-Agent Communication
 
 MCP enables agents to connect to tools and data. Agent-to-Agent Protocol (A2A), introduced by Google in 2025, addresses the problem of inter-agent interaction.
 
@@ -86,7 +86,7 @@ Agent Card solves the discovery problem: how does one agent find another and und
 
 **Rate Limits:** Specify constraints: requests per minute, maximum number of concurrent tasks, maximum task execution duration. This allows clients to properly manage load.
 
-Agent Cards are published at a well-known URL (`/.well-known/agent.json`), enabling automatic discovery. An orchestrator agent can scan known domains and build a catalog of available agents. This is similar to an OpenAPI specification but specifically adapted for agent systems with support for async operations and streaming.
+Agent Cards are published at a well-known URL (`/.well-known/agent.json`). This enables automatic discovery. An orchestrator agent can scan known domains and build a catalog of available agents. This is similar to an OpenAPI specification but specifically adapted for agent systems with support for async operations and streaming.
 
 ### Long-Running Tasks
 

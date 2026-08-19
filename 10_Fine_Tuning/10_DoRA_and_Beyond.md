@@ -1,8 +1,6 @@
 # DoRA and Advanced PEFT Methods
 
-## Introduction
-
-LoRA revolutionized fine-tuning, but research continues to advance. New methods offer improvements:
+LoRA reshaped fine-tuning, but research continues to advance. New methods offer improvements:
 
 - **DoRA:** up to +3.7% on LLaMA-7B (ICML 2024, paper-reported results)
 - **GaLore:** full-parameter training with LoRA-level memory efficiency
@@ -15,7 +13,7 @@ LoRA revolutionized fine-tuning, but research continues to advance. New methods 
 
 LoRA trains a low-rank update: W' = W + BA. It modifies magnitude and direction of weights simultaneously, which can be suboptimal.
 
-The authors discovered that full fine-tuning changes direction significantly, while magnitude changes less. LoRA does not separate these aspects.
+The authors discovered that full fine-tuning changes direction, while magnitude changes less. LoRA does not separate these aspects.
 
 ### The Idea Behind DoRA
 
@@ -111,7 +109,7 @@ LongLoRA enables fine-tuning LLaMA-2-7B on 100K context on a single 48GB GPU. Re
 
 ## Comparison Table
 
-With several PEFT methods now available, selecting the right one requires weighing memory savings, inference overhead, and production readiness. The table below consolidates these trade-offs across all methods discussed in this lesson, providing a quick reference for architecture decisions.
+With several PEFT methods now available, selecting the right one requires weighing memory savings, inference overhead, and production readiness. The table below consolidates these trade-offs across all methods discussed in this lesson. This gives a quick reference for architecture decisions.
 
 | Method | Memory | Quality | Inference | Complexity | Maturity |
 |--------|--------|---------|-----------|------------|----------|

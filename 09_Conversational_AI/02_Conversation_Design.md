@@ -1,6 +1,6 @@
 # Conversation Design
 
-## Introduction: The Art of Dialogue
+## The Art of Dialogue
 
 Technology is only half the equation. You can build a flawless infrastructure, but if the conversations are poorly designed, users will be frustrated. Conversation design is the art of creating pleasant, efficient, and human-like interactions. It is not programming but scriptwriting. Not algorithms but empathy.
 
@@ -81,7 +81,7 @@ Tone adapts to the specific user. If users write formally, respond formally. If 
 
 ### Emotional Intelligence
 
-The assistant recognizes emotions and responds accordingly. Is the user upset? Start with empathy: "I understand this is a frustrating situation," then address the problem. Is the user happy? Share in the joy: "Glad everything worked out." A lack of emotional awareness is the cardinal sin of automated systems. Voice agents (see Voice and Multimodality) have an advantage here, Retell AI and similar platforms detect frustration, satisfaction, and confusion from voice signals in real time, enabling automated escalation based on emotional state.
+The assistant recognizes emotions and responds accordingly. Is the user upset? Start with empathy: "I understand this is a frustrating situation," then address the problem. Is the user happy? Share in the joy: "Glad everything worked out." A lack of emotional awareness is the cardinal sin of automated systems. Voice agents (see Voice and Multimodality) have an advantage here, Retell AI and similar platforms detect frustration, satisfaction, and confusion from voice signals in real time. This enables automated escalation based on emotional state.
 
 ## Greetings and Farewells
 
@@ -163,7 +163,7 @@ How do you know if your conversational AI is working well? Subjective impression
 
 **User satisfaction correlation.** CSAT scores correlate with specific conversation patterns. Research consistently shows: fast first response improves CSAT more than fast resolution. Empathetic language in error scenarios improves CSAT by 15-20%. Forcing users to repeat information is the strongest negative CSAT predictor. Proactive context use ("I see your order #12345") is the strongest positive CSAT predictor. Monitor these patterns and optimize the dialog design accordingly.
 
-**CSAT prediction from dialog features.** Instead of surveying every user (low response rate, biased toward extremes), train a classifier to predict CSAT from dialog features: number of turns, number of clarification requests, presence of frustration keywords, time to resolution, whether escalation occurred, and whether the agent acknowledged errors. This gives a CSAT estimate for every conversation, enabling continuous quality monitoring without surveys.
+**CSAT prediction from dialog features.** Instead of surveying every user (low response rate, biased toward extremes), train a classifier to predict CSAT from dialog features: number of turns, number of clarification requests, presence of frustration keywords, time to resolution, whether escalation occurred, and whether the agent acknowledged errors. This gives a CSAT estimate for every conversation. This enables continuous quality monitoring without surveys.
 
 **Abandonment rate**: conversations where the user stops responding before resolution. High abandonment (>30%) signals: the agent is not understanding the user, too many turns before progress, or the user found an alternative. Analyze abandoned conversations to identify common drop-off points. These are the highest-priority conversation design improvements.
 

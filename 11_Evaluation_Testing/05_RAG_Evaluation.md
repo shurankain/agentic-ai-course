@@ -81,7 +81,7 @@ Methods: LLM-as-judge for fact checking, NLI models for entailment, human evalua
 
 **2. Out-of-Scope Queries**: questions outside the knowledge base, the system should honestly say "I don't know", tests hallucination resistance.
 
-**3. Ambiguous Queries**: ambiguous questions, multiple possible interpretations, the system should clarify or provide a comprehensive answer.
+**3. Ambiguous Queries**: ambiguous questions, multiple possible interpretations, the system should clarify or provide a answer.
 
 **4. Multi-hop Reasoning**: the answer requires information from multiple documents, tests the ability to synthesize, naive RAG often fails here.
 
@@ -150,7 +150,7 @@ Process: load a dataset (18 available: scifact, nfcorpus, fiqa, and others) via 
 
 Retriever integration: create a class with a search() method that accepts corpus, queries, top_k, returning a dictionary with results for each query_id.
 
-Metric calculation: EvaluateRetrieval compares retriever results with qrels, computes nDCG, Recall, MAP for various k values (typically 1, 3, 5, 10).
+Metric calculation: EvaluateRetrieval compares retriever results with qrels, computes nDCG, Recall, MAP for k values (typically 1, 3, 5, 10).
 
 Interpretation: nDCG@10, ranking quality in top-10, Recall@10: percentage of relevant documents in top-10, MAP@10: mean average precision across all queries.
 
@@ -188,6 +188,6 @@ Success criteria for production:
 
 - **Test 8 scenarios before production, not just the happy path.** Out-of-scope queries, ambiguous inputs, multi-hop reasoning, temporal questions, adversarial inputs, and edge cases all reveal failure modes that happy-path testing misses.
 
-- **Faithfulness evaluation decomposes responses into individual claims and verifies each against context.** This claim-level approach provides actionable diagnostics, identifying exactly which statements are unsupported or contradicted.
+- **Faithfulness evaluation decomposes responses into individual claims and verifies each against context.** This claim-level approach shows which claim failed, identifying exactly which statements are unsupported or contradicted.
 
 - **Production RAG evaluation often lacks ground truth.** LLM-as-Judge, user feedback signals (thumbs up/down, rephrasing, follow-up questions), and A/B testing provide quality signals when labeled data is unavailable.

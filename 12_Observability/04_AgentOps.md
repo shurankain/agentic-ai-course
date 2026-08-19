@@ -2,7 +2,7 @@
 
 ## What is AgentOps
 
-AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined not only by code but also by the model, prompts, tools, and dynamic context.
+AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined by code and by the model, prompts, tools, and dynamic context.
 
 **Evolution:** 2000s DevOps (Code, then Deployment), 2010s MLOps (Models, then Production), 2020s LLMOps (LLM APIs, then Applications), 2024+ AgentOps (Agents, then Autonomous systems).
 
@@ -140,11 +140,11 @@ Single-agent tracing is straightforward, one trace, one span tree. Multi-agent s
 
 RAG systems degrade silently when the knowledge base becomes stale. If the product pricing changed last week but the indexed documents still show old prices, the agent confidently gives wrong answers, and no error is logged.
 
-**Document staleness detection.** Track the last-updated timestamp for every document in the knowledge base. Alert when: any document exceeds its expected refresh interval (e.g., pricing documents should be refreshed weekly), a significant fraction of the corpus (>20%) has not been updated in more than the expected cycle, new documents are ingested at a rate significantly below the expected rate (ingestion pipeline may be broken).
+**Document staleness detection.** Track the last-updated timestamp for every document in the knowledge base. Alert when: any document exceeds its expected refresh interval (e.g., pricing documents should be refreshed weekly), a significant fraction of the corpus (>20%) has not been updated in more than the expected cycle, new documents are ingested at a rate below the expected rate (ingestion pipeline may be broken).
 
 **Retrieval coverage metrics.** Track the percentage of user queries where the retrieval system returns no relevant results (all similarity scores below threshold). A coverage rate below 80% indicates knowledge gaps, topics users ask about that the knowledge base does not address. Log these "no-good-result" queries and review them weekly to identify content gaps.
 
-**Knowledge gap identification.** Cluster the "no-good-result" queries by topic. If 50 users asked about "return policy for electronics" and the knowledge base has no document covering this, that is a content gap that directly impacts agent quality. Automated gap detection: embed the "no-result" queries, cluster them, and generate a weekly report of topic clusters ranked by query volume. This transforms observability data into actionable content improvement recommendations.
+**Knowledge gap identification.** Cluster the "no-good-result" queries by topic. If 50 users asked about "return policy for electronics" and the knowledge base has no document covering this, that is a content gap that directly impacts agent quality. Automated gap detection: embed the "no-result" queries, cluster them, and generate a weekly report of topic clusters ranked by query volume. This transforms observability data into specific content fixes.
 
 ## Agent Health Scoring
 

@@ -2,7 +2,7 @@
 
 ## Deployment Specifics in the World of Language Models
 
-Deploying LLM applications differs fundamentally from traditional web services. Classic microservices process requests in milliseconds, consume predictable resources, and scale linearly. LLM systems break all of these assumptions: a single request takes seconds or minutes, resource consumption varies depending on context length, and scaling costs are determined not only by infrastructure but also by the price of API calls.
+Deploying LLM applications differs fundamentally from traditional web services. Classic microservices process requests in milliseconds, consume predictable resources, and scale linearly. LLM systems break all of these assumptions: a single request takes seconds or minutes, resource consumption varies depending on context length, and scaling costs are determined by infrastructure and by the price of API calls.
 
 Response time increases from 50 milliseconds to 5 seconds: a hundredfold. Traditional approaches to load balancing, timeouts, and circuit breakers require a complete rethink. Dependence on external APIs (OpenAI, Anthropic, Google) adds a layer of complexity: providers have their own rate limits, experience temporary outages, and change model behavior without notice. The system must ensure graceful degradation instead of catastrophic failures.
 

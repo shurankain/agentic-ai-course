@@ -1,14 +1,12 @@
 # Semantic Kernel: AI Framework by Microsoft
 
-## Introduction to Semantic Kernel
-
 > **Status (February 2026): Transitioning to Maintenance Mode.** Microsoft has consolidated its agent framework strategy into **Microsoft Agent Framework**, which unifies concepts from Semantic Kernel and AutoGen. Semantic Kernel continues to receive security updates and bug fixes, and its core abstractions (plugins, functions, kernel) carry forward into the new framework. Existing SK applications remain fully functional. For **new projects**, Microsoft recommends evaluating Microsoft Agent Framework, which provides the same plugin/function model plus multi-agent orchestration, event-driven architecture, and deeper Azure AI Agent Service integration.
 
 Semantic Kernel is an SDK from Microsoft for integrating language models into applications. The project positions itself as a lightweight and extensible framework that provides primitives for building AI systems of any complexity.
 
 The name "Semantic Kernel" reflects the central idea: a kernel that unifies the semantic capabilities of AI with traditional software components. The model is not an isolated service but an integral part of the application, capable of invoking functions, working with memory, and orchestrating complex workflows.
 
-Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers..NET, Python, and Java are supported, making it accessible to a wide range of developers.
+Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers..NET, Python, and Java are supported. This makes it accessible to a wide range of developers.
 
 ## Architectural Concepts
 
@@ -32,9 +30,9 @@ This separation reflects the reality of AI development: part of the logic is exe
 
 Semantic Kernel provides abstractions for working with memory. Semantic Memory stores and retrieves information by semantic similarity. Chat History preserves the conversation history for multi-turn interactions.
 
-Memory integrates with various backends: Azure AI Search, Pinecone, Qdrant, and in-memory implementations. A unified interface allows abstraction from the specific storage backend.
+Memory integrates with backends: Azure AI Search, Pinecone, Qdrant, and in-memory implementations. A unified interface allows abstraction from the specific storage backend.
 
-Context combines everything needed to execute a function: variables, history, and results of previous calls. It is passed between functions, ensuring execution continuity.
+Context combines everything needed to execute a function: variables, history, and results of previous calls. It is passed between functions. This ensures execution continuity.
 
 ### Planners
 
@@ -44,7 +42,7 @@ One of the key capabilities of Semantic Kernel is automatic planning. The Planne
 
 The idea of automatic planning is not new: it dates back to the 1970s. STRIPS (1971) modeled the world as a set of predicates like on(A,B) for blocks, defined operators with preconditions and effects, and performed planning through state-space search. PDDL (1998) standardized the domain description language, separating domain (what is possible) and problem (the specific goal), using planners such as GraphPlan and FastDownward.
 
-Semantic Kernel adapts these ideas for LLMs. Instead of explicitly modeling the world through predicates, the "world" is understood implicitly by the LLM. Operators are functions with textual descriptions, and planning occurs through LLM reasoning and prompt engineering. The advantage is the ability to work with natural language goals without formal modeling. The disadvantage is a less formal approach, making it harder to guarantee correctness.
+Semantic Kernel adapts these ideas for LLMs. Instead of explicitly modeling the world through predicates, the "world" is understood implicitly by the LLM. Operators are functions with textual descriptions, and planning occurs through LLM reasoning and prompt engineering. The advantage is the ability to work with natural language goals without formal modeling. The disadvantage is a less formal approach. This makes it harder to guarantee correctness.
 
 **Types of planners:**
 
@@ -104,7 +102,7 @@ Creating a custom connector allows integrating any service. Implementing the cor
 
 ### Built-in Integrations
 
-The framework includes integrations with popular services: Azure Cognitive Services, Microsoft Graph, and various vector databases. This covers typical enterprise scenarios without additional development.
+The framework includes integrations with popular services: Azure Cognitive Services, Microsoft Graph, and vector databases. This covers typical enterprise scenarios without additional development.
 
 ### Agents and Copilots
 
@@ -146,7 +144,7 @@ Examples of typical semantic functions: text summarization with a specified numb
 
 Search is performed by specifying a query, the number of results, and a relevance threshold from 0.0 to 1.0. Results are ranked by semantic similarity.
 
-Integration with the Kernel for the RAG pattern: before sending a question to the model, a semantic search for relevant information is performed, found documents are added to the prompt as context, and the model answers based on the provided context. This significantly reduces hallucinations and allows the model to work with up-to-date domain-specific information.
+Integration with the Kernel for the RAG pattern: before sending a question to the model, a semantic search for relevant information is performed, found documents are added to the prompt as context, and the model answers based on the provided context. This reduces hallucinations and allows the model to work with up-to-date domain-specific information.
 
 **Automatic Planning:** The StepwisePlanner automates achieving complex goals. It analyzes a natural language goal, decomposes it into subtasks, and determines the sequence of function calls. Planner configuration includes the maximum number of iterations and the minimum time between steps.
 

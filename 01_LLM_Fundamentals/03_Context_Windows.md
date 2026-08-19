@@ -16,7 +16,7 @@ It is important to understand that the context window is not just what you send 
 
 **Current user query**: what the model needs to respond to right now.
 
-**And most importantly: the model's response.** This is often overlooked. The context limit applies not only to input data but also to the generated response. If a model has a context of 8,000 tokens and 7,000 are already occupied by the prompt and history, the model can generate at most 1,000 tokens of response.
+**And most importantly: the model's response.** This is often overlooked. The context limit applies to input data and to the generated response. If a model has a context of 8,000 tokens and 7,000 are already occupied by the prompt and history, the model can generate at most 1,000 tokens of response.
 
 ---
 
@@ -43,7 +43,7 @@ What do these numbers mean in practice? 4,000 tokens is roughly 8 pages of text 
 
 128K tokens is already around 250-300 pages. You can load a small book in its entirety.
 
-1M+ tokens in Gemini is essentially a library. Theoretically, you could load "War and Peace" and ask questions about it.
+1M+ tokens in Gemini is a library. Theoretically, you could load "War and Peace" and ask questions about it.
 
 But bigger is not always better. Increasing context comes at a cost.
 
@@ -97,7 +97,7 @@ For users, this means a direct dependency: loading an entire book and asking a q
 
 Even models with massive context windows have an interesting characteristic: they do not use information equally well from different parts of the context.
 
-Research demonstrates the "Lost in the Middle" phenomenon: information at the beginning and end of the context is utilized better than information in the middle.
+Research demonstrates the "Lost in the Middle" phenomenon: information at the beginning and end of the context is used better than information in the middle.
 
 ### Connection to Cognitive Psychology
 
@@ -128,7 +128,7 @@ This has practical implications for prompt design and RAG systems. If you load 2
 
 **Explicit citations.** Instruct the model to cite specific document IDs or section numbers when answering. This forces attention to all provided documents, partially mitigating the middle-neglect effect. When the model must justify its answer with references, it scans the context more thoroughly.
 
-**Frontier model improvements.** Models with the latest architectures (Gemini 3.5, Claude Opus 4.8 with 1M context) have significantly reduced but not eliminated this effect (as of mid-2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
+**Frontier model improvements.** Models with the latest architectures (Gemini 3.5, Claude Opus 4.8 with 1M context) have reduced but not eliminated this effect (as of mid-2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
 
 ---
 
@@ -160,13 +160,13 @@ Traditional positional encodings are fixed: the model is trained on sequences of
 
 **ALiBi (Attention with Linear Biases)** adds a simple linear penalty based on distance between tokens. The farther apart the tokens, the less "attention" they receive. An elegant solution that does not require positional embeddings at all.
 
-Modern long-context models (Claude, Gemini) use combinations of these techniques, enabling effective processing of hundreds of thousands of tokens.
+Modern long-context models (Claude, Gemini) use combinations of these techniques. This enables effective processing of hundreds of thousands of tokens.
 
 ### How 1M+ Context Is Achieved: Ring Attention and Sequence Parallelism
 
 Gemini 2.5 Pro, Gemini 3 Flash, and other models with million-token contexts use advanced distributed computing techniques:
 
-**Ring Attention** (2023): Distributes attention computation across multiple GPUs organized in a "ring." Imagine four GPUs connected in a cycle: the first is linked to the second, the second to the third, the third to the fourth, and the fourth loops back to the first. Each GPU holds only a portion of the KV-cache and its own portion of Query requests. During computation, KV data blocks are sequentially passed around the ring from one GPU to the next, allowing each processor to compute attention with all tokens in the sequence. This is like a relay race: each runner passes the baton to the next, and ultimately all participants contribute to achieving the common goal. The technology enables processing sequences that physically do not fit in the memory of a single GPU.
+**Ring Attention** (2023): Distributes attention computation across multiple GPUs organized in a "ring." Imagine four GPUs connected in a cycle: the first is linked to the second, the second to the third, the third to the fourth, and the fourth loops back to the first. Each GPU holds only a portion of the KV-cache and its own portion of Query requests. During computation, KV data blocks are sequentially passed around the ring from one GPU to the next. This allows each processor to compute attention with all tokens in the sequence. This is like a relay race: each runner passes the baton to the next, and all participants contribute to achieving the common goal. The technology enables processing sequences that physically do not fit in the memory of a single GPU.
 
 **Sequence Parallelism**: The long sequence is split into segments, each processed by a separate GPU. Results are synchronized. It differs from Ring Attention in how the splitting and communication are handled.
 
@@ -226,7 +226,7 @@ A smarter approach: instead of deleting old messages, compress them into a brief
 
 "Previously we discussed: the user wants to build an expense tracking application, chose React for the frontend, PostgreSQL for the database..."
 
-The summary takes far fewer tokens but preserves key information. Recent messages remain in full, providing context for the current query.
+The summary takes far fewer tokens but preserves key information. Recent messages remain in full. This gives context for the current query.
 
 ### Prioritization Strategy
 
@@ -318,7 +318,7 @@ When truncation is necessary, the least important parts will be affected.
 
 2. **Context size has grown exponentially**, from 1K tokens in 2019 to 10M+ by 2025 (Llama 4 Scout). But a large context means large computational and monetary costs.
 
-3. **Quality degrades on long contexts.** The "Lost in the Middle" problem means the model utilizes the beginning and end of the context better than the middle.
+3. **Quality degrades on long contexts.** The "Lost in the Middle" problem means the model uses the beginning and end of the context better than the middle.
 
 4. **Context management is a critical skill** for agent development. Truncation, summarization, and prioritization strategies enable effective operation within constraints.
 
@@ -348,4 +348,4 @@ Next, the history is divided into two parts: old messages for summarization and 
 
 The old messages are combined into a textual conversation representation (each message in "role: content" format), which is sent to a language model with a request to create a brief summary in 2-3 sentences. The resulting summary is wrapped in a special system message labeled "Summary of previous conversation," placed at the beginning of the final list, followed by all recent messages in full.
 
-This approach preserves key information from the entire interaction history while consuming significantly fewer tokens than the full history would. The disadvantage is an additional LLM call to create the summary, which increases latency and cost.
+This approach preserves key information from the entire interaction history while consuming fewer tokens than the full history would. The disadvantage is an additional LLM call to create the summary, which increases latency and cost.

@@ -1,7 +1,5 @@
 # AI Safety Interview Preparation
 
-## Introduction
-
 AI Safety is a critically important topic for interviews at frontier AI companies: Anthropic (safety as core mission), OpenAI (alignment research), Google DeepMind (AI safety team), Meta AI, Google AI Principles.
 
 Understanding these topics demonstrates maturity of thinking and awareness of the broader implications of your work.
@@ -55,7 +53,7 @@ Why it matters: if we understand how the model thinks, we can detect deceptive r
 Key concepts:
 - Circuits: inside the model there are patterns of weights implementing specific functions, for example induction heads for in-context learning
 - Superposition: models represent more features than dimensions through sparse combinations
-- Sparse Autoencoders: train an autoencoder to find interpretable directions in activation space, allowing decomposition of activations into understandable components
+- Sparse Autoencoders: train an autoencoder to find interpretable directions in activation space. This allows decomposition of activations into understandable components
 - Activation Patching: replace activations at one position with activations from another run, observe how the output changes, helps localize where reasoning occurs
 
 ### 6. Red Teaming

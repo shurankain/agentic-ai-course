@@ -88,7 +88,7 @@ Until 2024, Chain-of-Thought required explicit instructions. OpenAI o1/o3 change
 
 **Training through RL**: standard RLHF trains "prompt, then answer"; o1-style trains "prompt, then reasoning, then answer". Reasoning is optimized for final answer accuracy.
 
-**Key differences**: CoT activates automatically, quality is optimized through RL, the model decides on its own when to think deeper. However: numerous internal iterations increase cost, the reasoning process is hidden, latency is higher.
+**Key differences**: CoT activates automatically, quality is optimized through RL, the model decides on its own when to think deeper. However: internal iterations increase cost, the reasoning process is hidden, latency is higher.
 
 **When to use**: o1 for complex mathematical tasks and reasoning, multi-step problems, high-stakes tasks. Standard models + explicit CoT for simple tasks, when control is needed, or budget is limited.
 
@@ -114,7 +114,7 @@ Traditional LLMs work in a "think then answer" mode, but many tasks require inte
 
 ReAct combines the advantages of both approaches. **From reasoning**: sequence planning, task decomposition, course correction, explainability. **From acting**: up-to-date information via search and databases, fact verification, precise computations, system interaction.
 
-**Synergy**: reasoning guides actions, action results enrich reasoning. This enables solving tasks inaccessible to either pure reasoning or pure tool-use alone.
+**How they combine**: reasoning guides actions, action results enrich reasoning. This enables solving tasks inaccessible to either pure reasoning or pure tool-use alone.
 
 ### ReAct in the Context of Agents
 
@@ -150,7 +150,7 @@ The simplest case: describe the task and ask the model to create a prompt to sol
 
 ### Activating Expert Knowledge
 
-Role-Based Prompting is not simply "imagine you are an expert" but a detailed description of expertise, experience, and approach. Detail significantly improves quality: the model "tunes in," activating relevant knowledge.
+Role-Based Prompting is not simply "imagine you are an expert" but a detailed description of expertise, experience, and approach. Detail improves quality: the model "tunes in," activating relevant knowledge.
 
 **Role anatomy**: Expertise (specific domain, specialization, experience), Context (industry, systems, scale), Methodologies (expert approaches), Philosophy (Security-first vs Move fast), Communication style.
 
@@ -164,7 +164,7 @@ An advanced application, analyzing a task from multiple role-based perspectives.
 
 **When to apply**: critical decisions (architecture, production code), important code review, design with competing constraints.
 
-**Trade-off**: N requests, but significantly higher quality.
+**Trade-off**: N requests, but higher quality.
 
 ---
 
@@ -184,13 +184,13 @@ The main problem when integrating LLMs into production is unpredictable output f
 
 **Structure examples**: the most reliable method; the model "sees" what is expected. Few-shot (2-3 examples) is even more effective.
 
-**Explicit instructions**: "Return ONLY JSON without explanations", "Start with {", "No markdown". These significantly improve reliability.
+**Explicit instructions**: "Return ONLY JSON without explanations", "Start with {", "No markdown". These improve reliability.
 
 **Combining** is the most effective approach: JSON Schema + example + explicit instructions create triple protection.
 
 ### Native Structured Outputs
 
-Modern APIs (OpenAI, Anthropic) provide native support for structured outputs: the model is **guaranteed** to return valid JSON conforming to the schema. This is significantly more reliable than prompt-based approaches.
+Modern APIs (OpenAI, Anthropic) provide native support for structured outputs: the model is **guaranteed** to return valid JSON conforming to the schema. This is more reliable than prompt-based approaches.
 
 However, understanding prompt techniques remains important: not all models support native mode, sometimes formats other than JSON are needed, and the understanding helps diagnose problems.
 

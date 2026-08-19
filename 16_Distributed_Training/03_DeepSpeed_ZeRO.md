@@ -4,7 +4,7 @@
 
 Microsoft Research (2020) introduced DeepSpeed with the central innovation ZeRO (Zero Redundancy Optimizer). Turing-NLG 17B, then Megatron-Turing 530B parameters.
 
-The philosophy differs from PyTorch: comprehensive solution with its own training loop, configuration via JSON, integration with Hugging Face. An "all-in-one" approach.
+The philosophy differs from PyTorch: solution with its own training loop, configuration via JSON, integration with Hugging Face. An "all-in-one" approach.
 
 ZeRO is mathematically equivalent to DDP: models are identical after an iteration. But the implementation radically optimizes memory down to the theoretical minimum.
 
@@ -100,7 +100,7 @@ Architecture: parameters and optimizer states on NVMe, hierarchical GPU from CPU
 
 Requirements: fast NVMe PCIe 4.0+, efficient async I/O, careful tuning.
 
-In practice: rarely used: slowdown is significant for production. For research and fine-tuning on limited hardware, invaluable.
+In practice: rarely used: slowdown is significant for production. For research and fine-tuning on limited hardware, it is the difference between fitting and not fitting.
 
 ## Comparison with PyTorch FSDP
 
@@ -150,7 +150,7 @@ DeepSpeed is configured via a JSON file.
 
 ### Integration with Hugging Face
 
-Hugging Face Transformers provides seamless integration via TrainingArguments. Specify the path to the JSON in the deepspeed parameter.
+Hugging Face Transformers provides integration via TrainingArguments. Specify the path to the JSON in the deepspeed parameter.
 
 Trainer automatically initializes the DeepSpeed engine instead of the PyTorch distributed setup. Support for "auto" values in configuration.
 

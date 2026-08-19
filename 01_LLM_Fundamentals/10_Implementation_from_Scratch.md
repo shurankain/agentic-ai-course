@@ -1,6 +1,6 @@
 # Implementing Key Components from Scratch
 
-In interviews at OpenAI, Anthropic, and DeepMind, you may be asked to implement key components from scratch: attention, tokenizer, embeddings. This tests not only conceptual understanding but also the ability to translate theory into working code.
+In interviews at OpenAI, Anthropic, and DeepMind, you may be asked to implement key components from scratch: attention, tokenizer, embeddings. This tests conceptual understanding and the ability to translate theory into working code.
 
 ---
 
@@ -88,7 +88,7 @@ A simplified version of LayerNorm, used in LLaMA. It removes mean subtraction, r
 
 ## Feed-Forward Network
 
-The FFN processes each position independently. It serves as the model's "memory": factual knowledge is stored in the FFN weights.
+The FFN processes each position independently. It is the model's "memory": factual knowledge is stored in the FFN weights.
 
 ### Architecture
 
@@ -210,7 +210,7 @@ The following table quantifies the concrete gains from Flash Attention over the 
 | Training 4K context | OOM | Works |
 | Training 16K context | Impossible | Possible |
 
-Flash Attention reduces memory usage from quadratic to linear, providing 2-4x speedup on A100. This makes training on long contexts feasible: 4K works instead of OOM, and 16K becomes a reality.
+Flash Attention reduces memory usage from quadratic to linear. This gives 2-4x speedup on A100. This makes training on long contexts feasible: 4K works instead of OOM, and 16K becomes a reality.
 
 ### Flash Attention 2 and 3
 

@@ -1,8 +1,6 @@
 # AI Agent Architectures
 
-## Introduction
-
-If an AI agent is an autonomous system capable of solving tasks, then the agent architecture is its internal design that determines how it thinks, plans, and acts. Over the past several years, researchers have developed numerous architectural patterns, each embodying a distinct philosophy for approaching problem-solving.
+If an AI agent is an autonomous system capable of solving tasks, then the agent architecture is its internal design that determines how it thinks, plans, and acts. Over the past several years, researchers have developed architectural patterns, each embodying a distinct philosophy for approaching problem-solving.
 
 Choosing an architecture is more than a technical decision. It determines how the agent will interact with the world: will it impulsively react to every stimulus or carefully plan its actions? Will it learn from its mistakes or forget them immediately? Will it consider alternative paths or follow a single trajectory?
 
@@ -91,7 +89,7 @@ The cycle repeats until the agent reaches a final answer or exhausts the iterati
 
 ### Strengths of ReAct
 
-The main advantage of ReAct is **reasoning transparency**. A developer can inspect at any point what the agent was thinking and why it made a particular decision. This is invaluable for debugging and understanding system behavior. In production systems, ReAct agent logs enable rapid problem diagnosis and prompt improvement.
+The main advantage of ReAct is **reasoning transparency**. A developer can inspect at any point what the agent was thinking and why it made a particular decision. This is what makes debugging tractable and understanding system behavior. In production systems, ReAct agent logs enable rapid problem diagnosis and prompt improvement.
 
 ReAct also stands out for its **simplicity of implementation**. No complex planning or memory mechanisms are needed: a well-formulated prompt and an execution loop are sufficient. A minimalist implementation can fit in 50-100 lines of code.
 
@@ -117,7 +115,7 @@ Finally, the **greedy strategy** for action selection can lead to suboptimal sol
 
 Plan-and-Execute represents an entirely different philosophy. Instead of reactively responding to each step, the agent first creates a complete plan for solving the task, then methodically executes it.
 
-This architecture is inspired by how experienced professionals work. An architect does not start building a house by laying bricks one after another on intuition. They create a complete blueprint: foundation, walls, roof, utilities. Only with a holistic vision do they begin implementation.
+This architecture is inspired by how experienced professionals work. An architect does not start building a house by laying bricks one after another on intuition. They create a complete blueprint: foundation, walls, roof, utilities. Only with a whole design in view do they begin implementation.
 
 Plan-and-Execute consists of two independent components: the Planner and the Executor. The Planner analyzes the task and breaks it into a sequence of concrete steps. The Executor takes those steps one by one and carries them out.
 
@@ -318,7 +316,7 @@ ToT consists of four components.
 
 **Generation**: generating possible continuations for the current node. The model proposes several alternative next steps. This can be sampling (generating multiple variants) or propose (explicitly requesting variants).
 
-**Evaluation**: assessing the quality of each step. The model acts as a critic of its own ideas, determining which branches are promising and which lead to dead ends. The evaluation can be numeric (probability of success) or categorical (sure/maybe/impossible).
+**Evaluation**: assessing the quality of each step. The model is a critic of its own ideas, determining which branches are promising and which lead to dead ends. The evaluation can be numeric (probability of success) or categorical (sure/maybe/impossible).
 
 **Search**: the tree traversal algorithm. Classical strategies apply here: BFS (breadth-first search) or DFS (depth-first search).
 
@@ -354,7 +352,7 @@ The choice of search strategy critically affects ToT efficiency. Each strategy h
 
 **When to use DFS:** solutions are deep, memory is limited, any valid solution is sufficient.
 
-**Beam Search**: a practical trade-off that retains the k best nodes at each level (typically k=3-5). This limits the breadth of exploration, making the search manageable. Beam search is the standard choice for most production ToT systems.
+**Beam Search**: a practical trade-off that retains the k best nodes at each level (typically k=3-5). This limits the breadth of exploration. This makes the search manageable. Beam search is the standard choice for most production ToT systems.
 
 ### Monte Carlo Tree Search and LLMs
 
@@ -380,9 +378,9 @@ MCTS is particularly effective for tasks with large solution spaces and delayed 
 
 ### Graph-of-Thought (GoT)
 
-Tree-of-Thought constrains reasoning to a tree structure: each node has exactly one parent. **Graph-of-Thought** (Besta et al., AAAI 2024) removes this constraint, allowing arbitrary graph structures where nodes can have multiple parents and multiple children.
+Tree-of-Thought constrains reasoning to a tree structure: each node has exactly one parent. **Graph-of-Thought** (Besta et al., AAAI 2024) removes this constraint. This allows arbitrary graph structures where nodes can have multiple parents and multiple children.
 
-The key capability this unlocks is **merging**, combining partial solutions from different branches into a single refined solution. In ToT, if two branches each discover useful partial insights, those insights remain isolated in separate branches. In GoT, a new node can aggregate the best aspects of both branches.
+The key capability this opens up is **merging**, combining partial solutions from different branches into a single refined solution. In ToT, if two branches each discover useful partial insights, those insights remain isolated in separate branches. In GoT, a new node can aggregate the best aspects of both branches.
 
 GoT defines three transformation types:
 - **Generation**: create new thoughts from existing ones (same as ToT expansion)
@@ -513,7 +511,7 @@ These patterns are mentioned individually across earlier sections (ReAct mention
 
 A practical multi-agent pattern for tasks that decompose into independent subtasks: dispatch all subtasks in parallel, then aggregate results.
 
-The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orchestrator fans out subtasks to parallel workers, each worker processes independently, and the orchestrator waits for all workers before aggregating (fan-in). Wall-clock time equals the slowest subtask, not the sum, making this the most cost-efficient multi-agent pattern for parallelizable work.
+The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orchestrator fans out subtasks to parallel workers, each worker processes independently, and the orchestrator waits for all workers before aggregating (fan-in). Wall-clock time equals the slowest subtask, not the sum. This makes this the most cost-efficient multi-agent pattern for parallelizable work.
 
 **Common applications:** code review (parallel analysis of different files), research (parallel web searches on different aspects), data analysis (parallel queries to different sources), document processing (parallel summarization of different sections).
 
@@ -581,7 +579,7 @@ The ACI paradigm differs from traditional tool integration in several fundamenta
 
 | Aspect | Traditional Tools | ACI Approach |
 |--------|-------------------|--------------|
-| Focus | Individual APIs | Holistic environment |
+| Focus | Individual APIs | Whole environment |
 | Navigation | Coordinates / OCR | Semantic selectors |
 | State | Stateless calls | Persistent context |
 | Errors | Return codes | Rich error context |

@@ -1,7 +1,5 @@
 # Coding Exercises for Interviews
 
-## Introduction
-
 ML/AI interviews often require implementing basic algorithms from scratch: without using PyTorch, TensorFlow, or sklearn. This tests depth of understanding, not the ability to call APIs.
 
 Typical requirements: NumPy only (sometimes pure Python), thirty to forty-five minutes for implementation, explanation of each step, discussion of complexity and trade-offs.
@@ -44,7 +42,7 @@ Extend single-head attention to multi-head.
 
 ### Conceptual Solution
 
-Multi-head attention extends the single-head mechanism, allowing the model to simultaneously attend to different aspects of the input data.
+Multi-head attention extends the single-head mechanism. This allows the model to simultaneously attend to different aspects of the input data.
 
 Architecture: the input sequence is first projected through matrices W_q, W_k, W_v (each of dimension d_model times d_model). Then the resulting Q, K, V matrices are split into num_heads parts. If d_model equals 512 and num_heads equals 8, then each head operates with dimension d_k equal to 64.
 
@@ -114,11 +112,11 @@ Step 2 Update: centroids are updated as the mean of all points assigned to a giv
 
 Initialization (K-means++): instead of randomly selecting k points, K-means++ uses a smart strategy. The first centroid is chosen randomly from the data. For each subsequent centroid: compute for each point the distance to the nearest already-chosen centroid (squared). Select the next centroid with probability proportional to this squared distance. Points far from existing centroids have a higher chance of being selected. This ensures a good initial distribution of centroids.
 
-Convergence criterion: the algorithm stops when centroids stop changing significantly (if norm(new_centroids minus old_centroids) is less than tolerance) or the maximum number of iterations is reached.
+Convergence criterion: the algorithm stops when centroids stop changing (if norm(new_centroids minus old_centroids) is less than tolerance) or the maximum number of iterations is reached.
 
 ### Key Points
 
-K-means++ initialization: selection proportional to squared distance (D squared) avoids local minima, theoretically guarantees O(log k)-approximation of the optimal solution, practically yields significantly faster convergence and more stable results, without K-means++ the result strongly depends on random initialization.
+K-means++ initialization: selection proportional to squared distance (D squared) avoids local minima, theoretically guarantees O(log k)-approximation of the optimal solution, practically yields faster convergence and more stable results, without K-means++ the result strongly depends on random initialization.
 
 Complexity: time O(n times k times d times iterations) where n equals points, k equals clusters, d equals dimensionality. Typically iterations is much less than 100, in practice often 10-20. Space O(n times k) for the distance matrix (main memory). Can be optimized to O(n plus k) by computing distances on the fly.
 
@@ -220,7 +218,7 @@ Implement a LoRA-augmented linear layer forward pass.
 
 LoRA (Low-Rank Adaptation) adds trainable low-rank matrices to frozen pretrained weights. Instead of updating the full weight matrix W (d_out x d_in), LoRA adds delta_W = B x A, where A is (r x d_in) and B is (d_out x r), with r much less than d_in and d_out.
 
-Forward pass: output = W_frozen x x + (B x A) x x x (alpha / r). The frozen weights W are not updated. Only A and B are trained. The scaling factor alpha/r controls the magnitude of the adaptation.
+Forward pass: `output = W_frozen * x + (B * A) * x * (alpha / r)`. The frozen weights W are not updated. Only A and B are trained. The scaling factor alpha/r controls the magnitude of the adaptation.
 
 Initialization: A is initialized with random Gaussian, B is initialized to zeros. This ensures that at the start of training, delta_W = 0 and the model behaves exactly as the pretrained model.
 

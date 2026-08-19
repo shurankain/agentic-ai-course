@@ -1,6 +1,6 @@
 # Dialog Management
 
-## Introduction: Conversation as a Dance
+## Conversation as a Dance
 
 Dialog is not a series of isolated utterances but a coherent dance. Topics flow into one another, the unsaid is implied, and references to prior context are understood without explanation. Building an AI system capable of participating in this dance is an extremely challenging task. A simple chatbot answers questions in isolation. A true dialog system remembers context, understands intents, and steers the conversation toward a goal.
 
@@ -142,7 +142,7 @@ Short conversations fit comfortably in a context window. But production dialog s
 
 **Sliding window with anchors.** Keep the last N turns in full context, plus "anchor" messages that are always retained: the initial user request (defines the overall goal), any messages containing confirmed slot values, and messages where the system made commitments ("I'll send the confirmation email"). Anchors prevent the system from contradicting earlier commitments when old context is summarized away.
 
-**Hierarchical memory for long conversations.** For multi-day sessions (ongoing projects, iterative work): Level 1 (in-context): last 10-20 turns, full fidelity. Level 2 (summary): summarized earlier turns, refreshed periodically. Level 3 (persistent): key facts, decisions, and preferences stored in a database (see Module 03, Memory Systems). The dialog manager queries Level 3 for relevant facts before each response, ensuring consistency even weeks into a conversation.
+**Hierarchical memory for long conversations.** For multi-day sessions (ongoing projects, iterative work): Level 1 (in-context): last 10-20 turns, full fidelity. Level 2 (summary): summarized earlier turns, refreshed periodically. Level 3 (persistent): key facts, decisions, and preferences stored in a database (see Module 03, Memory Systems). The dialog manager queries Level 3 for relevant facts before each response. This ensures consistency even weeks into a conversation.
 
 ## Handoff Patterns
 

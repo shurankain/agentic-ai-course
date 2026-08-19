@@ -60,7 +60,7 @@ Effective prompts typically contain five key components.
 
 Defining the model's role activates specific knowledge patterns. When you tell the model "You are an experienced Java architect with 15 years of experience," you activate expert reasoning patterns the model encountered in training data.
 
-Context acts as a filter: "You are working on an enterprise banking system that must comply with PCI DSS requirements", this steers all model decisions toward security and compliance.
+Context is a filter: "You are working on an enterprise banking system that must comply with PCI DSS requirements", this steers all model decisions toward security and compliance.
 
 ### Instructions
 

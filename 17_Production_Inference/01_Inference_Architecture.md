@@ -18,7 +18,7 @@ All input tokens are processed in parallel. A compute-intensive phase with a lar
 **Decode (token generation):**
 Each token is processed sequentially. A memory-intensive phase: attention requires reading the entire KV-cache. Low arithmetic intensity makes the GPU memory-bound.
 
-Decode is critically slow: for a single token at context length N, the entire KV-cache of size N x hidden_size x 2 elements must be read, performing only 2 x N x hidden_size operations. At such low arithmetic intensity, a GPU with 3 TB/s memory bandwidth and 1000 TFLOPS utilizes only ~1% of its potential.
+Decode is critically slow: for a single token at context length N, the entire KV-cache of size N x hidden_size x 2 elements must be read, performing only 2 x N x hidden_size operations. At such low arithmetic intensity, a GPU with 3 TB/s memory bandwidth and 1000 TFLOPS uses only ~1% of its potential.
 
 ## KV-Cache
 

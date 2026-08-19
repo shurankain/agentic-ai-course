@@ -34,10 +34,10 @@ In December 2025, OWASP released a separate framework specifically for autonomou
 | ASI01 | **Agent Goal Hijacking** | Attackers manipulate an agent's objectives through poisoned inputs (emails, documents, web content). Agents cannot reliably distinguish instructions from data |
 | ASI02 | **Tool Misuse & Exploitation** | Agents misuse or abuse tools through unsafe composition, recursion, or excessive execution, causing harmful side effects despite having valid permissions |
 | ASI03 | **Supply Chain Risks** | Compromised dependencies, malicious MCP servers, poisoned plugins in agent ecosystems (see OpenClaw incident in Agent Security) |
-| ASI04 | **Unexpected Code Execution** | Agent-generated or agent-invoked code executes with insufficient sandboxing, enabling escape from intended boundaries |
+| ASI04 | **Unexpected Code Execution** | Agent-generated or agent-invoked code executes with insufficient sandboxing. This enables escape from intended boundaries |
 | ASI05 | **Credential Exposure** | Agents leak, mishandle, or over-share credentials and tokens across tool boundaries or in logs |
 | ASI06 | **Excessive Permissions** | Agents operate with broader privileges than the task requires, amplifying the impact of any compromise |
-| ASI07 | **Inadequate Sandboxing** | Execution environments lack sufficient isolation, enabling agents to affect host systems or other tenants |
+| ASI07 | **Inadequate Sandboxing** | Execution environments lack sufficient isolation. This enables agents to affect host systems or other tenants |
 | ASI08 | **Knowledge Poisoning** | Adversarial content in RAG stores, memory systems, or shared context corrupts agent behavior persistently across sessions |
 | ASI09 | **Logging & Monitoring Gaps** | Insufficient visibility into agent decision-making, tool invocations, and multi-step reasoning chains |
 | ASI10 | **Uncontrolled Resource Consumption** | Agents enter infinite loops, spawn unbounded sub-agents, or consume excessive compute/tokens without circuit breakers |
@@ -46,7 +46,7 @@ The framework was developed through collaboration with over 100 industry experts
 
 Three of the top four risks (ASI01, ASI02, ASI04) revolve around the boundary between what an agent intends to do and what it actually does, a category of risk that simply does not exist for non-agentic LLM applications. Defending against these requires architectural decisions (sandboxing, permission systems, human-in-the-loop) rather than input/output filtering alone. See Agent Security for implementation patterns.
 
-**The frontier of AI cyber capability (April-May 2026):** Anthropic's **Claude Mythos Preview** demonstrates what happens when agent capabilities extend into the security domain: the model achieves 73% success on expert-level cyber-attack simulations that no model could complete before April 2025. Anthropic restricted access to 12 founding partners due to "the scale and sophistication of the cyberattacks it could enable." OpenAI responded with **GPT-5.4-Cyber**, a model specialized for cyber defense with access gated through Trusted Access for Cyber (TAC). This development validates ASI04 (Unexpected Code Execution) and ASI06 (Excessive Permissions) as critical risks: frontier models are becoming more capable attackers, not just targets. The security community must now contend with models that can autonomously discover and exploit vulnerabilities, making the Agentic Top 10 more urgent, not less.
+**The frontier of AI cyber capability (April-May 2026):** Anthropic's **Claude Mythos Preview** demonstrates what happens when agent capabilities extend into the security domain: the model achieves 73% success on expert-level cyber-attack simulations that no model could complete before April 2025. Anthropic restricted access to 12 founding partners due to "the scale and sophistication of the cyberattacks it could enable." OpenAI responded with **GPT-5.4-Cyber**, a model specialized for cyber defense with access gated through Trusted Access for Cyber (TAC). This development validates ASI04 (Unexpected Code Execution) and ASI06 (Excessive Permissions) as critical risks: frontier models are becoming more capable attackers, not just targets. The security community must now contend with models that can autonomously discover and exploit vulnerabilities. This makes the Agentic Top 10 more urgent, not less.
 
 **Project Glasswing / Claude Security update (as of late May 2026):** Anthropic launched **Claude Security** in public beta (May 2026), alongside the **Cyber Verification Program**: a structured vetting process for organizations seeking access to Mythos-class security capabilities. Results at scale: over 10,000 high/critical zero-day vulnerabilities discovered, including a 17-year-old FreeBSD NFS remote code execution flaw. Cloudflare reported 2,000 bugs found by Claude Security across their infrastructure; Mozilla reported 271 vulnerabilities discovered in Firefox 150. However, a disclosure bottleneck has emerged: of 1,596 vetted findings submitted upstream, only 97 have been patched: a 6.1% patch rate that highlights the gap between AI-speed vulnerability discovery and human-speed remediation. Mythos-class models (full production versions beyond the Preview) are promised "in coming weeks" as of late May 2026.
 
@@ -107,7 +107,7 @@ Defense in depth: a combination of layers:
 
 **Safe prompt construction:** clear separation of system instructions and user input through special delimiters. Explicitly telling the model that text after a certain point is untrusted input.
 
-**Spotlighting:** a technique to isolate untrusted input by marking data with special delimiters or transformations so the model treats it strictly as data, never as instructions. Approaches include encoding untrusted content (base64, XML-escaped), wrapping it in explicit "data-only" blocks, or transforming it into a format the model recognizes as non-executable. Unlike simple delimiters, spotlighting changes the representation of the data itself, making it harder for injected instructions to "escape" into the instruction channel.
+**Spotlighting:** a technique to isolate untrusted input by marking data with special delimiters or transformations so the model treats it strictly as data, never as instructions. Approaches include encoding untrusted content (base64, XML-escaped), wrapping it in explicit "data-only" blocks, or transforming it into a format the model recognizes as non-executable. Unlike simple delimiters, spotlighting changes the representation of the data itself. This makes it harder for injected instructions to "escape" into the instruction channel.
 
 **Output validation:** the response contains the system prompt, violates policies, or does not match the expected format, indicators of a successful attack.
 
@@ -123,7 +123,7 @@ For RAG: sanitization of retrieved documents (checking HTML comments, metadata, 
 
 ## LLM-as-Guard
 
-LLMs detecting attacks on LLMs. A classification prompt describes injection indicators, and the model evaluates input. A separate model (or the same one in a separate call) acts as a "guard" checking requests before processing.
+LLMs detecting attacks on LLMs. A classification prompt describes injection indicators, and the model evaluates input. A separate model (or the same one in a separate call) is a "guard" checking requests before processing.
 
 Advantages: semantic understanding (detecting attacks in unusual phrasing), adaptability (new attacks added to the prompt), low implementation barrier.
 

@@ -16,7 +16,7 @@ An LLM request takes from 1 to 30+ seconds depending on complexity and response 
 
 ### Asynchronous Approach
 
-Asynchronous execution is the standard for production LLM integration. Instead of blocking the thread, return a `Future` or `Promise`, allowing the system to process other requests while waiting for the response.
+Asynchronous execution is the standard for production LLM integration. Instead of blocking the thread, return a `Future` or `Promise`. This allows the system to process other requests while waiting for the response.
 
 In Java, this is implemented through `CompletableFuture`:
 - The request is dispatched on a separate thread pool
@@ -57,7 +57,7 @@ When integrating LLMs into a reactive pipeline, it is critical not to block the 
 
 **Key operators for LLMs:**
 
-The following table summarizes the most useful reactive operators for building LLM integration pipelines. Each operator addresses a specific concern -- concurrency control, error recovery, or backpressure -- and combining them creates a robust production pipeline.
+The following table summarizes the most useful reactive operators for building LLM integration pipelines. Each operator addresses a specific concern -- concurrency control, error recovery, or backpressure -- and combining them creates a pipeline that survives partial failure.
 
 | Operator | Purpose |
 |----------|---------|
@@ -148,7 +148,7 @@ This allows even distribution of load and avoids spikes.
 
 ### Queueing Theory for LLM Serving
 
-Proper capacity planning for LLM systems requires understanding Little's Law (L = λ x W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
+Proper capacity planning for LLM systems requires understanding Little's Law (`L = lambda * W`) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
 
 ---
 
@@ -361,7 +361,7 @@ LangChain4j integrates with OpenTelemetry, LangSmith, and other tracing systems.
 
 3. **Rate limiting and retry** are not optional but essential. Exponential backoff with jitter is the industry standard.
 
-4. **Caching** (exact and semantic) significantly reduces costs and latency. With temperature=0, exact caching is highly effective.
+4. **Caching** (exact and semantic) reduces costs and latency. With temperature=0, exact caching is highly effective.
 
 5. **Complexity-based routing** allows using cheap models for simple tasks, saving budget.
 

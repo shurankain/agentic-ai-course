@@ -58,7 +58,7 @@ When the system has multiple agents of the same type (for example, three order p
 
 **Round-robin:** the simplest algorithm - cyclic distribution. The first task goes to the first agent, the second to the second, the third to the third, the fourth back to the first. This is fair and simple but does not account for the fact that different tasks require different amounts of time. If one agent gets three complex tasks in a row, it will be overloaded while others sit idle.
 
-**Least connections:** a smarter approach - route the task to the agent with the fewest current tasks. This balances the load better but requires tracking each agent's state. Moreover, task count is an imperfect metric: one agent may have three simple tasks, another - one complex one.
+**Least connections:** a smarter approach - route the task to the agent with the fewest current tasks. This balances the load better but requires tracking each agent's state. Task count is an imperfect metric: one agent may have three simple tasks, another - one complex one.
 
 **Weighted routing:** if it is known that agents have different performance capacities (for example, one runs on more powerful hardware or uses a faster model), weights can be assigned. More performant agents receive more tasks.
 
@@ -74,7 +74,7 @@ When multiple agents collaborate, the question of how they share and manage stat
 
 **CQRS-like patterns for agent systems.** Inspired by Command Query Responsibility Segregation from microservice architecture: one agent writes decisions (commands), another reads results (queries), and they communicate through an event log. This provides a clean audit trail and allows replaying the decision sequence for debugging. Event sourcing (storing the complete event history rather than current state) enables time-travel debugging, replaying the exact sequence of agent interactions that led to a problem.
 
-**Conflict resolution when agents modify shared state.** When two agents simultaneously try to update the same field, a resolution strategy is needed. LangGraph's reducer functions define how to merge concurrent updates (e.g., append messages rather than overwrite). Timestamp-based resolution (last write wins) is simple but can lose data. Semantic merging (agents negotiate on conflicting updates) is more robust but adds latency.
+**Conflict resolution when agents modify shared state.** When two agents simultaneously try to update the same field, a resolution strategy is needed. LangGraph's reducer functions define how to merge concurrent updates (e.g., append messages rather than overwrite). Timestamp-based resolution (last write wins) is simple but can lose data. Semantic merging (agents negotiate on conflicting updates) loses less data but adds latency.
 
 ## Error Handling in Multi-Agent Systems
 
@@ -152,13 +152,13 @@ This works, but the coordinator is a single point of failure. If it is unavailab
 
 ### Distributed Consensus
 
-More robust systems use distributed consensus protocols such as Raft or Paxos. In these protocols, there is no permanent leader - one is elected dynamically. If the leader goes down, the remaining agents elect a new one and continue operating.
+Systems that tolerate node failure use distributed consensus protocols such as Raft or Paxos. In these protocols, there is no permanent leader - one is elected dynamically. If the leader goes down, the remaining agents elect a new one and continue operating.
 
 Distributed consensus is harder to implement but provides resilience to individual agent failures. For critical production systems, this is often a necessity.
 
 ## Agent Lifecycle Management
 
-The orchestrator is responsible not only for coordinating running agents but also for their lifecycle: creation, startup, monitoring, shutdown.
+The orchestrator is responsible for coordinating running agents and for their lifecycle: creation, startup, monitoring, shutdown.
 
 ### Dynamic Agent Creation
 

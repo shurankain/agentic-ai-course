@@ -8,7 +8,7 @@ A complete pipeline for fine-tuning a model: from data collection to deployment.
 
 Business: understanding product terminology, responding in brand voice, knowledge of typical problems and solutions, escalating complex cases to humans.
 
-Technical: reproducible data pipeline, quality-focused curation, LoRA fine-tuning, comprehensive evaluation suite, production deployment.
+Technical: reproducible data pipeline, quality-focused curation, LoRA fine-tuning, evaluation suite, production deployment.
 
 ## Pipeline Architecture
 
@@ -154,7 +154,7 @@ Multi-level filtering (basic, then quality, then diversity) produces better data
 
 LoRA efficiently adapts large models on consumer hardware. Rank 16 is a good default. Unsloth provides 2-5x speedup and 60-80% memory reduction for LoRA training.
 
-Alignment after SFT: DPO for preference-based improvement, ORPO for a simpler single-stage pipeline. Both significantly improve response quality beyond SFT alone.
+Alignment after SFT: DPO for preference-based improvement, ORPO for a simpler single-stage pipeline. Both improve response quality beyond SFT alone.
 
 Evaluation is multi-faceted: automatic metrics (fast iteration), LLM-as-Judge (semantic quality), A/B testing (production validation), human evaluation (ground truth).
 

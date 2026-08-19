@@ -1,14 +1,12 @@
 # LangChain4j: LLM Framework for Java
 
-## Introduction to LangChain4j
-
 LangChain4j is a full-featured framework for developing applications based on language models within the Java ecosystem. The project emerged as a response to the need of Java developers for tools comparable to the Python ecosystem, where LangChain has long been the de facto standard.
 
-The philosophy of LangChain4j is built on several key principles. First, the framework strives to provide a unified interface for working with various LLM providers: from OpenAI to local models via Ollama. A developer can switch models by changing a single configuration line rather than rewriting the entire codebase.
+The philosophy of LangChain4j is built on several key principles. First, the framework strives to provide a unified interface for working with LLM providers: from OpenAI to local models via Ollama. A developer can switch models by changing a single configuration line rather than rewriting the entire codebase.
 
 Second, LangChain4j relies on a declarative approach through annotations. Instead of imperative code describing each step of interaction with the model, the developer declares interfaces with annotations, and the framework generates the implementation.
 
-Third, the project actively integrates with the Spring ecosystem, providing auto-configuration and starters for Spring Boot. This makes incorporating LLMs into existing Spring applications as straightforward as possible.
+Third, the project actively integrates with the Spring ecosystem. This gives auto-configuration and starters for Spring Boot. This makes incorporating LLMs into existing Spring applications as straightforward as possible.
 
 ## Architecture and Core Components
 
@@ -16,13 +14,13 @@ Third, the project actively integrates with the Spring ecosystem, providing auto
 
 The central element of LangChain4j is the language model abstraction. The ChatLanguageModel interface defines the contract for interacting with any model that supports the chat-completion API.
 
-The framework provides implementations for numerous providers: OpenAI, Azure OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Mistral, Hugging Face, Ollama, and others. Each implementation adapts the provider's specifics to a unified interface.
+The framework provides implementations for providers: OpenAI, Azure OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Mistral, Hugging Face, Ollama, and others. Each implementation adapts the provider's specifics to a unified interface.
 
 Beyond chat models, LangChain4j supports embedding models through the EmbeddingModel interface, moderation models, image generation models, and other specialized types.
 
 ### AI Services
 
-AI Services are the flagship feature of LangChain4j, enabling declarative interaction with LLMs through Java interfaces.
+AI Services are the flagship feature of LangChain4j. This enables declarative interaction with LLMs through Java interfaces.
 
 A developer creates an interface with methods representing the desired operations. Annotations describe prompts, system messages, and expected response formats. The framework generates an implementation that constructs requests to the model and parses responses.
 
@@ -40,7 +38,7 @@ To support multi-turn conversations, LangChain4j provides the ChatMemory abstrac
 
 **When to use which**: for a standard chatbot within a single session, use MessageWindow for current conversation context. For a personal assistant, combine Semantic memory for long-term preferences with Conversation memory for short-term context. In technical support, use Conversation memory for ticket context. For application personalization, use Semantic memory to store user preferences.
 
-Several memory implementations cover typical scenarios. Memory is associated with a session or user identifier, enabling independent conversations.
+Several memory implementations cover typical scenarios. Memory is associated with a session or user identifier. This enables independent conversations.
 
 ### RAG Components
 
@@ -76,7 +74,7 @@ In the declarative style, you define an interface with a SystemMessage annotatio
 
 Single Responsibility: the interface is responsible only for the contract, not the implementation. Open/Closed: extension through annotations without modifying code. Liskov Substitution: the implementation can be replaced. Interface Segregation: small, specialized interfaces. Dependency Inversion: dependency on abstraction, not implementation.
 
-This approach not only reduces code but also makes the developer's intentions explicit. By reading the interface, one can understand all the capabilities of the AI service without studying implementation details.
+This approach reduces code and makes the developer's intentions explicit. By reading the interface, one can understand all the capabilities of the AI service without studying implementation details.
 
 ### System and User Prompts
 
@@ -370,4 +368,4 @@ public class LangChain4jDemo {
 
 **Structured output**: By returning typed objects (record, POJO), you automatically get JSON parsing. The framework generates the JSON Schema and instructs the model on its own.
 
-**Modularity**: Components (model, memory, tools) are created separately and assembled via the builder pattern, ensuring flexibility and testability.
+**Modularity**: Components (model, memory, tools) are created separately and assembled via the builder pattern. This ensures flexibility and testability.

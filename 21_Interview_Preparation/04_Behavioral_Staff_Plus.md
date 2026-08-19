@@ -1,7 +1,5 @@
 # Behavioral Interview for Staff+ Positions
 
-## Introduction
-
 At Senior/Staff+ positions, technical skills are table stakes. The deciding factor becomes behavioral interviews, where they evaluate leadership (influence without authority), impact (scale of achievements), judgment (decisions under uncertainty), communication (conveying complex ideas), collaboration (working with teams).
 
 For AI/ML, additional factors include: working with uncertainty in ML projects, ethical decisions and AI safety, explaining ML concepts to a non-technical audience.
@@ -24,7 +22,7 @@ Example of a strong answer: "At company X, the support team was spending forty p
 
 Senior operates at the project/team level with feature-level impact, solves defined problems, influences within the team. Staff operates at the multi-team/organization level with product/platform-level impact, defines which problems to solve, influences across the organization, and has deep expertise plus breadth.
 
-At Staff+, they look for: organizational impact (changing processes, influencing strategy, raising the bar), dealing with ambiguity (turning an unclear problem into a plan, making decisions without complete information), technical leadership (setting direction, convincing without authority, mentorship), cross-functional work (working with PM/Design/Business, navigating conflicts).
+At Staff+, they look for: organizational impact (changing processes, influencing strategy, raising the bar), dealing with ambiguity (turning an unclear problem into a plan. This makes decisions without complete information), technical leadership (setting direction, convincing without authority, mentorship), cross-functional work (working with PM/Design/Business, navigating conflicts).
 
 ---
 
@@ -38,7 +36,7 @@ Example: the team wanted a fine-tuned model, I saw risks. I gathered data on tim
 
 ### Conflict Resolution
 
-"Describe a disagreement with a colleague": demonstrate understanding of the other position, focus on the problem (not on individuals), a constructive resolution, and preservation of the relationship. Structure: describe the disagreement neutrally, explain the colleague's position, explain yours, how you reached a resolution, result and learnings.
+"Describe a disagreement with a colleague": demonstrate understanding of the other position, focus on the problem (not on people), a constructive resolution, and preservation of the relationship. Structure: describe the disagreement neutrally, explain the colleague's position, explain yours, how you reached a resolution, result and learnings.
 
 Red Flags: blaming others, "I was right and they were wrong," escalation as the first step, lack of reflection.
 

@@ -68,7 +68,7 @@ Context Parallelism (CP) is now the standard approach for long-context LLM train
 
 **DeepSpeed Ulysses (2024):** Partitions the sequence across GPUs along the sequence dimension. Each GPU holds a portion of Q, K, V. Before attention computation, AllToAll communication redistributes data so each GPU has full Q, K, V for a subset of attention heads. After attention, another AllToAll restores the sequence partition.
 
-**Key advantage over Ring Attention:** Ulysses uses AllToAll (which is bandwidth-optimal) instead of point-to-point ring communication. On modern interconnects (NVLink 4.0+, NVLink 5.0), AllToAll is significantly faster. Result: 2-4x speedup over Ring Attention for equivalent sequence lengths.
+**Key advantage over Ring Attention:** Ulysses uses AllToAll (which is bandwidth-optimal) instead of point-to-point ring communication. On modern interconnects (NVLink 4.0+, NVLink 5.0), AllToAll is faster. Result: 2-4x speedup over Ring Attention for equivalent sequence lengths.
 
 **Llama 4 training context parallelism:** Meta used context parallelism (CP=8-16) for training Llama 4 Scout's 10M token context. Combined with tensor parallelism and data parallelism: TP=8 x CP=16 x DP=N. This configuration was critical, without CP, the activation memory for 10M-token sequences would be prohibitive even with Flash Attention.
 

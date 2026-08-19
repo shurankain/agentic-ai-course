@@ -33,7 +33,7 @@ The context window is the only "working memory" of an LLM. Everything the model 
 
 ## The Lost-in-the-Middle Problem
 
-Before diving into strategies, it is essential to understand a counterintuitive property of LLMs: they process information at the **beginning and end** of the context window significantly better than in the middle. This "Lost-in-the-Middle" effect (Liu et al., 2023) means that position in the context influences model attention more than semantic relevance.
+Before diving into strategies, it is essential to understand a counterintuitive property of LLMs: they process information at the **beginning and end** of the context window better than in the middle. This "Lost-in-the-Middle" effect (Liu et al., 2023) means that position in the context influences model attention more than semantic relevance.
 
 The practical implication is architectural: critical instructions belong at the start of the context (system prompt), key constraints should be repeated at the end (the "sandwich" pattern), and important retrieved documents should not be buried between less relevant ones. When assembling context for an agent, the ordering of information is not cosmetic. It directly affects the quality of reasoning.
 
@@ -115,7 +115,7 @@ Depending on available space in the context, the appropriate level of detail is 
 
 **Solution:** Splitting context across specialized agents.
 
-**ISOLATE Advantages:** each agent fully utilizes its own context window, specialization reduces noise in the context, parallel processing is possible, easier to debug and improve.
+**ISOLATE Advantages:** each agent fully uses its own context window, specialization reduces noise in the context, parallel processing is possible, easier to debug and improve.
 
 **Isolation Patterns:**
 
@@ -213,7 +213,7 @@ In traditional RAG, the context assembly pipeline is fixed: query, then embed, t
 
 **Letta's LLM-as-OS paradigm** takes this furthest: the agent manages a three-tier memory system (Core Memory always in prompt, Archival Memory out-of-context, agent-editable via tool calls). The agent decides when to write to memory, when to search its archives, and when to forget, through explicit tool calls, not pipeline logic. See Module 03, Memory Systems for details.
 
-**Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context, enabling effectively infinite-length sessions within a finite window.
+**Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context. This enables effectively infinite-length sessions within a finite window.
 
 **Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience, not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See Module 03, Memory Systems for details.
 

@@ -1,7 +1,5 @@
 # ML System Design for Interviews
 
-## Introduction
-
 ML System Design is one of the most challenging stages of interviews for Senior/Staff+ positions. It combines understanding of distributed systems with deep knowledge of ML/AI specifics.
 
 For positions at $400K+ (Staff+ at frontier AI companies), they evaluate the ability to structure an ambiguous problem, make well-reasoned trade-off decisions, think about production concerns from day one, and communicate complex ideas simply.
@@ -62,7 +60,7 @@ The architecture is built on a multi-layer principle:
 
 Input Layer: Load Balancer distributes load across API Gateway instances, which handles authentication, rate limiting, and request routing.
 
-Request Processing Layer: multiple Query Service instances process user requests in parallel, enabling horizontal scaling.
+Request Processing Layer: multiple Query Service instances process user requests in parallel. This enables horizontal scaling.
 
 Orchestration Layer: coordinates the entire request processing pipeline: from query understanding through relevant information retrieval to response generation. This layer manages the interaction logic between components.
 
@@ -74,7 +72,7 @@ Specialized Services: Vector Store (e.g., Pinecone) for semantic search over emb
 
 The document processing pipeline consists of sequential stages:
 
-Extraction: Apache Tika or similar tools are used to extract text from various formats (PDF, Word, HTML). Preserving the structural information of the document is important.
+Extraction: Apache Tika or similar tools are used to extract text from formats (PDF, Word, HTML). Preserving the structural information of the document is important.
 
 Chunking: semantic chunking is applied with awareness of document structure. Optimal chunk size is 500 tokens with an overlap of 50 tokens to preserve context at boundaries. For long documents, hierarchical chunking is used, creating both fine and coarse chunks for multi-level retrieval.
 
@@ -154,9 +152,9 @@ Tenant Preferences: the first level checks tenant configuration. If a client has
 
 Task Classification: prompt analysis to determine the task type: simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
 
-Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5), providing sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4-6, gpt-5.4) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
+Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5). This gives sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4-6, gpt-5.4) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
 
-Fallback Chain: if the primary model is unavailable or returns an error, the request is automatically rerouted to a fallback model, ensuring high service availability.
+Fallback Chain: if the primary model is unavailable or returns an error, the request is automatically rerouted to a fallback model. This ensures high service availability.
 
 ### Cost Optimization Strategies
 
@@ -214,7 +212,7 @@ Three-stage funnel for recommendations:
 
 Candidate Generation: the first stage uses efficient methods such as Two-Tower architecture or Collaborative Filtering to quickly select 100 relevant items from millions. This is a fast stage with 10-20 millisecond latency, operating on user and item embeddings.
 
-ML Ranking: the second stage applies a gradient boosting model (XGBoost) with numerous features (user demographics, item features, contextual signals, interaction history) for precise ranking of the top-100 candidates. The top-20 with the highest predicted engagement are selected.
+ML Ranking: the second stage applies a gradient boosting model (XGBoost) with features (user demographics, item features, contextual signals, interaction history) for precise ranking of the top-100 candidates. The top-20 with the highest predicted engagement are selected.
 
 LLM Reranking: the final stage uses an LLM for personalized reranking of the top-20, taking into account subtle nuances of the user's context. The LLM receives a User Profile (recent purchases, browsing history, inferred intent), a list of Candidate Items with features, and an instruction to maximize user satisfaction considering relevance, diversity, novelty. The model returns the final top-10 with justification.
 

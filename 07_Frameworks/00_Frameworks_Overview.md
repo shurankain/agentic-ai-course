@@ -1,7 +1,5 @@
 # AI Frameworks Overview
 
-## Introduction
-
 The ecosystem of frameworks for developing AI agents and LLM applications is evolving rapidly. New tools appear monthly, existing ones undergo radical changes, and some merge or become discontinued. This chapter provides an overview of the current state of the industry and helps select the right tool for a specific task.
 
 It is important to understand that choosing a framework is not about picking the "best" one but about selecting the one that fits your requirements. A simple RAG chatbot and a complex multi-agent system require different tools.
@@ -14,7 +12,7 @@ It is important to understand that choosing a framework is not about picking the
 
 Frameworks are organized by abstraction level from high to low:
 
-**HIGH-LEVEL (No-code / Low-code)**: visual tools for building AI workflows without programming. This level includes n8n, Make, and Zapier AI. These platforms provide graphical editors for creating scenarios with minimal code, making them accessible to non-developers.
+**HIGH-LEVEL (No-code / Low-code)**: visual tools for building AI workflows without programming. This level includes n8n, Make, and Zapier AI. These platforms provide graphical editors for creating scenarios with minimal code. This makes them accessible to non-developers.
 
 **MID-LEVEL (Agent Frameworks)**: frameworks for orchestrating multi-agent systems with ready-made patterns. CrewAI, LangGraph, and AutoGen provide high-level abstractions for building complex agent systems while hiding implementation details.
 
@@ -38,7 +36,7 @@ Frameworks are organized by abstraction level from high to low:
 
 ### Cloud Provider Solutions
 
-**AWS Bedrock Agents** are used by over 100,000 organizations (as of early 2026), providing enterprise SLA and full integration with the AWS ecosystem. Vendor lock-in remains the main drawback for companies planning a multi-cloud strategy.
+**AWS Bedrock Agents** are used by over 100,000 organizations (as of early 2026). This gives enterprise SLA and full integration with the AWS ecosystem. Vendor lock-in remains the main drawback for companies planning a multi-cloud strategy.
 
 **Google Vertex AI Agent Builder** shows growth with over 7 million Agent Development Kit downloads (as of early 2026). Integration with Gemini models and the ability to ground through Google Search make it attractive for the GCP ecosystem.
 
@@ -68,7 +66,7 @@ LangChain remains the most widely used framework for LLM applications. It provid
 
 **Tools** provide integration with external APIs and services. The model can invoke tools to perform actions: fetching data, sending notifications, managing systems.
 
-**RAG Components** include retrievers for finding relevant information, vector stores for storing embeddings, and document loaders for importing data from various sources.
+**RAG Components** include retrievers for finding relevant information, vector stores for storing embeddings, and document loaders for importing data from sources.
 
 **When to use LangChain**: rapid prototyping of LLM applications, building RAG systems, simple call chains, scenarios where a rich ecosystem of ready-made integrations is critical.
 
@@ -84,7 +82,7 @@ LangGraph extends LangChain for creating complex agent systems with explicit sta
 
 **Persistence** through checkpointing allows saving the state of long-running agents. If an agent performs a task requiring hours or days, its state is periodically saved. On failure, the agent resumes from the last checkpoint.
 
-**When to use LangGraph**: complex multi-step agents with numerous conditional transitions, cases requiring explicit control over execution flow, human-in-the-loop workflows requiring a pause for user confirmation, scenarios demanding granular control over each step.
+**When to use LangGraph**: complex multi-step agents with conditional transitions, cases requiring explicit control over execution flow, human-in-the-loop workflows requiring a pause for user confirmation, scenarios demanding granular control over each step.
 
 ---
 
@@ -140,7 +138,7 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 **Microsoft Agent Framework 1.0 GA** (April 3, 2026): The 1.0 release locked the API surface for long-term servicing. Ships with full MCP support for tool discovery, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI debugger** that visualizes agent execution and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic, Bedrock, Gemini, and Ollama..NET and Python SDKs unified under one API surface.
 
-**Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout**: an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ**, a new workplace intelligence layer with APIs (GA June 16), providing organizational context to agents. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake serves as the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform, leveraging 500M+ M365 users for distribution.
+**Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout**: an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ**, a new workplace intelligence layer with APIs (GA June 16). This gives organizational context to agents. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake is the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform, leveraging 500M+ M365 users for distribution.
 
 **Microsoft Agent Framework v1.9.0** (June 18): **Agent Harness** (GA) provides production patterns as first-class features: context compaction, instruction merging, todo tracking, extensible providers. **Hosted Agents** (GA by end of June) run in hypervisor-isolated sandboxes with persistent file systems, per-agent Entra ID, built-in OpenTelemetry tracing, sub-100ms cold starts, and zero idle cost. **A2A (Agent2Agent) in public preview**: expose any Foundry agent as an A2A endpoint. The velocity: from 1.0 GA (April 3) to 1.9.0 (June 18) in 11 weeks, with significant GA features each release.
 
@@ -154,7 +152,7 @@ Beyond the established leaders and cloud providers, several frameworks have gain
 
 **Pydantic AI** (v2.0.0b7 as of late June 2026, v1.107.0 stable): type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities: instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
 
-**Mastra**: TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers, enabling automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
+**Mastra**: TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers. This enables automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
 
 **Agno** (formerly Phidata): 39K+ GitHub stars (as of early 2026). Provides ReasoningTools (tools that help the agent think better, not just act), session-based memory, and a batteries-included approach. Good balance of ease-of-use and capability. Best for: Python developers who want a simpler alternative to LangGraph with built-in memory and reasoning support.
 
@@ -164,7 +162,7 @@ Beyond the established leaders and cloud providers, several frameworks have gain
 
 ### Specialized Frameworks
 
-**DSPy** (Stanford, v3.2.1 as of late May 2026), automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's optimizers find optimal prompts through automated search. **GEPA** (Greedy Evolutionary Prompt Approximation) is now the default optimizer, replacing MIPROv2. New **RLM module** enables recursive sub-LLM calls, an LLM invokes itself or another LLM within a reasoning step, enabling compositional reasoning chains. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
+**DSPy** (Stanford, v3.2.1 as of late May 2026), automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's optimizers find optimal prompts through automated search. **GEPA** (Greedy Evolutionary Prompt Approximation) is now the default optimizer, replacing MIPROv2. New **RLM module** enables recursive sub-LLM calls, an LLM invokes itself or another LLM within a reasoning step. This enables compositional reasoning chains. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
 
 **Mistral Vibe**: remote agents from Mistral AI launched alongside Mistral Medium 3.5 (May 2026). Async cloud agents for routine development tasks (bug fixes, dependency updates) with GitHub and Slack integration. The agents run in Mistral's cloud and create PRs autonomously. Notable because Mistral Medium 3.5 (128B dense, 77.6% SWE-bench Verified, open weights) is one model for chat, reasoning, and code: no separate reasoning model needed. Best for: teams using Mistral models who want hosted agent capabilities.
 
@@ -182,7 +180,7 @@ The JVM agent ecosystem reached parity with Python in 2025-2026:
 
 Java 26 (March 2026) is positioned as an "AI-first platform" with value types, structured concurrency, and other features that benefit agent workloads. Combined with LangChain4j, Spring AI, and now Koog, the JVM ecosystem offers production-grade agent development on par with Python.
 
-**Google ADK for Go 1.0** (April 2026), extends ADK to the Go ecosystem, making ADK the only major Big Tech framework supporting four languages. Particularly relevant for infrastructure and DevOps teams building agents in Go.
+**Google ADK for Go 1.0** (April 2026), extends ADK to the Go ecosystem. This makes ADK the only major Big Tech framework supporting four languages. Particularly relevant for infrastructure and DevOps teams building agents in Go.
 
 ### Open-Weight Models for Agent Workloads
 

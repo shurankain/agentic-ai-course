@@ -1,7 +1,5 @@
 # MCP Components: Resources, Tools, Prompts, and Sampling
 
-## Introduction to the MCP Component Model
-
 Model Context Protocol defines a set of primitives for client-server interaction. The three original primitives (Resources, Tools, and Prompts) form the foundation, while Sampling, Elicitation, and Tasks extend the protocol's capabilities.
 
 Resources answer the question "what can be read?", Tools: "what can be done?", Prompts: "how to formulate a request?", Elicitation, "how to ask the user?", Tasks: "how to track long-running work?". This architecture separates concerns between components, similar to the MVC pattern.
@@ -18,11 +16,11 @@ Why is this separation so important? Consider a situation where an AI agent anal
 
 ### Resource Structure and Identification
 
-Each resource in MCP is identified by a URI: a universal resource identifier. The URI scheme is defined by the server and can be arbitrary, providing flexibility in namespace organization. For example, a file system server might use the `file://` scheme, a database server, `db://`, and an API server, `api://`.
+Each resource in MCP is identified by a URI: a universal resource identifier. The URI scheme is defined by the server and can be arbitrary. This gives flexibility in namespace organization. For example, a file system server might use the `file://` scheme, a database server, `db://`, and an API server, `api://`.
 
-A resource contains not only data but also metadata. The MIME type indicates the content format: text, JSON, image, or another type. The name and description help the client and user understand the resource's purpose. This metadata is critically important for proper information processing and presentation.
+A resource contains data and metadata. The MIME type indicates the content format: text, JSON, image, or another type. The name and description help the client and user understand the resource's purpose. This metadata is critically important for proper information processing and presentation.
 
-Notably, MCP supports two types of resource content: text and binary. Text content is transmitted directly, while binary content is encoded in base64. This allows working not only with documents and code but also with images, audio, and other media files.
+Notably, MCP supports two types of resource content: text and binary. Text content is transmitted directly, while binary content is encoded in base64. This allows working with documents and code, with images, audio, and other media files.
 
 ### URI Design for Resources
 
@@ -78,7 +76,7 @@ If resources represent passive data access, then Tools embody active interaction
 
 The philosophy of tools in MCP is closely tied to the concept of function calling in modern language models. The model analyzes available tools, their descriptions and parameters, and then decides to invoke the appropriate tool to solve the user's task.
 
-It is critically important to understand that tools are intended to be invoked by the model, not directly by a human. This means tool descriptions must be understandable to AI, not just to programmers. A good tool description explains not only what it does but also when it should be used.
+It is critically important to understand that tools are intended to be invoked by the model, not directly by a human. This means tool descriptions must be understandable to AI, not just to programmers. A good tool description explains what it does and when it should be used.
 
 ### Tool Parameterization
 
@@ -120,7 +118,7 @@ Consider an example: a code analysis server can provide a "code_review" prompt w
 
 A prompt in MCP consists of a name, description, parameter list, and message generator. Parameters are described similarly to tool parameters: with a name, description, and required flag.
 
-When a prompt is invoked, the server generates a sequence of messages based on the provided parameters. Messages have roles, user or assistant, which allows forming not only requests but also example dialogues.
+When a prompt is invoked, the server generates a sequence of messages based on the provided parameters. Messages have roles, user or assistant, which allows forming requests and example dialogues.
 
 This structure enables creating complex multi-step prompts with context and examples. The few-shot learning technique, where the model is shown examples of desired behavior, is easily implemented through MCP prompts.
 
@@ -146,7 +144,7 @@ With Sampling, the server simply formulates a request and receives a response th
 
 The Sampling mechanism includes important control aspects. The client has full control over which Sampling requests to allow. It can modify prompts, filter unwanted requests, or entirely reject Sampling from untrusted servers.
 
-This is a "human-in-the-loop" architecture where the client acts as an intermediary between the server and the model. No request to the model can pass without the client's knowledge and consent.
+This is a "human-in-the-loop" architecture where the client is an intermediary between the server and the model. No request to the model can pass without the client's knowledge and consent.
 
 Sampling parameters include the model, maximum token count, temperature, and other generation settings. However, the client can override these parameters in accordance with its policies.
 
@@ -184,7 +182,7 @@ The sixth stage is result return. The final, filtered response is sent to the se
 
 **Sampling Security Model:**
 
-The threat of Prompt Injection from the server is mitigated by the client's full control over the system prompt, allowing it to add instructions that prevent manipulation.
+The threat of Prompt Injection from the server is mitigated by the client's full control over the system prompt. This allows it to add instructions that prevent manipulation.
 
 Excessive token consumption is controlled by the client through strict limits on the `maxTokens` parameter, regardless of what the server requests.
 
@@ -192,7 +190,7 @@ Access to sensitive data is prevented by the client filtering responses before p
 
 Uncontrolled invocations are prevented by the client's ability to require explicit user confirmation (human approval) before each Sampling request, especially from untrusted servers.
 
-**Important:** The server never has direct access to the model. The client is the sole intermediary controlling all aspects of the call. This is the fundamental security principle of MCP, ensuring that the user retains full control over the use of AI capabilities.
+**Important:** The server never has direct access to the model. The client is the sole intermediary controlling all aspects of the call. This is the fundamental security principle of MCP. This ensures that the user retains full control over the use of AI capabilities.
 
 ## Elicitation: Requesting User Input
 
@@ -235,7 +233,7 @@ Many real-world operations take significant time: running a CI/CD pipeline, proc
 
 ### Task Lifecycle
 
-A Task goes through a defined lifecycle: the server creates a task when a long-running operation begins, providing a unique task ID. The client can poll for status or subscribe to updates. The server sends progress notifications with percentage complete, status messages, and partial results.
+A Task goes through a defined lifecycle: the server creates a task when a long-running operation begins. This gives a unique task ID. The client can poll for status or subscribe to updates. The server sends progress notifications with percentage complete, status messages, and partial results.
 
 Task states include: `pending` (created but not started), `running` (in progress), `completed` (finished successfully), `failed` (finished with error), and `cancelled` (aborted by client request).
 
@@ -252,7 +250,7 @@ Tasks transform MCP from a synchronous request-response protocol into an asynchr
 - **Parallel execution with progress:** An orchestrator agent launches CI builds, test suites, and deployment checks via different MCP servers simultaneously, monitoring each task's progress and making decisions as results arrive
 - **Adaptive cancellation:** If an early task reveals a critical error, the agent cancels remaining tasks rather than wasting compute on doomed work
 - **Human-in-the-loop for long operations:** Tasks can pause for approval at critical checkpoints (e.g., before deploying to production), resuming when the human approves via Elicitation
-- **Partial result streaming:** A data processing task returns intermediate results (e.g., rows processed so far), allowing the agent to start analysis before the full dataset is ready
+- **Partial result streaming:** A data processing task returns intermediate results (e.g., rows processed so far). This allows the agent to start analysis before the full dataset is ready
 
 Tasks, combined with Elicitation for human checkpoints and Sampling for AI-driven decisions, give MCP servers the building blocks for sophisticated autonomous workflows.
 
@@ -324,11 +322,11 @@ The client also declares its capabilities: for example, support for resource sub
 
 MCP supports dynamic component discovery. The client can request a list of available resources, tools, or prompts. Each element is accompanied by a description and schema sufficient for use.
 
-Moreover, the server can notify about changes to the component list. If the server adds a new tool or removes an outdated resource, the client receives a notification and can update its representation.
+The server can notify about changes to the component list. If the server adds a new tool or removes an outdated resource, the client receives a notification and can update its representation.
 
 ### MCP Registry and Discovery
 
-The MCP ecosystem has matured rapidly. The official MCP Registry launched in September 2025, providing a centralized catalog of approximately 2,000 verified servers. By early 2026, over 10,000 community MCP servers exist across GitHub, npm, and PyPI.
+The MCP ecosystem has matured rapidly. The official MCP Registry launched in September 2025. This gives a centralized catalog of approximately 2,000 verified servers. By early 2026, over 10,000 community MCP servers exist across GitHub, npm, and PyPI.
 
 **Server Discovery Models:**
 
@@ -354,7 +352,7 @@ Tools represent active interaction with side effects. Strict typing through JSON
 
 Prompts standardize typical scenarios, lowering the entry barrier for users and ensuring interaction quality.
 
-Sampling adds a reverse model invocation capability, allowing servers to delegate intellectual operations to the client. Elicitation enables servers to request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
+Sampling adds a reverse model invocation capability. This allows servers to delegate intellectual operations to the client. Elicitation enables servers to request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
 
 OAuth 2.1 authorization provides a standardized security framework for remote MCP connections, replacing ad-hoc authentication patterns.
 

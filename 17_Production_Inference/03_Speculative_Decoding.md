@@ -20,7 +20,7 @@ Output distribution is identical to pure autoregressive sampling with the large 
 ## How It Works
 
 **Draft generation:**
-The small model generates K tokens sequentially. It saves not only the tokens but also the probabilities for acceptance/rejection.
+The small model generates K tokens sequentially. It saves the tokens and the probabilities for acceptance/rejection.
 
 **Target verification:**
 The large model receives the prompt + all K draft tokens and performs a single pass. Thanks to causal attention, it computes probabilities for all K positions simultaneously. Instead of K separate passes. One batched pass.

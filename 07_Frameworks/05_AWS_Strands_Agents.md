@@ -1,7 +1,5 @@
 # AWS Strands Agents
 
-## Introduction
-
 AWS Strands Agents SDK is an open-source framework from AWS for building AI agents. Strands implements a model-driven approach, contrasting with the graph-driven architecture of LangGraph.
 
 **Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption, 5K+ GitHub stars in the first 3 months, 14M+ PyPI downloads (as of early 2026), active community contributions, and growing ecosystem of MCP-compatible tools.
@@ -124,7 +122,7 @@ Strict flow requirements. Compliance and audit. Complex state machines. Full con
 
 ### Implementing Multi-Agent Patterns
 
-**Agents-as-Tools pattern**: specialized agents are created for specific tasks (e.g., data analyst and technical writer), each with its own set of tools and system prompt. These agents are then wrapped in tool functions using the @tool decorator. The main orchestrator agent gains access to these wrapped agents as its own tools, allowing it to delegate specialized tasks to the appropriate experts. When receiving a complex request, the orchestrator automatically decides which specialized agent to engage.
+**Agents-as-Tools pattern**: specialized agents are created for specific tasks (e.g., data analyst and technical writer), each with its own set of tools and system prompt. These agents are then wrapped in tool functions using the @tool decorator. The main orchestrator agent gains access to these wrapped agents as its own tools. This allows it to delegate specialized tasks to the appropriate experts. When receiving a complex request, the orchestrator automatically decides which specialized agent to engage.
 
 **Agent Handoffs pattern**: the handoffs mechanism allows agents to transfer control to each other. This uses the @handoff decorator specifying the target agent. For example, in a customer support system, three agents are created: general support, technical support, and billing. For the general support agent, handoff functions are defined for escalation to technical support or billing. When a user describes a payment issue, the general support agent automatically recognizes the context and transfers the conversation to the billing agent, preserving the entire conversation history.
 

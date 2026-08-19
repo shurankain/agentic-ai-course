@@ -125,7 +125,7 @@ In practice, there may be minor differences due to the order of floating-point o
 
 ### Parallelism Optimization
 
-Flash Attention 2 (2023) focuses on better GPU utilization. The first version was memory-efficient but did not fully utilize computational resources.
+Flash Attention 2 (2023) focuses on better GPU utilization. The first version was memory-efficient but did not fully use computational resources.
 
 **Parallelism across sequence length.** FA1 parallelized only across batch and heads. FA2 adds parallelism across sequence blocks, critical for long contexts with small batch sizes.
 
@@ -147,7 +147,7 @@ These optimizations are critical for production LLMs.
 
 ## Flash Attention 3: The Next Level
 
-Flash Attention 3 (2024) leverages the capabilities of the Hopper architecture (H100):
+Flash Attention 3 (2024) uses the capabilities of the Hopper architecture (H100):
 
 **Asynchronous execution via warp specialization.** FA3 divides warps into producers (data loading via TMA: Tensor Memory Accelerator) and consumers (computation on Tensor Cores). Producers asynchronously prefetch the next block while consumers process the current one. This hides memory latency almost completely.
 
@@ -202,7 +202,7 @@ NVIDIA Blackwell (B200, GB200) introduces new capabilities relevant to Flash Att
 
 ### What Are Tensor Cores
 
-Tensor Cores are specialized compute units in NVIDIA GPUs, starting from Volta (2017). They perform matrix multiplications significantly faster than CUDA cores.
+Tensor Cores are specialized compute units in NVIDIA GPUs, starting from Volta (2017). They perform matrix multiplications faster than CUDA cores.
 
 A standard CUDA core performs one FMA (fused multiply-add) operation per cycle. A Tensor Core performs an entire matrix operation D = A x B + C in a few cycles, where the matrices are 16x16. That is 4096 FMA operations in ~8 cycles, orders of magnitude more efficient.
 
@@ -383,4 +383,4 @@ Key metrics:
 - Throughput: measured in tokens/second for different batch sizes and sequence lengths
 - GPU utilization: target utilization >80% for long sequences
 
-Memory savings grow quadratically with sequence length: for seq_len=4096, savings reach 90%+ compared to a naive implementation. This allows increasing batch size by 2-4x or using significantly longer contexts.
+Memory savings grow quadratically with sequence length: for seq_len=4096, savings reach 90%+ compared to a naive implementation. This allows increasing batch size by 2-4x or using longer contexts.

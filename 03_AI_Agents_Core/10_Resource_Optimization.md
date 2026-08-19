@@ -1,7 +1,5 @@
 # Resource-Aware Optimization
 
-## Introduction
-
 AI agents consume significant resources: tokens, compute, time. In a production environment, uncontrolled consumption leads to:
 - Unpredictable costs
 - Quality degradation under load
@@ -146,7 +144,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 | Anthropic | 90% off cached input | 50-80% per-turn cost reduction |
 | OpenAI | 50% off cached input | 25-40% per-turn cost reduction |
 
-**Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix acts as a stable foundation, while dynamic content varies naturally.
+**Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix is a stable foundation, while dynamic content varies naturally.
 
 **Implementation:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [memory/context] + [conversation history] + [current message]`. The first two blocks are fully cacheable. See Module 02, Context Engineering for the broader WSCI framework.
 
@@ -277,7 +275,7 @@ When approaching the limit:
 
 ### Key Cost Metrics
 
-Effective cost monitoring requires a small set of actionable metrics. The four below cover cost per interaction, cost per user, token efficiency, and cache utilization: a minimum viable dashboard for any LLM-powered service.
+Effective cost monitoring requires a small set of metrics you can act on. The four below cover cost per interaction, cost per user, token efficiency, and cache utilization: a minimum viable dashboard for any LLM-powered service.
 
 | Metric | Formula | Alert Threshold |
 |--------|---------|-----------------|

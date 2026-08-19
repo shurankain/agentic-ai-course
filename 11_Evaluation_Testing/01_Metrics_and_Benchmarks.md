@@ -64,7 +64,7 @@ Overcome the limitations of text metrics through vector representations.
 
 ## Benchmarks
 
-Standardized task sets for comparing models. The benchmark landscape has evolved significantly. Many classic benchmarks have saturated, and new, harder benchmarks have emerged.
+Standardized task sets for comparing models. The benchmark landscape has evolved. Many classic benchmarks have saturated, and new, harder benchmarks have emerged.
 
 ### Classic Benchmarks (Saturating)
 
@@ -88,7 +88,7 @@ As classic benchmarks saturate, the community has shifted to harder, more discri
 
 **SWE-bench Verified**: evaluates autonomous coding agent capability on real GitHub issues from popular open-source projects. Each task is a real bug report or feature request with a test suite. The model must understand the codebase, localize the issue, write a fix, and pass all tests. The acceleration of scores has been dramatic: 72% (mid-2025), then 79.2% (early 2026), then 87.6% (Claude Opus 4.7, April 2026), then 88.7% (GPT-5.5 Instant, May 2026), then 88.6% (Claude Opus 4.8, May 28 2026), then **95.0%** (Claude Fable 5, June 9 2026, independently confirmed by vals.ai; **model suspended June 13 due to export controls**, see Module 14, Agent Security). DeepSeek V4 scores 80.6% (open weights, MIT). Mistral Medium 3.5 scores 77.6%. Fable 5 at 95% means the benchmark is approaching its practical ceiling, with solution leakage in ~33% of tasks and pretraining contamination in ~94%, the remaining 5% gap likely reflects benchmark noise more than model limitation. OpenAI officially stopped reporting Verified scores (May 2026) due to confirmed contamination, see Benchmark Reliability section.
 
-**SWE-bench Pro**: a harder variant introduced to address Verified's reliability issues, now the recommended replacement after OpenAI abandoned Verified (May 2026). Claude Fable 5 leads at **80.3%** (vendor-reported, +11pp over Opus 4.8's 69.2%, the largest single-model jump in Pro history). Previous leaders: Claude Opus 4.8 at 69.2%, Claude Mythos Preview at 77.8%, GPT-5.4 (xHigh) at 59.1%, GPT-5.5 Instant at 58.6%. The gap between Verified and Pro for Fable 5 is ~15 points (95.0% Verified vs 80.3% Pro), significantly narrower than the ~19 point gap for Opus 4.8, suggesting genuine capability improvement rather than benchmark contamination. Fable 5 at 80.3% Pro means the model autonomously solves 4 out of 5 real GitHub issues end-to-end on harder, less contaminated tasks: a landmark result. Note: the 80.3% figure comes from Anthropic's system card using their own scaffolding; independent evaluation has not yet been published (as of mid-June 2026).
+**SWE-bench Pro**: a harder variant introduced to address Verified's reliability issues, now the recommended replacement after OpenAI abandoned Verified (May 2026). Claude Fable 5 leads at **80.3%** (vendor-reported, +11pp over Opus 4.8's 69.2%, the largest single-model jump in Pro history). Previous leaders: Claude Opus 4.8 at 69.2%, Claude Mythos Preview at 77.8%, GPT-5.4 (xHigh) at 59.1%, GPT-5.5 Instant at 58.6%. The gap between Verified and Pro for Fable 5 is ~15 points (95.0% Verified vs 80.3% Pro), narrower than the ~19 point gap for Opus 4.8, suggesting genuine capability improvement rather than benchmark contamination. Fable 5 at 80.3% Pro means the model autonomously solves 4 out of 5 real GitHub issues end-to-end on harder, less contaminated tasks: a landmark result. Note: the 80.3% figure comes from Anthropic's system card using their own scaffolding; independent evaluation has not yet been published (as of mid-June 2026).
 
 **AIME (American Invitational Mathematics Examination)**: competition-level math problems requiring multi-step reasoning, creative problem-solving, and mathematical insight. Much harder than GSM8K or MATH. Scores on AIME 2024: o3 96.7%, o4-mini 93.4%, o1 83.3%, GPT-4o 13.4%. Note: AIME 2024 scores may be inflated due to data contamination in pretraining; AIME 2025 is considered a cleaner benchmark. Demonstrates the dramatic impact of test-time compute on mathematical reasoning.
 
@@ -118,7 +118,7 @@ Standard benchmarks measure model capabilities in isolation. Agent benchmarks ev
 
 **TAU-bench (Tool-Augmented Understanding)**: evaluates agent performance on tasks requiring correct tool selection and sequencing. Focuses on the tool-use pipeline: understanding when to call tools, interpreting results, and chaining multiple tool calls to reach a goal. Includes retail and airline customer service domains.
 
-**AgentBench**: a comprehensive suite covering 8 environments (OS, database, web browsing, knowledge graph, etc.). Agents must interact with real systems through actions. Measures robustness across diverse environments.
+**AgentBench**: a suite covering 8 environments (OS, database, web browsing, knowledge graph, etc.). Agents must interact with real systems through actions. Measures robustness across diverse environments.
 
 **ToolBench**: evaluates tool use at scale with 16,000+ real-world APIs. Tests API discovery, parameter filling, multi-API orchestration, and error handling. Measures whether agents can navigate large API ecosystems.
 
@@ -224,7 +224,7 @@ A critical principle for agent evaluation: **"Evaluate results, not paths."** Ag
 
 ## Implementing Metrics
 
-Practical implementation includes a service class that encapsulates various metrics:
+Practical implementation includes a service class that encapsulates metrics:
 
 **Exact Match** returns 1.0 on full match of normalized texts, 0.0 otherwise. Normalization: lowercase, removal of punctuation and extra whitespace.
 

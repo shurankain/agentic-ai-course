@@ -4,7 +4,7 @@
 
 The end consumer of model outputs is a human. No metric can fully model human perception of usefulness, appropriateness, and quality.
 
-Automated metrics measure proxy characteristics: word overlap, semantic vector similarity. Humans evaluate the holistic impression: whether the answer helped solve the task, whether it was clear, whether it inspired trust. These aspects cannot be reduced to numerical formulas.
+Automated metrics measure proxy characteristics: word overlap, semantic vector similarity. Humans evaluate the overall impression: whether the answer helped solve the task, whether it was clear, whether it inspired trust. These aspects cannot be reduced to numerical formulas.
 
 Automated metrics require calibration. What does a BERTScore of 0.85 mean? The only way to interpret numbers is to correlate them with human judgments. Human evaluation is the reference point for all other metrics.
 
@@ -16,7 +16,7 @@ The quality of human evaluation critically depends on task formulation. A poorly
 
 **Clarity of criteria**: the evaluator must understand exactly what is required. Bad: "Rate the quality of the answer". Better: "Rate the completeness of the answer on a scale of 1-5, where 1 means the answer contains none of the requested information, and 5 means it contains all necessary information without omissions".
 
-**Examples for each scale point** significantly improve consistency. Show what a 2-point answer looks like, what a 4-point answer looks like. This calibrates understanding of the scale.
+**Examples for each scale point** improve consistency. Show what a 2-point answer looks like, what a 4-point answer looks like. This calibrates understanding of the scale.
 
 **Avoid ambiguity**: break down a "good" answer into specific dimensions: correctness, completeness, clarity, usefulness.
 
@@ -50,7 +50,7 @@ Comparing pairs instead of assigning absolute scores has significant advantages.
 
 ## Annotation Guidelines: The Foundation of Consistent Evaluation
 
-The difference between useful and useless human evaluation comes down to the quality of annotation guidelines. Vague guidelines produce noisy data. Precise guidelines produce consistent, actionable assessments.
+The difference between useful and useless human evaluation comes down to the quality of annotation guidelines. Vague guidelines produce noisy data. Precise guidelines produce consistent assessments a reviewer can act on.
 
 **Building effective annotation guidelines.** Start with a concrete rubric, not abstract criteria. For each dimension (correctness, completeness, clarity), define exactly what each score means with examples. A 3-page guideline with 10 annotated examples produces better inter-annotator agreement than a 30-page guideline without examples. The document should answer three questions for every possible situation: what score to assign, why, and what the adjacent scores look like (so annotators understand the boundaries between ratings).
 

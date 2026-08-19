@@ -1,6 +1,6 @@
 # Practical AI Agent Use Cases
 
-## Introduction: From Theory to Practice
+## From Theory to Practice
 
 AI agents have been solving real-world problems in production environments since 2021. This chapter provides a practical map of applications: major use case categories, key players, technology maturity levels, and deployment examples.
 
@@ -53,7 +53,7 @@ Coding agents have become the most successful category of AI agents, and this is
 
 **Devin (Cognition)**: an autonomous software engineer valued at $4B+ (as of mid-2025). Operates in its own development environment and can execute tasks end-to-end.
 
-**Roo Code (Roo Cline)**: an open-source alternative with 20K+ stars (as of early 2026). Runs in VS Code and supports various LLMs.
+**Roo Code (Roo Cline)**: an open-source alternative with 20K+ stars (as of early 2026). Runs in VS Code and supports LLMs.
 
 **Aider**: a CLI-based coding agent (39-42K stars, as of early 2026). Minimalist approach with good integration into existing workflows. Pioneered the Architect/Editor dual-role pattern.
 
@@ -109,7 +109,7 @@ Classic RAG (Retrieval-Augmented Generation) is a simple pipeline: find relevant
 
 ### The No-Code/Low-Code Revolution
 
-Workflow automation is the area where AI agents became accessible to a mass audience through no-code platforms. This democratizes the technology, enabling business users to automate processes without programming.
+Workflow automation is the area where AI agents became accessible to a mass audience through no-code platforms. This democratizes the technology. This enables business users to automate processes without programming.
 
 ### Key Players
 
@@ -133,7 +133,7 @@ Workflow automation is the area where AI agents became accessible to a mass audi
 
 ### The Latency Breakthrough
 
-Voice agents long remained a "tomorrow's technology" due to high latency. A 2-3 second delay between utterances made conversations unnatural. In 2024 a breakthrough occurred: ElevenLabs achieved 75ms latency, making conversations virtually indistinguishable from human interaction.
+Voice agents long remained a "tomorrow's technology" due to high latency. A 2-3 second delay between utterances made conversations unnatural. In 2024 a breakthrough occurred: ElevenLabs achieved 75ms latency. This makes conversations virtually indistinguishable from human interaction.
 
 ### Technical Stack
 
@@ -209,7 +209,7 @@ Browser Automation Agents are a subcategory of Computer Use, specialized for web
 
 **Stagehand 2.0** (Browserbase): extends Playwright with three AI methods: `act()`, `extract()`, `observe()`. Deterministic-first philosophy: uses standard Playwright selectors when possible, falls back to AI only for dynamic elements. Key innovation: **auto-caching of selectors**: first run is expensive (AI figures out selectors), subsequent runs are near-free (cached selectors).
 
-**Playwright MCP** (Microsoft): uses **accessibility snapshots** instead of screenshots, eliminating the need for a vision model entirely. Reduces token usage by 4x (114K->27K tokens via `@playwright/cli`). Acts as a bridge between coding agents (Claude Code, Cursor) and browser automation.
+**Playwright MCP** (Microsoft): uses **accessibility snapshots** instead of screenshots, eliminating the need for a vision model entirely. Reduces token usage by 4x (114K->27K tokens via `@playwright/cli`). Is a bridge between coding agents (Claude Code, Cursor) and browser automation.
 
 **Amazon Nova Act**: part of Amazon Nova models. Optimized for web automation in the AWS ecosystem with deterministic action replay.
 
@@ -225,7 +225,7 @@ Production browser automation converges on a pragmatic hybrid: **80% determinist
 
 In April 2026, Andrej Karpathy released **AutoResearch**, 630 lines of Python that launched agents on automated ML experiments. The result: 700 experiments in two days on one GPU, 20 significant optimizations discovered autonomously, 11% training speedup.
 
-The numbers matter less than the pattern they reveal. Karpathy (and subsequently Fortune magazine) coined the term **"The Karpathy Loop"**, a universal optimization pattern with three ingredients:
+The numbers matter less than the pattern they reveal. Karpathy (and Fortune magazine) coined the term **"The Karpathy Loop"**, a universal optimization pattern with three ingredients:
 
 1. **Agent with file access**: the agent can read and modify code, config files, or any text-based artifact
 2. **One objectively testable metric**: a number that can be measured automatically (training loss, test pass rate, latency, cost)
@@ -262,7 +262,7 @@ This is not simply "search and summarize". It is a full research process involvi
 
 **Gemini Deep Research** (Google): integrated into Gemini. Creates a research plan, performs multi-step research, and generates structured reports.
 
-**OpenAI Deep Research**: integrated into ChatGPT Pro. Now connects to MCP servers, enabling research over private enterprise data. Supports trusted site whitelisting for enterprise deployments.
+**OpenAI Deep Research**: integrated into ChatGPT Pro. Now connects to MCP servers. This enables research over private enterprise data. Supports trusted site whitelisting for enterprise deployments.
 
 **OWL** (CAMEL-AI): the leading open-source research agent. 69.09% on the GAIA benchmark (#1 open-source, surpassing OpenAI Deep Research by 2.34%). Apache 2.0 license, fully self-hostable. Multi-tool architecture for web browsing, file manipulation, and multi-step reasoning.
 
@@ -382,7 +382,7 @@ Exercise caution if:
 
 3. **Workflow Automation**: no-code platforms make agents accessible to business users
 
-4. **Voice Agents**: the latency breakthrough unlocked production use cases
+4. **Voice Agents**: the latency breakthrough opened up production use cases
 
 5. **Computer Use**: maturing capability. **Browser Automation**: production-ready, justified when no API exists
 

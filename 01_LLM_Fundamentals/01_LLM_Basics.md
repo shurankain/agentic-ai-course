@@ -1,6 +1,6 @@
 # Large Language Model (LLM) Fundamentals
 
-Imagine a library that doesn't just store texts but has "absorbed" their content, internalized language patterns, authorial styles, and reasoning logic. That is essentially what a large language model is, a system that has learned to understand and generate human language.
+Imagine a library that doesn't just store texts but has "absorbed" their content, internalized language patterns, authorial styles, and reasoning logic. That is what a large language model is, a system that has learned to understand and generate human language.
 
 Large Language Models (LLMs) have become a revolution in artificial intelligence. They form the foundation of modern AI agents and determine their ability to understand user queries, reason, generate code, and interact with the external world.
 
@@ -12,7 +12,7 @@ A language model is a statistical model that predicts the probability of the nex
 
 The "large" prefix refers to the scale of these models. Modern LLMs contain billions of parameters, numbers that the model has "learned" during training on massive volumes of text data. GPT-4, for example, is estimated to contain over a trillion parameters.
 
-But it is not just about the number of parameters. These models are trained on unprecedented volumes of data, trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn not only grammar and syntax but also factual knowledge, logical relationships, and elements of common sense.
+But it is not just about the number of parameters. These models are trained on unprecedented volumes of data, trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn grammar and syntax, factual knowledge, logical relationships, and elements of common sense.
 
 ---
 
@@ -24,7 +24,7 @@ Before 2017, the primary tools for processing text sequences were recurrent neur
 
 Imagine reading a book through a small window that shows only one word at a time. You must remember everything you have read in a single "compressed" mental image. The further you progress, the harder it becomes to retain important details from the beginning of the book. This is exactly the problem RNNs faced: information "faded" over long sequences.
 
-Furthermore, sequential processing made training slow. It was impossible to begin processing the tenth word until the first nine had been processed. In the era of powerful GPUs, this was a serious limitation.
+Sequential processing made training slow. It was impossible to begin processing the tenth word until the first nine had been processed. In the era of powerful GPUs, this was a serious limitation.
 
 ### Attention Is All You Need
 
@@ -32,11 +32,11 @@ In 2017, researchers at Google published the paper "Attention Is All You Need." 
 
 The key idea behind the Transformer: instead of passing information sequentially, allow each word to directly "look at" all other words in the text and decide which ones to attend to. This is the Self-Attention mechanism.
 
-Returning to the book analogy: instead of a small window, you can now see the entire page at once. When reading the word "he," you can instantly look back and understand that "he" refers to "Dr. Watson," mentioned three sentences earlier. Moreover, you do this for all words simultaneously, in parallel.
+Returning to the book analogy: instead of a small window, you can now see the entire page at once. When reading the word "he," you can instantly look back and understand that "he" refers to "Dr. Watson," mentioned three sentences earlier. You do this for all words simultaneously, in parallel.
 
 ### How the Attention Mechanism Works
 
-The attention mechanism can be thought of as a query system over a database. Self-Attention implements a soft (differentiable) lookup over a key-value store. Each token simultaneously serves as both a record in the "database" and a query to it.
+The attention mechanism can be thought of as a query system over a database. Self-Attention implements a soft (differentiable) lookup over a key-value store. Each token simultaneously is both a record in the "database" and a query to it.
 
 For each word (token) in the text, three vectors are created:
 
@@ -197,7 +197,7 @@ Understanding the Transformer architecture is critically important for developin
 
 1. **LLMs are neural networks with billions of parameters**, trained to predict the next token in text. This simple task, at sufficient scale, gives rise to complex abilities.
 
-2. **The Transformer architecture** revolutionized language processing. The Self-Attention mechanism allows each token to "see" the entire context, and parallel processing makes training efficient.
+2. **The Transformer architecture** reshaped language processing. The Self-Attention mechanism allows each token to "see" the entire context, and parallel processing makes training efficient.
 
 3. **Multi-Head Attention** allows the model to analyze text from multiple perspectives simultaneously: syntactic, semantic, and logical.
 

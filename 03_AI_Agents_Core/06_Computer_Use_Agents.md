@@ -1,6 +1,6 @@
 # Computer Use Agents: Controlling the Computer Through AI
 
-## Introduction: When the Agent Goes Beyond Text
+## When the Agent Goes Beyond Text
 
 Before late 2024, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use, a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
 
@@ -19,7 +19,7 @@ Claude Computer Use employs three core tools that give the model full control ov
 **computer tool** - the primary tool for UI automation:
 - Takes screenshots of the screen for visual perception of the current state
 - Moves the mouse cursor to the desired coordinates
-- Performs various types of clicks (left, right, double, drag-and-drop)
+- Performs types of clicks (left, right, double, drag-and-drop)
 - Types text via keyboard, emulating human typing
 - Presses special keys and key combinations (Enter, Ctrl+C, Alt+Tab, etc.)
 
@@ -51,7 +51,7 @@ The core loop of a Computer Use agent is built on continuous interaction between
 - GPT-4V (2024): 7.7%
 - Human baseline: ~72%
 
-The progression from 14.9% to 76.26% in under two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies significantly by task category.
+The progression from 14.9% to 76.26% in under two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies by task category.
 
 **WebArena** (web navigation):
 - Claude-based agents achieve 40%+ on WebArena, up from single-digit scores in 2024
@@ -79,7 +79,7 @@ A screenshot passes through several processing stages before the model can "unde
 
 **What the Model "Understands" from UI:**
 
-Vision-language models vary significantly in how well they interpret different aspects of a user interface. The following breakdown reflects current capabilities and common failure modes observed in production computer use deployments.
+Vision-language models vary in how well they interpret different aspects of a user interface. The following breakdown reflects current capabilities and common failure modes observed in production computer use deployments.
 
 | Aspect | Understanding Level | Notes |
 |--------|---------------------|-------|
@@ -110,7 +110,7 @@ There are several fundamental sources of error when working with coordinates:
 
 3. **Coordinate Representation**: The model generates numbers as a sequence of tokens. The number "523" is three separate tokens ("5", "2", "3"), and each can be predicted incorrectly.
 
-4. **Variability in UI**: The same element can be at different positions depending on DPI scaling, window size, browser zoom, making generalization harder.
+4. **Variability in UI**: The same element can be at different positions depending on DPI scaling, window size, browser zoom. This makes generalization harder.
 
 **Strategies for Improving Accuracy:**
 
@@ -123,14 +123,14 @@ Instead of specifying absolute pixel coordinates, semantic descriptions are used
 A visible grid with labels (A1, A2, B1, B2: like in Excel) is overlaid on the screenshot. The model can reference grid cells, which provides better accuracy than absolute coordinates while maintaining positioning flexibility.
 
 **3. Set-of-Marks (SoM)**
-Interactive UI elements are automatically numbered on the screenshot. Instead of determining coordinates, the model simply says "Click element 5". This requires preliminary element detection (through accessibility APIs or computer vision) but significantly increases reliability.
+Interactive UI elements are automatically numbered on the screenshot. Instead of determining coordinates, the model simply says "Click element 5". This requires preliminary element detection (through accessibility APIs or computer vision) but increases reliability.
 
 **4. Iterative Refinement**
 The agent performs an action, captures the result, and if the click did not work (verified by checking the UI change), the model sees the feedback and adjusts the coordinates. Usually 2-3 attempts are sufficient for successful interaction even with small elements.
 
 ### OSWorld Benchmark: Detailed Analysis
 
-OSWorld (Open-Source World) is a comprehensive benchmark for evaluating computer use agents.
+OSWorld (Open-Source World) is a benchmark for evaluating computer use agents.
 
 **Task Categories:**
 
@@ -338,7 +338,7 @@ The agent can automatically create tutorials and how-to guides by performing act
 
 ## Computer Use Ecosystem (2025)
 
-The computer use landscape has expanded significantly beyond Claude's initial launch, with multiple providers and specialized tools.
+The computer use landscape has expanded beyond Claude's initial launch, with multiple providers and specialized tools.
 
 ### Claude Computer Use: Evolution
 
@@ -456,7 +456,7 @@ Choosing between computer use agents and traditional automation tools involves t
 
 ## Practical Code Examples
 
-This section covers the key aspects of implementing Computer Use agents. Rather than numerous lengthy listings, one complete working example of a basic integration is presented, with detailed descriptions of other important components.
+This section covers the key aspects of implementing Computer Use agents. Rather than lengthy listings, one complete working example of a basic integration is presented, with detailed descriptions of other important components.
 
 ### Basic Computer Use Integration
 

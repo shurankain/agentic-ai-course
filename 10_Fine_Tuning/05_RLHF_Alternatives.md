@@ -1,6 +1,6 @@
 # RLHF Alternatives: DPO, KTO, ORPO, and SimPO
 
-## Introduction: Evolution of Alignment Methods
+## Evolution of Alignment Methods
 
 RLHF became an industry standard but is complex to implement, requires training a separate reward model, is unstable, and expensive. This led to the emergence of alternative methods.
 

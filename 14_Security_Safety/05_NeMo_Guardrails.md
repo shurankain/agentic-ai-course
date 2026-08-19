@@ -1,8 +1,6 @@
 # NeMo Guardrails
 
-## Introduction
-
-NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection, providing a programmatic control layer on top of probabilistic models.
+NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection. This gives a programmatic control layer on top of probabilistic models.
 
 **Recent capabilities (2025+):** Colang 2.0 is now the recommended standard for new projects (Python-like syntax, event-driven programming). Reasoning-capable safety models (e.g., Llama Guard 3, ShieldGemma) can be used as rail backends for faster, cheaper classification. GLiNER-based PII detection provides entity recognition without external API calls. OpenTelemetry tracing integration enables connecting guardrails telemetry to existing observability stacks.
 
@@ -36,7 +34,7 @@ The prompt-based approach has systemic limitations:
 
 **No Guarantees:** Prompt-based safety provides a probability of rule compliance, not a guarantee. For regulated industries (finance, healthcare, law), this is unacceptable.
 
-**Hard to Audit:** Safety rules are scattered across prompts, making them difficult to review centrally, version, and test.
+**Hard to Audit:** Safety rules are scattered across prompts. This makes them difficult to review centrally, version, and test.
 
 ### Rails Architecture: Programmatic Control
 
@@ -64,7 +62,7 @@ Colang allows describing three types of entities:
 
 **Bot responses**: bot response templates. Instead of hardcoded strings in code, you describe a response as "bot refuse to answer" with text variants.
 
-**Flows**: dialog management rules. They describe intent to response sequences, conditions, and branching. Flows define how the bot should react to various scenarios.
+**Flows**: dialog management rules. They describe intent to response sequences, conditions, and branching. Flows define how the bot should react to scenarios.
 
 ### Syntax and Structure
 
@@ -214,7 +212,7 @@ NeMo Guardrails has evolved with **Colang 2.0**, a major redesign of the DSL tha
 
 **Python-like syntax:** Colang 2.0 replaces the indentation-based `define` syntax with a more explicit, Python-inspired style. Flows use `flow` keyword, actions use `await`, and pattern matching replaces simple intent definitions.
 
-**Event-driven model:** Instead of linear flow definitions, Colang 2.0 is built around events and event matching. The `match` keyword listens for user utterances, system events, or custom events, enabling reactive programming patterns.
+**Event-driven model:** Instead of linear flow definitions, Colang 2.0 is built around events and event matching. The `match` keyword listens for user utterances, system events, or custom events. This enables reactive programming patterns.
 
 **Decorators for flow properties:** `@active` marks flows that are always listening, `@loop` marks flows that restart after completion. This replaces implicit behavior with explicit annotations.
 
@@ -251,7 +249,7 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 
 **Llama Guard 2 (April 2024):** Improved taxonomy alignment with industry standards (MLCommons AI Safety taxonomy). Better multilingual support. Reduced false positive rates.
 
-**Llama Guard 3 (July 2024):** Based on Llama 3.1, with significantly improved quality. Available in 1B and 8B variants. The 1B variant enables on-device safety classification. Supports customizable safety taxonomies: organizations can define their own categories and severity levels. Integrates with Llama's prompt format for seamless use in Llama-based applications.
+**Llama Guard 3 (July 2024):** Based on Llama 3.1, with improved quality. Available in 1B and 8B variants. The 1B variant enables on-device safety classification. Supports customizable safety taxonomies: organizations can define their own categories and severity levels. Integrates with Llama's prompt format for use in Llama-based applications.
 
 **Integration with NeMo Guardrails:** Llama Guard models can be used as the LLM for input/output rails, replacing general-purpose models. This is faster (specialized model), cheaper (smaller model), and often more accurate for safety classification.
 
@@ -263,7 +261,7 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 
 ### Choosing a Safety Model
 
-Dedicated safety models differ significantly in size, latency, and customization capabilities. The table below compares the available options to help architects select the right classifier for their deployment scenario, from on-device edge inference to high-accuracy production filtering.
+Dedicated safety models differ in size, latency, and customization capabilities. The table below compares the available options to help architects select the right classifier for their deployment scenario, from on-device edge inference to high-accuracy production filtering.
 
 | Model | Size | Latency | Custom Taxonomy | Best For |
 |-------|------|---------|-----------------|----------|

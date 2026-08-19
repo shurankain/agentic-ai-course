@@ -1,6 +1,6 @@
 # Quantization: Model Compression Without Quality Loss
 
-## Introduction: Why Quantization Is Critical
+## Why Quantization Is Critical
 
 Modern LLMs are staggering in size. LLaMA-70B requires 140 GB of memory just for weights in FP16. GPT-4 presumably contains over a trillion parameters. Running such models on commodity hardware would seem impossible, if not for quantization.
 
@@ -353,7 +353,7 @@ NVIDIA Blackwell (B200/GB200) introduces native FP4 (4-bit floating point) Tenso
 **FP4 vs INT4:**
 - INT4: uniform quantization levels, optimal for symmetric distributions
 - FP4: non-uniform levels (denser near zero), better for the naturally bell-curved weight distributions of LLMs
-- FP4 on Blackwell achieves 2x the throughput of FP8, making it 4x faster than FP16
+- FP4 on Blackwell achieves 2x the throughput of FP8. This makes it 4x faster than FP16
 
 **Practical implications:** FP4 on Blackwell provides INT4-level compression with FP8-level quality. Early benchmarks show FP4 models matching INT4 GPTQ quality while running at hardware-native speed (no dequantization overhead). This may make GPTQ/AWQ less necessary on Blackwell hardware.
 
@@ -386,7 +386,7 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **Approach:** Instead of scalar quantization (one scale per group), AQLM represents each weight vector as a sum of entries from multiple codebooks. This is vector quantization, a richer representation space at the same bit budget.
 
-**Results at 2-bit:** AQLM at 2 bits per weight significantly outperforms GPTQ and AWQ at the same bitwidth. For LLaMA-2-70B at 2-bit, AQLM achieves perplexity within 0.5 of the 4-bit GPTQ result, remarkable for halving the storage.
+**Results at 2-bit:** AQLM at 2 bits per weight outperforms GPTQ and AWQ at the same bitwidth. For LLaMA-2-70B at 2-bit, AQLM achieves perplexity within 0.5 of the 4-bit GPTQ result, remarkable for halving the storage.
 
 **Trade-off:** Codebook lookup adds latency compared to simple dequantization. Best suited for memory-constrained deployment where the 2-bit regime is necessary.
 
@@ -394,7 +394,7 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **QuIP#** (Quantization with Incoherence Processing, 2024) achieves state-of-the-art 2-bit quantization through incoherent weight processing.
 
-**Key idea:** Before quantization, apply random orthogonal transformations (Hadamard rotations) to weight matrices. This spreads outlier values across all dimensions, making the weight distribution more uniform and easier to quantize. After quantization, the inverse transformation is applied during inference.
+**Key idea:** Before quantization, apply random orthogonal transformations (Hadamard rotations) to weight matrices. This spreads outlier values across all dimensions. This makes the weight distribution more uniform and easier to quantize. After quantization, the inverse transformation is applied during inference.
 
 **Results:** QuIP# at 2-bit matches GPTQ at 3-bit and approaches GPTQ at 4-bit for large models (70B+). Combined with lattice codebooks (E8 lattice), it achieves optimal packing of quantization levels.
 
