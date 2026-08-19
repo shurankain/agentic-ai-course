@@ -4,7 +4,7 @@
 
 Human evaluation is reliable but expensive and slow. Automated metrics are fast but do not correlate with quality. LLM-as-a-Judge is an intermediate approach that combines the advantages of both.
 
-Use a powerful language model (GPT-5.5, Claude Opus 4.8) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors: all beyond the reach of simple text metrics.
+Use a powerful language model (GPT-5.6 Sol, Claude Opus 5) to evaluate responses from another model. An LLM judge understands language nuances, assesses relevance and completeness, identifies logical errors: all beyond the reach of simple text metrics.
 
 **Advantages:** scalability (thousands of evaluations in minutes), reproducibility (consistent scores), explainability (the model justifies its score), accessibility (no experts required).
 
@@ -26,7 +26,7 @@ A formalized framework for LLM-as-Judge through chain-of-thought reasoning. Thre
 
 **Evaluation criteria** define what to evaluate: overall quality or specific dimensions (correctness, completeness, relevance). More specific criteria yield more reliable scores.
 
-**Judge model** is typically the most powerful available model. A weaker model cannot reliably evaluate a stronger one. Typical choices: GPT-5.5, Claude Opus 4.8.
+**Judge model** is typically the most powerful available model. A weaker model cannot reliably evaluate a stronger one. Typical choices: GPT-5.6 Sol, Claude Opus 5.
 
 **Output format:** numerical rating, quality category, or structured evaluation across dimensions. Structured output (JSON) simplifies parsing.
 
@@ -77,7 +77,7 @@ Example structure: "Evaluate the following response. Question: [question]. Respo
 
 ## Strategies for Improving Reliability
 
-**Multi-judge**: using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-5.5 + Claude Opus 4.8 + Gemini 3.5 Flash, then take the median score or weighted average.
+**Multi-judge**: using several different models as judges with score aggregation. Different models have different biases; aggregation smooths them out. For example, GPT-5.6 Sol plus Claude Opus 5 plus Gemini 3.7 Flash, then take the median score or weighted average.
 
 **Chain-of-thought**: requiring reasoning before the score. Improves quality through "thinking it through." Prompt: "First explain your considerations for each criterion, then provide the score."
 
@@ -135,7 +135,7 @@ Multi-judge aggregation runs evaluation with several models in parallel via Comp
 
 - **Calibration against human evaluations is non-negotiable.** Run a human-annotated dataset through the LLM judge regularly to verify correlation; without this, judge scores are uninterpretable.
 
-- **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.5 + Claude Opus 4.8 + Gemini) and taking the median produces more stable scores than any single judge.
+- **Multi-judge aggregation smooths out individual model biases.** Using 2-3 different judge models (e.g., GPT-5.6 Sol, Claude Opus 5, and Gemini 3.7 Flash) and taking the median produces more stable scores than any single judge.
 
 - **Pairwise comparison is the most reliable LLM judge mode.** Randomizing A/B order and averaging two runs eliminates position bias and avoids the scale calibration problem of absolute ratings.
 

@@ -358,7 +358,7 @@ Google's computer use research project, leveraging Gemini's multimodal capabilit
 
 ### Browser Use (Open Source)
 
-An open-source Python framework for building browser automation agents. Browser Use provides a high-level API for controlling browsers programmatically through AI, supporting multiple LLM backends (Claude, GPT-5.4, Gemini, local models). Key advantages: fully open source (MIT license), self-hosted, supports custom LLMs, and provides both visual and DOM-based interaction modes. Popular for building custom browser automation workflows.
+An open-source Python framework for building browser automation agents. Browser Use provides a high-level API for controlling browsers programmatically through AI, supporting multiple LLM backends (Claude, GPT-5.6, Gemini, local models). Key advantages: fully open source (MIT license), self-hosted, supports custom LLMs, and provides both visual and DOM-based interaction modes. Popular for building custom browser automation workflows.
 
 ### Comparison of Computer Use Platforms
 
@@ -366,7 +366,7 @@ Multiple platforms now compete in the computer use space, each targeting differe
 
 | Platform | Environment | Strengths | Model |
 |----------|-------------|-----------|-------|
-| Claude Computer Use | Full desktop | Most capable general-purpose, 61.4%+ OSWorld | Claude Sonnet/Opus 4.6 |
+| Claude Computer Use | Full desktop | Most capable general-purpose, 81.2% OSWorld (Sonnet 5) | Claude Sonnet 5 / Opus 5 |
 | Claude for Chrome | Browser only | Low-latency web tasks | Claude |
 | Cowork | Hosted VM | Supervised workflows, real-time observation | Claude |
 | Nova Act | Browser only | Deterministic replay, AWS integration | Amazon Nova |

@@ -292,7 +292,7 @@ public class LangChain4jDemo {
         // 1. Creating a model with settings
         ChatLanguageModel model = OpenAiChatModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
-                .modelName("gpt-5.4")
+                .modelName("gpt-5.6")
                 .temperature(0.7)
                 .maxTokens(1000)
                 .logRequests(true)

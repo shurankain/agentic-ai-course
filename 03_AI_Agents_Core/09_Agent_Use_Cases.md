@@ -139,7 +139,7 @@ Voice agents long remained a "tomorrow's technology" due to high latency. A 2-3 
 
 **Speech-to-Text.** Whisper (OpenAI), Deepgram, AssemblyAI. Real-time transcription with low latency.
 
-**LLM Processing.** Fast models: Claude Haiku 4.5, GPT-4o-mini. Time-to-first-token is critical.
+**LLM Processing.** Fast models: Claude Haiku 4.5, GPT-5.6 Luna. Time-to-first-token is critical.
 
 **Text-to-Speech.** ElevenLabs, PlayHT, LMNT. High-quality synthesis with expression control.
 

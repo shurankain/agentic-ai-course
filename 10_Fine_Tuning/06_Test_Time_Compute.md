@@ -131,7 +131,7 @@ A growing concern in safety research (as of late May 2026): **chain-of-thought r
 An established cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch, a narrower cognitive task that needs fewer reasoning tokens.
 
 **The pattern:**
-1. A cheap model (Claude Haiku 4.5, GPT-4o-mini) generates N candidate responses
+1. A cheap model (Claude Haiku 4.5, GPT-5.6 Luna) generates N candidate responses
 2. A reasoning model (o3 with low effort, Claude with modest budget_tokens) evaluates each candidate
 3. The best candidate is selected based on the verifier's assessment
 

@@ -132,7 +132,7 @@ Design a multi-tenant LLM serving infrastructure supporting multiple models, 10K
 
 ### Requirements
 
-Multi-model: GPT-5.4/5.5, Claude, Llama, custom fine-tuned. Multi-tenant: 100+ enterprise customers. Latency: streaming TTFT less than 500 milliseconds. Cost: minimize while meeting SLOs. Isolation: tenant data isolation.
+Multi-model: GPT-5.6, Claude, Llama, custom fine-tuned. Multi-tenant: 100+ enterprise customers. Latency: streaming TTFT less than 500 milliseconds. Cost: minimize while meeting SLOs. Isolation: tenant data isolation.
 
 ### High-Level Architecture
 
@@ -152,7 +152,7 @@ Tenant Preferences: the first level checks tenant configuration. If a client has
 
 Task Classification: prompt analysis to determine the task type: simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
 
-Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5). This gives sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4-6, gpt-5.4) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
+Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5). This gives sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-5, gpt-5.6) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
 
 Fallback Chain: if the primary model is unavailable or returns an error, the request is automatically rerouted to a fallback model. This ensures high service availability.
 

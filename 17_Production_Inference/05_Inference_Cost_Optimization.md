@@ -2,7 +2,7 @@
 
 ## LLM Inference Economics
 
-Inference requires significant expenditure. A single GPT-5.4 request with long context costs several cents. At millions of requests per day, costs reach hundreds of thousands of dollars per month.
+Inference requires significant expenditure. A single GPT-5.6 request with long context costs several cents. At millions of requests per day, costs reach hundreds of thousands of dollars per month.
 
 **Cost Structure:**
 

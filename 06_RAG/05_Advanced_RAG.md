@@ -370,7 +370,7 @@ Evaluating a RAG system involves several independent dimensions. It is important
 
 ### Automated Evaluation
 
-**LLM-as-judge:** A strong model (GPT-5.4, Claude) is shown the question, context, answer, and evaluation criteria. It returns a score (0-1 or 1-5) and justification. This enables rapid evaluation of thousands of examples without manual effort.
+**LLM-as-judge:** A strong model (GPT-5.6, Claude) is shown the question, context, answer, and evaluation criteria. It returns a score (0-1 or 1-5) and justification. This enables rapid evaluation of thousands of examples without manual effort.
 
 **Frameworks:** RAGAS, TruLens, DeepEval provide ready-made metrics and pipelines. They standardize evaluation and allow comparing different versions of the system. RAGAS has become the de facto standard. It includes faithfulness, answer relevancy, context precision, and context recall.
 
@@ -475,7 +475,7 @@ Modern models support contexts of 100K-1M+ tokens. Is RAG still needed?
 
 The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100, then reranker narrows to top-20, then all 20 are loaded into long context (40K tokens), then LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
 
-**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8). This makes the tradeoff more nuanced than it was at 128K, but the 40x cost difference remains significant at scale.
+**Practical thresholds (as of August 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8). This makes the tradeoff more nuanced than it was at 128K, but the 40x cost difference remains significant at scale.
 
 **"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See Module 02, Context Engineering for the Lost-in-the-Middle analysis.
 

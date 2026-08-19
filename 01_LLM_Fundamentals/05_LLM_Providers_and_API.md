@@ -64,7 +64,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 - **Claude Opus 4.7**: earlier flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP, first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning: the model decides how much to think based on task complexity.
 - **Claude Opus 4.6** and **Claude Sonnet 4.6**: earlier generation, still deployed in production code that has not migrated.
 
-*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-20250514`) were **retired from the API on June 15, 2026**, hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
+*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-20250514`) were **retired from the API on June 15, 2026**, hard cutoff, no grace period. Existing code using these model IDs must migrate to the current Opus and Sonnet tiers, now Opus 5 and Sonnet 5.
 
 **Anthropic operates a 4-tier model hierarchy (as of August 2026):** Mythos ($10/$50), then Opus ($5/$25), then Sonnet ($3/$15), then Haiku ($0.25/$1.25). Fable 5 is the public-facing Mythos-class model; full Mythos 5 remains restricted. The tiers are no longer a simple quality ladder: Opus 5 leads SWE-bench Verified while sitting a tier below Fable 5, which is what happens when a lab optimizes a cheaper tier against the benchmark the expensive tier already saturated.
 
@@ -412,7 +412,7 @@ This format reflects the conversation structure and allows the model to understa
 ### Core Request Parameters
 
 A typical API request includes:
-- **model**: model identifier (e.g., "gpt-5.4", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
+- **model**: model identifier (e.g., "gpt-5.6", "claude-opus-5", "gemini-3.7-flash"). Provider IDs change with every release, so read this one from configuration rather than hard-coding it
 - **messages**: array of messages
 - **temperature**: degree of randomness in responses (0-2; note: some reasoning models fix this)
 - **max_tokens**: maximum response length
@@ -465,7 +465,7 @@ Standard models cover the broadest range of use cases, from general-purpose chat
 | Claude Opus 5 | $5.00 | $25.00 |
 | GPT-5.6 Sol | $5.00 | $30.00 |
 | Claude Sonnet 5 | $2.00 promo / $3.00 from Sept 1 | $10.00 promo / $15.00 from Sept 1 |
-| GPT-5.4 | $2.50 | $15.00 |
+| GPT-5.6 Terra | $2.50 | $15.00 |
 | GPT-5.5 Instant | $2.50 | $10.00 |
 | GPT-5 | $1.25 | $10.00 |
 | Gemini 3.7 Flash | $0.75 to Dec 31, then $1.50 | $3.75 to Dec 31, then $7.50 |
@@ -624,7 +624,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 - Gemini 3.7 Flash (1,048,576 tokens, 65,536 max output)
 - Claude Opus 5 and Sonnet 5 (1M tokens each)
 - Grok 4.6 (500K, but note the price doubles above 200K)
-- GPT-5.5 / GPT-5.4 (128K-1M context)
+- GPT-5.5 / GPT-5.6 (128K-1M context)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
 
@@ -856,7 +856,7 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 ### Basic Integration via LangChain4j
 
-Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-5.4"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-sonnet-4-6-20250923", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-2.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama4:maverick".
+Working with different providers through LangChain4j is unified thanks to the shared `ChatLanguageModel` interface. To create an OpenAI client, use `OpenAiChatModel.builder()` specifying the API key, model name (e.g., "gpt-5.6"), temperature, and maximum token count. Anthropic clients are created similarly via `AnthropicChatModel.builder()` with model "claude-sonnet-4-6-20250923", Google via `GoogleAiGeminiChatModel.builder()` with model "gemini-2.5-pro", and even local models via `OllamaChatModel.builder()` specifying the URL and a model such as "llama4:maverick".
 
 **Multi-provider architecture with fallback:** To ensure reliability, a client is created that maintains a list of providers in priority order. When generating a response, it sequentially attempts each provider starting with the first. If a provider returns an error (e.g., rate limit or server error), the client automatically switches to the next one. To handle transient failures, a retry mechanism with exponential backoff is implemented: the first attempt after 1 second, the second after 2 seconds, the third after 4 seconds, with random jitter added to avoid synchronized retry storms. Only after exhausting all attempts across all providers is a final error thrown.
 
@@ -866,4 +866,4 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON. This gives 100% parsing reliability.
 
-**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) x inputPrice + (outputTokens / 1,000,000) x outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) x outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120): an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request. This makes selective routing essential.
+**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) x inputPrice + (outputTokens / 1,000,000) x outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) x outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.6 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120): an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request. This makes selective routing essential.

@@ -58,7 +58,7 @@ Choosing the right PEFT method depends on the trade-off between memory efficienc
 
 ## OpenAI Fine-Tuning API
 
-For production scenarios, managed services offer the simplest path. The OpenAI API allows fine-tuning GPT-4o-mini and GPT-5.4 without managing infrastructure.
+For production scenarios, managed services offer the simplest path. The OpenAI API allows fine-tuning GPT-4o-mini and GPT-5.6 without managing infrastructure.
 
 Process: prepare data in JSONL, then upload file via API, then create fine-tuning job, then monitor, then obtain model ID.
 
@@ -90,7 +90,7 @@ Without thorough evaluation, it is impossible to determine whether fine-tuning h
 
 **Human evaluation**: the gold standard.
 
-**LLM-as-judge**: using a powerful model (GPT-5.4) for evaluating answers.
+**LLM-as-judge**: using a powerful model (GPT-5.6) for evaluating answers.
 
 ## Iterative Improvement Process
 

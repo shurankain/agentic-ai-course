@@ -69,9 +69,9 @@
 
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
-  - OpenAI (GPT-5.5, GPT-5.4, o3, o4-mini, GPT-Rosalind, GPT-5.3-Codex-Spark)
-  - Anthropic (**Claude Fable 5**: Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro; Opus 4.8, Sonnet 4.6, Haiku 4.5; **model export controls June 13**)
-  - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4; **Siri AI deal ~$1B/year**)
+  - OpenAI (**GPT-5.6**: Sol, Terra, Luna; GPT-5.5, o3, o4-mini, GPT-Rosalind, GPT-5.6-Cyber)
+  - Anthropic (**Claude Opus 5**: about 96% SWE-bench Verified; **Fable 5**: Mythos-class, 95.0%; Sonnet 5, Haiku 4.5; **model export ban June 12, lifted July 1**)
+  - Google (**Gemini 3.7 Flash**; 3.6 Flash, 3.5 Flash, 3.1 Pro; Gemma 4; **3.5 Pro still unshipped**; **Siri AI deal ~$1B/year**)
   - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash: in-house models, Build 2026)
   - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash: open weights MIT)
   - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer) + **Nano Omni** (30B omni-modal)

@@ -241,7 +241,7 @@ flow main
 
 ## Dedicated Safety Models: Llama Guard and ShieldGemma
 
-Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-5.4 for safety evaluation), dedicated safety classification models have emerged: purpose-trained for content moderation at lower cost and latency.
+Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-5.6 for safety evaluation), dedicated safety classification models have emerged: purpose-trained for content moderation at lower cost and latency.
 
 ### Llama Guard Family (Meta)
 
@@ -269,7 +269,7 @@ Dedicated safety models differ in size, latency, and customization capabilities.
 | Llama Guard 3 8B | 8B | ~100ms | Yes | Production API, Llama apps |
 | ShieldGemma 2B | 2B | <50ms | Limited | Real-time filtering, Gemma/Gemini apps |
 | ShieldGemma 27B | 27B | ~200ms | Limited | High-accuracy classification |
-| General LLM (GPT-5.4) | Large | 200-500ms | Fully flexible | Complex policies, nuanced judgment |
+| General LLM (GPT-5.6) | Large | 200-500ms | Fully flexible | Complex policies, nuanced judgment |
 
 **Recommendation:** Use dedicated safety models (Llama Guard, ShieldGemma) for fast, cheap input/output rails. Reserve general-purpose LLMs for complex semantic checks that require nuanced judgment or custom reasoning.
 
@@ -491,7 +491,7 @@ define flow handle denied topic
 
 ```yaml
 models:
-  - {type: main, engine: openai, model: gpt-5.4}
+  - {type: main, engine: openai, model: gpt-5.6}
 
 rails:
   input:
