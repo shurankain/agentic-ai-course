@@ -4,7 +4,7 @@
 
 Historically, fine-tuning meant updating all model weights. For a model with billions of parameters, this required enormous computational resources.
 
-**Parameter-Efficient Fine-Tuning (PEFT)** changed the situation. Instead of updating all weights, PEFT methods update only a small fraction of parameters — typically less than 1%. The remaining weights are "frozen." This dramatically reduces memory requirements and speeds up training.
+**Parameter-Efficient Fine-Tuning (PEFT)** changed the situation. Instead of updating all weights, PEFT methods update only a small fraction of parameters: typically less than 1%. The remaining weights are "frozen." This dramatically reduces memory requirements and speeds up training.
 
 A surprising fact: despite updating only a fraction of a percent of parameters, PEFT achieves quality very close to full fine-tuning on most tasks.
 
@@ -12,9 +12,9 @@ A surprising fact: despite updating only a fraction of a percent of parameters, 
 
 LoRA is the most popular PEFT method. Its idea is mathematically elegant and practically effective.
 
-Instead of directly updating the weight matrix W of size 4096x4096, LoRA adds the product of two small matrices: ΔW = A × B, where A has size 4096×r, and B has size r×4096. The rank parameter r is typically chosen to be small: 8, 16, 32, or 64.
+Instead of directly updating the weight matrix W of size 4096x4096, LoRA adds the product of two small matrices: ΔW = A x B, where A has size 4096xr, and B has size rx4096. The rank parameter r is typically chosen to be small: 8, 16, 32, or 64.
 
-The number of parameters at rank 16 decreases from 16 million to 131 thousand — 125 times fewer.
+The number of parameters at rank 16 decreases from 16 million to 131 thousand, 125 times fewer.
 
 In practice: fine-tuning a 7B model, which requires 100+ GB VRAM for full training, becomes feasible on a GPU with 16GB of memory.
 
@@ -60,7 +60,7 @@ Choosing the right PEFT method depends on the trade-off between memory efficienc
 
 For production scenarios, managed services offer the simplest path. The OpenAI API allows fine-tuning GPT-4o-mini and GPT-5.4 without managing infrastructure.
 
-Process: prepare data in JSONL → upload file via API → create fine-tuning job → monitor → obtain model ID.
+Process: prepare data in JSONL, then upload file via API, then create fine-tuning job, then monitor, then obtain model ID.
 
 **Hyperparameters:** number of epochs (typically 2-4), batch size, learning rate multiplier.
 
@@ -70,27 +70,27 @@ Process: prepare data in JSONL → upload file via API → create fine-tuning jo
 
 Without thorough evaluation, it is impossible to determine whether fine-tuning helped.
 
-**Baseline comparison** — comparing against the base model on the same tasks.
+**Baseline comparison**: comparing against the base model on the same tasks.
 
-**Held-out test set** — data the model has never seen.
+**Held-out test set**: data the model has never seen.
 
-**Multiple metrics** — accuracy, format compliance, semantic similarity, latency, cost.
+**Multiple metrics**: accuracy, format compliance, semantic similarity, latency, cost.
 
-**Regression testing** — verifying that the model has not degraded on other tasks.
+**Regression testing**: verifying that the model has not degraded on other tasks.
 
 ## Types of Metrics
 
-**Exact match accuracy** — the proportion of fully correct answers.
+**Exact match accuracy**: the proportion of fully correct answers.
 
-**Semantic similarity** — embedding models for comparing the meaning of answers.
+**Semantic similarity**: embedding models for comparing the meaning of answers.
 
-**Format compliance** — valid JSON, required sections, structure.
+**Format compliance**: valid JSON, required sections, structure.
 
-**BLEU, ROUGE** — n-gram metrics for generation.
+**BLEU, ROUGE**: n-gram metrics for generation.
 
-**Human evaluation** — the gold standard.
+**Human evaluation**: the gold standard.
 
-**LLM-as-judge** — using a powerful model (GPT-5.4) for evaluating answers.
+**LLM-as-judge**: using a powerful model (GPT-5.4) for evaluating answers.
 
 ## Iterative Improvement Process
 
@@ -98,35 +98,35 @@ Fine-tuning rarely produces a perfect result on the first attempt.
 
 **First iteration** establishes a baseline and reveals obvious problems.
 
-**Error analysis** — where does the model make mistakes? Are there patterns?
+**Error analysis**: where does the model make mistakes? Are there patterns?
 
-**Data improvement** — adding examples for problematic scenarios, removing contradictions, balancing.
+**Data improvement**: adding examples for problematic scenarios, removing contradictions, balancing.
 
-**Hyperparameter experiments** — more epochs, different learning rate, different target modules.
+**Hyperparameter experiments**: more epochs, different learning rate, different target modules.
 
-**A/B testing** — gradual rollout with monitoring.
+**A/B testing**: gradual rollout with monitoring.
 
 ## Production Monitoring
 
-**Quality metrics tracking** — regular quality assessment on samples of production traffic.
+**Quality metrics tracking**: regular quality assessment on samples of production traffic.
 
-**Drift detection** — have the input queries changed?
+**Drift detection**: have the input queries changed?
 
-**Cost monitoring** — fine-tuning can change inference costs.
+**Cost monitoring**: fine-tuning can change inference costs.
 
-**Feedback collection** — gathering user feedback.
+**Feedback collection**: gathering user feedback.
 
-**Rollback capability** — the ability to quickly revert to a previous version.
+**Rollback capability**: the ability to quickly revert to a previous version.
 
 ## Model Versioning and Management
 
-**Model registry** — centralized storage of all versions with metadata.
+**Model registry**: centralized storage of all versions with metadata.
 
-**Experiment tracking** — recording all experiments with parameters and results.
+**Experiment tracking**: recording all experiments with parameters and results.
 
-**Data versioning** — versioning of training data.
+**Data versioning**: versioning of training data.
 
-**Reproducibility** — the ability to reproduce any model version.
+**Reproducibility**: the ability to reproduce any model version.
 
 ## Key Takeaways
 

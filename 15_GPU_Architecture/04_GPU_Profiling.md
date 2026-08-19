@@ -4,7 +4,7 @@
 
 Optimization without measurement is guesswork. Intuition fails even experienced developers: an operation that seems slow may account for a fraction of a percent of total time, while "fast" code may be the bottleneck of the entire pipeline.
 
-GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, instruction mix — numerous factors affect performance.
+GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, instruction mix: numerous factors affect performance.
 
 The modern toolkit spans several levels: from the high-level PyTorch profiler to the low-level NVIDIA Nsight. Each tool provides its own view of performance, and the ability to combine them is a key skill for an optimization engineer.
 
@@ -14,7 +14,7 @@ The modern toolkit spans several levels: from the high-level PyTorch profiler to
 
 PyTorch profiler is the most accessible tool for analyzing GPU code. It is integrated into PyTorch, requires no additional installation, and provides information at the PyTorch operation level.
 
-Basic usage involves wrapping the code under investigation in the torch.profiler.profile() context manager. During initialization, you specify activity types: CPU and CUDA. Additional parameters allow recording tensor shapes (record_shapes=True), tracking memory usage (profile_memory=True), and capturing the call stack (with_stack=True). After execution, the key_averages() method aggregates results by operation type, and .table() outputs a formatted table.
+Basic usage involves wrapping the code under investigation in the torch.profiler.profile() context manager. During initialization, you specify activity types: CPU and CUDA. Additional parameters allow recording tensor shapes (record_shapes=True), tracking memory usage (profile_memory=True), and capturing the call stack (with_stack=True). After execution, the key_averages() method aggregates results by operation type, and.table() outputs a formatted table.
 
 Sorting by cuda_time_total shows operations that consumed the most total GPU time.
 
@@ -38,13 +38,13 @@ The on_trace_ready parameter accepts a callback function. tensorboard_trace_hand
 
 ### Interpreting Results
 
-**Large percentage of time in a single operation** — an obvious optimization target. If 50% of time is spent on attention — this is the place for Flash Attention.
+**Large percentage of time in a single operation**: an obvious optimization target. If 50% of time is spent on attention. This is the place for Flash Attention.
 
-**Many small operations** — a sign of fragmentation. Hundreds of operations at 0.1ms each create overhead from kernel launch. Solution: fusion, torch.compile.
+**Many small operations**: a sign of fragmentation. Hundreds of operations at 0.1ms each create overhead from kernel launch. Solution: fusion, torch.compile.
 
-**CPU time >> CUDA time** — a CPU bottleneck. Possible causes: data loading, preprocessing on CPU, Python overhead. Solutions: DataLoader with num_workers, moving preprocessing to GPU, torch.compile.
+**CPU time >> CUDA time**: a CPU bottleneck. Possible causes: data loading, preprocessing on CPU, Python overhead. Solutions: DataLoader with num_workers, moving preprocessing to GPU, torch.compile.
 
-**High memory usage in unexpected places** — a memory leak or inefficient intermediate tensors. Check that you are not retaining unnecessary references.
+**High memory usage in unexpected places**: a memory leak or inefficient intermediate tensors. Check that you are not retaining unnecessary references.
 
 ## NVIDIA Nsight Systems: A System-Level View
 
@@ -64,9 +64,9 @@ NVIDIA Nsight Systems shows:
 Profiling with Nsight Systems is launched from the command line: nsys profile -o my_profile python train.py. This creates a report file my_profile.nsys-rep, which opens in the graphical interface.
 
 Useful options:
-- -t cuda,nvtx — specifies event types for tracing (CUDA API, NVTX markers)
-- --stats=true — outputs statistics directly to the console after completion
-- --capture-range=cudaProfilerApi — profiles only the code section between explicit calls to torch.cuda.cudart().cudaProfilerStart() and Stop()
+- -t cuda,nvtx: specifies event types for tracing (CUDA API, NVTX markers)
+- --stats=true: outputs statistics directly to the console after completion
+- --capture-range=cudaProfilerApi: profiles only the code section between explicit calls to torch.cuda.cudart().cudaProfilerStart() and Stop()
 
 ### Reading the Timeline
 
@@ -81,7 +81,7 @@ The timeline in Nsight Systems is a powerful tool. The horizontal axis is time, 
 - Synchronizations (if gaps are large)
 - CPU bottleneck (if the CPU lane is busy during the gap)
 
-**Overlapping** — when compute and memory transfer occur in parallel. Well-optimized code maximizes overlap.
+**Overlapping**: when compute and memory transfer occur in parallel. Well-optimized code maximizes overlap.
 
 ### Analyzing Specific Problems
 
@@ -126,25 +126,25 @@ The "roof" is formed by two lines:
 - Sloped: memory bandwidth limit (while the operation is memory-bound)
 - Horizontal: compute limit (when the operation is compute-bound)
 
-The intersection point is the "ridge point." Operations to its left are memory-bound, to its right — compute-bound.
+The intersection point is the "ridge point." Operations to its left are memory-bound, to its right: compute-bound.
 
 The position of your kernel on the roofline shows:
-- If far from the roof — there is optimization potential
-- If close to the sloped part — you need to reduce memory traffic
-- If close to the horizontal part — you need to reduce compute or it is already at the limit
+- If far from the roof: there is optimization potential
+- If close to the sloped part. You need to reduce memory traffic
+- If close to the horizontal part: you need to reduce compute or it is already at the limit
 
 ### Metrics for Analysis
 
-**Achieved Occupancy** — the percentage of maximum possible warps that are active. Low occupancy (< 50%) may indicate:
+**Achieved Occupancy**: the percentage of maximum possible warps that are active. Low occupancy (< 50%) may indicate:
 - Too many registers per thread
 - Too much shared memory per block
 - A small grid (insufficient blocks)
 
-**Memory Throughput** — how much data per second is read/written. Compare with the GPU's peak bandwidth. If significantly lower — non-coalesced access or other issues.
+**Memory Throughput**: how much data per second is read/written. Compare with the GPU's peak bandwidth. If significantly lower: non-coalesced access or other issues.
 
-**Compute Throughput** — how many operations per second. For FP16 on H100, the peak is ~1000 TFLOPS. If your kernel shows 100 TFLOPS — it is far from optimal.
+**Compute Throughput**: how many operations per second. For FP16 on H100, the peak is ~1000 TFLOPS. If your kernel shows 100 TFLOPS. It is far from optimal.
 
-**Warp Execution Efficiency** — the percentage of active lanes in a warp. < 100% means branch divergence: different threads in the warp took different if/else paths.
+**Warp Execution Efficiency**: the percentage of active lanes in a warp. < 100% means branch divergence: different threads in the warp took different if/else paths.
 
 ## Identifying Bottlenecks
 
@@ -181,7 +181,7 @@ Solution: Increase parallelism to hide latency, avoid atomics where possible, im
 
 Each kernel launch takes ~5-10μs on the CPU side. For a short kernel, this can be a significant fraction of the total time.
 
-Signs: In the Nsight Systems timeline — small gaps between many short kernels.
+Signs: In the Nsight Systems timeline: small gaps between many short kernels.
 
 Solution: Operation fusion, CUDA Graphs to eliminate launch overhead, increasing work per kernel.
 
@@ -191,25 +191,25 @@ Solution: Operation fusion, CUDA Graphs to eliminate launch overhead, increasing
 
 Fusion is the primary source of speedup for memory-bound operations. By combining n operations into one, we eliminate n-1 intermediate writes and reads to HBM.
 
-**torch.compile** provides automatic fusion. When decorating a function with @torch.compile, PyTorch analyzes the computation graph and generates optimized fused kernels. For example, a sequence of layer_norm → matmul → bias_add → gelu can be combined into one or several kernels, eliminating intermediate writes to global memory. This is especially effective for element-wise operations and small matrix transformations.
+**torch.compile** provides automatic fusion. When decorating a function with @torch.compile, PyTorch analyzes the computation graph and generates optimized fused kernels. For example, a sequence of layer_norm, then matmul, then bias_add, then gelu can be combined into one or several kernels, eliminating intermediate writes to global memory. This is especially effective for element-wise operations and small matrix transformations.
 
 **Manual fusion** is used when torch.compile is insufficient. For specific patterns, you can use Triton or write custom CUDA kernels, providing full control over shared memory and register file usage.
 
 ### Memory Optimization
 
-**Gradient checkpointing** — a compute vs memory trade-off. Instead of storing all intermediate activations for the backward pass, we recompute them on the fly. This reduces the memory footprint by 2-4x at the cost of approximately 30% additional computation. The torch.utils.checkpoint.checkpoint function wraps a layer or block of layers. The use_reentrant=False parameter uses the newer and more stable checkpointing implementation.
+**Gradient checkpointing**: a compute vs memory trade-off. Instead of storing all intermediate activations for the backward pass, we recompute them on the fly. This reduces the memory footprint by 2-4x at the cost of approximately 30% additional computation. The torch.utils.checkpoint.checkpoint function wraps a layer or block of layers. The use_reentrant=False parameter uses the newer and more stable checkpointing implementation.
 
-**Mixed precision** — using FP16 or BF16 instead of FP32. Benefits: half the memory for tensor storage, double the effective memory bandwidth, plus the ability to use Tensor Core acceleration. torch.autocast automatically selects the appropriate precision for each operation, preserving numerical stability where it is critical. A context manager with parameters device_type='cuda' and dtype=torch.float16 activates mixed precision for all operations within the block.
+**Mixed precision**: using FP16 or BF16 instead of FP32. Benefits: half the memory for tensor storage, double the effective memory bandwidth, plus the ability to use Tensor Core acceleration. torch.autocast automatically selects the appropriate precision for each operation, preserving numerical stability where it is critical. A context manager with parameters device_type='cuda' and dtype=torch.float16 activates mixed precision for all operations within the block.
 
-**Efficient data layouts** — using contiguous tensors and specialized memory formats. Channels-last format for convolutions provides better access locality. Non-contiguous tensors require scatter/gather operations during reads, significantly reducing effective bandwidth. Calling .contiguous() before intensive operations can significantly speed up execution.
+**Efficient data layouts**: using contiguous tensors and specialized memory formats. Channels-last format for convolutions provides better access locality. Non-contiguous tensors require scatter/gather operations during reads, significantly reducing effective bandwidth. Calling.contiguous() before intensive operations can significantly speed up execution.
 
 ### Reducing Synchronization
 
-**Avoid .item() and .cpu()** — these operations synchronize GPU and CPU. Calling .item() on a GPU tensor blocks the CPU thread until all pending GPU operations complete, copies the value to the CPU, and only then returns control. In a training loop, calling loss.item() every iteration for logging can add hundreds of milliseconds of overhead. A better strategy is to log less frequently (e.g., every 100 steps) or accumulate losses on the GPU and transfer a batch of values.
+**Avoid.item() and.cpu()**: these operations synchronize GPU and CPU. Calling.item() on a GPU tensor blocks the CPU thread until all pending GPU operations complete, copies the value to the CPU, and only then returns control. In a training loop, calling loss.item() every iteration for logging can add hundreds of milliseconds of overhead. A better strategy is to log less frequently (e.g., every 100 steps) or accumulate losses on the GPU and transfer a batch of values.
 
-**Non-blocking transfers** — for data loading, use the non_blocking=True parameter when transferring data to the GPU: data.to(device, non_blocking=True). This allows the CPU to continue execution while the transfer happens in the background. Works optimally with pinned memory (pin_memory=True in DataLoader).
+**Non-blocking transfers**: for data loading, use the non_blocking=True parameter when transferring data to the GPU: data.to(device, non_blocking=True). This allows the CPU to continue execution while the transfer happens in the background. Works optimally with pinned memory (pin_memory=True in DataLoader).
 
-**CUDA Graphs** — a mechanism for capturing and replaying sequences of operations without kernel launch overhead. The graph is "recorded" once through the torch.cuda.graph() context manager, capturing the entire sequence of CUDA operations. Then the graph can be "replayed" multiple times via .replay(), avoiding kernel launch overhead. Critical: the graph requires fixed tensor shapes and cannot contain CPU-GPU synchronizations.
+**CUDA Graphs**: a mechanism for capturing and replaying sequences of operations without kernel launch overhead. The graph is "recorded" once through the torch.cuda.graph() context manager, capturing the entire sequence of CUDA operations. Then the graph can be "replayed" multiple times via.replay(), avoiding kernel launch overhead. Critical: the graph requires fixed tensor shapes and cannot contain CPU-GPU synchronizations.
 
 ### Batch Size Tuning
 
@@ -251,7 +251,7 @@ Result: 3x speedup in latency.
 
 Symptoms: Attention layer accounts for 60% of time during training. Nsight Compute shows high memory throughput, low compute throughput.
 
-Diagnosis: Standard attention materializes an N×N matrix in HBM.
+Diagnosis: Standard attention materializes an NxN matrix in HBM.
 
 Solution: enable Flash Attention via attn_implementation="flash_attention_2".
 
@@ -277,9 +277,9 @@ Result: 4x improvement in throughput for batch inference.
 
 **Fusion is usually the answer.** For memory-bound operations (the majority of ML operations), kernel fusion is the primary source of speedup.
 
-**Eliminate synchronization.** Hidden syncs (.item(), .cpu(), print) can destroy performance.
+**Eliminate synchronization.** Hidden syncs (.item(),.cpu(), print) can destroy performance.
 
-**Profile in production-like conditions.** Batch size, sequence length, hardware — everything affects the profile. Optimizing for the wrong workload is useless.
+**Profile in production-like conditions.** Batch size, sequence length, hardware. Everything affects the profile. Optimizing for the wrong workload is useless.
 
 ## Practical Application
 
@@ -300,16 +300,16 @@ torch.compile automatically applies fusion by analyzing the operation graph and 
 ### Memory Profiling and Optimization
 
 Memory monitoring involves tracking three metrics via torch.cuda:
-- memory_allocated() — memory actually occupied by tensors
-- memory_reserved() — reserved CUDA memory (may exceed allocated due to allocator caching)
-- max_memory_allocated() — peak usage since the last reset
+- memory_allocated(): memory actually occupied by tensors
+- memory_reserved(): reserved CUDA memory (may exceed allocated due to allocator caching)
+- max_memory_allocated(), peak usage since the last reset
 
 Comparing with and without gradient checkpointing demonstrates the trade-off: checkpointing reduces peak memory by 2-4x but increases compute time by ~30% due to activation recomputation. Use checkpoint_sequential for automatic model segmentation with checkpointing.
 
 ### Inference Latency Profiling
 
 For accurate inference latency measurement:
-- Use CUDA Events (torch.cuda.Event()) instead of time.perf_counter() — this excludes CPU overhead and measures pure GPU time
+- Use CUDA Events (torch.cuda.Event()) instead of time.perf_counter(), this excludes CPU overhead and measures pure GPU time
 - Warm up the GPU before measurements (50+ iterations) to stabilize frequencies and fill caches
 - Test various batch sizes to assess GPU utilization and determine the optimal operating range
 - With good utilization, latency should grow sublinearly with batch size (throughput grows faster than latency)

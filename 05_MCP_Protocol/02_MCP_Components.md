@@ -2,9 +2,9 @@
 
 ## Introduction to the MCP Component Model
 
-Model Context Protocol defines a set of primitives for client-server interaction. The three original primitives — Resources, Tools, and Prompts — form the foundation, while Sampling, Elicitation, and Tasks extend the protocol's capabilities.
+Model Context Protocol defines a set of primitives for client-server interaction. The three original primitives (Resources, Tools, and Prompts) form the foundation, while Sampling, Elicitation, and Tasks extend the protocol's capabilities.
 
-Resources answer the question "what can be read?", Tools — "what can be done?", Prompts — "how to formulate a request?", Elicitation — "how to ask the user?", Tasks — "how to track long-running work?". This architecture separates concerns between components, similar to the MVC pattern.
+Resources answer the question "what can be read?", Tools: "what can be done?", Prompts: "how to formulate a request?", Elicitation, "how to ask the user?", Tasks: "how to track long-running work?". This architecture separates concerns between components, similar to the MVC pattern.
 
 ## Resources: Data and Content Access
 
@@ -18,9 +18,9 @@ Why is this separation so important? Consider a situation where an AI agent anal
 
 ### Resource Structure and Identification
 
-Each resource in MCP is identified by a URI — a universal resource identifier. The URI scheme is defined by the server and can be arbitrary, providing flexibility in namespace organization. For example, a file system server might use the `file://` scheme, a database server — `db://`, and an API server — `api://`.
+Each resource in MCP is identified by a URI: a universal resource identifier. The URI scheme is defined by the server and can be arbitrary, providing flexibility in namespace organization. For example, a file system server might use the `file://` scheme, a database server, `db://`, and an API server, `api://`.
 
-A resource contains not only data but also metadata. The MIME type indicates the content format — text, JSON, image, or another type. The name and description help the client and user understand the resource's purpose. This metadata is critically important for proper information processing and presentation.
+A resource contains not only data but also metadata. The MIME type indicates the content format: text, JSON, image, or another type. The name and description help the client and user understand the resource's purpose. This metadata is critically important for proper information processing and presentation.
 
 Notably, MCP supports two types of resource content: text and binary. Text content is transmitted directly, while binary content is encoded in base64. This allows working not only with documents and code but also with images, audio, and other media files.
 
@@ -40,17 +40,17 @@ Well-designed URIs make the resource system intuitive for both developers and AI
 | **Predictability** | URI pattern can be guessed | `github://owner/repo/issues/42` |
 
 **Scheme Recommendations:**
-- `file://` — for the local file system
-- `db://` — for databases (tables, records, queries)
-- `api://` — for REST/GraphQL endpoints
-- `git://` — for Git repositories
+- `file://`: for the local file system
+- `db://`: for databases (tables, records, queries)
+- `api://`: for REST/GraphQL endpoints
+- `git://`: for Git repositories
 - Custom schemes for specific domains: `jira://`, `slack://`, `notion://`
 
 **URI Templates (RFC 6570).** MCP uses URI template syntax for resource templates:
-- `{var}` — simple substitution
-- `{+var}` — reserved expansion (preserving `/`)
-- `{#var}` — fragment expansion
-- `{?var}` — query parameter
+- `{var}`: simple substitution
+- `{+var}`: reserved expansion (preserving `/`)
+- `{#var}`: fragment expansion
+- `{?var}`: query parameter
 
 Example: `db://tables/{tableName}/rows/{+rowId}` allows addressing any row in any table.
 
@@ -58,7 +58,7 @@ Example: `db://tables/{tableName}/rows/{+rowId}` allows addressing any row in an
 
 ### Resource Templates
 
-Resource Templates play a special role in the resource system. Instead of enumerating all possible resources — which may be impossible for dynamic data sources — the server declares URI templates with parameters.
+Resource Templates play a special role in the resource system. Instead of enumerating all possible resources, which may be impossible for dynamic data sources: the server declares URI templates with parameters.
 
 A template describes a family of resources with a shared structure. For example, the template `db://tables/{tableName}/rows/{rowId}` describes access to any row in any table in a database. The client can substitute specific parameter values to obtain the desired resource.
 
@@ -92,7 +92,7 @@ Modern language models handle schema interpretation and valid argument generatio
 
 A tool invocation in MCP is a synchronous operation with clearly defined semantics. The client sends a request with the tool name and arguments, the server performs the action and returns the result.
 
-The invocation result can be successful or erroneous. On success, content is returned — text, data, or an execution confirmation. On error, a problem description is returned that the model can use to adjust its actions.
+The invocation result can be successful or erroneous. On success, content is returned: text, data, or an execution confirmation. On error, a problem description is returned that the model can use to adjust its actions.
 
 An interesting feature of MCP is support for the `isError` flag in the invocation result. Even a successfully executed request can return a result marked as an error. This allows the server to signal business logic problems without resorting to protocol errors.
 
@@ -102,7 +102,7 @@ Tools in MCP can have annotations that provide additional behavioral information
 
 The `readOnly` annotation indicates that the tool does not modify system state. Such tools are conceptually close to resources but differ in their dynamic nature or the need for parameterization.
 
-The `destructive` annotation warns about dangerous operations — data deletion, irreversible changes, and similar actions. The client can use this information for additional confirmation before execution.
+The `destructive` annotation warns about dangerous operations: data deletion, irreversible changes, and similar actions. The client can use this information for additional confirmation before execution.
 
 The `idempotent` annotation indicates that repeated invocation with the same arguments will not cause additional changes. This is important for handling connection loss situations and request retransmission.
 
@@ -118,9 +118,9 @@ Consider an example: a code analysis server can provide a "code_review" prompt w
 
 ### Prompt Structure
 
-A prompt in MCP consists of a name, description, parameter list, and message generator. Parameters are described similarly to tool parameters — with a name, description, and required flag.
+A prompt in MCP consists of a name, description, parameter list, and message generator. Parameters are described similarly to tool parameters: with a name, description, and required flag.
 
-When a prompt is invoked, the server generates a sequence of messages based on the provided parameters. Messages have roles — user or assistant — which allows forming not only requests but also example dialogues.
+When a prompt is invoked, the server generates a sequence of messages based on the provided parameters. Messages have roles, user or assistant, which allows forming not only requests but also example dialogues.
 
 This structure enables creating complex multi-step prompts with context and examples. The few-shot learning technique, where the model is shown examples of desired behavior, is easily implemented through MCP prompts.
 
@@ -134,7 +134,7 @@ This integration between prompts and resources creates powerful compositional ca
 
 ### The Uniqueness of the Sampling Mechanism
 
-Sampling is the most innovative component of MCP. While resources, tools, and prompts follow the "client requests — server responds" model, Sampling reverses this model.
+Sampling is the most innovative component of MCP. While resources, tools, and prompts follow the "client requests, server responds" model, Sampling reverses this model.
 
 With Sampling, the server requests the client to perform a language model call. This means the server can use AI capabilities without direct access to the model, delegating intellectual operations to the client.
 
@@ -154,7 +154,7 @@ Sampling parameters include the model, maximum token count, temperature, and oth
 
 Typical Sampling use cases are diverse. Agentic workflows can use Sampling for decision-making at each step. Data analysis systems can delegate result interpretation. Chatbots can use Sampling to generate response variants.
 
-Sampling is especially useful for building complex systems from simple components. Each MCP server focuses on its specialization — data access, action execution — and uses Sampling for intellectual operations.
+Sampling is especially useful for building complex systems from simple components. Each MCP server focuses on its specialization (data access, action execution) and uses Sampling for intellectual operations.
 
 ### Detailed Sampling Request Flow
 
@@ -206,9 +206,9 @@ Consider an MCP server connecting to a database. During the connection process, 
 
 The server sends an `elicitation/create` request to the client, specifying a message (the question to present to the user) and a JSON Schema describing the expected response format. The client displays this to the user and returns their input.
 
-The response schema supports text input, numeric input, boolean (yes/no) confirmations, and enumerated choices. The client has full control over the user experience — it can present the elicitation as a dialog, inline prompt, or any appropriate UI element.
+The response schema supports text input, numeric input, boolean (yes/no) confirmations, and enumerated choices. The client has full control over the user experience. It can present the elicitation as a dialog, inline prompt, or any appropriate UI element.
 
-**Security considerations:** The client can reject elicitation requests, modify the presentation, or require user approval before showing them. Servers must not assume elicitation will always succeed — the user may dismiss the request, the client may not support it, or the host policy may prohibit it.
+**Security considerations:** The client can reject elicitation requests, modify the presentation, or require user approval before showing them. Servers must not assume elicitation will always succeed, the user may dismiss the request, the client may not support it, or the host policy may prohibit it.
 
 ### Practical Elicitation Scenarios
 
@@ -223,13 +223,13 @@ Without Elicitation, servers either fail with an error requiring restart with ne
 
 ### Elicitation vs. Sampling
 
-Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response — it is a machine-to-machine interaction. Elicitation asks the human user for input — it is a machine-to-human interaction. Both "reverse" the typical request flow (server initiates instead of client), but they address different needs. Elicitation is for decisions that require human judgment, while Sampling is for tasks that require AI reasoning.
+Elicitation and Sampling serve different purposes. Sampling asks the AI model to generate a response. It is a machine-to-machine interaction. Elicitation asks the human user for input: it is a machine-to-human interaction. Both "reverse" the typical request flow (server initiates instead of client), but they address different needs. Elicitation is for decisions that require human judgment, while Sampling is for tasks that require AI reasoning.
 
 ## Tasks: Long-Running Operations
 
 ### The Problem of Asynchronous Work
 
-Tasks, introduced in the November 2025 MCP specification update, address long-running operations that cannot return results within a single request-response cycle. Before Tasks, MCP tool calls were synchronous — the client waited for the server to complete the operation and return a result.
+Tasks, introduced in the November 2025 MCP specification update, address long-running operations that cannot return results within a single request-response cycle. Before Tasks, MCP tool calls were synchronous: the client waited for the server to complete the operation and return a result.
 
 Many real-world operations take significant time: running a CI/CD pipeline, processing a large dataset, training a model, generating a complex report, or waiting for external approval. Forcing these into a synchronous model either required long timeouts or artificial workarounds.
 
@@ -241,7 +241,7 @@ Task states include: `pending` (created but not started), `running` (in progress
 
 ### Task Capabilities
 
-Tasks support cancellation — the client can request that a running task be stopped. They support progress reporting — the server sends structured updates about completion percentage and current step. They support partial results — intermediate outputs can be returned before the task completes.
+Tasks support cancellation: the client can request that a running task be stopped. They support progress reporting: the server sends structured updates about completion percentage and current step. They support partial results: intermediate outputs can be returned before the task completes.
 
 This primitive is especially valuable for agentic systems where an agent may launch multiple long-running operations in parallel and needs to monitor their progress, cancel them if the strategy changes, or collect partial results to inform subsequent decisions.
 
@@ -298,15 +298,15 @@ The appropriate authentication mechanism depends on the deployment context: wher
 
 The true power of the MCP component model manifests in composition. Resources can reference each other. Tools can read resources and create new ones. Prompts can include resources and use tool results.
 
-This composability allows building complex integrations from simple primitives. A database server can provide resources for reading the schema, tools for executing queries, and prompts for typical analytical tasks — all within a single conceptual framework.
+This composability allows building complex integrations from simple primitives. A database server can provide resources for reading the schema, tools for executing queries, and prompts for typical analytical tasks, all within a single conceptual framework.
 
 ### Design Recommendations
 
 When designing an MCP server, it is important to properly distribute functionality among components. General recommendations are as follows:
 
-Use resources for static or slowly changing data that can be read multiple times. Configuration, documentation, reference data — these are ideal candidates for resources.
+Use resources for static or slowly changing data that can be read multiple times. Configuration, documentation, reference data: these are ideal candidates for resources.
 
-Use tools for operations with side effects or dynamic queries with parameters. Create, update, delete, and complex computations — these belong to the domain of tools.
+Use tools for operations with side effects or dynamic queries with parameters. Create, update, delete, and complex computations. These belong to the domain of tools.
 
 Use prompts to standardize typical scenarios. If users frequently perform similar tasks, a prompt will save their time and ensure quality.
 
@@ -318,7 +318,7 @@ Use Sampling cautiously. Each Sampling call is a request to a language model, wh
 
 During connection establishment, the client and server exchange information about supported capabilities. The server declares which components it provides: resources, tools, prompts, Sampling.
 
-The client also declares its capabilities — for example, support for resource subscriptions or willingness to handle Sampling requests. This negotiation ensures that both sides understand the available functionality.
+The client also declares its capabilities: for example, support for resource subscriptions or willingness to handle Sampling requests. This negotiation ensures that both sides understand the available functionality.
 
 ### Dynamic Discovery
 
@@ -342,11 +342,11 @@ The fourth model is enterprise registries. Organizations deploy private registri
 
 **Registry Components:**
 
-Catalog — the central database of servers with metadata, search, and categorization. Verification — a tiered trust system with verified publishers (official, audited), community trusted (reviewed by the community), and unverified (new, experimental). Versioning — semantic versioning with MCP protocol compatibility tracking. Security — automated static analysis, vulnerability scanning, and code signing by trusted publishers.
+Catalog: the central database of servers with metadata, search, and categorization. Verification: a tiered trust system with verified publishers (official, audited), community trusted (reviewed by the community), and unverified (new, experimental). Versioning: semantic versioning with MCP protocol compatibility tracking. Security: automated static analysis, vulnerability scanning, and code signing by trusted publishers.
 
 ## Key Takeaways
 
-The MCP component model is a carefully designed architecture for integrating AI systems with the external world. The core primitives — Resources, Tools, and Prompts — cover the fundamental aspects of interaction: data access, action execution, and request templating.
+The MCP component model is a carefully designed architecture for integrating AI systems with the external world. The core primitives (Resources, Tools, and Prompts) cover the fundamental aspects of interaction: data access, action execution, and request templating.
 
 Resources embody the philosophy of passive information access. They are safe, predictable, and ideally suited for providing context to the language model. URI addressing and template support ensure flexibility in data organization.
 

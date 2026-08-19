@@ -4,7 +4,7 @@
 
 AWS Strands Agents SDK is an open-source framework from AWS for building AI agents. Strands implements a model-driven approach, contrasting with the graph-driven architecture of LangGraph.
 
-**Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption — 5K+ GitHub stars in the first 3 months, 14M+ PyPI downloads (as of early 2026), active community contributions, and growing ecosystem of MCP-compatible tools.
+**Release timeline:** Open-sourced May 2025 as a developer preview. Reached 1.0 GA in July 2025 with stable APIs and production support. Quickly gained adoption, 5K+ GitHub stars in the first 3 months, 14M+ PyPI downloads (as of early 2026), active community contributions, and growing ecosystem of MCP-compatible tools.
 
 Key characteristics: the model-driven approach means the LLM makes decisions about which actions to take. Open-source under the Apache 2.0 license. Code size for a basic agent is only 5-10 lines. Native MCP support. For enterprise use, integration with Bedrock AgentCore is available.
 
@@ -38,7 +38,7 @@ The LLM independently decides which tools to use and in what order. Agent Loop i
 
 **Tool** is a function that the agent can invoke. It has strictly typed inputs/outputs, a description for the LLM, and automatic serialization of results.
 
-**Agentic Loop** is the execution cycle consisting of the following steps: receive a task from the user, the model decides whether to use a tool or respond directly, if a tool is needed — execute it and return to step two, if a response is ready — return it to the user. This cycle repeats until a final answer is reached.
+**Agentic Loop** is the execution cycle consisting of the following steps: receive a task from the user, the model decides whether to use a tool or respond directly, if a tool is needed (execute it and return to step two, if a response is ready) return it to the user. This cycle repeats until a final answer is reached.
 
 ## Multi-Agent Patterns in Strands
 
@@ -74,11 +74,11 @@ For cases requiring explicit control, Strands supports integration with graph-ba
 
 Strands has native MCP (Model Context Protocol) support. Agents can use MCP servers as tool sources. Automatic discovery of available tools simplifies integration. Compatibility with the existing MCP ecosystem provides access to a growing library of MCP servers.
 
-**Advantages**: access to the growing MCP server ecosystem, a unified protocol for tools, and interoperability — working with tools from different sources.
+**Advantages**: access to the growing MCP server ecosystem, a unified protocol for tools, and interoperability, working with tools from different sources.
 
 ## Bedrock AgentCore
 
-For enterprise deployment, AWS offers Bedrock AgentCore — a managed service built on top of Strands.
+For enterprise deployment, AWS offers Bedrock AgentCore: a managed service built on top of Strands.
 
 **Capabilities**: managed infrastructure with auto-scaling and monitoring. Security through IAM integration and encryption. Observability with built-in tracing and metrics. Guardrails for content filtering and safety checks. Multi-Model support for different LLM providers.
 
@@ -92,19 +92,19 @@ For enterprise deployment, AWS offers Bedrock AgentCore — a managed service bu
 
 **Approach**: Strands uses model-driven where the LLM decides; LangGraph uses graph-driven where the developer defines.
 
-**Minimal agent**: Strands — 5-10 lines, LangGraph — 50-100 lines.
+**Minimal agent**: Strands: 5-10 lines, LangGraph: 50-100 lines.
 
-**Flow control**: Strands — the LLM decides, LangGraph — the developer defines.
+**Flow control**: Strands: the LLM decides, LangGraph: the developer defines.
 
 **Debugging**: Strands is harder, LangGraph is easier.
 
 **Flexibility**: Strands is high, LangGraph is medium.
 
-**Enterprise**: Strands — Bedrock AgentCore, LangGraph — LangSmith.
+**Enterprise**: Strands: Bedrock AgentCore, LangGraph: LangSmith.
 
 **MCP Support**: Strands is native, LangGraph uses adapters.
 
-**Vendor**: Strands — AWS, LangGraph — LangChain.
+**Vendor**: Strands: AWS, LangGraph: LangChain.
 
 ### When to Choose Strands
 
@@ -140,11 +140,11 @@ Strict flow requirements. Compliance and audit. Complex state machines. Full con
 
 Strands exists alongside several agent frameworks, each occupying a different niche. Understanding the positioning helps choose correctly for a given project.
 
-**Strands vs Bedrock Agents (AWS-native managed service).** Bedrock Agents is a fully managed, no-code/low-code agent builder within the AWS console — define an agent's instructions and tools through the UI, and AWS handles orchestration, scaling, and state management. Strands SDK is the open-source, code-first alternative — full control, local development, testable outside AWS. The relationship: Strands is the SDK for developers who want to build custom agent logic; Bedrock Agents is the managed service for teams who want agents without writing orchestration code. Bedrock AgentCore bridges both — Strands agents can be deployed on AgentCore for production infrastructure.
+**Strands vs Bedrock Agents (AWS-native managed service).** Bedrock Agents is a fully managed, no-code/low-code agent builder within the AWS console: define an agent's instructions and tools through the UI, and AWS handles orchestration, scaling, and state management. Strands SDK is the open-source, code-first alternative: full control, local development, testable outside AWS. The relationship: Strands is the SDK for developers who want to build custom agent logic; Bedrock Agents is the managed service for teams who want agents without writing orchestration code. Bedrock AgentCore bridges both: Strands agents can be deployed on AgentCore for production infrastructure.
 
 **Strands vs LangChain/LangGraph.** LangChain provides building blocks (chains, memory, retrieval); LangGraph adds explicit state machines. Strands takes the opposite approach: minimal abstractions, let the model decide. A basic LangGraph agent requires defining states, edges, and transitions (50-100 lines). A basic Strands agent requires defining tools and a system prompt (5-10 lines). The trade-off is control vs simplicity: LangGraph when you need explicit flow control and checkpointing; Strands when you want the model to handle orchestration and you are willing to accept less predictability.
 
-**Strands vs Spring AI (JVM ecosystem).** Spring AI provides AI integration for Java/Kotlin applications within the Spring ecosystem — dependency injection, auto-configuration, Spring Boot integration. Strands is Python-native. For JVM teams already on Spring Boot, Spring AI is the natural choice (with LangChain4j as the alternative). For Python teams on AWS, Strands is simpler than LangChain while providing native AWS integration. The two do not compete directly — they serve different language ecosystems.
+**Strands vs Spring AI (JVM ecosystem).** Spring AI provides AI integration for Java/Kotlin applications within the Spring ecosystem: dependency injection, auto-configuration, Spring Boot integration. Strands is Python-native. For JVM teams already on Spring Boot, Spring AI is the natural choice (with LangChain4j as the alternative). For Python teams on AWS, Strands is simpler than LangChain while providing native AWS integration. The two do not compete directly. They serve different language ecosystems.
 
 **When to choose AWS-native.** Choose Strands when: your infrastructure is on AWS, you want Bedrock AgentCore for managed production deployment, IAM integration matters for security, and you prefer a model-driven approach. Choose Strands over LangGraph when predictability is less important than development speed and your agents are adaptive (customer support, research) rather than workflow-driven (compliance, audit). Do not choose Strands when: you need cross-cloud portability, you require explicit flow control for regulated workflows, or your team is not on Python.
 
@@ -160,7 +160,7 @@ Strands exists alongside several agent frameworks, each occupying a different ni
 
 Strands reached 1.0 GA in July 2025, establishing itself as a lightweight alternative to graph-driven frameworks.
 
-Model-Driven approach means the LLM makes workflow decisions with minimal code. Three components — Agent, Tools, and Agentic Loop — form the architectural foundation.
+Model-Driven approach means the LLM makes workflow decisions with minimal code. Three components (Agent, Tools, and Agentic Loop) form the architectural foundation.
 
 Multi-Agent patterns include Agents-as-Tools for hierarchy, Handoffs for control transfer, Swarm for peer collaboration, and Graph when control is needed.
 

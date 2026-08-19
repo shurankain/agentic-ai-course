@@ -6,13 +6,13 @@ AI technical capabilities outpace organizational readiness to use them. A compan
 
 Governance is not bureaucratic overhead but an enabler. Organizations with mature AI governance ship AI products faster because they know what guardrails are needed. They avoid costly post-hoc remediations because they built safety into the process. They attract talented AI specialists who want to work in an ethical environment.
 
-History shows the cost of absent governance. Amazon abandoned its AI recruiting tool after discovering gender bias — millions spent on development, reputational damage, missed opportunities. Microsoft's Tay chatbot became racist within 24 hours — no red teaming or content moderation. Clearview AI faced lawsuits worldwide for using facial recognition without consent.
+History shows the cost of absent governance. Amazon abandoned its AI recruiting tool after discovering gender bias, millions spent on development, reputational damage, missed opportunities. Microsoft's Tay chatbot became racist within 24 hours: no red teaming or content moderation. Clearview AI faced lawsuits worldwide for using facial recognition without consent.
 
 ## Organizational Models of AI Governance
 
 ### Centralized Model
 
-**AI Center of Excellence (CoE)** — a centralized team responsible for all aspects of AI governance. The CoE defines standards, approves use cases, conducts reviews, and provides training.
+**AI Center of Excellence (CoE)**: a centralized team responsible for all aspects of AI governance. The CoE defines standards, approves use cases, conducts reviews, and provides training.
 
 Advantages of centralization:
 - Consistent standards across the organization
@@ -21,7 +21,7 @@ Advantages of centralization:
 - Economies of scale in tooling and processes
 
 Disadvantages:
-- Bottleneck effect — everyone waits for CoE approval
+- Bottleneck effect: everyone waits for CoE approval
 - Distance from business context
 - May be perceived as "AI police"
 - Difficult to scale as AI adoption grows
@@ -30,7 +30,7 @@ The centralized model works well for organizations at early stages of AI adoptio
 
 ### Federated Model
 
-**Distributed governance** — each business unit has its own AI governance capability, coordinated by a central team. The center establishes policies and standards; business units implement them.
+**Distributed governance**: each business unit has its own AI governance capability, coordinated by a central team. The center establishes policies and standards; business units implement them.
 
 Advantages:
 - Faster decision-making at the local level
@@ -48,7 +48,7 @@ The federated model suits large, diverse organizations with a mature governance 
 
 ### Hybrid Model
 
-**Hub and spoke** — a central CoE (hub) plus AI champions in business units (spokes). The CoE owns strategy, standards, and high-risk approvals. Champions handle day-to-day governance, escalating complex cases.
+**Hub and spoke**: a central CoE (hub) plus AI champions in business units (spokes). The CoE owns strategy, standards, and high-risk approvals. Champions handle day-to-day governance, escalating complex cases.
 
 This model balances central control with local autonomy. The CoE ensures consistency; spokes provide speed and context. Champions serve as a bridge between central policies and local implementation.
 
@@ -56,7 +56,7 @@ This model balances central control with local autonomy. The CoE ensures consist
 
 ### AI Ethics Board
 
-**Composition** — a diverse group including:
+**Composition**: a diverse group including:
 - Senior executives (accountability)
 - Technical AI experts (feasibility)
 - Legal/compliance (regulatory requirements)
@@ -82,28 +82,28 @@ This model balances central control with local autonomy. The CoE ensures consist
 
 Comprehensive policies covering:
 
-**AI Use Policy** — when and how AI may be used:
+**AI Use Policy**: when and how AI may be used:
 - Approved use cases and prohibited uses
 - Required approvals for different risk levels
 - Data requirements and restrictions
 - Human oversight requirements
 - Vendor selection criteria
 
-**AI Development Standards** — how AI should be developed:
+**AI Development Standards**: how AI should be developed:
 - Model documentation requirements
 - Testing and validation standards
 - Bias and fairness testing
 - Security requirements
 - Code review and approval processes
 
-**AI Operations Policy** — how AI should operate in production:
+**AI Operations Policy**: how AI should operate in production:
 - Monitoring requirements
 - Incident response procedures
 - Model update and retirement processes
 - Performance thresholds and SLAs
 - Audit and compliance requirements
 
-**AI Risk Policy** — how AI risks are managed:
+**AI Risk Policy**: how AI risks are managed:
 - Risk assessment methodology
 - Risk acceptance criteria
 - Mitigation requirements
@@ -112,7 +112,7 @@ Comprehensive policies covering:
 
 ### Model Cards and Documentation
 
-**Model Card** — standardized documentation format:
+**Model Card**: standardized documentation format:
 
 - **Model details**: name, version, type, training date
 - **Intended use**: primary use cases, users, out-of-scope uses
@@ -197,41 +197,41 @@ Each AI initiative passes through defined gates:
 - Is this aligned with AI principles?
 - Is the data available and appropriate?
 - Initial risk assessment
-- → Proceed to exploration?
+- to Proceed to exploration?
 
 **Gate 1: Feasibility**
 - Technical feasibility confirmed
 - Data quality sufficient
 - Preliminary fairness analysis
-- → Proceed to development?
+- to Proceed to development?
 
 **Gate 2: Development Complete**
 - All testing passed
 - Documentation complete
 - Security review passed
-- → Proceed to pilot?
+- to Proceed to pilot?
 
 **Gate 3: Pilot Complete**
 - Pilot success criteria met
 - User feedback incorporated
 - Monitoring working
-- → Proceed to production?
+- to Proceed to production?
 
 **Gate 4: Production**
 - All operational requirements met
 - Training complete
 - Support procedures in place
-- → Approved for general availability
+- to Approved for general availability
 
 ### Exception Handling
 
 Rigid processes need flexibility for legitimate exceptions:
 
-**Emergency deployments** — for urgent business needs with expedited review and a post-hoc full review requirement.
+**Emergency deployments**: for urgent business needs with expedited review and a post-hoc full review requirement.
 
-**Innovation sandboxes** — controlled environments for experimentation with relaxed production requirements.
+**Innovation sandboxes**: controlled environments for experimentation with relaxed production requirements.
 
-**Pilot programs** — limited scope deployments with enhanced monitoring and clear success/failure criteria.
+**Pilot programs**: limited scope deployments with enhanced monitoring and clear success/failure criteria.
 
 All exceptions are documented with clear justification and compensating controls.
 
@@ -246,9 +246,9 @@ AI models require disciplined versioning:
 - MINOR: Significant performance improvement, new capabilities
 - PATCH: Bug fixes, minor tuning
 
-**Immutable artifacts** — each model version is preserved and reproducible. No "fixes in place."
+**Immutable artifacts**: each model version is preserved and reproducible. No "fixes in place."
 
-**Lineage tracking** — the link between versions, training data, code, and configurations.
+**Lineage tracking**: the link between versions, training data, code, and configurations.
 
 ### Change Management
 
@@ -281,15 +281,15 @@ Changes to production AI require a controlled process:
 
 A/B testing AI models requires ethical guardrails:
 
-**Consent and transparency** — users know they might see different experiences
+**Consent and transparency**: users know they might see different experiences
 
-**Fairness in assignment** — random assignment shouldn't create disadvantaged groups
+**Fairness in assignment**: random assignment shouldn't create disadvantaged groups
 
-**Guardrails** — even experimental variants meet minimum safety standards
+**Guardrails**: even experimental variants meet minimum safety standards
 
-**Duration limits** — experiments don't run indefinitely
+**Duration limits**: experiments don't run indefinitely
 
-**Exit criteria** — clear rules for stopping experiments
+**Exit criteria**: clear rules for stopping experiments
 
 ## Metrics and Reporting
 
@@ -356,7 +356,7 @@ A stage-gate process with clear gates from ideation to production ensures qualit
 
 Model versioning and change management are critical for production AI. Semantic versioning, immutable artifacts, and a controlled change process ensure stability and traceability.
 
-Governance metrics — process, compliance, risk, culture — allow tracking effectiveness and continuous improvement. Executive dashboards provide visibility for the C-suite.
+Governance metrics (process, compliance, risk, culture) allow tracking effectiveness and continuous improvement. Executive dashboards provide visibility for the C-suite.
 
 ## Practical Enforcement Reality (2025-2026)
 
@@ -382,10 +382,10 @@ Organizations preparing for compliance encounter recurring challenges:
 
 ### Practical Advice for AI Architects
 
-1. **Sign the GPAI Code of Practice** if you are a model provider — the presumption of compliance is worth the effort
-2. **Build documentation into the development process** — retrofitting is 10x harder than building it in
-3. **Classify risk at design time** — before building, not after deploying
-4. **Treat December 2027 as the high-risk deadline** (delayed from August 2026 by the Digital Omnibus, May 2026) — standalone high-risk (Annex III) requirements will be the first enforcement actions with real penalties. Product-embedded high-risk (Annex I): August 2028
+1. **Sign the GPAI Code of Practice** if you are a model provider: the presumption of compliance is worth the effort
+2. **Build documentation into the development process**: retrofitting is 10x harder than building it in
+3. **Classify risk at design time**: before building, not after deploying
+4. **Treat December 2027 as the high-risk deadline** (delayed from August 2026 by the Digital Omnibus, May 2026): standalone high-risk (Annex III) requirements will be the first enforcement actions with real penalties. Product-embedded high-risk (Annex I): August 2028
 
 ## Implementation Notes
 

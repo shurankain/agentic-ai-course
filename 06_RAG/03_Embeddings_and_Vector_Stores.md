@@ -8,7 +8,7 @@ Semantically similar texts receive similar vectors. The question "How do I conne
 
 ### From Words to Vectors: The Transformation Process
 
-When text enters an embedding model, a multi-stage transformation takes place. First, the text is split into tokens — subwords or word parts that the model recognizes. Then each token passes through transformer layers, where the attention mechanism allows each token to "look at" the surrounding context.
+When text enters an embedding model, a multi-stage transformation takes place. First, the text is split into tokens, subwords or word parts that the model recognizes. Then each token passes through transformer layers, where the attention mechanism allows each token to "look at" the surrounding context.
 
 As the text passes through model layers, each word is enriched with information about its surroundings. The word "key" in the sentence "He inserted the key into the keyhole" will receive activations reflecting a mechanical context, while the same word in "The key to success is persistence" will have different activations related to an abstract concept. This contextual understanding is the core advantage of modern embeddings.
 
@@ -28,7 +28,7 @@ Properties of the embedding space include clustering (semantically similar texts
 
 **Metric Learning:**
 
-Embedding models are trained through metric learning — a method where the goal is not classification but learning a distance function. The Triplet Loss function is used, which operates on triplets: anchor (reference text), positive (semantically similar text), and negative (semantically distant text). The model learns to place positive closer to anchor than negative, with a margin. This shapes the structure of the space where proximity equals semantic similarity.
+Embedding models are trained through metric learning, a method where the goal is not classification but learning a distance function. The Triplet Loss function is used, which operates on triplets: anchor (reference text), positive (semantically similar text), and negative (semantically distant text). The model learns to place positive closer to anchor than negative, with a margin. This shapes the structure of the space where proximity equals semantic similarity.
 
 ## How Embedding Models Work
 
@@ -38,7 +38,7 @@ Modern embedding models are based on the transformer architecture, but their pur
 
 Training embedding models is based on contrastive learning. The model receives triplets: anchor (reference text), positive (semantically similar), and negative (semantically distant). The goal is to learn to place positive closer to anchor than negative. This forms a space where geometric proximity corresponds to semantic similarity.
 
-Embedding dimensionality is an important architectural parameter. Small models (384 dimensions) are compact and fast but may miss subtle semantic distinctions. Large models (1536–3072 dimensions) convey nuances of meaning more accurately but require several times more memory and time for distance computation. For most practical tasks, the sweet spot is 768–1024 dimensions.
+Embedding dimensionality is an important architectural parameter. Small models (384 dimensions) are compact and fast but may miss subtle semantic distinctions. Large models (1536-3072 dimensions) convey nuances of meaning more accurately but require several times more memory and time for distance computation. For most practical tasks, the sweet spot is 768-1024 dimensions.
 
 ### Contextual Understanding and Polysemy
 
@@ -50,9 +50,9 @@ This contextual understanding is especially important for technical texts, where
 
 ### Length Limitations and Their Consequences
 
-All embedding models have a maximum input length — the context window. This limitation is dictated by the transformer architecture: the attention mechanism has quadratic complexity relative to sequence length. To control computational costs, models limit the maximum length.
+All embedding models have a maximum input length: the context window. This limitation is dictated by the transformer architecture: the attention mechanism has quadratic complexity relative to sequence length. To control computational costs, models limit the maximum length.
 
-Typical values: compact BERT models — 512 tokens, modern models like text-embedding-3 — 8192 tokens, specialized models for long texts — up to 32768 tokens. Attempting to feed text longer than the limit results in truncation — the model simply discards all tokens beyond the limit.
+Typical values: compact BERT models: 512 tokens, modern models like text-embedding-3: 8192 tokens, specialized models for long texts: up to 32768 tokens. Attempting to feed text longer than the limit results in truncation: the model simply discards all tokens beyond the limit.
 
 This makes chunking critically important. If a 10,000-token document is fed whole into a model with a 512-token limit, only the beginning will be processed and the rest will be lost. Proper chunking ensures that every part of the document receives a quality representation.
 
@@ -64,7 +64,7 @@ An interesting nuance: even if a document fits within the context window, embedd
 
 Choosing an embedding model requires balancing several conflicting factors.
 
-Representation quality is the primary criterion. How accurately does the model capture the semantics of your domain? Benchmarks like MTEB (Massive Text Embedding Benchmark) and its successor RTEB (Retrieval Text Embedding Benchmark, Hugging Face, October 2025) — which focuses specifically on retrieval performance rather than general embedding quality — provide a picture of a model's capabilities, but real-world testing on your data is irreplaceable. A model leading MTEB/RTEB may underperform compared to a specialized model on medical texts or source code.
+Representation quality is the primary criterion. How accurately does the model capture the semantics of your domain? Benchmarks like MTEB (Massive Text Embedding Benchmark) and its successor RTEB (Retrieval Text Embedding Benchmark, Hugging Face, October 2025), which focuses specifically on retrieval performance rather than general embedding quality, provide a picture of a model's capabilities, but real-world testing on your data is irreplaceable. A model leading MTEB/RTEB may underperform compared to a specialized model on medical texts or source code.
 
 Dimensionality affects all other system characteristics. A model with 384 dimensions requires 4 times less memory for vector storage than a model with 1536 dimensions. For one million documents, this is the difference between 1.5 GB and 6 GB of RAM. Search also speeds up proportionally with reduced dimensionality.
 
@@ -78,7 +78,7 @@ Cost and licensing are practical considerations. Cloud APIs charge per thousand 
 
 OpenAI text-embedding-3-small and text-embedding-3-large remain a strong cloud-based choice. Advantages: excellent quality on diverse tasks, simple integration via API, reliability and scalability of OpenAI. Disadvantages: dependency on an external service, variable cost, network latency.
 
-Open-source models have significantly closed the gap. The latest generation — bge-m3 (multilingual, hybrid retrieval), GTE-Qwen2 (strong MTEB scores), NV-Embed-v2 (NVIDIA, top MTEB at launch), and Jina Embeddings v3 (late interaction, multilingual) — rivals or exceeds commercial options on many benchmarks. Classic Sentence Transformers (all-MiniLM-L6, all-mpnet-base-v2) remain useful for lightweight, low-latency scenarios. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
+Open-source models have significantly closed the gap. The latest generation: bge-m3 (multilingual, hybrid retrieval), GTE-Qwen2 (strong MTEB scores), NV-Embed-v2 (NVIDIA, top MTEB at launch), and Jina Embeddings v3 (late interaction, multilingual): rivals or exceeds commercial options on many benchmarks. Classic Sentence Transformers (all-MiniLM-L6, all-mpnet-base-v2) remain useful for lightweight, low-latency scenarios. Advantages: full control, no API dependency, fixed infrastructure costs. Disadvantages: require administration, GPU for large volumes, may need fine-tuning for specific domains.
 
 Cohere Embed is an alternative to OpenAI with emphasis on multilingual support and enterprise features. Particularly strong in tasks requiring support for dozens of languages simultaneously.
 
@@ -86,11 +86,11 @@ For non-English applications, testing multilingual capabilities is critical. Mod
 
 ### Specialization vs. Versatility
 
-General-purpose models were trained on vast, diverse corpora — web pages, books, articles. They perform well on a broad range of texts, from news to blogs.
+General-purpose models were trained on vast, diverse corpora: web pages, books, articles. They perform well on a broad range of texts, from news to blogs.
 
 Specialized models were trained (or fine-tuned) on narrow domains. CodeBERT and StarEncoder understand programming syntax and recognize code patterns. SciBERT and PubMedBERT are optimized for academic publications with their specific terminology and structure.
 
-When should you choose a specialized model? When your domain differs significantly from the general-language corpus. Medical texts are filled with Latin terminology. Legal documents use archaic constructions. Source code is a formal language with strict syntax. In these cases, a specialized model can outperform a general-purpose one by 10–20% on search metrics.
+When should you choose a specialized model? When your domain differs significantly from the general-language corpus. Medical texts are filled with Latin terminology. Legal documents use archaic constructions. Source code is a formal language with strict syntax. In these cases, a specialized model can outperform a general-purpose one by 10-20% on search metrics.
 
 But specialization comes at a cost: a model for code will perform poorly on regular text. If your system needs to handle code, documentation, and user questions, a general-purpose model may be the better trade-off.
 
@@ -108,7 +108,7 @@ Different ANN algorithms offer various trade-offs between speed, accuracy, and m
 
 **HNSW (Hierarchical Navigable Small World)** is a popular graph-based algorithm. It builds a hierarchical structure of multiple layers: upper layers are sparse and contain few nodes for fast navigation, the bottom layer is dense and contains all vectors. Search starts from the top layer and greedily descends, refining results at each level.
 
-Key tuning parameters: M defines the number of neighbors at each level (typically 16–64), efConstruction sets the beam width during index construction, efSearch controls the trade-off between speed and quality during search.
+Key tuning parameters: M defines the number of neighbors at each level (typically 16-64), efConstruction sets the beam width during index construction, efSearch controls the trade-off between speed and quality during search.
 
 HNSW is best when high accuracy is required (recall > 95%), data fits in memory, search speed matters, and data is rarely updated.
 
@@ -138,7 +138,7 @@ Combined indexes (IVFPQ, IVFHNSW) merge the advantages of different approaches.
 
 ### Storage Selection Criteria
 
-**Scale** is the first and most important factor. Thousands of vectors (a typical corporate knowledge base) — almost any solution will work, including in-memory stores or pgvector. Millions of vectors (e-commerce catalog, large documentation) — optimized indexes like HNSW are needed. Billions of vectors (search engine, social network) — only distributed systems like Milvus will handle this efficiently.
+**Scale** is the first and most important factor. Thousands of vectors (a typical corporate knowledge base): almost any solution will work, including in-memory stores or pgvector. Millions of vectors (e-commerce catalog, large documentation): optimized indexes like HNSW are needed. Billions of vectors (search engine, social network): only distributed systems like Milvus will handle this efficiently.
 
 **Metadata filtering** is critical for multi-tenant applications and complex search scenarios. A RAG system for a company with departments requires filtering by department while preserving vector search.
 
@@ -146,7 +146,7 @@ Filtering implementations vary dramatically. Pre-filtering (first filter documen
 
 **Update frequency** affects index choice. Static data (archives, encyclopedias) can be indexed once with a complex index, achieving maximum search speed. Frequently changing data (news sites, forums, real-time monitoring) requires indexes with fast incremental updates.
 
-**Operational requirements** — a realistic assessment of team capabilities. Are there DevOps engineers? Kubernetes experience? Monitoring, alerting, backup strategies? Managed solutions (Pinecone, Weaviate Cloud) remove all this burden at the cost of price and some loss of control.
+**Operational requirements**: a realistic assessment of team capabilities. Are there DevOps engineers? Kubernetes experience? Monitoring, alerting, backup strategies? Managed solutions (Pinecone, Weaviate Cloud) remove all this burden at the cost of price and some loss of control.
 
 ## Hybrid Search
 
@@ -158,15 +158,15 @@ A user searches for "error ERR_CONNECTION_REFUSED." Semantic search understands 
 
 Rare terms and specific nomenclature are another weakness. The embedding model was trained on a general text corpus. A corporate abbreviation or product identifier was unlikely to appear during training. The model does not know their meaning and cannot properly encode them in the semantic space.
 
-People's names, codes, version numbers, exact wording from regulatory documents — all of these are better found by lexical search, which simply looks for text matches.
+People's names, codes, version numbers, exact wording from regulatory documents: all of these are better found by lexical search, which simply looks for text matches.
 
 ### Combining Approaches: The Best of Both Worlds
 
 Hybrid search runs two parallel searches on a single query: semantic (vector) search finds conceptually similar documents, lexical (keyword-based) search finds exact text matches.
 
-Lexical search is typically implemented via BM25 — an enhanced algorithm that accounts for term frequency and document length. BM25 assigns a high score to documents containing rare terms from the query, and a low score to documents with common words.
+Lexical search is typically implemented via BM25: an enhanced algorithm that accounts for term frequency and document length. BM25 assigns a high score to documents containing rare terms from the query, and a low score to documents with common words.
 
-Merging results is a non-trivial task. Semantic search returns cosine similarity from -1 to 1 (typically 0.5–0.95 for relevant documents). BM25 returns arbitrary positive numbers. How do you compare these incomparable scores?
+Merging results is a non-trivial task. Semantic search returns cosine similarity from -1 to 1 (typically 0.5-0.95 for relevant documents). BM25 returns arbitrary positive numbers. How do you compare these incomparable scores?
 
 ### Reciprocal Rank Fusion: An Elegant Solution
 
@@ -184,7 +184,7 @@ This makes RRF the standard for hybrid search in RAG systems.
 
 Higher dimensionality means better quality but more memory and slower search. For many tasks, 768 or even 384 dimensions are sufficient. 1536 and above are justified for critical applications or complex domains.
 
-Some models support matryoshka embeddings — a subset of dimensions can be used without losing compatibility. Starting with the first 256 dimensions for coarse search, you can refine with the full 1024.
+Some models support matryoshka embeddings: a subset of dimensions can be used without losing compatibility. Starting with the first 256 dimensions for coarse search, you can refine with the full 1024.
 
 ### Matryoshka Embeddings (2024)
 
@@ -194,7 +194,7 @@ In traditional embeddings, the model generates a vector of fixed dimensionality 
 
 The loss function is computed as a weighted sum of contrastive loss for different vector prefixes: 64, 128, 256, 512, 768 dimensions. Each prefix is trained to be useful independently of the rest, allowing flexible dimensionality selection at inference time.
 
-Practical applications: initial recall with 64–128 dimensions for speed and coarse filtering, final ranking with the full 768 dimensions for quality and precise ordering, mobile/edge with 128–256 for limited memory, production trade-off with 256–512 for balance.
+Practical applications: initial recall with 64-128 dimensions for speed and coarse filtering, final ranking with the full 768 dimensions for quality and precise ordering, mobile/edge with 128-256 for limited memory, production trade-off with 256-512 for balance.
 
 Models supporting Matryoshka: OpenAI text-embedding-3 (dimensions parameter), Nomic Embed, Jina Embeddings v2, E5-mistral-7b-instruct.
 
@@ -202,7 +202,7 @@ Models supporting Matryoshka: OpenAI text-embedding-3 (dimensions parameter), No
 
 Quantization reduces numerical precision to save memory. Float32 takes 4 bytes per dimension, int8 takes 1 byte. For one million vectors of dimensionality 1536, this is the difference between 6 GB and 1.5 GB.
 
-Modern quantization algorithms have minimal impact on search quality. A 1–2% accuracy loss is usually acceptable in exchange for 4x memory savings.
+Modern quantization algorithms have minimal impact on search quality. A 1-2% accuracy loss is usually acceptable in exchange for 4x memory savings.
 
 ### Filtering and Partitioning
 
@@ -220,19 +220,19 @@ It is important to define an invalidation strategy. When documents are updated, 
 
 ### Operational Metrics
 
-**Latency** — time from query to result. P50, P95, P99 show typical and worst-case performance. The target is sub-100ms for interactive applications.
+**Latency**: time from query to result. P50, P95, P99 show typical and worst-case performance. The target is sub-100ms for interactive applications.
 
-**Throughput** — queries per second. Important for high-load systems.
+**Throughput**: queries per second. Important for high-load systems.
 
-**Memory usage** — memory consumed by the index. Determines infrastructure cost.
+**Memory usage**: memory consumed by the index. Determines infrastructure cost.
 
-**Recall** — the fraction of truly relevant documents among those retrieved. Measured on a test set with known answers.
+**Recall**: the fraction of truly relevant documents among those retrieved. Measured on a test set with known answers.
 
 ### Quality Metrics
 
-**Hit rate** — how often does a relevant document appear in the top-K? If the needed document is in the top-5 for 90% of queries, the system is working well.
+**Hit rate**: how often does a relevant document appear in the top-K? If the needed document is in the top-5 for 90% of queries, the system is working well.
 
-**Mean Reciprocal Rank** — the average reciprocal position of the first relevant result. MRR=1 means perfect ranking.
+**Mean Reciprocal Rank**: the average reciprocal position of the first relevant result. MRR=1 means perfect ranking.
 
 Regular measurement of these metrics on a representative test set allows tracking degradation and the effect of optimizations.
 

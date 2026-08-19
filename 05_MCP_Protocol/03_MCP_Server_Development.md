@@ -10,7 +10,7 @@ An MCP server provides communication between an AI model and external systems (d
 
 Each MCP server should have a clear and bounded area of responsibility. A server for file system operations should not simultaneously manage a database and send emails. This separation simplifies development, testing, and maintenance.
 
-When a server focuses on a single domain, its API becomes intuitive. A user connecting a GitHub server expects to see tools for managing repositories, commits, and pull requests — and nothing extraneous.
+When a server focuses on a single domain, its API becomes intuitive. A user connecting a GitHub server expects to see tools for managing repositories, commits, and pull requests, and nothing extraneous.
 
 This principle also promotes security. A minimal set of capabilities means a minimal attack surface. A server that can only read files cannot accidentally or maliciously delete critical data.
 
@@ -24,7 +24,7 @@ Transparency extends to error handling as well. The server should return informa
 
 ### Idempotency Principle
 
-Where possible, server operations should be idempotent — a repeated call with the same parameters should not create additional side effects. This is especially important in unreliable network conditions where requests may be retried.
+Where possible, server operations should be idempotent: a repeated call with the same parameters should not create additional side effects. This is especially important in unreliable network conditions where requests may be retried.
 
 For read operations, idempotency is natural. For write operations, it can often be achieved through unique identifiers. Instead of "create a record," one can implement "create or update a record with ID X."
 
@@ -64,7 +64,7 @@ It is important to ensure correct handling of parallel requests. MCP does not gu
 
 ### Notifications and Events
 
-In addition to request-response interactions, MCP supports notifications — one-way messages that do not require a response. The server can send notifications about changes in the list of resources, tools, or prompts.
+In addition to request-response interactions, MCP supports notifications, one-way messages that do not require a response. The server can send notifications about changes in the list of resources, tools, or prompts.
 
 If the server supports resource subscriptions, it must track changes and notify subscribed clients. This requires mechanisms for observing data sources.
 
@@ -88,13 +88,13 @@ The limitation of stdio is the inability to provide remote access. The server mu
 
 For remote access, MCP uses Streamable HTTP transport (introduced March 2025). Unlike the earlier SSE transport, Streamable HTTP supports bidirectional communication over a single HTTP connection. The client sends JSON-RPC requests via HTTP POST, and the server can respond with either a single JSON response or an SSE stream for progressive results.
 
-Streamable HTTP is compatible with standard HTTP infrastructure — proxies, load balancers, CDNs — without requiring persistent connections. It supports session management through the `Mcp-Session-Id` header for stateful interactions.
+Streamable HTTP is compatible with standard HTTP infrastructure: proxies, load balancers, CDNs: without requiring persistent connections. It supports session management through the `Mcp-Session-Id` header for stateful interactions.
 
 **Note:** The earlier SSE-based HTTP transport (two endpoints: one for SSE events, one for POST requests) was deprecated in March 2025. Existing servers using SSE should migrate to Streamable HTTP. The WebSocket transport that appeared in some implementations was never standardized in the official MCP specification.
 
 ### Choosing a Transport
 
-The choice of transport depends on the use case. For local tools and IDE integrations, stdio is the obvious choice — simple, no network setup required. For remote servers, cloud services, and multi-user deployments, Streamable HTTP is the standard choice.
+The choice of transport depends on the use case. For local tools and IDE integrations, stdio is the obvious choice, simple, no network setup required. For remote servers, cloud services, and multi-user deployments, Streamable HTTP is the standard choice.
 
 A well-designed server abstracts the transport layer, allowing the same code to be used with different transports.
 
@@ -108,7 +108,7 @@ For remote connections, transport security is critical. MCP does not prescribe s
 
 **Mutual authentication (mTLS).** For high-security scenarios, mutual authentication is used where the client also presents a certificate. The process works as follows: the server sends its certificate to the client, the client sends its certificate to the server, both parties verify the received certificates, and only after successful mutual verification is an encrypted communication channel established.
 
-**Why does MCP use JSON-RPC rather than gRPC?** This is an interesting architectural choice. JSON-RPC uses text-based JSON serialization and can operate over any transport (stdio, HTTP, WebSocket), whereas gRPC requires binary Protocol Buffers and HTTP/2. Debugging JSON-RPC is easier since messages are human-readable, while gRPC requires specialized tools. Schema in JSON-RPC is optional, whereas in gRPC it is mandatory via .proto files. The JSON-RPC ecosystem is broader and does not require code generation.
+**Why does MCP use JSON-RPC rather than gRPC?** This is an interesting architectural choice. JSON-RPC uses text-based JSON serialization and can operate over any transport (stdio, HTTP, WebSocket), whereas gRPC requires binary Protocol Buffers and HTTP/2. Debugging JSON-RPC is easier since messages are human-readable, while gRPC requires specialized tools. Schema in JSON-RPC is optional, whereas in gRPC it is mandatory via.proto files. The JSON-RPC ecosystem is broader and does not require code generation.
 
 JSON-RPC was chosen for MCP for four key reasons: simplicity of working over stdio (gRPC requires HTTP/2, which is more complex for processes), human readability for easier debugging and protocol evolution, minimal dependencies (no protobuf compiler needed), and schema flexibility allowing protocol evolution without recompilation.
 
@@ -116,11 +116,11 @@ JSON-RPC was chosen for MCP for four key reasons: simplicity of working over std
 
 ### Error Categories
 
-MCP distinguishes several error categories. Protocol errors arise from malformed messages — incorrect format, missing fields, unknown methods.
+MCP distinguishes several error categories. Protocol errors arise from malformed messages: incorrect format, missing fields, unknown methods.
 
-Application errors relate to server logic — resource not found, insufficient permissions, invalid parameters. These errors are domain-specific.
+Application errors relate to server logic: resource not found, insufficient permissions, invalid parameters. These errors are domain-specific.
 
-Internal errors indicate problems in the server code — unhandled exceptions, connection failures to external systems.
+Internal errors indicate problems in the server code: unhandled exceptions, connection failures to external systems.
 
 ### Informative Messages
 
@@ -132,7 +132,7 @@ A good error message: "Document with ID 'abc123' not found in the database." A b
 
 The server should be resilient to errors. A failure in processing one request should not affect other requests or the overall server stability.
 
-Transient issues — network timeouts, connection pool exhaustion — can be resolved through retries with exponential backoff.
+Transient issues (network timeouts, connection pool exhaustion) can be resolved through retries with exponential backoff.
 
 ### Error Resilience Patterns
 
@@ -158,21 +158,21 @@ Special attention should be paid to injection protection. If parameters are used
 
 ### Authorization and Authentication
 
-The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks — critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and enterprise-managed authorization for organizational deployments.
+The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks: critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and enterprise-managed authorization for organizational deployments.
 
-**Token scoping.** Scope tokens to the minimum permissions required. An MCP server exposing a database should request read-only scope unless the tool explicitly performs writes. Use separate scopes for different tool categories (e.g., `tools:read`, `tools:write`, `admin:manage`). The principle of least privilege applies directly — a compromised token with narrow scope limits the blast radius. Short-lived tokens (minutes rather than hours) with refresh token rotation further reduce exposure from token theft.
+**Token scoping.** Scope tokens to the minimum permissions required. An MCP server exposing a database should request read-only scope unless the tool explicitly performs writes. Use separate scopes for different tool categories (e.g., `tools:read`, `tools:write`, `admin:manage`). The principle of least privilege applies directly: a compromised token with narrow scope limits the blast radius. Short-lived tokens (minutes rather than hours) with refresh token rotation further reduce exposure from token theft.
 
-**Local server authentication.** For stdio-based local servers, authentication is implicit — the server runs as a child process of the host application, inheriting the user's OS-level permissions. No additional auth layer is needed. However, if the local server accesses external APIs, it should manage its own API keys securely (environment variables, system keychain, OS credential stores) rather than receiving them from the MCP client. Passing secrets through the MCP protocol exposes them to any component that can inspect the message stream.
+**Local server authentication.** For stdio-based local servers, authentication is implicit: the server runs as a child process of the host application, inheriting the user's OS-level permissions. No additional auth layer is needed. However, if the local server accesses external APIs, it should manage its own API keys securely (environment variables, system keychain, OS credential stores) rather than receiving them from the MCP client. Passing secrets through the MCP protocol exposes them to any component that can inspect the message stream.
 
-**Multi-tenant server authentication.** Production MCP servers serving multiple users must validate that each request is authorized for the specific user's data. Extract the user identity from the OAuth token, apply row-level security or data isolation at the storage layer, and audit all access. Tenant isolation failures in MCP servers are a data breach vector — a single missing authorization check can expose one user's data to another user's agent. Test tenant isolation explicitly: verify that User A's token cannot access User B's resources through any tool or resource endpoint.
+**Multi-tenant server authentication.** Production MCP servers serving multiple users must validate that each request is authorized for the specific user's data. Extract the user identity from the OAuth token, apply row-level security or data isolation at the storage layer, and audit all access. Tenant isolation failures in MCP servers are a data breach vector: a single missing authorization check can expose one user's data to another user's agent. Test tenant isolation explicitly: verify that User A's token cannot access User B's resources through any tool or resource endpoint.
 
 ### Isolation and Sandboxing
 
 MCP servers execute code on behalf of AI agents. A malicious or buggy tool can read sensitive files, make unauthorized network requests, or modify system state in ways the user never intended. Sandboxing constrains what the server process can do, limiting the blast radius of compromised or misbehaving tools. This is especially critical for servers that accept input from untrusted sources or execute generated code.
 
-**Container-based sandboxing.** Run each MCP server in a separate container with minimal capabilities. Drop all Linux capabilities except those explicitly needed (e.g., keep only `NET_BIND_SERVICE` if the server needs to listen on a port). Use a read-only root filesystem, the `no-new-privileges` flag, and seccomp profiles to restrict available syscalls. For filesystem tools, mount only the specific directories the tool needs as bind mounts with read-only or read-write permissions as appropriate. Network-isolated containers (--network=none) prevent tools from making unauthorized external requests — add explicit network rules only for the specific endpoints the tool requires.
+**Container-based sandboxing.** Run each MCP server in a separate container with minimal capabilities. Drop all Linux capabilities except those explicitly needed (e.g., keep only `NET_BIND_SERVICE` if the server needs to listen on a port). Use a read-only root filesystem, the `no-new-privileges` flag, and seccomp profiles to restrict available syscalls. For filesystem tools, mount only the specific directories the tool needs as bind mounts with read-only or read-write permissions as appropriate. Network-isolated containers (--network=none) prevent tools from making unauthorized external requests: add explicit network rules only for the specific endpoints the tool requires.
 
-**Process-level sandboxing.** For lightweight isolation without containers, use OS-level sandboxing mechanisms: Linux namespaces (PID, network, mount) to restrict visibility, seccomp-bpf for syscall filtering, or macOS Sandbox profiles for Apple platforms. The stdio transport naturally provides some isolation because the server runs as a child process of the host application, but this alone is insufficient for untrusted servers. Additional restrictions — filesystem access limits, network controls, resource quotas — are needed to prevent a compromised server from affecting the host system.
+**Process-level sandboxing.** For lightweight isolation without containers, use OS-level sandboxing mechanisms: Linux namespaces (PID, network, mount) to restrict visibility, seccomp-bpf for syscall filtering, or macOS Sandbox profiles for Apple platforms. The stdio transport naturally provides some isolation because the server runs as a child process of the host application, but this alone is insufficient for untrusted servers. Additional restrictions (filesystem access limits, network controls, resource quotas) are needed to prevent a compromised server from affecting the host system.
 
 **Trust tiers.** Implement a tiered trust model for MCP servers: **first-party** servers (developed by your organization) receive full trust with minimal sandboxing; **verified third-party** servers (audited packages from known publishers, listed in the official MCP registry) receive moderate sandboxing with restricted filesystem and network access; **unverified** servers (community-contributed, unknown provenance) receive strict sandboxing with no network access and limited filesystem visibility. The host application should enforce these tiers automatically and warn users when connecting to unverified servers. Tool descriptions from unverified servers should be treated as potential prompt injection vectors.
 
@@ -180,11 +180,11 @@ MCP servers execute code on behalf of AI agents. A malicious or buggy tool can r
 
 ### Unit Testing
 
-Individual server components — resource, tool, and prompt handlers — are tested in isolation. External dependencies are mocked, and edge cases are verified.
+Individual server components (resource, tool, and prompt handlers) are tested in isolation. External dependencies are mocked, and edge cases are verified.
 
 Unit tests are fast and stable. They codify the contract of each component and help prevent regressions.
 
-Each tool handler is fundamentally a function that takes structured input and returns structured output — standard unit testing applies directly. Mock the MCP protocol layer and external dependencies (databases, APIs, third-party services) to test tool logic without network calls or protocol overhead. Validate input schema enforcement, error handling for invalid parameters, and edge cases such as empty inputs, excessively large payloads, and Unicode handling. Because tool handlers are pure functions with well-defined contracts, achieving high unit test coverage is straightforward and should be the foundation of the testing strategy.
+Each tool handler is fundamentally a function that takes structured input and returns structured output, standard unit testing applies directly. Mock the MCP protocol layer and external dependencies (databases, APIs, third-party services) to test tool logic without network calls or protocol overhead. Validate input schema enforcement, error handling for invalid parameters, and edge cases such as empty inputs, excessively large payloads, and Unicode handling. Because tool handlers are pure functions with well-defined contracts, achieving high unit test coverage is straightforward and should be the foundation of the testing strategy.
 
 ### Integration Testing
 
@@ -192,7 +192,7 @@ Integration tests verify component interactions and protocol correctness. A test
 
 These tests connect to the server, execute request sequences, and verify responses. They are slower but catch integration issues.
 
-The MCP Inspector (the official testing tool from the MCP project) is invaluable for integration testing. It connects to your server and lets you interactively test tool discovery, parameter validation, and execution. Inspector displays the full protocol exchange (JSON-RPC messages), making it easy to debug schema mismatches, incorrect response formats, and capability negotiation issues. Run Inspector against your server in CI to catch protocol compliance regressions automatically — any change that breaks the JSON-RPC contract will surface immediately. Inspector also validates that tool descriptions, parameter schemas, and return types conform to the MCP specification, which is important because schema errors that are silently ignored by one client may cause failures in another.
+The MCP Inspector (the official testing tool from the MCP project) is invaluable for integration testing. It connects to your server and lets you interactively test tool discovery, parameter validation, and execution. Inspector displays the full protocol exchange (JSON-RPC messages), making it easy to debug schema mismatches, incorrect response formats, and capability negotiation issues. Run Inspector against your server in CI to catch protocol compliance regressions automatically: any change that breaks the JSON-RPC contract will surface immediately. Inspector also validates that tool descriptions, parameter schemas, and return types conform to the MCP specification, which is important because schema errors that are silently ignored by one client may cause failures in another.
 
 ### End-to-End Testing
 
@@ -200,11 +200,11 @@ Full testing involves real external systems and real clients. This is the most a
 
 E2E tests are especially important before release, when it is necessary to confirm the entire system is working correctly.
 
-The ultimate test for an MCP server is whether a real LLM actually uses your tools correctly. Create test scenarios with known expected tool calls, run them against a real model, and verify that the model selects the right tools with the right parameters. This catches tool description quality issues that unit and integration tests cannot detect — a tool may be technically correct but poorly described, causing the model to ignore it or misuse it. Use a deterministic model configuration (temperature=0) for reproducibility. Compare tool call traces against expected sequences to detect both false positives (model calls the wrong tool) and false negatives (model fails to call the tool when it should).
+The ultimate test for an MCP server is whether a real LLM actually uses your tools correctly. Create test scenarios with known expected tool calls, run them against a real model, and verify that the model selects the right tools with the right parameters. This catches tool description quality issues that unit and integration tests cannot detect: a tool may be technically correct but poorly described, causing the model to ignore it or misuse it. Use a deterministic model configuration (temperature=0) for reproducibility. Compare tool call traces against expected sequences to detect both false positives (model calls the wrong tool) and false negatives (model fails to call the tool when it should).
 
 ### Automated Regression Testing
 
-Record successful tool call traces (input-output pairs) from production or integration tests and replay them in CI. Any change in tool behavior — different output for the same input, changed error codes, altered response schemas — triggers an alert. This catches unintended side effects of refactoring, dependency upgrades, or configuration changes. Regression trace libraries should grow over time: every production bug that is root-caused becomes a new regression test case.
+Record successful tool call traces (input-output pairs) from production or integration tests and replay them in CI. Any change in tool behavior (different output for the same input, changed error codes, altered response schemas) triggers an alert. This catches unintended side effects of refactoring, dependency upgrades, or configuration changes. Regression trace libraries should grow over time: every production bug that is root-caused becomes a new regression test case.
 
 ## Monitoring and Observability
 
@@ -220,7 +220,7 @@ Key server metrics include: request count, response time, error rate, and resour
 
 ### Tracing
 
-Distributed tracing allows tracking a request through the entire system — from client through server to external systems. This is critically important for diagnosing complex scenarios.
+Distributed tracing allows tracking a request through the entire system: from client through server to external systems. This is critically important for diagnosing complex scenarios.
 
 ---
 
@@ -231,20 +231,20 @@ Distributed tracing allows tracking a request through the entire system — from
 FastMCP is a library created by Jeremiah Lowin (founder of Prefect) that became the de facto standard for developing MCP servers in Python. In late 2024, FastMCP was integrated into the official MCP SDK under the name `mcp.server.fastmcp`.
 
 **Advantages of FastMCP:**
-FastMCP provides declarative syntax with decorators, automatic JSON Schema generation from Python type hints, built-in parameter validation via Pydantic, and minimal boilerplate code. Developers do not need to manually describe tool schemas — they are automatically generated from type annotations.
+FastMCP provides declarative syntax with decorators, automatic JSON Schema generation from Python type hints, built-in parameter validation via Pydantic, and minimal boilerplate code. Developers do not need to manually describe tool schemas. They are automatically generated from type annotations.
 
 **FastMCP Server Architecture:**
 A server is created through an instance of the FastMCP class with a specified name. Components are then registered via decorators: tools via `@mcp.tool()`, resources via `@mcp.resource(uri)`, and prompts via `@mcp.prompt()`. Each function automatically becomes the corresponding MCP primitive. For example, a function with the `@mcp.tool()` decorator and type annotations `def add(a: float, b: float) -> float` automatically registers a tool with two float parameters and a float return value. The function's docstring becomes the tool description for the language model.
 
 **Key Decorators:**
-The `@mcp.tool()` decorator registers a function as a tool — a function that performs actions. The `@mcp.resource(uri)` decorator registers a function as a resource — a data source for reading with the specified URI. The `@mcp.prompt()` decorator registers a function as a prompt — a template for interacting with the language model.
+The `@mcp.tool()` decorator registers a function as a tool: a function that performs actions. The `@mcp.resource(uri)` decorator registers a function as a resource: a data source for reading with the specified URI. The `@mcp.prompt()` decorator registers a function as a prompt: a template for interacting with the language model.
 
 ### MCP Inspector
 
 MCP Inspector is the official tool for testing and debugging MCP servers. It allows interactive communication with the server, viewing available components, and testing calls.
 
 **Installation and Launch:**
-Inspector is installed via npx with the command `npx @anthropic-ai/mcp-inspector` for Node.js environments, or via pip with the command `pip install mcp-inspector` for the Python wrapper. It is critically important to use version 0.14.1 or higher, as earlier versions contained a serious security vulnerability (CVE-2025-49596) — a Remote Code Execution (RCE) flaw where connecting to an untrusted MCP server via Inspector could allow the server to execute arbitrary code on the developer's machine. The vulnerability exploited insufficient input sanitization in Inspector's rendering of server-provided content. This incident underscores a fundamental MCP security principle: never connect development tools to untrusted servers without sandboxing.
+Inspector is installed via npx with the command `npx @anthropic-ai/mcp-inspector` for Node.js environments, or via pip with the command `pip install mcp-inspector` for the Python wrapper. It is critically important to use version 0.14.1 or higher, as earlier versions contained a serious security vulnerability (CVE-2025-49596), a Remote Code Execution (RCE) flaw where connecting to an untrusted MCP server via Inspector could allow the server to execute arbitrary code on the developer's machine. The vulnerability exploited insufficient input sanitization in Inspector's rendering of server-provided content. This incident underscores a fundamental MCP security principle: never connect development tools to untrusted servers without sandboxing.
 
 **Inspector Capabilities:**
 Inspector provides viewing of the complete list of registered tools, resources, and prompts on the server. It allows interactive invocation of tools with various parameters to test their behavior. It displays all JSON-RPC messages for debugging protocol interactions. It performs schema validation, checking that parameters and responses conform to declared types.
@@ -270,7 +270,7 @@ When developing MCP servers, consider several critical security aspects:
 All tool parameters must undergo strict validation. For example, for a file reading function, it is necessary to use a Pydantic Field with a regular expression restricting allowed characters in the path. This protects against path injection attacks where a malicious user may attempt to access system files through constructs like `../../etc/passwd`.
 
 **Sandboxing:**
-Restrict server access to the file system to only the necessary directories. Use Docker containers or other isolation mechanisms for executing potentially dangerous operations. Apply the principle of least privilege — the server should have only those rights that are absolutely necessary for its operation.
+Restrict server access to the file system to only the necessary directories. Use Docker containers or other isolation mechanisms for executing potentially dangerous operations. Apply the principle of least privilege: the server should have only those rights that are absolutely necessary for its operation.
 
 **Rate Limiting:**
 Implement overload protection by limiting the frequency of tool calls. For example, one can track timestamps of recent calls and reject requests if they occur more frequently than a defined threshold (for example, no more than one call per second). This protects against both accidental loops and malicious exploitation of server resources.
@@ -287,12 +287,12 @@ The `claude_desktop_config.json` configuration file is located in different plac
 
 ### Best Practices for Production
 
-1. **Use type hints** — FastMCP generates JSON Schema from type hints
-2. **Write docstrings** — they become descriptions for the LLM
-3. **Validate input data** — Pydantic Fields for constraints
-4. **Log everything** — MCP supports structured logging
-5. **Test via Inspector** — before integrating with clients
-6. **Version your API** — for backwards compatibility
+1. **Use type hints**: FastMCP generates JSON Schema from type hints
+2. **Write docstrings**: they become descriptions for the LLM
+3. **Validate input data**: Pydantic Fields for constraints
+4. **Log everything**: MCP supports structured logging
+5. **Test via Inspector**: before integrating with clients
+6. **Version your API**: for backwards compatibility
 
 ## Key Takeaways
 

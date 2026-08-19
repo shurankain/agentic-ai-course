@@ -14,13 +14,13 @@ It is important to understand that choosing a framework is not about picking the
 
 Frameworks are organized by abstraction level from high to low:
 
-**HIGH-LEVEL (No-code / Low-code)** — visual tools for building AI workflows without programming. This level includes n8n, Make, and Zapier AI. These platforms provide graphical editors for creating scenarios with minimal code, making them accessible to non-developers.
+**HIGH-LEVEL (No-code / Low-code)**: visual tools for building AI workflows without programming. This level includes n8n, Make, and Zapier AI. These platforms provide graphical editors for creating scenarios with minimal code, making them accessible to non-developers.
 
-**MID-LEVEL (Agent Frameworks)** — frameworks for orchestrating multi-agent systems with ready-made patterns. CrewAI, LangGraph, and AutoGen provide high-level abstractions for building complex agent systems while hiding implementation details.
+**MID-LEVEL (Agent Frameworks)**: frameworks for orchestrating multi-agent systems with ready-made patterns. CrewAI, LangGraph, and AutoGen provide high-level abstractions for building complex agent systems while hiding implementation details.
 
-**LOW-LEVEL (Building Blocks)** — modular components for building LLM applications. LangChain, LlamaIndex, and Haystack offer building blocks such as memory, tools, and chains that developers compose into the desired architecture.
+**LOW-LEVEL (Building Blocks)**: modular components for building LLM applications. LangChain, LlamaIndex, and Haystack offer building blocks such as memory, tools, and chains that developers compose into the desired architecture.
 
-**PROVIDER SDKs (Direct API)** — direct provider SDKs such as OpenAI, Anthropic, and Google. They provide maximum control with minimal abstractions, requiring more code but offering full flexibility.
+**PROVIDER SDKs (Direct API)**: direct provider SDKs such as OpenAI, Anthropic, and Google. They provide maximum control with minimal abstractions, requiring more code but offering full flexibility.
 
 ---
 
@@ -32,7 +32,7 @@ Frameworks are organized by abstraction level from high to low:
 
 **CrewAI** has reached 47.8K stars, 27M+ downloads, 150+ enterprise clients, and approximately 2 billion agent executions over 12 months (as of late May 2026). Series A: $18 million. The role-based approach to agents and easy onboarding attract developers, but less flexibility compared to LangGraph limits its use in complex scenarios. **v1.14.x** breaking change: `CrewAgentExecutor` deprecated in favor of `AgentExecutor`. Notable case: PwC improved code-generation accuracy from 10% to 70% using a CrewAI crew.
 
-**Microsoft AutoGen** with 55,000+ stars (reflecting historical interest) focused on multi-agent conversations and code execution. Now in maintenance mode — Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
+**Microsoft AutoGen** with 55,000+ stars (reflecting historical interest) focused on multi-agent conversations and code execution. Now in maintenance mode: Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
 
 **LlamaIndex** with 47,000+ stars (as of early 2026) is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, but its focus on information retrieval means fewer capabilities for agent workflows.
 
@@ -108,9 +108,9 @@ CrewAI offers a declarative approach: agents as a "team" with roles. Instead of 
 
 ### OpenAI Agents SDK
 
-OpenAI has transitioned from the Assistants API to a new architecture. The Assistants API was deprecated on August 26, 2025 (sunset date: August 26, 2026 — after which it will no longer be available), replaced by the **Responses API** (stateless, single-turn successor to Chat Completions with built-in tool use) and the **Agents SDK** (production multi-agent framework).
+OpenAI has transitioned from the Assistants API to a new architecture. The Assistants API was deprecated on August 26, 2025 (sunset date: August 26, 2026: after which it will no longer be available), replaced by the **Responses API** (stateless, single-turn successor to Chat Completions with built-in tool use) and the **Agents SDK** (production multi-agent framework).
 
-**Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design — state management is handled by the application or the Agents SDK.
+**Responses API**: the new foundational API replacing both Chat Completions and Assistants API. Supports web search, file search, code interpreter, and computer use as built-in tools. Stateless by design: state management is handled by the application or the Agents SDK.
 
 **Agents SDK** (released March 2025, now at v0.14.0+ as of April 15, 2026): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features. Recent additions (as of late May 2026): **sandbox providers** (Blaxel, Cloudflare, Daytona, E2B, Modal, Runloop, Vercel) for isolated code execution, **filesystem tools** + `apply_patch` for structured file manipulation, **Manifest** for workspace portability, **snapshotting + rehydration** for long-horizon tasks that survive process restarts, and **secure MCP tunneling** for accessing private MCP servers without exposing them to the public internet.
 
@@ -118,17 +118,17 @@ OpenAI has transitioned from the Assistants API to a new architecture. The Assis
 
 Anthropic provides the Claude API with tool use capabilities and the Claude Code CLI as its agent platform. Rather than a separate agent framework, Anthropic's approach emphasizes the model's native tool use ability combined with MCP for extensibility.
 
-**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. **Computer Use** enables browser and desktop automation where the model controls the computer — clicking, typing, navigating, and reading screen content. This is a major agent capability for automating workflows that require interacting with web applications and desktop software that lack APIs. Extended thinking provides transparent chain-of-thought reasoning with developer-visible `<thinking>` blocks and explicit `budget_tokens` control. Extended context of 200,000 tokens (1M available on Opus 4.6) allows processing vast amounts of information. **Claude Code** is a CLI-based coding agent that demonstrates the agentic pattern using Claude's native capabilities — it reads files, writes code, runs commands, and uses MCP servers for extensibility. **Claude Code SDK** allows building custom agents using Claude Code as a subprocess, inheriting its tool use and MCP capabilities. **Claude Managed Agents** (as of late May 2026) now support self-hosted sandboxes via Cloudflare microVMs, Daytona, Modal, and Vercel — giving enterprises control over where agent code executes. **MCP tunnels** (research preview) allow managed agents to access private MCP servers behind corporate firewalls without exposing them publicly. **Outcomes** provide rubric-based grading of agent task completion, and **Dreaming** enables agents to explore solution spaces before committing to an execution path.
+**Key capabilities**: powerful tool use via the Claude API allows models to call functions with high accuracy. **Computer Use** enables browser and desktop automation where the model controls the computer, clicking, typing, navigating, and reading screen content. This is a major agent capability for automating workflows that require interacting with web applications and desktop software that lack APIs. Extended thinking provides transparent chain-of-thought reasoning with developer-visible `<thinking>` blocks and explicit `budget_tokens` control. Extended context of 200,000 tokens (1M available on Opus 4.6) allows processing vast amounts of information. **Claude Code** is a CLI-based coding agent that demonstrates the agentic pattern using Claude's native capabilities. It reads files, writes code, runs commands, and uses MCP servers for extensibility. **Claude Code SDK** allows building custom agents using Claude Code as a subprocess, inheriting its tool use and MCP capabilities. **Claude Managed Agents** (as of late May 2026) now support self-hosted sandboxes via Cloudflare microVMs, Daytona, Modal, and Vercel, giving enterprises control over where agent code executes. **MCP tunnels** (research preview) allow managed agents to access private MCP servers behind corporate firewalls without exposing them publicly. **Outcomes** provide rubric-based grading of agent task completion, and **Dreaming** enables agents to explore solution spaces before committing to an execution path.
 
 ### Google Vertex AI and ADK
 
 Google Agent Development Kit is a unified toolkit for building agents in the Google Cloud ecosystem.
 
-**Key capabilities**: deep integration with Gemini models provides access to multimodal capabilities. Grounding through Google Search allows models to verify facts via search. Support for the A2A protocol (Agent-to-Agent) simplifies building multi-agent systems. ADK is the only Big Tech framework available on **four languages** (Python, TypeScript, Java, Go — Go SDK added April 2026). **ADK SkillToolset** provides progressive disclosure of tools — loading only relevant tool descriptions per step, achieving approximately **90% token reduction** compared to loading all tool descriptions upfront.
+**Key capabilities**: deep integration with Gemini models provides access to multimodal capabilities. Grounding through Google Search allows models to verify facts via search. Support for the A2A protocol (Agent-to-Agent) simplifies building multi-agent systems. ADK is the only Big Tech framework available on **four languages** (Python, TypeScript, Java, Go: Go SDK added April 2026). **ADK SkillToolset** provides progressive disclosure of tools, loading only relevant tool descriptions per step, achieving approximately **90% token reduction** compared to loading all tool descriptions upfront.
 
-**Google ADK v2.3.0** (June 18): **Interactions API** integration provides unified model/agent access with server-side state management and background execution. **Graph-based Workflow Runtime** and **Task API** for agent-to-agent delegation. ADK 2.0 has been GA since May 19, with rapid iteration (v2.0 → v2.3 in one month).
+**Google ADK v2.3.0** (June 18): **Interactions API** integration provides unified model/agent access with server-side state management and background execution. **Graph-based Workflow Runtime** and **Task API** for agent-to-agent delegation. ADK 2.0 has been GA since May 19, with rapid iteration (v2.0 to v2.3 in one month).
 
-**Antigravity 2.0** (May 19, 2026) replaces Gemini CLI as Google's desktop orchestration hub. Full-featured agent platform with CLI, SDK, plugins, skills, hooks, and subagent workflows. **Gemini CLI was shut down June 18** — Pro, Ultra, and free Code Assist users lost access with no grace period, breaking CI/CD pipelines for non-migrated teams. Enterprise accounts retain temporary access.
+**Antigravity 2.0** (May 19, 2026) replaces Gemini CLI as Google's desktop orchestration hub. Full-featured agent platform with CLI, SDK, plugins, skills, hooks, and subagent workflows. **Gemini CLI was shut down June 18**: Pro, Ultra, and free Code Assist users lost access with no grace period, breaking CI/CD pipelines for non-migrated teams. Enterprise accounts retain temporary access.
 
 ---
 
@@ -138,13 +138,13 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 **Current state**: AutoGen 0.4 was the last major release. The project continues to receive security updates but no new features. Microsoft's strategic investment has shifted to **Microsoft Agent Framework**, which unifies concepts from AutoGen (event-driven multi-agent patterns) and Semantic Kernel (plugin/function model, enterprise integrations).
 
-**Microsoft Agent Framework 1.0 GA** (April 3, 2026): The 1.0 release locked the API surface for long-term servicing. Ships with full MCP support for tool discovery, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI debugger** that visualizes agent execution and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface.
+**Microsoft Agent Framework 1.0 GA** (April 3, 2026): The 1.0 release locked the API surface for long-term servicing. Ships with full MCP support for tool discovery, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI debugger** that visualizes agent execution and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic, Bedrock, Gemini, and Ollama..NET and Python SDKs unified under one API surface.
 
-**Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout** — an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ** — a new workplace intelligence layer with APIs (GA June 16), providing organizational context to agents. **Agent 365** — agents spanning M365, Azure, Dynamics, and Power Platform — preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake serves as the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform — leveraging 500M+ M365 users for distribution.
+**Build 2026 (June 2):** Microsoft unveiled its full agent stack. **Scout**: an always-on personal AI agent embedded across M365, Teams, Outlook, OneDrive, and SharePoint. Scout operates in the background proactively managing workflows, built on the OpenClaw agent framework. Preview late June, GA targeted October 2026. **Work IQ**, a new workplace intelligence layer with APIs (GA June 16), providing organizational context to agents. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, preview in July with Entra identity services, Intune device management, Defender threat protection, and Purview data governance. OneLake serves as the agent memory layer. This represents the most aggressive enterprise agent deployment by any platform, leveraging 500M+ M365 users for distribution.
 
-**Microsoft Agent Framework v1.9.0** (June 18): **Agent Harness** (GA) provides production patterns as first-class features — context compaction, instruction merging, todo tracking, extensible providers. **Hosted Agents** (GA by end of June) run in hypervisor-isolated sandboxes with persistent file systems, per-agent Entra ID, built-in OpenTelemetry tracing, sub-100ms cold starts, and zero idle cost. **A2A (Agent2Agent) in public preview** — expose any Foundry agent as an A2A endpoint. The velocity: from 1.0 GA (April 3) to 1.9.0 (June 18) in 11 weeks, with significant GA features each release.
+**Microsoft Agent Framework v1.9.0** (June 18): **Agent Harness** (GA) provides production patterns as first-class features: context compaction, instruction merging, todo tracking, extensible providers. **Hosted Agents** (GA by end of June) run in hypervisor-isolated sandboxes with persistent file systems, per-agent Entra ID, built-in OpenTelemetry tracing, sub-100ms cold starts, and zero idle cost. **A2A (Agent2Agent) in public preview**: expose any Foundry agent as an A2A endpoint. The velocity: from 1.0 GA (April 3) to 1.9.0 (June 18) in 11 weeks, with significant GA features each release.
 
-**For new projects**: use Microsoft Agent Framework for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should plan migration — the API is stable and rapidly maturing.
+**For new projects**: use Microsoft Agent Framework for enterprise Microsoft ecosystem projects. For non-Microsoft scenarios, evaluate LangGraph, OpenAI Agents SDK, or CrewAI. Existing AutoGen deployments should plan migration: the API is stable and rapidly maturing.
 
 ---
 
@@ -152,45 +152,45 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 Beyond the established leaders and cloud providers, several frameworks have gained significant traction:
 
-**Pydantic AI** (v2.0.0b7 as of late June 2026, v1.107.0 stable) — type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities — instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
+**Pydantic AI** (v2.0.0b7 as of late June 2026, v1.107.0 stable): type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities: instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
 
-**Mastra** — TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers — enabling automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
+**Mastra**: TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers, enabling automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
 
-**Agno** (formerly Phidata) — 39K+ GitHub stars (as of early 2026). Provides ReasoningTools (tools that help the agent think better, not just act), session-based memory, and a batteries-included approach. Good balance of ease-of-use and capability. Best for: Python developers who want a simpler alternative to LangGraph with built-in memory and reasoning support.
+**Agno** (formerly Phidata): 39K+ GitHub stars (as of early 2026). Provides ReasoningTools (tools that help the agent think better, not just act), session-based memory, and a batteries-included approach. Good balance of ease-of-use and capability. Best for: Python developers who want a simpler alternative to LangGraph with built-in memory and reasoning support.
 
-**smolagents** (HuggingFace) — 26K GitHub stars. A minimalist framework where the CodingAgent writes Python code directly instead of generating JSON tool calls. This makes agent actions inspectable and debuggable as regular Python. Best for: research and experimentation, teams comfortable with HuggingFace ecosystem.
+**smolagents** (HuggingFace): 26K GitHub stars. A minimalist framework where the CodingAgent writes Python code directly instead of generating JSON tool calls. This makes agent actions inspectable and debuggable as regular Python. Best for: research and experimentation, teams comfortable with HuggingFace ecosystem.
 
-**Vercel AI SDK** — TypeScript/React framework with 20M+ monthly downloads. Deeply integrated with React for streaming UI updates. Provides the ToolLoopAgent pattern for agent loops in frontend applications. Best for: full-stack TypeScript teams building user-facing agent applications with React.
+**Vercel AI SDK**: TypeScript/React framework with 20M+ monthly downloads. Deeply integrated with React for streaming UI updates. Provides the ToolLoopAgent pattern for agent loops in frontend applications. Best for: full-stack TypeScript teams building user-facing agent applications with React.
 
 ### Specialized Frameworks
 
-**DSPy** (Stanford, v3.2.1 as of late May 2026) — automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's optimizers find optimal prompts through automated search. **GEPA** (Greedy Evolutionary Prompt Approximation) is now the default optimizer, replacing MIPROv2. New **RLM module** enables recursive sub-LLM calls — an LLM invokes itself or another LLM within a reasoning step, enabling compositional reasoning chains. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
+**DSPy** (Stanford, v3.2.1 as of late May 2026), automatic prompt optimization. Instead of manually writing prompts, define the task and let DSPy's optimizers find optimal prompts through automated search. **GEPA** (Greedy Evolutionary Prompt Approximation) is now the default optimizer, replacing MIPROv2. New **RLM module** enables recursive sub-LLM calls, an LLM invokes itself or another LLM within a reasoning step, enabling compositional reasoning chains. Fundamentally different from other frameworks: it treats prompt engineering as a machine learning problem, not a craft. Best for: teams with large evaluation datasets who want to systematically optimize prompts.
 
-**Mistral Vibe** — remote agents from Mistral AI launched alongside Mistral Medium 3.5 (May 2026). Async cloud agents for routine development tasks (bug fixes, dependency updates) with GitHub and Slack integration. The agents run in Mistral's cloud and create PRs autonomously. Notable because Mistral Medium 3.5 (128B dense, 77.6% SWE-bench Verified, open weights) is one model for chat, reasoning, and code — no separate reasoning model needed. Best for: teams using Mistral models who want hosted agent capabilities.
+**Mistral Vibe**: remote agents from Mistral AI launched alongside Mistral Medium 3.5 (May 2026). Async cloud agents for routine development tasks (bug fixes, dependency updates) with GitHub and Slack integration. The agents run in Mistral's cloud and create PRs autonomously. Notable because Mistral Medium 3.5 (128B dense, 77.6% SWE-bench Verified, open weights) is one model for chat, reasoning, and code: no separate reasoning model needed. Best for: teams using Mistral models who want hosted agent capabilities.
 
-**Dify** — 93K+ GitHub stars (as of early 2026), $30M raised at $180M valuation, 1.4M installations. Drag-and-drop low-code platform for building agent workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Best for: teams that need visual workflow building with minimal code.
+**Dify**: 93K+ GitHub stars (as of early 2026), $30M raised at $180M valuation, 1.4M installations. Drag-and-drop low-code platform for building agent workflows with built-in RAG pipeline, model management, and observability. Self-hostable. Best for: teams that need visual workflow building with minimal code.
 
 ### JVM Ecosystem: Reaching Parity
 
 The JVM agent ecosystem reached parity with Python in 2025-2026:
 
-**JetBrains Koog** (March 2026) — a JVM-native agent framework from JetBrains, built with Kotlin. Ships with OpenTelemetry integration for observability out of the box. **JetBrains Junie** (GA June 17) — a coding agent that left beta as the #1 on SWE-Rebench (61.6% resolved, 72.7% pass@5). Differentiator: **agentic debugging** — Junie drives the IDE debugger autonomously (launches sessions, sets breakpoints, inspects variables). Structured planning (requirements → design → delivery stages → testing strategy) before writing code. Model-agnostic, available across IntelliJ IDEA, WebStorm, PyCharm + standalone Junie CLI for terminal/CI/CD. Together, Koog (framework) and Junie (agent) represent JetBrains' full-stack bet on the agent ecosystem.
+**JetBrains Koog** (March 2026): a JVM-native agent framework from JetBrains, built with Kotlin. Ships with OpenTelemetry integration for observability out of the box. **JetBrains Junie** (GA June 17): a coding agent that left beta as the #1 on SWE-Rebench (61.6% resolved, 72.7% pass@5). Differentiator: **agentic debugging**: Junie drives the IDE debugger autonomously (launches sessions, sets breakpoints, inspects variables). Structured planning (requirements, then design, then delivery stages, then testing strategy) before writing code. Model-agnostic, available across IntelliJ IDEA, WebStorm, PyCharm + standalone Junie CLI for terminal/CI/CD. Together, Koog (framework) and Junie (agent) represent JetBrains' full-stack bet on the agent ecosystem.
 
-**MCP Java SDK** (`io.modelcontextprotocol.sdk:mcp`) v1.0.0 GA — the official MCP SDK for Java, co-created with Spring AI. Supports both blocking and reactive programming models (WebFlux), with STDIO and Servlet-based transports. This is the foundation layer — both LangChain4j and Spring AI build on it.
+**MCP Java SDK** (`io.modelcontextprotocol.sdk:mcp`) v1.0.0 GA: the official MCP SDK for Java, co-created with Spring AI. Supports both blocking and reactive programming models (WebFlux), with STDIO and Servlet-based transports. This is the foundation layer: both LangChain4j and Spring AI build on it.
 
-**Spring AI MCP starters** — `spring-ai-starter-mcp-client` and `spring-ai-starter-mcp-server` provide turnkey MCP integration for Spring Boot applications. One dependency in `pom.xml` connects a Spring Boot application to any MCP server.
+**Spring AI MCP starters**: `spring-ai-starter-mcp-client` and `spring-ai-starter-mcp-server` provide turnkey MCP integration for Spring Boot applications. One dependency in `pom.xml` connects a Spring Boot application to any MCP server.
 
 Java 26 (March 2026) is positioned as an "AI-first platform" with value types, structured concurrency, and other features that benefit agent workloads. Combined with LangChain4j, Spring AI, and now Koog, the JVM ecosystem offers production-grade agent development on par with Python.
 
-**Google ADK for Go 1.0** (April 2026) — extends ADK to the Go ecosystem, making ADK the only major Big Tech framework supporting four languages. Particularly relevant for infrastructure and DevOps teams building agents in Go.
+**Google ADK for Go 1.0** (April 2026), extends ADK to the Go ecosystem, making ADK the only major Big Tech framework supporting four languages. Particularly relevant for infrastructure and DevOps teams building agents in Go.
 
 ### Open-Weight Models for Agent Workloads
 
 Three major open-weight model families power self-hosted agent deployments:
 
-- **Llama 4** (Meta) — MoE architecture, 10M token context (Scout), strong ecosystem and tooling. Llama License.
-- **Qwen 3** (Alibaba) — 119 languages, hybrid reasoning mode, Apache 2.0. Broadest multilingual support.
-- **Gemma 4** (Google, April 2026) — newest entrant. 4 sizes: E2B, E4B, 26B MoE, 31B Dense. Natively multimodal (text + images), Apache 2.0. Designed for edge AI and personal AI — the smallest models (E2B, E4B) run on mobile devices and laptops. Fills the gap for on-device multimodal agents that larger families cannot serve.
+- **Llama 4** (Meta): MoE architecture, 10M token context (Scout), strong ecosystem and tooling. Llama License.
+- **Qwen 3** (Alibaba): 119 languages, hybrid reasoning mode, Apache 2.0. Broadest multilingual support.
+- **Gemma 4** (Google, April 2026): newest entrant. 4 sizes: E2B, E4B, 26B MoE, 31B Dense. Natively multimodal (text + images), Apache 2.0. Designed for edge AI and personal AI, the smallest models (E2B, E4B) run on mobile devices and laptops. Fills the gap for on-device multimodal agents that larger families cannot serve.
 
 ---
 
@@ -232,33 +232,33 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 
 ### Red Flags When Choosing
 
-**"Let's use the most popular one"** — popularity by GitHub stars does not guarantee suitability for your task. Analyze requirements, not metrics.
+**"Let's use the most popular one"**: popularity by GitHub stars does not guarantee suitability for your task. Analyze requirements, not metrics.
 
-**Unnecessary complexity** — using CrewAI or LangGraph for a simple single-agent chatbot adds unwarranted complexity.
+**Unnecessary complexity**: using CrewAI or LangGraph for a simple single-agent chatbot adds unwarranted complexity.
 
-**Insufficient abstraction** — attempting to build a complex multi-step agent directly through an API will result in enormous amounts of boilerplate code and errors.
+**Insufficient abstraction**: attempting to build a complex multi-step agent directly through an API will result in enormous amounts of boilerplate code and errors.
 
-**Ignoring operations** — a framework without observability, tracing, and monitoring will create problems in production. Verify the availability of metrics, logging, and tracing.
+**Ignoring operations**: a framework without observability, tracing, and monitoring will create problems in production. Verify the availability of metrics, logging, and tracing.
 
 ---
 
 ## Key Takeaways
 
-1. **LangChain/LangGraph** — the de facto standard for Python LLM development with a massive ecosystem and community support.
+1. **LangChain/LangGraph**: the de facto standard for Python LLM development with a massive ecosystem and community support.
 
-2. **CrewAI** — the best choice for role-based multi-agent systems when declarativeness matters more than granular control.
+2. **CrewAI**: the best choice for role-based multi-agent systems when declarativeness matters more than granular control.
 
-3. **AutoGen** — now in maintenance mode; new projects should use **Microsoft Agent Framework** (unified successor combining AutoGen + Semantic Kernel).
+3. **AutoGen**: now in maintenance mode; new projects should use **Microsoft Agent Framework** (unified successor combining AutoGen + Semantic Kernel).
 
-4. **Cloud providers** (AWS, GCP, Azure) — production-ready solutions with enterprise SLA, but vendor lock-in limits flexibility.
+4. **Cloud providers** (AWS, GCP, Azure): production-ready solutions with enterprise SLA, but vendor lock-in limits flexibility.
 
-5. **n8n** — the leader in low-code AI automation with a unique combination of a visual interface and MCP support.
+5. **n8n**: the leader in low-code AI automation with a unique combination of a visual interface and MCP support.
 
-6. **Anthropic's approach to agents** — use the Claude API with tool calling and MCP for extensibility; Claude Code demonstrates the pattern of a production coding agent built on native capabilities.
+6. **Anthropic's approach to agents**: use the Claude API with tool calling and MCP for extensibility; Claude Code demonstrates the pattern of a production coding agent built on native capabilities.
 
-7. **Choose by task, not by hype** — a simple RAG does not require complex agent frameworks, and a complex multi-agent system cannot be built on basic chains.
+7. **Choose by task, not by hype**: a simple RAG does not require complex agent frameworks, and a complex multi-agent system cannot be built on basic chains.
 
-8. **The framework landscape is consolidating.** Microsoft unified AutoGen + Semantic Kernel into Agent Framework 1.0 GA. Google ADK is the only Big Tech framework on 4 languages. Mistral launched hosted remote agents. The choice for new projects: Java → LangChain4j/Spring AI; TypeScript → Vercel AI SDK/Mastra; Python type-safe → Pydantic AI; minimal → OpenAI Agents SDK; auto prompt optimization → DSPy.
+8. **The framework landscape is consolidating.** Microsoft unified AutoGen + Semantic Kernel into Agent Framework 1.0 GA. Google ADK is the only Big Tech framework on 4 languages. Mistral launched hosted remote agents. The choice for new projects: Java, then LangChain4j/Spring AI; TypeScript, then Vercel AI SDK/Mastra; Python type-safe, then Pydantic AI; minimal, then OpenAI Agents SDK; auto prompt optimization, then DSPy.
 
 ---
 

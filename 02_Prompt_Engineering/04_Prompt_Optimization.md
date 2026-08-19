@@ -2,7 +2,7 @@
 
 ## From a Working Prompt to Production-Ready
 
-Writing a prompt that works on a few examples is straightforward. Creating a prompt that reliably works in production, is cost-efficient, fast, and maintainable — that is an engineering discipline.
+Writing a prompt that works on a few examples is straightforward. Creating a prompt that reliably works in production, is cost-efficient, fast, and maintainable, that is an engineering discipline.
 
 In production, prompts are critical system components. A poorly optimized prompt can cost thousands of dollars per month on excessive tokens, introduce latency, and generate errors.
 
@@ -22,23 +22,23 @@ Prompt testing is analogous to unit testing code: create a set of test cases, de
 
 A good test suite includes:
 
-**Happy path** — typical inputs that should be handled correctly. Baseline functionality.
+**Happy path**: typical inputs that should be handled correctly. Baseline functionality.
 
-**Edge cases** — boundary conditions: empty input, very long input, special characters, multilingual text.
+**Edge cases**: boundary conditions: empty input, very long input, special characters, multilingual text.
 
-**Adversarial cases** — attempts to "break" the prompt: contradictory instructions, prompt injection, unexpected format.
+**Adversarial cases**: attempts to "break" the prompt: contradictory instructions, prompt injection, unexpected format.
 
-**Regression cases** — cases that broke previously. Every time you fix a bug, add it to the test suite.
+**Regression cases**: cases that broke previously. Every time you fix a bug, add it to the test suite.
 
 ### Quality Metrics
 
 Each test case needs success criteria:
 
-**Deterministic** — exact match, presence of specific strings, regex conformance.
+**Deterministic**: exact match, presence of specific strings, regex conformance.
 
-**Heuristic** — response length within a certain range, absence of prohibited phrases, valid JSON format.
+**Heuristic**: response length within a certain range, absence of prohibited phrases, valid JSON format.
 
-**LLM-based** — using another model to evaluate response quality. "LLM-as-judge" is a powerful tool for assessing semantic quality.
+**LLM-based**: using another model to evaluate response quality. "LLM-as-judge" is a powerful tool for assessing semantic quality.
 
 ---
 
@@ -48,7 +48,7 @@ Each test case needs success criteria:
 
 Unit tests tell you whether a prompt works on known cases. But how does it behave on a real stream of requests? That requires A/B testing.
 
-A/B testing compares two versions on live traffic: Version A (control) — the current prompt, Version B (experiment) — the replacement candidate. Traffic is randomly split, metrics are collected, improvement is statistically analyzed.
+A/B testing compares two versions on live traffic: Version A (control), the current prompt, Version B (experiment): the replacement candidate. Traffic is randomly split, metrics are collected, improvement is statistically analyzed.
 
 ### Comparison Metrics
 
@@ -60,7 +60,7 @@ A/B testing compares two versions on live traffic: Version A (control) — the c
 
 ### Statistical Significance
 
-An A/B test without statistical analysis is not a test — it is guessing. Requirements: determine minimum sample size, calculate p-value, account for multiple comparisons, do not stop the test prematurely.
+An A/B test without statistical analysis is not a test. It is guessing. Requirements: determine minimum sample size, calculate p-value, account for multiple comparisons, do not stop the test prematurely.
 
 Without statistical rigor, you risk accepting random fluctuations as real improvements.
 
@@ -68,18 +68,18 @@ Without statistical rigor, you risk accepting random fluctuations as real improv
 
 Consider a concrete scenario. You have a customer support agent and want to test whether a more detailed system prompt improves response quality.
 
-- **Variant A** (control): Current system prompt — 200 tokens, basic role and tone instructions
-- **Variant B** (treatment): Expanded prompt with explicit tone guidelines, escalation rules, and two example responses — 450 tokens
+- **Variant A** (control): Current system prompt: 200 tokens, basic role and tone instructions
+- **Variant B** (treatment): Expanded prompt with explicit tone guidelines, escalation rules, and two example responses, 450 tokens
 
 **Metric:** Customer satisfaction score (1-5) collected after each interaction.
 
 **Sample size:** Use a statistical power calculator. To detect a 0.3-point improvement with 80% power and alpha = 0.05, you need approximately 175 interactions per variant (350 total).
 
-**Duration:** Run for at least 2 weeks to account for day-of-week and time-of-day effects. Customer behavior on Monday morning differs from Friday afternoon — a test that runs only on weekdays may miss important patterns.
+**Duration:** Run for at least 2 weeks to account for day-of-week and time-of-day effects. Customer behavior on Monday morning differs from Friday afternoon, a test that runs only on weekdays may miss important patterns.
 
-**Key pitfall — cost vs. quality trade-off:** Variant A uses 200 tokens per call; Variant B uses 450. Even if Variant B scores higher, calculate whether the quality improvement justifies the token cost increase. A prompt that scores 4.2 at $0.02/call may be a better business decision than one scoring 4.4 at $0.05/call, depending on volume. At 100K calls/month, the difference is $3,000/month for a 0.2-point quality gain.
+**Key pitfall: cost vs. quality trade-off:** Variant A uses 200 tokens per call; Variant B uses 450. Even if Variant B scores higher, calculate whether the quality improvement justifies the token cost increase. A prompt that scores 4.2 at $0.02/call may be a better business decision than one scoring 4.4 at $0.05/call, depending on volume. At 100K calls/month, the difference is $3,000/month for a 0.2-point quality gain.
 
-**One variable at a time:** Always test a single variable — prompt text, temperature, or model — to isolate the effect. Changing both the prompt and the model simultaneously makes it impossible to attribute the improvement.
+**One variable at a time:** Always test a single variable: prompt text, temperature, or model: to isolate the effect. Changing both the prompt and the model simultaneously makes it impossible to attribute the improvement.
 
 ---
 
@@ -88,7 +88,7 @@ Consider a concrete scenario. You have a customer support agent and want to test
 ### Token Economics
 
 Every token costs money. At scale this is critical:
-- 1,000 tokens per prompt × 1M requests per day = 1B tokens per day
+- 1,000 tokens per prompt x 1M requests per day = 1B tokens per day
 - At $3 per 1M input tokens (e.g., Claude Sonnet 4.6) = $3,000 per day = $90,000 per month
 - Using a cheaper model like GPT-4o-mini ($0.15 per 1M) = $150 per day
 
@@ -98,9 +98,9 @@ Reducing the prompt by 30% yields proportional savings regardless of model tier.
 
 **Removing redundancy**: many prompts contain repetitions, filler words, verbose formulations.
 
-**Contractions**: "do not" → "don't", "cannot" → "can't". Saves tokens without losing meaning.
+**Contractions**: "do not", then "don't", "cannot", then "can't". Saves tokens without losing meaning.
 
-**Simplifying instructions**: instead of detailed explanations — concise essence. Instead of "I would really appreciate if you could analyze..." → "Analyze...".
+**Simplifying instructions**: instead of detailed explanations: concise essence. Instead of "I would really appreciate if you could analyze..." becomes "Analyze...".
 
 **Removing politeness**: LLMs do not need "please" and "thank you." They understand instructions without polite forms.
 
@@ -112,7 +112,7 @@ Golden rule: optimize tokens AFTER you have achieved the required quality. Then 
 
 ### Dynamic Context Inclusion
 
-Not all requests need the full context. The dynamic context technique: analyze the request → determine which context is relevant → include only what is necessary.
+Not all requests need the full context. The dynamic context technique: analyze the request, then determine which context is relevant, then include only what is necessary.
 
 This can save 50-80% of context tokens while maintaining quality.
 
@@ -156,7 +156,7 @@ A prompt in production requires continuous monitoring:
 
 Automated detection is critical for rapid response: comparing metrics against a baseline, statistical tests for significant deviations, alerts when thresholds are exceeded.
 
-If quality score drops 10% after a prompt update — that should be an alert, not "let's check back in a week."
+If quality score drops 10% after a prompt update, that should be an alert, not "let's check back in a week."
 
 ### Alerting
 
@@ -176,21 +176,21 @@ Automatic Prompt Optimization (APO) uses algorithms to systematically improve pr
 
 ### LLM-based Prompt Optimization
 
-A paradoxical idea: using an LLM to optimize prompts for an LLM. It works thanks to the **metacognitive capabilities** of modern models — they can reason about how they reason.
+A paradoxical idea: using an LLM to optimize prompts for an LLM. It works thanks to the **metacognitive capabilities** of modern models. They can reason about how they reason.
 
-**Automatic Prompt Engineer (APE)** from Zhou et al. (2022, University of Toronto): take a set of example inputs and expected outputs → ask the LLM to generate instructions → obtain multiple candidates → evaluate each on a validation set → select the best one.
+**Automatic Prompt Engineer (APE)** from Zhou et al. (2022, University of Toronto): take a set of example inputs and expected outputs, then ask the LLM to generate instructions, then obtain multiple candidates, then evaluate each on a validation set, then select the best one.
 
 APE results are impressive: on many tasks it outperforms human-written prompts, and is especially effective when the human does not know the optimal formulation.
 
-**Reflexion** adds a feedback loop: execute the prompt → evaluate the result → analyze failures → improve the prompt → repeat. The model learns from its own mistakes.
+**Reflexion** adds a feedback loop: execute the prompt, then evaluate the result, then analyze failures, then improve the prompt, then repeat. The model learns from its own mistakes.
 
 **Prompt Gradient Descent (ProGrad)** applies gradient descent ideas to the discrete space of prompts. The "gradient" is a textual description of the improvement direction. The LLM analyzes errors and generates the direction, then rephrases the prompt accordingly.
 
-**Evoke** uses evolutionary optimization — genetic algorithms applied to prompts. A population of prompts is created → each is evaluated by fitness → the best are selected → the LLM combines them and introduces random mutations.
+**Evoke** uses evolutionary optimization: genetic algorithms applied to prompts. A population of prompts is created, then each is evaluated by fitness, then the best are selected, then the LLM combines them and introduces random mutations.
 
 ### Approaches to Automation
 
-**Iterative refinement**: take a prompt → test it → analyze errors → ask the model to improve → repeat.
+**Iterative refinement**: take a prompt, then test it, then analyze errors, then ask the model to improve, then repeat.
 
 **Variation generation**: generate many prompt variations, evaluate each, select the best.
 
@@ -238,17 +238,17 @@ The key idea of DSPy is **compilation**. You define what you want, and the optim
 
 ### Meta-Prompting Inside DSPy
 
-DSPy uses **meta-prompting** — an LLM optimizes prompts for an LLM. The model receives a task description and examples of failures, then generates suggestions for improving instructions. This process iterates until the target metric is reached.
+DSPy uses **meta-prompting**: an LLM optimizes prompts for an LLM. The model receives a task description and examples of failures, then generates suggestions for improving instructions. This process iterates until the target metric is reached.
 
 ### Optimization Algorithms in DSPy
 
-**BootstrapFewShot** automatically generates examples: iterates over the training set → executes the current pipeline → saves correct results as demonstrations → selects top-k demonstrations by diversity → adds them to the prompt.
+**BootstrapFewShot** automatically generates examples: iterates over the training set, then executes the current pipeline, then saves correct results as demonstrations, then selects top-k demonstrations by diversity, then adds them to the prompt.
 
-**MIPRO (Multi-prompt Instruction Proposal Optimizer)** optimizes instructions: generates instruction candidates via meta-prompting → creates variations with different demonstrations for each → evaluates on a validation set → uses Bayesian optimization to select the next candidates.
+**MIPRO (Multi-prompt Instruction Proposal Optimizer)** optimizes instructions: generates instruction candidates via meta-prompting, then creates variations with different demonstrations for each, then evaluates on a validation set, then uses Bayesian optimization to select the next candidates.
 
-**Copro (Collaborative Prompting)** uses multiple LLMs: a generator model proposes improvements → a critic model evaluates and provides feedback → the generator incorporates feedback in the next iteration.
+**Copro (Collaborative Prompting)** uses multiple LLMs: a generator model proposes improvements, then a critic model evaluates and provides feedback, then the generator incorporates feedback in the next iteration.
 
-**When to use which optimizer:** Limited data (fewer than 50 examples) → BootstrapFewShot. Need good instructions → MIPRO. Complex multi-step task → Copro. Limited API budget → BootstrapFewShot (fewer calls).
+**When to use which optimizer:** Limited data (fewer than 50 examples), then BootstrapFewShot. Need good instructions, then MIPRO. Complex multi-step task, then Copro. Limited API budget, then BootstrapFewShot (fewer calls).
 
 ---
 
@@ -262,15 +262,15 @@ The question arises: can you shorten a prompt while preserving its effectiveness
 
 ### Compression Approaches
 
-**LLMLingua: Iterative Token Pruning** — uses a small model to determine the "importance" of each token. Perplexity is calculated for each token: high perplexity means the token is informative, low perplexity means it can be removed. The algorithm removes tokens with perplexity below the threshold. Results: compression ratio up to 20x, retaining 90%+ of quality.
+**LLMLingua: Iterative Token Pruning**: uses a small model to determine the "importance" of each token. Perplexity is calculated for each token: high perplexity means the token is informative, low perplexity means it can be removed. The algorithm removes tokens with perplexity below the threshold. Results: compression ratio up to 20x, retaining 90%+ of quality.
 
-**Selective Context: Semantic Compression** — instead of removing tokens, rephrasing while preserving meaning. A verbose 150-token instruction is compressed to 40 tokens — meaning preserved, 4x fewer tokens.
+**Selective Context: Semantic Compression**: instead of removing tokens, rephrasing while preserving meaning. A verbose 150-token instruction is compressed to 40 tokens, meaning preserved, 4x fewer tokens.
 
-**Gist Tokens: Trainable Substitutes** — train special "gist tokens" that replace long instructions. The original 500 tokens of instructions are replaced by 3 special gist tokens. Requires fine-tuning, but achieves 100x+ compression for recurring prompts.
+**Gist Tokens: Trainable Substitutes**: train special "gist tokens" that replace long instructions. The original 500 tokens of instructions are replaced by 3 special gist tokens. Requires fine-tuning, but achieves 100x+ compression for recurring prompts.
 
 ### Trade-offs in Compression
 
-The relationship between compression ratio and quality loss: 2x compression → virtually zero loss (redundancy removal). 5x compression → 1-3% loss (optimal for production). 10x compression → 3-5% loss (for cost-critical applications). Aggressive 20x+ compression → 5-10% loss (research only).
+The relationship between compression ratio and quality loss: 2x compression, then virtually zero loss (redundancy removal). 5x compression, then 1-3% loss (optimal for production). 10x compression, then 3-5% loss (for cost-critical applications). Aggressive 20x+ compression, then 5-10% loss (research only).
 
 **When compression is justified:** very high request volume (over 1M/day), long system prompts (over 1,000 tokens), repetitive instructions.
 
@@ -282,9 +282,9 @@ The relationship between compression ratio and quality loss: 2x compression → 
 
 ### The Idea: The Model Checks Itself
 
-Instead of a single generation pass, the model first generates, then critiques its own response, and improves it. The process: Generate → Critique → Refine → (optionally repeat) → Final Output.
+Instead of a single generation pass, the model first generates, then critiques its own response, and improves it. The process: Generate, then Critique, then Refine, then (optionally repeat), then Final Output.
 
-**Self-Critique Pattern:** The model receives its previous response and a request to critique it against criteria — accuracy, completeness, reasoning errors.
+**Self-Critique Pattern:** The model receives its previous response and a request to critique it against criteria: accuracy, completeness, reasoning errors.
 
 **Self-Refinement Pattern:** Based on the critique, the model generates an improved response.
 
@@ -296,7 +296,7 @@ Instead of a single generation pass, the model first generates, then critiques i
 
 ### Limitations of Self-Critique
 
-The model can be "confidently wrong" — the critic reproduces the same misconceptions as the generator. This is especially problematic for: factual errors (the model does not know the correct answer), systemic biases (built into the model), logical errors the model is "blind" to.
+The model can be "confidently wrong": the critic reproduces the same misconceptions as the generator. This is especially problematic for: factual errors (the model does not know the correct answer), systemic biases (built into the model), logical errors the model is "blind" to.
 
 **Mitigation:** Use different models for generation and critique, or add external verification.
 
@@ -366,7 +366,7 @@ Stable task (requirements unchanged for months), abundant data (thousands of lab
 
 ### Hybrid Approach
 
-The optimal path: Start with prompting (quickly validate the idea) → Improve prompts (optimize on test data) → Collect examples (successful interactions → training data) → Fine-tune the model when the task stabilizes (quality plateaus + sufficient data) → Retain the prompting layer (fine-tuned model + instructions for flexibility).
+The optimal path: Start with prompting (quickly validate the idea), then Improve prompts (optimize on test data), then Collect examples (successful interactions, then training data), then Fine-tune the model when the task stabilizes (quality plateaus + sufficient data), then Retain the prompting layer (fine-tuned model + instructions for flexibility).
 
 ---
 

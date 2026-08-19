@@ -26,27 +26,27 @@ During fine-tuning, model weights are adjusted based on examples of desired beha
 
 ## When Fine-Tuning Is Justified
 
-**Specific output format** — a particular JSON structure, specific markdown template, formalized report that is difficult to describe via prompt.
+**Specific output format**: a particular JSON structure, specific markdown template, formalized report that is difficult to describe via prompt.
 
-**Corporate voice and style** — tone of voice: formal/informal, technical/accessible, restrained/emotional.
+**Corporate voice and style**: tone of voice: formal/informal, technical/accessible, restrained/emotional.
 
-**Domain terminology** — legal language, medical terminology, internal industry jargon.
+**Domain terminology**: legal language, medical terminology, internal industry jargon.
 
-**Prompt reduction** — a long system prompt is "embedded" into the model, saving tokens.
+**Prompt reduction**: a long system prompt is "embedded" into the model, saving tokens.
 
-**Improved reliability** — increased accuracy or consistency on specific tasks.
+**Improved reliability**: increased accuracy or consistency on specific tasks.
 
 ## When Fine-Tuning Is Not Suitable
 
-**Adding new knowledge** — use RAG. Fine-tuning handles factual knowledge injection poorly.
+**Adding new knowledge**: use RAG. Fine-tuning handles factual knowledge injection poorly.
 
-**Frequently changing information** — data is updated regularly, fine-tuning cannot keep up.
+**Frequently changing information**: data is updated regularly, fine-tuning cannot keep up.
 
-**Rarely used features** — training costs are not justified by the scale of usage.
+**Rarely used features**: training costs are not justified by the scale of usage.
 
-**Tasks without clear examples** — impossible to create a dataset with correct answers.
+**Tasks without clear examples**: impossible to create a dataset with correct answers.
 
-**Complex reasoning** — fine-tuning may degrade chain-of-thought reasoning.
+**Complex reasoning**: fine-tuning may degrade chain-of-thought reasoning.
 
 ## Data Requirements
 
@@ -70,21 +70,21 @@ During fine-tuning, model weights are adjusted based on examples of desired beha
 
 ## Risks and Limitations
 
-**Catastrophic forgetting** — loss of general capabilities when training on specific examples.
+**Catastrophic forgetting**: loss of general capabilities when training on specific examples.
 
-**Overfitting** — memorizing examples instead of extracting general patterns.
+**Overfitting**: memorizing examples instead of extracting general patterns.
 
-**Drift from the base model** — base model updates are not applied automatically.
+**Drift from the base model**: base model updates are not applied automatically.
 
-**Amplification of biases** — biases in the data are amplified.
+**Amplification of biases**: biases in the data are amplified.
 
-**Lock-in** — vendor lock-in.
+**Lock-in**: vendor lock-in.
 
 ## Key Takeaways
 
 Fine-tuning is a tool for changing model behavior, not its knowledge.
 
-The correct order: prompt engineering → few-shot → RAG → fine-tuning.
+The correct order: prompt engineering, then few-shot, then RAG, then fine-tuning.
 
 Data quality determines result quality.
 

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A complete pipeline for fine-tuning a model — from data collection to deployment. A specialized model for customer support that understands product specifics and responds in the appropriate tone.
+A complete pipeline for fine-tuning a model: from data collection to deployment. A specialized model for customer support that understands product specifics and responds in the appropriate tone.
 
 ### Goals
 
@@ -14,33 +14,33 @@ Technical: reproducible data pipeline, quality-focused curation, LoRA fine-tunin
 
 Five sequential phases:
 
-**DATA COLLECTION** — Support Tickets (real dialogues), Knowledge Base (documentation, FAQ), Synthetic Data (LLM-generated examples).
+**DATA COLLECTION**: Support Tickets (real dialogues), Knowledge Base (documentation, FAQ), Synthetic Data (LLM-generated examples).
 
-**DATA PROCESSING** — Formatting & Cleaning (normalization, noise removal), Quality Filtering (scoring and filtering by quality score), Dataset Splitting (train/val/test with stratification).
+**DATA PROCESSING**: Formatting & Cleaning (normalization, noise removal), Quality Filtering (scoring and filtering by quality score), Dataset Splitting (train/val/test with stratification).
 
-**TRAINING** — Base Model (Mistral/Llama/Qwen), LoRA Config (adaptation parameters), Training Loop with monitoring.
+**TRAINING**: Base Model (Mistral/Llama/Qwen), LoRA Config (adaptation parameters), Training Loop with monitoring.
 
-**EVALUATION** — Metrics (perplexity, ROUGE, BERTScore), Human Eval (expert assessment), A/B Testing (comparison with baseline).
+**EVALUATION**: Metrics (perplexity, ROUGE, BERTScore), Human Eval (expert assessment), A/B Testing (comparison with baseline).
 
-**DEPLOYMENT** — Model Registry (versioning), Serving Infra (vLLM/TGI), Monitoring & Alerts (latency, throughput, quality drift).
+**DEPLOYMENT**: Model Registry (versioning), Serving Infra (vLLM/TGI), Monitoring & Alerts (latency, throughput, quality drift).
 
 ## Data Collection
 
 ### Sources
 
-Historical Support Tickets — authentic language, real problems. Challenges: noise, PII, inconsistent quality.
+Historical Support Tickets, authentic language, real problems. Challenges: noise, PII, inconsistent quality.
 
-Knowledge Base Articles — accurate information, structured. Challenges: formal tone, may not match conversation style.
+Knowledge Base Articles: accurate information, structured. Challenges: formal tone, may not match conversation style.
 
-Synthetic Data — controllable, scalable. Challenges: potential model collapse, lack of authenticity.
+Synthetic Data: controllable, scalable. Challenges: potential model collapse, lack of authenticity.
 
 ### Quality Framework
 
-Level 1 — Basic Filtering: minimum length >50 chars, language detection, deduplication (exact + near-duplicate), PII removal.
+Level 1: Basic Filtering: minimum length >50 chars, language detection, deduplication (exact + near-duplicate), PII removal.
 
-Level 2 — Quality Scoring: resolution success, customer satisfaction (CSAT), response coherence (LLM-based), factual accuracy (verified against knowledge base).
+Level 2: Quality Scoring: resolution success, customer satisfaction (CSAT), response coherence (LLM-based), factual accuracy (verified against knowledge base).
 
-Level 3 — Diversity Sampling: topic distribution (all product areas), difficulty distribution (easy → complex), sentiment distribution (positive → negative).
+Level 3: Diversity Sampling: topic distribution (all product areas), difficulty distribution (easy, then complex), sentiment distribution (positive, then negative).
 
 ### Data Format
 
@@ -60,7 +60,7 @@ Strategy: Replacement with placeholders ([EMAIL], [NAME]) to balance privacy and
 
 ### Quality Filtering
 
-100% raw data → basic filters → 70% → quality scoring → 40% → diversity sampling → 25% final dataset. Aggressive filtering produces better models — fewer high-quality examples are better than many noisy ones.
+100% raw data, then basic filters, then 70%, then quality scoring, then 40%, then diversity sampling, then 25% final dataset. Aggressive filtering produces better models: fewer high-quality examples are better than many noisy ones.
 
 ### Split
 
@@ -70,7 +70,7 @@ Training 80% (gradient updates), Validation 10% (hyperparameter tuning, early st
 
 ### Base Model
 
-**Recommended:** Llama 3.3 70B or Llama 4 Scout for maximum quality. Llama 3.1 8B Instruct — strong reasoning, 128K context, excellent instruction following. Qwen 2.5/3 7B Instruct — strong multilingual support, competitive on benchmarks. Mistral v0.3 7B Instruct — efficient, good European language support.
+**Recommended:** Llama 3.3 70B or Llama 4 Scout for maximum quality. Llama 3.1 8B Instruct: strong reasoning, 128K context, excellent instruction following. Qwen 2.5/3 7B Instruct: strong multilingual support, competitive on benchmarks. Mistral v0.3 7B Instruct: efficient, good European language support.
 
 **Larger models:** Llama 3.1 70B for maximum quality (requires multi-GPU or quantization for fine-tuning). Qwen 2.5 72B for multilingual enterprise use.
 
@@ -92,11 +92,11 @@ Track: Loss (steady decrease), Validation loss (increase = overfitting), Learnin
 
 Beyond supervised fine-tuning, preference alignment improves response quality:
 
-**DPO (Direct Preference Optimization):** Trains directly on preference pairs (chosen vs rejected responses) without a separate reward model. Simpler than RLHF, stable training, strong results. Pipeline: generate response pairs → collect preferences (human or LLM-as-Judge) → train with DPO loss. Typical setup: SFT first, then DPO on 5K-20K preference pairs.
+**DPO (Direct Preference Optimization):** Trains directly on preference pairs (chosen vs rejected responses) without a separate reward model. Simpler than RLHF, stable training, strong results. Pipeline: generate response pairs, then collect preferences (human or LLM-as-Judge), then train with DPO loss. Typical setup: SFT first, then DPO on 5K-20K preference pairs.
 
-**ORPO (Odds Ratio Preference Optimization):** Combines SFT and preference alignment into a single training stage. No need for a separate SFT step — ORPO simultaneously teaches the model to generate good responses and avoid bad ones. Simpler pipeline, fewer hyperparameters, competitive results.
+**ORPO (Odds Ratio Preference Optimization):** Combines SFT and preference alignment into a single training stage. No need for a separate SFT step: ORPO simultaneously teaches the model to generate good responses and avoid bad ones. Simpler pipeline, fewer hyperparameters, competitive results.
 
-**Recommendation:** Start with SFT (LoRA) for the initial model. If quality needs improvement — add DPO on preference data. ORPO when you want a simpler pipeline with fewer training stages.
+**Recommendation:** Start with SFT (LoRA) for the initial model. If quality needs improvement: add DPO on preference data. ORPO when you want a simpler pipeline with fewer training stages.
 
 ### Unsloth for Efficient Training
 
@@ -104,7 +104,7 @@ Beyond supervised fine-tuning, preference alignment improves response quality:
 
 Custom CUDA kernels for attention, MLP, and LoRA operations. Automatic mixed-precision optimization. Memory-efficient gradient checkpointing. Supports Llama, Mistral, Qwen, Gemma model families.
 
-**Practical impact:** Fine-tune Llama 3.1 8B on a single RTX 4090 (24GB) instead of requiring an A100. Training that took 4 hours now takes 1-2 hours. Drop-in replacement for HuggingFace Trainer — change the import, keep the same code.
+**Practical impact:** Fine-tune Llama 3.1 8B on a single RTX 4090 (24GB) instead of requiring an A100. Training that took 4 hours now takes 1-2 hours. Drop-in replacement for HuggingFace Trainer: change the import, keep the same code.
 
 **4-bit QLoRA via Unsloth:** Quantize the base model to 4-bit, train LoRA adapters in FP16. 70B model fine-tuning on a single 48GB GPU. Quality within 1-2% of full-precision LoRA.
 
@@ -112,11 +112,11 @@ Custom CUDA kernels for attention, MLP, and LoRA operations. Automatic mixed-pre
 
 ### Automatic Metrics
 
-Perplexity — model confidence in predictions. Lower is better; a baseline is needed for comparison.
+Perplexity: model confidence in predictions. Lower is better; a baseline is needed for comparison.
 
-ROUGE/BLEU — overlap with reference. Useful for consistency but does not capture semantic quality.
+ROUGE/BLEU: overlap with reference. Useful for consistency but does not capture semantic quality.
 
-BERTScore — semantic similarity with reference. Better than ROUGE for open-ended generation.
+BERTScore: semantic similarity with reference. Better than ROUGE for open-ended generation.
 
 ### LLM-as-Judge
 
@@ -138,7 +138,7 @@ Version control: each version (customer-support-v1, v2) contains adapter_config.
 
 ### Serving Infrastructure
 
-vLLM (high-performance, PagedAttention), TGI (HuggingFace solution), OpenAI-compatible API (drop-in replacement). For LoRA — serve base + adapter or merge before serving.
+vLLM (high-performance, PagedAttention), TGI (HuggingFace solution), OpenAI-compatible API (drop-in replacement). For LoRA: serve base + adapter or merge before serving.
 
 ### Monitoring
 
@@ -148,9 +148,9 @@ Latency (P50, P95, P99), Throughput (requests/second), Error rate (failed genera
 
 An end-to-end pipeline requires attention to every stage. Data quality matters more than quantity.
 
-Modern base models (Llama 3.1, Qwen 2.5) provide stronger starting points — fine-tuning yields better results with less data than older models.
+Modern base models (Llama 3.1, Qwen 2.5) provide stronger starting points: fine-tuning yields better results with less data than older models.
 
-Multi-level filtering (basic → quality → diversity) produces better datasets than naive collection.
+Multi-level filtering (basic, then quality, then diversity) produces better datasets than naive collection.
 
 LoRA efficiently adapts large models on consumer hardware. Rank 16 is a good default. Unsloth provides 2-5x speedup and 60-80% memory reduction for LoRA training.
 
@@ -158,6 +158,6 @@ Alignment after SFT: DPO for preference-based improvement, ORPO for a simpler si
 
 Evaluation is multi-faceted: automatic metrics (fast iteration), LLM-as-Judge (semantic quality), A/B testing (production validation), human evaluation (ground truth).
 
-Iterative improvement — fine-tuning is not one-shot. Error analysis → data improvement → retrain → evaluate → repeat.
+Iterative improvement: fine-tuning is not one-shot. Error analysis, then data improvement, then retrain, then evaluate, then repeat.
 
 Production deployment requires a proper registry, serving infrastructure, and continuous monitoring to catch degradation.

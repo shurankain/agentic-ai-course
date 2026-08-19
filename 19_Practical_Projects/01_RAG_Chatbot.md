@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-We will build a full-featured RAG chatbot for enterprise documentation — from document ingestion to production deployment. The system processes thousands of documents, supports multiple users, and operates reliably in production.
+We will build a full-featured RAG chatbot for enterprise documentation, from document ingestion to production deployment. The system processes thousands of documents, supports multiple users, and operates reliably in production.
 
 ### Functionality
 
@@ -42,13 +42,13 @@ A document contains: text content, file source, title, format, creation date, pa
 
 ### Chunking Strategy
 
-Recursive character splitter with semantic awareness: target size 512 tokens, overlap 64 tokens (12.5%), split boundaries paragraph → sentence → word, preserve code blocks in their entirety.
+Recursive character splitter with semantic awareness: target size 512 tokens, overlap 64 tokens (12.5%), split boundaries paragraph, then sentence, then word, preserve code blocks in their entirety.
 
-Overlap avoids information loss at boundaries — a split sentence is fully present in at least one fragment.
+Overlap avoids information loss at boundaries: a split sentence is fully present in at least one fragment.
 
 ### Embeddings
 
-text-embedding-3-small provides a balance of quality and cost. Alternatives worth evaluating: text-embedding-3-large (higher quality, higher cost), Jina Embeddings v3 (strong multilingual support, task-specific adapters), BGE-M3 (open-source, hybrid dense+sparse embeddings in one model — useful for combining with BM25 retrieval). Best practices: batch processing (grouping chunks), rate limiting (respecting API limits), retry logic (handling transient failures), caching (avoiding redundant generation).
+text-embedding-3-small provides a balance of quality and cost. Alternatives worth evaluating: text-embedding-3-large (higher quality, higher cost), Jina Embeddings v3 (strong multilingual support, task-specific adapters), BGE-M3 (open-source, hybrid dense+sparse embeddings in one model, useful for combining with BM25 retrieval). Best practices: batch processing (grouping chunks), rate limiting (respecting API limits), retry logic (handling transient failures), caching (avoiding redundant generation).
 
 ## Vector Store and Retrieval
 
@@ -62,9 +62,9 @@ Alternatives: Pinecone (managed service), Weaviate (rich query language), Milvus
 
 Multi-strategy retrieval outperforms basic semantic search:
 
-1. Dense retrieval — semantic similarity via embeddings
-2. Sparse retrieval — BM25 for exact keyword match
-3. Hybrid fusion — Reciprocal Rank Fusion combines results
+1. Dense retrieval: semantic similarity via embeddings
+2. Sparse retrieval: BM25 for exact keyword match
+3. Hybrid fusion: Reciprocal Rank Fusion combines results
 
 Enhancements: Query expansion (LLM generates alternative phrasings), HyDE (generating a hypothetical answer for search), Reranking (cross-encoder re-ranks top candidates).
 
@@ -116,17 +116,17 @@ RAG systems require specialized evaluation that measures both retrieval and gene
 
 RAGAS (Retrieval Augmented Generation Assessment) provides metrics specifically designed for RAG:
 
-**Faithfulness** — does the answer use only information from the retrieved context? Measures hallucination risk. Target: >0.9.
+**Faithfulness**: does the answer use only information from the retrieved context? Measures hallucination risk. Target: >0.9.
 
-**Answer Relevancy** — does the answer address the actual question? Penalizes off-topic responses. Target: >0.85.
+**Answer Relevancy**: does the answer address the actual question? Penalizes off-topic responses. Target: >0.85.
 
-**Context Precision** — are the retrieved documents relevant to the question? Measures retrieval quality. Target: >0.8.
+**Context Precision**: are the retrieved documents relevant to the question? Measures retrieval quality. Target: >0.8.
 
-**Context Recall** — does the retrieved context contain all the information needed to answer? Measures retrieval completeness. Target: >0.8.
+**Context Recall**: does the retrieved context contain all the information needed to answer? Measures retrieval completeness. Target: >0.8.
 
 ### Evaluation Pipeline
 
-Automated evaluation: create a test set of 50-100 question-answer-context triples. Run RAGAS metrics on every deployment candidate. Set quality gates — block deployment if faithfulness drops below threshold.
+Automated evaluation: create a test set of 50-100 question-answer-context triples. Run RAGAS metrics on every deployment candidate. Set quality gates: block deployment if faithfulness drops below threshold.
 
 LLM-as-Judge: for nuanced quality assessment, use a strong model (GPT-5.4, Claude) to evaluate response quality on dimensions like helpfulness, accuracy, and completeness.
 
@@ -138,11 +138,11 @@ In production, track proxy metrics: user satisfaction (thumbs up/down), follow-u
 
 ## Key Takeaways
 
-Production RAG requires attention to every layer. Document processing is underestimated — chunking strategy, metadata extraction, and embedding quality affect results more than LLM selection.
+Production RAG requires attention to every layer. Document processing is underestimated, chunking strategy, metadata extraction, and embedding quality affect results more than LLM selection.
 
 Hybrid retrieval (dense + sparse + reranking) significantly outperforms naive semantic search. Query expansion and HyDE further improve quality.
 
-Evaluation is essential — RAGAS provides RAG-specific metrics (faithfulness, relevancy, precision, recall). Automate evaluation as a quality gate in the deployment pipeline.
+Evaluation is essential: RAGAS provides RAG-specific metrics (faithfulness, relevancy, precision, recall). Automate evaluation as a quality gate in the deployment pipeline.
 
 Conversation context is critical for multi-turn dialogs. Query rewriting handles anaphora resolution.
 

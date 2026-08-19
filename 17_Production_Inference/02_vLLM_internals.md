@@ -2,7 +2,7 @@
 
 ## Why vLLM Became the Standard
 
-vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention — an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of late June 2026, vLLM is at **v0.23** (released June 13 — 408 commits, 200 contributors). Key v0.23 additions: DiffusionGemma support (first diffusion LLM natively served), DeepSeek-V4 hardening, Model Runner V2 as default for Llama/Mistral dense models, multi-tier KV cache offloading, unified parser for reasoning + tool-call, and Transformers v5 compatibility.
+vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention: an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of late June 2026, vLLM is at **v0.23** (released June 13, 408 commits, 200 contributors). Key v0.23 additions: DiffusionGemma support (first diffusion LLM natively served), DeepSeek-V4 hardening, Model Runner V2 as default for Llama/Mistral dense models, multi-tier KV cache offloading, unified parser for reasoning + tool-call, and Transformers v5 compatibility.
 
 Advantages:
 - Memory efficiency through fragmentation elimination
@@ -15,13 +15,13 @@ Advantages:
 
 **The fragmentation problem:**
 
-The traditional approach allocates contiguous memory for the maximum sequence length. Internal fragmentation: 2 GB allocated, 0.5 GB used — 1.5 GB wasted. External fragmentation: after requests complete, memory is fragmented — a new large request cannot find contiguous space.
+The traditional approach allocates contiguous memory for the maximum sequence length. Internal fragmentation: 2 GB allocated, 0.5 GB used: 1.5 GB wasted. External fragmentation: after requests complete, memory is fragmented, a new large request cannot find contiguous space.
 
 In production, 60-80% of memory is lost to fragmentation. A system with 32 GB effectively uses only 6-12 GB.
 
 **Solution through paging:**
 
-An idea from 1960s OS design: divide memory into small fixed pages. The KV-cache is divided into blocks (typically 16 tokens). Each request receives a block table, where blocks can be scattered across memory — contiguity is not required.
+An idea from 1960s OS design: divide memory into small fixed pages. The KV-cache is divided into blocks (typically 16 tokens). Each request receives a block table, where blocks can be scattered across memory: contiguity is not required.
 
 During prefill, the system allocates the required number of blocks from the pool. During decode, a new token is appended to the last block. When a block fills up, a new one is allocated. When a request completes, all blocks are returned to the pool.
 
@@ -29,7 +29,7 @@ The attention kernel is modified: it uses the block table to locate K and V valu
 
 **Results:**
 
-Internal fragmentation is virtually eliminated — losses only in the last block (~15 tokens). External fragmentation is eliminated — all blocks are the same size. Systems use 60-80% more memory for actual work. A GPU that served 20 requests now serves 50-80.
+Internal fragmentation is virtually eliminated: losses only in the last block (~15 tokens). External fragmentation is eliminated. All blocks are the same size. Systems use 60-80% more memory for actual work. A GPU that served 20 requests now serves 50-80.
 
 ## Continuous Batching
 
@@ -59,7 +59,7 @@ Chunked prefill splits long prompts into parts to reduce processing time varianc
 
 **When it is needed:**
 
-LLaMA-70B requires ~140 GB for weights alone in FP16. The H100 has 80 GB — not enough. Solution: distribute the model across multiple GPUs within a server via tensor parallelism.
+LLaMA-70B requires ~140 GB for weights alone in FP16. The H100 has 80 GB, not enough. Solution: distribute the model across multiple GPUs within a server via tensor parallelism.
 
 **Implementation:**
 
@@ -75,9 +75,9 @@ A chatbot uses the same system prompt for all users. RAG includes the same conte
 
 **Automatic prefix caching:**
 
-The --enable-prefix-caching parameter. vLLM computes a hash of the prefix and searches the cache. Cache hit — reuses KV blocks, computes only the unique part. Cache miss — performs prefill, saves blocks with the hash.
+The --enable-prefix-caching parameter. vLLM computes a hash of the prefix and searches the cache. Cache hit: reuses KV blocks, computes only the unique part. Cache miss: performs prefill, saves blocks with the hash.
 
-A chatbot with a 1000-token system prompt: first request takes 100ms for prefill, subsequent requests take 2ms instead of 102ms — a 50x speedup. Cached blocks are physically shared through PagedAttention — all requests reference the same blocks.
+A chatbot with a 1000-token system prompt: first request takes 100ms for prefill, subsequent requests take 2ms instead of 102ms: a 50x speedup. Cached blocks are physically shared through PagedAttention: all requests reference the same blocks.
 
 ## Practical Deployment
 
@@ -92,7 +92,7 @@ python -m vllm.entrypoints.openai.api_server with model and port parameters.
 - --enable-prefix-caching
 - --disable-log-requests
 
-The gpu-memory-utilization parameter controls the reservation for KV-cache. max-model-len determines allocation planning — a smaller value allows more requests.
+The gpu-memory-utilization parameter controls the reservation for KV-cache. max-model-len determines allocation planning: a smaller value allows more requests.
 
 ## vLLM V1 Engine Architecture (2025)
 
@@ -100,15 +100,15 @@ vLLM has undergone a major internal rewrite with the V1 engine, designed to supp
 
 ### Multi-Modal Serving
 
-vLLM V1 natively supports multi-modal models — serving models that accept images, audio, and video alongside text:
+vLLM V1 natively supports multi-modal models, serving models that accept images, audio, and video alongside text:
 - **Image inputs** are preprocessed, tokenized (via the model's vision encoder), and managed alongside text tokens in the KV-cache
-- **Variable-length visual tokens** — different images produce different numbers of visual tokens, requiring dynamic memory management (PagedAttention handles this naturally)
+- **Variable-length visual tokens**: different images produce different numbers of visual tokens, requiring dynamic memory management (PagedAttention handles this naturally)
 - Supported models include LLaVA, Llama 4 (native multimodal), Qwen-VL, InternVL, and others
 - The OpenAI-compatible API accepts image URLs or base64-encoded images in the messages format
 
 ### LoRA Serving
 
-Production systems often need to serve multiple fine-tuned variants of the same base model. vLLM supports **multi-LoRA serving** — loading and serving multiple LoRA adapters simultaneously on a single base model:
+Production systems often need to serve multiple fine-tuned variants of the same base model. vLLM supports **multi-LoRA serving**, loading and serving multiple LoRA adapters simultaneously on a single base model:
 - The base model weights are loaded once and shared across all requests
 - LoRA adapter weights (typically 0.1-1% of base model size) are loaded per-adapter
 - Request-level routing: each request specifies which LoRA adapter to use
@@ -118,23 +118,23 @@ Production systems often need to serve multiple fine-tuned variants of the same 
 ### Structured Output (Guided Decoding)
 
 vLLM V1 supports guided decoding to constrain model output to valid formats:
-- **JSON schema enforcement** — output conforms to a specified JSON schema
-- **Regex constraints** — output matches a specified regular expression
-- **Grammar-based** — output follows a formal grammar (e.g., for SQL, code)
+- **JSON schema enforcement**: output conforms to a specified JSON schema
+- **Regex constraints**: output matches a specified regular expression
+- **Grammar-based**: output follows a formal grammar (e.g., for SQL, code)
 - Implementation uses token-level masking: at each step, only tokens consistent with the constraint are allowed
 
 ### Performance Improvements
 
 The V1 engine brings significant architectural improvements:
-- **Torch.compile integration** — automatic kernel fusion and optimization for supported models
-- **Improved scheduling** — better handling of mixed prefill/decode batches
-- **Reduced overhead** — lower Python-level overhead for high-throughput serving
-- **Speculative decoding integration** — native support for draft-model-based speculative decoding to reduce latency
+- **Torch.compile integration**: automatic kernel fusion and optimization for supported models
+- **Improved scheduling**: better handling of mixed prefill/decode batches
+- **Reduced overhead**: lower Python-level overhead for high-throughput serving
+- **Speculative decoding integration**: native support for draft-model-based speculative decoding to reduce latency
 
 ## Alternatives
 
 **SGLang (LMSYS):**
-RadixAttention — prefix caching on a radix tree instead of a hash. Finds the longest matching prefix, allows partial reuse. Up to 3x improvement in chatbots. Python DSL for constrained generation.
+RadixAttention: prefix caching on a radix tree instead of a hash. Finds the longest matching prefix, allows partial reuse. Up to 3x improvement in chatbots. Python DSL for constrained generation.
 
 **TensorRT-LLM (NVIDIA):**
 Maximum performance through deep kernel optimization. Difficult to configure, but best latency for single requests. Enterprise deployments.
@@ -143,10 +143,10 @@ Maximum performance through deep kernel optimization. Difficult to configure, bu
 Edge and local deployments. GGML quantization for extreme compression. Simple setup, low requirements. Popular for local AI.
 
 **Choosing:**
-- High-volume API serving — vLLM
-- Chatbots with prefix reuse — SGLang
-- Maximum performance on NVIDIA — TensorRT-LLM
-- Local/edge — llama.cpp
+- High-volume API serving: vLLM
+- Chatbots with prefix reuse: SGLang
+- Maximum performance on NVIDIA: TensorRT-LLM
+- Local/edge: llama.cpp
 
 ## Key Takeaways
 
@@ -162,4 +162,4 @@ Production-ready out of the box with an OpenAI-compatible API.
 
 vLLM V1 extends capabilities: multi-modal serving (images, audio, video), multi-LoRA serving (hundreds of fine-tuned variants on shared base), disaggregated prefill/decode, structured output enforcement, and speculative decoding integration.
 
-**Disaggregated serving maturity (as of early 2026):** What was initially a 30-60% throughput gain has matured significantly. Across both vLLM and SGLang, disaggregated prefill-decode implementations now demonstrate **up to 6.4x throughput improvements and 20x reduction in latency variance**. The technique is no longer experimental — it is a production feature that most high-throughput deployments should evaluate. The core insight remains: prefill is compute-bound (benefits from high-FLOPS GPUs), while decode is memory-bandwidth-bound (benefits from high-bandwidth memory). Running them on separate, appropriately configured GPU pools eliminates the resource contention that degrades both phases when they share hardware.
+**Disaggregated serving maturity (as of early 2026):** What was initially a 30-60% throughput gain has matured significantly. Across both vLLM and SGLang, disaggregated prefill-decode implementations now demonstrate **up to 6.4x throughput improvements and 20x reduction in latency variance**. The technique is no longer experimental. It is a production feature that most high-throughput deployments should evaluate. The core insight remains: prefill is compute-bound (benefits from high-FLOPS GPUs), while decode is memory-bandwidth-bound (benefits from high-bandwidth memory). Running them on separate, appropriately configured GPU pools eliminates the resource contention that degrades both phases when they share hardware.

@@ -4,31 +4,31 @@
 
 AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined not only by code but also by the model, prompts, tools, and dynamic context.
 
-**Evolution:** 2000s DevOps (Code → Deployment), 2010s MLOps (Models → Production), 2020s LLMOps (LLM APIs → Applications), 2024+ AgentOps (Agents → Autonomous systems).
+**Evolution:** 2000s DevOps (Code, then Deployment), 2010s MLOps (Models, then Production), 2020s LLMOps (LLM APIs, then Applications), 2024+ AgentOps (Agents, then Autonomous systems).
 
 **Why AgentOps ≠ MLOps:**
 
-Artifact: MLOps — trained model, AgentOps — agent (model + prompt + tools).
+Artifact: MLOps: trained model, AgentOps, agent (model + prompt + tools).
 
-Behavior: MLOps — deterministic inference, AgentOps — stochastic reasoning loops.
+Behavior: MLOps: deterministic inference, AgentOps: stochastic reasoning loops.
 
-Debugging: MLOps — Input → Output, AgentOps — Multi-step traces.
+Debugging: MLOps: Input to Output, AgentOps, Multi-step traces.
 
-Metrics: MLOps — Accuracy/latency, AgentOps — Session success/task completion.
+Metrics: MLOps: Accuracy/latency, AgentOps: Session success/task completion.
 
-Rollback: MLOps — model version, AgentOps — prompt + tools + guardrails.
+Rollback: MLOps: model version, AgentOps: prompt + tools + guardrails.
 
 ## Agent Lifecycle
 
-**Plan — Design:** Defining scope (tasks, tools, guardrails), architectural decisions (Single vs Multi-Agent, model selection, tool design, memory strategy).
+**Plan: Design:** Defining scope (tasks, tools, guardrails), architectural decisions (Single vs Multi-Agent, model selection, tool design, memory strategy).
 
-**Build — Development:** Prompt engineering and iterations, tool implementation, integration testing, safety testing. Version control: prompts as code (git-versioned), tool configurations, guardrail rules.
+**Build, Development:** Prompt engineering and iterations, tool implementation, integration testing, safety testing. Version control: prompts as code (git-versioned), tool configurations, guardrail rules.
 
-**Evaluate — Testing:** Pre-production evaluation (benchmark datasets, red teaming, edge case testing, regression testing). Evaluation dimensions: task success rate, safety compliance, response quality, tool usage accuracy.
+**Evaluate, Testing:** Pre-production evaluation (benchmark datasets, red teaming, edge case testing, regression testing). Evaluation dimensions: task success rate, safety compliance, response quality, tool usage accuracy.
 
-**Deploy — Deployment:** Deployment strategies (canary releases, A/B testing, shadow mode, gradual rollout). Infrastructure: scaling configuration, rate limiting, failover setup.
+**Deploy: Deployment:** Deployment strategies (canary releases, A/B testing, shadow mode, gradual rollout). Infrastructure: scaling configuration, rate limiting, failover setup.
 
-**Monitor — Monitoring:** Real-time observability (session tracking, error detection, anomaly detection, cost monitoring). Alerting: guardrail violations, error rate spikes, latency degradation, cost overruns.
+**Monitor, Monitoring:** Real-time observability (session tracking, error detection, anomaly detection, cost monitoring). Alerting: guardrail violations, error rate spikes, latency degradation, cost overruns.
 
 ## Key Metrics for AgentOps
 
@@ -40,7 +40,7 @@ Rollback: MLOps — model version, AgentOps — prompt + tools + guardrails.
 
 **Safety & Guardrail:** Guardrail Trigger Rate (target <5%), False Positive Rate (target <1%), Safety Violation Rate (target 0%), PII Leak Rate (target 0%).
 
-**Agent-Specific Quality:** **Loop Detection Rate** — how often agents get stuck in repetitive cycles (same tool, same args, same error; target: <2% of sessions). **Decision Quality** — correctness of intermediate steps, not just the final output (did the agent choose the right tool, formulate the right query, interpret the result correctly?). **Planning Efficiency** — ratio of useful actions to total actions (an agent that reaches the goal in 5 steps is more efficient than one that takes 15 with 10 wasted steps; target varies by task complexity). These three metrics complement Session Success Rate — a session can "succeed" through an inefficient or fragile path that will not generalize.
+**Agent-Specific Quality:** **Loop Detection Rate**, how often agents get stuck in repetitive cycles (same tool, same args, same error; target: <2% of sessions). **Decision Quality**: correctness of intermediate steps, not just the final output (did the agent choose the right tool, formulate the right query, interpret the result correctly?). **Planning Efficiency**: ratio of useful actions to total actions (an agent that reaches the goal in 5 steps is more efficient than one that takes 15 with 10 wasted steps; target varies by task complexity). These three metrics complement Session Success Rate: a session can "succeed" through an inefficient or fragile path that will not generalize.
 
 ## Agent Tracing
 
@@ -62,15 +62,15 @@ Contextual fields: user_id, task_type, model, tokens_in, tokens_out, latency_ms,
 
 **Phoenix (Arize):** Enterprise observability. Embedding analysis, LLM evaluation, RAG analysis, production scale. Use for enterprise deployment, RAG-heavy systems, embedding monitoring. Freemium pricing.
 
-**Braintrust:** End-to-end evaluation and observability platform. Logging, evals, prompt playground, dataset management. Growing adoption in 2025 for its unified evaluation-observability approach. Supports **merge-blocking quality gates** — PRs are blocked if evaluation quality drops below a threshold, integrating eval directly into CI/CD.
+**Braintrust:** End-to-end evaluation and observability platform. Logging, evals, prompt playground, dataset management. Growing adoption in 2025 for its unified evaluation-observability approach. Supports **merge-blocking quality gates**: PRs are blocked if evaluation quality drops below a threshold, integrating eval directly into CI/CD.
 
-**DeepEval:** Open-source evaluation framework specifically designed for agent evaluation. Key differentiator: **PlanQualityMetric** and **PlanAdherenceMetric** — metrics that evaluate the quality of an agent's plan (is the plan reasonable?) and whether the agent adhered to its plan during execution (did it follow through?). These evaluate the reasoning process, not just the final output. Essential for debugging agents that produce correct results through unreliable paths.
+**DeepEval:** Open-source evaluation framework specifically designed for agent evaluation. Key differentiator: **PlanQualityMetric** and **PlanAdherenceMetric**: metrics that evaluate the quality of an agent's plan (is the plan reasonable?) and whether the agent adhered to its plan during execution (did it follow through?). These evaluate the reasoning process, not just the final output. Essential for debugging agents that produce correct results through unreliable paths.
 
 ### Framework-Native Observability (2024-2025)
 
 **LangGraph Studio:** LangChain's visual debugging environment for LangGraph agents. Provides: real-time visualization of graph execution (nodes, edges, state transitions), step-through debugging of agent reasoning, state inspection at each node, time-travel debugging (replay from any checkpoint). Particularly valuable for complex multi-step agents where understanding the execution flow is critical.
 
-**CrewAI Observability:** CrewAI added built-in observability features: crew execution traces, agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility — seeing how agents delegate, collaborate, and hand off tasks — fills a gap that general-purpose observability tools miss.
+**CrewAI Observability:** CrewAI added built-in observability features: crew execution traces, agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility, seeing how agents delegate, collaborate, and hand off tasks, fills a gap that general-purpose observability tools miss.
 
 **AG2 (formerly AutoGen):** Microsoft's AutoGen was forked and rebranded as AG2 in late 2024 by the original AutoGen team, who continued development independently. AG2 includes: conversation logging across agent groups, structured message tracing, cost tracking per agent, and integration with observability backends. Note the distinction: **AutoGen** (the Microsoft repo) is now in maintenance mode with Microsoft's investment shifting to Microsoft Agent Framework, while **AG2** (the community fork at ag2ai/ag2) continues active development as an independent project. For observability purposes, both share similar tracing patterns inherited from AutoGen 0.4.
 
@@ -114,47 +114,47 @@ Triggered evaluations: after each prompt change, after tool updates, after model
 
 **Typical Incidents:**
 
-Prompt leak (system prompt in responses) → Immediate rollback.
+Prompt leak (system prompt in responses) to Immediate rollback.
 
-Tool abuse (anomalous tool usage) → Rate limit + investigate.
+Tool abuse (anomalous tool usage) to Rate limit + investigate.
 
-Safety violation (harmful content) → Block + review.
+Safety violation (harmful content) to Block + review.
 
-Cost spike (10x+ cost increase) → Throttle + audit.
+Cost spike (10x+ cost increase) to Throttle + audit.
 
-Hallucination surge (grounding score decline) → Shadow mode + fix.
+Hallucination surge (grounding score decline) to Shadow mode + fix.
 
 **Runbook structure:** Detection (how to detect), Triage (severity assessment), Mitigation (immediate actions), Resolution (long-term fix), Post-mortem (root cause analysis).
 
 ## Multi-Agent Observability
 
-Single-agent tracing is straightforward — one trace, one span tree. Multi-agent systems produce trace forests: multiple interleaved traces where causality crosses agent boundaries. Debugging "why did the system give a wrong answer?" requires understanding which agent made the wrong decision and what information it had when it decided.
+Single-agent tracing is straightforward, one trace, one span tree. Multi-agent systems produce trace forests: multiple interleaved traces where causality crosses agent boundaries. Debugging "why did the system give a wrong answer?" requires understanding which agent made the wrong decision and what information it had when it decided.
 
 **Cross-agent communication traces.** Each inter-agent message (handoff, delegation, result return) should be a span that links the sender's trace to the receiver's trace. The parent-child span relationship crosses agent boundaries: Agent A's "delegate_to_B" span is the parent of Agent B's root span. This creates a unified trace tree across agents. LangSmith and Langfuse support this through trace correlation IDs.
 
-**Delegation chain visualization.** In a hierarchical multi-agent system, a task may be delegated through 3-4 levels: Orchestrator → Research Manager → Web Search Agent → URL Fetcher. Each level adds latency and token cost. Visualizing the delegation chain reveals: which agent consumed the most time (bottleneck identification), which agent consumed the most tokens (cost optimization target), where errors originated and how they propagated (root cause analysis). CrewAI's built-in delegation tracking provides this natively; for LangGraph and custom systems, implement explicit delegation logging.
+**Delegation chain visualization.** In a hierarchical multi-agent system, a task may be delegated through 3-4 levels: Orchestrator, then Research Manager, then Web Search Agent, then URL Fetcher. Each level adds latency and token cost. Visualizing the delegation chain reveals: which agent consumed the most time (bottleneck identification), which agent consumed the most tokens (cost optimization target), where errors originated and how they propagated (root cause analysis). CrewAI's built-in delegation tracking provides this natively; for LangGraph and custom systems, implement explicit delegation logging.
 
-**Agent-level metrics comparison dashboard.** A side-by-side view of all agents in the system: success rate per agent, average latency per agent, average token cost per agent, error rate per agent. This immediately reveals imbalances — if the security review agent takes 30 seconds while the style review agent takes 2 seconds, you know where to optimize. If one agent's error rate spikes, you know which agent to debug first.
+**Agent-level metrics comparison dashboard.** A side-by-side view of all agents in the system: success rate per agent, average latency per agent, average token cost per agent, error rate per agent. This immediately reveals imbalances: if the security review agent takes 30 seconds while the style review agent takes 2 seconds, you know where to optimize. If one agent's error rate spikes, you know which agent to debug first.
 
 ## Knowledge Base Freshness Monitoring
 
-RAG systems degrade silently when the knowledge base becomes stale. If the product pricing changed last week but the indexed documents still show old prices, the agent confidently gives wrong answers — and no error is logged.
+RAG systems degrade silently when the knowledge base becomes stale. If the product pricing changed last week but the indexed documents still show old prices, the agent confidently gives wrong answers, and no error is logged.
 
 **Document staleness detection.** Track the last-updated timestamp for every document in the knowledge base. Alert when: any document exceeds its expected refresh interval (e.g., pricing documents should be refreshed weekly), a significant fraction of the corpus (>20%) has not been updated in more than the expected cycle, new documents are ingested at a rate significantly below the expected rate (ingestion pipeline may be broken).
 
-**Retrieval coverage metrics.** Track the percentage of user queries where the retrieval system returns no relevant results (all similarity scores below threshold). A coverage rate below 80% indicates knowledge gaps — topics users ask about that the knowledge base does not address. Log these "no-good-result" queries and review them weekly to identify content gaps.
+**Retrieval coverage metrics.** Track the percentage of user queries where the retrieval system returns no relevant results (all similarity scores below threshold). A coverage rate below 80% indicates knowledge gaps, topics users ask about that the knowledge base does not address. Log these "no-good-result" queries and review them weekly to identify content gaps.
 
 **Knowledge gap identification.** Cluster the "no-good-result" queries by topic. If 50 users asked about "return policy for electronics" and the knowledge base has no document covering this, that is a content gap that directly impacts agent quality. Automated gap detection: embed the "no-result" queries, cluster them, and generate a weekly report of topic clusters ranked by query volume. This transforms observability data into actionable content improvement recommendations.
 
 ## Agent Health Scoring
 
-As agent fleets grow, individual agent monitoring becomes impractical. An aggregate health score — a single number that captures whether an agent is performing well — enables fleet-level management.
+As agent fleets grow, individual agent monitoring becomes impractical. An aggregate health score, a single number that captures whether an agent is performing well, enables fleet-level management.
 
-**Composite health metric.** Combine four dimensions into a 0-100 score: success rate (weight 40% — the agent completes tasks successfully), efficiency (weight 20% — tasks completed within expected token/time budgets), cost (weight 20% — cost per task relative to baseline), safety (weight 20% — guardrail violations, PII leaks, policy breaches). Each dimension is normalized to 0-100, then weighted. An agent scoring below 60 is flagged for investigation; below 40 triggers automatic failover to a backup.
+**Composite health metric.** Combine four dimensions into a 0-100 score: success rate (weight 40%, the agent completes tasks successfully), efficiency (weight 20%: tasks completed within expected token/time budgets), cost (weight 20%: cost per task relative to baseline), safety (weight 20%: guardrail violations, PII leaks, policy breaches). Each dimension is normalized to 0-100, then weighted. An agent scoring below 60 is flagged for investigation; below 40 triggers automatic failover to a backup.
 
 **Traffic-light dashboard for agent fleets.** Green (score 80-100): healthy, no action needed. Yellow (score 60-79): degrading, investigate within 24 hours. Red (score 0-59): failing, immediate investigation required. For a fleet of 20 agents, a single dashboard with 20 traffic lights provides instant operational awareness. Drill-down into any red/yellow agent shows the contributing factors (which dimension is pulling the score down).
 
-**Health score trends.** A declining health score over time (e.g., 85 → 75 → 65 over 3 weeks) signals gradual degradation — perhaps the model provider's behavior changed, or the knowledge base became stale, or the user query distribution shifted. Trend alerts catch slow degradation that point-in-time metrics miss.
+**Health score trends.** A declining health score over time (e.g., 85, then 75, then 65 over 3 weeks) signals gradual degradation: perhaps the model provider's behavior changed, or the knowledge base became stale, or the user query distribution shifted. Trend alerts catch slow degradation that point-in-time metrics miss.
 
 ## Practical Examples
 
@@ -182,7 +182,7 @@ Test cases define input data, expected results, and success criteria. The evalua
 
 ## Key Takeaways
 
-- **AgentOps is a distinct discipline from MLOps.** The artifact is an agent (model + prompt + tools), behavior is stochastic, debugging requires multi-step traces, and rollback involves prompt + tools + guardrails — not just a model version.
+- **AgentOps is a distinct discipline from MLOps.** The artifact is an agent (model + prompt + tools), behavior is stochastic, debugging requires multi-step traces, and rollback involves prompt + tools + guardrails, not just a model version.
 
 - **Session-level metrics matter more than request-level metrics.** Session success rate, turns per session, abandonment rate, and loop detection rate capture the user experience that per-call metrics miss.
 

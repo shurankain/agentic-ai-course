@@ -14,35 +14,35 @@ Automated metrics require calibration. What does a BERTScore of 0.85 mean? The o
 
 The quality of human evaluation critically depends on task formulation. A poorly designed task yields inconsistent, unreliable results.
 
-**Clarity of criteria** — the evaluator must understand exactly what is required. Bad: "Rate the quality of the answer". Better: "Rate the completeness of the answer on a scale of 1-5, where 1 means the answer contains none of the requested information, and 5 means it contains all necessary information without omissions".
+**Clarity of criteria**: the evaluator must understand exactly what is required. Bad: "Rate the quality of the answer". Better: "Rate the completeness of the answer on a scale of 1-5, where 1 means the answer contains none of the requested information, and 5 means it contains all necessary information without omissions".
 
 **Examples for each scale point** significantly improve consistency. Show what a 2-point answer looks like, what a 4-point answer looks like. This calibrates understanding of the scale.
 
-**Avoid ambiguity** — break down a "good" answer into specific dimensions: correctness, completeness, clarity, usefulness.
+**Avoid ambiguity**: break down a "good" answer into specific dimensions: correctness, completeness, clarity, usefulness.
 
-**Cognitive load** — an evaluator with 15 criteria will make errors. Break complex evaluation into simple tasks or use a hierarchy.
+**Cognitive load**: an evaluator with 15 criteria will make errors. Break complex evaluation into simple tasks or use a hierarchy.
 
 ## Rating Scales
 
-**Binary** (yes/no) — easy to explain, high agreement. But loses nuance: the difference between "almost good" and "completely bad" is erased.
+**Binary** (yes/no): easy to explain, high agreement. But loses nuance: the difference between "almost good" and "completely bad" is erased.
 
-**5-point** — a popular trade-off. Sufficient granularity without excessive complexity.
+**5-point**: a popular trade-off. Sufficient granularity without excessive complexity.
 
-**Likert with anchors** — "1 — Strongly disagree, 2 — Disagree, 3 — Neutral, 4 — Agree, 5 — Strongly agree" is more reliable than bare numbers 1-5.
+**Likert with anchors**: "1: Strongly disagree, 2: Disagree, 3: Neutral, 4: Agree, 5: Strongly agree" is more reliable than bare numbers 1-5.
 
-**Continuous** (slider 0-100) — maximum granularity, but requires more cognitive effort and may reduce agreement.
+**Continuous** (slider 0-100): maximum granularity, but requires more cognitive effort and may reduce agreement.
 
-**Best-worst scaling** — selecting the best and worst answer from a set. More reliable than absolute ratings, but requires more examples.
+**Best-worst scaling**: selecting the best and worst answer from a set. More reliable than absolute ratings, but requires more examples.
 
 ## Pairwise Comparison
 
 Comparing pairs instead of assigning absolute scores has significant advantages.
 
-**Easier for the evaluator** — "which answer is better?" is more natural than assigning a numerical rating. People handle comparative judgments better.
+**Easier for the evaluator**: "which answer is better?" is more natural than assigning a numerical rating. People handle comparative judgments better.
 
-**Higher inter-annotator agreement** — evaluators agree more often when comparing pairs than when assigning absolute ratings.
+**Higher inter-annotator agreement**: evaluators agree more often when comparing pairs than when assigning absolute ratings.
 
-**Less sensitive to bias** — different experts have different "baselines" in absolute ratings. Pairwise comparison neutralizes this difference.
+**Less sensitive to bias**: different experts have different "baselines" in absolute ratings. Pairwise comparison neutralizes this difference.
 
 **Elo rating** and similar systems allow building a global ranking based on pairwise comparisons.
 
@@ -54,7 +54,7 @@ The difference between useful and useless human evaluation comes down to the qua
 
 **Building effective annotation guidelines.** Start with a concrete rubric, not abstract criteria. For each dimension (correctness, completeness, clarity), define exactly what each score means with examples. A 3-page guideline with 10 annotated examples produces better inter-annotator agreement than a 30-page guideline without examples. The document should answer three questions for every possible situation: what score to assign, why, and what the adjacent scores look like (so annotators understand the boundaries between ratings).
 
-**Inter-annotator agreement (IAA) as a quality signal.** Cohen's kappa measures agreement between two annotators beyond what chance would predict. Kappa > 0.8: strong agreement — guidelines are clear, annotators are calibrated. Kappa 0.6-0.8: moderate agreement — acceptable for most tasks, but review guidelines for ambiguous cases. Kappa 0.4-0.6: fair agreement — guidelines need revision, consider additional training. Kappa < 0.4: poor agreement — stop evaluation, redesign the task. Compute IAA continuously throughout the campaign, not just at the start. Agreement can degrade as annotators fatigue or encounter novel examples not covered by the guidelines.
+**Inter-annotator agreement (IAA) as a quality signal.** Cohen's kappa measures agreement between two annotators beyond what chance would predict. Kappa > 0.8: strong agreement: guidelines are clear, annotators are calibrated. Kappa 0.6-0.8: moderate agreement, acceptable for most tasks, but review guidelines for ambiguous cases. Kappa 0.4-0.6: fair agreement: guidelines need revision, consider additional training. Kappa < 0.4: poor agreement: stop evaluation, redesign the task. Compute IAA continuously throughout the campaign, not just at the start. Agreement can degrade as annotators fatigue or encounter novel examples not covered by the guidelines.
 
 **Common pitfalls that destroy annotation quality.** Anchoring bias: the first example an annotator sees calibrates all subsequent ratings. Mitigate by randomizing example order and providing calibration examples at the start of each session. Fatigue effects: after 50-100 evaluations, attention drops and ratings become noisier. Limit sessions to 30-45 minutes with mandatory breaks. Scale compression: annotators tend to avoid extreme ratings (1 and 5), clustering around 3. Counteract with guidelines that explicitly describe what a 1 and a 5 look like, and include calibration examples at the extremes.
 
@@ -64,9 +64,9 @@ For production AI systems processing millions of requests, evaluation must scale
 
 **When to use crowd workers vs domain experts.** Crowd workers (Mechanical Turk, Prolific, Appen) handle: fluency judgments (is the response well-written?), format compliance (does it follow instructions?), pairwise preferences (which answer is better?), and general helpfulness assessment. Cost: $0.50-2.00 per evaluation, depending on complexity and platform. Domain experts are required for: factual correctness in specialized domains (medical, legal, financial), safety-critical assessments, and evaluation of technical depth. Cost: $10-50+ per evaluation.
 
-**Quality control for crowd annotations.** Attention checks — insert known-answer questions (10-15% of tasks) to identify inattentive workers. Workers who fail more than 20% of attention checks are excluded and their data is discarded. Gold standard questions — embed pre-evaluated examples with known correct ratings. Measure each worker's deviation from gold standard to compute a reliability score. Weight their annotations by this score. Minimum time thresholds — evaluations completed in under 10 seconds for a complex task are likely unread. Reject and re-queue. Redundancy — assign each example to 3-5 workers and aggregate through majority voting or weighted averaging. Redundancy costs more but produces more reliable results than relying on single annotators.
+**Quality control for crowd annotations.** Attention checks, insert known-answer questions (10-15% of tasks) to identify inattentive workers. Workers who fail more than 20% of attention checks are excluded and their data is discarded. Gold standard questions: embed pre-evaluated examples with known correct ratings. Measure each worker's deviation from gold standard to compute a reliability score. Weight their annotations by this score. Minimum time thresholds: evaluations completed in under 10 seconds for a complex task are likely unread. Reject and re-queue. Redundancy: assign each example to 3-5 workers and aggregate through majority voting or weighted averaging. Redundancy costs more but produces more reliable results than relying on single annotators.
 
-**The crowdsourcing evaluation pipeline.** Design task and guidelines → pilot with 5-10 workers (calibration) → launch with attention checks and gold standards → monitor IAA in real time → exclude unreliable workers → aggregate results → validate against expert panel on a 10% subsample. This pipeline typically produces crowd annotations that agree with expert judgments 85-90% of the time — sufficient for most quality monitoring use cases, though not for safety-critical decisions.
+**The crowdsourcing evaluation pipeline.** Design task and guidelines, then pilot with 5-10 workers (calibration), then launch with attention checks and gold standards, then monitor IAA in real time, then exclude unreliable workers, then aggregate results, then validate against expert panel on a 10% subsample. This pipeline typically produces crowd annotations that agree with expert judgments 85-90% of the time: sufficient for most quality monitoring use cases, though not for safety-critical decisions.
 
 ## Selecting Evaluators
 
@@ -74,7 +74,7 @@ For production AI systems processing millions of requests, evaluation must scale
 
 **Crowd workers** (MTurk, Prolific, Appen) provide scale: hundreds of evaluations within hours at low cost. Quality is variable; control mechanisms are needed: qualification tests, attention checks, rejection criteria, agreement thresholds.
 
-**Target users** — sometimes the best evaluators. If the model is for students, students will assess clarity better than professors.
+**Target users**: sometimes the best evaluators. If the model is for students, students will assess clarity better than professors.
 
 **Combined approach:** domain experts for correctness, crowd workers for fluency and helpfulness, target users for real-world usefulness.
 
@@ -86,19 +86,19 @@ For production AI systems processing millions of requests, evaluation must scale
 
 **Power analysis** determines the required sample size to detect an effect of a given magnitude. The smaller the expected difference, the more examples are needed.
 
-**In practice:** for rough evaluation, 50-100 examples × 3 evaluations. For fine-grained comparisons (5-10% difference) — hundreds of examples. For statistical rigor — consult a statistician.
+**In practice:** for rough evaluation, 50-100 examples x 3 evaluations. For fine-grained comparisons (5-10% difference), hundreds of examples. For statistical rigor: consult a statistician.
 
 ## Bias in Human Evaluation
 
-**Anchoring** — early examples influence the perception of subsequent ones.
+**Anchoring**: early examples influence the perception of subsequent ones.
 
-**Order effects** — presentation order affects ratings. Randomize the A/B order.
+**Order effects**: presentation order affects ratings. Randomize the A/B order.
 
-**Length bias** — longer answers are perceived as more complete, even if the extra length is filler.
+**Length bias**: longer answers are perceived as more complete, even if the extra length is filler.
 
-**Positional bias** — in a list of options, the first and last items attract more attention.
+**Positional bias**: in a list of options, the first and last items attract more attention.
 
-**Fatigue effects** — evaluation quality decreases over time. Long sessions produce less reliable results.
+**Fatigue effects**: evaluation quality decreases over time. Long sessions produce less reliable results.
 
 **Mitigation:** order randomization, condition balancing, session length limits, calibration examples, blind evaluation.
 
@@ -106,7 +106,7 @@ For production AI systems processing millions of requests, evaluation must scale
 
 **Preparation:** clear instructions, calibration examples, convenient interface.
 
-**Pilot study** — testing on a small sample reveals problems with instructions and the interface.
+**Pilot study**: testing on a small sample reveals problems with instructions and the interface.
 
 **Evaluator training:** task explanation, example walkthrough, calibration session with discussion of disagreements.
 
@@ -118,15 +118,15 @@ For production AI systems processing millions of requests, evaluation must scale
 
 ## When to Use Human Evaluation
 
-**Metric development** — calibrating automated metrics requires ground truth from humans. Conduct it once, then use the calibrated automated metrics.
+**Metric development**: calibrating automated metrics requires ground truth from humans. Conduct it once, then use the calibrated automated metrics.
 
-**Critical decisions** — choosing between fundamentally different approaches. Automated metrics may miss important nuances.
+**Critical decisions**: choosing between fundamentally different approaches. Automated metrics may miss important nuances.
 
-**Novel tasks** — for non-standard tasks, no ready-made benchmarks exist.
+**Novel tasks**: for non-standard tasks, no ready-made benchmarks exist.
 
-**Final validation** — before a production release, verify that automated metrics are not misleading.
+**Final validation**: before a production release, verify that automated metrics are not misleading.
 
-**Problem investigation** — when users complain but automated metrics look good.
+**Problem investigation**: when users complain but automated metrics look good.
 
 ## Practical Implementation
 
@@ -136,13 +136,13 @@ When retrieving the next task, the evaluator's qualifications are verified, task
 
 Submitting an evaluation includes validation, checking completion time (excessively fast completion is rejected), and verifying attention checks with possible evaluator blocking upon systematic failures.
 
-Result analysis aggregates evaluations by task. For numerical ratings, the mean, median, and standard deviation are computed. For pairwise comparisons — majority voting with confidence as the proportion of votes for the winner.
+Result analysis aggregates evaluations by task. For numerical ratings, the mean, median, and standard deviation are computed. For pairwise comparisons: majority voting with confidence as the proportion of votes for the winner.
 
-Inter-annotator agreement is computed via Krippendorff's alpha: observed disagreement and expected disagreement are calculated, alpha = 1 - observed/expected. Interpretation: >=0.8 — strong agreement, >=0.6 — moderate, >=0.4 — fair, otherwise poor.
+Inter-annotator agreement is computed via Krippendorff's alpha: observed disagreement and expected disagreement are calculated, alpha = 1 - observed/expected. Interpretation: >=0.8: strong agreement, >=0.6: moderate, >=0.4, fair, otherwise poor.
 
-The pairwise comparison system implements Elo rating. When creating a pair, the order is randomized to eliminate positional bias. When recording a result, the order is restored, and Elo ratings are updated using the formula: new rating = old + K × (actual outcome - expected outcome). The expected outcome is computed via the formula 1 / (1 + 10^((opponent_rating - own_rating)/400)).
+The pairwise comparison system implements Elo rating. When creating a pair, the order is randomized to eliminate positional bias. When recording a result, the order is restored, and Elo ratings are updated using the formula: new rating = old + K x (actual outcome - expected outcome). The expected outcome is computed via the formula 1 / (1 + 10^((opponent_rating - own_rating)/400)).
 
-Statistical significance is verified through a binomial test on direct comparisons between systems. With fewer than 10 direct matches — insufficient data. A p-value < 0.05 is considered significant.
+Statistical significance is verified through a binomial test on direct comparisons between systems. With fewer than 10 direct matches: insufficient data. A p-value < 0.05 is considered significant.
 
 ## Key Takeaways
 
@@ -156,4 +156,4 @@ Statistical significance is verified through a binomial test on direct compariso
 
 - **Crowdsourcing scales human evaluation but requires strict quality control.** Attention checks, gold standard questions, minimum time thresholds, and 3-5x redundancy produce crowd annotations that agree with experts 85-90% of the time.
 
-- **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality — randomization, session limits, and calibration examples are essential countermeasures.
+- **Bias is systematic and must be actively mitigated.** Anchoring, length bias, positional bias, and fatigue effects all degrade evaluation quality: randomization, session limits, and calibration examples are essential countermeasures.

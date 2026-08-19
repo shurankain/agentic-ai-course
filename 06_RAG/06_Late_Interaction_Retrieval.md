@@ -10,7 +10,7 @@ When an entire document is compressed into a single fixed-dimension vector (typi
 
 | Problem | Description | Consequences |
 |---------|-------------|--------------|
-| Information Loss | Long document → one vector | Details and nuances are lost |
+| Information Loss | Long document to one vector | Details and nuances are lost |
 | Semantic Averaging | Different topics get averaged | Precision decreases |
 | Query Mismatch | Different parts of the query are ignored | Relevant documents are missed |
 | Long Documents | Especially critical for >512 tokens | Late chunking partially addresses this |
@@ -30,7 +30,7 @@ A document contains information about Python, JavaScript, and Rust. With single 
 
 ### The Multi-Vector Representation Idea
 
-Instead of a single vector, multiple vectors are created — one per token (or group of tokens). This preserves fine-grained semantic information that would otherwise be averaged away in a single-vector representation. The key architectural difference lies in both how text is represented and how query-document similarity is computed.
+Instead of a single vector, multiple vectors are created: one per token (or group of tokens). This preserves fine-grained semantic information that would otherwise be averaged away in a single-vector representation. The key architectural difference lies in both how text is represented and how query-document similarity is computed.
 
 | Approach | Representation | Interaction |
 |----------|----------------|-------------|
@@ -39,9 +39,9 @@ Instead of a single vector, multiple vectors are created — one per token (or g
 
 ### Why "Late"?
 
-- **Early Interaction** (Cross-Encoder): query and document are processed together through a transformer — accurate but slow (O(n²))
-- **No Interaction** (Bi-Encoder): separate embeddings, only cosine similarity — fast but loses nuances
-- **Late Interaction**: separate embeddings but sophisticated interaction via MaxSim — a balance of speed and quality
+- **Early Interaction** (Cross-Encoder): query and document are processed together through a transformer: accurate but slow (O(n²))
+- **No Interaction** (Bi-Encoder): separate embeddings, only cosine similarity, fast but loses nuances
+- **Late Interaction**: separate embeddings but sophisticated interaction via MaxSim: a balance of speed and quality
 
 ---
 
@@ -53,8 +53,8 @@ Instead of a single vector, multiple vectors are created — one per token (or g
 
 For each query token, the most similar document token is found:
 
-1. Query tokens: q₁, q₂, ..., qₘ (each is a vector)
-2. Document tokens: d₁, d₂, ..., dₙ (each is a vector)
+1. Query tokens: q₁, q₂,..., qₘ (each is a vector)
+2. Document tokens: d₁, d₂,..., dₙ (each is a vector)
 3. For each qᵢ, find max(sim(qᵢ, dⱼ)) across all j
 4. Score = sum of all maximums
 
@@ -244,31 +244,31 @@ For documents with visual content:
 
 ## Related Topics
 
-- Retrieval Methods — basic search approaches
-- Advanced RAG — taxonomy of RAG architectures
-- Embeddings and Vector Stores — vector storage
-- Module 11, RAG Evaluation — retrieval quality metrics
+- Retrieval Methods: basic search approaches
+- Advanced RAG, taxonomy of RAG architectures
+- Embeddings and Vector Stores, vector storage
+- Module 11, RAG Evaluation: retrieval quality metrics
 
 ---
 
 ## Key Takeaways
 
-1. **Single Vector Bottleneck** — a single vector loses information, especially for long documents
+1. **Single Vector Bottleneck**: a single vector loses information, especially for long documents
 
 2. **Late Interaction solves this** through multi-vector representation and the MaxSim operator
 
 3. **SOTA models:**
-   - ColBERTv2 — balanced production choice
-   - Jina-ColBERT-v2 — 89 languages, long context
-   - GTE-ModernColBERT — best on BEIR
-   - ColPali/ColQwen — PDF as image
+   - ColBERTv2: balanced production choice
+   - Jina-ColBERT-v2: 89 languages, long context
+   - GTE-ModernColBERT: best on BEIR
+   - ColPali/ColQwen: PDF as image
 
 4. **When to use Late Interaction:**
    - High-precision requirements
    - Complex documents
    - Resources available for multi-vector storage
 
-5. **Production pattern:** Dense retrieval (recall) → Late Interaction (precision)
+5. **Production pattern:** Dense retrieval (recall) to Late Interaction (precision)
 
 ---
 
@@ -278,7 +278,7 @@ For documents with visual content:
 
 To work with ColBERT through the PyLate library, you need to import the models and rank modules. The process begins with loading a pretrained ColBERT model, for example "colbert-ir/colbertv2.0" from Hugging Face Hub, which is initialized via the models.ColBERT constructor with the model identifier.
 
-A list of documents is prepared for indexing — these can be strings of various content, such as text about the Python and Rust programming languages. Document encoding is performed using the encode method with the mandatory parameter is_query=False, which signals the model to use document processing mode. The batch_size parameter controls the batch size when processing multiple documents; for example, a value of 32 allows processing 32 documents simultaneously for faster throughput.
+A list of documents is prepared for indexing. These can be strings of various content, such as text about the Python and Rust programming languages. Document encoding is performed using the encode method with the mandatory parameter is_query=False, which signals the model to use document processing mode. The batch_size parameter controls the batch size when processing multiple documents; for example, a value of 32 allows processing 32 documents simultaneously for faster throughput.
 
 The result of document encoding is a multi-vector representation where each document is represented not by a single vector but by a set of vectors (one per token). Similarly, the query is encoded using the encode method but with is_query=True, which switches the model to query processing mode. The query is also transformed into a set of token embeddings.
 
@@ -290,7 +290,7 @@ The final step is computing scores via the rank.colbert_score function, which ta
 
 **ColPali for PDF documents:** The model processes PDF pages as images via `ColPali.from_pretrained("vidore/colpali-v1.2")`. The process involves loading a page image, obtaining visual embeddings through `process_images()`, encoding the text query through `process_queries()`, and computing MaxSim between the text query and visual document patches. This completely eliminates the need for OCR and preserves visual information.
 
-**Hybrid Retrieval pattern:** The two-stage architecture starts with fast dense retrieval to obtain 100-1000 candidates from a vector store (using a standard model like `all-MiniLM-L6-v2`). These candidates are then reranked through a ColBERT model to produce precise top-K results. The first stage ensures high recall, the second — high precision.
+**Hybrid Retrieval pattern:** The two-stage architecture starts with fast dense retrieval to obtain 100-1000 candidates from a vector store (using a standard model like `all-MiniLM-L6-v2`). These candidates are then reranked through a ColBERT model to produce precise top-K results. The first stage ensures high recall, the second, high precision.
 
 **Visual Document Store:** For PDF indexing, a dictionary is created where the key is `{pdf_path}:page_{i}` and the value is the multi-vector embeddings of the page. Each page is converted to an image, processed through ColPali, and the embeddings are stored. During search, the text query is encoded, a score is computed with each page via MaxSim, and results are sorted by relevance.
 

@@ -6,11 +6,11 @@ If an AI agent is an autonomous system capable of solving tasks, then the agent 
 
 Choosing an architecture is more than a technical decision. It determines how the agent will interact with the world: will it impulsively react to every stimulus or carefully plan its actions? Will it learn from its mistakes or forget them immediately? Will it consider alternative paths or follow a single trajectory?
 
-This chapter covers the evolution of AI agent architectures — from simple reactive systems to complex cognitive architectures inspired by human reasoning.
+This chapter covers the evolution of AI agent architectures: from simple reactive systems to complex cognitive architectures inspired by human reasoning.
 
-Simon Willison's definition has become the industry standard for its precision: **"An LLM agent runs tools in a loop to achieve a goal."** LLM, tools, loop, goal — everything else is implementation detail. The architectures below are different strategies for how that loop operates.
+Simon Willison's definition has become the industry standard for its precision: **"An LLM agent runs tools in a loop to achieve a goal."** LLM, tools, loop, goal. Everything else is implementation detail. The architectures below are different strategies for how that loop operates.
 
-A useful framing for why these architectures matter comes from Karpathy's **Software 1.0 / 2.0 / 3.0** taxonomy (2026): Software 1.0 is code written by humans. Software 2.0 is neural network weights — trained, not written. Software 3.0 is agent-orchestrated software — assembled by agents under human direction. Agent architectures are the engineering discipline of Software 3.0: they determine how agents plan, reason, and act when assembling solutions.
+A useful framing for why these architectures matter comes from Karpathy's **Software 1.0 / 2.0 / 3.0** taxonomy (2026): Software 1.0 is code written by humans. Software 2.0 is neural network weights: trained, not written. Software 3.0 is agent-orchestrated software: assembled by agents under human direction. Agent architectures are the engineering discipline of Software 3.0: they determine how agents plan, reason, and act when assembling solutions.
 
 ---
 
@@ -41,17 +41,17 @@ These four properties help assess the "agentness" of a system: the more properti
 
 In 2024, Andrew Ng (founder of DeepLearning.AI, co-founder of Google Brain) proposed a practical taxonomy of four key agentic design patterns:
 
-**1. REFLECTION** — the agent evaluates and improves its own results. This is a self-criticism pattern: after generating a response, the agent analyzes its quality, identifies weaknesses, and iteratively improves it. Includes quality checks, output validation, and gradual solution refinement.
+**1. REFLECTION**: the agent evaluates and improves its own results. This is a self-criticism pattern: after generating a response, the agent analyzes its quality, identifies weaknesses, and iteratively improves it. Includes quality checks, output validation, and gradual solution refinement.
 
-**2. TOOL USE** — the agent extends its capabilities through external tools. Instead of relying solely on its own knowledge, the agent delegates tasks to specialized systems: makes API calls to retrieve data, executes code for computations, queries databases for precise information.
+**2. TOOL USE**: the agent extends its capabilities through external tools. Instead of relying solely on its own knowledge, the agent delegates tasks to specialized systems: makes API calls to retrieve data, executes code for computations, queries databases for precise information.
 
-**3. PLANNING** — the agent breaks complex tasks into manageable subtasks. Instead of trying to solve everything at once, the agent formulates a strategy, decomposes the problem into a sequence of steps, and manages progress toward intermediate goals.
+**3. PLANNING**: the agent breaks complex tasks into manageable subtasks. Instead of trying to solve everything at once, the agent formulates a strategy, decomposes the problem into a sequence of steps, and manages progress toward intermediate goals.
 
-**4. MULTI-AGENT** — multiple agents collaborate to solve a task. Each agent has a specialized role, agents can debate to reach consensus, and they divide work according to their competencies.
+**4. MULTI-AGENT**: multiple agents collaborate to solve a task. Each agent has a specialized role, agents can debate to reach consensus, and they divide work according to their competencies.
 
 **Applying the patterns:**
 
-These patterns are not mutually exclusive — production agents typically combine several of them. For example, a RAG agent uses Tool Use for retrieval plus possibly Reflection for relevance assessment. A coding agent combines Planning for decomposition, Tool Use for code execution, and Reflection for test verification. A research agent combines Planning, Tool Use for search, and a Multi-agent approach with different specializations.
+These patterns are not mutually exclusive: production agents typically combine several of them. For example, a RAG agent uses Tool Use for retrieval plus possibly Reflection for relevance assessment. A coding agent combines Planning for decomposition, Tool Use for code execution, and Reflection for test verification. A research agent combines Planning, Tool Use for search, and a Multi-agent approach with different specializations.
 
 ### Validated Academic Patterns
 
@@ -73,19 +73,19 @@ Each of these patterns is examined in detail below.
 
 ### Philosophy
 
-ReAct (Reasoning + Acting) is an architecture that unifies two fundamental cognitive processes: reasoning and acting. The name reflects the key idea: the agent does not simply act — it thinks aloud, explaining its logic before each step.
+ReAct (Reasoning + Acting) is an architecture that unifies two fundamental cognitive processes: reasoning and acting. The name reflects the key idea: the agent does not simply act, it thinks aloud, explaining its logic before each step.
 
-Consider a detective investigating a case. They do not silently collect evidence — they verbalize their reasoning: "Interesting, a red hair was found at the crime scene. I need to check which suspects have red hair." Then they take action — checking the suspects. Upon receiving a result, they reason again: "Two of them have red hair. Now I need to establish each one's alibi."
+Consider a detective investigating a case. They do not silently collect evidence: they verbalize their reasoning: "Interesting, a red hair was found at the crime scene. I need to check which suspects have red hair." Then they take action, checking the suspects. Upon receiving a result, they reason again: "Two of them have red hair. Now I need to establish each one's alibi."
 
 A ReAct agent works the same way. Each cycle of its operation consists of three phases: Thought (reasoning), Action (acting), and Observation (observing the result). This structure makes the decision-making process transparent and debuggable.
 
 ### Anatomy of the ReAct Cycle
 
-The ReAct cycle begins with reasoning. The agent analyzes the current situation and articulates what it needs to do and why. This is not decoration — reasoning helps the model focus on the correct next step and avoid impulsive decisions.
+The ReAct cycle begins with reasoning. The agent analyzes the current situation and articulates what it needs to do and why. This is not decoration, reasoning helps the model focus on the correct next step and avoid impulsive decisions.
 
-After reasoning, the agent selects an action from the available set of tools. It specifies the tool name and parameters for the call. The action choice logically follows from the preceding reasoning — it is not a random selection but a justified decision.
+After reasoning, the agent selects an action from the available set of tools. It specifies the tool name and parameters for the call. The action choice logically follows from the preceding reasoning: it is not a random selection but a justified decision.
 
-After executing the action, the agent receives an observation — the tool's output. This could be a search engine response, a computation result, file contents, or any other information. The observation becomes input for the next reasoning step.
+After executing the action, the agent receives an observation: the tool's output. This could be a search engine response, a computation result, file contents, or any other information. The observation becomes input for the next reasoning step.
 
 The cycle repeats until the agent reaches a final answer or exhausts the iteration limit.
 
@@ -93,7 +93,7 @@ The cycle repeats until the agent reaches a final answer or exhausts the iterati
 
 The main advantage of ReAct is **reasoning transparency**. A developer can inspect at any point what the agent was thinking and why it made a particular decision. This is invaluable for debugging and understanding system behavior. In production systems, ReAct agent logs enable rapid problem diagnosis and prompt improvement.
 
-ReAct also stands out for its **simplicity of implementation**. No complex planning or memory mechanisms are needed — a well-formulated prompt and an execution loop are sufficient. A minimalist implementation can fit in 50-100 lines of code.
+ReAct also stands out for its **simplicity of implementation**. No complex planning or memory mechanisms are needed: a well-formulated prompt and an execution loop are sufficient. A minimalist implementation can fit in 50-100 lines of code.
 
 **Cost efficiency** is another important advantage. ReAct requires a minimal number of LLM calls: typically 5-10 per task. This makes it accessible even on a limited budget.
 
@@ -101,7 +101,7 @@ The architecture works well for a **broad range of tasks**, especially when a so
 
 ### Limitations of the Architecture
 
-However, ReAct has significant limitations. The agent **cannot plan ahead** — each decision is made based on the current state, without considering a global strategy. This is like a chess player thinking only one move ahead. For tasks requiring multi-step strategies, this is critical.
+However, ReAct has significant limitations. The agent **cannot plan ahead**: each decision is made based on the current state, without considering a global strategy. This is like a chess player thinking only one move ahead. For tasks requiring multi-step strategies, this is critical.
 
 ReAct is **prone to looping**. The agent can endlessly repeat the same actions if it does not get the expected result. It lacks a mechanism for recognizing: "This approach is not working; I need to try something fundamentally different." A practical solution is limiting max_iterations and detecting repeating patterns.
 
@@ -141,23 +141,23 @@ This makes the agent resilient to the unexpected. It does not give up at the fir
 
 **Advantages of Plan-and-Execute:**
 
-**1. Global optimization** — the Planner sees the entire task and can arrange an optimal sequence of steps. This prevents situations where the agent takes a step that later needs to be undone.
+**1. Global optimization**: the Planner sees the entire task and can arrange an optimal sequence of steps. This prevents situations where the agent takes a step that later needs to be undone.
 
-**2. Predictability** — with a plan, it is easier to estimate execution time and required resources. This is critical for production systems where SLA guarantees are needed.
+**2. Predictability**: with a plan, it is easier to estimate execution time and required resources. This is critical for production systems where SLA guarantees are needed.
 
-**3. Parallelization** — if the plan contains independent steps, they can be executed in parallel. ReAct, being strictly sequential, does not offer this possibility.
+**3. Parallelization**: if the plan contains independent steps, they can be executed in parallel. ReAct, being strictly sequential, does not offer this possibility.
 
-**4. Easier debugging** — when something goes wrong, the plan can be analyzed separately from execution. "Was the plan correct? Or was the problem in execution?"
+**4. Easier debugging**: when something goes wrong, the plan can be analyzed separately from execution. "Was the plan correct? Or was the problem in execution?"
 
 **Trade-offs and limitations:**
 
-**1. Planning overhead** — creating a plan requires an additional LLM call, increasing latency and cost. For simple tasks, this overhead may be unjustified.
+**1. Planning overhead**: creating a plan requires an additional LLM call, increasing latency and cost. For simple tasks, this overhead may be unjustified.
 
-**2. Plan fragility** — if the situation changes rapidly, the plan can become stale. Dynamic tasks require frequent replanning, which negates the advantages.
+**2. Plan fragility**: if the situation changes rapidly, the plan can become stale. Dynamic tasks require frequent replanning, which negates the advantages.
 
-**3. Implementation complexity** — two components (planner and executor) must be implemented instead of one, their interaction configured, and replanning scenarios handled.
+**3. Implementation complexity**: two components (planner and executor) must be implemented instead of one, their interaction configured, and replanning scenarios handled.
 
-**4. Over-planning risk** — sometimes the agent spends too much effort creating a perfect plan for a simple task where ReAct would have been faster.
+**4. Over-planning risk**: sometimes the agent spends too much effort creating a perfect plan for a simple task where ReAct would have been faster.
 
 ---
 
@@ -165,7 +165,7 @@ This makes the agent resilient to the unexpected. It does not give up at the fir
 
 ### Philosophy
 
-Reflexion adds a capability to the agent that distinguishes experts from novices — the ability to learn from mistakes. This is not simply retrying — it is deep analysis of what went wrong and how to fix it.
+Reflexion adds a capability to the agent that distinguishes experts from novices: the ability to learn from mistakes. This is not simply retrying. It is deep analysis of what went wrong and how to fix it.
 
 Consider a student preparing for an exam. An inexperienced student who receives a poor grade simply rereads the textbook. An experienced student analyzes their mistakes: "I did not understand topic X, confused concepts Y and Z, did not spend enough time on practice." This analysis guides further preparation.
 
@@ -175,7 +175,7 @@ A Reflexion agent works similarly. After each attempt to solve a task, it evalua
 
 The Reflexion architecture includes three interacting components: Actor, Evaluator, and Reflector.
 
-The Actor executes the task using available tools. This can be any base architecture — ReAct, a simple agent, or even a program.
+The Actor executes the task using available tools. This can be any base architecture: ReAct, a simple agent, or even a program.
 
 The Evaluator assesses the Actor's output. The assessment can be binary (success/failure), numeric (completion percentage), or textual (detailed analysis). The Evaluator answers the question: "How well was the task performed?"
 
@@ -183,7 +183,7 @@ The Reflector analyzes failed attempts. It looks for root causes of errors, form
 
 ### Memory as a Key Element
 
-Unlike ReAct and Plan-and-Execute, Reflexion necessarily uses memory. Without memory, reflection is meaningless — lessons must be stored somewhere.
+Unlike ReAct and Plan-and-Execute, Reflexion necessarily uses memory. Without memory, reflection is meaningless: lessons must be stored somewhere.
 
 Reflexion memory stores not raw data but high-level insights: "When working with API X, the request rate limit must be considered," "Tasks of type Y are better decomposed into subtasks," "Tool Z often fails on large inputs."
 
@@ -193,15 +193,15 @@ Before each new attempt, the agent retrieves relevant lessons from memory and us
 
 Reflexion delivers the best results in specific scenarios:
 
-**1. Tasks with clear success criteria** — unit tests for code, correct answers in math, compliance with a specification. The Evaluator can objectively determine success or failure.
+**1. Tasks with clear success criteria**: unit tests for code, correct answers in math, compliance with a specification. The Evaluator can objectively determine success or failure.
 
-**2. Iterative tasks** — where multiple attempts are possible and acceptable. Producing ideal code, writing high-quality text, optimizing a solution. One attempt may be insufficient, but there is an opportunity to improve.
+**2. Iterative tasks**: where multiple attempts are possible and acceptable. Producing ideal code, writing high-quality text, optimizing a solution. One attempt may be insufficient, but there is an opportunity to improve.
 
-**3. Informative errors** — when failure contains useful information. For example, a traceback on an exception points to a specific line. Or tests reveal which edge cases were not handled. Uninformative errors ("something went wrong") provide no material for reflection.
+**3. Informative errors**: when failure contains useful information. For example, a traceback on an exception points to a specific line. Or tests reveal which edge cases were not handled. Uninformative errors ("something went wrong") provide no material for reflection.
 
-**4. Patterns of success and failure** — tasks where there are recurring types of errors and successful strategies. Debugging often falls into the same categories of problems. API integration has typical error patterns (rate limits, authentication, malformed requests).
+**4. Patterns of success and failure**: tasks where there are recurring types of errors and successful strategies. Debugging often falls into the same categories of problems. API integration has typical error patterns (rate limits, authentication, malformed requests).
 
-**5. Long-term application** — if the agent solves many similar tasks, accumulated reflections pay off. For one-off tasks, the Reflexion overhead may be unjustified.
+**5. Long-term application**: if the agent solves many similar tasks, accumulated reflections pay off. For one-off tasks, the Reflexion overhead may be unjustified.
 
 **Typical use cases:**
 - Code generation with automated tests
@@ -214,17 +214,17 @@ Reflexion delivers the best results in specific scenarios:
 
 Reflexion is not just an architectural pattern but an implementation of **meta-learning** (learning to learn) in the context of LLM agents.
 
-**What is Meta-Learning:** In traditional machine learning, a model learns to solve a specific task. In meta-learning, the model learns **how to learn** — it acquires the ability to quickly adapt to new tasks.
+**What is Meta-Learning:** In traditional machine learning, a model learns to solve a specific task. In meta-learning, the model learns **how to learn**, it acquires the ability to quickly adapt to new tasks.
 
 **Reflexion as Meta-Learning** achieves this through three mechanisms:
 
-**1. Learning from Self-Generated Experience** — the agent generates a training signal from its own experience, without labeled data from experts. After a failure, it analyzes: "Why did I fail? What did I learn?" These insights become meta-knowledge: "For tasks of type X, approach Y works better than Z."
+**1. Learning from Self-Generated Experience**: the agent generates a training signal from its own experience, without labeled data from experts. After a failure, it analyzes: "Why did I fail? What did I learn?" These insights become meta-knowledge: "For tasks of type X, approach Y works better than Z."
 
-**2. Fast Adaptation (Few-Shot Learning)** — after accumulating reflections, the agent shows rapid improvement on similar tasks. Without reflections, each new task requires the same number of attempts. With Reflexion, the number of attempts drops sharply for familiar task types.
+**2. Fast Adaptation (Few-Shot Learning)**: after accumulating reflections, the agent shows rapid improvement on similar tasks. Without reflections, each new task requires the same number of attempts. With Reflexion, the number of attempts drops sharply for familiar task types.
 
-**3. Episodic Memory as Meta-Knowledge** — memory stores not specific solutions ("the answer to task X is 42") but generalized lessons ("recursive tasks benefit from memoization," "on API timeout use exponential backoff").
+**3. Episodic Memory as Meta-Knowledge**: memory stores not specific solutions ("the answer to task X is 42") but generalized lessons ("recursive tasks benefit from memoization," "on API timeout use exponential backoff").
 
-**Formal connection to MAML:** Model-Agnostic Meta-Learning finds parameter initializations for fast adaptation. Reflexion achieves a similar effect **without modifying model weights**, using prompt conditioning — this is a form of **in-context meta-learning**.
+**Formal connection to MAML:** Model-Agnostic Meta-Learning finds parameter initializations for fast adaptation. Reflexion achieves a similar effect **without modifying model weights**, using prompt conditioning. This is a form of **in-context meta-learning**.
 
 **Practical implications:**
 1. **Transfer learning**: reflections from one task type improve performance on similar ones
@@ -241,17 +241,17 @@ LATS (Language Agent Tree Search) combines language agents with classical search
 
 Consider a chess grandmaster. They do not simply make the first move that looks good. They mentally play through multiple variations: "If I move here, the opponent might respond this way or that way. In the first case I'll have an advantage; in the second, I'll lose."
 
-LATS applies this idea to AI agents. The agent generates several possible actions, evaluates each one, and selects the most promising. But it does not discard alternatives entirely — if the chosen path turns out to be a dead end, it can backtrack and try another.
+LATS applies this idea to AI agents. The agent generates several possible actions, evaluates each one, and selects the most promising. But it does not discard alternatives entirely: if the chosen path turns out to be a dead end, it can backtrack and try another.
 
 ### Tree-Based Search Structure
 
 LATS represents the solution process as a tree. The root is the initial state (the task). Each node is a state after some sequence of actions. Edges are actions that transition from one state to another.
 
-Search begins at the root. The agent generates several possible actions from the current state — this is called "expanding" a node. Each action creates a new child node.
+Search begins at the root. The agent generates several possible actions from the current state. This is called "expanding" a node. Each action creates a new child node.
 
-The agent then evaluates each new node: how close is this state to the goal? This is "simulation" — predicting the success of the path.
+The agent then evaluates each new node: how close is this state to the goal? This is "simulation", predicting the success of the path.
 
-Evaluations propagate up the tree — "backpropagation." Nodes leading to good results receive high scores. Nodes leading to dead ends receive low scores.
+Evaluations propagate up the tree: "backpropagation." Nodes leading to good results receive high scores. Nodes leading to dead ends receive low scores.
 
 On the next iteration, the agent selects the node with the best score for expansion. Gradually, a tree is built where more attention is given to promising directions.
 
@@ -259,7 +259,7 @@ On the next iteration, the agent selects the node with the best score for expans
 
 The key problem in search is balancing exploration and exploitation. Exploration means trying new, unknown paths. Exploitation means deepening into already known good paths.
 
-Too much exploration — the agent wastes resources on unpromising directions. Too much exploitation — the agent can get stuck in a local optimum, missing a better solution.
+Too much exploration: the agent wastes resources on unpromising directions. Too much exploitation: the agent can get stuck in a local optimum, missing a better solution.
 
 LATS uses the UCB (Upper Confidence Bound) formula for balancing. This formula considers both the node's score and the number of times it has been visited. Rarely visited nodes receive a "curiosity bonus" that encourages the agent to explore them.
 
@@ -269,21 +269,21 @@ A **rollout** in LATS is a way to assess how promising a tree node is by "lookin
 
 **Three main rollout approaches:**
 
-**1. Random Rollout (Monte Carlo)** — the simplest approach where random actions are taken from the current node to a terminal state. Fast, but has high variance. Suitable when the number of actions is small and the state space is limited.
+**1. Random Rollout (Monte Carlo)**: the simplest approach where random actions are taken from the current node to a terminal state. Fast, but has high variance. Suitable when the number of actions is small and the state space is limited.
 
-**2. LLM-guided Rollout** — using a language model for intelligent trajectory completion. The model generates a plausible continuation from the current state to the final answer. Produces more realistic estimates, but each rollout requires an expensive LLM call.
+**2. LLM-guided Rollout**: using a language model for intelligent trajectory completion. The model generates a plausible continuation from the current state to the final answer. Produces more realistic estimates, but each rollout requires an expensive LLM call.
 
-**3. Truncated Rollout with Value Function** — a hybrid approach: a short rollout of a few steps plus state evaluation via a value function. Balances accuracy and speed. This is the standard approach in AlphaGo and similar systems.
+**3. Truncated Rollout with Value Function**: a hybrid approach: a short rollout of a few steps plus state evaluation via a value function. Balances accuracy and speed. This is the standard approach in AlphaGo and similar systems.
 
 ### Value Function: State Evaluation
 
-The value function V(s) estimates the "value" of a state — the expected reward from that state to the end of the task. In the context of LLM agents, the value function can be implemented in three ways:
+The value function V(s) estimates the "value" of a state: the expected reward from that state to the end of the task. In the context of LLM agents, the value function can be implemented in three ways:
 
-**1. LLM as critic** — the model evaluates the current state on a 0-1 scale, estimating the probability of reaching the correct solution. Flexible, but requires an additional LLM call per evaluation.
+**1. LLM as critic**: the model evaluates the current state on a 0-1 scale, estimating the probability of reaching the correct solution. Flexible, but requires an additional LLM call per evaluation.
 
-**2. Reward Model** — if a trained reward model is available (e.g., from RLHF), it is used to directly predict state value. Fast and accurate, but requires prior training.
+**2. Reward Model**: if a trained reward model is available (e.g., from RLHF), it is used to directly predict state value. Fast and accurate, but requires prior training.
 
-**3. Heuristic Rules** — a set of heuristics for rapid evaluation: are there progress indicators, are there obvious errors, is the solution approaching a final answer. The fastest approach, but requires domain knowledge to develop good heuristics.
+**3. Heuristic Rules**: a set of heuristics for rapid evaluation: are there progress indicators, are there obvious errors, is the solution approaching a final answer. The fastest approach, but requires domain knowledge to develop good heuristics.
 
 ### Computational Cost and Applicability
 
@@ -304,7 +304,7 @@ LATS is the most computationally expensive of the architectures discussed. Each 
 
 ### From Chain-of-Thought to Tree-of-Thought
 
-Chain-of-Thought (CoT) was a breakthrough in LLM reasoning — the model "thinks aloud," sequentially building a logical chain to the answer. But linear chains have a fundamental flaw: a single error in the middle of the reasoning corrupts the entire result. There is no way to go back and try an alternative path.
+Chain-of-Thought (CoT) was a breakthrough in LLM reasoning, the model "thinks aloud," sequentially building a logical chain to the answer. But linear chains have a fundamental flaw: a single error in the middle of the reasoning corrupts the entire result. There is no way to go back and try an alternative path.
 
 Tree-of-Thought (ToT) overcomes this limitation by turning the linear chain into a tree. Instead of a single reasoning path, the agent explores multiple branches, evaluates each, and deepens into the most promising ones.
 
@@ -314,13 +314,13 @@ Consider a mathematician solving a complex problem. They do not write a single s
 
 ToT consists of four components.
 
-**Decomposition** — breaking the problem into intermediate thoughts. Each thought is a reasoning step small enough to be evaluated and significant enough to make progress toward a solution.
+**Decomposition**: breaking the problem into intermediate thoughts. Each thought is a reasoning step small enough to be evaluated and significant enough to make progress toward a solution.
 
-**Generation** — generating possible continuations for the current node. The model proposes several alternative next steps. This can be sampling (generating multiple variants) or propose (explicitly requesting variants).
+**Generation**: generating possible continuations for the current node. The model proposes several alternative next steps. This can be sampling (generating multiple variants) or propose (explicitly requesting variants).
 
-**Evaluation** — assessing the quality of each step. The model acts as a critic of its own ideas, determining which branches are promising and which lead to dead ends. The evaluation can be numeric (probability of success) or categorical (sure/maybe/impossible).
+**Evaluation**: assessing the quality of each step. The model acts as a critic of its own ideas, determining which branches are promising and which lead to dead ends. The evaluation can be numeric (probability of success) or categorical (sure/maybe/impossible).
 
-**Search** — the tree traversal algorithm. Classical strategies apply here: BFS (breadth-first search) or DFS (depth-first search).
+**Search**: the tree traversal algorithm. Classical strategies apply here: BFS (breadth-first search) or DFS (depth-first search).
 
 ### BFS vs DFS: Exploration Strategies
 
@@ -354,21 +354,21 @@ The choice of search strategy critically affects ToT efficiency. Each strategy h
 
 **When to use DFS:** solutions are deep, memory is limited, any valid solution is sufficient.
 
-**Beam Search** — a practical trade-off that retains the k best nodes at each level (typically k=3-5). This limits the breadth of exploration, making the search manageable. Beam search is the standard choice for most production ToT systems.
+**Beam Search**: a practical trade-off that retains the k best nodes at each level (typically k=3-5). This limits the breadth of exploration, making the search manageable. Beam search is the standard choice for most production ToT systems.
 
 ### Monte Carlo Tree Search and LLMs
 
-MCTS (Monte Carlo Tree Search) — the algorithm that gained fame in AlphaGo — also finds application in LLM agents. MCTS adds statistical sampling and exploration/exploitation balancing to tree search.
+MCTS (Monte Carlo Tree Search): the algorithm that gained fame in AlphaGo: also finds application in LLM agents. MCTS adds statistical sampling and exploration/exploitation balancing to tree search.
 
 The MCTS cycle consists of four phases:
 
-**Selection** — descending the tree from root to leaf using UCB (Upper Confidence Bound) for node selection. UCB balances exploitation (selecting nodes with high scores) and exploration (selecting rarely visited nodes).
+**Selection**: descending the tree from root to leaf using UCB (Upper Confidence Bound) for node selection. UCB balances exploitation (selecting nodes with high scores) and exploration (selecting rarely visited nodes).
 
-**Expansion** — adding new child nodes to the selected leaf. Each node is a potential action or thought.
+**Expansion**: adding new child nodes to the selected leaf. Each node is a potential action or thought.
 
-**Simulation** — a "rollout" from the new node to a terminal state. In the LLM context, this can be a quick completion of reasoning to a final answer.
+**Simulation**: a "rollout" from the new node to a terminal state. In the LLM context, this can be a quick completion of reasoning to a final answer.
 
-**Backpropagation** — updating the statistics of all nodes on the path from leaf to root. If the rollout led to success, all nodes along the path receive a bonus.
+**Backpropagation**: updating the statistics of all nodes on the path from leaf to root. If the rollout led to success, all nodes along the path receive a bonus.
 
 UCB formula for node selection:
 
@@ -376,35 +376,35 @@ $$UCB(i) = \frac{Q(i)}{N(i)} + c \cdot \sqrt{\frac{\ln N(parent)}{N(i)}}$$
 
 Where Q(i) is the cumulative reward of the node, N(i) is the visit count, c is the exploration coefficient. The first term is exploitation (selecting successful nodes); the second is exploration (giving a chance to under-explored nodes).
 
-MCTS is particularly effective for tasks with large solution spaces and delayed reward — when reasoning quality can only be evaluated at the end.
+MCTS is particularly effective for tasks with large solution spaces and delayed reward, when reasoning quality can only be evaluated at the end.
 
 ### Graph-of-Thought (GoT)
 
 Tree-of-Thought constrains reasoning to a tree structure: each node has exactly one parent. **Graph-of-Thought** (Besta et al., AAAI 2024) removes this constraint, allowing arbitrary graph structures where nodes can have multiple parents and multiple children.
 
-The key capability this unlocks is **merging** — combining partial solutions from different branches into a single refined solution. In ToT, if two branches each discover useful partial insights, those insights remain isolated in separate branches. In GoT, a new node can aggregate the best aspects of both branches.
+The key capability this unlocks is **merging**, combining partial solutions from different branches into a single refined solution. In ToT, if two branches each discover useful partial insights, those insights remain isolated in separate branches. In GoT, a new node can aggregate the best aspects of both branches.
 
 GoT defines three transformation types:
-- **Generation** — create new thoughts from existing ones (same as ToT expansion)
-- **Aggregation** — merge multiple thoughts into one (the novel capability)
-- **Refinement** — improve a single thought through iteration
+- **Generation**: create new thoughts from existing ones (same as ToT expansion)
+- **Aggregation**: merge multiple thoughts into one (the novel capability)
+- **Refinement**: improve a single thought through iteration
 
 **Results:** On sorting and set intersection tasks, GoT achieved 62% quality improvement over ToT with a 31% cost reduction through reuse of intermediate reasoning.
 
-**Trade-off:** GoT requires explicit graph management — the orchestrator must decide when to merge branches and how to handle conflicting partial solutions. This adds complexity compared to the natural tree structure of ToT. GoT is most useful when the solution structure is known in advance (e.g., "we need to combine information from sources A, B, and C") and less useful for open-ended exploration where the optimal structure is unknown.
+**Trade-off:** GoT requires explicit graph management: the orchestrator must decide when to merge branches and how to handle conflicting partial solutions. This adds complexity compared to the natural tree structure of ToT. GoT is most useful when the solution structure is known in advance (e.g., "we need to combine information from sources A, B, and C") and less useful for open-ended exploration where the optimal structure is unknown.
 
 ### ReWOO: Reasoning Without Observation
 
 Most agent architectures (ReAct, Plan-and-Execute, LATS) interleave reasoning with tool execution: the agent reasons, calls a tool, observes the result, reasons again. ReWOO (Xu et al., 2023) takes a radically different approach: **generate the entire plan and all tool calls upfront, then execute all of them without re-calling the LLM.**
 
 The architecture has three components:
-1. **Planner** — generates the full plan with all tool calls in a single LLM pass
-2. **Worker** — executes all planned tool calls sequentially (no LLM involved)
-3. **Solver** — takes the original query, the plan, and all tool results, and generates the final answer in one LLM pass
+1. **Planner**: generates the full plan with all tool calls in a single LLM pass
+2. **Worker**: executes all planned tool calls sequentially (no LLM involved)
+3. **Solver**: takes the original query, the plan, and all tool results, and generates the final answer in one LLM pass
 
 **Token efficiency:** ReWOO uses approximately 5x fewer tokens than ReAct on the same tasks, because intermediate observations are not fed back into the LLM's context. In ReAct, each tool result is added to the growing prompt; in ReWOO, results are consumed only once at the end. ReWOO also showed 4% accuracy improvement on HotpotQA.
 
-**Trade-off:** ReWOO is fragile when later steps depend on earlier results. If step 3 needs the output of step 1 to formulate its query, ReWOO cannot adapt — the plan was generated before any execution. This makes ReWOO best suited for queries where the plan is predictable: parallel data lookups, information gathering from known sources, batch tool calls where the inputs are all derivable from the original query.
+**Trade-off:** ReWOO is fragile when later steps depend on earlier results. If step 3 needs the output of step 1 to formulate its query, ReWOO cannot adapt: the plan was generated before any execution. This makes ReWOO best suited for queries where the plan is predictable: parallel data lookups, information gathering from known sources, batch tool calls where the inputs are all derivable from the original query.
 
 **When to choose ReWOO over ReAct:** When you need to minimize LLM calls and costs, when tool calls are independent of each other, and when the plan structure is predictable. When to choose ReAct: when tool results inform subsequent decisions, when the plan must adapt to intermediate findings.
 
@@ -413,15 +413,15 @@ The architecture has three components:
 OpenAI's o1 series models demonstrated a paradigm shift: instead of scaling model size, one can scale computation at inference time. The model "thinks longer" on complex questions.
 
 The connection to agent architectures is direct:
-- **Extended thinking** — the model generates internal reasoning before the answer, similar to a "scratchpad" in ReAct
-- **Search and backtracking** — the internal search resembles ToT/MCTS but is built into the generation process itself
-- **Self-correction** — the model corrects errors in its reasoning, like Reflexion
+- **Extended thinking**: the model generates internal reasoning before the answer, similar to a "scratchpad" in ReAct
+- **Search and backtracking**: the internal search resembles ToT/MCTS but is built into the generation process itself
+- **Self-correction**: the model corrects errors in its reasoning, like Reflexion
 
 The o1-style approach blurs the boundary between "prompt engineering" and "architecture design." The ability for deep reasoning becomes a property of the model itself, not an external agent framework.
 
 For practitioners, this means: if the model has built-in reasoning (like o1 or Claude with extended thinking), the agent architecture can be simplified. Complex techniques like ToT may be redundant because the model already does something similar internally.
 
-**How internal search differs from explicit ToT/MCTS:** Explicit ToT explores a tree through multiple separate LLM calls — the orchestrator manages the tree structure externally. Reasoning models perform a similar search within a single generation pass — exploring, backtracking, and evaluating paths as part of their extended token output. This is more token-efficient (one context window vs. many parallel calls) but less controllable (the search process is hidden or semi-transparent).
+**How internal search differs from explicit ToT/MCTS:** Explicit ToT explores a tree through multiple separate LLM calls: the orchestrator manages the tree structure externally. Reasoning models perform a similar search within a single generation pass, exploring, backtracking, and evaluating paths as part of their extended token output. This is more token-efficient (one context window vs. many parallel calls) but less controllable (the search process is hidden or semi-transparent).
 
 **Choosing the right architecture:**
 
@@ -434,7 +434,7 @@ The decision of whether to use a reasoning model's built-in search or an explici
 | Long-running task, many tools, human oversight | Plan-and-Execute | Explicit plan provides checkpointing and auditability |
 | Exploration with verifiable outcomes | Explicit ToT/MCTS + PRM | Full control over search with custom evaluation functions |
 
-**Cost consideration:** A reasoning model may use 5,000–20,000 thinking tokens internally on a complex problem — but this is often cheaper and faster than orchestrating 10–50 separate LLM calls in explicit ToT. The trade-off shifts when you need fine-grained control over the search process or domain-specific evaluation at each step.
+**Cost consideration:** A reasoning model may use 5,000-20,000 thinking tokens internally on a complex problem, but this is often cheaper and faster than orchestrating 10-50 separate LLM calls in explicit ToT. The trade-off shifts when you need fine-grained control over the search process or domain-specific evaluation at each step.
 
 ### Self-Consistency: The Power of Multiple Opinions
 
@@ -453,7 +453,7 @@ An important advantage of Self-Consistency is parallelizability. All k reasoning
 
 ### Integration with Agent Architectures
 
-Advanced reasoning techniques do not exist in isolation — they combine with base architectures.
+Advanced reasoning techniques do not exist in isolation. They combine with base architectures.
 
 **ReAct + Self-Consistency**: execute several independent ReAct trajectories and select the consensus result. Especially useful for tasks with uncertainty.
 
@@ -467,25 +467,25 @@ Practical advice: start simple (ReAct or basic CoT), add Self-Consistency for im
 
 ## The Augmented-LLM Progression (Anthropic, 2024)
 
-Anthropic's "Building Effective Agents" guide introduced the most influential framework for deciding how much complexity an agent system actually needs. The core insight: **"Find the simplest solution. Agentic systems often trade latency and cost for better task performance — and this trade-off is only worth making when simpler approaches are insufficient."**
+Anthropic's "Building Effective Agents" guide introduced the most influential framework for deciding how much complexity an agent system actually needs. The core insight: **"Find the simplest solution. Agentic systems often trade latency and cost for better task performance, and this trade-off is only worth making when simpler approaches are insufficient."**
 
 The progression defines three levels:
 
-**Level 1 — Augmented LLM.** A single model with retrieval (RAG), tools (function calling), and memory. No orchestration framework, no multi-step loops. The model processes the request, optionally calls tools, and returns a response. This handles the majority of production use cases: customer support, document analysis, code generation, data extraction.
+**Level 1: Augmented LLM.** A single model with retrieval (RAG), tools (function calling), and memory. No orchestration framework, no multi-step loops. The model processes the request, optionally calls tools, and returns a response. This handles the majority of production use cases: customer support, document analysis, code generation, data extraction.
 
-**Level 2 — Workflows.** Deterministic orchestration of multiple LLM calls. Prompt chaining (output of one LLM call becomes input to the next), routing (a classifier directs to specialized handlers), parallelization (multiple LLM calls run concurrently on different aspects). The key property: the flow is predictable and testable — a developer designs the graph of operations, and the LLM operates within each node. LangGraph's graph model is the canonical implementation.
+**Level 2: Workflows.** Deterministic orchestration of multiple LLM calls. Prompt chaining (output of one LLM call becomes input to the next), routing (a classifier directs to specialized handlers), parallelization (multiple LLM calls run concurrently on different aspects). The key property: the flow is predictable and testable, a developer designs the graph of operations, and the LLM operates within each node. LangGraph's graph model is the canonical implementation.
 
-**Level 3 — Agents.** An autonomous loop where the LLM itself decides the next action at each step. The system is adaptive — it can change strategy based on intermediate results. But it is also less predictable, more expensive, and harder to debug. Use agents only when the task genuinely requires dynamic decision-making that cannot be encoded in a workflow.
+**Level 3: Agents.** An autonomous loop where the LLM itself decides the next action at each step. The system is adaptive. It can change strategy based on intermediate results. But it is also less predictable, more expensive, and harder to debug. Use agents only when the task genuinely requires dynamic decision-making that cannot be encoded in a workflow.
 
 Most teams that skip to Level 3 prematurely discover that 80% of their use cases could have been solved at Level 1 or 2, at lower cost and with better reliability. Start at the lowest level that works. Escalate only when you have evidence that the current level is insufficient.
 
-**Single agent sufficiency (2026 update):** Reasoning models (o3, o4-mini, Claude with extended thinking) have internalized much of the multi-step reasoning that previously required multi-agent orchestration. Multi-agent systems add approximately **10x cost**, increased latency, and additional failure modes compared to a single agent. The 2026 trend: deterministic orchestration (Level 2 workflows) for control flow, with LLM reasoning for bounded decisions within each step. **Decision rule:** prototype with a single agent using a reasoning model first. Move to multi-agent only when clear capability boundaries justify the cost — for example, when different steps require fundamentally different tool sets, models, or security contexts.
+**Single agent sufficiency (2026 update):** Reasoning models (o3, o4-mini, Claude with extended thinking) have internalized much of the multi-step reasoning that previously required multi-agent orchestration. Multi-agent systems add approximately **10x cost**, increased latency, and additional failure modes compared to a single agent. The 2026 trend: deterministic orchestration (Level 2 workflows) for control flow, with LLM reasoning for bounded decisions within each step. **Decision rule:** prototype with a single agent using a reasoning model first. Move to multi-agent only when clear capability boundaries justify the cost: for example, when different steps require fundamentally different tool sets, models, or security contexts.
 
 ---
 
 ## Agent Loop Essentials
 
-Every agent architecture discussed in this chapter — ReAct, Plan-and-Execute, Reflexion, LATS — shares a common foundation: a loop that calls an LLM, executes actions, and iterates. The patterns below are production-critical for any agent loop, regardless of architecture. They are the difference between a demo and a system that runs reliably in production.
+Every agent architecture discussed in this chapter (ReAct, Plan-and-Execute, Reflexion, LATS) shares a common foundation: a loop that calls an LLM, executes actions, and iterates. The patterns below are production-critical for any agent loop, regardless of architecture. They are the difference between a demo and a system that runs reliably in production.
 
 **How the loop plays out in practice differs by architecture:**
 
@@ -493,11 +493,11 @@ Every agent architecture discussed in this chapter — ReAct, Plan-and-Execute, 
 
 **Plan-and-Execute loop example:** User asks "Compare revenue of Apple and Microsoft for Q3 2025." The planner produces a plan: [1. Search Apple Q3 2025 revenue, 2. Search Microsoft Q3 2025 revenue, 3. Compare figures and format a table]. The executor then works through each step sequentially, passing results forward. The loop is two-phase: one LLM call for planning, then N tool calls for execution, with optional replanning if a step fails.
 
-**Reflexion loop example:** An agent writes a Python function. Unit tests fail on empty input. The reflector analyzes: "The function does not handle the edge case for empty input — it raises an IndexError instead of returning an empty list." The actor revises the code to handle the edge case. Tests pass. The lesson ("always guard for empty collections in list-processing functions") is stored in episodic memory for future tasks.
+**Reflexion loop example:** An agent writes a Python function. Unit tests fail on empty input. The reflector analyzes: "The function does not handle the edge case for empty input: it raises an IndexError instead of returning an empty list." The actor revises the code to handle the edge case. Tests pass. The lesson ("always guard for empty collections in list-processing functions") is stored in episodic memory for future tasks.
 
-The underlying pattern is the same across all architectures — observe, think, act — but the balance between planning depth and execution speed varies. ReAct optimizes for fast iteration with no upfront planning. Plan-and-Execute invests in a plan to reduce wasted iterations. Reflexion invests in post-hoc analysis to improve future iterations. Understanding this shared loop makes it easier to combine architectures: a Plan-and-Execute outer loop with ReAct inner execution and Reflexion meta-learning is a common production pattern.
+The underlying pattern is the same across all architectures (observe, think, act) but the balance between planning depth and execution speed varies. ReAct optimizes for fast iteration with no upfront planning. Plan-and-Execute invests in a plan to reduce wasted iterations. Reflexion invests in post-hoc analysis to improve future iterations. Understanding this shared loop makes it easier to combine architectures: a Plan-and-Execute outer loop with ReAct inner execution and Reflexion meta-learning is a common production pattern.
 
-**Max iterations — enforced in code, not in the prompt.** A prompt instruction like "stop after 10 steps" is not reliable — the model may ignore it. Set a hard iteration cap in the orchestration code: 10-15 iterations for typical tasks, up to 25 for research/exploration. When the limit is hit, the agent reports its intermediate results rather than failing silently.
+**Max iterations: enforced in code, not in the prompt.** A prompt instruction like "stop after 10 steps" is not reliable, the model may ignore it. Set a hard iteration cap in the orchestration code: 10-15 iterations for typical tasks, up to 25 for research/exploration. When the limit is hit, the agent reports its intermediate results rather than failing silently.
 
 **Loop detection.** Track the sequence of (tool, arguments, result) tuples. If the agent calls the same tool with the same arguments three times in a row and gets the same error, it is stuck in a loop. Abort and report the stuck state. Without this, agents can burn through token budgets repeating the same failed action indefinitely.
 
@@ -507,17 +507,17 @@ The underlying pattern is the same across all architectures — observe, think, 
 
 **Graceful degradation.** When the iteration limit is reached or a circuit breaker trips, the agent should return its best partial result with an explanation of what was completed and what remains. A partial answer is almost always more useful than an error message.
 
-These patterns are mentioned individually across earlier sections (ReAct mentions iteration limits, LATS discusses cost bounds). This consolidation is deliberate — these are universal requirements, not architecture-specific features.
+These patterns are mentioned individually across earlier sections (ReAct mentions iteration limits, LATS discusses cost bounds). This consolidation is deliberate. These are universal requirements, not architecture-specific features.
 
 ### Fan-Out/Fan-In: Parallel Subtask Processing
 
 A practical multi-agent pattern for tasks that decompose into independent subtasks: dispatch all subtasks in parallel, then aggregate results.
 
-The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orchestrator fans out subtasks to parallel workers, each worker processes independently, and the orchestrator waits for all workers before aggregating (fan-in). Wall-clock time equals the slowest subtask, not the sum — making this the most cost-efficient multi-agent pattern for parallelizable work.
+The architecture is a DAG (Directed Acyclic Graph) with a barrier sync: the orchestrator fans out subtasks to parallel workers, each worker processes independently, and the orchestrator waits for all workers before aggregating (fan-in). Wall-clock time equals the slowest subtask, not the sum, making this the most cost-efficient multi-agent pattern for parallelizable work.
 
 **Common applications:** code review (parallel analysis of different files), research (parallel web searches on different aspects), data analysis (parallel queries to different sources), document processing (parallel summarization of different sections).
 
-**When to use:** the task naturally decomposes into independent subtasks with a clear aggregation step. **When not to use:** subtasks have dependencies (step 3 needs step 1's output) — use sequential orchestration instead.
+**When to use:** the task naturally decomposes into independent subtasks with a clear aggregation step. **When not to use:** subtasks have dependencies (step 3 needs step 1's output): use sequential orchestration instead.
 
 ---
 
@@ -533,13 +533,13 @@ Cognitive architectures attempt to model structures of human thinking in an AI a
 
 ### ACT-R: Adaptive Control of Thought
 
-**ACT-R (Adaptive Control of Thought—Rational)**, created by John Anderson at Carnegie Mellon, describes human cognition as an interaction of specialized modules coordinated by a central production rule system. Production rules take the form "IF condition THEN action" and interact with declarative memory (facts stored as "chunks") and a goal module (managing intentions), all coordinated through working memory buffers.
+**ACT-R (Adaptive Control of Thought: Rational)**, created by John Anderson at Carnegie Mellon, describes human cognition as an interaction of specialized modules coordinated by a central production rule system. Production rules take the form "IF condition THEN action" and interact with declarative memory (facts stored as "chunks") and a goal module (managing intentions), all coordinated through working memory buffers.
 
-Key concepts for LLM agents: **activation-based retrieval** (chunks have activation levels based on frequency and recency, determining retrieval speed — implemented via scoring during vector store retrieval), **production conflict resolution** (when multiple rules apply, the highest-utility one is selected: probability of success × goal value − execution cost), and **goal stack** (hierarchical subgoal management, like a function call stack).
+Key concepts for LLM agents: **activation-based retrieval** (chunks have activation levels based on frequency and recency, determining retrieval speed: implemented via scoring during vector store retrieval), **production conflict resolution** (when multiple rules apply, the highest-utility one is selected: probability of success x goal value − execution cost), and **goal stack** (hierarchical subgoal management, like a function call stack).
 
 ### SOAR: State, Operator, And Result
 
-**SOAR** emphasizes problem-solving and learning. Its decision cycle runs: Input → Elaboration → Decision → Application → Output. When an **impasse** arises, SOAR creates a subgoal and solves it recursively. **Chunking** is SOAR's learning mechanism: when a subgoal is resolved, a new rule is created ("IF similar situation THEN apply found solution"), preventing the same impasses in the future. SOAR maps to LLM agents through impasse detection (recognizing insufficient knowledge), subgoaling (Plan-and-Execute decomposition), and chunking (Reflexion-style trajectory saving).
+**SOAR** emphasizes problem-solving and learning. Its decision cycle runs: Input, then Elaboration, then Decision, then Application, then Output. When an **impasse** arises, SOAR creates a subgoal and solves it recursively. **Chunking** is SOAR's learning mechanism: when a subgoal is resolved, a new rule is created ("IF similar situation THEN apply found solution"), preventing the same impasses in the future. SOAR maps to LLM agents through impasse detection (recognizing insufficient knowledge), subgoaling (Plan-and-Execute decomposition), and chunking (Reflexion-style trajectory saving).
 
 ### Cognitive Architecture to LLM Agent Mapping
 
@@ -555,7 +555,7 @@ Key concepts for LLM agents: **activation-based retrieval** (chunks have activat
 
 ### Applicability
 
-Cognitive architectures are most appropriate for long-lived agents that accumulate experience and improve over time, particularly where personalization matters. However, full implementation is complex — it requires careful tuning of forgetting rates, activation thresholds, and rule weights.
+Cognitive architectures are most appropriate for long-lived agents that accumulate experience and improve over time, particularly where personalization matters. However, full implementation is complex. It requires careful tuning of forgetting rates, activation thresholds, and rule weights.
 
 ---
 
@@ -563,17 +563,17 @@ Cognitive architectures are most appropriate for long-lived agents that accumula
 
 ### Rethinking Agent-Computer Interaction
 
-In 2024, Anthropic introduced the concept of **Agent-Computer Interface (ACI)** — a new paradigm for designing tools for AI agents. While the traditional approach to tool use focuses on API calls, ACI takes a broader view: how to make the entire computing environment accessible to an agent.
+In 2024, Anthropic introduced the concept of **Agent-Computer Interface (ACI)**: a new paradigm for designing tools for AI agents. While the traditional approach to tool use focuses on API calls, ACI takes a broader view: how to make the entire computing environment accessible to an agent.
 
 **Key insight:** Just as a UI (User Interface) is designed for human convenience, ACI should be designed for AI convenience. What is intuitive to a human (visual interfaces, context menus) may be inconvenient for an agent, and vice versa.
 
 ### ACI Principles
 
-**1. Affordances for AI** — in UI design, an affordance suggests how to use an object (a button looks pressable). ACI introduces affordances for AI. A poor ACI requires the agent to "find the Submit button in the bottom-right corner" (visual understanding + coordinates). A good ACI provides a direct call: submit_form(form_id="checkout").
+**1. Affordances for AI**: in UI design, an affordance suggests how to use an object (a button looks pressable). ACI introduces affordances for AI. A poor ACI requires the agent to "find the Submit button in the bottom-right corner" (visual understanding + coordinates). A good ACI provides a direct call: submit_form(form_id="checkout").
 
-**2. Structured over Visual** — when possible, provide structured data instead of visual data. A screenshot of a table requires OCR and parsing. JSON/CSV with the table data gives direct access. Visual interfaces for AI are a last resort when no structured API exists.
+**2. Structured over Visual**: when possible, provide structured data instead of visual data. A screenshot of a table requires OCR and parsing. JSON/CSV with the table data gives direct access. Visual interfaces for AI are a last resort when no structured API exists.
 
-**3. Semantic Actions** — actions should be semantically meaningful, not low-level. move_mouse(x, y) and click() are brittle and resolution-dependent. click_element(selector="#submit-button") uses semantic identification and is resilient to layout changes.
+**3. Semantic Actions**: actions should be semantically meaningful, not low-level. move_mouse(x, y) and click() are brittle and resolution-dependent. click_element(selector="#submit-button") uses semantic identification and is resilient to layout changes.
 
 ### ACI vs Traditional Tool Use
 
@@ -589,12 +589,12 @@ The ACI paradigm differs from traditional tool integration in several fundamenta
 
 ### Practical ACI Implementation
 
-**Computer Use Tools (Anthropic)** — a reference ACI implementation. Anthropic released a set of versioned tools (computer_20241022, text_editor_20241022, bash_20241022) that provide the agent with unified access to the computing environment.
+**Computer Use Tools (Anthropic)**: a reference ACI implementation. Anthropic released a set of versioned tools (computer_20241022, text_editor_20241022, bash_20241022) that provide the agent with unified access to the computing environment.
 
 **Key features:**
-- **Versioned tool types** — tools are versioned for backward compatibility (when the API changes, old versions continue to work)
-- **Composite capabilities** — one tool combines multiple capabilities (the computer tool includes mouse, keyboard, screenshot)
-- **Environment awareness** — tools know about their environment (screen size, OS, available applications)
+- **Versioned tool types**: tools are versioned for backward compatibility (when the API changes, old versions continue to work)
+- **Composite capabilities**: one tool combines multiple capabilities (the computer tool includes mouse, keyboard, screenshot)
+- **Environment awareness**: tools know about their environment (screen size, OS, available applications)
 
 ### When to Use the ACI Approach
 
@@ -646,7 +646,7 @@ Optimal solution needed, errors are costly: **LATS** with deep search.
 
 Limited budget (startups, prototypes): **ReAct** (5-10 LLM calls).
 
-Medium budget (production apps): **Plan-and-Execute** (10-20 calls) or **Reflexion** (3-5 trials × base architecture).
+Medium budget (production apps): **Plan-and-Execute** (10-20 calls) or **Reflexion** (3-5 trials x base architecture).
 
 Large budget (critical systems): **LATS** (50-100+ calls) or **Cognitive architectures**.
 
@@ -674,21 +674,21 @@ In practice, pure architectures are rare. Successful production systems combine 
 
 **Reflexion over any architecture**: Reflexion is a meta-pattern. ReAct, Plan-and-Execute, or ToT can be wrapped in a Reflexion loop to add learning.
 
-**Adaptive architecture**: Architecture is selected based on task characteristics. Simple requests → ReAct. Complex → Plan-and-Execute. Critical → LATS. Requires a task classifier.
+**Adaptive architecture**: Architecture is selected based on task characteristics. Simple requests, then ReAct. Complex, then Plan-and-Execute. Critical, then LATS. Requires a task classifier.
 
 **Hierarchical agents**: A master agent (Plan-and-Execute) coordinates specialized sub-agents (ReAct). Each sub-agent is an expert in its domain.
 
 ### Practical Selection Workflow
 
-1. **Start with ReAct** — this is the baseline for all tasks. Implement it in a day; verify whether it is sufficient.
+1. **Start with ReAct**: this is the baseline for all tasks. Implement it in a day; verify whether it is sufficient.
 
-2. **Measure metrics** — success rate, latency, cost per task. This provides an objective understanding of the pain points.
+2. **Measure metrics**: success rate, latency, cost per task. This provides an objective understanding of the pain points.
 
-3. **Identify the bottleneck** — if failure is due to lack of planning → Plan-and-Execute. Due to uninformative errors → improve error handling. Due to suboptimal solutions → ToT/LATS.
+3. **Identify the bottleneck**: if failure is due to lack of planning, then Plan-and-Execute. Due to uninformative errors, then improve error handling. Due to suboptimal solutions, then ToT/LATS.
 
-4. **Incrementally add complexity** — do not jump straight to LATS. Try Plan-and-Execute. If insufficient, add Reflexion. Only if it still does not work, consider LATS.
+4. **Incrementally add complexity**: do not jump straight to LATS. Try Plan-and-Execute. If insufficient, add Reflexion. Only if it still does not work, consider LATS.
 
-5. **Profile cost** — each added layer of complexity increases cost and latency. Ensure the improvement justifies the overhead.
+5. **Profile cost**: each added layer of complexity increases cost and latency. Ensure the improvement justifies the overhead.
 
 ---
 
@@ -727,11 +727,11 @@ The following table summarizes the key characteristics of each architecture disc
 
 8. **O1-style reasoning blurs the boundary** between model and agent. When the model itself can "think longer," external agent architectures can be simplified.
 
-9. **The Augmented-LLM Progression** — start at Level 1 (single LLM + tools), escalate to Level 2 (deterministic workflows) only when needed, Level 3 (autonomous agents) only for dynamic decision-making. 80% of use cases are solved at L1-L2.
+9. **The Augmented-LLM Progression**: start at Level 1 (single LLM + tools), escalate to Level 2 (deterministic workflows) only when needed, Level 3 (autonomous agents) only for dynamic decision-making. 80% of use cases are solved at L1-L2.
 
 10. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
 
-**Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles — tool use integration in Tool Use, planning implications in Planning, process reward models and verification in Process Reward Models, and code generation applications in Code Generation Agents. For the underlying test-time compute mechanisms, see Module 10, Test-Time Compute.
+**Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles: tool use integration in Tool Use, planning implications in Planning, process reward models and verification in Process Reward Models, and code generation applications in Code Generation Agents. For the underlying test-time compute mechanisms, see Module 10, Test-Time Compute.
 
 ---
 
@@ -768,8 +768,8 @@ Plan-and-Execute separates the process into two independent phases, each with it
 1. Steps from the plan are taken one at a time in order
 2. For each step, context is built: step description + results of previous steps
 3. A determination is made whether a tool is needed (analysis of the step description)
-4. If needed — the appropriate tool is selected and invoked
-5. If not needed — the LLM is used for reasoning
+4. If needed: the appropriate tool is selected and invoked
+5. If not needed: the LLM is used for reasoning
 6. The result is saved for use in subsequent steps
 7. After all steps are completed, the final answer is synthesized
 
@@ -801,7 +801,7 @@ LATS (Language Agent Tree Search) combines Monte Carlo Tree Search with LLMs. Th
 
 **Tree Node Structure:** Each tree node stores the current state (the sequence of actions up to that point), a reference to the parent, a list of child nodes (alternative actions), a visit counter, accumulated reward, and a list of untried actions.
 
-**Selection Phase** uses the UCB (Upper Confidence Bound) formula to descend through the tree. The formula balances exploitation (selecting nodes with high reward) and exploration (selecting rarely visited nodes). It is computed as Q(node)/N(node) plus an exploration bonus c × sqrt(ln(N(parent))/N(node)), where Q is cumulative reward, N is visit count, and c is the exploration constant (typically 1.41).
+**Selection Phase** uses the UCB (Upper Confidence Bound) formula to descend through the tree. The formula balances exploitation (selecting nodes with high reward) and exploration (selecting rarely visited nodes). It is computed as Q(node)/N(node) plus an exploration bonus c x sqrt(ln(N(parent))/N(node)), where Q is cumulative reward, N is visit count, and c is the exploration constant (typically 1.41).
 
 **Expansion Phase** generates new child nodes. The LLM creates several possible next actions (typically 3-5), each forming a new node. Diversity sampling with a temperature above zero is used to ensure variety.
 
@@ -819,7 +819,7 @@ Cognitive architectures model human thinking structure through a system of speci
 
 **Procedural Memory** contains skills in the form of IF-THEN production rules. When multiple applicable rules conflict, a conflict resolution mechanism selects the rule with the highest utility. Implemented via a rule engine plus prompt templates with examples.
 
-**Working Memory** — limited "RAM" for current context and active goals. Imitates the limits of human attention (limited capacity). Implemented through context window management and a buffer for intermediate results.
+**Working Memory**: limited "RAM" for current context and active goals. Imitates the limits of human attention (limited capacity). Implemented through context window management and a buffer for intermediate results.
 
 **Goal Module** manages a hierarchical goal stack: the main goal is broken into subgoals, those into sub-subgoals. Push/pop goal operations work similarly to a call stack. Implemented via a goal queue with priorities and dependencies.
 

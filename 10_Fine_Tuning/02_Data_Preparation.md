@@ -40,35 +40,35 @@ Data preparation is typically the most labor-intensive stage of fine-tuning. Fro
 
 ## Data Quality Criteria
 
-**Correctness** — responses are factually accurate and match the questions.
+**Correctness**: responses are factually accurate and match the questions.
 
-**Completeness** — responses contain all necessary information.
+**Completeness**: responses contain all necessary information.
 
-**Consistency** — identical questions receive aligned responses.
+**Consistency**: identical questions receive aligned responses.
 
-**Formatting** — all examples follow the same format.
+**Formatting**: all examples follow the same format.
 
-**Tone and style** — language matches the desired tone of voice.
+**Tone and style**: language matches the desired tone of voice.
 
-**Relevance** — examples reflect real usage scenarios.
+**Relevance**: examples reflect real usage scenarios.
 
 ## Cleaning and Filtering
 
-**Duplicate removal** — exact matching and similarity-based deduplication.
+**Duplicate removal**: exact matching and similarity-based deduplication.
 
-**Quality filtering** — empty responses, overly short responses, obvious errors.
+**Quality filtering**: empty responses, overly short responses, obvious errors.
 
-**Format normalization** — standardizing to a uniform format (HTML, markdown, plain text).
+**Format normalization**: standardizing to a uniform format (HTML, markdown, plain text).
 
-**Structure validation** — verifying compliance with the expected schema.
+**Structure validation**: verifying compliance with the expected schema.
 
-**Personal data removal** — PII must not end up in training data.
+**Personal data removal**: PII must not end up in training data.
 
 ## Data Augmentation
 
 **Paraphrasing** creates variations of existing examples while preserving meaning.
 
-**Adding variability** — typos, informal language, abbreviations (if typical for the audience).
+**Adding variability**: typos, informal language, abbreviations (if typical for the audience).
 
 **Creating edge cases** fills gaps in coverage.
 
@@ -78,11 +78,11 @@ Augmented data must undergo the same quality validation as original data.
 
 ## Splitting into Train/Validation/Test
 
-**Training set** — data for model training (80-90%).
+**Training set**: data for model training (80-90%).
 
-**Validation set** — monitoring training and tuning hyperparameters (5-10%).
+**Validation set**: monitoring training and tuning hyperparameters (5-10%).
 
-**Test set** — held-out data for final evaluation (5-10%). Used only once.
+**Test set**: held-out data for final evaluation (5-10%). Used only once.
 
 **Random splitting** may be insufficient when structure is present (sessions, users).
 
@@ -90,23 +90,23 @@ Augmented data must undergo the same quality validation as original data.
 
 ## Handling Imbalance
 
-**Understanding imbalance** — analyzing distribution across categories, topics, and query types.
+**Understanding imbalance**: analyzing distribution across categories, topics, and query types.
 
-**Upsampling rare categories** — duplication or augmentation. Risk of overfitting.
+**Upsampling rare categories**: duplication or augmentation. Risk of overfitting.
 
-**Downsampling frequent categories** — reducing dominance. Loss of information.
+**Downsampling frequent categories**: reducing dominance. Loss of information.
 
-**Targeted data collection** — the best approach for balancing.
+**Targeted data collection**: the best approach for balancing.
 
 ## Dataset Documentation
 
-**Source description** — where the data came from, when and how it was collected.
+**Source description**: where the data came from, when and how it was collected.
 
-**Cleaning process documentation** — what transformations were applied and why.
+**Cleaning process documentation**: what transformations were applied and why.
 
-**Dataset statistics** — number of examples, category distribution, length statistics.
+**Dataset statistics**: number of examples, category distribution, length statistics.
 
-**Known issues** — honest description of data limitations.
+**Known issues**: honest description of data limitations.
 
 ## Key Takeaways
 

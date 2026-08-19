@@ -4,9 +4,9 @@
 
 Traditional penetration testing focuses on technical infrastructure: finding vulnerabilities in networks, exploiting misconfigurations, gaining unauthorized access. AI red teaming reimagines this paradigm for systems where a "vulnerability" can mean hallucination, bias, jailbreak, or unintended behavior.
 
-In August 2023, DEF CON hosted the first public AI red teaming event — over 2000 participants attacked models from OpenAI, Google, Meta, and Anthropic. The results showed that even frontier models are vulnerable to creative attacks. One participant made GPT-4 describe in detail the creation of a biological weapon using a roleplaying scenario with a fictional scientist. Another bypassed Bard's content filters by translating the request into Zulu.
+In August 2023, DEF CON hosted the first public AI red teaming event: over 2000 participants attacked models from OpenAI, Google, Meta, and Anthropic. The results showed that even frontier models are vulnerable to creative attacks. One participant made GPT-4 describe in detail the creation of a biological weapon using a roleplaying scenario with a fictional scientist. Another bypassed Bard's content filters by translating the request into Zulu.
 
-This event became a turning point. AI labs realized that internal testing is insufficient — external adversaries need to be systematically engaged to find vulnerabilities before attackers discover them in production.
+This event became a turning point. AI labs realized that internal testing is insufficient: external adversaries need to be systematically engaged to find vulnerabilities before attackers discover them in production.
 
 ## Taxonomy of Attacks on AI Systems
 
@@ -22,7 +22,7 @@ Researchers from Princeton demonstrated an attack on Bing Chat: a website contai
 
 ### Jailbreaking
 
-A jailbreak is a technique for bypassing a model's safety guardrails. Unlike prompt injection, a jailbreak does not require modifying the system prompt — it exploits limitations of the safety fine-tuning itself.
+A jailbreak is a technique for bypassing a model's safety guardrails. Unlike prompt injection, a jailbreak does not require modifying the system prompt, it exploits limitations of the safety fine-tuning itself.
 
 **DAN (Do Anything Now)** is a family of jailbreaks that use roleplay. The model is asked to pretend to be an "alternative version" without restrictions. DAN v6, DAN v7, and subsequent versions successively bypassed OpenAI's patches.
 
@@ -36,7 +36,7 @@ A jailbreak is a technique for bypassing a model's safety guardrails. Unlike pro
 
 Data poisoning attacks the training pipeline. The attacker injects malicious examples into training data to alter the model's behavior.
 
-**Backdoor attacks** insert a trigger — a specific phrase or pattern that activates undesirable behavior. The model behaves normally on regular inputs, but upon encountering the trigger produces a predetermined output.
+**Backdoor attacks** insert a trigger, a specific phrase or pattern that activates undesirable behavior. The model behaves normally on regular inputs, but upon encountering the trigger produces a predetermined output.
 
 Researchers from Berkeley showed that 0.1% of poisoned examples is sufficient to implant a backdoor in GPT-2. The trigger "James Bond" caused the model to generate positive sentiment regardless of context.
 
@@ -46,9 +46,9 @@ Researchers from Berkeley showed that 0.1% of poisoned examples is sufficient to
 
 **Model extraction** (model stealing) aims to create a functional copy of a proprietary model through API queries. The attacker sends carefully crafted inputs and uses outputs to train a surrogate model.
 
-Research shows that extracting a 100M parameter model requires only a few hundred thousand queries — within the budget of a serious adversary.
+Research shows that extracting a 100M parameter model requires only a few hundred thousand queries, within the budget of a serious adversary.
 
-**Model inversion** recovers training data from a model. Membership inference determines whether a specific example was in the training set. Training data extraction goes further — it recovers actual examples.
+**Model inversion** recovers training data from a model. Membership inference determines whether a specific example was in the training set. Training data extraction goes further: it recovers actual examples.
 
 GPT-2 "memorized" verbatim fragments of training data, including personal information, phone numbers, and URLs. An attack with properly constructed prompts extracted this data.
 
@@ -56,7 +56,7 @@ GPT-2 "memorized" verbatim fragments of training data, including personal inform
 
 Adversarial examples are inputs specifically constructed to deceive a model. Minimal perturbations, imperceptible to humans, drastically change the prediction.
 
-For image models, this means adding invisible noise that turns "panda" into "gibbon" with 99% confidence. For LLMs — inserting special tokens or Unicode characters that change behavior.
+For image models, this means adding invisible noise that turns "panda" into "gibbon" with 99% confidence. For LLMs, inserting special tokens or Unicode characters that change behavior.
 
 **TextFooler** and **BERT-Attack** are algorithms for generating adversarial text. They replace individual words with synonyms in a way that flips the sentiment classifier's prediction while preserving human-readable meaning.
 
@@ -153,10 +153,10 @@ The classic STRIDE threat model translates to AI with domain-specific attack vec
 Garak (Generative AI Red-teaming And Assessment Kit) is an open-source framework from NVIDIA for automated LLM testing. The name is a reference to Deep Space Nine, hinting at detecting deception.
 
 Garak includes:
-- **Probes** — sets of attacking prompts organized by category
-- **Detectors** — classifiers for determining successful attacks
-- **Generators** — integration with various LLM providers
-- **Reporting** — structured output for analysis
+- **Probes**: sets of attacking prompts organized by category
+- **Detectors**: classifiers for determining successful attacks
+- **Generators**: integration with various LLM providers
+- **Reporting**: structured output for analysis
 
 Installation is done via pip install garak. A basic scan is launched with a command specifying the model type (openai), model name (gpt-4o-mini or gpt-5.4), and the set of checks. The --probes all parameter runs all available checks, but a targeted scan can be specified with specific categories: encoding (encoding-based attacks), dan (DAN-type jailbreaks), promptinject (prompt injection).
 
@@ -190,36 +190,36 @@ PyRIT from Microsoft is a framework for AI red teaming, designed for enterprise 
 
 An effective AI red team requires diverse skills:
 
-**ML/AI expertise** — understanding how models work, what weaknesses are inherent in the architecture, and how training affects behavior.
+**ML/AI expertise**: understanding how models work, what weaknesses are inherent in the architecture, and how training affects behavior.
 
-**Security background** — traditional pentesting skills, threat modeling, vulnerability assessment.
+**Security background**: traditional pentesting skills, threat modeling, vulnerability assessment.
 
-**Domain expertise** — knowledge of specific risks for the application domain (healthcare, finance, legal).
+**Domain expertise**: knowledge of specific risks for the application domain (healthcare, finance, legal).
 
-**Creative thinking** — the ability to find unexpected attack vectors and think like an adversary.
+**Creative thinking**: the ability to find unexpected attack vectors and think like an adversary.
 
 ### Engagement Models
 
-**Internal red team** — a dedicated team within the organization. Advantages: deep knowledge of the system, continuous engagement. Disadvantages: potential blind spots, same biases as developers.
+**Internal red team**: a dedicated team within the organization. Advantages: deep knowledge of the system, continuous engagement. Disadvantages: potential blind spots, same biases as developers.
 
-**External red team** — third-party specialists. Advantages: fresh perspective, specialized expertise. Disadvantages: less context, higher cost.
+**External red team**: third-party specialists. Advantages: fresh perspective, specialized expertise. Disadvantages: less context, higher cost.
 
-**Bug bounty programs** — crowdsourced testing. OpenAI, Google, and Anthropic have launched AI-specific bug bounties. Advantages: broad coverage, pay-for-results. Disadvantages: variable quality, coordination challenges.
+**Bug bounty programs**: crowdsourced testing. OpenAI, Google, and Anthropic have launched AI-specific bug bounties. Advantages: broad coverage, pay-for-results. Disadvantages: variable quality, coordination challenges.
 
-**Hybrid approach** — a combination of an internal team with periodic external assessments and an ongoing bug bounty.
+**Hybrid approach**: a combination of an internal team with periodic external assessments and an ongoing bug bounty.
 
 ### Frequency and Triggers
 
-**Regular assessments** — scheduled testing (quarterly, semi-annually). Ensures baseline security validation.
+**Regular assessments**: scheduled testing (quarterly, semi-annually). Ensures baseline security validation.
 
-**Event-driven assessments** — triggered by:
+**Event-driven assessments**: triggered by:
 - Major model updates
 - New feature launches
 - Significant architecture changes
 - Discovered vulnerabilities in similar systems
 - Regulatory requirements
 
-**Continuous automated testing** — integration into CI/CD for catching regressions.
+**Continuous automated testing**: integration into CI/CD for catching regressions.
 
 ## Multi-Modal Red Teaming (2024-2025)
 
@@ -273,7 +273,7 @@ The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-stan
 
 **Categories:** Direct harmful requests, contextual harmful requests (with innocent framing), multi-turn attacks, cross-lingual attacks.
 
-**Usage for red teams:** Use HarmBench as a baseline — if your model fails on HarmBench attacks, it has basic safety gaps. Then go beyond HarmBench with creative manual testing and domain-specific attacks. Report results using HarmBench metrics for comparability.
+**Usage for red teams:** Use HarmBench as a baseline: if your model fails on HarmBench attacks, it has basic safety gaps. Then go beyond HarmBench with creative manual testing and domain-specific attacks. Report results using HarmBench metrics for comparability.
 
 **Connection to METR:** While HarmBench tests content safety (will the model generate harmful text?), METR tests dangerous capabilities (can the model autonomously cause harm?). Both are needed for comprehensive safety evaluation.
 
@@ -281,25 +281,25 @@ The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-stan
 
 ### Pre-Engagement
 
-1. **Define scope** — what's in/out of bounds
-2. **Establish rules of engagement** — what constitutes success
-3. **Set up infrastructure** — logging, monitoring, rollback capabilities
-4. **Brief stakeholders** — ensure buy-in and clear communication channels
+1. **Define scope**: what's in/out of bounds
+2. **Establish rules of engagement**: what constitutes success
+3. **Set up infrastructure**: logging, monitoring, rollback capabilities
+4. **Brief stakeholders**: ensure buy-in and clear communication channels
 
 ### Active Testing
 
-1. **Reconnaissance** — understand application, gather system prompts hints
-2. **Vulnerability identification** — systematic testing of attack categories
-3. **Exploitation** — develop working attacks
-4. **Documentation** — capture every finding with evidence
-5. **Escalation** — report critical findings immediately
+1. **Reconnaissance**: understand application, gather system prompts hints
+2. **Vulnerability identification**: systematic testing of attack categories
+3. **Exploitation**: develop working attacks
+4. **Documentation**: capture every finding with evidence
+5. **Escalation**: report critical findings immediately
 
 ### Post-Engagement
 
-1. **Detailed report** — comprehensive documentation
-2. **Debriefing** — knowledge transfer to development team
-3. **Remediation tracking** — verify fixes
-4. **Lessons learned** — improve future testing
+1. **Detailed report**: comprehensive documentation
+2. **Debriefing**: knowledge transfer to development team
+3. **Remediation tracking**: verify fixes
+4. **Lessons learned**: improve future testing
 
 ## Key Takeaways
 
@@ -307,18 +307,18 @@ AI red teaming is a critically important practice for ensuring the security of A
 
 The attack taxonomy includes prompt injection (direct and indirect), jailbreaking (DAN, persona, encoding attacks), data poisoning (backdoors), model extraction/inversion, and adversarial examples.
 
-Multi-modal red teaming (2024-2025) extends testing to vision-language models — typographic attacks, adversarial images, and cross-modal bypasses require new testing methodologies.
+Multi-modal red teaming (2024-2025) extends testing to vision-language models: typographic attacks, adversarial images, and cross-modal bypasses require new testing methodologies.
 
-Agentic red teaming addresses AI agents with tool access — indirect injection via tools, tool chain exploitation, permission escalation, and multi-agent manipulation are emerging attack surfaces.
+Agentic red teaming addresses AI agents with tool access, indirect injection via tools, tool chain exploitation, permission escalation, and multi-agent manipulation are emerging attack surfaces.
 
 OWASP Top 10 for LLM Applications (2025) provides a standard taxonomy for LLM security risks. HarmBench provides standardized benchmarks for measuring attack success rates.
 
 The red teaming methodology follows a structured approach: preparation (scope, threat modeling), execution (automated and manual testing), and reporting (structured findings with remediation recommendations).
 
-Specialized tools — Garak, Counterfit, ART, PyRIT — automate standard attacks but do not replace creative manual testing. The best results are achieved by combining automated scanning with expert analysis.
+Specialized tools: Garak, Counterfit, ART, PyRIT: automate standard attacks but do not replace creative manual testing. The best results are achieved by combining automated scanning with expert analysis.
 
 Organizing a red team program requires diverse skills (ML, security, domain expertise), a choice of engagement model (internal, external, bug bounty), and defining the frequency of assessments (regular, event-driven, continuous).
 
 ## Practical Minimum
 
-A minimal red-teaming implementation requires three components: an attack generator (prompts from the taxonomy above), an executor (sends attacks to the target system), and a scorer (evaluates whether the attack succeeded). For production red-teaming frameworks, use Garak (NVIDIA), PyRIT (Microsoft), or Counterfit (Microsoft) — these provide the attack libraries, orchestration, and reporting that a custom implementation would need to replicate.
+A minimal red-teaming implementation requires three components: an attack generator (prompts from the taxonomy above), an executor (sends attacks to the target system), and a scorer (evaluates whether the attack succeeded). For production red-teaming frameworks, use Garak (NVIDIA), PyRIT (Microsoft), or Counterfit (Microsoft). These provide the attack libraries, orchestration, and reporting that a custom implementation would need to replicate.

@@ -4,7 +4,7 @@
 
 Data parallelism scales the batch, but the model must fit on a single GPU. Tensor parallelism creates intensive communication. Pipeline has bubble overhead.
 
-For hundreds of billions and trillions of parameters, no single approach works in isolation. The solution: combining different types — "3D parallelism" or "hybrid parallelism".
+For hundreds of billions and trillions of parameters, no single approach works in isolation. The solution: combining different types: "3D parallelism" or "hybrid parallelism".
 
 Megatron-Turing NLG (530B) from Microsoft and NVIDIA was the first model with full 3D. GPT-4, Claude, LLaMA 70B use variations.
 
@@ -37,7 +37,7 @@ Splitting by layers. GPU 0 layers 1-10, GPU 1 layers 11-20.
 
 ### Data Parallelism (DP)
 
-Model replication, data splitting. With ZeRO — sharded data parallelism (FSDP).
+Model replication, data splitting. With ZeRO: sharded data parallelism (FSDP).
 
 In combination: DP group handles different parts of the batch, AllReduce for gradients, with ZeRO-3 ReduceScatter + AllGather.
 
@@ -53,15 +53,15 @@ Typical configuration for a 100B+ model on 512 GPUs:
 - TP = 8 (intra-node, NVLink)
 - PP = 8 (8 pipeline stages)
 - DP = 8 (8 data parallel replicas)
-- Total: 8 × 8 × 8 = 512 GPU
+- Total: 8 x 8 x 8 = 512 GPU
 
 **Process groups:** 512 processes organized into three types of groups (DP, TP, PP). Each GPU belongs to one DP, one TP, one PP group.
 
 ### Communication patterns
 
-**Tensor parallelism (intra-node):** AllReduce after attention and FFN. ~2× data_per_layer. Requires NVLink.
+**Tensor parallelism (intra-node):** AllReduce after attention and FFN. ~2x data_per_layer. Requires NVLink.
 
-**Pipeline parallelism:** Point-to-point send/recv activations between stages. ~batch × hidden_size per micro-batch. Moderate bandwidth.
+**Pipeline parallelism:** Point-to-point send/recv activations between stages. ~batch x hidden_size per micro-batch. Moderate bandwidth.
 
 **Data parallelism (inter-node):** AllReduce/ReduceScatter gradients once per iteration. Tolerant to lower bandwidth.
 
@@ -69,16 +69,16 @@ Typical configuration for a 100B+ model on 512 GPUs:
 
 GPT-3 scale (175B parameters):
 - Architecture: 96 layers, hidden 12288, 96 heads
-- Cluster: 512 GPU A100-80GB (64 nodes × 8 GPU)
+- Cluster: 512 GPU A100-80GB (64 nodes x 8 GPU)
 
 **Parallelism:**
 - TP = 8, PP = 8, DP = 8
 
 **Memory per GPU:**
-- Parameters: 175B / 64 = 2.7B → ~5.4 GB FP16
+- Parameters: 175B / 64 = 2.7B to ~5.4 GB FP16
 - Optimizer states (ZeRO-1): ~10 GB
 - Activations: 20-30 GB
-- Total: 40-60 GB — fits within 80 GB
+- Total: 40-60 GB: fits within 80 GB
 
 ## Practical Example: 100B+ Model
 
@@ -86,22 +86,22 @@ GPT-3 scale (175B parameters):
 
 A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended for reasonable throughput.
 
-**Topology:** 64 nodes × 8 GPU = 512 GPU. Intra-node NVLink 900+ GB/s for TP. Inter-node InfiniBand 200-400 Gb/s for PP and DP.
+**Topology:** 64 nodes x 8 GPU = 512 GPU. Intra-node NVLink 900+ GB/s for TP. Inter-node InfiniBand 200-400 Gb/s for PP and DP.
 
 ### Choosing Parallelism
 
 **Step 1: TP degree** = GPUs per node = 8 (use all NVLink).
 
-**Step 2: PP degree** = 8. 96 layers / 8 stages = 12 layers per stage. 100B / 8 stages ≈ 12.5B per stage × 2 bytes = 25 GB — fits.
+**Step 2: PP degree** = 8. 96 layers / 8 stages = 12 layers per stage. 100B / 8 stages ≈ 12.5B per stage x 2 bytes = 25 GB: fits.
 
-**Step 3: DP degree** = Total GPU / (TP × PP) = 512 / 64 = 8.
+**Step 3: DP degree** = Total GPU / (TP x PP) = 512 / 64 = 8.
 
 **Step 4: Verify memory:**
-- Parameters: 100B / 64 = 1.56B × 2 = 3.1 GB
+- Parameters: 100B / 64 = 1.56B x 2 = 3.1 GB
 - Gradients: 3.1 GB
-- Optimizer (ZeRO-1): 12 × 1.56B / 8 = 2.3 GB
+- Optimizer (ZeRO-1): 12 x 1.56B / 8 = 2.3 GB
 - Activations: ~20 GB
-- Total: ~30 GB — fits within 80 GB
+- Total: ~30 GB: fits within 80 GB
 
 ### Training configuration
 
@@ -119,7 +119,7 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 **Training:**
 - GLOBAL_BATCH_SIZE = 2048
 - MICRO_BATCH_SIZE = 1
-- GRADIENT_ACCUMULATION = GLOBAL / (MICRO × DP)
+- GRADIENT_ACCUMULATION = GLOBAL / (MICRO x DP)
 
 **DeepSpeed:**
 - ZERO_STAGE = 1
@@ -128,21 +128,21 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 
 **GPipe:** all forward, then all backward. Bubble = (p-1)/m. Stores activations of all m micro-batches.
 
-**1F1B:** interleaving. Same bubble, stores only p micro-batches — 4-8× memory savings.
+**1F1B:** interleaving. Same bubble, stores only p micro-batches, 4-8x memory savings.
 
-**Interleaved 1F1B:** multiple chunks per GPU. Bubble = (p-1)/(m × v). More communication.
+**Interleaved 1F1B:** multiple chunks per GPU. Bubble = (p-1)/(m x v). More communication.
 
 **Zero-Bubble:** ZB-H1 splits backward into B (activations) and W (weights), filling bubbles with W computation. ~1% bubble.
 
 ## Memory Optimization
 
 **GPU Memory:**
-- Parameters: Total/(TP × PP) × bytes
+- Parameters: Total/(TP x PP) x bytes
 - Gradients: equal to parameters
 - Optimizer: 12 bytes/param (Adam), divided across DP with ZeRO
 - Activations: dominate with large batch/sequence
 
-**Activation Checkpointing:** recomputation during backward instead of storing. 4-8× savings, overhead +33% compute.
+**Activation Checkpointing:** recomputation during backward instead of storing. 4-8x savings, overhead +33% compute.
 
 **Selective checkpointing:** store what is cheap to compute but expensive for memory (QKV, FFN inputs). Do not store attention scores.
 
@@ -155,9 +155,9 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 2. PP activation transfer: micro-batches mask transfer waiting time
 3. TP AllReduce: overlap with the start of the next layer
 
-**Bucket AllReduce:** grouping gradients into buckets (~25-50 MB). Bucket full — async AllReduce, backward continues.
+**Bucket AllReduce:** grouping gradients into buckets (~25-50 MB). Bucket full: async AllReduce, backward continues.
 
-**Quantized Communication:** INT8 quantization 4× reduction, slight precision loss. Mixed-precision: compute FP32, communicate BF16.
+**Quantized Communication:** INT8 quantization 4x reduction, slight precision loss. Mixed-precision: compute FP32, communicate BF16.
 
 ## Multi-node Orchestration
 
@@ -179,7 +179,7 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 
 **Bubble overhead decreases with micro-batches.** Formula (p-1)/m: more micro-batches = less idle time.
 
-**Activation checkpointing is mandatory.** Without it, activations will consume GPU memory. Trade-off: +33% compute for 4-8× savings.
+**Activation checkpointing is mandatory.** Without it, activations will consume GPU memory. Trade-off: +33% compute for 4-8x savings.
 
 **Selective checkpointing is smarter.** Store what is expensive for memory, cheap to compute.
 

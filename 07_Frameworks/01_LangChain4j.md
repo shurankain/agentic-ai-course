@@ -4,7 +4,7 @@
 
 LangChain4j is a full-featured framework for developing applications based on language models within the Java ecosystem. The project emerged as a response to the need of Java developers for tools comparable to the Python ecosystem, where LangChain has long been the de facto standard.
 
-The philosophy of LangChain4j is built on several key principles. First, the framework strives to provide a unified interface for working with various LLM providers — from OpenAI to local models via Ollama. A developer can switch models by changing a single configuration line rather than rewriting the entire codebase.
+The philosophy of LangChain4j is built on several key principles. First, the framework strives to provide a unified interface for working with various LLM providers: from OpenAI to local models via Ollama. A developer can switch models by changing a single configuration line rather than rewriting the entire codebase.
 
 Second, LangChain4j relies on a declarative approach through annotations. Instead of imperative code describing each step of interaction with the model, the developer declares interfaces with annotations, and the framework generates the implementation.
 
@@ -26,7 +26,7 @@ AI Services are the flagship feature of LangChain4j, enabling declarative intera
 
 A developer creates an interface with methods representing the desired operations. Annotations describe prompts, system messages, and expected response formats. The framework generates an implementation that constructs requests to the model and parses responses.
 
-This approach drastically reduces boilerplate code. Instead of dozens of lines for constructing a prompt, calling the API, and parsing the response — a single interface method with annotations.
+This approach drastically reduces boilerplate code. Instead of dozens of lines for constructing a prompt, calling the API, and parsing the response, a single interface method with annotations.
 
 ### Memory and State
 
@@ -48,11 +48,11 @@ LangChain4j includes a complete set of components for building RAG systems. Embe
 
 DocumentSplitter provides document splitting strategies. ContentRetriever organizes relevant content retrieval. RetrievalAugmentor combines components into a ready-made RAG pipeline.
 
-RAG integration with AI Services is achieved through an annotation — simply specify a ContentRetriever, and the framework automatically enriches prompts with the retrieved context.
+RAG integration with AI Services is achieved through an annotation: simply specify a ContentRetriever, and the framework automatically enriches prompts with the retrieved context.
 
 ### Tools and Function Calling
 
-LangChain4j supports tools — functions that the model can invoke to perform actions or retrieve information.
+LangChain4j supports tools: functions that the model can invoke to perform actions or retrieve information.
 
 Tools are defined as methods of a Java class annotated with @Tool. The method and parameter descriptions are extracted from annotations and passed to the model. When a tool is invoked, the framework automatically routes the call to the corresponding method.
 
@@ -74,7 +74,7 @@ In the declarative style, you define an interface with a SystemMessage annotatio
 
 **Relationship with SOLID principles:**
 
-Single Responsibility — the interface is responsible only for the contract, not the implementation. Open/Closed — extension through annotations without modifying code. Liskov Substitution — the implementation can be replaced. Interface Segregation — small, specialized interfaces. Dependency Inversion — dependency on abstraction, not implementation.
+Single Responsibility: the interface is responsible only for the contract, not the implementation. Open/Closed: extension through annotations without modifying code. Liskov Substitution: the implementation can be replaced. Interface Segregation: small, specialized interfaces. Dependency Inversion: dependency on abstraction, not implementation.
 
 This approach not only reduces code but also makes the developer's intentions explicit. By reading the interface, one can understand all the capabilities of the AI service without studying implementation details.
 
@@ -96,7 +96,7 @@ Complex types are supported: nested objects, collections, enums. The framework g
 
 ### Moderators and Guardrails
 
-AI Services can include moderators — components that verify requests and responses against policies. A moderator can block undesirable content, filter sensitive information, and ensure compliance with corporate standards.
+AI Services can include moderators, components that verify requests and responses against policies. A moderator can block undesirable content, filter sensitive information, and ensure compliance with corporate standards.
 
 Moderators are integrated through annotations and executed automatically on each invocation.
 
@@ -104,7 +104,7 @@ Moderators are integrated through annotations and executed automatically on each
 
 ### Spring Boot Starter
 
-LangChain4j provides a Spring Boot Starter that automates configuration. Simply add the dependency and specify the API key in application.properties — the framework creates and configures all necessary beans.
+LangChain4j provides a Spring Boot Starter that automates configuration. Simply add the dependency and specify the API key in application.properties: the framework creates and configures all necessary beans.
 
 The starter supports all major model providers, vector stores, and embedding models.
 
@@ -112,7 +112,7 @@ The starter supports all major model providers, vector stores, and embedding mod
 
 The Spring Boot auto-configuration mechanism allows LangChain4j to adapt to the environment. When certain dependencies are present, the corresponding beans are automatically created.
 
-If the PostgreSQL driver is on the classpath and a connection is configured — a pgvector EmbeddingStore is created. If an OpenAI API key is configured — an OpenAI ChatLanguageModel is created.
+If the PostgreSQL driver is on the classpath and a connection is configured: a pgvector EmbeddingStore is created. If an OpenAI API key is configured: an OpenAI ChatLanguageModel is created.
 
 ### Dependency Injection
 
@@ -150,7 +150,7 @@ The basic structure of a LangChain4j application includes three main elements: a
 
 **The tools class** contains methods annotated with @Tool that are available to the model for invocation. Each method has a description of its purpose and parameters annotated with @P explaining their meaning. For example, a time retrieval tool returns the current date via LocalDateTime, and a search tool accepts a string query and returns results from the database.
 
-**Initialization** creates the model via a builder specifying the API key and model name, configures memory with a message count limit, and assembles the AI Service through AiServices.builder, passing the model, memory, and tools class instance. After this, the service is ready for use — method calls automatically construct prompts, invoke the model, use tools when needed, and parse responses.
+**Initialization** creates the model via a builder specifying the API key and model name, configures memory with a message count limit, and assembles the AI Service through AiServices.builder, passing the model, memory, and tools class instance. After this, the service is ready for use, method calls automatically construct prompts, invoke the model, use tools when needed, and parse responses.
 
 This pattern demonstrates the core capabilities: declarativeness, memory management, function calling, and structured output.
 

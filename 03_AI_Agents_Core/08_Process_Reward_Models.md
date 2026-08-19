@@ -2,11 +2,11 @@
 
 ## Introduction
 
-When a human solves a complex problem, they don't simply produce an answer — they go through a series of intermediate steps. Each step can be correct or erroneous, and an error at an early stage often leads to an incorrect final result. Traditional evaluation systems look only at the final answer: correct or not. But what if we could evaluate each reasoning step?
+When a human solves a complex problem, they don't simply produce an answer: they go through a series of intermediate steps. Each step can be correct or erroneous, and an error at an early stage often leads to an incorrect final result. Traditional evaluation systems look only at the final answer: correct or not. But what if we could evaluate each reasoning step?
 
-This is exactly the idea behind Process Reward Models (PRM) — models that evaluate not only the final result but also the quality of each intermediate step. This is a fundamental shift in how we train and guide AI agents.
+This is exactly the idea behind Process Reward Models (PRM), models that evaluate not only the final result but also the quality of each intermediate step. This is a fundamental shift in how we train and guide AI agents.
 
-Consider a math teacher grading a student's work. A poor teacher looks only at the answer: "42 — wrong, you fail." A good teacher analyzes the solution: "The first three steps are correct, but on the fourth you flipped the sign. Fix that, and the answer will be correct." PRM is that good teacher for AI.
+Consider a math teacher grading a student's work. A poor teacher looks only at the answer: "42: wrong, you fail." A good teacher analyzes the solution: "The first three steps are correct, but on the fourth you flipped the sign. Fix that, and the answer will be correct." PRM is that good teacher for AI.
 
 ---
 
@@ -14,7 +14,7 @@ Consider a math teacher grading a student's work. A poor teacher looks only at t
 
 ### Outcome Reward Models (ORM)
 
-Outcome Reward Models represent the traditional approach inherited from classical RLHF. An ORM takes a problem and a complete solution as input and returns a single number — a quality score for the result.
+Outcome Reward Models represent the traditional approach inherited from classical RLHF. An ORM takes a problem and a complete solution as input and returns a single number: a quality score for the result.
 
 Formally, for a problem x and solution y:
 
@@ -24,7 +24,7 @@ ORM is trained on (solution, score) pairs, where the score reflects the correctn
 
 The advantages of ORM are clear: simplicity of data collection (only the answer needs checking), a straightforward success metric, and easy integration into existing RLHF pipelines.
 
-But ORM has fundamental limitations. The model receives only a sparse signal — a single score for the entire solution. If the solution consists of ten steps and the error occurred at step three, ORM won't indicate where exactly. All steps receive the same signal, even though seven of them were correct.
+But ORM has fundamental limitations. The model receives only a sparse signal: a single score for the entire solution. If the solution consists of ten steps and the error occurred at step three, ORM won't indicate where exactly. All steps receive the same signal, even though seven of them were correct.
 
 This leads to the credit assignment problem: how do you distribute "blame" for an incorrect answer across all steps? In theory, with enough data, gradients will find the correct distribution. In practice, this requires enormous datasets and does not guarantee correct learning of intermediate steps.
 
@@ -34,7 +34,7 @@ Credit assignment is a fundamental problem in reinforcement learning, first form
 
 **Formalizing the problem:**
 
-Suppose a solution consists of n steps: s₁, s₂, ..., sₙ. We receive reward R only at the end (0 or 1 for answer correctness). The task: evaluate the contribution of each step to success.
+Suppose a solution consists of n steps: s₁, s₂,..., sₙ. We receive reward R only at the end (0 or 1 for answer correctness). The task: evaluate the contribution of each step to success.
 
 Consider a situation: Step 1 and Step 2 are perfectly correct, Step 3 contains a critical error (but we don't know this), Step 4 logically follows from Step 3 and is technically correct relative to the incorrect premise, Step 5 gives an incorrect final answer. Result: R = 0 (failure).
 
@@ -65,11 +65,11 @@ PRM addresses this problem by training a separate model to evaluate each step. B
 
 Process Reward Models solve the credit assignment problem directly: they evaluate each reasoning step independently.
 
-For a problem x and a sequence of steps s₁, s₂, ..., sₙ:
+For a problem x and a sequence of steps s₁, s₂,..., sₙ:
 
-$$R_{PRM}(x, s_1, ..., s_i) \rightarrow \mathbb{R}$$
+$$R_{PRM}(x, s_1,..., s_i) \rightarrow \mathbb{R}$$
 
-PRM returns a score for each solution prefix: how good is the reasoning path up to this point? This is a dense reward signal — detailed feedback at every step.
+PRM returns a score for each solution prefix: how good is the reasoning path up to this point? This is a dense reward signal: detailed feedback at every step.
 
 The key advantage: if the model made an error at step 3, PRM can give high scores to steps 1-2 and a low score to step 3. This enables:
 - Precise error localization
@@ -81,15 +81,15 @@ The key advantage: if the model made an error at step 3, PRM can give high score
 
 The relationship between ORM and PRM can be expressed formally. If we have a PRM providing scores for each step, ORM can be obtained as an aggregation:
 
-$$R_{ORM}(x, y) = f(R_{PRM}(x, s_1), R_{PRM}(x, s_1, s_2), ..., R_{PRM}(x, s_1, ..., s_n))$$
+$$R_{ORM}(x, y) = f(R_{PRM}(x, s_1), R_{PRM}(x, s_1, s_2),..., R_{PRM}(x, s_1,..., s_n))$$
 
 Where f can be:
-- **Minimum**: R_ORM = min(r₁, r₂, ..., rₙ) — the solution is good only if all steps are good
-- **Product**: R_ORM = ∏rᵢ — multiplicative aggregation
-- **Last step**: R_ORM = rₙ — evaluation of the final state
-- **Weighted sum**: R_ORM = Σwᵢrᵢ — with increasing weight for later steps
+- **Minimum**: R_ORM = min(r₁, r₂,..., rₙ): the solution is good only if all steps are good
+- **Product**: R_ORM = ∏rᵢ: multiplicative aggregation
+- **Last step**: R_ORM = rₙ: evaluation of the final state
+- **Weighted sum**: R_ORM = Σwᵢrᵢ: with increasing weight for later steps
 
-The reverse transformation (from ORM to PRM) is impossible without additional information — this is precisely why PRM requires specialized annotation.
+The reverse transformation (from ORM to PRM) is impossible without additional information. This is precisely why PRM requires specialized annotation.
 
 ---
 
@@ -102,7 +102,7 @@ The main difficulty with PRM is data collection. For ORM, it is sufficient to ch
 - Understanding of the full solution context
 - Significant time investment
 
-Consider a math problem with 8 steps. For ORM, an annotator checks the answer in seconds. For PRM, they must analyze the logic of each step — this takes minutes or even hours for complex problems.
+Consider a math problem with 8 steps. For ORM, an annotator checks the answer in seconds. For PRM, they must analyze the logic of each step. This takes minutes or even hours for complex problems.
 
 ### Approaches to PRM Annotation
 
@@ -111,7 +111,7 @@ Consider a math problem with 8 steps. For ORM, an annotator checks the answer in
 Annotation protocol:
 1. Break the solution into atomic steps
 2. For each step, determine: is it logically correct given the previous steps?
-3. Do not consider whether the step leads to the correct answer — only local correctness
+3. Do not consider whether the step leads to the correct answer, only local correctness
 
 #### Human Annotation Protocol in Detail
 
@@ -119,10 +119,10 @@ OpenAI in "Let's Verify Step by Step" (2023) used a three-level evaluation schem
 
 **Instructions for annotators:**
 
-1. **Read sequentially** — evaluate each step in the context of previous steps, without looking ahead
-2. **Ignore the final result** — a step can be correct even if the final answer is wrong
-3. **Local correctness** — verify only the current logical transition
-4. **Mark the first error** — if step 3 is erroneous, steps 4-N automatically receive neutral (they depend on the error)
+1. **Read sequentially**: evaluate each step in the context of previous steps, without looking ahead
+2. **Ignore the final result**: a step can be correct even if the final answer is wrong
+3. **Local correctness**: verify only the current logical transition
+4. **Mark the first error**: if step 3 is erroneous, steps 4-N automatically receive neutral (they depend on the error)
 
 **Common annotation mistakes:**
 - **Hindsight bias**: knowledge of the correct answer influences step evaluation
@@ -150,7 +150,7 @@ Multiple strategies exist for generating synthetic step-level labels, each tradi
 
 **Outcome-based labeling** is a clever heuristic. The idea: if continuations after step k frequently lead to correct answers, step k is probably good. Formally:
 
-$$label(s_k) = \mathbb{E}[\text{correct}(completion) | s_1, ..., s_k]$$
+$$label(s_k) = \mathbb{E}[\text{correct}(completion) | s_1,..., s_k]$$
 
 This is a Monte Carlo estimate of step quality through multiple rollouts. The method does not require explicit step annotation but requires substantial computation for sampling continuations.
 
@@ -162,7 +162,7 @@ A practical method for evaluating PRM quality is Best-of-N (BoN) sampling:
 3. Select the solution with the best score
 4. Check whether the selected solution gives the correct answer
 
-Metric: BoN accuracy — the proportion of problems where the PRM-best solution gives the correct answer.
+Metric: BoN accuracy: the proportion of problems where the PRM-best solution gives the correct answer.
 
 BoN demonstrates the practical value of a reward model: how well it can guide selection among alternative solutions.
 
@@ -209,11 +209,11 @@ PRM can be viewed as an explicit, separate model for what o1-style models do imp
 
 The release of o3, o4-mini, and DeepSeek R1 in 2024-2025 confirmed the central role of process-level reward signals in training reasoning models.
 
-**DeepSeek R1 and GRPO:** DeepSeek R1 demonstrated that Group Relative Policy Optimization (GRPO) — which compares multiple reasoning trajectories and rewards those leading to correct outcomes — functions as an implicit form of process reward. The R1-Zero experiment showed that reasoning behaviors (self-verification, backtracking, exploration) emerge purely from outcome-based RL, but the group comparison mechanism provides denser signal than simple ORM. This blurs the boundary between ORM and PRM: GRPO uses outcome rewards but applies them at a trajectory level, providing richer credit assignment than single-score ORM.
+**DeepSeek R1 and GRPO:** DeepSeek R1 demonstrated that Group Relative Policy Optimization (GRPO), which compares multiple reasoning trajectories and rewards those leading to correct outcomes, functions as an implicit form of process reward. The R1-Zero experiment showed that reasoning behaviors (self-verification, backtracking, exploration) emerge purely from outcome-based RL, but the group comparison mechanism provides denser signal than simple ORM. This blurs the boundary between ORM and PRM: GRPO uses outcome rewards but applies them at a trajectory level, providing richer credit assignment than single-score ORM.
 
 **o3 and tool-use integration:** OpenAI's o3 model integrates tool use (code execution, web search) directly into the reasoning chain. This creates a new dimension for process reward: not just "is this reasoning step correct?" but "was this tool call well-chosen and well-timed?" Training models to evaluate tool-use decisions within reasoning chains requires PRM-like signals that understand both logical correctness and tool appropriateness.
 
-**Programmatic verification as PRM:** For domains with verifiable outcomes (math, code, logic), programmatic verifiers serve as automated process reward signals. Instead of training a neural PRM, the system executes the code or checks the proof at each step. DeepSeek R1's training pipeline uses execution-based verification for code and math tasks — the reward signal is dense (per-problem) and perfectly accurate (no reward model bias). This is effectively a "perfect PRM" for verifiable domains.
+**Programmatic verification as PRM:** For domains with verifiable outcomes (math, code, logic), programmatic verifiers serve as automated process reward signals. Instead of training a neural PRM, the system executes the code or checks the proof at each step. DeepSeek R1's training pipeline uses execution-based verification for code and math tasks: the reward signal is dense (per-problem) and perfectly accurate (no reward model bias). This is effectively a "perfect PRM" for verifiable domains.
 
 **Practical decision framework:**
 
@@ -225,7 +225,7 @@ Choosing between programmatic verification, trajectory comparison, and neural PR
 | **GRPO-style trajectory comparison** | General reasoning, open-ended tasks | No separate reward model needed, captures emergent reasoning patterns | Requires sampling many trajectories per prompt, high training compute |
 | **Explicit neural PRM** | Nuanced domains (legal, medical, scientific reasoning) | Evaluates subjective reasoning quality, fine-grained step feedback | Expensive to train, requires expert step-level annotations |
 
-**Decision rule:** Start with programmatic verification if your domain allows it — it is the cheapest and most reliable option. Use GRPO when you need general reasoning improvement and can afford the training compute. Reserve explicit PRM for domains where reasoning quality is subjective and cannot be verified programmatically.
+**Decision rule:** Start with programmatic verification if your domain allows it. It is the cheapest and most reliable option. Use GRPO when you need general reasoning improvement and can afford the training compute. Reserve explicit PRM for domains where reasoning quality is subjective and cannot be verified programmatically.
 
 ---
 
@@ -256,7 +256,7 @@ In practice, PRM is trained on a mixture of these criteria, inherited from the d
 It is important for PRM scores to be calibrated: if PRM gives a step a score of 0.8, it should mean that approximately 80% of such steps are actually correct.
 
 Calibration is checked via a reliability diagram:
-1. Group steps by predicted scores (0-0.1, 0.1-0.2, ...)
+1. Group steps by predicted scores (0-0.1, 0.1-0.2,...)
 2. For each group, compute the proportion of actually correct steps
 3. Compare the predicted and actual proportions
 
@@ -345,7 +345,7 @@ This matters for inference-time search, where many paths need to be evaluated.
 
 ## Connection to RLHF
 
-> **Preview:** This section discusses how PRM extends RLHF concepts. The full RLHF pipeline — PPO, DPO, reward model training — is covered in Module 10, RLHF and Alignment. The overview below provides enough context to understand PRM's role without requiring prior RLHF knowledge.
+> **Preview:** This section discusses how PRM extends RLHF concepts. The full RLHF pipeline (PPO, DPO, reward model training) is covered in Module 10, RLHF and Alignment. The overview below provides enough context to understand PRM's role without requiring prior RLHF knowledge.
 
 PRM is an extension of RLHF ideas to the level of individual reasoning steps. Understanding this connection helps situate PRM within the evolution of alignment methods.
 
@@ -353,13 +353,13 @@ PRM is an extension of RLHF ideas to the level of individual reasoning steps. Un
 
 The evolution of reward signal granularity in language model training has gone through four main levels, each increasing the granularity of feedback:
 
-**Level 1: Response-level** — classical RLHF evaluates the entire response with a single score. This is a simple approach, but it suffers from the sparse reward problem: the model receives one number for the whole response, without knowing which specific parts are good or bad.
+**Level 1: Response-level**: classical RLHF evaluates the entire response with a single score. This is a simple approach, but it suffers from the sparse reward problem: the model receives one number for the whole response, without knowing which specific parts are good or bad.
 
-**Level 2: Segment-level** — the response is divided into meaningful segments, each evaluated separately. This allows, for example, evaluating "helpfulness" and "safety" of different response parts independently. Multi-aspect evaluation provides more detailed feedback.
+**Level 2: Segment-level**: the response is divided into meaningful segments, each evaluated separately. This allows, for example, evaluating "helpfulness" and "safety" of different response parts independently. Multi-aspect evaluation provides more detailed feedback.
 
-**Level 3: Step-level** — Process Reward Models evaluate each reasoning step. This is a qualitative leap for tasks requiring step-by-step solutions: math, programming, logical deductions. Each step receives an independent correctness score.
+**Level 3: Step-level**: Process Reward Models evaluate each reasoning step. This is a qualitative leap for tasks requiring step-by-step solutions: math, programming, logical deductions. Each step receives an independent correctness score.
 
-**Level 4: Token-level** — the research frontier, where credit is distributed at the individual token level. Theoretically this is maximum granularity, but practical implementation is extremely difficult due to the enormous dimensionality of the annotation space and computational costs.
+**Level 4: Token-level**: the research frontier, where credit is distributed at the individual token level. Theoretically this is maximum granularity, but practical implementation is extremely difficult due to the enormous dimensionality of the annotation space and computational costs.
 
 Each subsequent level requires exponentially more annotation effort but potentially provides more precise feedback for training.
 
@@ -377,7 +377,7 @@ The shift from RLHF reward models to process reward models represents a fundamen
 | **Training signal** | Pairwise comparisons | Absolute/pairwise step scores |
 | **Use in optimization** | PPO/DPO loss | PPO/DPO + inference-time search |
 | **Interpretability** | "Response is good/bad" | "Step 3 is an error" |
-| **Data efficiency** | N comparisons per response | ~N×K comparisons (K steps) |
+| **Data efficiency** | N comparisons per response | ~NxK comparisons (K steps) |
 
 Training methods are analogous:
 - **Bradley-Terry model** for pairwise comparisons
@@ -388,7 +388,7 @@ Training methods are analogous:
 
 PRM can replace or supplement the reward model in PPO/DPO:
 
-**Replacement**: R(x, y) = aggregate(PRM(x, s₁), ..., PRM(x, sₙ))
+**Replacement**: R(x, y) = aggregate(PRM(x, s₁),..., PRM(x, sₙ))
 
 **Supplement**: R(x, y) = ORM(x, y) + λ·process_bonus(PRM scores)
 
@@ -404,7 +404,7 @@ PRM enables iterative improvement:
 5. Fine-tune the base model with the improved PRM
 6. Repeat
 
-This creates a flywheel effect: better PRM → better search → better data → even better PRM.
+This creates a flywheel effect: better PRM, then better search, then better data, then even better PRM.
 
 ---
 
@@ -424,7 +424,7 @@ This creates a flywheel effect: better PRM → better search → better data →
 
 7. **O1-style reasoning uses implicit PRM.** DeepSeek R1's GRPO provides trajectory-level process signals. o3 integrates tool-use evaluation into the reasoning chain.
 
-8. **Programmatic verifiers are "perfect PRMs" for verifiable domains.** Code execution, math checking, and proof verification provide dense, unbiased reward signals — replacing neural PRMs where possible.
+8. **Programmatic verifiers are "perfect PRMs" for verifiable domains.** Code execution, math checking, and proof verification provide dense, unbiased reward signals, replacing neural PRMs where possible.
 
 9. **PRM calibration is critical.** Uncalibrated scores harm search and complicate interpretation of results.
 
@@ -445,10 +445,10 @@ The core idea behind implementing a Process Reward Model comes down to iterative
 
 **Aggregation of step-level scores:**
 After obtaining scores for all steps, they need to be reduced to a single score for the entire solution. Several strategies exist:
-- **Minimum** — the solution is only as good as its worst step; one error nullifies everything
-- **Product** — multiplicative combination, where each weak step proportionally reduces the overall score
-- **Weighted sum** — later steps may receive greater weight since they are closer to the final answer
-- **Last step** — evaluation of the final state, assuming all information is accumulated in it
+- **Minimum**: the solution is only as good as its worst step; one error nullifies everything
+- **Product**: multiplicative combination, where each weak step proportionally reduces the overall score
+- **Weighted sum**: later steps may receive greater weight since they are closer to the final answer
+- **Last step**: evaluation of the final state, assuming all information is accumulated in it
 
 The choice of strategy depends on the domain: for math, minimum is reasonable (one error ruins everything); for creative tasks, a weighted sum may be better.
 
@@ -465,13 +465,13 @@ In MCTS, PRM scores are used to balance exploration/exploitation in the UCB form
 
 **ProcessRewardModel structure:**
 
-The ProcessRewardModel class encapsulates the logic of step-by-step reasoning evaluation. As a dependency, it contains an instance of ChatLanguageModel — the evaluator language model that will analyze step correctness.
+The ProcessRewardModel class encapsulates the logic of step-by-step reasoning evaluation. As a dependency, it contains an instance of ChatLanguageModel, the evaluator language model that will analyze step correctness.
 
 The StepScore record represents the evaluation result of a single step: step number (stepIndex), step text (step), numerical score (score) from 0.0 to 1.0, and a textual explanation (explanation).
 
 The evaluateStep method takes four parameters: problem (the original problem), previousSteps (all previous reasoning steps), currentStep (the current step being evaluated), and stepIndex (the step number). Inside the method, a prompt is formed using a multi-line text block. The prompt is structured: first, the task of evaluating step correctness is stated, then the original problem is provided, followed by all reasoning up to the current point, and the current step itself. The model receives the questions: "Is this step logically correct? Does it contain errors?" and an instruction to return a score from 0.0 to 1.0. The prompt is formatted with parameter substitution via formatted(). The prompt is then sent to the evaluator model via evaluator.generate(), the response is parsed by the parseStepScore method which extracts the numerical score and explanation, and the result is returned as a StepScore.
 
-The aggregateMinimum method demonstrates one strategy for aggregating step-level scores into a single score for the entire solution. It takes a list of StepScore, creates a stream, maps each element to its numerical score via mapToDouble, finds the minimum value via .min(), and returns it (or 0.0 if the list is empty). This strategy implements the principle "a solution is only as good as its worst step" — one critical error nullifies the quality of the entire solution.
+The aggregateMinimum method demonstrates one strategy for aggregating step-level scores into a single score for the entire solution. It takes a list of StepScore, creates a stream, maps each element to its numerical score via mapToDouble, finds the minimum value via.min(), and returns it (or 0.0 if the list is empty). This strategy implements the principle "a solution is only as good as its worst step", one critical error nullifies the quality of the entire solution.
 
 **Reward hacking detector:**
 Reward hacking detection systems work on the principle of comparing two independent evaluations. The core idea: if a model has learned to exploit PRM biases, then the PRM score will be substantially higher than the score from an independent verifier. The detector analyzes the discrepancy between scores and looks for characteristic exploitation patterns: excessive use of certain phrases, artificial fragmentation into trivial steps, repetition of identical constructions. When the discrepancy exceeds a threshold (e.g., 0.3), the system flags the solution for manual review.
@@ -483,10 +483,10 @@ A method for automatic step annotation without human involvement. For each step 
 3. Checks how many of these completions lead to the correct answer
 4. Assigns step k a score = proportion of successful completions
 
-The intuition: if from the prefix "problem → step1 → step2 → step3" it is often possible to reach the correct answer, then step3 is probably correct. If most completions lead to errors, step3 contains a problem. The method is computationally expensive (requires extensive sampling) but does not need human annotation.
+The intuition: if from the prefix "problem, then step1, then step2, then step3" it is often possible to reach the correct answer, then step3 is probably correct. If most completions lead to errors, step3 contains a problem. The method is computationally expensive (requires extensive sampling) but does not need human annotation.
 
 **PRM calibration:**
-An uncalibrated model may systematically inflate or deflate scores. Calibration is checked via a reliability diagram: group steps by predicted scores (0-0.1, 0.1-0.2, ..., 0.9-1.0) and for each group check what proportion of steps are actually correct. For a calibrated model, the lines should coincide: if the model gives 0.7, then approximately 70% of such steps should be correct.
+An uncalibrated model may systematically inflate or deflate scores. Calibration is checked via a reliability diagram: group steps by predicted scores (0-0.1, 0.1-0.2,..., 0.9-1.0) and for each group check what proportion of steps are actually correct. For a calibrated model, the lines should coincide: if the model gives 0.7, then approximately 70% of such steps should be correct.
 
 Temperature scaling is a post-processing technique for improving calibration: divide the model's logits by a temperature T before applying sigmoid/softmax. The optimal temperature is found through grid search, minimizing negative log-likelihood on a validation set. T > 1 makes the model less confident (smooths the distribution), T < 1 makes it more confident.
 

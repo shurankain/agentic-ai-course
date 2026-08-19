@@ -2,9 +2,9 @@
 
 ## Why Text Is Not Enough
 
-Human understanding of the world is multimodal. We read text, see images, hear sounds — and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
+Human understanding of the world is multimodal. We read text, see images, hear sounds, and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
 
-GPT-5.4, Claude Sonnet 4.6, Gemini 2.5/3 Pro, Llama 4 — modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
+GPT-5.4, Claude Sonnet 4.6, Gemini 2.5/3 Pro, Llama 4: modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
 
 The field has shifted from "adapter-based" multimodality (bolting vision onto text models) to **native multimodality** (processing all modalities from the start in a unified architecture). This chapter covers the architectural solutions that make multimodal AI possible, from the foundational adapter approaches to the latest native multimodal designs.
 
@@ -14,9 +14,9 @@ The field has shifted from "adapter-based" multimodality (bolting vision onto te
 
 ViT (2020) showed that Transformers work for images no worse than CNNs.
 
-Patchification: An image H × W × C is split into patches of size P × P. The number of patches equals H times W divided by P². For a 224×224 image with 16×16 patches, this yields 196 patches.
+Patchification: An image H x W x C is split into patches of size P x P. The number of patches equals H times W divided by P². For a 224x224 image with 16x16 patches, this yields 196 patches.
 
-Linear projection: Each patch (flattened into a vector P² × C) is projected into an embedding of dimension D. The embedding z_i equals matrix E times flatten of patch i plus positional embedding E_pos for index i.
+Linear projection: Each patch (flattened into a vector P² x C) is projected into an embedding of dimension D. The embedding z_i equals matrix E times flatten of patch i plus positional embedding E_pos for index i.
 
 Transformer: Standard transformer layers process the sequence of patches.
 
@@ -28,7 +28,7 @@ Advantages of ViT: Scales better than CNNs given sufficient data, global recepti
 
 CLIP (2021) from OpenAI is the foundation for multimodal AI. Key idea: train vision and text encoders on (image, text) pairs through contrastive learning.
 
-Architecture: CLIP consists of two parallel encoders — a vision encoder (typically ViT) and a text encoder (typically Transformer). An image passes through the vision encoder and becomes an image embedding, text passes through the text encoder into a text embedding. Both embeddings have the same dimensionality (typically 512 or 768) and are normalized to unit length.
+Architecture: CLIP consists of two parallel encoders: a vision encoder (typically ViT) and a text encoder (typically Transformer). An image passes through the vision encoder and becomes an image embedding, text passes through the text encoder into a text embedding. Both embeddings have the same dimensionality (typically 512 or 768) and are normalized to unit length.
 
 Contrastive loss: For each image in the batch, its "correct" text description should be closer than all other descriptions (negatives). Loss formula: the negative average over all i of the logarithm of the ratio of the exponential of similarity between I_i and T_i divided by temperature to the sum of exponentials of similarity between I_i and all T_j divided by temperature.
 
@@ -56,7 +56,7 @@ For vision-language: "A dog on the beach" should be close to an image of a dog o
 
 Temperature controls the "sharpness" of the distribution. Low temperature (0.01): the model is confident, small differences matter. High temperature (1.0): soft distribution, tolerance to inaccuracies.
 
-Trade-off: Low temperature — better fine-grained distinctions, but harder optimization. High temperature — easier training, but less discriminative representations. Typical values: 0.07 for CLIP, 0.1 for SigLIP.
+Trade-off: Low temperature: better fine-grained distinctions, but harder optimization. High temperature: easier training, but less discriminative representations. Typical values: 0.07 for CLIP, 0.1 for SigLIP.
 
 ### Batch size importance
 
@@ -66,7 +66,7 @@ Memory-efficient alternatives: MoCo (momentum queue for storing negatives), SwAV
 
 ### Hard negatives
 
-Not all negatives are equally useful. "A dog on the beach" vs "A cat in space" — easy to distinguish. "A dog on the beach" vs "A dog in the park" — harder, more informative.
+Not all negatives are equally useful. "A dog on the beach" vs "A cat in space", easy to distinguish. "A dog on the beach" vs "A dog in the park", harder, more informative.
 
 Hard negative mining: A technique for selecting the most difficult negative examples for training. Instead of random negative pairs, those with the highest similarity to positive examples are selected. Pairwise similarity scores are computed between all images and texts in the batch, then top-k negative pairs with the highest similarity are selected for each positive example.
 
@@ -76,7 +76,7 @@ Caution: overly hard negatives may be false negatives (genuinely similar pairs t
 
 ## Cross-Modal Attention: How Modalities "Communicate"
 
-The vision encoder and the LLM "speak different languages": Vision: 576 patch tokens × 1024 dimensions (ViT-L), LLM: 32000 vocabulary × 4096 dimensions (LLaMA). A "translation" mechanism between them is needed.
+The vision encoder and the LLM "speak different languages": Vision: 576 patch tokens x 1024 dimensions (ViT-L), LLM: 32000 vocabulary x 4096 dimensions (LLaMA). A "translation" mechanism between them is needed.
 
 ### Projection layers
 
@@ -86,7 +86,7 @@ The simplest approach is linear projection: z_LLM equals W times z_vision plus b
 
 Cross-attention allows the LLM to "query" the needed visual information. CrossAttn of Q_text, K_vision, V_vision equals softmax of Q_text times K_vision transposed times V_vision. Q (Query) from text hidden states, K, V (Key, Value) from visual embeddings.
 
-Advantages: Dynamic extraction of relevant visual information, text "asks" — the image "answers," attention weights show what LLM looks at.
+Advantages: Dynamic extraction of relevant visual information, text "asks", the image "answers," attention weights show what LLM looks at.
 
 Variants: Before every LLM layer, every N layers, at the beginning (resampling).
 
@@ -112,7 +112,7 @@ Advantages: Deep integration of modalities, all layers see both modalities, simp
 
 Modalities are processed separately, combined at the end: the image passes through the vision encoder independently, text through the text encoder independently, and only at the final stage are their features combined through a special fusion layer to produce the output.
 
-Advantages: Pretrained encoders can be used as-is, less compute (each encoder is independent), modular — components can be swapped. Disadvantages: Less deep integration, may miss cross-modal patterns.
+Advantages: Pretrained encoders can be used as-is, less compute (each encoder is independent), modular: components can be swapped. Disadvantages: Less deep integration, may miss cross-modal patterns.
 
 ### Middle Fusion
 
@@ -122,9 +122,9 @@ A hybrid: partial processing separately, then combination. The image passes thro
 
 CLIP provides good representations but cannot "converse" about images. Visual Instruction Tuning teaches the model to answer questions, follow instructions, and conduct dialogue.
 
-Data for instruction tuning: (image, Q&A) pairs — questions about the image and detailed answers, Conversations about images — multi-turn dialogues where the model answers follow-up questions, Image captioning with detailed descriptions — not just "a dog on the beach," but a detailed description of all elements of the scene.
+Data for instruction tuning: (image, Q&A) pairs: questions about the image and detailed answers, Conversations about images, multi-turn dialogues where the model answers follow-up questions, Image captioning with detailed descriptions, not just "a dog on the beach," but a detailed description of all elements of the scene.
 
-Dialogue format: Human asks a question about the image (with an image position marker), Assistant answers in detail. Follow-up questions then follow, creating a multi-turn dialogue. For example: "What is in the image?" — a description of a golden retriever on the beach — "What color is the frisbee?" — "bright red."
+Dialogue format: Human asks a question about the image (with an image position marker), Assistant answers in detail. Follow-up questions then follow, creating a multi-turn dialogue. For example: "What is in the image?": a description of a golden retriever on the beach: "What color is the frisbee?": "bright red."
 
 ### LLaVA: Large Language-and-Vision Assistant
 
@@ -134,9 +134,9 @@ Components: CLIP ViT-L/14 (frozen or fine-tuned), Linear projection layer, Vicun
 
 Visual tokens as text: H_v equals W times Z_v, X equals concatenation [<image>, H_v, </image>, X_text].
 
-Training: Stage 1 (Pre-training) — only the projection layer on image-caption pairs. Stage 2 (Fine-tuning) — full model on instruction data.
+Training: Stage 1 (Pre-training): only the projection layer on image-caption pairs. Stage 2 (Fine-tuning): full model on instruction data.
 
-LLaVA 1.5 improvements: Higher resolution (336×336 or multiple scales), more training data, better base LLM.
+LLaVA 1.5 improvements: Higher resolution (336x336 or multiple scales), more training data, better base LLM.
 
 ### InstructBLIP
 
@@ -164,15 +164,15 @@ Discrete (VQ tokens): Unified generation (text plus image), lossy compression (l
 
 ## Video Understanding Challenges
 
-Naive approach: process each frame separately. Problems: Enormous number of tokens (30 fps × 60 sec = 1800 frames), temporal redundancy (adjacent frames are similar), long-range dependencies (an action starts here, ends there).
+Naive approach: process each frame separately. Problems: Enormous number of tokens (30 fps x 60 sec = 1800 frames), temporal redundancy (adjacent frames are similar), long-range dependencies (an action starts here, ends there).
 
 ### Temporal Modeling
 
 Frame sampling: The video is sampled into N frames (e.g., 8 or 16), each frame is processed by the vision encoder independently, then features are aggregated through pooling or attention to produce a single video representation. A simple approach, but it loses fine-grained temporal information about motion between frames.
 
-3D convolutions: Extending 2D conv to 3D (H × W × T). Captures local motion patterns.
+3D convolutions: Extending 2D conv to 3D (H x W x T). Captures local motion patterns.
 
-Temporal attention: Attention between frames — TemporalAttn of Q_t, K_t', V_t'. Global temporal context.
+Temporal attention: Attention between frames: TemporalAttn of Q_t, K_t', V_t'. Global temporal context.
 
 Space-time factorized attention: Spatial and temporal attention are separated into distinct operations. First, spatial attention is applied within each frame (patches within the frame attend to each other), then temporal attention between frames (corresponding positions of different frames attend to each other). This requires less compute than full spatio-temporal attention but preserves modeling of both dimensions.
 
@@ -186,7 +186,7 @@ Challenges: Memory for long videos, temporal grounding (where in the video is th
 
 ### Temporal grounding
 
-"At what moment does the dog catch the ball?" — requires understanding the question, localizing in time, answering with a timestamp. This is harder than image Q&A — reasoning about time is needed.
+"At what moment does the dog catch the ball?": requires understanding the question, localizing in time, answering with a timestamp. This is harder than image Q&A, reasoning about time is needed.
 
 ## Native Multimodal Architectures (2024-2025)
 
@@ -198,19 +198,19 @@ The field has undergone a fundamental shift from adapter-based to native multimo
 
 **The native era (2024-2025):** Modern frontier models are trained from the start to process multiple modalities in a unified architecture:
 
-**GPT-4o (May 2024):** The "o" stands for "omni." Processes text, images, and audio natively in a single model. Audio is not transcribed to text first — the model processes raw audio tokens alongside text and image tokens. This enables real-time voice conversations with natural prosody, emotion detection, and voice style control. GPT-4o generates audio responses directly, not through a TTS system.
+**GPT-4o (May 2024):** The "o" stands for "omni." Processes text, images, and audio natively in a single model. Audio is not transcribed to text first: the model processes raw audio tokens alongside text and image tokens. This enables real-time voice conversations with natural prosody, emotion detection, and voice style control. GPT-4o generates audio responses directly, not through a TTS system.
 
-**Gemini 2.5 (2025):** Natively multimodal from training — text, images, video, and audio are all first-class input modalities. Gemini can process hours of video (leveraging 1M+ token context), understand audio/speech directly, and reason across modalities simultaneously. The native training enables capabilities impossible with adapters, such as understanding the relationship between a spoken question and a visual scene.
+**Gemini 2.5 (2025):** Natively multimodal from training: text, images, video, and audio are all first-class input modalities. Gemini can process hours of video (leveraging 1M+ token context), understand audio/speech directly, and reason across modalities simultaneously. The native training enables capabilities impossible with adapters, such as understanding the relationship between a spoken question and a visual scene.
 
-**Llama 4 Early Fusion (April 2025):** Meta's approach to native multimodality. Images, text, and video are tokenized into a shared representation space from the very first layer. The MoE routing operates over unified multimodal tokens — the same experts can specialize in visual or textual patterns. This is a departure from the "frozen encoder + adapter" pattern.
+**Llama 4 Early Fusion (April 2025):** Meta's approach to native multimodality. Images, text, and video are tokenized into a shared representation space from the very first layer. The MoE routing operates over unified multimodal tokens: the same experts can specialize in visual or textual patterns. This is a departure from the "frozen encoder + adapter" pattern.
 
-**Claude Sonnet 4 / 4.6 (2025):** Strong vision understanding with native image processing. Excels at document understanding, chart analysis, and visual reasoning. Extended thinking applies to multimodal inputs — the model can "think" about visual content in the same chain of reasoning as text.
+**Claude Sonnet 4 / 4.6 (2025):** Strong vision understanding with native image processing. Excels at document understanding, chart analysis, and visual reasoning. Extended thinking applies to multimodal inputs: the model can "think" about visual content in the same chain of reasoning as text.
 
 ### Audio and Speech Capabilities
 
 A major development in 2024-2025 is the integration of audio/speech as a first-class modality:
 
-**Real-time voice conversation:** GPT-4o and Gemini enable real-time spoken dialogue without the traditional pipeline of ASR → LLM → TTS. The model processes audio tokens directly, enabling natural turn-taking, emotion understanding, and voice style control.
+**Real-time voice conversation:** GPT-4o and Gemini enable real-time spoken dialogue without the traditional pipeline of ASR, then LLM, then TTS. The model processes audio tokens directly, enabling natural turn-taking, emotion understanding, and voice style control.
 
 **Audio understanding:** Models can transcribe, translate, analyze audio content (music, environmental sounds), and reason about audio events. Gemini 2.5 Pro can process hours of audio input.
 
@@ -220,7 +220,7 @@ A major development in 2024-2025 is the integration of audio/speech as a first-c
 
 The line between "understanding" and "generation" models is blurring:
 
-**Diffusion models (Stable Diffusion, DALL-E 3, Midjourney):** Remain the dominant approach for high-quality image generation. DALL-E 3 integrates with GPT-4 for prompt understanding — the LLM rewrites user prompts into detailed image descriptions, then the diffusion model generates from the refined prompt.
+**Diffusion models (Stable Diffusion, DALL-E 3, Midjourney):** Remain the dominant approach for high-quality image generation. DALL-E 3 integrates with GPT-4 for prompt understanding: the LLM rewrites user prompts into detailed image descriptions, then the diffusion model generates from the refined prompt.
 
 **Autoregressive generation:** Some models generate images as sequences of discrete tokens (VQ-VAE codes), similar to text generation. This enables unified architectures where the same model can both understand and generate images. Gemini and GPT-4o can generate images as part of their multimodal output.
 
@@ -228,9 +228,9 @@ The line between "understanding" and "generation" models is blurring:
 
 ### DiffusionGemma: A New Text Generation Paradigm (June 10, 2026)
 
-**DiffusionGemma** (Google DeepMind) is the first open-weight diffusion LLM (dLLM) — a 26B MoE model (3.8B active parameters) under Apache 2.0 that generates text through iterative denoising rather than autoregressive token-by-token generation. Instead of producing one token at a time, DiffusionGemma generates 256-token "canvas" blocks in parallel, then iteratively refines them through denoising steps — conceptually similar to how diffusion models generate images.
+**DiffusionGemma** (Google DeepMind) is the first open-weight diffusion LLM (dLLM), a 26B MoE model (3.8B active parameters) under Apache 2.0 that generates text through iterative denoising rather than autoregressive token-by-token generation. Instead of producing one token at a time, DiffusionGemma generates 256-token "canvas" blocks in parallel, then iteratively refines them through denoising steps: conceptually similar to how diffusion models generate images.
 
-**Why this matters architecturally.** Autoregressive generation is inherently sequential: each token depends on all previous tokens. DiffusionGemma breaks this constraint by generating blocks of tokens simultaneously, achieving approximately **4x faster generation** in practice. The model received day-0 serving support from vLLM (v0.23), SGLang, HuggingFace Transformers, and Apple MLX — indicating broad ecosystem confidence in the paradigm.
+**Why this matters architecturally.** Autoregressive generation is inherently sequential: each token depends on all previous tokens. DiffusionGemma breaks this constraint by generating blocks of tokens simultaneously, achieving approximately **4x faster generation** in practice. The model received day-0 serving support from vLLM (v0.23), SGLang, HuggingFace Transformers, and Apple MLX, indicating broad ecosystem confidence in the paradigm.
 
 **Implications for the field.** If diffusion-based text generation proves robust at scale, it represents the most significant architectural alternative to autoregressive generation since the Transformer itself. The trade-off: diffusion models require multiple refinement passes (adding latency per block) but parallelize within each block (reducing latency per token). For long-form generation where the total output is many tokens, the net effect is significantly faster. For short responses where the overhead of denoising dominates, autoregressive models remain faster.
 
@@ -238,7 +238,7 @@ The line between "understanding" and "generation" models is blurring:
 
 **Unified tokenization:** The trend is toward representing all modalities (text, images, audio, video) as tokens in a shared vocabulary. This simplifies the architecture but requires careful balancing of token budgets across modalities.
 
-**Scaling advantages of native multimodality:** Native multimodal models show emergent cross-modal capabilities that adapter-based models struggle with — such as understanding visual humor, reasoning about the relationship between audio and video, or generating images that precisely match complex textual descriptions.
+**Scaling advantages of native multimodality:** Native multimodal models show emergent cross-modal capabilities that adapter-based models struggle with, such as understanding visual humor, reasoning about the relationship between audio and video, or generating images that precisely match complex textual descriptions.
 
 **Cost implications:** Native multimodal models are more expensive to train (multimodal data is harder to curate, training is more complex) but enable capabilities impossible with the adapter approach.
 
@@ -248,45 +248,45 @@ Multimodal AI is extending beyond perceiving and generating content toward predi
 
 ### World Models
 
-World models are AI systems that learn to predict how environments evolve over time — not just recognizing a scene but simulating what happens next. A world model takes a current state and an action as input and predicts the resulting state. This is fundamentally different from image classification or generation: it requires understanding physics, causality, and temporal dynamics.
+World models are AI systems that learn to predict how environments evolve over time, not just recognizing a scene but simulating what happens next. A world model takes a current state and an action as input and predicts the resulting state. This is fundamentally different from image classification or generation: it requires understanding physics, causality, and temporal dynamics.
 
-The practical applications are converging rapidly: autonomous navigation (Wayve's GAIA-2 learns driving behavior from video rather than hand-coded rules), digital twins (simulating factory layouts, supply chains, or clinical trials before physical execution), AR/VR (predicting how objects will behave in mixed-reality environments), and robotics (planning movements in unstructured environments). Industry consensus points toward unified foundation world models with persistent memory by 2027 — a single model that can simulate diverse physical environments rather than domain-specific simulators.
+The practical applications are converging rapidly: autonomous navigation (Wayve's GAIA-2 learns driving behavior from video rather than hand-coded rules), digital twins (simulating factory layouts, supply chains, or clinical trials before physical execution), AR/VR (predicting how objects will behave in mixed-reality environments), and robotics (planning movements in unstructured environments). Industry consensus points toward unified foundation world models with persistent memory by 2027, a single model that can simulate diverse physical environments rather than domain-specific simulators.
 
 For AI architects, world models matter because they represent the next leap in what agents can do. Current agents reason about text and code. Agents with world models will reason about physical spaces, predict consequences of physical actions, and plan in three-dimensional environments.
 
 ### Vision-Language-Action (VLA) Models
 
-VLA models extend the vision-language paradigm into physical action. Where a VLM perceives and reasons, a VLA perceives, reasons, and acts — translating natural language instructions into physical behaviors through robotic actuators.
+VLA models extend the vision-language paradigm into physical action. Where a VLM perceives and reasons, a VLA perceives, reasons, and acts, translating natural language instructions into physical behaviors through robotic actuators.
 
 Key systems: **Gemini Robotics** (Google DeepMind) applies Gemini's multimodal reasoning to robotic manipulation. **NVIDIA GR00T** provides a foundation model for humanoid robots trained in simulation (Isaac Sim) and transferred to physical hardware. **Figure AI** develops general-purpose humanoid robots with integrated VLA capabilities. **Wayve** applies VLAs to autonomous driving, learning driving behaviors from video data.
 
-The architectural pattern: a vision encoder processes the robot's camera feeds, a language model processes the task instruction, and an action decoder generates motor commands — all in a single end-to-end model. The critical insight is that spatial intelligence — understanding 3D space, object affordances, and physical constraints — is emerging as the next frontier after language and vision understanding.
+The architectural pattern: a vision encoder processes the robot's camera feeds, a language model processes the task instruction, and an action decoder generates motor commands: all in a single end-to-end model. The critical insight is that spatial intelligence, understanding 3D space, object affordances, and physical constraints: is emerging as the next frontier after language and vision understanding.
 
 ### AI for Scientific Discovery
 
 AI systems are moving beyond assisting researchers to actively generating hypotheses, designing experiments, and interpreting results.
 
-**GPT-Rosalind** (OpenAI, June 3, 2026) is the first commercial vertical frontier model purpose-built for life sciences. It combines GPT-5.5's agentic capabilities with specialized performance in medicinal chemistry, genomics, and laboratory workflows. Claude Fable 5 / Mythos 5 demonstrated genomics capabilities that outperformed results from a Science paper at 100x smaller scale — showing that frontier models can match domain specialists on specific scientific tasks.
+**GPT-Rosalind** (OpenAI, June 3, 2026) is the first commercial vertical frontier model purpose-built for life sciences. It combines GPT-5.5's agentic capabilities with specialized performance in medicinal chemistry, genomics, and laboratory workflows. Claude Fable 5 / Mythos 5 demonstrated genomics capabilities that outperformed results from a Science paper at 100x smaller scale, showing that frontier models can match domain specialists on specific scientific tasks.
 
-**Digital twins** are moving from pilot to practice in clinical development. Pharmaceutical companies use AI-driven simulations to model drug interactions, patient responses, and trial outcomes before committing to physical trials — reducing development time from years to months for certain phases.
+**Digital twins** are moving from pilot to practice in clinical development. Pharmaceutical companies use AI-driven simulations to model drug interactions, patient responses, and trial outcomes before committing to physical trials, reducing development time from years to months for certain phases.
 
-The pattern for scientific AI: the model generates hypotheses from existing literature and data, proposes experimental designs to test them, controls laboratory equipment (through robotic integration), interprets results, and iterates. This is the full scientific method, automated — with human researchers overseeing and guiding rather than executing each step.
+The pattern for scientific AI: the model generates hypotheses from existing literature and data, proposes experimental designs to test them, controls laboratory equipment (through robotic integration), interprets results, and iterates. This is the full scientific method, automated, with human researchers overseeing and guiding rather than executing each step.
 
 ### Automated AI R&D
 
 The most consequential frontier: AI systems that improve AI systems.
 
-**Karpathy's AutoResearch** demonstrated the concept: 700 experiments, 2 days, 1 GPU. An AI agent formulated research hypotheses about model training, designed experiments to test them, ran the experiments, analyzed results, and iterated — producing a research report with findings. The agent replaced weeks of a researcher's manual experiment loop.
+**Karpathy's AutoResearch** demonstrated the concept: 700 experiments, 2 days, 1 GPU. An AI agent formulated research hypotheses about model training, designed experiments to test them, ran the experiments, analyzed results, and iterated, producing a research report with findings. The agent replaced weeks of a researcher's manual experiment loop.
 
-**Agent0** takes a different approach: adversarial co-evolution where two AI systems improve each other. Results: +18% on math benchmarks, +24% on reasoning — through self-play without human-generated training data. This echoes the AlphaZero pattern (self-play in chess/Go) applied to general reasoning.
+**Agent0** takes a different approach: adversarial co-evolution where two AI systems improve each other. Results: +18% on math benchmarks, +24% on reasoning: through self-play without human-generated training data. This echoes the AlphaZero pattern (self-play in chess/Go) applied to general reasoning.
 
-The trajectory is clear: AI systems are beginning to participate in their own improvement. Current systems require human guidance at the goal-setting level (what to research, what metrics matter). The research question is how far this automation extends before fundamental limits — or safety concerns — intervene. Sam Altman has referenced this as the "recursive self-improvement" trajectory. Whether this leads to rapid capability gains or diminishing returns is one of the most important open questions in the field.
+The trajectory is clear: AI systems are beginning to participate in their own improvement. Current systems require human guidance at the goal-setting level (what to research, what metrics matter). The research question is how far this automation extends before fundamental limits, or safety concerns: intervene. Sam Altman has referenced this as the "recursive self-improvement" trajectory. Whether this leads to rapid capability gains or diminishing returns is one of the most important open questions in the field.
 
 ## Connections to Other Course Topics
 
 Scaling (section 01): Multimodal models show emergence at large scale. GPT-4V capabilities appeared at sufficient size.
 
-RLHF (section 10): Multimodal RLHF is harder — visual understanding needs to be evaluated, not just text quality. Human feedback for image descriptions is more subjective.
+RLHF (section 10): Multimodal RLHF is harder: visual understanding needs to be evaluated, not just text quality. Human feedback for image descriptions is more subjective.
 
 Inference (section 17): Visual tokens increase context length. KV cache for 576+ visual tokens is substantial. Strategies: visual token compression, caching.
 
@@ -294,7 +294,7 @@ Distributed Training (section 16): Multimodal training requires larger batch siz
 
 ## Interpretability and Activation Research
 
-**Natural Language Autoencoders (Anthropic, as of late May 2026):** A research direction that translates internal model activations into natural-language explanations and then reconstructs the activations back from those explanations. The encoder converts a hidden-state vector into a human-readable sentence describing what the model "represents" at that layer; the decoder reconstructs an approximation of the original activation from the text explanation. This creates a more testable bridge between hidden state and human-readable interpretation than sparse autoencoders or probing classifiers — because the intermediate representation is literally natural language, it can be inspected, edited, and verified by humans. Early results show that the reconstruction fidelity is sufficient to preserve downstream model behavior in many cases, suggesting that a significant fraction of what models compute can be expressed in language.
+**Natural Language Autoencoders (Anthropic, as of late May 2026):** A research direction that translates internal model activations into natural-language explanations and then reconstructs the activations back from those explanations. The encoder converts a hidden-state vector into a human-readable sentence describing what the model "represents" at that layer; the decoder reconstructs an approximation of the original activation from the text explanation. This creates a more testable bridge between hidden state and human-readable interpretation than sparse autoencoders or probing classifiers: because the intermediate representation is literally natural language, it can be inspected, edited, and verified by humans. Early results show that the reconstruction fidelity is sufficient to preserve downstream model behavior in many cases, suggesting that a significant fraction of what models compute can be expressed in language.
 
 ## Key Takeaways
 
@@ -302,7 +302,7 @@ Vision encoders are the foundation. ViT, CLIP, SigLIP provide visual understandi
 
 Contrastive learning requires scale. Large batch sizes, many negatives, and the right temperature are critical for quality.
 
-Cross-modal alignment is non-trivial. Projection layers, cross-attention, Perceiver — different trade-offs between complexity and expressiveness.
+Cross-modal alignment is non-trivial. Projection layers, cross-attention, Perceiver: different trade-offs between complexity and expressiveness.
 
 Early fusion is deeper, late fusion is simpler. LLaVA-style concatenation provides deep integration. BLIP-2 style frozen encoders plus adapter is easier to train.
 
@@ -310,16 +310,16 @@ Instruction tuning transforms capabilities. Going from CLIP embeddings to a full
 
 Discrete vs continuous tokens. Continuous is simpler for understanding, discrete is necessary for unified generation.
 
-Video is exponentially harder. Temporal dimension, memory requirements, long-range reasoning — open problems.
+Video is exponentially harder. Temporal dimension, memory requirements, long-range reasoning: open problems.
 
 Resolution matters. High resolution equals more detail but more tokens. Trade-off quality vs compute.
 
 Modular architectures are giving way to native multimodality. The "frozen encoder + adapter" pattern dominated 2023-2024, but GPT-4o, Gemini 2.5, and Llama 4 demonstrate that native multimodal training from scratch enables superior cross-modal capabilities.
 
-Audio/speech is now a first-class modality. Real-time voice conversation (GPT-4o, Gemini) processes audio tokens directly, bypassing the ASR → LLM → TTS pipeline.
+Audio/speech is now a first-class modality. Real-time voice conversation (GPT-4o, Gemini) processes audio tokens directly, bypassing the ASR, then LLM, then TTS pipeline.
 
 Image/video generation is converging with understanding. Unified architectures that both understand and generate images (and video) are emerging, blurring the line between "understanding" and "generation" models.
 
-The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers — expected to reach production between 2026-2028 — will define the next generation of AI applications beyond text and code.
+The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers, expected to reach production between 2026-2028, will define the next generation of AI applications beyond text and code.
 
-This is a rapidly evolving field. GPT-5.4/5.5, Gemini 2.5/3, Claude Opus 4.8/Sonnet 4.6, Llama 4 — new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
+This is a rapidly evolving field. GPT-5.4/5.5, Gemini 2.5/3, Claude Opus 4.8/Sonnet 4.6, Llama 4, new multimodal capabilities emerge every few months, with native multimodality as the clear direction.

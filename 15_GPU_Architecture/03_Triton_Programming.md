@@ -4,7 +4,7 @@
 
 In an ideal world, libraries like PyTorch would cover all needs. In reality, even the most advanced frameworks cannot anticipate every scenario.
 
-A typical scenario: a model applies a sequence of operations (LayerNorm → linear → GELU → dropout). PyTorch executes each operation as a separate kernel. Between operations, intermediate results are written to HBM and read back. For four operations, that is eight extra passes through slow memory.
+A typical scenario: a model applies a sequence of operations (LayerNorm, then linear, then GELU, then dropout). PyTorch executes each operation as a separate kernel. Between operations, intermediate results are written to HBM and read back. For four operations, that is eight extra passes through slow memory.
 
 A fused kernel combines all operations into one: data is loaded from HBM once, processed in fast SRAM, and the result is written back. The IO savings can speed up the operation by 2-5x.
 
@@ -22,11 +22,11 @@ CUDA is the native language of GPU programming. It gives full control over every
 
 But this power comes at a cost. A CUDA kernel for a simple matrix multiply takes hundreds of lines of code. You need to manually manage data partitioning into tiles, loading into shared memory with coalescing, synchronization between threads, avoiding bank conflicts, optimizing occupancy, and utilizing Tensor Cores.
 
-Debugging CUDA is a separate nightmare. Race conditions, uninitialized memory, implicit type conversions — bugs manifest as incorrect results or spontaneous crashes, often non-reproducible.
+Debugging CUDA is a separate nightmare. Race conditions, uninitialized memory, implicit type conversions: bugs manifest as incorrect results or spontaneous crashes, often non-reproducible.
 
 ### Triton: Block-Level Abstraction
 
-Triton operates at the block level rather than individual threads. Instead of "thread 0 processes element 0, thread 1 processes element 1", the programmer thinks "a block processes a 64×64 tensor".
+Triton operates at the block level rather than individual threads. Instead of "thread 0 processes element 0, thread 1 processes element 1", the programmer thinks "a block processes a 64x64 tensor".
 
 This abstraction radically simplifies code:
 - No explicit thread management
@@ -43,7 +43,7 @@ Triton is not a silver bullet. There are scenarios where CUDA wins:
 
 **Extreme optimization.** For performance-critical kernels (Flash Attention, cuBLAS-level matrix multiply), hand-written CUDA can provide a 10-20% advantage.
 
-**Non-standard patterns.** Some algorithms do not map well to Triton's block model. Irregular memory access patterns, complex inter-block communication — CUDA is preferable here.
+**Non-standard patterns.** Some algorithms do not map well to Triton's block model. Irregular memory access patterns, complex inter-block communication: CUDA is preferable here.
 
 **Specific hardware features.** The newest GPU capabilities (asynchronous copies, special instructions) appear in CUDA first.
 
@@ -53,17 +53,17 @@ For most practical tasks, Triton is the right choice. Development time shrinks f
 
 ### Thinking in Blocks
 
-In Triton, the basic unit is a program instance that operates on a block of data. All threads within a block are abstracted away — you operate on entire tensors.
+In Triton, the basic unit is a program instance that operates on a block of data. All threads within a block are abstracted away. You operate on entire tensors.
 
-When you write tl.load(pointer) with a block size of 64, Triton generates code where 64 threads load 64 elements in parallel. Coalescing, bank conflicts, memory alignment — everything is handled by the compiler.
+When you write tl.load(pointer) with a block size of 64, Triton generates code where 64 threads load 64 elements in parallel. Coalescing, bank conflicts, memory alignment: everything is handled by the compiler.
 
 Key concepts:
 
-**Program ID** (tl.program_id) — the identifier of the current program instance. Analogous to blockIdx in CUDA. Used to determine which portion of data the given instance processes.
+**Program ID** (tl.program_id): the identifier of the current program instance. Analogous to blockIdx in CUDA. Used to determine which portion of data the given instance processes.
 
-**Block pointer** — a pointer to a block of data in global memory. Computed based on the program ID and block dimensions.
+**Block pointer**: a pointer to a block of data in global memory. Computed based on the program ID and block dimensions.
 
-**Block operations** — operations on entire blocks: tl.load, tl.store, arithmetic, reductions. All operations are vectorized by block size.
+**Block operations**: operations on entire blocks: tl.load, tl.store, arithmetic, reductions. All operations are vectorized by block size.
 
 ### Example: Vector Addition
 
@@ -81,7 +81,7 @@ An equivalent CUDA version would require explicit management of threadIdx, block
 
 Triton automatically optimizes memory coalescing for standard patterns. Sequential access (base + tl.arange(0, N)) generates coalesced loads/stores.
 
-For accessing multidimensional data (e.g., matrices), indices for rows and columns are created via tl.arange, then combined through broadcasting (using [:, None] and [None, :]) to create 2D grid indices from 1D ranges. Final offsets are computed as row_idx * stride_row + col_idx * stride_col, matching the memory layout.
+For accessing multidimensional data (e.g., matrices), indices for rows and columns are created via tl.arange, then combined through broadcasting (using [:, None] and [None,:]) to create 2D grid indices from 1D ranges. Final offsets are computed as row_idx * stride_row + col_idx * stride_col, matching the memory layout.
 
 ## Practical Examples
 
@@ -110,7 +110,7 @@ Matrix multiply is the king of deep learning operations. An optimized GEMM is an
 The basic idea: classic tiled matrix multiplication. Matrices are partitioned into blocks, blocks are loaded into fast SRAM, partial products are computed, and results are accumulated.
 
 Algorithm:
-- Each program instance processes a result block C of size BLOCK_M × BLOCK_N
+- Each program instance processes a result block C of size BLOCK_M x BLOCK_N
 - The program ID determines the block position in the output matrix
 - Offsets are computed for rows of matrix A and columns of matrix B
 - The main loop iterates over the K dimension with step BLOCK_K
@@ -130,9 +130,9 @@ Manual parameter tuning is tedious and not portable across hardware. Triton prov
 
 ### The autotune Decorator
 
-The @triton.autotune decorator automates the search for optimal parameters. You define a list of configurations with different values for BLOCK_SIZE, num_warps, num_stages, and other parameters. You also specify a key — the set of input parameters that the optimal choice depends on (typically data dimensions).
+The @triton.autotune decorator automates the search for optimal parameters. You define a list of configurations with different values for BLOCK_SIZE, num_warps, num_stages, and other parameters. You also specify a key, the set of input parameters that the optimal choice depends on (typically data dimensions).
 
-How it works: on the first kernel call with specific dimensions, Triton benchmarks all specified configurations, measures execution time, and selects the best one. The result is cached in the file system — subsequent calls with the same dimensions use the optimal config with no overhead.
+How it works: on the first kernel call with specific dimensions, Triton benchmarks all specified configurations, measures execution time, and selects the best one. The result is cached in the file system: subsequent calls with the same dimensions use the optimal config with no overhead.
 
 This is especially important for kernels in training loops where tensor sizes are fixed: autotuning runs once at the start, and the entire subsequent training uses optimal parameters.
 
@@ -154,13 +154,13 @@ Practical approach: start with a small set of "standard" configurations, then ex
 
 Triton kernels integrate with torch.profiler for basic profiling. You can wrap the kernel call in a profiler context and obtain timing information showing your kernel's time compared to other operations.
 
-For detailed analysis, use NVIDIA Nsight Compute — a professional tool that shows low-level metrics: achieved occupancy, memory throughput, instruction mix, L1/L2 cache hit rates, and register usage. Nsight Compute can pinpoint bottlenecks: whether the kernel is memory-bound or compute-bound, whether there are bank conflicts, and whether Tensor Cores are being utilized.
+For detailed analysis, use NVIDIA Nsight Compute, a professional tool that shows low-level metrics: achieved occupancy, memory throughput, instruction mix, L1/L2 cache hit rates, and register usage. Nsight Compute can pinpoint bottlenecks: whether the kernel is memory-bound or compute-bound, whether there are bank conflicts, and whether Tensor Cores are being utilized.
 
 ### Debugging Tips
 
 **Verify correctness first.** Before optimizing, ensure the kernel produces correct results. Compare with a PyTorch reference implementation.
 
-**Print intermediate values.** Triton supports tl.device_print for debugging (use with caution — it significantly slows execution).
+**Print intermediate values.** Triton supports tl.device_print for debugging (use with caution, it significantly slows execution).
 
 **Test edge cases.** Check boundary conditions: sizes not divisible by BLOCK_SIZE, very small and very large inputs.
 
@@ -196,7 +196,7 @@ PyTorch 2.0+ with torch.compile can automatically generate Triton kernels for yo
 
 Simply wrap a function or model with the @torch.compile decorator. The compiler will detect patterns like softmax + matmul + bias add and generate a single fused kernel, eliminating intermediate memory transfers.
 
-This is a "free" optimization for many cases — you get fusion without writing custom kernels. However, for specific operations or maximum performance, hand-written Triton kernels are still preferable.
+This is a "free" optimization for many cases, you get fusion without writing custom kernels. However, for specific operations or maximum performance, hand-written Triton kernels are still preferable.
 
 ## Key Takeaways
 

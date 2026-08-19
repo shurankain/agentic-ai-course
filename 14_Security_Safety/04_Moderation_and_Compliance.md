@@ -6,7 +6,7 @@ LLM systems generate content for which the system operator bears responsibility,
 
 Harmful content takes the following forms: hate speech, harassment, explicit sexual content, violence, instructions for illegal activities, self-harm content, misinformation, copyright infringement. Each category requires its own approach to detection and handling.
 
-The difficulty of moderating LLM content is that it is generated dynamically. It cannot be moderated in advance — only in real time. The volume of content can be enormous, and latency requirements are strict. Fully manual moderation is impossible.
+The difficulty of moderating LLM content is that it is generated dynamically. It cannot be moderated in advance: only in real time. The volume of content can be enormous, and latency requirements are strict. Fully manual moderation is impossible.
 
 The balance between safety and utility is a constant tension. Overly aggressive moderation blocks legitimate content and degrades UX. Overly lenient moderation lets harmful content through. Calibration requires ongoing effort.
 
@@ -14,27 +14,27 @@ The balance between safety and utility is a constant tension. Overly aggressive 
 
 Effective moderation uses a multi-layered approach, where each layer filters out problematic content at different speeds and accuracy levels.
 
-**First layer — keyword filtering.** Fast regex-based checking for explicitly prohibited words and phrases. Runs in microseconds, catches obvious cases. Limitation: easily bypassed through obfuscation (spaces, character substitution).
+**First layer: keyword filtering.** Fast regex-based checking for explicitly prohibited words and phrases. Runs in microseconds, catches obvious cases. Limitation: easily bypassed through obfuscation (spaces, character substitution).
 
-**Second layer — ML classifiers.** Specialized models (BERT-based, smaller transformers) classify text by harm categories. Run in tens of milliseconds, understand context better than keywords. Require training data and updates.
+**Second layer: ML classifiers.** Specialized models (BERT-based, smaller transformers) classify text by harm categories. Run in tens of milliseconds, understand context better than keywords. Require training data and updates.
 
-**Third layer — LLM-as-Judge.** Using a large language model to analyze complex cases. Understands nuances, context, implicit harm. Slower and more expensive, applied selectively — for borderline cases or spot checks.
+**Third layer: LLM-as-Judge.** Using a large language model to analyze complex cases. Understands nuances, context, implicit harm. Slower and more expensive, applied selectively: for borderline cases or spot checks.
 
 Cascade architecture: keyword filter passes 95% of requests instantly, ML classifier processes the suspicious 5%, LLM judge handles the 0.1% of particularly complex cases. Balances latency, cost, and accuracy.
 
 ## Harmful Content Categories
 
-**Hate speech** — content targeting groups based on race, religion, gender, orientation. Detection: specialized classifiers trained on hate speech datasets. Difficulty: the boundary between criticism and hatred, cultural context.
+**Hate speech**: content targeting groups based on race, religion, gender, orientation. Detection: specialized classifiers trained on hate speech datasets. Difficulty: the boundary between criticism and hatred, cultural context.
 
-**Harassment** — personal attacks, threats, bullying. Can target a specific individual or group. Detection: tone analysis, presence of threats, repeated patterns directed at one user.
+**Harassment**: personal attacks, threats, bullying. Can target a specific individual or group. Detection: tone analysis, presence of threats, repeated patterns directed at one user.
 
-**Sexual content** — explicit or implicit sexual content. Thresholds vary: what is acceptable on an adult platform is unacceptable for a general-use application. Detection: classifiers trained on corresponding datasets.
+**Sexual content**: explicit or implicit sexual content. Thresholds vary: what is acceptable on an adult platform is unacceptable for a general-use application. Detection: classifiers trained on corresponding datasets.
 
-**Violence** — descriptions of or instructions for violence. Gradations: fiction vs reality, defensive vs offensive. Context is critical — discussing historical events differs from providing instructions.
+**Violence**: descriptions of or instructions for violence. Gradations: fiction vs reality, defensive vs offensive. Context is critical, discussing historical events differs from providing instructions.
 
-**Self-harm** — content related to suicide, self-injury, eating disorders. A particularly sensitive category requiring a careful approach and possibly referral to support resources.
+**Self-harm**: content related to suicide, self-injury, eating disorders. A particularly sensitive category requiring a careful approach and possibly referral to support resources.
 
-**Dangerous content** — instructions for making weapons, explosives, drugs. A zero-tolerance category for most applications.
+**Dangerous content**: instructions for making weapons, explosives, drugs. A zero-tolerance category for most applications.
 
 ## Input Content Moderation
 
@@ -44,7 +44,7 @@ Request categorization: benign (pass through), suspicious (require attention), m
 
 The message shown to the user upon blocking should be informative but not reveal system details. "Your request could not be processed" is better than "Blocked due to hate speech classifier score 0.92".
 
-False positives on input are particularly painful — the user cannot get a legitimate response. The threshold must balance safety and usability.
+False positives on input are particularly painful: the user cannot get a legitimate response. The threshold must balance safety and usability.
 
 ## Output Content Moderation
 
@@ -58,7 +58,7 @@ Real-time requirements for streaming: moderation must work token-by-token or on 
 
 ## Factual Claims and Misinformation
 
-LLMs hallucinate — they generate plausible-sounding but factually incorrect content. For some applications (medicine, finance, law) this is a critical problem.
+LLMs hallucinate. They generate plausible-sounding but factually incorrect content. For some applications (medicine, finance, law) this is a critical problem.
 
 Fact-checking approaches: comparison with trusted sources, consistency checks (the model contradicts itself), confidence estimation (the model is uncertain).
 
@@ -70,31 +70,31 @@ Domain restrictions: prohibiting content generation in particularly sensitive ar
 
 Regulatory requirements define minimum standards for data and content processing. The landscape has evolved significantly in 2024-2025 with the EU AI Act becoming actively enforced and US states stepping in.
 
-### EU AI Act — Now Actively Enforced
+### EU AI Act: Now Actively Enforced
 
-The EU AI Act is no longer future regulation — it is active law with enforcement:
+The EU AI Act is no longer future regulation. It is active law with enforcement:
 
-**February 2025 — Prohibited practices ban in force:** Social scoring, real-time biometric identification in public spaces, emotion recognition in workplaces and schools, and manipulative AI targeting vulnerable groups are now prohibited. Fines up to 7% of global turnover.
+**February 2025: Prohibited practices ban in force:** Social scoring, real-time biometric identification in public spaces, emotion recognition in workplaces and schools, and manipulative AI targeting vulnerable groups are now prohibited. Fines up to 7% of global turnover.
 
-**August 2025 — GPAI obligations in force:** All General Purpose AI model providers must provide: technical documentation (architecture, training process, data sources), training data summaries, copyright compliance policies, and cooperation with regulators. Models exceeding 10^25 FLOPS (systemic risk) face additional requirements: adversarial testing, incident reporting, cybersecurity measures.
+**August 2025: GPAI obligations in force:** All General Purpose AI model providers must provide: technical documentation (architecture, training process, data sources), training data summaries, copyright compliance policies, and cooperation with regulators. Models exceeding 10^25 FLOPS (systemic risk) face additional requirements: adversarial testing, incident reporting, cybersecurity measures.
 
-**December 2027 — Standalone high-risk system requirements (delayed from August 2026 by the Digital Omnibus, May 2026):** Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure (Annex III). **August 2028** for high-risk AI embedded in regulated products (Annex I). Requirements unchanged — only deadlines shifted: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
+**December 2027: Standalone high-risk system requirements (delayed from August 2026 by the Digital Omnibus, May 2026):** Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure (Annex III). **August 2028** for high-risk AI embedded in regulated products (Annex I). Requirements unchanged: only deadlines shifted: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
 
 **Implications for AI architects:** Every production AI system deployed in the EU needs a risk classification. High-risk systems need conformity assessment architecture from the start. GPAI providers must maintain technical documentation as a continuous process, not a one-time effort.
 
-### US Regulatory Landscape — Federal and State
+### US Regulatory Landscape: Federal and State
 
 **Federal level:** The Biden Executive Order on AI (October 2023) was rescinded in January 2025, removing federal safety reporting requirements. NIST AI RMF remains as voluntary guidance. Sector-specific regulations continue: SEC/FINRA for finance, FDA for healthcare, FedRAMP for government.
 
-**State level — the new regulatory frontier:**
+**State level, the new regulatory frontier:**
 
-**Colorado AI Act (SB 24-205):** Originally the first comprehensive US state AI law (signed May 2024). Delayed to January 1, 2027 and significantly narrowed by SB 189 (signed May 14, 2026) — the risk-based framework was replaced with a transparency-only approach, eliminating the duty of care and most deployer obligations. The first comprehensive US state AI law was substantially weakened before enforcement.
+**Colorado AI Act (SB 24-205):** Originally the first comprehensive US state AI law (signed May 2024). Delayed to January 1, 2027 and significantly narrowed by SB 189 (signed May 14, 2026): the risk-based framework was replaced with a transparency-only approach, eliminating the duty of care and most deployer obligations. The first comprehensive US state AI law was substantially weakened before enforcement.
 
-**California:** SB-1047 was vetoed (September 2024), but California subsequently passed **SB-53** (signed into law September 2024) — a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
+**California:** SB-1047 was vetoed (September 2024), but California subsequently passed **SB-53** (signed into law September 2024): a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
 
-**Other states:** Illinois (AI Video Interview Act), Texas, Connecticut — sector-specific AI legislation is proliferating. The trend: in the absence of federal legislation, states are creating a patchwork of requirements.
+**Other states:** Illinois (AI Video Interview Act), Texas, Connecticut: sector-specific AI legislation is proliferating. The trend: in the absence of federal legislation, states are creating a patchwork of requirements.
 
-**Implication:** Multi-state US deployment now resembles multi-country EU deployment — track the strictest applicable law.
+**Implication:** Multi-state US deployment now resembles multi-country EU deployment: track the strictest applicable law.
 
 ### Data Protection Regulations
 
@@ -104,7 +104,7 @@ The EU AI Act is no longer future regulation — it is active law with enforceme
 
 **HIPAA (US healthcare)** requires protection of protected health information (PHI). LLM systems working with medical data must comply with strict requirements for encryption, access control, and audit logging.
 
-**SOC 2** — a framework for demonstrating security controls. Not legally mandatory but often required by enterprise customers. Covers: security, availability, processing integrity, confidentiality, privacy.
+**SOC 2**: a framework for demonstrating security controls. Not legally mandatory but often required by enterprise customers. Covers: security, availability, processing integrity, confidentiality, privacy.
 
 Industry-specific regulations in finance (SEC, FINRA), insurance, and education add additional requirements.
 
@@ -112,17 +112,17 @@ Industry-specific regulations in finance (SEC, FINRA), insurance, and education 
 
 Safety enforcement is shifting from application-level configuration to centralized organizational policy. This represents a significant architectural change: instead of each team configuring safety guardrails in their own application code, the platform enforces safety controls uniformly across all workloads.
 
-### AWS Bedrock Guardrails — Organizational Enforcement
+### AWS Bedrock Guardrails: Organizational Enforcement
 
-AWS Bedrock Guardrails (April 3, 2026 update) are now enforceable cross-account and at the AWS Organizations level. Previously, guardrails were configured per-application by individual development teams. Now, a central security team can define content policies, PII filters, and topic restrictions that apply to all Bedrock invocations across all accounts in the organization — regardless of what the application code does.
+AWS Bedrock Guardrails (April 3, 2026 update) are now enforceable cross-account and at the AWS Organizations level. Previously, guardrails were configured per-application by individual development teams. Now, a central security team can define content policies, PII filters, and topic restrictions that apply to all Bedrock invocations across all accounts in the organization: regardless of what the application code does.
 
-**Architectural implication:** Safety controls have moved from "each team configures safety" to "platform enforces safety." Individual applications cannot bypass organizational guardrails even if their code does not explicitly reference them. This is analogous to how AWS SCPs (Service Control Policies) restrict IAM permissions organization-wide — guardrails now work the same way for AI content safety.
+**Architectural implication:** Safety controls have moved from "each team configures safety" to "platform enforces safety." Individual applications cannot bypass organizational guardrails even if their code does not explicitly reference them. This is analogous to how AWS SCPs (Service Control Policies) restrict IAM permissions organization-wide: guardrails now work the same way for AI content safety.
 
-### Anthropic Runtime Controls — Beyond Refusals
+### Anthropic Runtime Controls, Beyond Refusals
 
 Anthropic introduced runtime controls that go beyond traditional model refusals: **cyber-risk blocks** prevent the model from executing actions that could cause security harm (not just refusing to answer, but actively blocking dangerous tool calls and code execution at the runtime level). The **Cyber Verification Program** provides a pathway for legitimate security researchers and professionals to access capabilities that are blocked for general users.
 
-**Architectural implication:** Safety has moved beyond the prompt-response layer into runtime control. The model does not just refuse dangerous requests — the runtime prevents them from executing. This is the difference between a firewall that logs bad packets (refusals) and a firewall that drops them (runtime controls). For architects building agent systems with tool use, this means safety enforcement happens at the execution layer, not just the generation layer.
+**Architectural implication:** Safety has moved beyond the prompt-response layer into runtime control. The model does not just refuse dangerous requests: the runtime prevents them from executing. This is the difference between a firewall that logs bad packets (refusals) and a firewall that drops them (runtime controls). For architects building agent systems with tool use, this means safety enforcement happens at the execution layer, not just the generation layer.
 
 ---
 
@@ -130,11 +130,11 @@ Anthropic introduced runtime controls that go beyond traditional model refusals:
 
 Retention policies define the data storage period. Different types have different requirements.
 
-**Conversation data** — typically 30-90 days for operational needs, followed by deletion or anonymization. Longer retention may be required for compliance (financial services).
+**Conversation data**: typically 30-90 days for operational needs, followed by deletion or anonymization. Longer retention may be required for compliance (financial services).
 
-**Audit logs** — longer retention (1-7 years) for investigation and compliance. PII in logs must be anonymized or encrypted.
+**Audit logs**: longer retention (1-7 years) for investigation and compliance. PII in logs must be anonymized or encrypted.
 
-**Training data** — if used for fine-tuning, requirements depend on consent and purpose limitation.
+**Training data**: if used for fine-tuning, requirements depend on consent and purpose limitation.
 
 Deletion procedures must be: comprehensive (all systems, including backups), verifiable (deletion can be confirmed), timely (within required timeframes).
 

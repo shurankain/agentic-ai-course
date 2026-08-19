@@ -44,13 +44,13 @@ Discussion points: why specifically sin/cos for positions (extrapolation, relati
 
 Problem: how to use unlabeled text for pre-training?
 
-Key idea: Masked Language Modeling — predict masked tokens using context from both sides.
+Key idea: Masked Language Modeling: predict masked tokens using context from both sides.
 
 Approach: mask fifteen percent of tokens, predict the original token, additionally Next Sentence Prediction (NSP).
 
 Results: SOTA on eleven NLP tasks, fine-tuning instead of feature extraction.
 
-Discussion points: why bidirectional matters (GPT was unidirectional), whether NSP is useful (later shown it is not — RoBERTa), mask token mismatch between pre-training and fine-tuning.
+Discussion points: why bidirectional matters (GPT was unidirectional), whether NSP is useful (later shown it is not, RoBERTa), mask token mismatch between pre-training and fine-tuning.
 
 ### 3. GPT-3: Language Models are Few-Shot Learners (2020)
 
@@ -82,7 +82,7 @@ Discussion points: reward hacking (the model optimizes a proxy not the true obje
 
 Problem: RLHF is expensive (requires annotators) and can have biases.
 
-Key idea: replace human feedback with AI feedback guided by a constitution — a set of principles.
+Key idea: replace human feedback with AI feedback guided by a constitution, a set of principles.
 
 Approach: generate responses, AI critiques according to the constitution, AI revises the response, RLAIF instead of RLHF.
 
@@ -108,7 +108,7 @@ Discussion points: what rank to choose (4-64 is usually sufficient), which layer
 
 Problem: attention requires O(n^2) memory for the scores matrix.
 
-Key idea: IO-aware algorithm — minimize transfers between HBM and SRAM.
+Key idea: IO-aware algorithm: minimize transfers between HBM and SRAM.
 
 Approach: tiling (process in blocks), online softmax (do not materialize the full matrix), recomputation (do not store attention for backward).
 
@@ -116,11 +116,11 @@ Results: 2-4x speedup, memory O(n) instead of O(n^2), up to 16K context without 
 
 Discussion points: trade-off recomputation versus memory, when Flash Attention does not help (short sequences), Flash Attention 2/3 improvements.
 
-### 8. Mixture of Experts — Switch Transformer (2022)
+### 8. Mixture of Experts: Switch Transformer (2022)
 
 Problem: scaling requires proportional growth of compute.
 
-Key idea: sparse activation — each token passes through only a subset of experts.
+Key idea: sparse activation: each token passes through only a subset of experts.
 
 Architecture: each input token is processed by a router that directs it to the most relevant K experts from the total pool, after which expert outputs are combined through weighted summation.
 
@@ -132,7 +132,7 @@ Discussion points: why load balancing matters (otherwise collapse to one expert)
 
 Problem: Transformer attention O(n^2) limits context length.
 
-Key idea: State Space Models with selective mechanism — linear complexity O(n).
+Key idea: State Space Models with selective mechanism, linear complexity O(n).
 
 Selective SSM: parameters depend on input (unlike classical SSMs), hardware-aware implementation.
 
@@ -162,7 +162,7 @@ Problem: LLMs cannot interact with the external world.
 
 Key idea: interleave reasoning (thought) and acting (tool use).
 
-Format: the model alternates between three types of steps — Thought (reasoning about what to do next), Action (tool call such as search), and Observation (the result of the action). The cycle continues until a final answer is obtained. This structure allows the model to plan actions, obtain up-to-date information from the external world, and adjust its plan based on the data received.
+Format: the model alternates between three types of steps: Thought (reasoning about what to do next), Action (tool call such as search), and Observation (the result of the action). The cycle continues until a final answer is obtained. This structure allows the model to plan actions, obtain up-to-date information from the external world, and adjust its plan based on the data received.
 
 Results: HotpotQA +6% over Chain-of-Thought, fewer hallucinations through grounding.
 
@@ -182,7 +182,7 @@ Discussion points: compute cost (many LLM calls), when justified (complex reason
 
 ### 13. DPO: Direct Preference Optimization (2023)
 
-Problem: RLHF is complex — requires a separate reward model and PPO training.
+Problem: RLHF is complex: requires a separate reward model and PPO training.
 
 Key idea: optimize the policy directly from preference data without an explicit reward model.
 
@@ -226,7 +226,7 @@ Discussion points: emergent reasoning from RL (no explicit CoT supervision), GRP
 
 ### 16. Scaling Monosemanticity (Anthropic, 2024)
 
-Problem: features in neural networks are superposed — one neuron encodes multiple concepts.
+Problem: features in neural networks are superposed. One neuron encodes multiple concepts.
 
 Key idea: train large sparse autoencoders on Claude 3 Sonnet to extract millions of interpretable features.
 
@@ -250,7 +250,7 @@ Problem: extending open-weight models to native multimodality and extreme contex
 
 Key idea: mixture-of-experts architecture with native vision, 10M token context via iRoPE (interleaved RoPE without position encodings in some layers).
 
-Results: Llama 4 Scout (17B active / 109B total, 16 experts), Llama 4 Maverick (17B active / 400B total, 128 experts). Scout achieves 10M context — the longest of any open model. Maverick competitive with GPT-4o and Gemini 2.5 Flash.
+Results: Llama 4 Scout (17B active / 109B total, 16 experts), Llama 4 Maverick (17B active / 400B total, 128 experts). Scout achieves 10M context, the longest of any open model. Maverick competitive with GPT-4o and Gemini 2.5 Flash.
 
 Discussion points: MoE trade-offs for open models (memory vs compute), iRoPE for extreme context lengths, distillation from Llama 4 Behemoth (288B active / 2T total), early-fusion multimodality.
 
@@ -276,11 +276,11 @@ Discussion points: why single-stage works (SFT objective + preference penalty), 
 
 ### 21. Mamba-2 and Hybrid Architectures (2024)
 
-Problem: pure SSM (Mamba) and pure Transformer each have limitations — SSMs struggle with recall, Transformers are quadratic.
+Problem: pure SSM (Mamba) and pure Transformer each have limitations, SSMs struggle with recall, Transformers are quadratic.
 
 Key idea: Mamba-2 connects SSMs to structured masked attention, enabling efficient hardware implementation. Hybrid architectures (Jamba, Zamba) combine Transformer and Mamba layers.
 
-Results: Mamba-2 achieves 2-8x speedup over Mamba-1 with competitive quality. Jamba (AI21, 52B MoE) combines attention layers with Mamba layers — 256K context with linear memory scaling. Zamba (Zyphra) uses similar hybridization for edge deployment.
+Results: Mamba-2 achieves 2-8x speedup over Mamba-1 with competitive quality. Jamba (AI21, 52B MoE) combines attention layers with Mamba layers: 256K context with linear memory scaling. Zamba (Zyphra) uses similar hybridization for edge deployment.
 
 Discussion points: SSM vs attention trade-offs (recall, in-context learning, efficiency), hybrid layer scheduling (which layers use attention vs SSM), implications for long-context inference, whether hybrids will replace pure Transformers.
 
@@ -288,15 +288,15 @@ Discussion points: SSM vs attention trade-offs (recall, in-context learning, eff
 
 ### 22. Training Language Models to Follow Instructions (InstructGPT)
 
-Foundation for alignment — see section four above.
+Foundation for alignment: see section four above.
 
 ### 23. Anthropic's Papers on AI Safety
 
 Red Teaming Language Models (2022): methodology for finding vulnerabilities, crowdsourced attacks.
 
-Sleeper Agents (2024): whether a model can be trained to behave well but activate upon a trigger, deceptive alignment concerns. Key finding: safety training (RLHF, SFT) does not remove backdoor behavior — it persists through standard safety fine-tuning.
+Sleeper Agents (2024): whether a model can be trained to behave well but activate upon a trigger, deceptive alignment concerns. Key finding: safety training (RLHF, SFT) does not remove backdoor behavior, it persists through standard safety fine-tuning.
 
-Scaling Monosemanticity (2024): extracting millions of interpretable features from Claude 3 Sonnet using sparse autoencoders — see paper 16 above.
+Scaling Monosemanticity (2024): extracting millions of interpretable features from Claude 3 Sonnet using sparse autoencoders, see paper 16 above.
 
 Discussion points for Anthropic interviews: why alignment matters before creating AGI, the scalable oversight problem, interpretability as a path to safety, RSP (Responsible Scaling Policy) and ASL levels.
 
@@ -312,7 +312,7 @@ If time is limited, focus on these: Attention Is All You Need (the foundation of
 
 On specific papers: "Explain the attention mechanism in transformers", "How does RLHF work? What are its limitations?", "What's the difference between DPO and RLHF?", "How does RAG help with hallucinations?"
 
-Comparative: "When would you use LoRA versus full fine-tuning?", "Compare CoT, ToT, and ReAct", "MoE versus dense models — trade-offs?"
+Comparative: "When would you use LoRA versus full fine-tuning?", "Compare CoT, ToT, and ReAct", "MoE versus dense models, trade-offs?"
 
 Open-ended: "What's the most important paper from last year?", "What research directions excite you?", "How would you improve paper X?"
 

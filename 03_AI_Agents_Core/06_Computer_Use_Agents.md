@@ -2,9 +2,9 @@
 
 ## Introduction: When the Agent Goes Beyond Text
 
-Before late 2024, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use — a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
+Before late 2024, AI agents existed in a text-based world: they read documents, generated responses, called APIs. But in October 2024, Anthropic introduced Claude Computer Use, a capability that allows the model to literally control a computer: see the screen, move the mouse, press keys.
 
-This is a qualitative shift. The agent is no longer limited to what the developer explicitly implemented as a tool. It can use any software the same way a human does — through a graphical interface. Fill out a form in a browser, edit a document in Word, run a script in the terminal.
+This is a qualitative shift. The agent is no longer limited to what the developer explicitly implemented as a tool. It can use any software the same way a human does: through a graphical interface. Fill out a form in a browser, edit a document in Word, run a script in the terminal.
 
 However, with this power comes complexity: security, reliability, speed. Computer Use is a rapidly maturing capability, and understanding its possibilities and limitations is critical for an AI systems architect.
 
@@ -38,7 +38,7 @@ The core loop of a Computer Use agent is built on continuous interaction between
 
 1. **State Capture**: The agent takes a screenshot of the current screen for visual context analysis
 2. **Analysis and Planning**: Claude processes the image and, based on the task, action history, and current UI state, decides on the next step
-3. **Action Execution**: Through input control libraries (e.g., pyautogui), the action is executed — a mouse click, text input, or key press
+3. **Action Execution**: Through input control libraries (e.g., pyautogui), the action is executed: a mouse click, text input, or key press
 4. **Waiting for Response**: The system pauses, giving the interface time to react to the action (animations, data loading, DOM updates)
 5. **Iteration**: The loop repeats until the task is completed or the action limit is reached
 
@@ -88,7 +88,7 @@ Vision-language models vary significantly in how well they interpret different a
 | Element type (button, field) | Medium | Based on visual cues |
 | Color and contrast | High | Distinguishes well |
 | Icons and symbols | Medium | Depends on training data |
-| Element state | Low | Disabled, selected — more difficult |
+| Element state | Low | Disabled, selected - more difficult |
 
 **Visual Understanding Limitations:**
 
@@ -96,7 +96,7 @@ Vision-language models vary significantly in how well they interpret different a
 
 2. **Spatial Reasoning**: The model understands relative positioning better ("button to the right of the input field") than absolute coordinates ("button at 150px from the left edge").
 
-3. **Dynamic Content**: The model sees only a static snapshot of a moment. Animations, smooth transitions, loading states — all of these can create confusion if the UI is captured in an intermediate state.
+3. **Dynamic Content**: The model sees only a static snapshot of a moment. Animations, smooth transitions, loading states. All of these can create confusion if the UI is captured in an intermediate state.
 
 ### The Coordinate Accuracy Problem
 
@@ -106,7 +106,7 @@ There are several fundamental sources of error when working with coordinates:
 
 1. **Quantization Error**: The model works with image patches, not individual pixels. With a patch size of 16x16 pixels, there can be an error of up to +/-8 pixels in determining the exact position of an element.
 
-2. **Resolution Mismatch**: The screenshot is scaled to fit the model's input size (e.g., 1920x1080 → 1024x768), requiring coordinate recalculation. Rounding errors during this recalculation accumulate.
+2. **Resolution Mismatch**: The screenshot is scaled to fit the model's input size (e.g., 1920x1080 to 1024x768), requiring coordinate recalculation. Rounding errors during this recalculation accumulate.
 
 3. **Coordinate Representation**: The model generates numbers as a sequence of tokens. The number "523" is three separate tokens ("5", "2", "3"), and each can be predicted incorrectly.
 
@@ -120,7 +120,7 @@ There are several proven approaches for increasing the accuracy of UI interactio
 Instead of specifying absolute pixel coordinates, semantic descriptions are used: "Click the center of the search button" instead of "Click at (523, 287)". This allows the model to use visual understanding of the UI rather than precise numeric coordinates, which it generates as tokens and where errors are easy to make.
 
 **2. Grid Overlay**
-A visible grid with labels (A1, A2, B1, B2 — like in Excel) is overlaid on the screenshot. The model can reference grid cells, which provides better accuracy than absolute coordinates while maintaining positioning flexibility.
+A visible grid with labels (A1, A2, B1, B2: like in Excel) is overlaid on the screenshot. The model can reference grid cells, which provides better accuracy than absolute coordinates while maintaining positioning flexibility.
 
 **3. Set-of-Marks (SoM)**
 Interactive UI elements are automatically numbered on the screenshot. Instead of determining coordinates, the model simply says "Click element 5". This requires preliminary element detection (through accessibility APIs or computer vision) but significantly increases reliability.
@@ -167,7 +167,7 @@ Performance improvements have been uneven across task categories, with browser-b
 
 **The problem with the screenshot-based approach:**
 
-A screenshot = a "picture" of the UI; the model must "understand" it visually. But the UI already has a structural representation — the Accessibility Tree.
+A screenshot = a "picture" of the UI; the model must "understand" it visually. But the UI already has a structural representation, the Accessibility Tree.
 
 **What Accessibility APIs are:**
 
@@ -190,7 +190,7 @@ Accessibility APIs provide structured, semantic information that eliminates much
 
 The most reliable production systems use a hybrid approach, combining visual understanding with structural data:
 
-1. The accessibility tree is extracted — a structural representation of the UI with explicit information about elements, their types, states, and bounds
+1. The accessibility tree is extracted, a structural representation of the UI with explicit information about elements, their types, states, and bounds
 2. Only interactive elements are filtered (buttons, input fields, links)
 3. Numbered markers are overlaid on the screenshot for each interactive element
 4. The model receives both visual information (annotated screenshot) and structural information (list of elements with their properties)
@@ -215,7 +215,7 @@ This approach combines the advantages of both methods: the accuracy and speed of
 Agents handle form filling, navigation through familiar interfaces, copying data between applications, creating screenshots and process documentation well.
 
 **2. Tasks with clear visual feedback:**
-When the result of an action is immediately visible on screen (click a button → a dialog appears, enter text → text is displayed, scroll → new content is visible), the agent can easily verify the success of the operation.
+When the result of an action is immediately visible on screen (click a button, then a dialog appears, enter text, then text is displayed, scroll, then new content is visible), the agent can easily verify the success of the operation.
 
 **3. Exploration and investigation:**
 Agents are effective for exploratory tasks like "find where in settings X is enabled" or "show what options are in this menu", where navigation through an unfamiliar interface is required.
@@ -243,7 +243,7 @@ Agents are effective for exploratory tasks like "find where in settings X is ena
 - CAPTCHAs and anti-bot protections
 
 **5. Hallucinations in visual perception:**
-The model can misinterpret UI elements — for example, asserting that it sees a 'Submit' button in the right corner when it is actually a 'Cancel' button. This is especially critical for consequential actions.
+The model can misinterpret UI elements, for example, asserting that it sees a 'Submit' button in the right corner when it is actually a 'Cancel' button. This is especially critical for consequential actions.
 
 ---
 
@@ -266,7 +266,7 @@ A malicious website can display text like "IMPORTANT: Ignore previous instructio
 - **Deepfake UI elements:** Fake dialog boxes, confirmation prompts, or system notifications rendered within a webpage that trick the agent into believing it is interacting with the operating system rather than a malicious page
 - **Cross-application injection:** A document opened in one application contains instructions that influence the agent's behavior in another application visible on the same screen
 
-These visual injection attacks are particularly dangerous because traditional text-based input sanitization is ineffective — the malicious content arrives through the visual channel, bypassing all text-layer defenses.
+These visual injection attacks are particularly dangerous because traditional text-based input sanitization is ineffective, the malicious content arrives through the visual channel, bypassing all text-layer defenses.
 
 **3. Credential exposure:**
 - The agent sees the entire screen, including passwords
@@ -326,7 +326,7 @@ Hard limits are set on the number of actions (e.g., a maximum of 100) and sessio
 Legacy systems often lack APIs or documentation for automation. Computer Use can work with them as a "human" through the UI. Typical examples: mainframe terminals with green screens, desktop applications without automation APIs, web applications with complex bot protection. This is the only way to automate interaction without modifying legacy code.
 
 **2. Testing and QA:**
-Computer Use can test applications like a real user, finding UI/UX issues that traditional e2e tests miss. No specific test frameworks are required — the agent works with any application. However, such tests are slower than traditional ones and can be flaky due to visual recognition inaccuracy.
+Computer Use can test applications like a real user, finding UI/UX issues that traditional e2e tests miss. No specific test frameworks are required: the agent works with any application. However, such tests are slower than traditional ones and can be flaky due to visual recognition inaccuracy.
 
 **3. Data Entry Automation:**
 For one-time data migrations (e.g., transferring from Excel to a web form), Computer Use can be an effective solution. Suitable when the target system has no API, the data volume does not justify developing custom automation, and the task is not recurring.
@@ -344,9 +344,9 @@ The computer use landscape has expanded significantly beyond Claude's initial la
 
 Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4, and now the 4.6 generation) and the computer use infrastructure pushed scores to 61.4%. In February 2026, Anthropic acquired **Vercept**, a computer vision startup, to accelerate Computer Use capabilities.
 
-**Claude for Chrome** — a browser extension providing computer use capabilities directly in the browser, without requiring a full desktop environment. Optimized for web workflows with access to the DOM and accessibility tree alongside visual understanding.
+**Claude for Chrome**: a browser extension providing computer use capabilities directly in the browser, without requiring a full desktop environment. Optimized for web workflows with access to the DOM and accessibility tree alongside visual understanding.
 
-**Cowork** — Anthropic's hosted computer use environment where Claude operates in a managed virtual machine accessible via the web. Users can watch Claude work in real-time, intervene when needed, and take over at any point. Designed for supervised workflows like research, data entry, and application testing.
+**Cowork**: Anthropic's hosted computer use environment where Claude operates in a managed virtual machine accessible via the web. Users can watch Claude work in real-time, intervene when needed, and take over at any point. Designed for supervised workflows like research, data entry, and application testing.
 
 ### Amazon Nova Act
 
@@ -438,19 +438,19 @@ Choosing between computer use agents and traditional automation tools involves t
 
 ## Key Takeaways
 
-1. **Computer Use has matured rapidly** — from 14.9% to 76%+ on OSWorld in under two years, with top agents now exceeding the 72% human baseline
+1. **Computer Use has matured rapidly**: from 14.9% to 76%+ on OSWorld in under two years, with top agents now exceeding the 72% human baseline
 
-2. **Security requires a dedicated environment** — never run on production systems without isolation
+2. **Security requires a dedicated environment**: never run on production systems without isolation
 
 3. **Human-in-the-loop remains important** for consequential actions, though reliability has improved enough for supervised production use
 
-4. **Multiple platforms now compete** — Claude Computer Use (most capable), Cowork (hosted/supervised), Nova Act (AWS/web), Browser Use (open source), Project Mariner (Gemini)
+4. **Multiple platforms now compete**: Claude Computer Use (most capable), Cowork (hosted/supervised), Nova Act (AWS/web), Browser Use (open source), Project Mariner (Gemini)
 
 5. **Browser-specific agents** (Browser Use, Nova Act, Claude for Chrome) offer better reliability for web tasks by combining visual and DOM-based approaches
 
-6. **Prompt injection through UI** — remains a critical attack vector as these agents become more capable
+6. **Prompt injection through UI**: remains a critical attack vector as these agents become more capable
 
-7. **Hybrid approaches are standard** — Computer Use for flexibility and legacy systems, traditional APIs for reliability and speed
+7. **Hybrid approaches are standard**: Computer Use for flexibility and legacy systems, traditional APIs for reliability and speed
 
 ---
 
@@ -464,17 +464,17 @@ A minimal working implementation of a Computer Use agent includes several key co
 
 A minimal working implementation of a Computer Use agent starts with defining the types of actions the agent can perform. An enumeration is created for the basic operations: taking a screenshot, mouse click, text input, special key press, and scrolling.
 
-Each action is represented as a data structure containing the operation type and required parameters. For a mouse click, these are the x and y coordinates on the screen. For text input — the string to type. For key presses — the key name. All parameters are made optional since different action types require different data.
+Each action is represented as a data structure containing the operation type and required parameters. For a mouse click, these are the x and y coordinates on the screen. For text input: the string to type. For key presses: the key name. All parameters are made optional since different action types require different data.
 
 The main agent class is initialized with an Anthropic API client and an empty action history. The history is necessary for debugging and potential session replay.
 
-The screen capture method uses the pyautogui library to take a screenshot, then scales the image to 1280x720 resolution using the LANCZOS algorithm to preserve quality. Scaling is critically important — it balances detail (needed for recognizing small UI elements) against token count (the smaller the image, the cheaper and faster the processing). The image is saved to a memory buffer in PNG format, then encoded in base64 for transmission through the API.
+The screen capture method uses the pyautogui library to take a screenshot, then scales the image to 1280x720 resolution using the LANCZOS algorithm to preserve quality. Scaling is critically important: it balances detail (needed for recognizing small UI elements) against token count (the smaller the image, the cheaper and faster the processing). The image is saved to a memory buffer in PNG format, then encoded in base64 for transmission through the API.
 
 The action execution method checks the operation type and calls the corresponding function from the pyautogui library. For clicks, coordinates are passed. For text input, the typewrite function is used with a 0.02-second interval between key presses, simulating natural human typing. For special keys, the press function is used. After each action, it is added to the history. All operations are wrapped in an exception handler for fault tolerance.
 
 The main task execution method implements an iterative interaction loop. A maximum number of iterations (typically 20) is set to prevent infinite loops. On each iteration: the current screen state is captured, a message for Claude is formed with the embedded image and text prompt, the request is sent to the API with the available computer tool definition, the model's response with tool calls is processed, and after each action a half-second pause is made, giving the user interface time to update.
 
-The API message includes the image in base64 format and text. On the first iteration, the text contains the full task description and the question "What action should I perform next?"; on subsequent iterations — a brief "What next?" to save tokens.
+The API message includes the image in base64 format and text. On the first iteration, the text contains the full task description and the question "What action should I perform next?"; on subsequent iterations: a brief "What next?" to save tokens.
 
 The computer tool definition is passed to the API via the tools parameter. The schema specifies that the tool accepts an action type (string), coordinates (number array), and text (string). Claude uses this schema to generate correct tool calls.
 
@@ -526,7 +526,7 @@ Then an instance of the secured agent is created with this policy. When calling 
 
 ### Multi-Step Task Orchestration
 
-For complex tasks requiring a sequence of actions, an orchestrator is needed — a component that manages the execution of multi-step workflows.
+For complex tasks requiring a sequence of actions, an orchestrator is needed, a component that manages the execution of multi-step workflows.
 
 **TaskOrchestrator Architecture:**
 
@@ -548,8 +548,8 @@ This allows rollback to the last successful state upon error.
 **3. Error Recovery:**
 When an action fails, the orchestrator:
 - Increments the attempt counter
-- If the limit is not exceeded — retries
-- If checkpoints exist — can roll back
+- If the limit is not exceeded, retries
+- If checkpoints exist: can roll back
 - Can apply an alternative strategy (e.g., a different way to reach the element)
 
 **4. Verification:**
@@ -572,7 +572,7 @@ The task is broken into a sequence of steps with control points. The first step 
 
 If the third step (filling in the email) fails, the orchestrator applies a recovery strategy:
 
-On the first attempt, the system simply retries the same approach — tries to click the email field and enter the address. This helps with temporary issues like slow interface response.
+On the first attempt, the system simply retries the same approach: tries to click the email field and enter the address. This helps with temporary issues like slow interface response.
 
 On the second attempt, an alternative strategy is applied: instead of clicking on the field, navigation via the Tab key from the previous field is used, followed by text entry. This works around coordinate click accuracy issues.
 

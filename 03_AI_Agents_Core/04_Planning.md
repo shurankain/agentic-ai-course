@@ -36,7 +36,7 @@ Good decomposition follows several principles.
 
 **Logical sequence**: steps should follow the order in which they are naturally performed. You cannot put the cart before the horse. Each step must have all necessary input data from previous steps.
 
-**Measurability of results**: for each subtask, it should be clear what constitutes successful completion. "Gather information on competitors" — when is this considered done? When information on five competitors has been collected? Ten? When the information includes specific data points?
+**Measurability of results**: for each subtask, it should be clear what constitutes successful completion. "Gather information on competitors", when is this considered done? When information on five competitors has been collected? Ten? When the information includes specific data points?
 
 ### Complexity Assessment
 
@@ -60,7 +60,7 @@ Each level operates at its own scale and in its own language. The commander-in-c
 
 Hierarchical planning provides several advantages.
 
-**Complexity management**: at each level, only a limited number of elements are considered. Instead of a hundred actions — ten subgoals, each containing ten actions.
+**Complexity management**: at each level, only a limited number of elements are considered. Instead of a hundred actions, ten subgoals, each containing ten actions.
 
 **Flexibility**: if the plan at a lower level does not work, only that level needs changing without affecting upper levels. If a tactic fails, a different tactic can be tried within the same strategy.
 
@@ -80,15 +80,15 @@ Dynamic refinement saves resources: there is no need to plan in detail steps tha
 
 HTN is a formalism for hierarchical planning that divides tasks into two types:
 
-**Primitive tasks** — directly executable actions that correspond to tool calls. They have preconditions (what must be true before execution) and effects (what changes after execution). Examples: send an email, search the web, read a file.
+**Primitive tasks**: directly executable actions that correspond to tool calls. They have preconditions (what must be true before execution) and effects (what changes after execution). Examples: send an email, search the web, read a file.
 
-**Compound tasks** — high-level abstractions that are not executed directly but decomposed into subtasks. For each compound task, several decomposition methods are defined — different ways to accomplish it. Examples: research a topic, prepare a report, deploy an application.
+**Compound tasks**: high-level abstractions that are not executed directly but decomposed into subtasks. For each compound task, several decomposition methods are defined, different ways to accomplish it. Examples: research a topic, prepare a report, deploy an application.
 
 Each decomposition method includes preconditions (when this method is applicable) and a sequence of subtasks (how exactly to accomplish the compound task using this method). For example, the task "prepare a report" may have two methods: (1) research and write from scratch, (2) use an existing template. The choice of method depends on context.
 
 **The HTN planning algorithm** works recursively: if all tasks are primitive, the plan is ready; otherwise, the first compound task is selected, an applicable method is chosen for it, the task is replaced with the method's subtasks, and the process repeats.
 
-**Difference from classical planning:** Classical planning (STRIPS) works with a goal state and searches for any way to achieve it, which can be inefficient. HTN encodes domain expert knowledge in decomposition methods, guiding the search but limiting flexibility — only tasks with defined methods can be solved.
+**Difference from classical planning:** Classical planning (STRIPS) works with a goal state and searches for any way to achieve it, which can be inefficient. HTN encodes domain expert knowledge in decomposition methods, guiding the search but limiting flexibility: only tasks with defined methods can be solved.
 
 **Application to LLM agents:** Language models can act as HTN planners, selecting decomposition methods based on natural language reasoning. The agent analyzes preconditions, selects an appropriate method, then recursively decomposes subtasks until it obtains a sequence of primitive actions.
 
@@ -108,7 +108,7 @@ Plan-space search works differently: it starts with an "empty" plan containing o
 
 **Partial-Order Planning:**
 
-Unlike a linear plan (strict sequence A → B → C → D), a partial-order plan defines ordering only where dependencies exist. If actions B and C are independent, the plan can represent them as parallel branches after A and before D.
+Unlike a linear plan (strict sequence A, then B, then C, then D), a partial-order plan defines ordering only where dependencies exist. If actions B and C are independent, the plan can represent them as parallel branches after A and before D.
 
 Advantages: greater flexibility (fewer unnecessary ordering constraints), parallelism expressed naturally, fewer backtracks during solution search.
 
@@ -131,9 +131,9 @@ LLM agents implicitly implement classical planning concepts: state representatio
 GOAP (Goal-Oriented Action Planning) is a formal approach to planning borrowed from the game industry. It represents the world as a set of boolean variables describing the state (e.g., "have key," "door is open," "monster defeated").
 
 Each action is defined by three components:
-- **Preconditions** — what must be true for the action to become possible
-- **Effects** — which state variables change after the action
-- **Cost** — how much it "costs" to perform this action (time, resources, risk)
+- **Preconditions**: what must be true for the action to become possible
+- **Effects**: which state variables change after the action
+- **Cost**: how much it "costs" to perform this action (time, resources, risk)
 
 The goal is formulated as a desired state: a set of variables that must become true. The planner searches for a sequence of actions that transitions the current state to the goal state with minimal total cost.
 
@@ -155,7 +155,7 @@ GOAP excels for tasks with well-defined states and actions: system configuration
 
 However, the world of LLM agents is often more ambiguous. States are hard to formalize as boolean variables. Action effects are nondeterministic (an API may return an unexpected result). Cost varies and depends on context.
 
-Nevertheless, GOAP concepts are valuable. Thinking in terms of "preconditions → action → effects" helps structure planning. GOAP can be used for subtasks with formalizable states, while LLMs handle high-level planning and uncertainty.
+Nevertheless, GOAP concepts are valuable. Thinking in terms of "preconditions, then action, then effects" helps structure planning. GOAP can be used for subtasks with formalizable states, while LLMs handle high-level planning and uncertainty.
 
 ---
 
@@ -163,7 +163,7 @@ Nevertheless, GOAP concepts are valuable. Thinking in terms of "preconditions �
 
 ### LLM as a Universal Planner
 
-Language models open a radically new approach to planning. Instead of formal algorithms requiring strict specification of states and actions — natural language reasoning. The model receives a task description in human language, a list of available tools, and generates a structured execution plan.
+Language models open a radically new approach to planning. Instead of formal algorithms requiring strict specification of states and actions: natural language reasoning. The model receives a task description in human language, a list of available tools, and generates a structured execution plan.
 
 This works surprisingly well for several reasons:
 
@@ -181,7 +181,7 @@ Plan quality depends on prompt quality. An effective prompt includes:
 
 **2. Available tools:** Name, purpose, parameters, return values, limitations (rate limits, side effects).
 
-**3. Output format:** Step structure (action, tool, input data, result), explicit dependencies, optionally — complexity, fallback alternatives on errors.
+**3. Output format:** Step structure (action, tool, input data, result), explicit dependencies, optionally, complexity, fallback alternatives on errors.
 
 **4. Quality criteria:** Speed vs. reliability? Risk tolerance or conservatism? Minimize calls or cost?
 
@@ -205,9 +205,9 @@ At a fundamental level, planning is search in the space of action sequences. Thi
 
 **Model-Free vs. Model-Based RL:**
 
-Model-Free RL learns from experience without an explicit world model (Q-Learning, Policy Gradient). In agents — analogous to ReAct without planning.
+Model-Free RL learns from experience without an explicit world model (Q-Learning, Policy Gradient). In agents: analogous to ReAct without planning.
 
-Model-Based RL builds a transition model and plans on top of it (Dyna, MCTS, MuZero). In agents — Plan-and-Execute and LATS.
+Model-Based RL builds a transition model and plans on top of it (Dyna, MCTS, MuZero). In agents: Plan-and-Execute and LATS.
 
 ### LLM as a World Model
 
@@ -217,7 +217,7 @@ The LLM acts as a world model: predicting action outcomes, estimating their valu
 
 MCTS is an algorithm from model-based RL, applied in LATS.
 
-**MCTS cycle:** Selection (node selection) → Expansion (generating continuations) → Simulation (playout) → Backpropagation (updating evaluations).
+**MCTS cycle:** Selection (node selection), then Expansion (generating continuations), then Simulation (playout), then Backpropagation (updating evaluations).
 
 **Adaptation for LLMs:** Selection with UCB on a thought tree, Expansion via LLM, Simulation as LLM-guided rollout, Backprop updates node scores.
 
@@ -243,7 +243,7 @@ Understanding the connection between planning and RL helps design effective agen
 
 No plan survives contact with reality unchanged. Tools fail. Data differs from expectations. New information emerges that changes priorities. Requirements evolve during execution.
 
-Adaptive planning is the ability to adjust the plan during execution without losing the overall direction toward the goal. This is not just error handling — it is continuous situation monitoring and readiness to revise the approach.
+Adaptive planning is the ability to adjust the plan during execution without losing the overall direction toward the goal. This is not just error handling. It is continuous situation monitoring and readiness to revise the approach.
 
 An agent with adaptive planning asks itself questions at every step:
 - Is this still the best path to the goal?
@@ -255,13 +255,13 @@ An agent with adaptive planning asks itself questions at every step:
 
 When a plan step fails, the agent has four primary strategies. The choice depends on the nature of the error, remaining resources, and proximity to the goal.
 
-**Retry:** For transient failures — timeouts, server overload, rate limiting. Use with exponential backoff and an attempt limit. Avoid for fundamental errors (wrong parameters, missing permissions).
+**Retry:** For transient failures: timeouts, server overload, rate limiting. Use with exponential backoff and an attempt limit. Avoid for fundamental errors (wrong parameters, missing permissions).
 
-**Modify:** When the error is in the parameters but the approach is correct — wrong URL, data format. Use when it is clear what to fix and how. Avoid for unclear problems or multiple failures.
+**Modify:** When the error is in the parameters but the approach is correct, wrong URL, data format. Use when it is clear what to fix and how. Avoid for unclear problems or multiple failures.
 
-**Alternative:** When the action is impossible but the goal is achievable by another means — fallback API, different tool. Use when a clear alternative with acceptable cost exists. Avoid when the alternative is unknown or too expensive.
+**Alternative:** When the action is impossible but the goal is achievable by another means, fallback API, different tool. Use when a clear alternative with acceptable cost exists. Avoid when the alternative is unknown or too expensive.
 
-**Replan (Full Replanning):** When changes are substantial — build a new plan accounting for what has been completed. Use when multiple errors point to an incorrect approach, or when context has changed fundamentally. Avoid when 1-2 steps remain to the goal or the plan is still workable with minor adjustments.
+**Replan (Full Replanning):** When changes are substantial: build a new plan accounting for what has been completed. Use when multiple errors point to an incorrect approach, or when context has changed fundamentally. Avoid when 1-2 steps remain to the goal or the plan is still workable with minor adjustments.
 
 ### Incremental Plan Refinement
 
@@ -271,17 +271,17 @@ Sometimes a plan needs refinement not because of errors but because new informat
 
 **Principle:** The plan evolves based on accumulated knowledge. Each step provides information for refining the remaining steps. This is not rewriting but organic evolution.
 
-**Balance between planning and execution:** Too much detail upfront — wasted effort on steps that will change. Too little — chaotic wandering. The optimum: a detailed plan for 2-3 steps ahead, a rough plan for the entire task, refinement as progress is made.
+**Balance between planning and execution:** Too much detail upfront: wasted effort on steps that will change. Too little: chaotic wandering. The optimum: a detailed plan for 2-3 steps ahead, a rough plan for the entire task, refinement as progress is made.
 
 ### Reasoning Models and Planning
 
-Reasoning models (o3, Claude with extended thinking) shift the planning landscape. These models can perform multi-step planning, contingency analysis, and replanning internally within a single generation pass — tasks that previously required explicit Plan-and-Execute frameworks.
+Reasoning models (o3, Claude with extended thinking) shift the planning landscape. These models can perform multi-step planning, contingency analysis, and replanning internally within a single generation pass, tasks that previously required explicit Plan-and-Execute frameworks.
 
-**What changes:** For moderate-complexity tasks (5-10 steps), a reasoning model can generate and adapt a plan within its thinking phase, eliminating the need for a separate planning agent or LangGraph state machine. The model naturally handles the "plan → encounter obstacle → replan" cycle inside its reasoning tokens.
+**What changes:** For moderate-complexity tasks (5-10 steps), a reasoning model can generate and adapt a plan within its thinking phase, eliminating the need for a separate planning agent or LangGraph state machine. The model naturally handles the "plan, then encounter obstacle, then replan" cycle inside its reasoning tokens.
 
 **What stays the same:** For long-running tasks with dozens of steps, external checkpointing, human-in-the-loop approval, or coordination across multiple specialized agents, explicit planning frameworks remain essential. The reasoning model's context window and token budget impose natural limits on how much planning complexity can be internalized.
 
-**Practical rule of thumb:** If the task can be completed in a single model call (even a long one with many tool calls), let the reasoning model plan internally. If the task spans multiple sessions, requires persistent state, or needs human approval at intermediate steps — use an explicit planning framework.
+**Practical rule of thumb:** If the task can be completed in a single model call (even a long one with many tool calls), let the reasoning model plan internally. If the task spans multiple sessions, requires persistent state, or needs human approval at intermediate steps: use an explicit planning framework.
 
 ---
 
@@ -336,9 +336,9 @@ Parallelism is not free. Limitations:
 
 **Decomposition is the foundation of planning.** Breaking a complex task into atomic subtasks makes it feasible. Good decomposition accounts for dependencies, complexity, and measurability of results.
 
-**Hierarchy manages complexity.** A multi-level structure (goals → subgoals → actions) enables working with tasks of any scale. HTN encodes expert knowledge in decomposition methods.
+**Hierarchy manages complexity.** A multi-level structure (goals, then subgoals, then actions) enables working with tasks of any scale. HTN encodes expert knowledge in decomposition methods.
 
-**Classical algorithms remain relevant.** GOAP, Partial-Order Planning, the connection with RL — all of this provides a conceptual foundation for designing LLM agents.
+**Classical algorithms remain relevant.** GOAP, Partial-Order Planning, the connection with RL. All of this provides a conceptual foundation for designing LLM agents.
 
 **LLMs are flexible planners.** Language models generate plans in natural language, leveraging implicit knowledge of patterns. Plan quality depends on prompt quality and validation.
 
@@ -350,7 +350,7 @@ Parallelism is not free. Limitations:
 
 ## Practical Example: LLM Planner with Adaptation
 
-This section describes the architecture of a planner that combines plan generation, validation, and adaptive execution. The description focuses on design patterns rather than runnable code — for working implementations, see LangGraph's [Plan-and-Execute](https://langchain-ai.github.io/langgraph/tutorials/plan-and-execute/plan-and-execute/) tutorial or the [Strands Agents](https://github.com/strands-agents/sdk-python) open-source framework, both of which implement these patterns with full test suites.
+This section describes the architecture of a planner that combines plan generation, validation, and adaptive execution. The description focuses on design patterns rather than runnable code: for working implementations, see LangGraph's [Plan-and-Execute](https://langchain-ai.github.io/langgraph/tutorials/plan-and-execute/plan-and-execute/) tutorial or the [Strands Agents](https://github.com/strands-agents/sdk-python) open-source framework, both of which implement these patterns with full test suites.
 
 ### Prompt Structure for Plan Generation
 
@@ -368,13 +368,13 @@ The prompt is built from several clearly separated sections:
 
 For each plan step, the model must specify four mandatory elements:
 
-First — a concrete and actionable action. Not an abstract "process data" but a specific "extract email addresses from the CSV file."
+First: a concrete and actionable action. Not an abstract "process data" but a specific "extract email addresses from the CSV file."
 
-Second — the tool needed to perform the action. If the action does not require a tool (e.g., it is a logical reasoning step), "none" is specified.
+Second: the tool needed to perform the action. If the action does not require a tool (e.g., it is a logical reasoning step), "none" is specified.
 
-Third — the expected result, which will allow verification of the step's successful completion. This is critical for adaptive planning and error handling.
+Third: the expected result, which will allow verification of the step's successful completion. This is critical for adaptive planning and error handling.
 
-Fourth — dependencies on other steps in the format of step numbers separated by commas. If the step is independent and can execute first, "none" is specified. This enables building a dependency graph and identifying opportunities for parallel execution.
+Fourth: dependencies on other steps in the format of step numbers separated by commas. If the step is independent and can execute first, "none" is specified. This enables building a dependency graph and identifying opportunities for parallel execution.
 
 **Output format** is structured for easy parsing. Each step begins with a number and action name. Then lines with prefixes Tool, Expected, and Depends follow, containing the corresponding information. Steps are separated by triple dashes for unambiguous boundaries.
 
@@ -413,7 +413,7 @@ Then incremental refinement of remaining steps is invoked. The current step's re
 
 When a step execution fails, the system selects the optimal adaptation strategy by analyzing the error type, current plan, problematic step, and original task. The chooseStrategy method applies heuristics to determine the most appropriate approach.
 
-**RETRY strategy:** Used for transient failures such as timeouts, server overload, or rate limiting. The system pauses for a duration calculated using an exponential backoff formula based on the attempt number. First attempt — 1 second, second — 2 seconds, third — 4 seconds, and so on. This gives the overloaded system time to recover.
+**RETRY strategy:** Used for transient failures such as timeouts, server overload, or rate limiting. The system pauses for a duration calculated using an exponential backoff formula based on the attempt number. First attempt: 1 second, second: 2 seconds, third: 4 seconds, and so on. This gives the overloaded system time to recover.
 
 **MODIFY strategy:** Applied when the error is in the parameters but the overall approach is correct. The fixParameters method analyzes the error message and attempts to correct the step's parameters. For example, if an API returned a "wrong date format" error, the system can convert the date to the correct format and retry the step with corrected parameters.
 

@@ -2,7 +2,7 @@
 
 ## Continuous Integration for LLM Applications
 
-Continuous Integration for LLM projects introduces additional challenges. Beyond standard tests, it is necessary to test interactions with LLM APIs, prompt quality, and behavior under various model responses. These tests are more expensive in the literal sense — each call costs money.
+Continuous Integration for LLM projects introduces additional challenges. Beyond standard tests, it is necessary to test interactions with LLM APIs, prompt quality, and behavior under various model responses. These tests are more expensive in the literal sense. Each call costs money.
 
 The strategy balances coverage and cost. Unit tests with mocked LLM responses are fast and free but do not catch changes in real model behavior. Integration tests with real APIs are more accurate but expensive and slower. A sensible approach: extensive unit tests with mocks for processing logic, a limited set of integration tests for critical paths.
 
@@ -10,13 +10,13 @@ Prompt versioning deserves special attention. A prompt is an artifact like code 
 
 ## CI Pipeline Structure
 
-**First stage** — standard build and static analysis: compilation, linting, formatting checks, dependency security scanning.
+**First stage**: standard build and static analysis: compilation, linting, formatting checks, dependency security scanning.
 
-**Second stage** — unit tests. Executed with mocked LLM clients, no API keys required. Tests cover request and response processing logic, prompt construction, result parsing, and error handling. High coverage is critically important.
+**Second stage**: unit tests. Executed with mocked LLM clients, no API keys required. Tests cover request and response processing logic, prompt construction, result parsing, and error handling. High coverage is critically important.
 
-**Third stage** — integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, use cheaper models (GPT-4o-mini instead of GPT-5.4).
+**Third stage**: integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, use cheaper models (GPT-4o-mini instead of GPT-5.4).
 
-**Fourth stage** — building and publishing the Docker image. Tagged with commit SHA for unique identification. The latest tag is updated only for the main branch. Parallel execution of independent stages accelerates the pipeline. Integration tests wait for unit test success.
+**Fourth stage**: building and publishing the Docker image. Tagged with commit SHA for unique identification. The latest tag is updated only for the main branch. Parallel execution of independent stages accelerates the pipeline. Integration tests wait for unit test success.
 
 **Typical workflow structure:** The build job compiles code and performs static analysis via dependencyCheck, then uploads artifacts. Unit tests run in parallel, executing tests with mocks, collecting coverage, and uploading to Codecov. Integration tests depend on unit tests (needs: unit-tests), spin up dependencies via docker-compose (PostgreSQL, Redis), run tests with real API keys from Secrets, and clean up resources through a cleanup step with if: always(). The Docker job builds the image using multi-stage build; metadata-action generates tags: commit SHA, branch name, latest for main. BuildKit cache accelerates builds through layer caching. Deploy jobs are separated by environment: staging from develop, production from main. Environments are used for secrets and protection rules. Kubectl commands update the Deployment via set image, rollout status waits for successful deployment, and smoke tests verify functionality.
 
@@ -26,11 +26,11 @@ Continuous Deployment automates rollout after checks pass. For LLM applications,
 
 **Canary deployment** is the gold standard. The new version receives 1-5% of traffic. Metrics are compared against the stable version: latency, error rate, cost, and quality. On anomalies, the canary is rolled back. Practical implementation requires two Deployments: llm-agent-canary and llm-agent (stable). A Service or Ingress distributes traffic through weight-based routing. Prometheus collects metrics from both, labeling them deployment=canary or deployment=stable. A validation script periodically queries the Prometheus API, comparing metrics over a 5-minute window.
 
-Critical metrics: error rate (percentage of 5xx), P95/P99 latency, LLM call cost, and throughput. If the canary shows an error rate above 5%, latency exceeds the threshold, or cost is anomalously high — rollback. Observation period is 10-15 minutes.
+Critical metrics: error rate (percentage of 5xx), P95/P99 latency, LLM call cost, and throughput. If the canary shows an error rate above 5%, latency exceeds the threshold, or cost is anomalously high: rollback. Observation period is 10-15 minutes.
 
 **Blue-green deployment** provides instant switchover. Both versions run in parallel, and traffic switches atomically. Rollback is an instant switch back. The downside is doubled resource usage.
 
-**Feature flags** separate code deployment from feature activation. A new prompt or model is deployed in a disabled state, then gradually enabled for users or traffic percentages. Useful for testing new models — metrics on quality can be collected before rollout.
+**Feature flags** separate code deployment from feature activation. A new prompt or model is deployed in a disabled state, then gradually enabled for users or traffic percentages. Useful for testing new models: metrics on quality can be collected before rollout.
 
 Implementation requires a flag management system (LaunchDarkly, Unleash, or custom-built). A flag defines the prompt, model, and parameters. Flags are stored in a distributed cache (Redis) for fast access. Changing a flag takes effect immediately without redeployment.
 
@@ -42,21 +42,21 @@ Smoke tests verify basic functionality: the endpoint responds, the LLM provider 
 
 Quality gates define criteria for a successful deployment. Quantitative gates: error rate < 1%, P95 latency < 10s, cost per request within budget. Qualitative gates: automatic quality evaluation requires deterministic checks or LLM-as-Judge.
 
-Deterministic checks use test cases with precisely known answers. Math problems, JSON formatting, information extraction — verified programmatically. The regression suite accumulates over time; each bug becomes a test case.
+Deterministic checks use test cases with precisely known answers. Math problems, JSON formatting, information extraction: verified programmatically. The regression suite accumulates over time; each bug becomes a test case.
 
 LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-5.4 evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
 
-Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation — pre-prepared test cases with reference answers.
+Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation: pre-prepared test cases with reference answers.
 
 ## Prompt Versioning and Registry
 
-A prompt change can alter system behavior as drastically as a code change — yet most teams version prompts less rigorously than code. In production agent systems, every prompt is a versioned artifact with its own lifecycle.
+A prompt change can alter system behavior as drastically as a code change, yet most teams version prompts less rigorously than code. In production agent systems, every prompt is a versioned artifact with its own lifecycle.
 
-**Git-based prompt management.** Store prompts in a dedicated directory (e.g., `prompts/`) alongside code, with the same branch/PR/review workflow. Each prompt file includes: the prompt text, metadata (model target, temperature, expected behavior), and a changelog. A prompt change goes through code review just like a code change — because it has the same production impact.
+**Git-based prompt management.** Store prompts in a dedicated directory (e.g., `prompts/`) alongside code, with the same branch/PR/review workflow. Each prompt file includes: the prompt text, metadata (model target, temperature, expected behavior), and a changelog. A prompt change goes through code review just like a code change: because it has the same production impact.
 
-**Prompt registry pattern.** For systems with many prompts (dozens of agents, each with system prompts, tool descriptions, and few-shot examples), a prompt registry provides centralized management. The registry stores prompt versions with semantic versioning (1.0.0 → 1.1.0 for compatible changes, 2.0.0 for breaking changes), links each version to evaluation results (what quality score did this prompt achieve?), and supports instant rollback (switch to previous version without redeployment). LangSmith Prompt Hub and Humanloop implement this pattern as managed services.
+**Prompt registry pattern.** For systems with many prompts (dozens of agents, each with system prompts, tool descriptions, and few-shot examples), a prompt registry provides centralized management. The registry stores prompt versions with semantic versioning (1.0.0 to 1.1.0 for compatible changes, 2.0.0 for breaking changes), links each version to evaluation results (what quality score did this prompt achieve?), and supports instant rollback (switch to previous version without redeployment). LangSmith Prompt Hub and Humanloop implement this pattern as managed services.
 
-**A/B testing prompt variants.** Deploy two prompt versions simultaneously, route traffic 50/50, compare quality metrics. The winning prompt becomes the new default. This is the prompt equivalent of canary deployment — and it is more important for prompts than for code, because prompt quality is harder to predict from review alone.
+**A/B testing prompt variants.** Deploy two prompt versions simultaneously, route traffic 50/50, compare quality metrics. The winning prompt becomes the new default. This is the prompt equivalent of canary deployment, and it is more important for prompts than for code, because prompt quality is harder to predict from review alone.
 
 Post-deployment monitoring tracks behavior for 30-60 minutes after deployment. If no issues arise, the deployment is successful. Grafana dashboards show metrics in real time with deployment event annotations for correlation. Alerts are configured for critical deviations: spikes in error rate, increased latency, throughput drops. PagerDuty notifies the on-call engineer.
 
@@ -68,7 +68,7 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Latency and throughput** for high-load systems. At very high volumes, self-hosted is more economical than cloud APIs. Network latency to the provider is eliminated.
 
-**Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-5.4. At a million requests per day with an average of 500 tokens — hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
+**Economics:** OpenAI API costs $0.15/1M input tokens for GPT-4o-mini, $2.50/1M for GPT-5.4. At a million requests per day with an average of 500 tokens: hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
 
 **Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are significantly better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-5.4, but with limited control over the process. Self-hosted Llama 3.x/4, Mistral, and Qwen 2.5/3 can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 
@@ -76,13 +76,13 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 ## vLLM: High-Performance Inference
 
-vLLM is one of the most efficient solutions for inference. It implements PagedAttention — a memory management technique that significantly increases throughput. Traditional implementations allocate memory for the maximum context length per request, even if the actual length is shorter. PagedAttention allocates memory dynamically, similar to how an OS manages memory pages. This allows serving more concurrent requests on the same GPU.
+vLLM is one of the most efficient solutions for inference. It implements PagedAttention: a memory management technique that significantly increases throughput. Traditional implementations allocate memory for the maximum context length per request, even if the actual length is shorter. PagedAttention allocates memory dynamically, similar to how an OS manages memory pages. This allows serving more concurrent requests on the same GPU.
 
 The mechanism: the KV-cache is split into fixed-size blocks (typically 16 tokens). Blocks are allocated as needed. When a request completes, blocks are freed and reused. This eliminates fragmentation and enables near-optimal memory utilization.
 
 vLLM provides an OpenAI-compatible API, simplifying migration. If your application uses the openai-python client, it is sufficient to change the base_url to the vLLM server address. The rest of the code remains unchanged. Streaming, function calling, and response format are supported. This allows A/B testing self-hosted vs. cloud without code changes.
 
-Continuous batching combines requests for efficient GPU utilization. Unlike static batching, where a batch is formed in advance and waits to fill, continuous batching adds new requests as previous ones complete. Static batching waits for 32 requests, then processes them together. If only 10 arrive — it either waits for a timeout (increasing latency) or processes an incomplete batch (losing throughput). Continuous batching processes 10 immediately, adding the 11th as soon as it arrives. It dynamically optimizes the latency-throughput trade-off.
+Continuous batching combines requests for efficient GPU utilization. Unlike static batching, where a batch is formed in advance and waits to fill, continuous batching adds new requests as previous ones complete. Static batching waits for 32 requests, then processes them together. If only 10 arrive: it either waits for a timeout (increasing latency) or processes an incomplete batch (losing throughput). Continuous batching processes 10 immediately, adding the 11th as soon as it arrives. It dynamically optimizes the latency-throughput trade-off.
 
 Tensor Parallelism distributes a single model across multiple GPUs. For models that do not fit in a single GPU's memory (70B+ parameters), this is necessary. Configured via the --tensor-parallel-size parameter. It slices each layer along the dimension, placing parts on different GPUs. The forward pass requires all-reduce communication over NVLink or PCIe. This introduces overhead but allows running otherwise impossible models. Llama-70B requires ~140GB in FP16 and does not fit in an A100-80GB. With tensor-parallel-size=2, each GPU stores half, ~70GB.
 
@@ -90,7 +90,7 @@ Tensor Parallelism distributes a single model across multiple GPUs. For models t
 
 GPU inference requires specialized infrastructure. NVIDIA GPUs with sufficient VRAM are the primary resource. For 7B parameters, 16GB is sufficient (RTX 4080, A4000). For 70B, 80+ GB is needed (A100-80GB, H100-80GB, or multiple GPUs). H100 and H200 are the current standard for production inference.
 
-Estimating requirements: a model in FP16 requires 2 bytes per parameter. 7B parameters = 14GB, plus KV-cache and activations — round up to 20GB. Quantized INT8 — 1 byte per parameter, 7B = 7GB. INT4 (GPTQ/AWQ) — 0.5 bytes, 7B = 3.5GB. This allows selecting GPUs to match the budget: an RTX 4090 24GB can run Llama-13B in INT4, an A100 80GB — Llama-70B in INT8.
+Estimating requirements: a model in FP16 requires 2 bytes per parameter. 7B parameters = 14GB, plus KV-cache and activations: round up to 20GB. Quantized INT8, 1 byte per parameter, 7B = 7GB. INT4 (GPTQ/AWQ): 0.5 bytes, 7B = 3.5GB. This allows selecting GPUs to match the budget: an RTX 4090 24GB can run Llama-13B in INT4, an A100 80GB, Llama-70B in INT8.
 
 In Kubernetes, GPU nodes require the NVIDIA device plugin and node labels. Tolerations and node selectors direct pods to GPU nodes. Resource requests for nvidia.com/gpu reserve a GPU for the pod.
 
@@ -100,7 +100,7 @@ Shared memory (shm) is critical for inference. PyTorch and vLLM use shared memor
 
 PyTorch DataLoader with num_workers > 0 uses shared memory. vLLM uses it for communication between Python and CUDA kernels. Exhausting shm leads to "OSError: No space left on device." The solution: an emptyDir volume with sizeLimit 16Gi, mounted to /dev/shm.
 
-Model caching saves startup time. Models are downloaded from HuggingFace Hub on first launch, which takes minutes. A PersistentVolume for cache allows reusing weights between restarts. Llama-70B weighs ~140GB; downloading over the network takes 10-20 minutes. On every restart or rolling update, this is downtime. A PersistentVolumeClaim on fast SSD (100-200GB) mounted to ~/.cache/huggingface means the model is downloaded once, and subsequent starts use cache — pod ready in 2-3 minutes instead of 20.
+Model caching saves startup time. Models are downloaded from HuggingFace Hub on first launch, which takes minutes. A PersistentVolume for cache allows reusing weights between restarts. Llama-70B weighs ~140GB; downloading over the network takes 10-20 minutes. On every restart or rolling update, this is downtime. A PersistentVolumeClaim on fast SSD (100-200GB) mounted to ~/.cache/huggingface means the model is downloaded once, and subsequent starts use cache, pod ready in 2-3 minutes instead of 20.
 
 Memory utilization in vLLM is controlled by --gpu-memory-utilization. A value of 0.9 means 90% of available GPU memory is allocated to KV-cache. The remaining 10% serves as a buffer. Too high (0.95-0.99) leads to OOM during peak loads. Too low (0.7-0.8) underutilizes the GPU, reducing throughput. The optimum depends on the workload: short requests tolerate high utilization, while long contexts require headroom.
 
@@ -110,11 +110,11 @@ Quantization reduces model size and memory requirements at the cost of a small q
 
 INT8 converts FP16/FP32 weights to 8-bit integers, applying per-channel scaling factors. Quality drops by 1-2% on benchmark metrics; subjectively, it is often indistinguishable. INT4 is more aggressive, grouping weights and applying shared scales; the loss is 3-5% but acceptable for most tasks.
 
-GPTQ and AWQ are two popular INT4 methods. GPTQ minimizes quantization error through optimal brain quantization — slower but more accurate. AWQ (Activation-aware Weight Quantization) focuses on important weights through activations — faster but slightly less accurate. In practice, both yield similar results.
+GPTQ and AWQ are two popular INT4 methods. GPTQ minimizes quantization error through optimal brain quantization: slower but more accurate. AWQ (Activation-aware Weight Quantization) focuses on important weights through activations: faster but slightly less accurate. In practice, both yield similar results.
 
 KV-cache management is the key to high throughput. vLLM automatically optimizes through PagedAttention. The KV-cache grows linearly with context length and the number of concurrent requests. A model with an 8K context window processing 20 concurrent requests requires cache for 160K tokens. In FP16, this amounts to gigabytes. PagedAttention optimizes through sharing and reuse, but fundamental limits remain.
 
-Speculative decoding accelerates generation using a draft model. A small model quickly generates several tokens, and the large model verifies them in a single forward pass. With a high acceptance rate, this yields significant speedup. The small model (draft) is typically from the same family at a smaller size: Llama-7B as draft, Llama-70B as target. The draft generates 4-8 tokens speculatively, and the target verifies in parallel. If all are correct — accept and continue. If there is an error — reject from that point and continue with the target. With an acceptance rate > 70%, this gives 2-3x speedup.
+Speculative decoding accelerates generation using a draft model. A small model quickly generates several tokens, and the large model verifies them in a single forward pass. With a high acceptance rate, this yields significant speedup. The small model (draft) is typically from the same family at a smaller size: Llama-7B as draft, Llama-70B as target. The draft generates 4-8 tokens speculatively, and the target verifies in parallel. If all are correct: accept and continue. If there is an error, reject from that point and continue with the target. With an acceptance rate > 70%, this gives 2-3x speedup.
 
 Dynamic batching parameters affect the latency-throughput trade-off. A small batch means low latency but low throughput. A large batch means high throughput but potentially high latency. vLLM manages this automatically through continuous batching, but the max-num-seqs and max-num-batched-tokens parameters influence behavior. For latency-sensitive workloads, reduce both; for throughput-oriented workloads, increase them.
 
@@ -130,7 +130,7 @@ A circuit breaker monitors self-hosted health. When the error rate or latency is
 
 Fallback between local and cloud models improves availability. API unification is achieved through OpenAI-compatible endpoints: vLLM exports the OpenAI API, and the client works identically. Differences in capabilities are handled through a capability registry: before sending, it checks whether the target model supports the required features; otherwise, fallback or error.
 
-Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially GPT-4o-mini ($0.0005). 5% are complex tasks, GPT-5.4 ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid) — 70% savings.
+Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially GPT-4o-mini ($0.0005). 5% are complex tasks, GPT-5.4 ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
 
 ## Monitoring Inference Servers
 
@@ -148,11 +148,11 @@ Capacity planning is based on historical data. Analysis: average 100 requests/mi
 
 Traditional disaster recovery focuses on database backups and application state. AI systems add unique recovery challenges: model weights (140GB+ per model), vector store indexes (potentially terabytes of embeddings), conversation history and agent state, and prompt/configuration artifacts.
 
-**What to back up and how often.** Model weights: back up once after each deployment (they do not change between deployments). Use object storage (S3, GCS) with versioning. For self-hosted models, the HuggingFace cache directory is the backup target. Vector stores: continuous replication for production (pgvector replication, Qdrant snapshots, Pinecone managed backups). RPO target: <1 hour — a stale knowledge base gives wrong answers, not errors. Conversation history and agent state: continuous replication (PostgreSQL streaming replication, Redis persistence). RPO target: <5 minutes for active sessions. Prompts and configuration: version-controlled in git — recovery is a git checkout.
+**What to back up and how often.** Model weights: back up once after each deployment (they do not change between deployments). Use object storage (S3, GCS) with versioning. For self-hosted models, the HuggingFace cache directory is the backup target. Vector stores: continuous replication for production (pgvector replication, Qdrant snapshots, Pinecone managed backups). RPO target: <1 hour: a stale knowledge base gives wrong answers, not errors. Conversation history and agent state: continuous replication (PostgreSQL streaming replication, Redis persistence). RPO target: <5 minutes for active sessions. Prompts and configuration: version-controlled in git: recovery is a git checkout.
 
-**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic → OpenAI → self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern — it is a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
+**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic, then OpenAI, then self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern. It is a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
 
-**Provider outage scenario.** On June 13, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive — at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical — it is the canonical case for why multi-provider failover is mandatory for production AI systems.
+**Provider outage scenario.** On June 13, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive: at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical. It is the canonical case for why multi-provider failover is mandatory for production AI systems.
 
 ## Key Takeaways
 

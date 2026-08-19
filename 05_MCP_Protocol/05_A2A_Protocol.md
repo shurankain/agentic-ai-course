@@ -10,23 +10,23 @@ Example: a travel planning agent coordinates with hotel booking, flight booking,
 
 ### Different Levels of Abstraction
 
-MCP and A2A operate at different levels. MCP defines how an agent accesses resources: reads files, executes database queries, calls APIs. This is vertical integration — the agent reaches "down" to data.
+MCP and A2A operate at different levels. MCP defines how an agent accesses resources: reads files, executes database queries, calls APIs. This is vertical integration, the agent reaches "down" to data.
 
-A2A defines how agents interact with each other. This is horizontal integration — an agent reaches "sideways" to other agents. The hotel booking agent does not need to know the implementation details of the flight booking agent. It simply sends a request "find a flight from London to Paris on January 15" and receives a structured response.
+A2A defines how agents interact with each other. This is horizontal integration: an agent reaches "sideways" to other agents. The hotel booking agent does not need to know the implementation details of the flight booking agent. It simply sends a request "find a flight from London to Paris on January 15" and receives a structured response.
 
 ### Complementary, Not Competing
 
-MCP and A2A do not compete — they complement each other. In a multi-agent system, agents use the A2A protocol for horizontal communication with each other, delegating tasks and coordinating actions. Simultaneously, each agent uses MCP for vertical integration with tools and data. For example, a travel planning agent coordinates with hotel and flight agents via A2A, while each of these agents accesses their specialized APIs and databases through MCP. This creates a clean separation: A2A for inter-agent coordination, MCP for resource access.
+MCP and A2A do not compete, they complement each other. In a multi-agent system, agents use the A2A protocol for horizontal communication with each other, delegating tasks and coordinating actions. Simultaneously, each agent uses MCP for vertical integration with tools and data. For example, a travel planning agent coordinates with hotel and flight agents via A2A, while each of these agents accesses their specialized APIs and databases through MCP. This creates a clean separation: A2A for inter-agent coordination, MCP for resource access.
 
 ### When to Use Which
 
-**MCP — for resource access:**
+**MCP: for resource access:**
 - Reading/writing files
 - Database queries
 - REST/GraphQL API calls
 - Managing local tools
 
-**A2A — for agent coordination:**
+**A2A: for agent coordination:**
 - Delegating tasks to specialized agents
 - Parallel execution of independent subtasks
 - Complex workflows involving multiple agents
@@ -36,20 +36,20 @@ MCP and A2A do not compete — they complement each other. In a multi-agent syst
 
 ### Core Concepts
 
-**Agent** — an autonomous unit with defined capabilities. An agent can be implemented on any platform (LangChain, AutoGen, CrewAI, custom) and use any LLM. A2A abstracts away these differences.
+**Agent**: an autonomous unit with defined capabilities. An agent can be implemented on any platform (LangChain, AutoGen, CrewAI, custom) and use any LLM. A2A abstracts away these differences.
 
-**Agent Card** — agent metadata in JSON-LD format. Contains:
+**Agent Card**: agent metadata in JSON-LD format. Contains:
 - Capabilities (what the agent can do)
 - Endpoints (how to reach it)
 - Authentication requirements
 - Supported input/output schemas
 
-**Task** — a unit of work delegated to an agent. Tasks can be:
+**Task**: a unit of work delegated to an agent. Tasks can be:
 - Synchronous (immediate response)
 - Asynchronous (long-running, result delivered later)
 - Streaming (partial results as execution progresses)
 
-**Message** — a unit of communication within a task. Can contain text, files, structured data.
+**Message**: a unit of communication within a task. Can contain text, files, structured data.
 
 ### Agent Identity
 
@@ -72,7 +72,7 @@ A2A uses a layered identity model so that agents can be identified at different 
 
 ### Agent Cards: Discovery and Capabilities
 
-Agent Card solves the discovery problem — how does one agent find another and understand what it can do? It is a JSON-LD document that describes the agent's capabilities, its endpoints, authentication requirements, and constraints.
+Agent Card solves the discovery problem: how does one agent find another and understand what it can do? It is a JSON-LD document that describes the agent's capabilities, its endpoints, authentication requirements, and constraints.
 
 **Agent Card structure includes:**
 
@@ -82,9 +82,9 @@ Agent Card solves the discovery problem — how does one agent find another and 
 
 **Endpoints:** Define how to reach the agent. The primary API endpoint for task execution, a well-known URL for discovery (typically `/.well-known/agent.json`), and optionally a WebSocket endpoint for streaming communication.
 
-**Authentication:** Describes authentication requirements. A2A supports OAuth2 (client credentials or authorization code flow), API keys, and mutual TLS. For each method, the necessary parameters are specified — token URL, scopes, headers.
+**Authentication:** Describes authentication requirements. A2A supports OAuth2 (client credentials or authorization code flow), API keys, and mutual TLS. For each method, the necessary parameters are specified: token URL, scopes, headers.
 
-**Rate Limits:** Specify constraints — requests per minute, maximum number of concurrent tasks, maximum task execution duration. This allows clients to properly manage load.
+**Rate Limits:** Specify constraints: requests per minute, maximum number of concurrent tasks, maximum task execution duration. This allows clients to properly manage load.
 
 Agent Cards are published at a well-known URL (`/.well-known/agent.json`), enabling automatic discovery. An orchestrator agent can scan known domains and build a catalog of available agents. This is similar to an OpenAPI specification but specifically adapted for agent systems with support for async operations and streaming.
 
@@ -92,7 +92,7 @@ Agent Cards are published at a well-known URL (`/.well-known/agent.json`), enabl
 
 One of A2A's key features is native support for long-running tasks. Unlike synchronous API calls, agent tasks can take minutes, hours, or even days.
 
-**Task lifecycle:** A task goes through several states. SUBMITTED — the task is accepted but not started. WORKING — the agent is actively working. INPUT_REQUIRED — the agent awaits additional input from the caller (e.g., payment confirmation). BLOCKED — the task is blocked by external factors (external service unavailable). Final states: COMPLETED (success), FAILED (error), CANCELLED (cancelled by the caller).
+**Task lifecycle:** A task goes through several states. SUBMITTED: the task is accepted but not started. WORKING: the agent is actively working. INPUT_REQUIRED, the agent awaits additional input from the caller (e.g., payment confirmation). BLOCKED: the task is blocked by external factors (external service unavailable). Final states: COMPLETED (success), FAILED (error), CANCELLED (cancelled by the caller).
 
 **Asynchronous workflow:** The client sends POST /tasks with a capability and receives 202 Accepted with a taskId and SUBMITTED status. It periodically polls GET /tasks/{taskId} to check the status. If the status is INPUT_REQUIRED, the client sends POST /tasks/{taskId}/messages with the required data, and the task transitions back to WORKING. When the task is complete, the agent can send a webhook callback or the client receives COMPLETED status on the next poll.
 
@@ -100,9 +100,9 @@ One of A2A's key features is native support for long-running tasks. Unlike synch
 
 For tasks with intermediate results, A2A supports streaming via Server-Sent Events (SSE). The client establishes an SSE connection when creating a task by specifying the stream=true flag. The agent sends events of several types: progress events with completion percentage and current status, artifact events with partial results (e.g., the first documents found in a research task), and a final complete event with the overall result.
 
-**Note on SSE vs Streamable HTTP:** A2A uses SSE for server-to-client streaming, which is distinct from MCP's transport evolution. MCP deprecated its HTTP+SSE *transport* (separate POST and SSE endpoints) in favor of Streamable HTTP (single endpoint). A2A's use of SSE is for *streaming task results* within its own HTTP-based protocol — a different architectural layer. A2A does not use MCP's transport mechanism; they are complementary protocols (MCP for tool/resource access, A2A for agent-to-agent coordination).
+**Note on SSE vs Streamable HTTP:** A2A uses SSE for server-to-client streaming, which is distinct from MCP's transport evolution. MCP deprecated its HTTP+SSE *transport* (separate POST and SSE endpoints) in favor of Streamable HTTP (single endpoint). A2A's use of SSE is for *streaming task results* within its own HTTP-based protocol: a different architectural layer. A2A does not use MCP's transport mechanism; they are complementary protocols (MCP for tool/resource access, A2A for agent-to-agent coordination).
 
-This is critical for user experience in agent systems — the user can see what is happening, receive intermediate results, and can cancel the task if the direction is wrong. For example, a research agent can stream discovered articles as the search progresses rather than waiting for the entire analysis to complete.
+This is critical for user experience in agent systems: the user can see what is happening, receive intermediate results, and can cancel the task if the direction is wrong. For example, a research agent can stream discovered articles as the search progresses rather than waiting for the entire analysis to complete.
 
 ## Multi-Agent Orchestration Patterns
 
@@ -134,11 +134,11 @@ A multi-level structure with delegation. Travel Planner Agent coordinates domain
 
 ### Honest Adoption Assessment
 
-As of late May 2026, A2A has crossed from announcements into production. The protocol celebrated its first anniversary (April 2026) with **150+ participating organizations** and **22,000+ GitHub stars**. A2A is now complementary to MCP under the same governance body (AAIF/Linux Foundation), with both protocols co-evolving as the two standard layers of the agent communication stack. Production deployments are now live in major enterprise platforms: **Azure AI Foundry**, **Amazon Bedrock AgentCore**, **Salesforce**, **SAP**, and **ServiceNow** — these are not pilot integrations but production-grade implementations handling real workloads. The protocol reached **v1.0.0 stable** (March 2026) — the first production-ready version, with key features: **Signed Agent Cards** for cryptographic identity verification, multi-agent hosting on a single endpoint, support for **stateless interactions**, and **standardized authentication** based on an OpenAPI-like auth schema. An **official Python SDK** was released, and Microsoft Agent Framework 1.0 (April 3, 2026) ships with full A2A support. **Microsoft Work IQ** (Build 2026, June 2) became the first platform-level A2A deployment — IQ agents use A2A for cross-framework coordination across M365, Azure, and third-party systems, with A2A/MCP/REST all GA as of June 16.
+As of late May 2026, A2A has crossed from announcements into production. The protocol celebrated its first anniversary (April 2026) with **150+ participating organizations** and **22,000+ GitHub stars**. A2A is now complementary to MCP under the same governance body (AAIF/Linux Foundation), with both protocols co-evolving as the two standard layers of the agent communication stack. Production deployments are now live in major enterprise platforms: **Azure AI Foundry**, **Amazon Bedrock AgentCore**, **Salesforce**, **SAP**, and **ServiceNow**. These are not pilot integrations but production-grade implementations handling real workloads. The protocol reached **v1.0.0 stable** (March 2026), the first production-ready version, with key features: **Signed Agent Cards** for cryptographic identity verification, multi-agent hosting on a single endpoint, support for **stateless interactions**, and **standardized authentication** based on an OpenAPI-like auth schema. An **official Python SDK** was released, and Microsoft Agent Framework 1.0 (April 3, 2026) ships with full A2A support. **Microsoft Work IQ** (Build 2026, June 2) became the first platform-level A2A deployment: IQ agents use A2A for cross-framework coordination across M365, Azure, and third-party systems, with A2A/MCP/REST all GA as of June 16.
 
-The protocol has effectively ceased to be experimental. MCP (tool integration) and A2A (agent-to-agent communication) are now the two complementary standards for agent systems, both in production and both under AAIF governance. However, most multi-agent systems still use direct API calls or framework-native patterns (LangGraph handoffs, CrewAI delegation) for intra-framework coordination — A2A's primary value is cross-framework and cross-organization agent interoperability.
+The protocol has effectively ceased to be experimental. MCP (tool integration) and A2A (agent-to-agent communication) are now the two complementary standards for agent systems, both in production and both under AAIF governance. However, most multi-agent systems still use direct API calls or framework-native patterns (LangGraph handoffs, CrewAI delegation) for intra-framework coordination: A2A's primary value is cross-framework and cross-organization agent interoperability.
 
-MCP, by contrast, has seen massive real-world adoption: 9,400+ verified servers, 97M+ monthly SDK downloads, 28% of Fortune 500 deploying servers, and integration into every major AI development tool (as of mid-June 2026). The practical reality is that most "agent-to-agent" coordination happens within a single framework or orchestrator, not across independent agents from different providers — which is A2A's primary use case.
+MCP, by contrast, has seen massive real-world adoption: 9,400+ verified servers, 97M+ monthly SDK downloads, 28% of Fortune 500 deploying servers, and integration into every major AI development tool (as of mid-June 2026). The practical reality is that most "agent-to-agent" coordination happens within a single framework or orchestrator, not across independent agents from different providers, which is A2A's primary use case.
 
 A2A's value proposition strengthens as the industry moves toward truly autonomous, independently deployed agents that need to discover and coordinate with each other across organizational boundaries. This use case is emerging but not yet widespread.
 
@@ -156,11 +156,11 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 | **LLM focus** | Native | Yes | No | No |
 
 **Why Google chose a new protocol:**
-1. **Existing standards (FIPA) are too academic** — too complex for practical use
-2. **Agent Protocol from AI21 is too simple** — lacks async, streaming, and rich capabilities support
-3. **Direct use of gRPC/REST requires ad-hoc coordination** — no standard patterns
+1. **Existing standards (FIPA) are too academic**: too complex for practical use
+2. **Agent Protocol from AI21 is too simple**: lacks async, streaming, and rich capabilities support
+3. **Direct use of gRPC/REST requires ad-hoc coordination**: no standard patterns
 
-**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon — establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 9,400+ verified servers and 97M+ monthly SDK downloads (as of mid-June 2026), while A2A has moved into early production in major enterprise platforms (Azure AI Foundry, Bedrock AgentCore, Salesforce, SAP, ServiceNow).
+**Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon, establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 9,400+ verified servers and 97M+ monthly SDK downloads (as of mid-June 2026), while A2A has moved into early production in major enterprise platforms (Azure AI Foundry, Bedrock AgentCore, Salesforce, SAP, ServiceNow).
 
 **Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium).
 
@@ -187,7 +187,7 @@ At its April 2025 announcement, A2A listed 150+ partners (primarily announcement
 
 ### Integration with MCP
 
-Google and Anthropic coordinate protocol development for interoperability. In a typical agent ecosystem, Agent A (on Claude) and Agent B (on GPT-5.4) communicate with each other via the A2A Protocol. Each uses MCP to access their tools — Agent A to GitHub Server, Agent B to Jira Server.
+Google and Anthropic coordinate protocol development for interoperability. In a typical agent ecosystem, Agent A (on Claude) and Agent B (on GPT-5.4) communicate with each other via the A2A Protocol. Each uses MCP to access their tools, Agent A to GitHub Server, Agent B to Jira Server.
 
 A typical scenario: Agent A receives a task via A2A from Agent B, uses MCP to access GitHub (e.g., reads code or creates a PR), and returns the result via A2A back to Agent B. This demonstrates a clean separation: A2A for coordination between agents, MCP for accessing data and tools.
 
@@ -195,19 +195,19 @@ A typical scenario: Agent A receives a task via A2A from Agent B, uses MCP to ac
 
 ### Authentication Chain
 
-A2A defines a trust chain through a central Identity Provider that issues tokens to agents (Agent A Token, Agent B Token, Agent C Token). During interaction, agents perform mutual verification — they exchange tokens and verify each other's rights. Each agent has an identity verifiable through OAuth2/OIDC.
+A2A defines a trust chain through a central Identity Provider that issues tokens to agents (Agent A Token, Agent B Token, Agent C Token). During interaction, agents perform mutual verification: they exchange tokens and verify each other's rights. Each agent has an identity verifiable through OAuth2/OIDC.
 
 ### Capability-Based Security
 
 Instead of role-based access, A2A uses a capability-based security model. When delegating a task to an agent, the following are explicitly specified: requiredCapabilities (what is needed for execution), delegatedCapabilities (what the agent can do on its own), and restrictedCapabilities (what the caller must handle).
 
-For example, a "bookFlight" task may require flight:search, flight:book, and payment:process. But the agent receives delegation only for flight:search and flight:book, while payment:process remains with the caller — the agent must request payment confirmation through the INPUT_REQUIRED state. The principle of least privilege is applied automatically at the protocol level.
+For example, a "bookFlight" task may require flight:search, flight:book, and payment:process. But the agent receives delegation only for flight:search and flight:book, while payment:process remains with the caller: the agent must request payment confirmation through the INPUT_REQUIRED state. The principle of least privilege is applied automatically at the protocol level.
 
 ### Audit Trail
 
 All interactions between agents are logged with detailed information for auditing. Each event includes a timestamp, taskId, source and target agents with their identities, the action performed (TASK_SUBMITTED, TASK_COMPLETED, etc.), the capability used, and metadata with a correlationId for tracing the entire call chain.
 
-This is critical for enterprise deployments with compliance requirements — it is possible to trace which agent did what, at whose request, and with what data. The audit trail also helps in debugging complex multi-agent workflows where understanding the sequence of events and the causes of failures is important.
+This is critical for enterprise deployments with compliance requirements. It is possible to trace which agent did what, at whose request, and with what data. The audit trail also helps in debugging complex multi-agent workflows where understanding the sequence of events and the causes of failures is important.
 
 ## MCP vs. A2A Comparison
 
@@ -215,7 +215,7 @@ MCP and A2A serve fundamentally different integration layers: MCP connects an ag
 
 | Aspect | MCP | A2A |
 |--------|-----|-----|
-| **Purpose** | Agent → Tools/Data | Agent → Agent |
+| **Purpose** | Agent, then Tools/Data | Agent, then Agent |
 | **Pattern** | Client-Server | Peer-to-Peer / Orchestration |
 | **Tasks** | Sync + Async (Tasks primitive, Nov 2025) | Sync + Async + Streaming |
 | **Discovery** | Client configuration | Agent Cards + Well-Known URLs |
@@ -231,14 +231,14 @@ MCP and A2A serve fundamentally different integration layers: MCP connects an ag
 
 ## Key Takeaways
 
-A2A Protocol solves the problem of coordination between autonomous agents, complementing MCP. If MCP is "how an agent gets data," then A2A is "how agents work together." As of May 2026, A2A is in production at Azure AI Foundry, Amazon Bedrock AgentCore, Salesforce, SAP, and ServiceNow — no longer experimental.
+A2A Protocol solves the problem of coordination between autonomous agents, complementing MCP. If MCP is "how an agent gets data," then A2A is "how agents work together." As of May 2026, A2A is in production at Azure AI Foundry, Amazon Bedrock AgentCore, Salesforce, SAP, and ServiceNow, no longer experimental.
 
 Key features of A2A include Agent Cards for automatic discovery and capability description, full support for long-running tasks with a detailed lifecycle, streaming for receiving progressive results as execution proceeds, and multi-provider support enabling agents on different LLMs to interact with each other. The protocol is designed as an enterprise-ready solution with built-in support for security, audit trail, and compliance requirements.
 
-Orchestration architectural patterns — Hub-and-Spoke, Mesh, and Hierarchical — address different challenges. Hub-and-Spoke provides centralized control, Mesh delivers fault tolerance through peer-to-peer communication, and Hierarchical enables scaling complex systems through delegation.
+Orchestration architectural patterns (Hub-and-Spoke, Mesh, and Hierarchical) address different challenges. Hub-and-Spoke provides centralized control, Mesh delivers fault tolerance through peer-to-peer communication, and Hierarchical enables scaling complex systems through delegation.
 
 Security in A2A is implemented through a capability-based model with mutual agent authentication, an audit trail for all interactions, and the principle of least privilege at the protocol level.
 
-Understanding the complementary nature of MCP and A2A is critically important: MCP provides vertical integration (agent → data and tools), while A2A implements horizontal integration (agent → agent). Together they form a complete ecosystem for building complex multi-agent systems.
+Understanding the complementary nature of MCP and A2A is critically important: MCP provides vertical integration (agent, then data and tools), while A2A implements horizontal integration (agent, then agent). Together they form a complete ecosystem for building complex multi-agent systems.
 
 With protocols in place for agents to use tools (MCP) and coordinate with each other (A2A), Module 6 addresses the most common data pattern these protocols serve: Retrieval-Augmented Generation (RAG).

@@ -1,6 +1,6 @@
 # Generation Parameters: Controlling Model Behavior
 
-Imagine a writer standing before the choice of the next word in a novel. Sometimes precision is required — when drafting a legal document or a technical manual. Sometimes creativity matters — in poetry or a film script. And sometimes balance is needed — vivid language without drifting into absurdity.
+Imagine a writer standing before the choice of the next word in a novel. Sometimes precision is required, when drafting a legal document or a technical manual. Sometimes creativity matters: in poetry or a film script. And sometimes balance is needed, vivid language without drifting into absurdity.
 
 Generation parameters in language models are exactly these "tuning knobs" that control the degree of creativity and predictability in responses. Understanding these parameters is critically important for an AI agent developer: tool selection demands precision, while responding to a user demands lively language.
 
@@ -8,17 +8,17 @@ Generation parameters in language models are exactly these "tuning knobs" that c
 
 ## How LLMs Generate Text
 
-Before diving into parameters, it is important to understand the generation process itself. An LLM operates autoregressively — generating text token by token, where each subsequent token depends on all preceding ones.
+Before diving into parameters, it is important to understand the generation process itself. An LLM operates autoregressively, generating text token by token, where each subsequent token depends on all preceding ones.
 
 At each step, the model does the following:
 
-1. **Receives context** — all tokens generated up to this point (plus the original prompt)
+1. **Receives context**: all tokens generated up to this point (plus the original prompt)
 
-2. **Computes logits** — for each token in the vocabulary, the model produces a number (logit) reflecting its "confidence" that this particular token should come next
+2. **Computes logits**: for each token in the vocabulary, the model produces a number (logit) reflecting its "confidence" that this particular token should come next
 
-3. **Converts logits to probabilities** — through the softmax function, logits are transformed into a probability distribution where all values are positive and sum to 1
+3. **Converts logits to probabilities**: through the softmax function, logits are transformed into a probability distribution where all values are positive and sum to 1
 
-4. **Selects the next token** — this is where generation parameters come into play
+4. **Selects the next token**: this is where generation parameters come into play
 
 The process repeats until a special end-of-sequence token is generated or the token limit is reached.
 
@@ -32,11 +32,11 @@ Temperature is the primary parameter controlling the "randomness" of token selec
 
 What happens at different temperature values?
 
-**Temperature = 0 (or close to zero)**: The distribution becomes "sharp" — virtually all probability concentrates on the token with the maximum logit. The model always selects the most probable token. This is deterministic mode — the same prompt always produces the same response.
+**Temperature = 0 (or close to zero)**: The distribution becomes "sharp": virtually all probability concentrates on the token with the maximum logit. The model always selects the most probable token. This is deterministic mode: the same prompt always produces the same response.
 
 **Temperature = 1**: The original distribution as the model "sees" it after training. A balance between probable and less probable tokens.
 
-**Temperature > 1**: The distribution "flattens" — even unlikely tokens get a chance of being selected. The model becomes unpredictable, sometimes creative, sometimes nonsensical.
+**Temperature > 1**: The distribution "flattens": even unlikely tokens get a chance of being selected. The model becomes unpredictable, sometimes creative, sometimes nonsensical.
 
 ### Visualizing the Effect
 
@@ -56,7 +56,7 @@ At different temperatures, the probabilities distribute as follows:
 | 1.5 | 33.6% | 24.7% | 18.1% | 13.3% |
 | 2.0 | 29.0% | 23.4% | 18.9% | 15.3% |
 
-At temperature 0.1, the choice almost always falls on "the". At temperature 2.0, the distribution is nearly uniform — any token has a realistic chance.
+At temperature 0.1, the choice almost always falls on "the". At temperature 2.0, the distribution is nearly uniform: any token has a realistic chance.
 
 ### When to Use Which Temperature
 
@@ -93,7 +93,7 @@ Temperature has a deep connection to the concepts of entropy and perplexity:
 
 **Perplexity** is the exponential of entropy (2 raised to the power H). Intuitively, perplexity indicates how many equally probable options the model is "choosing" from on average. A perplexity of 10 means the choice is equivalent to randomly selecting from 10 equally probable tokens.
 
-Temperature directly controls the perplexity of generation: low temperature → low perplexity (confident selection), high temperature → high perplexity (many alternatives).
+Temperature directly controls the perplexity of generation: low temperature, then low perplexity (confident selection), high temperature, then high perplexity (many alternatives).
 
 ### Sampling vs Greedy: Exploration vs Exploitation
 
@@ -106,9 +106,9 @@ This is the classic **exploration vs exploitation** dilemma:
 **Sampling (exploration)**: Sometimes select less probable options. Pros: discovers unexpectedly good solutions, produces diverse text. Cons: may select a poor token.
 
 In practice:
-- For **deterministic tasks** (code, data) — greedy: we need the single correct answer
-- For **creative tasks** — sampling: diversity matters more than stability
-- For **dialogue** — moderate sampling: lively language without absurdity
+- For **deterministic tasks** (code, data): greedy: we need the single correct answer
+- For **creative tasks**, sampling: diversity matters more than stability
+- For **dialogue**: moderate sampling: lively language without absurdity
 
 ---
 
@@ -118,13 +118,13 @@ In practice:
 
 Temperature has a drawback: it affects all situations equally. But sometimes the model is highly confident about the next token (99% probability), and sometimes it is not (the distribution is uniform).
 
-Consider the sentence: "Paris is the capital of ___". The model is nearly certain the next word is "France". Here, a temperature of 0.7 can already cause problems — why give less probable tokens a chance?
+Consider the sentence: "Paris is the capital of ___". The model is nearly certain the next word is "France". Here, a temperature of 0.7 can already cause problems: why give less probable tokens a chance?
 
 But in the sentence "My favorite ___ is..." there are many reasonable continuations: "dish", "activity", "place", "season". Here, a temperature of 0.7 may be too conservative.
 
 ### How Top-p Works
 
-Top-p (also known as nucleus sampling) solves this problem adaptively. Instead of temperature, we specify a cumulative probability — and consider only the tokens whose combined probability reaches this threshold.
+Top-p (also known as nucleus sampling) solves this problem adaptively. Instead of temperature, we specify a cumulative probability, and consider only the tokens whose combined probability reaches this threshold.
 
 Algorithm:
 1. Sort tokens by descending probability
@@ -138,11 +138,11 @@ With top_p = 0.9, we consider the minimal set of tokens covering 90% of the prob
 Here is why top-p is "smarter" than temperature:
 
 **Model is confident** (one token with probability 0.95):
-- Top-p = 0.9 → only 1 token is considered
+- Top-p = 0.9 to only 1 token is considered
 - Randomness is minimal, as it should be
 
 **Model is uncertain** (five tokens at 0.18-0.20 each):
-- Top-p = 0.9 → all 5 tokens are considered
+- Top-p = 0.9 to all 5 tokens are considered
 - Randomness is high, reflecting the actual uncertainty
 
 Top-p automatically adapts to the model's confidence, whereas temperature operates the same way in all situations.
@@ -166,7 +166,7 @@ With top_k = 5, the model selects the next token only from the five most probabl
 
 ### Drawback: Inflexibility
 
-Top-k has a significant drawback — it does not adapt to the situation:
+Top-k has a significant drawback. It does not adapt to the situation:
 
 **Problem 1: top_k is too small**
 
@@ -205,7 +205,7 @@ With top_p = 0.95, we include tokens A, B, C, and several from D-Z. But why incl
 **Min-P** sets a **relative probability threshold**: a token is included for consideration only if its probability is greater than or equal to min_p multiplied by the probability of the best token.
 
 With min_p = 0.1 and the best token at 40% probability:
-- Threshold = 0.1 × 0.4 = 4%
+- Threshold = 0.1 x 0.4 = 4%
 - Tokens with probability < 4% are discarded
 
 This is **adaptive**: when the model is confident (best token at 90%), the threshold is high (9%). When uncertain (best at 20%), the threshold is low (2%).
@@ -257,20 +257,20 @@ Reasoning models (o1, o3, o4-mini, Claude with extended thinking, Gemini with th
 
 **Temperature constraints:**
 
-Reasoning models handle temperature differently from standard models. OpenAI's o-series models (o1, o3, o4-mini) **force temperature=1** — the parameter is accepted by the API but ignored. The reasoning process relies on internal sampling strategies that are not controllable by the user. Setting temperature=0 has no effect. Claude's extended thinking mode similarly fixes the temperature at 1.0 for the thinking phase — the `temperature` parameter applies only to the final output, not to the chain-of-thought reasoning tokens. DeepSeek R1 recommends temperature=0.6 for reasoning tasks, noting that lower values can cause repetitive loops in the thinking process.
+Reasoning models handle temperature differently from standard models. OpenAI's o-series models (o1, o3, o4-mini) **force temperature=1**: the parameter is accepted by the API but ignored. The reasoning process relies on internal sampling strategies that are not controllable by the user. Setting temperature=0 has no effect. Claude's extended thinking mode similarly fixes the temperature at 1.0 for the thinking phase: the `temperature` parameter applies only to the final output, not to the chain-of-thought reasoning tokens. DeepSeek R1 recommends temperature=0.6 for reasoning tasks, noting that lower values can cause repetitive loops in the thinking process.
 
 **Thinking budget parameter:**
 
-A new parameter unique to reasoning models — controlling how much compute the model spends on reasoning before producing a final answer. Each provider exposes this control differently, as the table below summarizes. Understanding these differences is essential when building agentic systems that target multiple providers, since the parameter names, value types, and defaults are not interchangeable.
+A new parameter unique to reasoning models, controlling how much compute the model spends on reasoning before producing a final answer. Each provider exposes this control differently, as the table below summarizes. Understanding these differences is essential when building agentic systems that target multiple providers, since the parameter names, value types, and defaults are not interchangeable.
 
 | Provider | Parameter | Values | Default |
 |----------|-----------|--------|---------|
 | **OpenAI** | `reasoning_effort` | `low`, `medium`, `high` | `medium` |
-| **Anthropic** | `budget_tokens` (inside `thinking` block) | 1024 – 128000 | Model-dependent |
-| **Google** | `thinkingBudget` (Gemini 2.5); `thinkingLevel` (Gemini 3) | 0 – 24576 / `low`, `medium`, `high` | Dynamic |
-| **DeepSeek** | N/A (not exposed) | — | Internal |
+| **Anthropic** | `budget_tokens` (inside `thinking` block) | 1024 - 128000 | Model-dependent |
+| **Google** | `thinkingBudget` (Gemini 2.5); `thinkingLevel` (Gemini 3) | 0 - 24576 / `low`, `medium`, `high` | Dynamic |
+| **DeepSeek** | N/A (not exposed) | - | Internal |
 
-`reasoning_effort: "low"` or a small `budget_tokens` value produces faster, cheaper responses with less thorough reasoning — suitable for simple tasks. `reasoning_effort: "high"` or a large `budget_tokens` enables deep multi-step reasoning — necessary for complex math, code, and analysis tasks.
+`reasoning_effort: "low"` or a small `budget_tokens` value produces faster, cheaper responses with less thorough reasoning: suitable for simple tasks. `reasoning_effort: "high"` or a large `budget_tokens` enables deep multi-step reasoning, necessary for complex math, code, and analysis tasks.
 
 **Practical implications:** For agentic systems, the thinking budget is a new optimization lever. Simple tool-selection decisions need minimal reasoning budget, while complex planning steps benefit from maximum budget. This creates a new dimension of cost-latency-quality trade-off beyond traditional temperature tuning.
 
@@ -278,8 +278,8 @@ A new parameter unique to reasoning models — controlling how much compute the 
 
 The maximum number of tokens in a response. A critically important parameter:
 
-- Too small a value — the response gets cut off
-- Too large — you pay for unused tokens (in some APIs)
+- Too small a value: the response gets cut off
+- Too large: you pay for unused tokens (in some APIs)
 
 Recommendations by task:
 - Classification: 5-20 tokens
@@ -292,10 +292,10 @@ Recommendations by task:
 
 Character sequences that cause generation to stop when encountered. Useful for structured responses:
 
-- `"\n"` — stop after the first line
-- `"```"` — stop after a code block
-- `"\nObservation:"` — stop before the next step in an agent
-- `"</answer>"` — stop after the closing tag
+- `"\n"`: stop after the first line
+- `"```"`: stop after a code block
+- `"\nObservation:"`: stop before the next step in an agent
+- `"</answer>"`: stop after the closing tag
 
 ### presence_penalty and frequency_penalty
 
@@ -309,7 +309,7 @@ Penalties for repetition:
 
 Both penalties work by modifying logits **before** applying softmax. Each logit has two penalty terms subtracted: presence_penalty multiplied by a token appearance indicator (1 if the token has appeared, 0 otherwise), plus frequency_penalty multiplied by the number of token occurrences.
 
-**Presence penalty** subtracts a fixed value from the logit if the token has appeared at least once. This is a "one-time" penalty — it does not matter whether the token appeared 1 time or 100 times, the penalty is the same.
+**Presence penalty** subtracts a fixed value from the logit if the token has appeared at least once. This is a "one-time" penalty. It does not matter whether the token appeared 1 time or 100 times, the penalty is the same.
 
 **Frequency penalty** subtracts a value proportional to the number of occurrences. Each repetition increases the penalty.
 
@@ -321,7 +321,7 @@ Both penalties work by modifying logits **before** applying softmax. Each logit 
 
 ### Repetition penalty (alternative)
 
-Some frameworks (especially Hugging Face) use **repetition_penalty** — a multiplicative penalty instead of an additive one. If a token has already appeared, its logit is modified depending on its sign: positive logits are divided by repetition_penalty, negative logits are multiplied by it.
+Some frameworks (especially Hugging Face) use **repetition_penalty**: a multiplicative penalty instead of an additive one. If a token has already appeared, its logit is modified depending on its sign: positive logits are divided by repetition_penalty, negative logits are multiplied by it.
 
 With repetition_penalty = 1.2, positive logits decrease (divided by 1.2), while negative logits become even more negative (multiplied by 1.2). This prevents repetition regardless of the logit's sign.
 
@@ -346,7 +346,7 @@ Optimal settings: temperature = 0, max_tokens = 50-100, stop_sequences = ["\n"].
 
 ### Argument Generation
 
-Tool arguments must be precise — correct JSON syntax, valid parameter values. Use temperature = 0, max_tokens = 200-500, stop_sequences = ["```"].
+Tool arguments must be precise, correct JSON syntax, valid parameter values. Use temperature = 0, max_tokens = 200-500, stop_sequences = ["```"].
 
 ### Reasoning (Chain of Thought)
 
@@ -364,7 +364,7 @@ Generation parameters affect not only quality but also economics:
 
 **max_tokens**: Directly impacts the cost of output tokens. Setting a reasonable limit is a direct cost saving.
 
-**stop_sequences**: Proper stop sequences prevent generation of unnecessary text. If the model tends to append "Have questions? Feel free to ask!" — a stop sequence can cut that off.
+**stop_sequences**: Proper stop sequences prevent generation of unnecessary text. If the model tends to append "Have questions? Feel free to ask!": a stop sequence can cut that off.
 
 **temperature = 0**: Some providers use caching for identical requests with temp=0. Potential savings on repeated calls.
 
@@ -380,9 +380,9 @@ Generation parameters affect not only quality but also economics:
 
 4. **Combining parameters** provides better control. A typical combination: temperature + top_p + a reasonable top_k.
 
-5. **Different stages of agent operation require different settings**. Tool selection — temperature=0, user response — temperature=0.7.
+5. **Different stages of agent operation require different settings**. Tool selection: temperature=0, user response: temperature=0.7.
 
-6. **Reasoning models override standard parameters**. o-series forces temperature=1, Claude extended thinking fixes temperature for the thinking phase. A new `thinking budget` parameter (reasoning_effort, budget_tokens) controls the depth of reasoning — a new cost-latency-quality lever.
+6. **Reasoning models override standard parameters**. o-series forces temperature=1, Claude extended thinking fixes temperature for the thinking phase. A new `thinking budget` parameter (reasoning_effort, budget_tokens) controls the depth of reasoning: a new cost-latency-quality lever.
 
 7. **Experimentation is essential**. Optimal parameters depend on the specific model, task, and user expectations.
 
@@ -410,8 +410,8 @@ In agentic systems, it is critically important to use different generation param
 
 **Argument generation mode**: Also requires temperature = 0 for JSON accuracy. Max_tokens is expanded to 500, as arguments can be complex objects. Stop sequences include "```" (end of code block) and a double newline. This prevents generation of extraneous text after the arguments.
 
-**Reasoning mode (Chain of Thought)**: A small degree of creativity is acceptable here — temperature = 0.5. Top-p is set to 0.9 for diversity of thought. Max_tokens is increased to 1000, as reasoning can be extensive. Stop sequences include "Action:" and "Final Answer:" to prevent the model from advancing to the next stage on its own. Small repetition penalties (presence = 0.3, frequency = 0.1) prevent the model from fixating on the same phrases.
+**Reasoning mode (Chain of Thought)**: A small degree of creativity is acceptable here: temperature = 0.5. Top-p is set to 0.9 for diversity of thought. Max_tokens is increased to 1000, as reasoning can be extensive. Stop sequences include "Action:" and "Final Answer:" to prevent the model from advancing to the next stage on its own. Small repetition penalties (presence = 0.3, frequency = 0.1) prevent the model from fixating on the same phrases.
 
-**User response mode**: Temperature is raised to 0.7 for natural language. Top-p = 0.95 provides more freedom in word choice. Max_tokens up to 2000 for detailed explanations. Stop sequences are empty — the model decides when to finish. Repetition penalties are more significant (presence = 0.5, frequency = 0.3) to keep the text from becoming monotonous.
+**User response mode**: Temperature is raised to 0.7 for natural language. Top-p = 0.95 provides more freedom in word choice. Max_tokens up to 2000 for detailed explanations. Stop sequences are empty: the model decides when to finish. Repetition penalties are more significant (presence = 0.5, frequency = 0.3) to keep the text from becoming monotonous.
 
 This differentiation of parameters allows the agent to be precise where precision is needed and natural where fluent communication matters.

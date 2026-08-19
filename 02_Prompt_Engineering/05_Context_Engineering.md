@@ -4,7 +4,7 @@
 
 In 2025, Andrej Karpathy proposed the term **Context Engineering**, which was quickly adopted by the industry as a more accurate description of working with LLMs. Harrison Chase (CEO of LangChain) formalized the shift further: "When agents mess up, they mess up because they don't have the right context; when they succeed, they succeed because they have the right context."
 
-This is not merely a rebranding. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context — not from model limitations.** The same Claude Sonnet 4.6 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
+This is not merely a rebranding. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context, not from model limitations.** The same Claude Sonnet 4.6 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
 
 ### Why Context, not Prompt?
 
@@ -20,10 +20,10 @@ This is not merely a rebranding. Research shows that **70% of LLM application er
 
 Karpathy proposed a powerful analogy for understanding LLMs:
 
-- **CPU (processor)** → **LLM (model weights)** — processing
-- **RAM (random-access memory)** → **Context Window** — working memory
-- **HDD/SSD (storage)** → **Vector DB** — long-term storage
-- **OS (operating system)** → **Agent Loop** — resource management
+- **CPU (processor)** to **LLM (model weights)**, processing
+- **RAM (random-access memory)** to **Context Window**, working memory
+- **HDD/SSD (storage)** to **Vector DB**: long-term storage
+- **OS (operating system)** to **Agent Loop**: resource management
 
 ### Key Insight
 
@@ -35,7 +35,7 @@ The context window is the only "working memory" of an LLM. Everything the model 
 
 Before diving into strategies, it is essential to understand a counterintuitive property of LLMs: they process information at the **beginning and end** of the context window significantly better than in the middle. This "Lost-in-the-Middle" effect (Liu et al., 2023) means that position in the context influences model attention more than semantic relevance.
 
-The practical implication is architectural: critical instructions belong at the start of the context (system prompt), key constraints should be repeated at the end (the "sandwich" pattern), and important retrieved documents should not be buried between less relevant ones. When assembling context for an agent, the ordering of information is not cosmetic — it directly affects the quality of reasoning.
+The practical implication is architectural: critical instructions belong at the start of the context (system prompt), key constraints should be repeated at the end (the "sandwich" pattern), and important retrieved documents should not be buried between less relevant ones. When assembling context for an agent, the ordering of information is not cosmetic. It directly affects the quality of reasoning.
 
 This effect intensifies with context length. At 4K tokens, the middle is still reasonably attended. At 128K tokens, information in the middle may effectively be invisible. For long-context applications, hierarchical summarization or progressive disclosure (loading detail on demand) outperforms simply concatenating all available text.
 
@@ -43,11 +43,11 @@ This effect intensifies with context length. At 4K tokens, the middle is still r
 
 ## Four Context Engineering Strategies
 
-Karpathy and his followers identified four core context management strategies — **WSCI** (Write, Select, Compress, Isolate).
+Karpathy and his followers identified four core context management strategies: **WSCI** (Write, Select, Compress, Isolate).
 
-### 1. WRITE — Persisting Outside the Context
+### 1. WRITE, Persisting Outside the Context
 
-**Problem:** The context window is limited (8K–200K tokens); information is lost between sessions.
+**Problem:** The context window is limited (8K-200K tokens); information is lost between sessions.
 
 **Solution:** Write important information to external storage.
 
@@ -55,15 +55,15 @@ Karpathy and his followers identified four core context management strategies �
 
 **WRITE Tools (from simplest to most complex):**
 
-- **File-based memory** (e.g., Claude Code's CLAUDE.md) — plain text files the agent reads and writes. Human-readable, git-versioned, zero infrastructure. Effective for developer tools with modest memory scale
-- **Scratchpads** — temporary agent notes for complex computations
-- **MCP memory servers** — standardized read/write interface, backend-agnostic (can use files, SQL, or vector DB behind the protocol)
-- **Vector DBs** — semantic search over memory for RAG systems, scales to millions of items
-- **MemGPT / Letta** — one of the early approaches (2023) to automatic paged memory management for long dialogues, inspired by OS virtual memory. The concept (self-directed memory via tool calls, tiered storage) has been broadly influential, though simpler patterns often suffice in production — see Module 03, Memory Systems for a detailed comparison
+- **File-based memory** (e.g., Claude Code's CLAUDE.md): plain text files the agent reads and writes. Human-readable, git-versioned, zero infrastructure. Effective for developer tools with modest memory scale
+- **Scratchpads**: temporary agent notes for complex computations
+- **MCP memory servers**: standardized read/write interface, backend-agnostic (can use files, SQL, or vector DB behind the protocol)
+- **Vector DBs**: semantic search over memory for RAG systems, scales to millions of items
+- **MemGPT / Letta**: one of the early approaches (2023) to automatic paged memory management for long dialogues, inspired by OS virtual memory. The concept (self-directed memory via tool calls, tiered storage) has been broadly influential, though simpler patterns often suffice in production, see Module 03, Memory Systems for a detailed comparison
 
 ---
 
-### 2. SELECT — Choosing Relevant Context
+### 2. SELECT, Choosing Relevant Context
 
 **Problem:** There is a lot of information, but not all of it is relevant to the current query.
 
@@ -71,11 +71,11 @@ Karpathy and his followers identified four core context management strategies �
 
 **SELECT Techniques:**
 
-- **Semantic search** — meaning-based search via embeddings (primary method for RAG)
-- **Keyword search** — exact term matching (technical terms, codes)
-- **Hybrid search** — combination of semantic and keyword search (production systems)
-- **Metadata filtering** — filtering by attributes (temporal data, categories)
-- **Reranking** — re-ranking results (improving precision)
+- **Semantic search**: meaning-based search via embeddings (primary method for RAG)
+- **Keyword search**: exact term matching (technical terms, codes)
+- **Hybrid search**: combination of semantic and keyword search (production systems)
+- **Metadata filtering**: filtering by attributes (temporal data, categories)
+- **Reranking**: re-ranking results (improving precision)
 
 **SELECT Process:**
 1. Receive the user query
@@ -86,7 +86,7 @@ Karpathy and his followers identified four core context management strategies �
 
 ---
 
-### 3. COMPRESS — Compressing Information
+### 3. COMPRESS, Compressing Information
 
 **Problem:** There is too much information, even relevant information.
 
@@ -94,10 +94,10 @@ Karpathy and his followers identified four core context management strategies �
 
 **COMPRESS Techniques:**
 
-- **Summarization** — ratio 5–10x, loss of details, applied to long documents
-- **Fact extraction** — ratio 10–20x, loss of context, for structured data
-- **Sliding window** — ratio 2–3x, loss of older content, for dialogues
-- **Hierarchical compression** — ratio 3–5x, loss of lower levels, for structured documents
+- **Summarization**: ratio 5-10x, loss of details, applied to long documents
+- **Fact extraction**: ratio 10-20x, loss of context, for structured data
+- **Sliding window**: ratio 2-3x, loss of older content, for dialogues
+- **Hierarchical compression**: ratio 3-5x, loss of lower levels, for structured documents
 
 **Hierarchical Compression:**
 - Level 1: Full document (10K tokens)
@@ -109,7 +109,7 @@ Depending on available space in the context, the appropriate level of detail is 
 
 ---
 
-### 4. ISOLATE — Isolation via Multi-Agent
+### 4. ISOLATE, Isolation via Multi-Agent
 
 **Problem:** A single agent cannot hold everything needed for a complex task in its context.
 
@@ -119,10 +119,10 @@ Depending on available space in the context, the appropriate level of detail is 
 
 **Isolation Patterns:**
 
-- **Sequential pipeline** — agents work sequentially (linear workflows)
-- **Hierarchical** — Orchestrator + Executors (complex tasks)
-- **Debate/Critique** — Proposer + Critic (quality improvement)
-- **Parallel specialists** — parallel processing (independent subtasks)
+- **Sequential pipeline**: agents work sequentially (linear workflows)
+- **Hierarchical**: Orchestrator + Executors (complex tasks)
+- **Debate/Critique**: Proposer + Critic (quality improvement)
+- **Parallel specialists**: parallel processing (independent subtasks)
 
 ---
 
@@ -130,27 +130,27 @@ Depending on available space in the context, the appropriate level of detail is 
 
 ### Customer Support Agent
 
-- **WRITE**: Preferences → Vector DB, History → Redis
+- **WRITE**: Preferences, then Vector DB, History, then Redis
 - **SELECT**: Hybrid search over FAQ + Customer history
 - **COMPRESS**: Sliding window of last 10 messages
-- **ISOLATE**: Intent → Retrieval → Response → QA
+- **ISOLATE**: Intent, then Retrieval, then Response, then QA
 
 ### Code Assistant
 
-- **WRITE**: Changes → Git, Decisions → Scratchpad
+- **WRITE**: Changes, then Git, Decisions, then Scratchpad
 - **SELECT**: Semantic + Keyword over codebase index
 - **COMPRESS**: Signatures + Docstrings (without function bodies)
-- **ISOLATE**: Planner → Coder → Tester → Reviewer
+- **ISOLATE**: Planner, then Coder, then Tester, then Reviewer
 
 ---
 
 ## Context Engineering Metrics
 
-- **Context Utilization** — % of context window used → target 70–90%
-- **Relevance Score** — relevance of retrieved context → above 0.8
-- **Memory Hit Rate** — % of queries where memory helped → above 60%
-- **Compression Ratio** — compression without quality loss → 3–5x
-- **Token Efficiency** — useful tokens / total tokens → above 0.7
+- **Context Utilization**: % of context window used to target 70-90%
+- **Relevance Score**: relevance of retrieved context to above 0.8
+- **Memory Hit Rate**: % of queries where memory helped to above 60%
+- **Compression Ratio**: compression without quality loss to 3-5x
+- **Token Efficiency**: useful tokens / total tokens to above 0.7
 
 ---
 
@@ -172,23 +172,23 @@ Adaptive context assembly for each query, balance between completeness and relev
 
 ## MCP as Context Engineering Infrastructure
 
-The **Model Context Protocol (MCP)** maps directly to the WSCI framework: MCP Resources enable SELECT (discovering and retrieving external context), MCP Tools enable WRITE (persisting results to external systems), and MCP Prompts enable COMPRESS (pre-structured context templates). MCP standardizes context engineering across tools, IDEs, and agent frameworks — the same MCP server works identically in Claude Code, Cursor, or any custom agent. For the full MCP architecture and ecosystem, see Module 05, MCP Basics.
+The **Model Context Protocol (MCP)** maps directly to the WSCI framework: MCP Resources enable SELECT (discovering and retrieving external context), MCP Tools enable WRITE (persisting results to external systems), and MCP Prompts enable COMPRESS (pre-structured context templates). MCP standardizes context engineering across tools, IDEs, and agent frameworks: the same MCP server works identically in Claude Code, Cursor, or any custom agent. For the full MCP architecture and ecosystem, see Module 05, MCP Basics.
 
 ### Agentic Search as Context Engineering
 
-A significant development in 2024-2025 is the emergence of **agentic search** — where the agent itself manages the SELECT strategy dynamically.
+A significant development in 2024-2025 is the emergence of **agentic search**, where the agent itself manages the SELECT strategy dynamically.
 
-Traditional RAG: fixed pipeline (query → embed → retrieve → generate). The SELECT strategy is static — the same retrieval pipeline runs for every query.
+Traditional RAG: fixed pipeline (query, then embed, then retrieve, then generate). The SELECT strategy is static: the same retrieval pipeline runs for every query.
 
 Agentic search: the agent reasons about what information it needs, formulates targeted queries, evaluates retrieved results, and iterates if the results are insufficient. The agent applies Chain-of-Thought to the SELECT strategy itself:
 
-1. Analyze the question — what information is needed?
-2. Formulate a search strategy — which sources, what queries?
-3. Execute retrieval — run searches in parallel where possible
-4. Evaluate results — is the retrieved context sufficient?
-5. Iterate if needed — refine queries, try different sources
+1. Analyze the question: what information is needed?
+2. Formulate a search strategy, which sources, what queries?
+3. Execute retrieval: run searches in parallel where possible
+4. Evaluate results: is the retrieved context sufficient?
+5. Iterate if needed, refine queries, try different sources
 
-This is the SELECT strategy elevated from a pipeline component to an agent capability. Examples: Perplexity's search agent, OpenAI's deep research, Claude's web search integration — all implement agentic search patterns.
+This is the SELECT strategy elevated from a pipeline component to an agent capability. Examples: Perplexity's search agent, OpenAI's deep research, Claude's web search integration, all implement agentic search patterns.
 
 ## Karpathy's Context Hierarchy
 
@@ -207,19 +207,19 @@ The hierarchy implies a management strategy: Level 1 is stable and cacheable (id
 
 ## Self-Directed Context Engineering
 
-The most significant trend in 2026 context engineering is the shift from static pipelines to **self-directed context management** — where the agent itself decides what to see, what to retrieve, what to summarize, and what to evict.
+The most significant trend in 2026 context engineering is the shift from static pipelines to **self-directed context management**, where the agent itself decides what to see, what to retrieve, what to summarize, and what to evict.
 
-In traditional RAG, the context assembly pipeline is fixed: query → embed → retrieve → inject into prompt. The same pipeline runs for every query regardless of what the agent actually needs. Self-directed context engineering gives the agent control over its own context.
+In traditional RAG, the context assembly pipeline is fixed: query, then embed, then retrieve, then inject into prompt. The same pipeline runs for every query regardless of what the agent actually needs. Self-directed context engineering gives the agent control over its own context.
 
-**Letta's LLM-as-OS paradigm** takes this furthest: the agent manages a three-tier memory system (Core Memory always in prompt, Archival Memory out-of-context, agent-editable via tool calls). The agent decides when to write to memory, when to search its archives, and when to forget — through explicit tool calls, not pipeline logic. See Module 03, Memory Systems for details.
+**Letta's LLM-as-OS paradigm** takes this furthest: the agent manages a three-tier memory system (Core Memory always in prompt, Archival Memory out-of-context, agent-editable via tool calls). The agent decides when to write to memory, when to search its archives, and when to forget, through explicit tool calls, not pipeline logic. See Module 03, Memory Systems for details.
 
 **Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context, enabling effectively infinite-length sessions within a finite window.
 
-**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience — not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See Module 03, Memory Systems for details.
+**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience, not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See Module 03, Memory Systems for details.
 
-**Claude Messages API: inline system records (Opus 4.8+, Fable 5).** The Claude Messages API now accepts `system` records inside the `messages[]` array — not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
+**Claude Messages API: inline system records (Opus 4.8+, Fable 5).** The Claude Messages API now accepts `system` records inside the `messages[]` array, not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
 
-**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering — see Module 04, Multi-Agent Basics.
+**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering, see Module 04, Multi-Agent Basics.
 
 The common thread: context engineering is shifting from something engineers build around the model to something the agent manages for itself. The agent is becoming its own context engineer.
 
@@ -229,9 +229,9 @@ The common thread: context engineering is shifting from something engineers buil
 
 In an agentic loop where the LLM is called 10-20 times per task, every wasted token compounds. Token budget management is the discipline of controlling what enters the context and how much of the window it consumes.
 
-**Just-in-time tool loading** is the highest-impact optimization. Rather than loading all tool descriptions into every LLM call (a common pattern in early agent frameworks), a lightweight classifier first determines which tools are relevant to the current step, and only those descriptions are included. This reduces tool-related context from 77K tokens (for a large tool set) to approximately 8.7K tokens — an **85% reduction**. The classifier can be rule-based (keyword matching on the query), semantic (embed the query, match against tool description embeddings), or LLM-based (a cheap model routes to relevant tools).
+**Just-in-time tool loading** is the highest-impact optimization. Rather than loading all tool descriptions into every LLM call (a common pattern in early agent frameworks), a lightweight classifier first determines which tools are relevant to the current step, and only those descriptions are included. This reduces tool-related context from 77K tokens (for a large tool set) to approximately 8.7K tokens: an **85% reduction**. The classifier can be rule-based (keyword matching on the query), semantic (embed the query, match against tool description embeddings), or LLM-based (a cheap model routes to relevant tools).
 
-**Tool description budgeting:** Each tool description consumes 200-500 tokens. A rule of thumb: tool descriptions should not exceed **10% of the available context window**. For a 128K context model, that is 12.8K tokens — roughly 25-60 tools before tool descriptions alone crowd out actual task context. Beyond that threshold, dynamic filtering becomes mandatory.
+**Tool description budgeting:** Each tool description consumes 200-500 tokens. A rule of thumb: tool descriptions should not exceed **10% of the available context window**. For a 128K context model, that is 12.8K tokens, roughly 25-60 tools before tool descriptions alone crowd out actual task context. Beyond that threshold, dynamic filtering becomes mandatory.
 
 **Dynamic context filtering** selects which context elements to include based on the current step. The three approaches below trade off speed against filtering accuracy; most production systems use semantic filtering as the best compromise between latency and relevance.
 
@@ -241,7 +241,7 @@ In an agentic loop where the LLM is called 10-20 times per task, every wasted to
 | **Semantic** | Embedding similarity | ~10ms | Medium |
 | **LLM-based** | Cheap model classifies relevance | ~200ms | High (but adds latency and cost) |
 
-For most production systems, semantic filtering is the sweet spot — fast enough for real-time and accurate enough to avoid loading irrelevant context.
+For most production systems, semantic filtering is the sweet spot: fast enough for real-time and accurate enough to avoid loading irrelevant context.
 
 ---
 
@@ -257,7 +257,7 @@ Five patterns that consistently reduce context costs and improve quality in real
 
 **4. Semantic Caching.** Before calling the LLM, embed the current query and search a cache of recent query-response pairs. If a cached query has similarity above a threshold (typically >0.95), return the cached response. This can reduce LLM calls by 30-40% for workloads with repeated patterns (customer support, FAQ-style queries). Not suitable for creative tasks where variety is desired.
 
-**5. Progressive Disclosure.** Instead of loading the full context for a task upfront (which might be 500K tokens of codebase or documentation), load a hierarchical summary first (10-15K tokens). The agent requests detail on specific sections as needed. This mirrors how humans work with large information sets — overview first, detail on demand.
+**5. Progressive Disclosure.** Instead of loading the full context for a task upfront (which might be 500K tokens of codebase or documentation), load a hierarchical summary first (10-15K tokens). The agent requests detail on specific sections as needed. This mirrors how humans work with large information sets, overview first, detail on demand.
 
 ---
 
@@ -282,35 +282,35 @@ In practice, many production systems use JSON at system boundaries (API inputs/o
 
 ## The LLM Wiki Pattern
 
-In April 2026, Karpathy published **LLM Wiki** — a concept that quickly went viral as an "anti-RAG" pattern. The core idea: instead of performing retrieval from raw documents on every query, **have an LLM compile the knowledge into a structured wiki once, then maintain it incrementally**.
+In April 2026, Karpathy published **LLM Wiki**, a concept that quickly went viral as an "anti-RAG" pattern. The core idea: instead of performing retrieval from raw documents on every query, **have an LLM compile the knowledge into a structured wiki once, then maintain it incrementally**.
 
 **Three-layer architecture:**
 
-1. **Raw sources** — immutable documents (articles, papers, data). Never modified.
-2. **Wiki** — markdown files maintained by the LLM: summaries, entity descriptions, concept explanations, cross-references. The LLM creates and updates these.
-3. **Schema** — configuration (analogous to CLAUDE.md) defining structure, categories, and maintenance workflows.
+1. **Raw sources**: immutable documents (articles, papers, data). Never modified.
+2. **Wiki**: markdown files maintained by the LLM: summaries, entity descriptions, concept explanations, cross-references. The LLM creates and updates these.
+3. **Schema**: configuration (analogous to CLAUDE.md) defining structure, categories, and maintenance workflows.
 
 **Three operations:**
 
-- **Ingest** — process a new source, update relevant wiki pages with new information
-- **Query** — search the wiki + synthesize an answer with citations back to sources
-- **Lint** — health-check: find contradictions, outdated data, orphan pages, coverage gaps
+- **Ingest**: process a new source, update relevant wiki pages with new information
+- **Query**: search the wiki + synthesize an answer with citations back to sources
+- **Lint**: health-check: find contradictions, outdated data, orphan pages, coverage gaps
 
-**When LLM Wiki beats RAG:** For small-to-medium knowledge bases (hundreds to low thousands of documents) where questions require synthesis across multiple sources. A compiled wiki with pre-computed cross-references enables answers that naive RAG — which retrieves individual chunks without understanding their relationships — simply cannot produce. Karpathy's key insight: "The tedious part of maintaining a knowledge base is not the reading or the thinking — it's the bookkeeping." LLMs do not tire of bookkeeping.
+**When LLM Wiki beats RAG:** For small-to-medium knowledge bases (hundreds to low thousands of documents) where questions require synthesis across multiple sources. A compiled wiki with pre-computed cross-references enables answers that naive RAG, which retrieves individual chunks without understanding their relationships: simply cannot produce. Karpathy's key insight: "The tedious part of maintaining a knowledge base is not the reading or the thinking: it's the bookkeeping." LLMs do not tire of bookkeeping.
 
 **When RAG still wins:** Large corpora (millions of documents), real-time data that changes continuously, cases where provenance and citation to exact source passages are required, and any scenario where the knowledge base does not fit in the context window even as a compiled wiki. See Module 06, Advanced RAG for the full taxonomy.
 
-The two approaches are complementary: LLM Wiki for curated, synthesis-heavy knowledge; RAG for large-scale, real-time retrieval. Some production systems use both — a wiki for core domain knowledge and RAG for long-tail queries.
+The two approaches are complementary: LLM Wiki for curated, synthesis-heavy knowledge; RAG for large-scale, real-time retrieval. Some production systems use both, a wiki for core domain knowledge and RAG for long-tail queries.
 
 ---
 
 ## Related Topics
 
-- Prompt Optimization — foundational prompt techniques
-- Module 06, RAG Basics — the SELECT strategy in detail
-- Module 04, Multi-Agent Basics — the ISOLATE strategy
-- Module 03, Memory Systems — the WRITE strategy
-- Module 05, MCP Basics — standardized context engineering protocol
+- Prompt Optimization: foundational prompt techniques
+- Module 06, RAG Basics: the SELECT strategy in detail
+- Module 04, Multi-Agent Basics: the ISOLATE strategy
+- Module 03, Memory Systems: the WRITE strategy
+- Module 05, MCP Basics: standardized context engineering protocol
 
 ---
 

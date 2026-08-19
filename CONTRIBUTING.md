@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving the AI Agents Course. Contributions of all kinds are welcome — from fixing typos to adding new content.
+Thanks for your interest in improving the AI Agents Course. Contributions of all kinds are welcome, from fixing typos to adding new content.
 
 ## Ways to Contribute
 

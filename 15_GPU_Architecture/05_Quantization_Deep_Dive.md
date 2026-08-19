@@ -2,11 +2,11 @@
 
 ## Introduction: Why Quantization Is Critical
 
-Modern LLMs are staggering in size. LLaMA-70B requires 140 GB of memory just for weights in FP16. GPT-4 presumably contains over a trillion parameters. Running such models on commodity hardware would seem impossible — if not for quantization.
+Modern LLMs are staggering in size. LLaMA-70B requires 140 GB of memory just for weights in FP16. GPT-4 presumably contains over a trillion parameters. Running such models on commodity hardware would seem impossible, if not for quantization.
 
-Quantization is a technique for reducing the precision of number representation: instead of 16 or 32 bits per parameter, we use 8, 4, or even 2 bits. Mathematically, this means information loss. In practice — with the right approach, the model preserves quality while requiring 2-8x less memory and running faster.
+Quantization is a technique for reducing the precision of number representation: instead of 16 or 32 bits per parameter, we use 8, 4, or even 2 bits. Mathematically, this means information loss. In practice: with the right approach, the model preserves quality while requiring 2-8x less memory and running faster.
 
-The paradox of quantization is that neural networks are redundant. Most weights do not need high precision — only relative proportions and general patterns matter. Quantization exploits this redundancy, preserving the essence of the model while discarding precision noise.
+The paradox of quantization is that neural networks are redundant. Most weights do not need high precision, only relative proportions and general patterns matter. Quantization exploits this redundancy, preserving the essence of the model while discarding precision noise.
 
 ---
 
@@ -16,7 +16,7 @@ The paradox of quantization is that neural networks are redundant. Most weights 
 
 Quantization maps a continuous set of values (floating point) to a discrete one (fixed point with a limited number of levels).
 
-For K-bit quantization, we have 2^K possible values. At K=8, that is 256 levels; at K=4 — only 16 levels; at K=2 — just 4 levels.
+For K-bit quantization, we have 2^K possible values. At K=8, that is 256 levels; at K=4, only 16 levels; at K=2, just 4 levels.
 
 The simplest linear quantization: x_q = round((x - z) / s), where x is the original value in FP32/FP16, x_q is the quantized integer value, s (scale) is the scaling factor, z (zero point) is the zero offset.
 
@@ -39,7 +39,7 @@ Scale and zero point are chosen to minimize the quantization error on calibratio
 - Better coverage of the actual data range
 - Additional computation due to zero point
 
-For LLM weights, symmetric is typically used (distribution is close to symmetric); for activations — asymmetric.
+For LLM weights, symmetric is typically used (distribution is close to symmetric); for activations, asymmetric.
 
 ### Per-tensor vs Per-channel vs Per-group
 
@@ -105,7 +105,7 @@ Key insight: quantization errors can be compensated by adjusting weights that ha
 
 ### Optimal Brain Quantization (OBQ)
 
-OBQ — the predecessor to GPTQ — quantizes weights sequentially, compensating for error:
+OBQ: the predecessor to GPTQ: quantizes weights sequentially, compensating for error:
 
 1. Quantize weight w_i
 2. Quantization error: δ = w_i - Q(w_i)
@@ -163,11 +163,11 @@ Scaling does not change the result (mathematically), but improves quantization q
 ### AWQ vs GPTQ
 
 Comparison aspects:
-- Approach: GPTQ — optimal error compensation, AWQ — protection of important weights
-- Calibration: GPTQ — requires the Hessian, AWQ — requires only activations
-- Quantization speed: GPTQ — slower (hours), AWQ — faster (minutes)
+- Approach: GPTQ: optimal error compensation, AWQ: protection of important weights
+- Calibration: GPTQ (requires the Hessian, AWQ) requires only activations
+- Quantization speed: GPTQ: slower (hours), AWQ: faster (minutes)
 - Quality @ 4-bit: roughly equal
-- Inference speed: GPTQ — baseline, AWQ — optimized for AutoAWQ
+- Inference speed: GPTQ: baseline, AWQ: optimized for AutoAWQ
 
 The practical choice is often determined by tooling: GPTQ is supported via AutoGPTQ, AWQ via AutoAWQ. Both deliver comparable quality.
 
@@ -247,7 +247,7 @@ QAT is expensive for LLMs (full training cycle), so it is rarely used. Alternati
 
 ### Why Calibration Is Needed
 
-Scale and zero point depend on the value range. For weights, the range is known immediately. For activations — the model must be run on representative data.
+Scale and zero point depend on the value range. For weights, the range is known immediately. For activations: the model must be run on representative data.
 
 Poor calibration = poor quantization:
 - Too narrow a range: saturation, loss of large values
@@ -328,8 +328,8 @@ Full INT8 quantization:
 
 Quantization is critical for production serving:
 
-**Memory savings → larger batches**:
-A 4-bit model uses 4x less memory → can serve 4x more concurrent requests → higher throughput.
+**Memory savings to larger batches**:
+A 4-bit model uses 4x less memory, then can serve 4x more concurrent requests, then higher throughput.
 
 **Faster prefill**:
 Weight loading is the bottleneck of the prefill phase. Smaller weights = faster prefill.
@@ -346,14 +346,14 @@ A 70B model in 4-bit (~35GB) fits on a single GPU, eliminating tensor parallelis
 
 ### FP4 on Blackwell
 
-NVIDIA Blackwell (B200/GB200) introduces native FP4 (4-bit floating point) Tensor Cores — a hardware-level shift from integer to floating-point 4-bit computation.
+NVIDIA Blackwell (B200/GB200) introduces native FP4 (4-bit floating point) Tensor Cores, a hardware-level shift from integer to floating-point 4-bit computation.
 
 **FP4 format:** E2M1 (2 exponent bits, 1 mantissa bit) with microscaling (block-level scale factors). Only 8 distinct values per element, but floating-point semantics preserve relative magnitudes better than INT4.
 
 **FP4 vs INT4:**
 - INT4: uniform quantization levels, optimal for symmetric distributions
 - FP4: non-uniform levels (denser near zero), better for the naturally bell-curved weight distributions of LLMs
-- FP4 on Blackwell achieves 2x the throughput of FP8 — making it 4x faster than FP16
+- FP4 on Blackwell achieves 2x the throughput of FP8, making it 4x faster than FP16
 
 **Practical implications:** FP4 on Blackwell provides INT4-level compression with FP8-level quality. Early benchmarks show FP4 models matching INT4 GPTQ quality while running at hardware-native speed (no dequantization overhead). This may make GPTQ/AWQ less necessary on Blackwell hardware.
 
@@ -361,32 +361,32 @@ NVIDIA Blackwell (B200/GB200) introduces native FP4 (4-bit floating point) Tenso
 
 KV-cache grows with sequence length and batch size, often consuming more memory than model weights in production serving. Quantizing the KV-cache is a high-impact optimization.
 
-**KV-cache memory:** For a 70B model serving 32 concurrent requests with 4K context each, the KV-cache consumes ~40 GB in FP16. At 32K context — ~320 GB.
+**KV-cache memory:** For a 70B model serving 32 concurrent requests with 4K context each, the KV-cache consumes ~40 GB in FP16. At 32K context: ~320 GB.
 
 **Approaches:**
 - **KV-cache INT8:** 2x compression with negligible quality loss. Supported in vLLM and TensorRT-LLM. Per-token or per-head quantization.
 - **KV-cache FP8:** Preferred on H100+ hardware. Native compute support means no dequantization penalty. vLLM supports this out of the box.
 - **KV-cache INT4:** 4x compression, slight quality degradation on long contexts. Research active; KIVI (2024) demonstrates effective 2-bit KV-cache via per-channel quantization with residual compensation.
 
-**Impact:** KV-cache quantization from FP16 to INT8 doubles the number of concurrent users a single GPU can serve, or doubles the supported context length — a direct production cost saving.
+**Impact:** KV-cache quantization from FP16 to INT8 doubles the number of concurrent users a single GPU can serve, or doubles the supported context length: a direct production cost saving.
 
 ### BitNet: 1-bit LLMs
 
 **BitNet b1.58** (Microsoft, 2024) trains models with ternary weights: {-1, 0, +1}. Each weight requires only 1.58 bits.
 
-**Key insight:** BitNet does not quantize a trained model — it trains from scratch with ternary weights. The model learns to represent knowledge within the ternary constraint.
+**Key insight:** BitNet does not quantize a trained model: it trains from scratch with ternary weights. The model learns to represent knowledge within the ternary constraint.
 
 **Results:** BitNet b1.58 at 3B parameters matches FP16 LLaMA-3B on many benchmarks. Memory: 8x reduction vs FP16. Compute: matrix multiplication becomes addition/subtraction (no actual multiplications needed). Energy: 71x less energy per token than FP16 at equivalent scale.
 
-**Limitations:** Requires training from scratch (cannot convert existing models), smaller models show more degradation, ecosystem tooling is improving — Microsoft released BitNet.cpp v2 (February 2025) for CPU inference and published BitNet b1.58 2B4T (April 2025) as a reference model. However, BitNet remains a research direction rather than a production-recommended solution — major inference frameworks (vLLM, TGI) do not yet support ternary weights natively.
+**Limitations:** Requires training from scratch (cannot convert existing models), smaller models show more degradation, ecosystem tooling is improving: Microsoft released BitNet.cpp v2 (February 2025) for CPU inference and published BitNet b1.58 2B4T (April 2025) as a reference model. However, BitNet remains a research direction rather than a production-recommended solution, major inference frameworks (vLLM, TGI) do not yet support ternary weights natively.
 
 ### AQLM: Additive Quantization
 
 **AQLM** (Additive Quantization for Language Models, 2024) applies multi-codebook quantization to LLM weights.
 
-**Approach:** Instead of scalar quantization (one scale per group), AQLM represents each weight vector as a sum of entries from multiple codebooks. This is vector quantization — a richer representation space at the same bit budget.
+**Approach:** Instead of scalar quantization (one scale per group), AQLM represents each weight vector as a sum of entries from multiple codebooks. This is vector quantization, a richer representation space at the same bit budget.
 
-**Results at 2-bit:** AQLM at 2 bits per weight significantly outperforms GPTQ and AWQ at the same bitwidth. For LLaMA-2-70B at 2-bit, AQLM achieves perplexity within 0.5 of the 4-bit GPTQ result — remarkable for halving the storage.
+**Results at 2-bit:** AQLM at 2 bits per weight significantly outperforms GPTQ and AWQ at the same bitwidth. For LLaMA-2-70B at 2-bit, AQLM achieves perplexity within 0.5 of the 4-bit GPTQ result, remarkable for halving the storage.
 
 **Trade-off:** Codebook lookup adds latency compared to simple dequantization. Best suited for memory-constrained deployment where the 2-bit regime is necessary.
 
@@ -398,11 +398,11 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **Results:** QuIP# at 2-bit matches GPTQ at 3-bit and approaches GPTQ at 4-bit for large models (70B+). Combined with lattice codebooks (E8 lattice), it achieves optimal packing of quantization levels.
 
-**Relationship to FA3:** The "incoherent processing" technique in Flash Attention 3's FP8 mode is directly inspired by QuIP#'s approach — both use random rotations to improve quantization quality.
+**Relationship to FA3:** The "incoherent processing" technique in Flash Attention 3's FP8 mode is directly inspired by QuIP#'s approach. Both use random rotations to improve quantization quality.
 
 ## Key Takeaways
 
-1. **Quantization exploits neural network redundancy**. Most weights do not require high precision — patterns matter, not exact values.
+1. **Quantization exploits neural network redundancy**. Most weights do not require high precision, patterns matter, not exact values.
 
 2. **Weight-only quantization is the standard for LLMs**. W4A16 (4-bit weights, 16-bit activations) provides 4x memory savings with minimal quality loss.
 
@@ -410,7 +410,7 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 4. **Calibration is critical**. 128-512 representative samples is usually sufficient, but data must reflect real-world usage.
 
-5. **The trade-off is nonlinear**. Going from 8-bit to 4-bit yields 2x compression with moderate quality loss. Going from 4-bit to 2-bit yields another 2x compression, but quality degradation is disproportionately larger — though AQLM and QuIP# are narrowing this gap.
+5. **The trade-off is nonlinear**. Going from 8-bit to 4-bit yields 2x compression with moderate quality loss. Going from 4-bit to 2-bit yields another 2x compression, but quality degradation is disproportionately larger: though AQLM and QuIP# are narrowing this gap.
 
 6. **QAT is better than PTQ at low bitwidth**. But for LLMs, QAT is expensive, so advanced PTQ methods are used instead. BitNet b1.58 shows that training-time ternary weights can match FP16 quality.
 
@@ -432,11 +432,11 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **AutoAWQ** is an analogous tool for AWQ quantization. The interface is similar to AutoGPTQ, but the process is typically faster (10-20 minutes for LLaMA-7B), since AWQ does not require Hessian computation. Configuration is simpler: you specify bitwidth, group size, and version (GEMM for batch inference, GEMV for batch_size=1). AWQ automatically identifies important channels and applies protective scaling. The result is optimized for fast inference through custom CUDA kernels.
 
-**llama.cpp and GGUF** — for CPU inference. Conversion is done through Python scripts from the llama.cpp repository. You choose the quantization type: Q4_K_M — optimal balance for most cases, Q5_K_M — slightly better quality at the cost of size, Q8_0 — minimal quality loss, Q3_K_M — extreme compression. After conversion, the model runs through the llama.cpp CLI or through bindings (llama-cpp-python). The advantage: works on any processor, supports memory mapping for RAM savings.
+**llama.cpp and GGUF**: for CPU inference. Conversion is done through Python scripts from the llama.cpp repository. You choose the quantization type: Q4_K_M: optimal balance for most cases, Q5_K_M: slightly better quality at the cost of size, Q8_0, minimal quality loss, Q3_K_M, extreme compression. After conversion, the model runs through the llama.cpp CLI or through bindings (llama-cpp-python). The advantage: works on any processor, supports memory mapping for RAM savings.
 
 ### Evaluating Quality After Quantization
 
-The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate — this is the perplexity. Lower is better. Typical results for 4-bit GPTQ: perplexity increase of 0.5-2.0 points, which is negligible for practical use. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
+The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate. This is the perplexity. Lower is better. Typical results for 4-bit GPTQ: perplexity increase of 0.5-2.0 points, which is negligible for practical use. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
 
 An additional check is qualitative evaluation: generate responses to prompts characteristic of your use case with both models and compare. Sometimes perplexity does not correlate with user-perceived quality: the model may preserve quality on simple tasks but degrade on complex reasoning tasks.
 
@@ -464,4 +464,4 @@ This code demonstrates the core mechanics: divide the tensor into groups, find t
 
 **Do not use quantization for**: training (except QAT), critical tasks where the slightest degradation is unacceptable (medical, legal), models smaller than 7B (they are already small; the overhead from quantization is not justified).
 
-For deployment-oriented guidance — hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks — see Module 17, Model Quantization for Production.
+For deployment-oriented guidance: hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks, see Module 17, Model Quantization for Production.

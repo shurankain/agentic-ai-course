@@ -10,7 +10,7 @@ NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolki
 
 Unlike prompt-based safety (describing rules in prompt text that depends on the LLM's "memory"), NeMo Guardrails implements **deterministic programmatic control**.
 
-Prompt-based safety is like asking a person "don't do X" — the person can forget, misunderstand, or intentionally ignore the request. Guardrails are a physical barrier that cannot be bypassed through simple conversation.
+Prompt-based safety is like asking a person "don't do X": the person can forget, misunderstand, or intentionally ignore the request. Guardrails are a physical barrier that cannot be bypassed through simple conversation.
 
 ### Core Advantages
 
@@ -18,7 +18,7 @@ Prompt-based safety is like asking a person "don't do X" — the person can forg
 
 **Runtime Enforcement:** Checks are performed at the runtime level, before and after the LLM call. Even if the LLM generates unsafe content, the output rail will block it.
 
-**Integration with Any LLM:** Works with OpenAI, Anthropic, local models — the rails system is independent of model choice.
+**Integration with Any LLM:** Works with OpenAI, Anthropic, local models: the rails system is independent of model choice.
 
 **Production-Ready Architecture:** Low latency overhead (20-50ms for regex checks, 200-500ms for LLM-based rails), support for parallel execution, caching, and graceful degradation.
 
@@ -42,9 +42,9 @@ The prompt-based approach has systemic limitations:
 
 NeMo Guardrails adds four types of programmatic "barriers" that form a protective perimeter around the LLM. The architecture works like a filter system: user input passes through Input Rails, then reaches the LLM, the generated response is filtered through Output Rails, while Dialog Rails (controlling the overall conversation flow) and Retrieval Rails (filtering data from the knowledge base) operate in parallel.
 
-**Input Rails** check the incoming request before sending it to the LLM. They block jailbreak attempts, toxic content, and requests on sensitive topics. They function like a firewall — malicious traffic never reaches the application. The first line of defense, cutting off obviously harmful requests without spending tokens.
+**Input Rails** check the incoming request before sending it to the LLM. They block jailbreak attempts, toxic content, and requests on sensitive topics. They function like a firewall, malicious traffic never reaches the application. The first line of defense, cutting off obviously harmful requests without spending tokens.
 
-**Output Rails** check the LLM response after generation. They block hallucinations, toxic outputs, PII leaks, and compliance violations. They function like DLP (Data Loss Prevention) — even if the LLM generated problematic content, it will not reach the user. Insurance against model errors.
+**Output Rails** check the LLM response after generation. They block hallucinations, toxic outputs, PII leaks, and compliance violations. They function like DLP (Data Loss Prevention): even if the LLM generated problematic content, it will not reach the user. Insurance against model errors.
 
 **Dialog Rails** control the conversation flow. They keep the bot within allowed topics (topical rails), prevent looping, and ensure transitions between states. They function like a state machine for conversation. They can detect that a user has asked the same question three times in a row and automatically offer to connect with a live agent.
 
@@ -60,11 +60,11 @@ Colang is a domain-specific language from NVIDIA for describing conversational f
 
 Colang allows describing three types of entities:
 
-**User intents** — canonical forms of what a user might say. Instead of checking all possible phrasings of "How to hack?" in code, you define the intent "user ask harmful question" with example phrases.
+**User intents**: canonical forms of what a user might say. Instead of checking all possible phrasings of "How to hack?" in code, you define the intent "user ask harmful question" with example phrases.
 
-**Bot responses** — bot response templates. Instead of hardcoded strings in code, you describe a response as "bot refuse to answer" with text variants.
+**Bot responses**: bot response templates. Instead of hardcoded strings in code, you describe a response as "bot refuse to answer" with text variants.
 
-**Flows** — dialog management rules. They describe intent → response sequences, conditions, and branching. Flows define how the bot should react to various scenarios.
+**Flows**: dialog management rules. They describe intent to response sequences, conditions, and branching. Flows define how the bot should react to various scenarios.
 
 ### Syntax and Structure
 
@@ -74,7 +74,7 @@ A Colang file consists of three main definition types: user intents (what the us
 
 **Bot response definition** specifies response templates. Instead of hardcoded strings in application code, you describe an abstract response like "bot refuse to answer" with text variants. This separates wording from business logic and simplifies localization.
 
-**Flow definition** links intents and responses into rules. A flow describes: if the user does X, then the bot responds with Y and then executes Z. For example: upon detecting a harmful question → issue a refusal → stop processing (stop). Flows support control constructs: conditions (if/else), event triggers (when), and interruption (stop).
+**Flow definition** links intents and responses into rules. A flow describes: if the user does X, then the bot responds with Y and then executes Z. For example: upon detecting a harmful question, then issue a refusal, then stop processing (stop). Flows support control constructs: conditions (if/else), event triggers (when), and interruption (stop).
 
 **Key Concepts:**
 
@@ -82,7 +82,7 @@ A Colang file consists of three main definition types: user intents (what the us
 
 **Variables and context:** Flows can use variables to store dialog state, check results, and repetition counters. This enables implementing stateful logic without writing code.
 
-**Actions:** Flows call Python actions via execute action_name. An extension point for integrating with external systems — database lookups, fraud detection API calls, complex validations that cannot be expressed declaratively.
+**Actions:** Flows call Python actions via execute action_name. An extension point for integrating with external systems: database lookups, fraud detection API calls, complex validations that cannot be expressed declaratively.
 
 **Control flow:** Declarative if/else constructs, when (event reactions), and stop (flow interruption) allow describing complex logic without imperative code. For example, when same_question_count > 2 can automatically suggest escalation to a human.
 
@@ -114,7 +114,7 @@ Output rails check the LLM response after generation. Even the safest model can 
 
 **PII leakage prevention:** The LLM can accidentally include sensitive data from training data or context. The output rail removes PII before sending the response to the user.
 
-**Compliance validation:** For regulated industries — verifying that the response contains required disclaimers, does not give financial advice without a warning, and complies with industry regulations.
+**Compliance validation:** For regulated industries, verifying that the response contains required disclaimers, does not give financial advice without a warning, and complies with industry regulations.
 
 Built-in output rails: self check output (LLM-based check for harmful output), output moderation (toxicity filtering), hallucination detection (check for factual accuracy).
 
@@ -128,7 +128,7 @@ Dialog rails control the conversation flow, independent of individual message co
 
 **State management:** Track the state of multi-step processes (onboarding, troubleshooting, transaction). Ensure the user completes mandatory steps.
 
-**Escalation rules:** Define when to hand the conversation to a human — for complex questions, complaints, or bot uncertainty.
+**Escalation rules:** Define when to hand the conversation to a human: for complex questions, complaints, or bot uncertainty.
 
 ### Retrieval Rails: Knowledge Access Control
 
@@ -162,13 +162,13 @@ Flows link intents and responses into behavioral rules: for an off-topic questio
 
 NeMo Guardrails uses directory-based configuration:
 
-**config.yml** — the main system configuration. Specifies which LLM to use for the primary response and which LLM to use for rail checks (can be a faster model for cost optimization). Activates specific rails (self check input, jailbreak detection, output moderation).
+**config.yml**: the main system configuration. Specifies which LLM to use for the primary response and which LLM to use for rail checks (can be a faster model for cost optimization). Activates specific rails (self check input, jailbreak detection, output moderation).
 
-**config.co** — the Colang definitions file. All user intents, bot responses, and flows are described here. The heart of the safety system — all DSL code with dialog rules.
+**config.co**: the Colang definitions file. All user intents, bot responses, and flows are described here. The heart of the safety system: all DSL code with dialog rules.
 
-**prompts.yml** (optional) — custom prompts for specific rails or the main model. Allows fine-tuning behavior without changing code.
+**prompts.yml** (optional): custom prompts for specific rails or the main model. Allows fine-tuning behavior without changing code.
 
-**actions/** directory — Python modules with custom actions. Used for integration with external services (fraud detection API, CRM systems), database lookups, and complex validations that cannot be expressed declaratively in Colang.
+**actions/** directory: Python modules with custom actions. Used for integration with external services (fraud detection API, CRM systems), database lookups, and complex validations that cannot be expressed declaratively in Colang.
 
 ### Application Integration
 
@@ -198,11 +198,11 @@ Three deployment methods:
 
 **Scaling:** The rails service is stateless and easily scales horizontally. The bottleneck is usually the LLM API, not the guardrails logic.
 
-**Monitoring:** It is important to log rail activations — which rails triggered, whether there were false positives, latency of each rail. Data for tuning.
+**Monitoring:** It is important to log rail activations, which rails triggered, whether there were false positives, latency of each rail. Data for tuning.
 
-**Graceful degradation:** If a rail check fails (timeout, LLM API unavailable), define fallback behavior — block the request (fail closed) or pass it through (fail open).
+**Graceful degradation:** If a rail check fails (timeout, LLM API unavailable), define fallback behavior: block the request (fail closed) or pass it through (fail open).
 
-**Docker/Kubernetes:** NeMo Guardrails is easily containerized. Basic setup: Python 3.10+ image, install the nemoguardrails package, copy the config directory. In Kubernetes — a standard Deployment with health checks, resource limits, and horizontal pod autoscaling.
+**Docker/Kubernetes:** NeMo Guardrails is easily containerized. Basic setup: Python 3.10+ image, install the nemoguardrails package, copy the config directory. In Kubernetes: a standard Deployment with health checks, resource limits, and horizontal pod autoscaling.
 
 ---
 
@@ -218,7 +218,7 @@ NeMo Guardrails has evolved with **Colang 2.0**, a major redesign of the DSL tha
 
 **Decorators for flow properties:** `@active` marks flows that are always listening, `@loop` marks flows that restart after completion. This replaces implicit behavior with explicit annotations.
 
-**Example — Colang 2.0 syntax:**
+**Example: Colang 2.0 syntax:**
 ```colang
 # Colang 2.0 - event-driven, Python-like
 flow handle harmful input
@@ -239,11 +239,11 @@ flow main
   activate prevent jailbreak
 ```
 
-**Migration:** NeMo Guardrails supports both Colang 1.0 and 2.0. The 1.0 syntax continues to work, but 2.0 is recommended for new projects. Key migration steps: `define user` → `match` patterns, `define bot` → `bot say`, `define flow` → `flow`, and `execute` → `await`.
+**Migration:** NeMo Guardrails supports both Colang 1.0 and 2.0. The 1.0 syntax continues to work, but 2.0 is recommended for new projects. Key migration steps: `define user` -> `match` patterns, `define bot` -> `bot say`, `define flow` -> `flow`, and `execute` -> `await`.
 
 ## Dedicated Safety Models: Llama Guard and ShieldGemma
 
-Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-5.4 for safety evaluation), dedicated safety classification models have emerged — purpose-trained for content moderation at lower cost and latency.
+Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like GPT-5.4 for safety evaluation), dedicated safety classification models have emerged: purpose-trained for content moderation at lower cost and latency.
 
 ### Llama Guard Family (Meta)
 
@@ -251,7 +251,7 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 
 **Llama Guard 2 (April 2024):** Improved taxonomy alignment with industry standards (MLCommons AI Safety taxonomy). Better multilingual support. Reduced false positive rates.
 
-**Llama Guard 3 (July 2024):** Based on Llama 3.1, with significantly improved quality. Available in 1B and 8B variants. The 1B variant enables on-device safety classification. Supports customizable safety taxonomies — organizations can define their own categories and severity levels. Integrates with Llama's prompt format for seamless use in Llama-based applications.
+**Llama Guard 3 (July 2024):** Based on Llama 3.1, with significantly improved quality. Available in 1B and 8B variants. The 1B variant enables on-device safety classification. Supports customizable safety taxonomies: organizations can define their own categories and severity levels. Integrates with Llama's prompt format for seamless use in Llama-based applications.
 
 **Integration with NeMo Guardrails:** Llama Guard models can be used as the LLM for input/output rails, replacing general-purpose models. This is faster (specialized model), cheaper (smaller model), and often more accurate for safety classification.
 
@@ -263,7 +263,7 @@ Beyond NeMo Guardrails' LLM-based checking (which uses general-purpose LLMs like
 
 ### Choosing a Safety Model
 
-Dedicated safety models differ significantly in size, latency, and customization capabilities. The table below compares the available options to help architects select the right classifier for their deployment scenario — from on-device edge inference to high-accuracy production filtering.
+Dedicated safety models differ significantly in size, latency, and customization capabilities. The table below compares the available options to help architects select the right classifier for their deployment scenario, from on-device edge inference to high-accuracy production filtering.
 
 | Model | Size | Latency | Custom Taxonomy | Best For |
 |-------|------|---------|-----------------|----------|
@@ -281,9 +281,9 @@ Dedicated safety models differ significantly in size, latency, and customization
 
 **Guardrails AI** is another popular open-source project for LLM safety, but with a different focus:
 
-**NeMo Guardrails** is oriented toward **conversational safety** — dialog control, input/output filtering, dialog flows. Strengths: multi-turn conversation management, topical rails, complex dialog state management.
+**NeMo Guardrails** is oriented toward **conversational safety**: dialog control, input/output filtering, dialog flows. Strengths: multi-turn conversation management, topical rails, complex dialog state management.
 
-**Guardrails AI** is oriented toward **output validation** — structured JSON output validation, pydantic schemas, data quality checks. Strengths: structured output validation, Python-first API, rich validator library.
+**Guardrails AI** is oriented toward **output validation**: structured JSON output validation, pydantic schemas, data quality checks. Strengths: structured output validation, Python-first API, rich validator library.
 
 Definition language: NeMo uses Colang (DSL), Guardrails AI uses Python validators. Colang requires learning a new language but provides a more declarative approach to dialog management. Python validators are more familiar but less expressive for conversational flows.
 
@@ -301,7 +301,7 @@ Definition language: NeMo uses Colang (DSL), Guardrails AI uses Python validator
 
 ### NeMo Guardrails vs Custom LLM Moderation
 
-You can implement moderation with custom code — calling a separate LLM to check input/output. Basic approach: send the user input to a moderating LLM with the prompt "Is this harmful?", and if the response contains "yes", return a refusal instead of processing with the main LLM.
+You can implement moderation with custom code, calling a separate LLM to check input/output. Basic approach: send the user input to a moderating LLM with the prompt "Is this harmful?", and if the response contains "yes", return a refusal instead of processing with the main LLM.
 
 **Advantages of a custom solution:** Full control over logic without framework abstractions, no dependency on external libraries, ability to use any checks (API calls to fraud detection services, database queries for user context, custom ML models).
 
@@ -319,23 +319,23 @@ You can implement moderation with custom code — calling a separate LLM to chec
 
 Key principle: **do not rely on a single layer of protection**. Even if one rail fails or is bypassed, other layers should catch the problem.
 
-**Layer 1: Fast regex/keyword checks** — first line of defense, checks for obvious patterns (blocklisted words, known attack patterns). Very fast (1-5ms) but easily bypassed with clever phrasing.
+**Layer 1: Fast regex/keyword checks**: first line of defense, checks for obvious patterns (blocklisted words, known attack patterns). Very fast (1-5ms) but easily bypassed with clever phrasing.
 
-**Layer 2: LLM-based semantic checks** — understands intent, not just keywords. Catches sophisticated attacks where the user does not use blocklisted words but the intent is malicious. Slower (200-500ms) but thorough.
+**Layer 2: LLM-based semantic checks**: understands intent, not just keywords. Catches sophisticated attacks where the user does not use blocklisted words but the intent is malicious. Slower (200-500ms) but thorough.
 
-**Layer 3: Domain-specific rules** — custom actions for checking business logic. For example, verifying the user's access level, compliance with industry regulations, integration with fraud detection systems.
+**Layer 3: Domain-specific rules**: custom actions for checking business logic. For example, verifying the user's access level, compliance with industry regulations, integration with fraud detection systems.
 
-Example: a user asks "How to bypass authentication?" Layer 1 (regex) catches the word "bypass" → blocks. If bypassed via "circumvent login", Layer 2 (LLM) classifies the harmful intent → blocks. If bypassed via "I forgot password", Layer 3 (business logic) redirects to a legitimate password reset flow.
+Example: a user asks "How to bypass authentication?" Layer 1 (regex) catches the word "bypass", then blocks. If bypassed via "circumvent login", Layer 2 (LLM) classifies the harmful intent, then blocks. If bypassed via "I forgot password", Layer 3 (business logic) redirects to a legitimate password reset flow.
 
 ### Graceful Degradation
 
-Rail checks can fail — LLM API timeout, network issue, internal error. How to handle failures?
+Rail checks can fail: LLM API timeout, network issue, internal error. How to handle failures?
 
 **Fail closed (default):** On failure, block the request. Safer but can create false positives and poor UX.
 
 **Fail open (risky):** On failure, pass the request through. Better UX but creates a security hole.
 
-**Hybrid approach:** Critical rails (input harmful content check) — fail closed. Non-critical rails (hallucination detection) — fail open with a warning.
+**Hybrid approach:** Critical rails (input harmful content check): fail closed. Non-critical rails (hallucination detection): fail open with a warning.
 
 Important: always log rail failures for post-mortem analysis. If a rail frequently fails, this is a reliability problem that needs to be addressed.
 
@@ -367,7 +367,7 @@ Rails should be tested like any security-critical code:
 
 ### Financial Services Compliance Bot
 
-**Scenario:** A banking chatbot for customer support. Strict regulatory requirements — GDPR, financial disclaimers, anti-fraud.
+**Scenario:** A banking chatbot for customer support. Strict regulatory requirements: GDPR, financial disclaimers, anti-fraud.
 
 **Guardrails setup:**
 - Input rails: Block requests for other clients' PII, social engineering attempts to obtain account details
@@ -377,12 +377,12 @@ Rails should be tested like any security-critical code:
 
 ### Healthcare AI Assistant
 
-**Scenario:** An AI assistant for physicians. Critical safety — incorrect medical advice can harm patients.
+**Scenario:** An AI assistant for physicians. Critical safety: incorrect medical advice can harm patients.
 
 **Guardrails setup:**
 - Input rails: Block off-topic questions (politics, entertainment), focus on medical queries
-- Output rails: Hallucination detection is critical — verify that the response is backed by medical literature. Block definitive diagnoses (suggestions for the physician only)
-- Dialog rails: For complex/critical cases — mandatory escalation to a human physician
+- Output rails: Hallucination detection is critical: verify that the response is backed by medical literature. Block definitive diagnoses (suggestions for the physician only)
+- Dialog rails: For complex/critical cases: mandatory escalation to a human physician
 - Retrieval rails: Access control for patient records (HIPAA compliance), filtering by physician credentials
 
 ### E-commerce Customer Support
@@ -392,7 +392,7 @@ Rails should be tested like any security-critical code:
 **Guardrails setup:**
 - Input rails: Block toxic language, spam, competitor mentions
 - Output rails: Prevent promises the company cannot fulfill (unlimited refunds), toxic responses
-- Dialog rails: Loop prevention (if the bot cannot help after 3 attempts — escalation to a human), topical rails (only product/order questions)
+- Dialog rails: Loop prevention (if the bot cannot help after 3 attempts, escalation to a human), topical rails (only product/order questions)
 - Retrieval rails: Filter internal docs; the customer sees only public-facing information
 
 ---
@@ -409,13 +409,13 @@ Rails should be tested like any security-critical code:
 
 **Layered defense is critical:** Do not rely on a single protection mechanism. Combine fast regex checks (1-5ms) for obvious patterns, LLM-based semantic checks (200-500ms) for sophisticated attacks, and domain-specific rules for business logic.
 
-**Production considerations:** Latency overhead is manageable through parallel execution and caching. Three deployment models — embedded, REST API service, sidecar container — for different architecture requirements. Graceful degradation and monitoring are mandatory.
+**Production considerations:** Latency overhead is manageable through parallel execution and caching. Three deployment models: embedded, REST API service, sidecar container: for different architecture requirements. Graceful degradation and monitoring are mandatory.
 
 **Tool comparison:** NeMo Guardrails for conversational AI with complex dialogs and enterprise compliance. Guardrails AI for structured output validation and Python-first teams. Custom solutions when maximum control or very specific requirements are needed.
 
 **Real-world application:** Financial services require compliance rails (GDPR, disclaimers), healthcare requires hallucination prevention and escalation rules, e-commerce requires brand protection and fraud prevention. Rails adapt to domain-specific risks.
 
-With security and safety patterns established, Modules 15-17 cover the hardware and infrastructure that production agents run on — GPU architecture, distributed training, and inference optimization.
+With security and safety patterns established, Modules 15-17 cover the hardware and infrastructure that production agents run on: GPU architecture, distributed training, and inference optimization.
 
 ---
 

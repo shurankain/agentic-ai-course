@@ -20,7 +20,7 @@ Each GPU receives a full copy of the model and different data. After backward, g
 
 **Use case:** models up to 7-10B parameters in FP16, fast interconnect available.
 
-**Ring AllReduce** organizes GPUs in a ring. In two phases (Scatter-Reduce, AllGather) each GPU receives aggregated gradients. Approximately 2x the data size is transferred regardless of the number of GPUs — bandwidth optimal. Modern libraries use a hybrid: tree within a node (NVLink), ring between nodes (InfiniBand).
+**Ring AllReduce** organizes GPUs in a ring. In two phases (Scatter-Reduce, AllGather) each GPU receives aggregated gradients. Approximately 2x the data size is transferred regardless of the number of GPUs: bandwidth optimal. Modern libraries use a hybrid: tree within a node (NVLink), ring between nodes (InfiniBand).
 
 ### Model Parallelism (Tensor Parallelism)
 
@@ -34,11 +34,11 @@ For Transformers, this splits naturally: attention by heads, FFN by hidden dimen
 
 ### Pipeline Parallelism
 
-Splitting the model by layers. GPU 0 layers 1-10, GPU 1 layers 11-20. The naive approach is inefficient — GPUs idle while a batch passes through the pipeline.
+Splitting the model by layers. GPU 0 layers 1-10, GPU 1 layers 11-20. The naive approach is inefficient, GPUs idle while a batch passes through the pipeline.
 
 **Micro-batching** solves the problem: the batch is split into small micro-batches that are pushed through the pipeline.
 
-**Pipeline bubble** — idle time at the beginning and end. Bubble fraction: ~(N-1)/micro-batches. With 4 stages and 16 micro-batches: 19% overhead.
+**Pipeline bubble**: idle time at the beginning and end. Bubble fraction: ~(N-1)/micro-batches. With 4 stages and 16 micro-batches: 19% overhead.
 
 **1F1B schedule** alternates forward and backward, reducing memory footprint.
 
@@ -60,7 +60,7 @@ For sequences of 100K+ tokens. Activations of a single layer exceed GPU memory. 
 
 **Ring Attention** computes attention in blocks via ring communication. Query attends to local Key/Value, then Key/Value are passed along the ring.
 
-**Combination with Tensor Parallelism:** two-dimensional splitting — sequence by length, heads by count.
+**Combination with Tensor Parallelism:** two-dimensional splitting: sequence by length, heads by count.
 
 ### Context Parallelism
 
@@ -70,7 +70,7 @@ Context Parallelism (CP) is now the standard approach for long-context LLM train
 
 **Key advantage over Ring Attention:** Ulysses uses AllToAll (which is bandwidth-optimal) instead of point-to-point ring communication. On modern interconnects (NVLink 4.0+, NVLink 5.0), AllToAll is significantly faster. Result: 2-4x speedup over Ring Attention for equivalent sequence lengths.
 
-**Llama 4 training context parallelism:** Meta used context parallelism (CP=8-16) for training Llama 4 Scout's 10M token context. Combined with tensor parallelism and data parallelism: TP=8 x CP=16 x DP=N. This configuration was critical — without CP, the activation memory for 10M-token sequences would be prohibitive even with Flash Attention.
+**Llama 4 training context parallelism:** Meta used context parallelism (CP=8-16) for training Llama 4 Scout's 10M token context. Combined with tensor parallelism and data parallelism: TP=8 x CP=16 x DP=N. This configuration was critical, without CP, the activation memory for 10M-token sequences would be prohibitive even with Flash Attention.
 
 **When to use CP:**
 - Sequences > 64K tokens during training
@@ -80,26 +80,26 @@ Context Parallelism (CP) is now the standard approach for long-context LLM train
 
 ## Communication Primitives
 
-**AllReduce** — each has a tensor, after the operation each has the reduction of all. Gradient synchronization in DDP.
+**AllReduce**: each has a tensor, after the operation each has the reduction of all. Gradient synchronization in DDP.
 
-**AllGather** — each has a part, after the operation each has everything. Output assembly in tensor parallelism.
+**AllGather**: each has a part, after the operation each has everything. Output assembly in tensor parallelism.
 
-**ReduceScatter** — reduces and distributes in parts. FSDP uses this instead of AllReduce.
+**ReduceScatter**: reduces and distributes in parts. FSDP uses this instead of AllReduce.
 
-**Broadcast** — one has it, all receive it. Distribution of initial weights.
+**Broadcast**: one has it, all receive it. Distribution of initial weights.
 
-**AllToAll** — all-to-all exchange. Expert parallelism for token routing.
+**AllToAll**: all-to-all exchange. Expert parallelism for token routing.
 
 ### Ring AllReduce Efficiency
 
 Naive AllReduce: each GPU transfers (N-1)xD data. For 8 GPUs and 10GB: 70GB per GPU.
 
-Ring AllReduce: GPUs in a ring, two phases over 2(N-1) steps. Each GPU transfers ~2D data regardless of N. For 8 GPUs and 10GB: 20GB per GPU — 3.5x improvement.
+Ring AllReduce: GPUs in a ring, two phases over 2(N-1) steps. Each GPU transfers ~2D data regardless of N. For 8 GPUs and 10GB: 20GB per GPU: 3.5x improvement.
 
 ### Gradient Compression
 
-FP32→FP16: 2x compression, minimal quality loss.
-FP32→INT8: 4x compression, requires scaling.
+FP32 to FP16: 2x compression, minimal quality loss.
+FP32 to INT8: 4x compression, requires scaling.
 Top-K sparsification: transfer K% of gradients with maximum magnitude, error feedback accumulates the rest.
 PowerSGD: low-rank approximation, 10-50x compression for large matrices.
 
@@ -127,7 +127,7 @@ The performance of distributed training is fundamentally constrained by the band
 | InfiniBand NDR | 50 GB/s | Current datacenter | 400 Gbps per port |
 | RoCE/Ethernet | 12-50 GB/s | Cloud standard | Cheaper, higher latency |
 
-**NVLink 5.0 (Blackwell, 2025):** Doubles bandwidth to 1.8 TB/s per GPU. The GB200 NVL72 rack connects 72 Blackwell GPUs via NVLink 5.0 into a single domain with 130 TB/s aggregate bisection bandwidth. This enables tensor parallelism across the entire rack — not just within a single node — fundamentally changing the TP/PP/DP decomposition strategy.
+**NVLink 5.0 (Blackwell, 2025):** Doubles bandwidth to 1.8 TB/s per GPU. The GB200 NVL72 rack connects 72 Blackwell GPUs via NVLink 5.0 into a single domain with 130 TB/s aggregate bisection bandwidth. This enables tensor parallelism across the entire rack, not just within a single node, fundamentally changing the TP/PP/DP decomposition strategy.
 
 **Strategy:** Tensor parallelism on NVLink intra-node (or intra-rack on NVL72). Pipeline and Data parallelism on InfiniBand/Ethernet inter-node.
 
@@ -150,7 +150,7 @@ Effective batch = micro_batch x accumulation x num_gpus. Equivalent to a large b
 ### Decision Framework
 
 **Model size vs memory:**
-- 7B parameters: ~84GB. A100/H100 80GB is sufficient → DDP.
+- 7B parameters: ~84GB. A100/H100 80GB is sufficient to DDP.
 - 70B parameters: ~840GB. Model Parallelism required (FSDP/Tensor/Pipeline).
 
 **Topology:**
@@ -195,18 +195,18 @@ Effective batch = micro_batch x accumulation x num_gpus. Equivalent to a large b
 
 Distributed training is a necessity for modern AI.
 
-**Data Parallelism — always start here.** DDP is simple, efficient up to ~10B parameters. 80-95% efficiency with good interconnect.
+**Data Parallelism: always start here.** DDP is simple, efficient up to ~10B parameters. 80-95% efficiency with good interconnect.
 
-**Model Parallelism only when necessary.** Tensor intra-node on NVLink, Pipeline inter-node, FSDP — middle ground.
+**Model Parallelism only when necessary.** Tensor intra-node on NVLink, Pipeline inter-node, FSDP, middle ground.
 
 **Communication is the bottleneck.** Minimize volume and hide latency behind computation.
 
-**Topology determines strategy.** Match parallelism to physical topology. Tensor on Ethernet — anti-pattern.
+**Topology determines strategy.** Match parallelism to physical topology. Tensor on Ethernet: anti-pattern.
 
 **Context Parallelism for long sequences.** DeepSpeed Ulysses and CP enable training with 100K-10M token contexts. AllToAll-based CP is faster than Ring Attention on modern interconnects.
 
 **NVLink 5.0 changes the topology calculus.** With 1.8 TB/s per GPU and NVL72 rack-level NVLink domains, tensor parallelism extends beyond single nodes.
 
-**Start simple, scale complexity.** DDP → FSDP → Tensor → Pipeline → 3D → +CP. Each step adds complexity.
+**Start simple, scale complexity.** DDP, then FSDP, then Tensor, then Pipeline, then 3D, then +CP. Each step adds complexity.
 
 **Measure, don't guess.** Profile communication overhead, scaling efficiency, GPU utilization.

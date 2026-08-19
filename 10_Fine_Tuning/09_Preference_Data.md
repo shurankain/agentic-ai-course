@@ -1,6 +1,6 @@
 # Preference Data: The Foundation of Alignment
 
-RLHF and DPO rely on preference data — comparisons of "A is better than B". The quality of this data directly determines the quality of the trained model.
+RLHF and DPO rely on preference data: comparisons of "A is better than B". The quality of this data directly determines the quality of the trained model.
 
 ## Bradley-Terry Model: The Mathematics of Preferences
 
@@ -13,7 +13,7 @@ Probability of preferring A over B = sigma(r_A - r_B), where r is log-strength, 
 - DPO implicitly uses Bradley-Terry, but without explicitly training a reward model
 
 **Model assumptions:**
-- Transitivity: A > B and B > C → A > C
+- Transitivity: A > B and B > C to A > C
 - Independence: preference of A vs B does not depend on other items
 - Stability: item strength does not change
 
@@ -23,7 +23,7 @@ In practice, these assumptions are violated.
 
 **Elo in the LLM arena:** Chatbot Arena by LMSYS uses Elo for its leaderboard. Two responses from different models are shown for a single prompt, the annotator selects the better one, and ratings are updated.
 
-Update formula: new rating = old + K × (actual outcome - expected outcome). K (typically 16-32) determines the rate of rating change.
+Update formula: new rating = old + K x (actual outcome - expected outcome). K (typically 16-32) determines the rate of rating change.
 
 **Elo for preference data curation:** can be applied for efficient curation within a single model. Instead of N² comparisons for full ranking, O(N log N) strategically selected comparisons suffice.
 
@@ -32,10 +32,10 @@ Advantages: dramatically more efficient, provides full ranking, robust to noise,
 ## Collecting Preference Data: Practice
 
 **Sources:**
-- Human annotation (gold standard) — professional annotators, crowdsourcing, domain experts
-- AI evaluation (RLAIF) — a strong model as judge, cheaper and more scalable
-- User feedback (implicit) — thumbs up/down, regeneration requests, response copying
-- Hybrid — AI for initial filtering, human for final quality check
+- Human annotation (gold standard): professional annotators, crowdsourcing, domain experts
+- AI evaluation (RLAIF): a strong model as judge, cheaper and more scalable
+- User feedback (implicit): thumbs up/down, regeneration requests, response copying
+- Hybrid: AI for initial filtering, human for final quality check
 
 **Data format:**
 - Pairwise comparisons: prompt, chosen, rejected
@@ -44,7 +44,7 @@ Advantages: dramatically more efficient, provides full ranking, robust to noise,
 
 **Inter-Annotator Agreement:**
 
-Cohen's Kappa measures agreement adjusted for chance. Interpretation: <0.2 — poor, 0.2-0.4 — fair, 0.4-0.6 — moderate, 0.6-0.8 — substantial, >0.8 — almost perfect.
+Cohen's Kappa measures agreement adjusted for chance. Interpretation: <0.2: poor, 0.2-0.4: fair, 0.4-0.6: moderate, 0.6-0.8, substantial, >0.8, almost perfect.
 
 Typical values: simple tasks >0.7, complex 0.4-0.6, subjective 0.3-0.5.
 
@@ -53,20 +53,20 @@ Typical values: simple tasks >0.7, complex 0.4-0.6, subjective 0.3-0.5.
 Collecting preference data is expensive. Active learning selects the most informative comparisons.
 
 **Strategies:**
-- Uncertainty sampling — prioritize pairs where the model is least confident
-- Diversity sampling — cover diverse regions of the space
-- Expected model improvement — select pairs with the maximum expected improvement
+- Uncertainty sampling: prioritize pairs where the model is least confident
+- Diversity sampling: cover diverse regions of the space
+- Expected model improvement: select pairs with the maximum expected improvement
 
-**Batch Active Learning:** a combined score balancing importance (uncertainty) and diversity. Diversity weight — 0.2-0.4.
+**Batch Active Learning:** a combined score balancing importance (uncertainty) and diversity. Diversity weight: 0.2-0.4.
 
 ## Data Quality and Its Impact
 
-**Garbage in, garbage out:** 10% noise → noticeable degradation, 30% noise → no better than random, systematic bias is worse than random noise.
+**Garbage in, garbage out:** 10% noise, then noticeable degradation, 30% noise, then no better than random, systematic bias is worse than random noise.
 
 **Types of problems:**
-- Label noise — random annotator errors
-- Systematic bias — preference for longer responses, confident tone, cultural/demographic bias
-- Distribution mismatch — preference data does not cover production queries
+- Label noise: random annotator errors
+- Systematic bias: preference for longer responses, confident tone, cultural/demographic bias
+- Distribution mismatch: preference data does not cover production queries
 
 **Diagnostics:** consistency analysis, analysis of difficult examples, checking for systematic bias.
 
@@ -79,9 +79,9 @@ Collecting preference data is expensive. Active learning selects the most inform
 **When human evaluation is necessary:** subjective preferences, safety-critical domains, novel/edge cases, final validation.
 
 **Best practices:**
-- Model selection — the judge must be significantly more powerful than the student model
-- Prompting for consistency — clear criteria, structured output
-- Reducing position bias — compare twice with reversed order
+- Model selection: the judge must be significantly more powerful than the student model
+- Prompting for consistency: clear criteria, structured output
+- Reducing position bias: compare twice with reversed order
 
 ## Key Takeaways
 

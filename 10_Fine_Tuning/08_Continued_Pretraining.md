@@ -49,35 +49,35 @@ Understanding where CPT sits relative to other training methods clarifies when t
 
 **Mitigation methods:**
 
-1. **Data mixing** — training data: α domain + (1-α) general. Typically α = 0.7-0.9.
+1. **Data mixing**: training data: α domain + (1-α) general. Typically α = 0.7-0.9.
 
-2. **Replay buffer** — periodic "replay" of examples from pretraining.
+2. **Replay buffer**: periodic "replay" of examples from pretraining.
 
-3. **Elastic Weight Consolidation (EWC)** — penalty for changing "important" weights via Fisher information.
+3. **Elastic Weight Consolidation (EWC)**: penalty for changing "important" weights via Fisher information.
 
-4. **Progressive learning rate** — different LR for different layers. Early layers (general features): low LR. Deep layers (specific features): higher LR.
+4. **Progressive learning rate**: different LR for different layers. Early layers (general features): low LR. Deep layers (specific features): higher LR.
 
-5. **Checkpoint averaging** — averaging weights before and after CPT.
+5. **Checkpoint averaging**: averaging weights before and after CPT.
 
 ## Domain-Adaptive Pretraining (DAPT)
 
 DAPT is CPT specifically optimized for downstream tasks in a domain. Even a relatively small volume of domain data (a few GB) can significantly improve performance.
 
 **DAPT vs TAPT:**
-- DAPT: pretraining on all domain data — broad coverage
-- TAPT: pretraining on data close to a specific task — narrow but deep
+- DAPT: pretraining on all domain data: broad coverage
+- TAPT: pretraining on data close to a specific task, narrow but deep
 
 Combining DAPT + TAPT often yields the best results.
 
-**Classic examples:** BioBERT/PubMedBERT (biomedicine), LegalBERT (legal texts), SciBERT (scientific papers). **Modern LLM-era CPT:** BioMistral (biomedical Mistral), Meditron (medical Llama), SaulLM (legal Mistral) — these apply CPT to decoder-only LLMs rather than BERT-class encoders, achieving stronger downstream performance.
+**Classic examples:** BioBERT/PubMedBERT (biomedicine), LegalBERT (legal texts), SciBERT (scientific papers). **Modern LLM-era CPT:** BioMistral (biomedical Mistral), Meditron (medical Llama), SaulLM (legal Mistral): these apply CPT to decoder-only LLMs rather than BERT-class encoders, achieving stronger downstream performance.
 
 ## CPT for Low-Resource Languages
 
 For languages with low representation, CPT on a target language corpus significantly improves quality:
 
-1. Vocabulary extension — adding tokens
-2. Language modeling — learning language statistics
-3. Cultural adaptation — learning culturally specific concepts
+1. Vocabulary extension, adding tokens
+2. Language modeling, learning language statistics
+3. Cultural adaptation, learning culturally specific concepts
 
 Data mixing with English helps preserve multilingual capabilities.
 
@@ -99,20 +99,20 @@ Early stopping if general perplexity starts increasing.
 **Decision tree:**
 
 **Step 1:** Do you have >1 billion tokens of domain text?
-- No → SFT or few-shot
-- Yes → Step 2
+- No to SFT or few-shot
+- Yes to Step 2
 
 **Step 2:** Is deep understanding or format/style needed?
-- Format/style only → SFT
-- Deep understanding → Step 3
+- Format/style only to SFT
+- Deep understanding to Step 3
 
 **Step 3:** How much does the domain differ?
-- Slightly → Light CPT (100M-1B tokens)
-- Significantly → Full CPT (1-10B+ tokens)
+- Slightly to Light CPT (100M-1B tokens)
+- Significantly to Full CPT (1-10B+ tokens)
 
 ## Combining CPT and SFT
 
-Typical pipeline: CPT on domain corpus → SFT on instruction-following data → Optionally DPO/RLHF.
+Typical pipeline: CPT on domain corpus, then SFT on instruction-following data, then Optionally DPO/RLHF.
 
 Each stage:
 - CPT: domain knowledge and understanding

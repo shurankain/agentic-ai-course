@@ -110,7 +110,7 @@ The cross-encoder combines the query and document into a single input: "[CLS] Qu
 
 This full interaction between query and document provides significantly higher accuracy compared to the bi-encoder. The model sees both texts simultaneously and can capture subtle nuances of correspondence.
 
-Critical limitation: O(n) complexity — a separate forward pass through the neural network is required for each document. With millions of documents, this makes cross-encoders unsuitable for initial search but ideal for reranking a small set of candidates.
+Critical limitation: O(n) complexity: a separate forward pass through the neural network is required for each document. With millions of documents, this makes cross-encoders unsuitable for initial search but ideal for reranking a small set of candidates.
 
 **Practical comparison:**
 
@@ -130,11 +130,11 @@ At the search stage, the MaxSim (Maximum Similarity) mechanism is applied: for e
 
 **Key advantages:**
 
-Precomputing document embeddings is possible, as with a bi-encoder — they can be created in advance and stored in the index. Token-level matching provides finer-grained correspondence than comparing single vectors. ColBERT turns out to be substantially more accurate than a classic bi-encoder, as it captures fine-grained correspondence between specific words of the query and document.
+Precomputing document embeddings is possible, as with a bi-encoder. They can be created in advance and stored in the index. Token-level matching provides finer-grained correspondence than comparing single vectors. ColBERT turns out to be substantially more accurate than a classic bi-encoder, as it captures fine-grained correspondence between specific words of the query and document.
 
 **Evolution of ColBERT v2 (2022-2024):**
 
-The second version brought significant improvements. Compression via residual compression allows compressing token-level document embeddings, reducing memory requirements. Distillation — training on data from cross-encoder models improves quality without increasing model size. The optimized Plaid indexing system speeds up search over token embeddings.
+The second version brought significant improvements. Compression via residual compression allows compressing token-level document embeddings, reducing memory requirements. Distillation, training on data from cross-encoder models improves quality without increasing model size. The optimized Plaid indexing system speeds up search over token embeddings.
 
 **Practical recommendations for choosing:**
 
@@ -228,25 +228,25 @@ The reranker landscape has evolved significantly, with new models and approaches
 
 ### Modern Reranker Models
 
-**Cohere Rerank v3 (2024):** A hosted reranking API supporting 100+ languages. Optimized for RAG pipelines — accepts a query and a list of documents, returns relevance scores. Low latency (~50ms for 25 documents), easy integration. Trade-off: hosted service, data leaves your infrastructure.
+**Cohere Rerank v3 (2024):** A hosted reranking API supporting 100+ languages. Optimized for RAG pipelines, accepts a query and a list of documents, returns relevance scores. Low latency (~50ms for 25 documents), easy integration. Trade-off: hosted service, data leaves your infrastructure.
 
 **Jina Reranker v2 (2024):** Open-weight reranker with multilingual support. Available for self-hosting. Competitive with Cohere on benchmarks while allowing on-premise deployment for data-sensitive applications.
 
 **BGE Reranker v2.5 (BAAI, 2024):** Open-source cross-encoder reranker in multiple sizes (small to large). Strong performance on MTEB benchmarks. Popular choice for self-hosted reranking.
 
-**LLM-based rerankers — RankGPT pattern (2024):** Using LLMs (GPT-5.4, Claude) as listwise rerankers. Instead of scoring documents individually, the LLM receives the full list and returns a ranking. More expensive but captures inter-document relationships. Best used as a final refinement stage for the top 5-10 candidates.
+**LLM-based rerankers, RankGPT pattern (2024):** Using LLMs (GPT-5.4, Claude) as listwise rerankers. Instead of scoring documents individually, the LLM receives the full list and returns a ranking. More expensive but captures inter-document relationships. Best used as a final refinement stage for the top 5-10 candidates.
 
 ### Speculative Retrieval
 
-**Concept:** Inspired by speculative decoding in LLM inference. A small, fast retriever proposes candidates, and a larger, more accurate model validates them. The key insight: validation is cheaper than generation — checking whether a document is relevant is faster than searching for relevant documents from scratch.
+**Concept:** Inspired by speculative decoding in LLM inference. A small, fast retriever proposes candidates, and a larger, more accurate model validates them. The key insight: validation is cheaper than generation, checking whether a document is relevant is faster than searching for relevant documents from scratch.
 
 **Two-phase speculative retrieval:**
 1. **Speculate:** A lightweight retriever (BM25, small bi-encoder) quickly proposes top-K candidates
 2. **Verify:** A powerful cross-encoder or LLM verifies each candidate's relevance, potentially triggering a refined search if verification rejects too many
 
-**Adaptive retrieval depth:** Instead of always retrieving a fixed top-K, speculative retrieval adjusts depth dynamically. If the first 5 candidates all pass verification — stop early. If none pass — expand the search or reformulate the query. This reduces average latency while maintaining quality.
+**Adaptive retrieval depth:** Instead of always retrieving a fixed top-K, speculative retrieval adjusts depth dynamically. If the first 5 candidates all pass verification: stop early. If none pass: expand the search or reformulate the query. This reduces average latency while maintaining quality.
 
-**Connection to Agentic RAG:** Speculative retrieval is a building block for agentic search patterns. The agent's reasoning loop naturally implements speculate-verify: retrieve → evaluate relevance → decide whether to search more or proceed with generation.
+**Connection to Agentic RAG:** Speculative retrieval is a building block for agentic search patterns. The agent's reasoning loop naturally implements speculate-verify: retrieve, then evaluate relevance, then decide whether to search more or proceed with generation.
 
 ## Key Takeaways
 
@@ -274,7 +274,7 @@ The EnhancedRetriever class implements a two-stage search architecture using thr
 
 The public search method takes two parameters: a string query (the user's query text) and an integer topK (the desired number of final results). The method returns a list of SearchResult objects ordered by relevance.
 
-In the first stage, a fast vector search is performed using a bi-encoder architecture. The text query is converted into a numerical vector (float array) by calling the embedSingle method of the embedding service. This vector represents the semantic content of the query in a multi-dimensional space. Then a search is performed in the vector store via the search method, which receives the query embedding and the number of candidates. An important detail: topK multiplied by 3 is requested, i.e., three times the final count — this is because the vector search is optimized for recall rather than precision, and the subsequent reranking will filter out less relevant results.
+In the first stage, a fast vector search is performed using a bi-encoder architecture. The text query is converted into a numerical vector (float array) by calling the embedSingle method of the embedding service. This vector represents the semantic content of the query in a multi-dimensional space. Then a search is performed in the vector store via the search method, which receives the query embedding and the number of candidates. An important detail: topK multiplied by 3 is requested, i.e., three times the final count. This is because the vector search is optimized for recall rather than precision, and the subsequent reranking will filter out less relevant results.
 
 In the second stage, precise reranking is applied via a cross-encoder. The rerank method receives the original text query (not the embedding), the list of candidate documents from the first stage, and the final topK count. The cross-encoder processes each (query, candidate document) pair jointly through a neural network, allowing the model to see the full interaction between the texts and compute more accurate relevance scores. The result is sorted by score in descending order, the top topK documents are selected and returned as the final result.
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ML/AI interviews often require implementing basic algorithms from scratch — without using PyTorch, TensorFlow, or sklearn. This tests depth of understanding, not the ability to call APIs.
+ML/AI interviews often require implementing basic algorithms from scratch: without using PyTorch, TensorFlow, or sklearn. This tests depth of understanding, not the ability to call APIs.
 
 Typical requirements: NumPy only (sometimes pure Python), thirty to forty-five minutes for implementation, explanation of each step, discussion of complexity and trade-offs.
 
@@ -30,7 +30,7 @@ Step 4 Weighted summation: the final output is obtained by multiplying the atten
 
 Why divide by the square root of d_k: without this, dot products grow with dimensionality proportionally to d_k, softmax concentrates at extreme values (zero or one), gradients in flat regions of softmax become very small, scaling preserves the variance of scores regardless of dimensionality.
 
-Complexity: time O(n squared times d) where n equals seq_len dominated by the Q times transposed K operation, space O(n squared) for the attention matrix — the main bottleneck for long sequences. It is precisely the quadratic complexity that motivates alternatives such as Linear Attention.
+Complexity: time O(n squared times d) where n equals seq_len dominated by the Q times transposed K operation, space O(n squared) for the attention matrix: the main bottleneck for long sequences. It is precisely the quadratic complexity that motivates alternatives such as Linear Attention.
 
 Numerical stability of softmax: subtract max to prevent overflow when exponentiating large numbers, mathematically equivalent since softmax is invariant to shifting by a constant, also prevents underflow when computing exp of very negative numbers.
 
@@ -70,7 +70,7 @@ Implement a single step of an LSTM cell.
 
 LSTM (Long Short-Term Memory) solves the vanishing gradient problem in standard RNNs through a gating mechanism and a separate cell state.
 
-Architecture and components: LSTM has two internal states — cell state (c_t) and hidden state (h_t). Cell state is a "pipeline" of information that flows through the entire sequence with minimal changes.
+Architecture and components: LSTM has two internal states: cell state (c_t) and hidden state (h_t). Cell state is a "pipeline" of information that flows through the entire sequence with minimal changes.
 
 Four key elements:
 
@@ -88,7 +88,7 @@ Input concatenation: all gates receive as input the concatenation of the current
 
 ### Key Points
 
-Forget gate bias equals one: initializing b_f equal to one shifts sigmoid toward larger values (closer to one), the model remembers by default rather than forgets — this is critical for training, without this trick training stalls for a long time with vanishing gradients, empirically proven to improve convergence in early stages.
+Forget gate bias equals one: initializing b_f equal to one shifts sigmoid toward larger values (closer to one), the model remembers by default rather than forgets. This is critical for training, without this trick training stalls for a long time with vanishing gradients, empirically proven to improve convergence in early stages.
 
 Why LSTM solves vanishing gradient: cell state c_t is updated additively (new equals old times f plus candidate times i), the gradient can flow directly through the addition operation without repeated multiplications, in standard RNNs the gradient passes through a chain of tanh multiplications causing exponential decay, LSTM creates a highway for the gradient through cell state.
 
@@ -150,7 +150,7 @@ Why Xavier/He initialization: preserves the variance of activations approximatel
 
 ReLU gradient: derivative is one if x greater than zero, else zero (technically undefined at zero, zero is used). Dead ReLU problem: if a neuron always receives negative inputs, the gradient is always zero. Solutions: Leaky ReLU (0.01 times x instead of zero), proper initialization, not too large a learning rate. Advantages: computationally efficient, does not saturate for positive values.
 
-Softmax plus Cross-entropy gradient: mathematically d(CrossEntropy)/dz equals softmax(z) minus y_true — an incredibly simple formula. Why: the derivatives of the exponentials in softmax and the logarithms in cross-entropy cancel each other out. This property makes training classifiers efficient and numerically stable. It is important to use stabilized softmax (subtracting max) to avoid numerical issues.
+Softmax plus Cross-entropy gradient: mathematically d(CrossEntropy)/dz equals softmax(z) minus y_true: an incredibly simple formula. Why: the derivatives of the exponentials in softmax and the logarithms in cross-entropy cancel each other out. This property makes training classifiers efficient and numerically stable. It is important to use stabilized softmax (subtracting max) to avoid numerical issues.
 
 ---
 
@@ -218,21 +218,21 @@ Implement a LoRA-augmented linear layer forward pass.
 
 ### Conceptual Solution
 
-LoRA (Low-Rank Adaptation) adds trainable low-rank matrices to frozen pretrained weights. Instead of updating the full weight matrix W (d_out × d_in), LoRA adds delta_W = B × A, where A is (r × d_in) and B is (d_out × r), with r much less than d_in and d_out.
+LoRA (Low-Rank Adaptation) adds trainable low-rank matrices to frozen pretrained weights. Instead of updating the full weight matrix W (d_out x d_in), LoRA adds delta_W = B x A, where A is (r x d_in) and B is (d_out x r), with r much less than d_in and d_out.
 
-Forward pass: output = W_frozen × x + (B × A) × x × (alpha / r). The frozen weights W are not updated. Only A and B are trained. The scaling factor alpha/r controls the magnitude of the adaptation.
+Forward pass: output = W_frozen x x + (B x A) x x x (alpha / r). The frozen weights W are not updated. Only A and B are trained. The scaling factor alpha/r controls the magnitude of the adaptation.
 
 Initialization: A is initialized with random Gaussian, B is initialized to zeros. This ensures that at the start of training, delta_W = 0 and the model behaves exactly as the pretrained model.
 
 ### Key Discussion Points
 
-Why low-rank works: weight updates during fine-tuning have low intrinsic dimensionality — the rank of useful updates is much smaller than the full matrix rank. Empirically, r=4-16 captures most of the adaptation signal.
+Why low-rank works: weight updates during fine-tuning have low intrinsic dimensionality: the rank of useful updates is much smaller than the full matrix rank. Empirically, r=4-16 captures most of the adaptation signal.
 
-Parameter efficiency: for a 4096×4096 layer with r=16, LoRA adds 2 × 4096 × 16 = 131K parameters instead of 16.8M — a 128x reduction. Multiple LoRA adapters can be swapped at inference without reloading the base model.
+Parameter efficiency: for a 4096x4096 layer with r=16, LoRA adds 2 x 4096 x 16 = 131K parameters instead of 16.8M: a 128x reduction. Multiple LoRA adapters can be swapped at inference without reloading the base model.
 
 Which layers to adapt: Q and V projections in attention are most important. Adapting all linear layers (Q, K, V, O, gate, up, down) with small r often outperforms adapting fewer layers with large r.
 
-Merging: at inference, delta_W = B × A can be merged into W, eliminating any latency overhead. Un-merging restores the original model for switching adapters.
+Merging: at inference, delta_W = B x A can be merged into W, eliminating any latency overhead. Un-merging restores the original model for switching adapters.
 
 ---
 
@@ -246,17 +246,17 @@ Implement RoPE position encoding for query/key vectors.
 
 RoPE encodes position by rotating query and key vectors in 2D subspaces. For a vector of dimension d, pairs of adjacent elements (x_0, x_1), (x_2, x_3), etc., are treated as 2D vectors and rotated by position-dependent angles.
 
-The rotation angle for position m and dimension pair i is: theta_i = m / (10000^(2i/d)). Each pair (x_{2i}, x_{2i+1}) is rotated by theta_i: x_{2i}' = x_{2i} × cos(theta_i) - x_{2i+1} × sin(theta_i), x_{2i+1}' = x_{2i} × sin(theta_i) + x_{2i+1} × cos(theta_i).
+The rotation angle for position m and dimension pair i is: theta_i = m / (10000^(2i/d)). Each pair (x_{2i}, x_{2i+1}) is rotated by theta_i: x_{2i}' = x_{2i} x cos(theta_i) - x_{2i+1} x sin(theta_i), x_{2i+1}' = x_{2i} x sin(theta_i) + x_{2i+1} x cos(theta_i).
 
-Implementation: precompute freqs = 1.0 / (10000^(2i/d)) for i in range(d/2). For position m, angles = m × freqs. Apply rotation using complex number multiplication or the cos/sin formulas above.
+Implementation: precompute freqs = 1.0 / (10000^(2i/d)) for i in range(d/2). For position m, angles = m x freqs. Apply rotation using complex number multiplication or the cos/sin formulas above.
 
 ### Key Discussion Points
 
-Why RoPE works: the dot product between rotated queries and keys depends only on relative position (m-n), not absolute positions. This gives the model translation invariance — the same relative pattern at positions (5,8) and (100,103) produces the same attention score.
+Why RoPE works: the dot product between rotated queries and keys depends only on relative position (m-n), not absolute positions. This gives the model translation invariance, the same relative pattern at positions (5,8) and (100,103) produces the same attention score.
 
 Extrapolation: vanilla RoPE degrades beyond training length. Solutions: NTK-aware scaling (modify the base frequency), YaRN (neural tangent kernel interpolation), position interpolation (scale positions to fit training range). These enable models trained on 4K context to work at 32K-128K.
 
-Comparison with learned/sinusoidal: sinusoidal (original Transformer) — fixed, no learned parameters, poor extrapolation. Learned (GPT series) — flexible but no extrapolation. RoPE — no learned parameters, relative position naturally, reasonable extrapolation with scaling.
+Comparison with learned/sinusoidal: sinusoidal (original Transformer): fixed, no learned parameters, poor extrapolation. Learned (GPT series): flexible but no extrapolation. RoPE: no learned parameters, relative position naturally, reasonable extrapolation with scaling.
 
 Efficiency: RoPE is applied per-head to Q and K only (not V), adds negligible compute (element-wise operations), and requires no additional parameters.
 
@@ -272,15 +272,15 @@ Implement a sliding window (local) attention mask and compute sparse attention.
 
 Full attention is O(n²). Sparse attention restricts which positions can attend to each other. Sliding window attention: each token attends only to a local window of size w around it.
 
-Mask construction: for sequence length n and window size w, create an n×n boolean mask where mask[i][j] = True if |i - j| <= w/2. Positions outside the window are masked to negative infinity before softmax.
+Mask construction: for sequence length n and window size w, create an nxn boolean mask where mask[i][j] = True if |i - j| <= w/2. Positions outside the window are masked to negative infinity before softmax.
 
-Forward pass: compute Q×K^T as usual, apply the sparse mask (set masked positions to -inf), apply softmax, multiply by V. Only positions within the window contribute to attention weights.
+Forward pass: compute QxK^T as usual, apply the sparse mask (set masked positions to -inf), apply softmax, multiply by V. Only positions within the window contribute to attention weights.
 
 ### Key Discussion Points
 
-Complexity: full attention O(n²d), sparse with window w gives O(nwd) — linear in n for fixed w. Memory: O(nw) instead of O(n²). For w=4096 and n=128K, this is a 32x reduction.
+Complexity: full attention O(n²d), sparse with window w gives O(nwd): linear in n for fixed w. Memory: O(nw) instead of O(n²). For w=4096 and n=128K, this is a 32x reduction.
 
-Effective receptive field: with L layers of window w, information can propagate w×L positions. A 32-layer model with w=4096 has an effective receptive field of 128K tokens — full context coverage through stacked layers.
+Effective receptive field: with L layers of window w, information can propagate wxL positions. A 32-layer model with w=4096 has an effective receptive field of 128K tokens: full context coverage through stacked layers.
 
 Combination patterns: Mistral uses sliding window in every layer. Longformer combines local window with global tokens (CLS, special tokens). BigBird adds random attention connections. These hybrid patterns balance efficiency and expressiveness.
 
@@ -292,15 +292,15 @@ Connection to modern models: Mistral 7B uses w=4096 sliding window attention. GP
 
 ### What Interviewers Expect
 
-Clean code — clear variable names, comments. Explain as you go — think out loud. Handle edge cases — empty input, division by zero. Know complexity — Time and Space. Trade-offs — can be made faster but requires more memory.
+Clean code: clear variable names, comments. Explain as you go: think out loud. Handle edge cases, empty input, division by zero. Know complexity: Time and Space. Trade-offs: can be made faster but requires more memory.
 
 ### Common Mistakes
 
-Forgetting numerical stability — softmax overflow, log(zero). Incorrect dimensions — especially in matrix operations. Off-by-one errors — in loops, indices. Not testing — at least one simple example.
+Forgetting numerical stability: softmax overflow, log(zero). Incorrect dimensions: especially in matrix operations. Off-by-one errors: in loops, indices. Not testing: at least one simple example.
 
 ### Preparation
 
-Practice on paper — interviews are often on a whiteboard. Know formulas by heart — attention, LSTM gates. Understand why — not just how but why it works. Prepare questions — what batch size to use.
+Practice on paper: interviews are often on a whiteboard. Know formulas by heart: attention, LSTM gates. Understand why, not just how but why it works. Prepare questions: what batch size to use.
 
 ## Key Takeaways
 

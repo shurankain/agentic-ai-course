@@ -4,13 +4,13 @@
 
 Spring AI is the official Spring ecosystem project for integrating applications with artificial intelligence systems. This framework continues the Spring tradition of providing unified, productive abstractions for complex technological challenges.
 
-**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations. **Spring AI 2.0.0 GA** was released on **June 12, 2026** — a major version requiring **Spring Boot 4.0/4.1** and **Spring Framework 7.0**. Key 2.0 additions: **ToolSearchToolCallingAdvisor** for progressive tool disclosure (indexes all tools per session, exposes only a built-in `toolSearchTool` for on-demand retrieval — three ToolIndex implementations: vector store, Lucene, regex), enhanced observability for chat models, and improved OpenAI options builder pattern. Spring AI 1.0.9 and 1.1.8 were also released on June 12 as security patches.
+**Spring AI 1.0 GA** was released in May 2025, marking the transition from experimental to production-ready. **Spring AI 1.1 GA** followed in November 2025 with MCP client support and additional model integrations. **Spring AI 2.0.0 GA** was released on **June 12, 2026**, a major version requiring **Spring Boot 4.0/4.1** and **Spring Framework 7.0**. Key 2.0 additions: **ToolSearchToolCallingAdvisor** for progressive tool disclosure (indexes all tools per session, exposes only a built-in `toolSearchTool` for on-demand retrieval: three ToolIndex implementations: vector store, Lucene, regex), enhanced observability for chat models, and improved OpenAI options builder pattern. Spring AI 1.0.9 and 1.1.8 were also released on June 12 as security patches.
 
 **Security: CVE-2026-47835 (CVSS 8.6, June 2026):** Arbitrary query execution via special characters in Elasticsearch, OpenSearch, and GemFire vector store metadata filtering. Affects Spring AI versions prior to 1.0.9/1.1.8/2.0.0. Patch: upgrade to 1.0.9, 1.1.8, or 2.0.0 GA. If you use vector store metadata filters in production, patch immediately.
 
 Spring has a rich history of successful standardization: Spring Data unified data access, Spring Integration standardized integration patterns, Spring Cloud streamlined cloud development. Spring AI applies this proven approach to the world of AI and LLMs.
 
-The key value of Spring AI lies in its deep integration with the Spring ecosystem. It is not a standalone library but an organic part of the Spring platform. Auto-configuration, dependency injection, configuration profiles, actuator metrics — all of these work with AI components just as naturally as with any other Spring beans.
+The key value of Spring AI lies in its deep integration with the Spring ecosystem. It is not a standalone library but an organic part of the Spring platform. Auto-configuration, dependency injection, configuration profiles, actuator metrics: all of these work with AI components just as naturally as with any other Spring beans.
 
 ## Project Philosophy
 
@@ -24,7 +24,7 @@ Portability is especially valuable in the rapidly evolving AI market. New models
 
 ### Spring-Idiomatic Design
 
-Spring AI follows Spring idioms and patterns. If you know Spring, you know Spring AI. Configuration through properties, conditional beans, profiles, testing — everything works in a familiar way.
+Spring AI follows Spring idioms and patterns. If you know Spring, you know Spring AI. Configuration through properties, conditional beans, profiles, testing: everything works in a familiar way.
 
 This lowers the entry barrier for Spring developers. Instead of learning a new framework, they apply familiar concepts to a new domain.
 
@@ -54,17 +54,17 @@ Typed prompts simplify testing and reuse. A prompt can be extracted into a separ
 
 ### Structured Output
 
-Spring AI provides powerful mechanisms for obtaining structured responses from language models, solving one of the key problems of LLM applications — unpredictable response format.
+Spring AI provides powerful mechanisms for obtaining structured responses from language models, solving one of the key problems of LLM applications, unpredictable response format.
 
 **Evolution of Structured Output:**
 
 Before the advent of specialized APIs, developers faced significant challenges. They had to add prompt instructions like "return JSON in the format...", then hope the model would correctly interpret the request, write parsing with error handling, and implement retry logic for invalid formats. The successful parsing rate was 85-90 percent, requiring complex exception handling.
 
-Since August 2024, OpenAI provides an API for guaranteed structured responses, changing the paradigm. Instead of prompt instructions, the developer passes a JSON Schema in the response_format parameter, and the model is guaranteed to return valid JSON matching the schema. This is achieved through constrained decoding at the model level — tokens are generated with constraints that prevent structural violations.
+Since August 2024, OpenAI provides an API for guaranteed structured responses, changing the paradigm. Instead of prompt instructions, the developer passes a JSON Schema in the response_format parameter, and the model is guaranteed to return valid JSON matching the schema. This is achieved through constrained decoding at the model level: tokens are generated with constraints that prevent structural violations.
 
 Spring AI intelligently selects a strategy based on the provider's available capabilities. For OpenAI with Structured Outputs API support, the native mechanism is used with a 100 percent guarantee and minimal latency. For providers like Anthropic or Google, function calling is employed as an intermediate technique with approximately 99 percent reliability. For other models, the classic prompt-based approach with parsing and 90 percent success rate remains.
 
-This adaptability makes code portable — the same business logic works across different providers, automatically using the best available structuring method.
+This adaptability makes code portable: the same business logic works across different providers, automatically using the best available structuring method.
 
 ### Advisors
 
@@ -72,7 +72,7 @@ Advisors are request and response interceptors that allow modifying the behavior
 
 **Advisors as AOP for Artificial Intelligence:**
 
-The analogy with traditional AOP is very direct. In classic Spring AOP, you use annotations like @Around to intercept business logic method execution, applying cross-cutting concerns — logging, security, transactions. In Spring AI, Advisors intercept calls to language models in exactly the same way.
+The analogy with traditional AOP is very direct. In classic Spring AOP, you use annotations like @Around to intercept business logic method execution, applying cross-cutting concerns, logging, security, transactions. In Spring AI, Advisors intercept calls to language models in exactly the same way.
 
 The join point in Spring AOP is method execution. In Spring AI, it is the LLM call. Around advice wraps execution, providing control before and after. An Advisor does the same with the prompt (before) and the response (after). A pointcut defines which methods to intercept. In the AI context, this is the advisor chain configuration for a specific ChatClient.
 
@@ -80,7 +80,7 @@ The join point in Spring AOP is method execution. In Spring AI, it is the LLM ca
 
 Classic enterprise concerns translate elegantly to LLM applications. Logging is implemented via LoggingAdvisor instead of LoggingAspect. Security is provided by SafeGuardAdvisor, filtering prompt injections and unwanted content, replacing SecurityAspect. Prompt caching is handled by PromptCacheAdvisor. Retry logic for handling transient provider failures operates through RetryAdvisor.
 
-Unique AI-specific concerns also emerge. QuestionAnswerAdvisor implements RAG, automatically enriching prompts with relevant context from a vector store. This has no counterpart in traditional AOP — it is a new category of functionality specific to LLMs.
+Unique AI-specific concerns also emerge. QuestionAnswerAdvisor implements RAG, automatically enriching prompts with relevant context from a vector store. This has no counterpart in traditional AOP. It is a new category of functionality specific to LLMs.
 
 **Composition and Execution Order:**
 
@@ -90,9 +90,9 @@ This architecture makes behavior extension declarative and modular, fully in lin
 
 ### Vector Store
 
-Spring AI provides VectorStore — a vector storage abstraction. Implementations exist for Pinecone, Milvus, Qdrant, pgvector, Redis, Chroma, and others.
+Spring AI provides VectorStore, a vector storage abstraction. Implementations exist for Pinecone, Milvus, Qdrant, pgvector, Redis, Chroma, and others.
 
-A unified interface allows switching stores without changing code. For development, InMemory can be used; for production — a distributed store.
+A unified interface allows switching stores without changing code. For development, InMemory can be used; for production: a distributed store.
 
 DocumentReader and DocumentTransformer form the document processing pipeline before indexing.
 
@@ -112,7 +112,7 @@ This means a Spring AI application can simultaneously act as an MCP client (cons
 
 ### Properties-Driven Configuration
 
-Spring AI is fully configured through standard Spring mechanisms — application.properties or YAML files. You define the provider, model, and generation parameters declaratively using structured configuration keys.
+Spring AI is fully configured through standard Spring mechanisms: application.properties or YAML files. You define the provider, model, and generation parameters declaratively using structured configuration keys.
 
 A typical configuration includes the provider API key (usually via environment variables for security), the specific model selection (e.g., gpt-5.4 or claude-sonnet-4-6), and generation parameters such as temperature for controlling creativity, max-tokens for limiting length, or top-p for nucleus sampling.
 
@@ -126,7 +126,7 @@ Multiple providers can coexist simultaneously, distinguished by qualifiers. This
 
 ### Customization
 
-When deep customization is needed, you can define your own beans. Spring AI uses the standard @ConditionalOnMissingBean mechanism — your bean takes priority over the auto-configured one.
+When deep customization is needed, you can define your own beans. Spring AI uses the standard @ConditionalOnMissingBean mechanism: your bean takes priority over the auto-configured one.
 
 This allows fine-tuning clients, adding interceptors, and modifying behavior.
 
@@ -140,7 +140,7 @@ The function description is extracted from metadata and passed to the model. The
 
 ### Automatic Discovery
 
-Functions are discovered automatically through bean scanning. Simply defining a bean is enough — it becomes available to the model.
+Functions are discovered automatically through bean scanning. Simply defining a bean is enough. It becomes available to the model.
 
 This supports the Spring approach to development: functions are grouped into services, tested in isolation, and composed through DI.
 
@@ -148,7 +148,7 @@ This supports the Spring approach to development: functions are grouped into ser
 
 Spring AI provides control over function execution. You can restrict the set of available functions for a specific request. You can receive a function call without automatic execution for manual handling.
 
-This is important for security — not all functions should be accessible to all users.
+This is important for security, not all functions should be accessible to all users.
 
 ## Retrieval Augmented Generation
 
@@ -202,13 +202,13 @@ The configuration creates a ChatClient via a builder specifying a VectorStore fo
 
 ## API Evolution
 
-**Pre-1.0 to 1.0 changes:** The API stabilized significantly for the 1.0 GA release. Key renames: `EmbeddingClient` → `EmbeddingModel` (aligning with the `*Model` naming convention), `AiClient` → `ChatClient` (early alpha rename). The `ChatClient` fluent API became the primary entry point, replacing direct `ChatModel.call()` for most use cases.
+**Pre-1.0 to 1.0 changes:** The API stabilized significantly for the 1.0 GA release. Key renames: `EmbeddingClient` -> `EmbeddingModel` (aligning with the `*Model` naming convention), `AiClient` -> `ChatClient` (early alpha rename). The `ChatClient` fluent API became the primary entry point, replacing direct `ChatModel.call()` for most use cases.
 
 **ChatClient vs ChatModel:** `ChatModel` is the low-level interface (provider implementations). `ChatClient` is the high-level fluent API with advisor chains, structured output, and function calling integration. Production code should use `ChatClient`; `ChatModel` is for framework extensions and custom providers.
 
 ## Key Takeaways
 
-Spring AI 2.0 GA (June 2026) is the current release — requires Spring Boot 4.0, adds progressive tool disclosure (ToolSearchToolCallingAdvisor), and enhanced observability. Check CVE-2026-47835 (CVSS 8.6) for vector store metadata filtering vulnerability — patch to 1.0.9/1.1.8/2.0.0.
+Spring AI 2.0 GA (June 2026) is the current release: requires Spring Boot 4.0, adds progressive tool disclosure (ToolSearchToolCallingAdvisor), and enhanced observability. Check CVE-2026-47835 (CVSS 8.6) for vector store metadata filtering vulnerability, patch to 1.0.9/1.1.8/2.0.0.
 
 Spring AI brings modern AI capabilities to the Spring ecosystem in a natural and idiomatic way. Provider portability, deep Spring integration, and production readiness make it a strong choice for enterprise applications.
 

@@ -14,11 +14,11 @@ For positions at $400K+ (Staff+ at frontier AI companies), they evaluate the abi
 
 **R - Requirements:** Clarify functional (data types, features, integrations) and non-functional requirements (latency, throughput, availability, reliability).
 
-**E - Estimation:** Perform calculations to understand scale — data volumes, required storage, network bandwidth, required number of GPUs/CPUs. This justifies architectural decisions.
+**E - Estimation:** Perform calculations to understand scale: data volumes, required storage, network bandwidth, required number of GPUs/CPUs. This justifies architectural decisions.
 
 **S - Service Architecture:** Design a high-level architecture with component separation, define service boundaries, communication protocols, integration points.
 
-**H - How ML Works:** Deep dive into ML specifics — model selection and justification, feature engineering, training pipeline, online versus offline inference.
+**H - How ML Works:** Deep dive into ML specifics, model selection and justification, feature engineering, training pipeline, online versus offline inference.
 
 **A - API Design:** Design clear interfaces between components, define contracts, data formats, API versioning.
 
@@ -46,7 +46,7 @@ Functional: what document types (PDF, Word, HTML, Confluence, Slack), is multi-t
 
 Non-functional: latency P50 less than 500 milliseconds, P99 less than 2 seconds, throughput 1000 QPS, availability 99.9%, freshness new documents available within 1 hour.
 
-Constraints: data cannot leave the region (GDPR), some documents are confidential — access control is needed.
+Constraints: data cannot leave the region (GDPR), some documents are confidential: access control is needed.
 
 ### Estimation
 
@@ -64,7 +64,7 @@ Input Layer: Load Balancer distributes load across API Gateway instances, which 
 
 Request Processing Layer: multiple Query Service instances process user requests in parallel, enabling horizontal scaling.
 
-Orchestration Layer: coordinates the entire request processing pipeline — from query understanding through relevant information retrieval to response generation. This layer manages the interaction logic between components.
+Orchestration Layer: coordinates the entire request processing pipeline: from query understanding through relevant information retrieval to response generation. This layer manages the interaction logic between components.
 
 Specialized Services: Vector Store (e.g., Pinecone) for semantic search over embeddings, Reranking Service with a cross-encoder model for improving result relevance, LLM Gateway (vLLM or API providers) for generating final responses.
 
@@ -76,7 +76,7 @@ The document processing pipeline consists of sequential stages:
 
 Extraction: Apache Tika or similar tools are used to extract text from various formats (PDF, Word, HTML). Preserving the structural information of the document is important.
 
-Chunking: semantic chunking is applied with awareness of document structure. Optimal chunk size is 500 tokens with an overlap of 50 tokens to preserve context at boundaries. For long documents, hierarchical chunking is used — creating both fine and coarse chunks for multi-level retrieval.
+Chunking: semantic chunking is applied with awareness of document structure. Optimal chunk size is 500 tokens with an overlap of 50 tokens to preserve context at boundaries. For long documents, hierarchical chunking is used, creating both fine and coarse chunks for multi-level retrieval.
 
 Embedding: each chunk is converted into a vector representation using an embedding model (e.g., text-embedding-3-large with dimensionality of 1536). These vectors represent the semantic meaning of the text.
 
@@ -88,7 +88,7 @@ Multi-stage process for extracting relevant information:
 
 Query Understanding: the first step is query expansion using techniques such as query expansion. HyDE (Hypothetical Document Embeddings) generates a hypothetical answer and uses it for search. Multi-query generates several query variations for broader coverage.
 
-Initial Retrieval: parallel search is performed using two methods — semantic search through the vector store over embeddings (top-50 results) and keyword search through BM25 for exact term matching (also top-50). It is critically important to apply access control filters at this stage, verifying user permissions on documents.
+Initial Retrieval: parallel search is performed using two methods: semantic search through the vector store over embeddings (top-50 results) and keyword search through BM25 for exact term matching (also top-50). It is critically important to apply access control filters at this stage, verifying user permissions on documents.
 
 Fusion: reciprocal rank fusion is applied to combine results from semantic and keyword search. This algorithm effectively combines rankings from different sources, giving advantage to documents ranked highly in both lists.
 
@@ -100,7 +100,7 @@ Trade-offs: hybrid search adds 15% to relevance with a 20 millisecond increase i
 
 The final response generation process includes:
 
-Prompt Construction: retrieved chunks are formatted into context while preserving metadata (source, date, author). Context window management is critically important — relevant chunks must fit within the model's limited context, prioritizing the most relevant ones and avoiding overflow.
+Prompt Construction: retrieved chunks are formatted into context while preserving metadata (source, date, author). Context window management is critically important: relevant chunks must fit within the model's limited context, prioritizing the most relevant ones and avoiding overflow.
 
 LLM Generation: the model receives a system prompt, context, and the user's question. The prompt instructs the model to answer strictly based on the provided context, avoiding hallucinations, and to include citations in the format [1], [2] for source traceability.
 
@@ -152,7 +152,7 @@ Logic for intelligent request routing:
 
 Tenant Preferences: the first level checks tenant configuration. If a client has a preferred model (e.g., due to compliance requirements or completed validation), the request is routed directly to it.
 
-Task Classification: prompt analysis to determine the task type — simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
+Task Classification: prompt analysis to determine the task type: simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
 
 Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5), providing sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-4-6, gpt-5.4) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
 
@@ -160,7 +160,7 @@ Fallback Chain: if the primary model is unavailable or returns an error, the req
 
 ### Cost Optimization Strategies
 
-Cascading Models: start with a cheap model; if confidence is low, use a more powerful model — savings of up to 60% while maintaining quality.
+Cascading Models: start with a cheap model; if confidence is low, use a more powerful model, savings of up to 60% while maintaining quality.
 
 Caching: exact match cache with 100% hit at zero cost, semantic cache (embeddings plus similarity threshold), KV-cache sharing for common prefixes.
 
@@ -184,11 +184,11 @@ Multi-layer content moderation system:
 
 Pre-filter: the first level uses regex patterns and blocklists for fast rejection of obvious violations. The cheapest stage with latency under 1 millisecond, filtering out approximately 10-15% of content.
 
-ML Pipeline: content passing the pre-filter is processed by a multi-model ensemble — a combination of specialized classifiers for different violation types (hate speech, violence, sexual content, spam).
+ML Pipeline: content passing the pre-filter is processed by a multi-model ensemble: a combination of specialized classifiers for different violation types (hate speech, violence, sexual content, spam).
 
-Policy Engine: combines ML model results with business rules and determines the final action — approve, reject, or escalate to human review.
+Policy Engine: combines ML model results with business rules and determines the final action: approve, reject, or escalate to human review.
 
-Action: executing the decision — publishing content, blocking, or sending to a moderator for manual review.
+Action: executing the decision, publishing content, blocking, or sending to a moderator for manual review.
 
 ### ML Pipeline
 
@@ -226,11 +226,11 @@ Trade-offs: LLM reranking adds 200-500 milliseconds of latency, cost of 0.001-0.
 
 ### What NOT to Do
 
-Jumping straight to a solution without clarifying requirements. Ignoring scale — a solution for 1000 QPS is not the same as a solution for 1 million QPS. Forgetting about costs especially for LLM-heavy systems. Over-engineering — start simple, add complexity as needed. Ignoring failure modes — what if the LLM is unavailable?
+Jumping straight to a solution without clarifying requirements. Ignoring scale: a solution for 1000 QPS is not the same as a solution for 1 million QPS. Forgetting about costs especially for LLM-heavy systems. Over-engineering: start simple, add complexity as needed. Ignoring failure modes: what if the LLM is unavailable?
 
 ### What to Do
 
-Think out loud — the interviewer wants to understand your thought process. Draw diagrams — visualization helps structure ideas. Quantify trade-offs — "this adds 100 milliseconds but improves quality by 20%". Ask clarifying questions — this demonstrates maturity. Consider alternatives — "we could do X but Y is better because..."
+Think out loud: the interviewer wants to understand your thought process. Draw diagrams: visualization helps structure ideas. Quantify trade-offs: "this adds 100 milliseconds but improves quality by 20%". Ask clarifying questions: this demonstrates maturity. Consider alternatives: "we could do X but Y is better because..."
 
 ---
 
@@ -249,7 +249,7 @@ ML Debugging is a separate interview round at OpenAI and DeepMind.
 
 Main bug categories: Shape Mismatches (broadcasting hides dimension mismatches), Gradient Issues (detach breaks gradient flow, missing residual connections lead to explosion/vanishing), Data Processing (incorrect shuffle, tokenization mismatch, data leakage in data pipeline), Optimizer (creation before setting requires_grad, weight decay on bias/LayerNorm).
 
-Debugging strategy: Reproduce → Hypothesize → Test → Fix.
+Debugging strategy: Reproduce, then Hypothesize, then Test, then Fix.
 
 Interview checklist: check tensor shapes first, verify gradient flow, Cross-entropy expects logits not probs, create Optimizer after requires_grad, effects of eval vs train mode.
 

@@ -4,11 +4,11 @@
 
 Deploying LLM applications differs fundamentally from traditional web services. Classic microservices process requests in milliseconds, consume predictable resources, and scale linearly. LLM systems break all of these assumptions: a single request takes seconds or minutes, resource consumption varies depending on context length, and scaling costs are determined not only by infrastructure but also by the price of API calls.
 
-Response time increases from 50 milliseconds to 5 seconds — a hundredfold. Traditional approaches to load balancing, timeouts, and circuit breakers require a complete rethink. Dependence on external APIs (OpenAI, Anthropic, Google) adds a layer of complexity: providers have their own rate limits, experience temporary outages, and change model behavior without notice. The system must ensure graceful degradation instead of catastrophic failures.
+Response time increases from 50 milliseconds to 5 seconds: a hundredfold. Traditional approaches to load balancing, timeouts, and circuit breakers require a complete rethink. Dependence on external APIs (OpenAI, Anthropic, Google) adds a layer of complexity: providers have their own rate limits, experience temporary outages, and change model behavior without notice. The system must ensure graceful degradation instead of catastrophic failures.
 
 ## LLM Application Architecture
 
-A typical architecture consists of several layers. The API Gateway provides authentication, rate limiting, and basic routing — the first line of defense. The Application Layer implements business logic: Chat API for conversations, Agent API for autonomous agents, Completion API for generation. Each service is specialized, but all use a shared LLM Orchestration Layer — the heart of the system, where prompt management, retry logic, fallback between providers, caching, and cost monitoring take place. At the lowest level — LLM providers accessed through a unified abstraction.
+A typical architecture consists of several layers. The API Gateway provides authentication, rate limiting, and basic routing, the first line of defense. The Application Layer implements business logic: Chat API for conversations, Agent API for autonomous agents, Completion API for generation. Each service is specialized, but all use a shared LLM Orchestration Layer, the heart of the system, where prompt management, retry logic, fallback between providers, caching, and cost monitoring take place. At the lowest level: LLM providers accessed through a unified abstraction.
 
 ## Deployment Patterns
 
@@ -22,17 +22,17 @@ A typical architecture consists of several layers. The API Gateway provides auth
 
 ## Fault Tolerance
 
-**Circuit Breaker** prevents cascading failures. When the error threshold is reached (50% over 10 calls), the circuit opens, and subsequent requests immediately return an error. After 30 seconds — a probe call; on success, the circuit closes again.
+**Circuit Breaker** prevents cascading failures. When the error threshold is reached (50% over 10 calls), the circuit opens, and subsequent requests immediately return an error. After 30 seconds: a probe call; on success, the circuit closes again.
 
-**Fallback strategies**: switching to an alternative provider (GPT-5.4 → Claude), degrading to a cheaper model (GPT-5.4 → GPT-4o-mini), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
+**Fallback strategies**: switching to an alternative provider (GPT-5.4, then Claude), degrading to a cheaper model (GPT-5.4, then GPT-4o-mini), cached response for similar queries, honest unavailability message. The choice depends on quality and availability requirements. A multi-provider setup requires a unified interface.
 
 ### Multi-Provider Failover Architecture
 
-Production systems should not depend on a single LLM provider. A robust failover architecture uses a **unified abstraction layer** — tools like LiteLLM provide a unified API for 100+ LLM providers with cost routing, budget enforcement, and spend tracking behind a single interface. The application code calls LiteLLM; LiteLLM routes to the configured provider. **Security caveat:** LiteLLM CVE-2026-42271 (added to CISA Known Exploited Vulnerabilities catalog, June 9) demonstrated that proxy libraries inherit and amplify security risk — a vulnerability in the proxy affects every application behind it. Pin proxy library versions, monitor security advisories, and apply patches within hours of disclosure. See Module 14, Agent Security for the full CVE chain and the Mercor breach case study.
+Production systems should not depend on a single LLM provider. A robust failover architecture uses a **unified abstraction layer**: tools like LiteLLM provide a unified API for 100+ LLM providers with cost routing, budget enforcement, and spend tracking behind a single interface. The application code calls LiteLLM; LiteLLM routes to the configured provider. **Security caveat:** LiteLLM CVE-2026-42271 (added to CISA Known Exploited Vulnerabilities catalog, June 9) demonstrated that proxy libraries inherit and amplify security risk: a vulnerability in the proxy affects every application behind it. Pin proxy library versions, monitor security advisories, and apply patches within hours of disclosure. See Module 14, Agent Security for the full CVE chain and the Mercor breach case study.
 
-**Failover chain:** Primary provider (e.g., Anthropic) → Secondary provider (e.g., OpenAI) → Degraded mode (cached responses or simpler model). Each transition is triggered by circuit breaker thresholds. Provider health is monitored continuously — latency percentiles, error rates, and availability.
+**Failover chain:** Primary provider (e.g., Anthropic), then Secondary provider (e.g., OpenAI), then Degraded mode (cached responses or simpler model). Each transition is triggered by circuit breaker thresholds. Provider health is monitored continuously: latency percentiles, error rates, and availability.
 
-**Cost-aware routing** extends failover into an optimization strategy: route simple queries (classification, extraction) to cheap models, complex queries (reasoning, analysis) to expensive ones. This is not just failover — it is intelligent routing that reduces cost by 50-70% during normal operation while providing automatic failover during outages. See Module 03, Resource Optimization for routing patterns.
+**Cost-aware routing** extends failover into an optimization strategy: route simple queries (classification, extraction) to cheap models, complex queries (reasoning, analysis) to expensive ones. This is not just failover. It is intelligent routing that reduces cost by 50-70% during normal operation while providing automatic failover during outages. See Module 03, Resource Optimization for routing patterns.
 
 **Timeouts** are differentiated by endpoint: Completion 30 seconds, Chat 60 seconds, Agent 5 minutes. At the LLM call level, expected generation length is taken into account. Retry logic considers idempotency: completion is safe, agent workflows are riskier due to side effects. Exponential backoff with jitter: second attempt after 1 second, third after 2-4 seconds with randomization.
 
@@ -50,7 +50,7 @@ The cache key is formed via SHA-256 hashing of all parameters: model, message ro
 
 The controller accepts a POST request, generates a UUID, creates a task with PENDING status, saves it to the repository, and places it in the queue. It returns 202 Accepted with a Location header and the task ID. A GET status request returns details: status, progress percentage, current step, result or error, timestamps. Retry-After header: 5 seconds for PENDING, 2 seconds for PROCESSING.
 
-The worker subscribes to the queue, updates the status to PROCESSING, and invokes the agent with callbacks: onProgress updates the percentage and step, onThought and onAction add entries to the log. On completion, it saves the result and updates the status to COMPLETED. On exception — FAILED with a message. The architecture ensures fault tolerance: a worker crash leaves the task in the queue for processing by another worker.
+The worker subscribes to the queue, updates the status to PROCESSING, and invokes the agent with callbacks: onProgress updates the percentage and step, onThought and onAction add entries to the log. On completion, it saves the result and updates the status to COMPLETED. On exception: FAILED with a message. The architecture ensures fault tolerance: a worker crash leaves the task in the queue for processing by another worker.
 
 ## Streaming via SSE
 
@@ -64,13 +64,13 @@ The handler creates an AgentSession when a connection is established and stores 
 
 Serverless platforms (AWS Lambda, Google Cloud Functions, Azure Functions) can host LLM applications, but with significant constraints that differ from traditional web workloads.
 
-**Constraints:** Cold start latency (10-30 seconds for loading dependencies, problematic for interactive agents), execution time limits (15 minutes max on Lambda — insufficient for long-running agent loops), memory limits (10GB max — insufficient for local model inference). These constraints make serverless unsuitable for real-time streaming or autonomous agents with multi-step tool use.
+**Constraints:** Cold start latency (10-30 seconds for loading dependencies, problematic for interactive agents), execution time limits (15 minutes max on Lambda, insufficient for long-running agent loops), memory limits (10GB max: insufficient for local model inference). These constraints make serverless unsuitable for real-time streaming or autonomous agents with multi-step tool use.
 
 **Where serverless works well:** Async batch processing (document classification, data extraction triggered by S3 uploads), event-triggered agents (process Slack message, handle webhook), low-traffic endpoints where maintaining always-on infrastructure is wasteful, scheduled tasks (daily report generation, periodic evaluation runs).
 
 **Where serverless does NOT work:** Real-time streaming (SSE/WebSocket require persistent connections), long-running agent loops (Devin-style sessions can last hours), self-hosted model inference (memory and timeout constraints), high-throughput production APIs (cold starts degrade P99 latency).
 
-**Hybrid approach:** Use serverless for event-triggered and batch workloads, containers (ECS, GKE, AKS) for real-time and long-running agents. The LLM Orchestration Layer abstracts the difference — the same business logic runs in both environments.
+**Hybrid approach:** Use serverless for event-triggered and batch workloads, containers (ECS, GKE, AKS) for real-time and long-running agents. The LLM Orchestration Layer abstracts the difference: the same business logic runs in both environments.
 
 ---
 
@@ -80,23 +80,23 @@ Deploying AI agents differs from deploying standard LLM applications in several 
 
 **Long-running sessions.** A chatbot request completes in seconds. An agent session can last minutes (code review), hours (Devin working on an issue), or even days (research agents). Infrastructure must support persistent connections and state management across these timescales. WebSocket keepalives, session storage, and timeout configuration all need adjustment.
 
-**State management across tool calls.** Each tool call in an agent loop may modify external state (files written, APIs called, databases updated). If the agent crashes mid-loop, the system must handle partial state: which actions were completed? Which need rollback? Checkpointing after each successful tool call is essential — see Module 03, Agent Architectures for loop essentials.
+**State management across tool calls.** Each tool call in an agent loop may modify external state (files written, APIs called, databases updated). If the agent crashes mid-loop, the system must handle partial state: which actions were completed? Which need rollback? Checkpointing after each successful tool call is essential, see Module 03, Agent Architectures for loop essentials.
 
 **Graceful termination.** Agents must not be killed mid-action. A SIGTERM during a database write or API call can leave systems in an inconsistent state. On Kubernetes, set `terminationGracePeriodSeconds: 180-300` (3-5 minutes) to give agents time to reach a safe checkpoint. The agent's shutdown handler should: complete the current tool call, save state for resumption, release any locks or resources.
 
-**Resource unpredictability.** A standard LLM app makes one API call per request — resource usage is predictable. An agent may make 1 or 50 LLM calls per task, depending on the complexity of the problem it encounters. This makes capacity planning harder — provision for the P99 case, not the average. Autoscaling should monitor token throughput and active agent sessions, not just CPU.
+**Resource unpredictability.** A standard LLM app makes one API call per request: resource usage is predictable. An agent may make 1 or 50 LLM calls per task, depending on the complexity of the problem it encounters. This makes capacity planning harder, provision for the P99 case, not the average. Autoscaling should monitor token throughput and active agent sessions, not just CPU.
 
 **Shared memory for inference.** Self-hosted models via vLLM require large shared memory allocations (`shm-size: 16Gi` in Docker/Kubernetes) for the KV-cache. Default container shared memory (64MB) is insufficient and will cause silent failures or crashes.
 
 ## Agent State Persistence and Recovery
 
-When an agent crashes mid-task — provider timeout, OOM kill, infrastructure failure — what happens to the work in progress? Without state persistence, the entire task restarts from scratch. For a 30-minute research agent session, that is 30 minutes of lost work and wasted tokens.
+When an agent crashes mid-task: provider timeout, OOM kill, infrastructure failure: what happens to the work in progress? Without state persistence, the entire task restarts from scratch. For a 30-minute research agent session, that is 30 minutes of lost work and wasted tokens.
 
 **Checkpoint after each tool call.** The minimum viable persistence strategy: after every successful tool call, save the agent's state (conversation history, tool results, plan progress) to durable storage. If the agent crashes, it resumes from the last checkpoint rather than the beginning. LangGraph implements this natively through its checkpoint mechanism (PostgreSQL for production, SQLite for development). For custom agents, the checkpoint is a serialized state object stored in Redis (fast, TTL-based expiry) or PostgreSQL (durable, queryable).
 
 **Database schema for agent sessions.** A production agent needs at minimum: a sessions table (session_id, user_id, agent_type, status, created_at, updated_at), a checkpoints table (checkpoint_id, session_id, state_json, step_number, created_at), and a tool_results table (result_id, session_id, tool_name, input_json, output_json, duration_ms, created_at). The checkpoint state_json contains everything needed to resume: conversation messages, plan state, accumulated results, and current step. Index by session_id and step_number for fast recovery.
 
-**Idempotency for resumable agents.** When an agent resumes from a checkpoint, it must not repeat side effects. If the agent sent an email before crashing, it should not send it again on resume. Implementation: each tool call is tagged with a unique idempotency key (session_id + step_number). Tools check whether an action with this key was already completed before executing. This is the same idempotency pattern used in payment systems — apply it to agent tool calls.
+**Idempotency for resumable agents.** When an agent resumes from a checkpoint, it must not repeat side effects. If the agent sent an email before crashing, it should not send it again on resume. Implementation: each tool call is tagged with a unique idempotency key (session_id + step_number). Tools check whether an action with this key was already completed before executing. This is the same idempotency pattern used in payment systems: apply it to agent tool calls.
 
 **Session recovery flow:** On agent startup, check for an incomplete session for this user/task. If found, load the latest checkpoint, verify external state consistency (did the email actually send? did the file actually write?), and resume from the next step. If external state is inconsistent, fall back to the last known-good checkpoint.
 
@@ -106,11 +106,11 @@ Load testing AI systems differs fundamentally from load testing web APIs. A web 
 
 **The challenge.** A conventional load test might spawn 1,000 concurrent requests and measure throughput. For agents, 1,000 concurrent sessions means 1,000 simultaneous LLM API calls (hitting rate limits immediately), 1,000 active WebSocket connections (if streaming), and potentially 10,000-50,000 LLM calls in total (each agent session makes 10-50 calls). The load test saturates provider rate limits long before it stresses the application.
 
-**Locust/k6 configuration for agents.** Use long-lived "user" sessions that simulate realistic agent interactions: start a session, send a task, wait for progressive results (5-60 seconds), send a follow-up, wait again. Set think times between interactions to 5-30 seconds (not milliseconds). Ramp up slowly — add 1-2 concurrent users per minute, not 100 per second. Monitor provider rate limit responses (HTTP 429) as the primary saturation signal.
+**Locust/k6 configuration for agents.** Use long-lived "user" sessions that simulate realistic agent interactions: start a session, send a task, wait for progressive results (5-60 seconds), send a follow-up, wait again. Set think times between interactions to 5-30 seconds (not milliseconds). Ramp up slowly: add 1-2 concurrent users per minute, not 100 per second. Monitor provider rate limit responses (HTTP 429) as the primary saturation signal.
 
 **What to measure.** Concurrent agent session capacity (how many simultaneous sessions before degradation), time-to-first-response under load, session completion rate under load (do agents start failing to complete tasks?), provider rate limit hit rate, memory consumption growth over time (agent state accumulates), and cost per session under load (does cost increase due to retries?).
 
-**Concurrent session limits.** Determine your system's practical limit: start with 10 concurrent sessions, increase by 10, and observe when P95 latency exceeds SLA or session completion rate drops below 95%. This number — not requests-per-second — is the capacity metric for agent systems. Plan production capacity at 60-70% of this limit to handle bursts.
+**Concurrent session limits.** Determine your system's practical limit: start with 10 concurrent sessions, increase by 10, and observe when P95 latency exceeds SLA or session completion rate drops below 95%. This number, not requests-per-second, is the capacity metric for agent systems. Plan production capacity at 60-70% of this limit to handle bursts.
 
 ---
 

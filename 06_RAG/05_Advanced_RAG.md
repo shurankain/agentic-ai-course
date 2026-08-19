@@ -12,7 +12,7 @@ Before diving into details, it is useful to understand the landscape of RAG appr
 
 | Architecture | Key Idea | When to Use |
 |-------------|---------------|-------------------|
-| **Naive RAG** | Simple retrieve → generate | Prototypes, simple use cases |
+| **Naive RAG** | Simple retrieve to generate | Prototypes, simple use cases |
 | **Retrieve-and-Rerank** | Two-stage retrieval with reranker | When high precision is needed |
 | **Hybrid RAG** | Dense (embeddings) + Sparse (BM25) | Terminology, exact matches matter |
 | **Graph RAG** | Knowledge graph + vector search | Multi-hop reasoning, entity relationships |
@@ -20,7 +20,7 @@ Before diving into details, it is useful to understand the landscape of RAG appr
 | **Agentic RAG (Router)** | LLM selects data source | Multiple heterogeneous sources |
 | **Agentic RAG (Multi-Agent)** | Multiple agents for retrieval | Complex research tasks |
 
-This taxonomy is not exhaustive — in practice architectures are combined. For example, Agentic RAG can use Graph RAG internally, and Hybrid Search is applicable almost everywhere.
+This taxonomy is not exhaustive: in practice architectures are combined. For example, Agentic RAG can use Graph RAG internally, and Hybrid Search is applicable almost everywhere.
 
 **Evolution of complexity:**
 
@@ -32,7 +32,7 @@ Choosing an architecture is a trade-off between complexity and capability. Start
 
 ### The 2026 Baseline for Complex Queries
 
-By early 2026, agentic RAG is no longer an advanced option — it is the **production baseline for complex queries**. On multi-hop questions requiring information synthesis from multiple sources, agentic RAG improved accuracy from approximately 34% (static RAG) to 78% (as of early 2026). This is the difference between a system that works sometimes and a system that works most of the time.
+By early 2026, agentic RAG is no longer an advanced option. It is the **production baseline for complex queries**. On multi-hop questions requiring information synthesis from multiple sources, agentic RAG improved accuracy from approximately 34% (static RAG) to 78% (as of early 2026). This is the difference between a system that works sometimes and a system that works most of the time.
 
 Traditional RAG is passive: receive a query, find documents, generate an answer. Agentic RAG transforms the system into an active researcher capable of planning, iterating, and adapting. The agent analyzes the question and determines a search strategy. It decomposes complex questions into parts. When information is insufficient, it refines the query and searches again. When data is contradictory, it seeks additional sources for resolution.
 
@@ -42,13 +42,13 @@ Agentic RAG uses the LLM not only for answer generation but also for managing th
 
 What distinguishes a true agentic RAG system from a pipeline with a few extra steps is the presence of five interacting components:
 
-1. **Orchestrator** — a ReAct or CoT-based agent that decides the retrieval strategy for each query. It determines whether to search, which sources to query, and in what order.
-2. **Specialized retriever agents** — different sources require different retrieval strategies. A vector search agent for the knowledge base, a SQL agent for structured data, a web search agent for current information. The orchestrator delegates to the right specialist.
-3. **Short-term memory** — the current workflow state: what has been retrieved so far, which queries have been tried, what gaps remain. This prevents redundant searches and enables the agent to build on previous results.
-4. **Long-term memory** — historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See Module 03, Memory Systems.
-5. **Evaluation and refinement loop** — the agent assesses whether retrieved context is sufficient and relevant before generating an answer. If not, it iterates. This fifth component is what creates the accuracy jump: the system does not assume that retrieval always works.
+1. **Orchestrator**: a ReAct or CoT-based agent that decides the retrieval strategy for each query. It determines whether to search, which sources to query, and in what order.
+2. **Specialized retriever agents**: different sources require different retrieval strategies. A vector search agent for the knowledge base, a SQL agent for structured data, a web search agent for current information. The orchestrator delegates to the right specialist.
+3. **Short-term memory**: the current workflow state: what has been retrieved so far, which queries have been tried, what gaps remain. This prevents redundant searches and enables the agent to build on previous results.
+4. **Long-term memory**: historical knowledge: what queries have been seen before, what retrieval strategies worked, user preferences. See Module 03, Memory Systems.
+5. **Evaluation and refinement loop**: the agent assesses whether retrieved context is sufficient and relevant before generating an answer. If not, it iterates. This fifth component is what creates the accuracy jump: the system does not assume that retrieval always works.
 
-Basic RAG (components 1-2 only) handles simple single-hop queries well. Adding components 3-5 is what enables the 34%→78% improvement on complex queries — and is what makes the system genuinely agentic.
+Basic RAG (components 1-2 only) handles simple single-hop queries well. Adding components 3-5 is what enables the 34% to 78% improvement on complex queries, and is what makes the system genuinely agentic.
 
 ### Planning and Reasoning
 
@@ -60,7 +60,7 @@ This plan can be adjusted during execution. If the first search does not yield t
 
 Agentic RAG goes beyond simple vector search. The agent can have access to multiple tools: search across different indexes, SQL queries to databases, API calls to external services, a calculator for computations.
 
-Tool selection is determined by the nature of the question. A statistics question may require an SQL query. A question about current events — a news search. A question about internal documentation — vector search in the knowledge base.
+Tool selection is determined by the nature of the question. A statistics question may require an SQL query. A question about current events: a news search. A question about internal documentation: vector search in the knowledge base.
 
 **Examples of tools in Agentic RAG:**
 - Vector search over the corporate knowledge base
@@ -96,18 +96,18 @@ CRAG defines fallback scenarios for various situations:
 
 **CRAG Process in Detail:**
 
-1. **Retrieve** — obtain candidates from the vector store
-2. **Evaluate** — assess the relevance of each document (0-1 score)
-3. **Decide** — make a decision based on scores:
-   - All scores high → use the documents
-   - Scores moderate → filter out irrelevant parts
-   - Scores low → fall back to web search or another source
-4. **Refine** — for partially relevant documents, extract only the relevant fragments
-5. **Generate** — generate an answer factoring in source quality assessment
+1. **Retrieve**: obtain candidates from the vector store
+2. **Evaluate**: assess the relevance of each document (0-1 score)
+3. **Decide**: make a decision based on scores:
+   - All scores high to use the documents
+   - Scores moderate to filter out irrelevant parts
+   - Scores low to fall back to web search or another source
+4. **Refine**: for partially relevant documents, extract only the relevant fragments
+5. **Generate**: generate an answer factoring in source quality assessment
 
 The critical difference from basic RAG: the system does not assume that retrieval always works. It verifies the assumption and adjusts strategy when necessary.
 
-The CRAG process can be simplified to a **three-path decision**: **Correct** (high relevance scores → use the documents directly), **Incorrect** (low scores → fall back to web search or another source entirely), **Ambiguous** (moderate scores → combine retrieved documents with a reformulated query for a second retrieval pass). This explicit branching is what distinguishes CRAG from naive pipelines that always use whatever was retrieved. On knowledge-intensive tasks, CRAG outperforms naive RAG by 15-25% in answer quality.
+The CRAG process can be simplified to a **three-path decision**: **Correct** (high relevance scores, then use the documents directly), **Incorrect** (low scores, then fall back to web search or another source entirely), **Ambiguous** (moderate scores, then combine retrieved documents with a reformulated query for a second retrieval pass). This explicit branching is what distinguishes CRAG from naive pipelines that always use whatever was retrieved. On knowledge-intensive tasks, CRAG outperforms naive RAG by 15-25% in answer quality.
 
 ## Self-RAG
 
@@ -125,7 +125,7 @@ Self-RAG includes a self-assessment mechanism. The model not only generates an a
 
 Self-RAG operates on a multi-step decision model. In the first stage, the model analyzes the incoming query Q and decides whether retrieval is needed, generating a special token [Retrieve] or [No Retrieve]. If retrieval is needed, the system obtains a set of documents D.
 
-Next, each document d undergoes a relevance check — the model generates an ISREL score, classifying the document as relevant or irrelevant. For each relevant document, an answer is generated and then checked for source support via the ISSUP token (full, partial, or no support).
+Next, each document d undergoes a relevance check: the model generates an ISREL score, classifying the document as relevant or irrelevant. For each relevant document, an answer is generated and then checked for source support via the ISSUP token (full, partial, or no support).
 
 In the final stage, each generated answer receives a usefulness score ISUSE on a scale from 1 to 5. The best answer is selected based on the combined score of all these evaluations.
 
@@ -166,11 +166,11 @@ A flat index loses this structure. A question about relationships between entiti
 
 Graph RAG builds a knowledge graph on top of documents. Entities (people, companies, concepts) become nodes. Relationships between them become edges. Documents are linked to the entities they mention.
 
-Search in Graph RAG combines vector similarity with graph traversal. After finding a relevant node, the system can explore its neighbors — related entities and facts about them.
+Search in Graph RAG combines vector similarity with graph traversal. After finding a relevant node, the system can explore its neighbors: related entities and facts about them.
 
 ### Advantages of the Graph Approach
 
-Multi-hop reasoning becomes natural. The question "Which companies compete with those that X invested in?" requires: find X → find their investments → find competitors of those companies. On a graph, this is a chain of relationships.
+Multi-hop reasoning becomes natural. The question "Which companies compete with those that X invested in?" requires: find X, then find their investments, then find competitors of those companies. On a graph, this is a chain of relationships.
 
 Information aggregation is simplified. The graph knows all mentions of an entity across different documents and can assemble a complete picture.
 
@@ -178,10 +178,10 @@ Information aggregation is simplified. The graph knows all mentions of an entity
 
 Graph construction involves several processing stages:
 
-1. **Entity extraction (NER)** — identifying people, organizations, locations, products in text
-2. **Relation extraction** — determining relationships between entities (works_at, founded, acquired)
-3. **Coreference resolution** — understanding that "John Smith", "J. Smith", and "he" refer to the same entity
-4. **Entity Linking** — linking to external knowledge bases (Wikidata, corporate directories)
+1. **Entity extraction (NER)**: identifying people, organizations, locations, products in text
+2. **Relation extraction**: determining relationships between entities (works_at, founded, acquired)
+3. **Coreference resolution**: understanding that "John Smith", "J. Smith", and "he" refer to the same entity
+4. **Entity Linking**: linking to external knowledge bases (Wikidata, corporate directories)
 
 **Relation extraction methods:**
 
@@ -200,7 +200,7 @@ Modern systems often use LLMs for graph extraction: the model is shown the entir
 
 ### Microsoft Graph RAG (2024)
 
-Microsoft introduced GraphRAG — a production-ready approach to Graph RAG that became the de facto standard.
+Microsoft introduced GraphRAG, a production-ready approach to Graph RAG that became the de facto standard.
 
 **Key innovations:**
 
@@ -215,12 +215,12 @@ Microsoft GraphRAG introduced four architectural components that together enable
 
 **Indexing architecture:**
 
-1. **Chunking** — splitting documents into chunks
-2. **Entity & Relationship Extraction** — LLM extracts a graph from each chunk
-3. **Graph Construction** — merging into a unified graph
-4. **Community Detection** — Leiden clustering creates a hierarchy of communities
-5. **Summary Generation** — LLM summarizes each community
-6. **Indexing** — chunks + entities + communities + summaries → index
+1. **Chunking**: splitting documents into chunks
+2. **Entity & Relationship Extraction**: LLM extracts a graph from each chunk
+3. **Graph Construction**: merging into a unified graph
+4. **Community Detection**: Leiden clustering creates a hierarchy of communities
+5. **Summary Generation**: LLM summarizes each community
+6. **Indexing**: chunks + entities + communities + summaries to index
 
 **Global vs Local Search:**
 
@@ -232,9 +232,9 @@ GraphRAG provides two fundamentally different retrieval modes, each optimized fo
 | **Global Search** | Community summaries + map-reduce | High-level questions about the entire corpus |
 
 **Global Search pipeline:**
-1. Query → all community summaries (parallel)
-2. Each summary + query → partial answer (map)
-3. Partial answers → final answer (reduce)
+1. Query to all community summaries (parallel)
+2. Each summary + query to partial answer (map)
+3. Partial answers to final answer (reduce)
 
 **When to use:**
 - Questions like "What are the main themes in this corpus?"
@@ -254,20 +254,20 @@ Traditional RAG indexes chunks at a single level of detail. The question "What i
 
 **RAPTOR solves this through hierarchical indexing:**
 
-RAPTOR creates a multi-level abstraction structure of the document. The base level (Level 0) contains the original document. The first level (Level 1) contains individual chunks — the result of splitting the document into fragments.
+RAPTOR creates a multi-level abstraction structure of the document. The base level (Level 0) contains the original document. The first level (Level 1) contains individual chunks: the result of splitting the document into fragments.
 
-The system then clusters semantically similar chunks and summarizes each cluster, creating the second level (Level 2) of summaries. This process repeats recursively: Level 2 summaries are again clustered and summarized, forming the third level (Level 3) — an overall summary of the entire document.
+The system then clusters semantically similar chunks and summarizes each cluster, creating the second level (Level 2) of summaries. This process repeats recursively: Level 2 summaries are again clustered and summarized, forming the third level (Level 3), an overall summary of the entire document.
 
 All levels are indexed into a single vector store, allowing retrieval to find both detailed chunks for specific questions and high-level summaries for overview queries.
 
 ### RAPTOR Algorithm
 
-1. **Chunking** — splitting the document into base chunks (Level 1)
-2. **Embedding** — obtaining embeddings for each chunk
-3. **Clustering** — clustering similar chunks (GMM or k-means)
-4. **Summarization** — LLM summarizes each cluster
-5. **Recursion** — repeat steps 2-4 for summaries, creating the next level
-6. **Indexing** — index ALL levels into a single vector store
+1. **Chunking**: splitting the document into base chunks (Level 1)
+2. **Embedding**: obtaining embeddings for each chunk
+3. **Clustering**: clustering similar chunks (GMM or k-means)
+4. **Summarization**: LLM summarizes each cluster
+5. **Recursion**: repeat steps 2-4 for summaries, creating the next level
+6. **Indexing**: index ALL levels into a single vector store
 
 ### Advantages of RAPTOR
 
@@ -323,14 +323,14 @@ This enables search by description: "sales growth chart" will find a visualizati
 **Practical applications:**
 - Searching for diagrams and charts by text description
 - Answering questions about image content
-- Cross-modal search: text → image or image → text
+- Cross-modal search: text, then image or image, then text
 - Indexing presentation slides, infographics, schematics
 
 ### ColPali: Vision-Language Retrieval Without OCR
 
-ColPali (2024-2025) eliminates OCR from document retrieval entirely. Instead of converting documents to text, it treats each page as an image and uses a vision encoder (PaliGemma-3B) for both retrieval and understanding. The model generates multi-vector representations for each page, scored against queries using MaxSim (the same late interaction mechanism as ColBERT — see Late Interaction Retrieval for the full architecture).
+ColPali (2024-2025) eliminates OCR from document retrieval entirely. Instead of converting documents to text, it treats each page as an image and uses a vision encoder (PaliGemma-3B) for both retrieval and understanding. The model generates multi-vector representations for each page, scored against queries using MaxSim (the same late interaction mechanism as ColBERT: see Late Interaction Retrieval for the full architecture).
 
-**Key result:** On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines — and handles complex layouts (multi-column, merged cells, mixed text/diagram content) that break traditional OCR.
+**Key result:** On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines, and handles complex layouts (multi-column, merged cells, mixed text/diagram content) that break traditional OCR.
 
 **When to use:** Documents with complex visual layouts, scanned/photographed documents, forms, tables. **When text extraction suffices:** Born-digital documents (Word, HTML) where text is already available programmatically. See Late Interaction Retrieval for ColPali's full architecture, ColQwen variants, and production integration patterns.
 
@@ -344,9 +344,9 @@ Information has a temporal dimension. A document about the "current situation" b
 
 **Time filtering:** A question about "current rules" should find only up-to-date documents. A question about "development history" should find historical ones. The system analyzes temporal indicators in the query ("now", "in 2020", "historically") and applies corresponding filters.
 
-**Temporal weighting:** More recent documents receive a relevance bonus if the question is not explicitly historical. For example, a decay function: score × (1 / (1 + age_days)) boosts the rank of fresh documents.
+**Temporal weighting:** More recent documents receive a relevance bonus if the question is not explicitly historical. For example, a decay function: score x (1 / (1 + age_days)) boosts the rank of fresh documents.
 
-**Versioning:** For changing documents (policies, API documentation), versions are stored. The system can return the version that was current at a specific point in time. This is critical for compliance and audit — one needs to know what the policy stated at the time a decision was made.
+**Versioning:** For changing documents (policies, API documentation), versions are stored. The system can return the version that was current at a specific point in time. This is critical for compliance and audit. One needs to know what the policy stated at the time a decision was made.
 
 **Change detection:** The system tracks changes and updates the index. When a document is updated, the old version is archived, the new one is indexed with a timestamp, dependent entities in the graph are updated, and caches are invalidated.
 
@@ -356,15 +356,15 @@ Information has a temporal dimension. A document about the "current situation" b
 
 ### Quality Metrics
 
-Evaluating a RAG system involves several independent dimensions. It is important to understand that high retrieval quality does not guarantee a good answer, and vice versa — all pipeline stages need to be evaluated.
+Evaluating a RAG system involves several independent dimensions. It is important to understand that high retrieval quality does not guarantee a good answer, and vice versa. All pipeline stages need to be evaluated.
 
-**Context Relevance** (Relevance) — how relevant are the retrieved documents to the question? Measures retrieval quality. Low relevance means the retriever finds irrelevant results.
+**Context Relevance** (Relevance): how relevant are the retrieved documents to the question? Measures retrieval quality. Low relevance means the retriever finds irrelevant results.
 
-**Context Recall** (Recall) — were all relevant documents found? Complements relevance: one can find relevant results but miss important ones. Requires ground truth annotations.
+**Context Recall** (Recall): were all relevant documents found? Complements relevance: one can find relevant results but miss important ones. Requires ground truth annotations.
 
-**Answer Faithfulness** (Groundedness) — is the answer based on the retrieved documents? Critical for preventing hallucinations. An answer can be correct but not grounded in the context — this is a problem.
+**Answer Faithfulness** (Groundedness): is the answer based on the retrieved documents? Critical for preventing hallucinations. An answer can be correct but not grounded in the context. This is a problem.
 
-**Answer Relevance** — does the answer address the question asked? The model can generate truthful text that does not answer the question.
+**Answer Relevance**: does the answer address the question asked? The model can generate truthful text that does not answer the question.
 
 **How to measure:** Each metric can be evaluated by an LLM-as-judge (a prompt with evaluation criteria) or by a human on a test set. LLM evaluation scales but requires validation on a subset manually.
 
@@ -372,7 +372,7 @@ Evaluating a RAG system involves several independent dimensions. It is important
 
 **LLM-as-judge:** A strong model (GPT-5.4, Claude) is shown the question, context, answer, and evaluation criteria. It returns a score (0-1 or 1-5) and justification. This enables rapid evaluation of thousands of examples without manual effort.
 
-**Frameworks:** RAGAS, TruLens, DeepEval provide ready-made metrics and pipelines. They standardize evaluation and allow comparing different versions of the system. RAGAS has become the de facto standard — it includes faithfulness, answer relevancy, context precision, and context recall.
+**Frameworks:** RAGAS, TruLens, DeepEval provide ready-made metrics and pipelines. They standardize evaluation and allow comparing different versions of the system. RAGAS has become the de facto standard. It includes faithfulness, answer relevancy, context precision, and context recall.
 
 ### Test Sets
 
@@ -401,13 +401,13 @@ Feedback is used for continuous improvement: expanding the test set with problem
 
 Caching is critical for production performance. It is applied at several levels:
 
-**Embedding cache:** Identical queries are not vectorized repeatedly. Text hash → cached embedding. Saves time and money on API calls for hosted embeddings.
+**Embedding cache:** Identical queries are not vectorized repeatedly. Text hash to cached embedding. Saves time and money on API calls for hosted embeddings.
 
-**Retrieval cache:** Identical queries do not perform search repeatedly. Especially effective for FAQs — frequently repeated questions are cached aggressively (TTL = hours/days).
+**Retrieval cache:** Identical queries do not perform search repeatedly. Especially effective for FAQs: frequently repeated questions are cached aggressively (TTL = hours/days).
 
 **Response cache:** Full answers to frequent questions. The most aggressive cache with the greatest savings. But requires caution: invalidation upon data updates is critical.
 
-**Invalidation strategy:** When a document is updated, all caches related to that document are invalidated. This can be expensive — an alternative: TTL-based cache with a reasonable time-to-live (1-24 hours).
+**Invalidation strategy:** When a document is updated, all caches related to that document are invalidated. This can be expensive: an alternative: TTL-based cache with a reasonable time-to-live (1-24 hours).
 
 ### Streaming
 
@@ -419,19 +419,19 @@ Streaming generation improves perceived latency. The user sees the first tokens 
 
 Independent operations are executed in parallel to reduce latency:
 
-- **Search across multiple indexes** — if the database is split into indexes (by document type, by date), search in parallel
-- **Batch embedding** — if multiple queries arrive, the embedding model processes them as a batch
-- **Parallel reranking** — split the top-100 documents into chunks, rerank each chunk in parallel
+- **Search across multiple indexes**: if the database is split into indexes (by document type, by date), search in parallel
+- **Batch embedding**: if multiple queries arrive, the embedding model processes them as a batch
+- **Parallel reranking**: split the top-100 documents into chunks, rerank each chunk in parallel
 
 ### Precomputation
 
 Offline preprocessing reduces online latency:
 
-**Document clustering** — for RAPTOR and hierarchical search. Performed during indexing, not during search.
+**Document clustering**: for RAPTOR and hierarchical search. Performed during indexing, not during search.
 
-**Summary precomputation** — for large documents, generate summaries in advance. During search, return the summary + a link to the full document.
+**Summary precomputation**: for large documents, generate summaries in advance. During search, return the summary + a link to the full document.
 
-**Aggregation materialization** — in Graph RAG, frequently queried patterns (all relationships of an entity) are materialized into the index.
+**Aggregation materialization**: in Graph RAG, frequently queried patterns (all relationships of an entity) are materialized into the index.
 
 ---
 
@@ -441,7 +441,7 @@ Current research focuses on training RAG components end-to-end rather than using
 
 ### From Frozen Retriever to Learned Retrieval
 
-Standard RAG uses a "frozen" retriever — the embedding model is trained separately and used as-is. Learned retrieval trains the retriever together with the generator, optimizing for final answer quality. The retriever learns to find documents that help the generator, not just semantically similar ones.
+Standard RAG uses a "frozen" retriever: the embedding model is trained separately and used as-is. Learned retrieval trains the retriever together with the generator, optimizing for final answer quality. The retriever learns to find documents that help the generator, not just semantically similar ones.
 
 **REPLUG (2023):** Trains the retriever via KL-divergence between answer probabilities with and without the document. Documents that increase the probability of the correct answer receive a reward. Works with any LLM as a black box.
 
@@ -469,13 +469,13 @@ Modern models support contexts of 100K-1M+ tokens. Is RAG still needed?
 
 **RAG wins:** Scale (millions of documents), cost (100K tokens per request = hundreds of thousands of dollars/month), latency (prefill 100K tokens = 5-10 seconds vs RAG 0.5-1 second), freshness (new documents are added constantly), precision (relevant fragments are needed).
 
-**Quantitatively:** Long context (100K tokens) = $0.30/request. RAG (2.5K tokens) = $0.0075/request. Savings of 40×. Latency: 10-20× difference.
+**Quantitatively:** Long context (100K tokens) = $0.30/request. RAG (2.5K tokens) = $0.0075/request. Savings of 40x. Latency: 10-20x difference.
 
 ### Hybrid Approach: RAG + Long Context
 
-The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100 → reranker narrows to top-20 → all 20 are loaded into long context (40K tokens) → LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
+The optimal strategy combines both approaches: RAG filters the corpus (1M docs) down to 100, then reranker narrows to top-20, then all 20 are loaded into long context (40K tokens), then LLM synthesizes the answer. This provides the precision of RAG and the depth of understanding from long context.
 
-**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8), making the tradeoff more nuanced than it was at 128K — but the 40× cost difference remains significant at scale.
+**Practical thresholds (as of early 2026):** Long context wins when the corpus is small (<500 pages), changes rarely, and questions require synthesis across the full text. RAG wins above that scale, when data changes frequently, when citations to specific passages are required, or when cost is a constraint. Frontier models now support 1M+ tokens (Gemini 3.5 Flash, Claude Opus 4.8), making the tradeoff more nuanced than it was at 128K, but the 40x cost difference remains significant at scale.
 
 **"Lost in the middle" problem:** LLMs have worse recall for information in the middle of long context (U-shaped attention). Solution: place important content at the beginning and end, use explicit citations, chunking with overlap. See Module 02, Context Engineering for the Lost-in-the-Middle analysis.
 
@@ -483,25 +483,25 @@ The optimal strategy combines both approaches: RAG filters the corpus (1M docs) 
 
 ## RAG System Design: Interview Preparation
 
-RAG System Design is a standard question in ML System Design interviews. Interviewers evaluate understanding of ML systems: data pipelines, embedding models, retrieval quality, and critically — the ability to analyze trade-offs.
+RAG System Design is a standard question in ML System Design interviews. Interviewers evaluate understanding of ML systems: data pipelines, embedding models, retrieval quality, and critically, the ability to analyze trade-offs.
 
 ### Structured Approach
 
 **1. Clarifying Questions (5 minutes):** Scale (documents, QPS)? Latency requirements (<1s)? Accuracy vs recall trade-off? Data types (text/multimodal)? Regulatory constraints (GDPR, HIPAA)?
 
-**2. High-Level Design (10 minutes):** Core components — Ingestion Pipeline → Vector Store → Retrieval Service → Generation Service → Evaluation Pipeline. Key decisions: sync vs async ingestion, hosted vs self-hosted embeddings, vector DB selection, single-stage vs multi-stage retrieval.
+**2. High-Level Design (10 minutes):** Core components: Ingestion Pipeline, then Vector Store, then Retrieval Service, then Generation Service, then Evaluation Pipeline. Key decisions: sync vs async ingestion, hosted vs self-hosted embeddings, vector DB selection, single-stage vs multi-stage retrieval.
 
 **3. Deep Dive (20 minutes):**
 
-**Ingestion:** Document → Preprocessing → Chunking → Embedding → Indexing. Chunking strategy — a critical trade-off:
+**Ingestion:** Document, then Preprocessing, then Chunking, then Embedding, then Indexing. Chunking strategy: a critical trade-off:
 - Fixed-size (512 tokens): simple, predictable, but breaks semantic units
 - Semantic (paragraphs): preserves meaning, but variable size
 - Hierarchical: multi-resolution search, complex implementation
 - Sliding window: overlap helps with boundaries, but redundant storage
 
-**Retrieval:** Query → Query Processing → Retrieval → Reranking → Context Assembly. Hybrid search (dense + BM25) for terminology. Reranking (cross-encoder) for top-K refinement.
+**Retrieval:** Query, then Query Processing, then Retrieval, then Reranking, then Context Assembly. Hybrid search (dense + BM25) for terminology. Reranking (cross-encoder) for top-K refinement.
 
-**4. Trade-offs Discussion (10 minutes):** The most important part. Framework: identify trade-off → quantify impact → context-dependent decision → mitigation.
+**4. Trade-offs Discussion (10 minutes):** The most important part. Framework: identify trade-off, then quantify impact, then context-dependent decision, then mitigation.
 
 Examples: Chunk size (small = precision, large = context), Retrieval (hybrid wins for terminology), Reranking (add if latency budget > 200ms), Context (depends on question complexity).
 
@@ -523,17 +523,17 @@ Choosing a vector database is an infrastructure decision with long-term implicat
 
 **Generation metrics:** Faithfulness (grounded in context?), Answer Relevance (addresses question?), Context Relevance (useful context?), Hallucination Rate.
 
-**RAGAS framework** — the de facto standard for automated evaluation. LLM-as-judge for scalable evaluation.
+**RAGAS framework**: the de facto standard for automated evaluation. LLM-as-judge for scalable evaluation.
 
 **Production monitoring:** Online metrics (latency, error rate), Offline evals (RAGAS, golden set), Automated testing (regression, A/B tests), Human review (spot checks, flagged responses).
 
 ### Red Flags in Interviews
 
-❌ "Just use ChatGPT with all documents in context" — lack of understanding of cost/latency
-❌ "We'll use the best embedding model" — no domain-specific understanding
-❌ "Vector search will find everything" — lack of understanding of semantic search limitations
-❌ "We'll evaluate with accuracy" — lack of understanding of RAG-specific metrics
-❌ Ignoring production concerns — no production experience
+❌ "Just use ChatGPT with all documents in context": lack of understanding of cost/latency
+❌ "We'll use the best embedding model", no domain-specific understanding
+❌ "Vector search will find everything", lack of understanding of semantic search limitations
+❌ "We'll evaluate with accuracy", lack of understanding of RAG-specific metrics
+❌ Ignoring production concerns: no production experience
 
 ✅ **Correct approach:** Analyze trade-offs, consider domain, combine dense + BM25, use specific metrics (faithfulness, relevance), address monitoring/fallbacks/cost.
 
@@ -545,7 +545,7 @@ Microsoft's GraphRAG (2024) established the category, but its high indexing cost
 
 ### LazyGraphRAG (Microsoft, 2024)
 
-**Problem:** Standard GraphRAG requires expensive upfront indexing — extracting entities, building graphs, computing community summaries. For large corpora this can cost thousands of dollars in LLM API calls before a single query is answered.
+**Problem:** Standard GraphRAG requires expensive upfront indexing, extracting entities, building graphs, computing community summaries. For large corpora this can cost thousands of dollars in LLM API calls before a single query is answered.
 
 **Solution:** LazyGraphRAG defers expensive computation to query time. Instead of precomputing the full graph and all community summaries at indexing, it builds a lightweight index (BM25 + minimal entity extraction) and performs graph construction and summarization on-demand, only for the subgraph relevant to the current query.
 
@@ -590,21 +590,21 @@ RAG continues to evolve. Several techniques from 2024 significantly change the a
 
 **When it does not fit:** Large knowledge base (millions of documents), frequent updates, latency is critical (prefill is slow), limited budget.
 
-**Hybrid approach:** RAG filters the corpus (1M docs) down to 100 → CAG loads all 100 into context → LLM synthesizes.
+**Hybrid approach:** RAG filters the corpus (1M docs) down to 100, then CAG loads all 100 into context, then LLM synthesizes.
 
 ### Context-Aware RAG (Anthropic, 2024)
 
 A deceptively simple technique that reduces retrieval errors by approximately 35%: before embedding each chunk, **prepend a short context explanation** describing where the chunk fits in the original document. Instead of embedding "He was elected in 1860" in isolation, embed "The following is from a biography of Abraham Lincoln, Chapter 3 (Political Career): He was elected in 1860."
 
-The context explanation is generated by an LLM once during indexing (not at query time), adding minimal latency to retrieval. The benefit is substantial because many retrieval failures stem from ambiguous chunks that lack the surrounding context needed to match the right query. A chunk about "the company's Q3 results" is ambiguous without knowing which company — the context prefix resolves this.
+The context explanation is generated by an LLM once during indexing (not at query time), adding minimal latency to retrieval. The benefit is substantial because many retrieval failures stem from ambiguous chunks that lack the surrounding context needed to match the right query. A chunk about "the company's Q3 results" is ambiguous without knowing which company, the context prefix resolves this.
 
-**When to apply:** Any RAG system where chunks are extracted from longer documents. The technique is complementary to hybrid search and reranking — it improves the quality of the initial embedding, which benefits all downstream stages.
+**When to apply:** Any RAG system where chunks are extracted from longer documents. The technique is complementary to hybrid search and reranking. It improves the quality of the initial embedding, which benefits all downstream stages.
 
 ### Late Chunking (Jina AI)
 
-**Problem:** Embedding models see only an isolated chunk. "He was a great scientist" in isolation is meaningless — who is "he"?
+**Problem:** Embedding models see only an isolated chunk. "He was a great scientist" in isolation is meaningless, who is "he"?
 
-**Solution:** Invert the process — first run the entire document through the embedding model (before pooling), obtain token-level embeddings with full context, then split into chunks and apply pooling.
+**Solution:** Invert the process: first run the entire document through the embedding model (before pooling), obtain token-level embeddings with full context, then split into chunks and apply pooling.
 
 **Result:** Each chunk "remembers" the document's context. Pronouns, references, and abbreviations retain their meaning. +7.8% retrieval quality (Jina AI benchmark).
 
@@ -653,13 +653,13 @@ Advanced RAG goes beyond simple "find and answer." Main directions of developmen
 - Monitoring and observability
 
 **New techniques (2024-2025):**
-- Contextual Retrieval (Anthropic) — contextual annotation of chunks (-35% errors)
-- Late Chunking (Jina) — embeddings with full document context
-- ColPali — vision-language retrieval without OCR (+15% recall on tables)
+- Contextual Retrieval (Anthropic): contextual annotation of chunks (-35% errors)
+- Late Chunking (Jina), embeddings with full document context
+- ColPali: vision-language retrieval without OCR (+15% recall on tables)
 
-**Production landscape (mid-2026):** Adaptive RAG has become the dominant production pattern — a query classifier routes requests by complexity: simple factual queries to direct retrieval, multi-hop queries to agentic RAG, entity-relationship queries to GraphRAG. Microsoft and Thomson Reuters run GraphRAG in production for legal and compliance workflows. Continuous ingestion is replacing batch reindexing — documents are embedded and indexed on arrival, not in nightly batches. Agentic memory (persistent cross-session memory for agents) is now table stakes, not a differentiator.
+**Production landscape (mid-2026):** Adaptive RAG has become the dominant production pattern, a query classifier routes requests by complexity: simple factual queries to direct retrieval, multi-hop queries to agentic RAG, entity-relationship queries to GraphRAG. Microsoft and Thomson Reuters run GraphRAG in production for legal and compliance workflows. Continuous ingestion is replacing batch reindexing: documents are embedded and indexed on arrival, not in nightly batches. Agentic memory (persistent cross-session memory for agents) is now table stakes, not a differentiator.
 
-**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier → pipeline selection) is the recommended starting point for production systems (as of mid-June 2026). Long context (1M+ tokens) reduces RAG complexity for small corpora but does not replace RAG at scale — the 40x cost difference and need for citations keep RAG essential for production.
+**Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier to pipeline selection) is the recommended starting point for production systems (as of mid-June 2026). Long context (1M+ tokens) reduces RAG complexity for small corpora but does not replace RAG at scale: the 40x cost difference and need for citations keep RAG essential for production.
 
 ---
 
@@ -673,11 +673,11 @@ An advanced RAG system is implemented through a class encapsulating the full que
 
 The query processing method takes a user question and two parameters: top_k determines the number of candidates for initial retrieval (default 20), and rerank_k sets the final number of documents after reranking (default 5).
 
-The first stage — hybrid retrieval — performs parallel search across two channels. Dense retrieval via vector_store finds top_k/2 semantically similar documents (10 in this case) using cosine similarity of embeddings. Simultaneously, sparse retrieval via bm25_index finds top_k/2 documents (10) with maximum lexical term overlap. Results from both searches are combined by the merge_results method, which removes duplicates and can apply weighting coefficients to scores from different sources, forming a unified candidate list.
+The first stage, hybrid retrieval, performs parallel search across two channels. Dense retrieval via vector_store finds top_k/2 semantically similar documents (10 in this case) using cosine similarity of embeddings. Simultaneously, sparse retrieval via bm25_index finds top_k/2 documents (10) with maximum lexical term overlap. Results from both searches are combined by the merge_results method, which removes duplicates and can apply weighting coefficients to scores from different sources, forming a unified candidate list.
 
-The second stage — reranking — passes all candidates along with the question to the reranker, which typically uses a cross-encoder model. The cross-encoder processes each (question, candidate document) pair jointly through a transformer, obtaining a precise relevance score. This is significantly more accurate than simply comparing vectors but is feasible only for a small set of candidates due to computational complexity. The result is the top rerank_k most relevant documents (5).
+The second stage, reranking: passes all candidates along with the question to the reranker, which typically uses a cross-encoder model. The cross-encoder processes each (question, candidate document) pair jointly through a transformer, obtaining a precise relevance score. This is significantly more accurate than simply comparing vectors but is feasible only for a small set of candidates due to computational complexity. The result is the top rerank_k most relevant documents (5).
 
-The third stage — generation — formats the reranked documents into context via format_context, which can combine document texts with their metadata. This context along with the original question is passed to the LLM for answer generation. The LLM synthesizes information from the provided context, creating a coherent answer.
+The third stage: generation: formats the reranked documents into context via format_context, which can combine document texts with their metadata. This context along with the original question is passed to the LLM for answer generation. The LLM synthesizes information from the provided context, creating a coherent answer.
 
 The final result is returned as a structured object with three fields: answer contains the LLM-generated response text, sources includes metadata of the documents used (titles, URLs, dates) for transparency and verifiability, and confidence represents the system's confidence in the answer, computed based on the relevance scores of reranked documents (e.g., high scores of top documents indicate high confidence).
 
@@ -685,8 +685,8 @@ The final result is returned as a structured object with three fields: answer co
 
 **Agentic RAG** is implemented through a planning system where the LLM analyzes the question, creates a search plan in JSON format with steps and tools, then iteratively executes each step. The agent has access to a dictionary of tools (vector_search, SQL, web_search) and dynamically selects the appropriate one based on query type. When results are insufficient, the agent revises the plan and adds new steps.
 
-**Corrective RAG (CRAG)** adds a relevance evaluation stage after retrieval. Each document receives a score via an evaluator (which can be a separate model or LLM-as-judge). A decision is made based on scores: if all scores are high (>0.8) — use documents as-is; if moderate (0.5-0.8) — filter and refine irrelevant parts; if low (<0.5) — fall back to alternative sources (web search, another index).
+**Corrective RAG (CRAG)** adds a relevance evaluation stage after retrieval. Each document receives a score via an evaluator (which can be a separate model or LLM-as-judge). A decision is made based on scores: if all scores are high (>0.8): use documents as-is; if moderate (0.5-0.8), filter and refine irrelevant parts; if low (<0.5): fall back to alternative sources (web search, another index).
 
 **Graph RAG** works through extracting entities from the question, searching for those entities in the knowledge graph, traversing the graph 1-2 hops to obtain related entities and facts, retrieving documents linked to this subgraph, and generating an answer considering the graph structure. This enables answering multi-hop questions that require connecting multiple entities.
 
-**Evaluation with RAGAS** is implemented by computing four key metrics for each example: faithfulness (is the answer based on the context?), answer relevance (does the answer address the question?), context precision (is the context relevant?), and context recall (was all necessary context found?). Metrics are computed using the LLM-as-judge approach — a prompt with evaluation criteria returning a score from 0 to 1. Results are aggregated for an overall system assessment.
+**Evaluation with RAGAS** is implemented by computing four key metrics for each example: faithfulness (is the answer based on the context?), answer relevance (does the answer address the question?), context precision (is the context relevant?), and context recall (was all necessary context found?). Metrics are computed using the LLM-as-judge approach: a prompt with evaluation criteria returning a score from 0 to 1. Results are aggregated for an overall system assessment.

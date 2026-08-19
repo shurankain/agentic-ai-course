@@ -4,13 +4,13 @@
 
 For decades, AI improvement followed the formula: more data, parameters, training compute. In 2024, a shift occurred: OpenAI o1 demonstrated that computation during inference dramatically improves quality.
 
-Test-Time Compute (TTC) represents a new optimization axis. Instead of a fixed answer in a single forward pass, the model can "think longer" — generating chains of reasoning, verifying hypotheses, correcting errors.
+Test-Time Compute (TTC) represents a new optimization axis. Instead of a fixed answer in a single forward pass, the model can "think longer", generating chains of reasoning, verifying hypotheses, correcting errors.
 
 This changes the economics of AI systems. For complex tasks, it is cheaper to use more inference compute than to train a larger model.
 
 ## OpenAI o-Series: The Reasoning Model Family
 
-o1 (September 2024) demonstrated results that seemed impossible. The performance leap on mathematical, coding, and scientific reasoning benchmarks was dramatic — well beyond what incremental model scaling alone could explain. These results established test-time compute as a viable alternative to simply training larger models.
+o1 (September 2024) demonstrated results that seemed impossible. The performance leap on mathematical, coding, and scientific reasoning benchmarks was dramatic: well beyond what incremental model scaling alone could explain. These results established test-time compute as a viable alternative to simply training larger models.
 
 | Benchmark | GPT-4o | o1 | o3 | o4-mini |
 |-----------|--------|-----|-----|---------|
@@ -18,11 +18,11 @@ o1 (September 2024) demonstrated results that seemed impossible. The performance
 | Codeforces | 11th % | 93rd % | 99th % | 93rd % |
 | GPQA Diamond | 53.6% | 78.0% | 87.7% | 81.4% |
 
-Architecture: user prompt → hidden chain of reasoning (hundreds/thousands of tokens) → final answer.
+Architecture: user prompt, then hidden chain of reasoning (hundreds/thousands of tokens), then final answer.
 
 Key features: extended thinking, self-correction, verification, backtracking.
 
-**o3** (announced January 2025, initially limited release, broadly available by mid-2025) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small, cost-efficient reasoning models with sufficient TTC outperform larger standard models — scores above are from OpenAI's published benchmarks at launch.
+**o3** (announced January 2025, initially limited release, broadly available by mid-2025) significantly improved over o1, achieving near-human performance on mathematical competition problems. **o4-mini** (April 2025) demonstrated that even small, cost-efficient reasoning models with sufficient TTC outperform larger standard models: scores above are from OpenAI's published benchmarks at launch.
 
 API parameters: `reasoning_effort` ("low", "medium", "high") controls thinking depth. Higher effort = more thinking tokens = better quality but higher cost and latency.
 
@@ -35,9 +35,9 @@ Anthropic introduced extended thinking with Claude 3.7 Sonnet (February 2025), m
 **API control:** The `budget_tokens` parameter sets the maximum number of thinking tokens the model can use. Higher budgets allow more thorough reasoning. Thinking tokens are billed at a reduced rate.
 
 **Key differences from o1/o3:**
-- **Transparent thinking** — developers can see the full reasoning chain, aiding debugging and trust
-- **Explicit budget control** — `budget_tokens` gives fine-grained control (vs. o-series `reasoning_effort` which is coarse: low/medium/high)
-- **Same model architecture** — extended thinking is a capability of the same Claude models, not a separate model family
+- **Transparent thinking**: developers can see the full reasoning chain, aiding debugging and trust
+- **Explicit budget control**: `budget_tokens` gives fine-grained control (vs. o-series `reasoning_effort` which is coarse: low/medium/high)
+- **Same model architecture**: extended thinking is a capability of the same Claude models, not a separate model family
 
 **Results:** Claude Opus 4.6 / 4.7 / 4.8 with extended thinking achieves competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
 
@@ -57,7 +57,7 @@ Traditionally: Quality ∝ (Training Compute)^α, where α ≈ 0.05-0.1.
 
 TTC introduces a new dimension: Quality ∝ (Inference Compute)^β, and for complex tasks β can be higher than α.
 
-Trade-off: for a fixed budget C_total = C_train + N × C_inference, one must decide how much to allocate to training and how much to inference reasoning.
+Trade-off: for a fixed budget C_total = C_train + N x C_inference, one must decide how much to allocate to training and how much to inference reasoning.
 
 The optimum depends on task complexity, number of requests, and the current model level.
 
@@ -72,27 +72,27 @@ The optimum depends on task complexity, number of requests, and the current mode
 
 **Process Reward Models (PRMs)** evaluate the quality of each intermediate reasoning step. Advantages: early error detection, search guidance, informative feedback. Training through Monte Carlo estimation or synthetic step labels.
 
-**Best-of-N Sampling** — generate N answers, select the best one via a verifier or self-consistency (majority voting). Trade-offs: linear compute growth, diminishing returns after N ≈ 64-256, requires a good verifier.
+**Best-of-N Sampling**: generate N answers, select the best one via a verifier or self-consistency (majority voting). Trade-offs: linear compute growth, diminishing returns after N ≈ 64-256, requires a good verifier.
 
-**Self-Consistency** — for tasks with a definite answer, generate N chains of reasoning, extract the final answer from each, select the most frequent one. Works when errors are random, not systematic.
+**Self-Consistency**: for tasks with a definite answer, generate N chains of reasoning, extract the final answer from each, select the most frequent one. Works when errors are random, not systematic.
 
-**Tree Search** — build a tree of reasoning paths, explore intelligently via beam search, MCTS, or best-first. Advantages over Best-of-N: uses compute more efficiently, can recover from mistakes. Disadvantages: harder to implement, requires a quality value function.
+**Tree Search**: build a tree of reasoning paths, explore intelligently via beam search, MCTS, or best-first. Advantages over Best-of-N: uses compute more efficiently, can recover from mistakes. Disadvantages: harder to implement, requires a quality value function.
 
-**Budget Forcing** — the model adapts reasoning depth based on compute budget. OpenAI o-series API: `reasoning_effort` ("low", "medium", "high"). Claude API: `budget_tokens` (explicit token limit for thinking). Gemini API: `thinkingBudget` (similar explicit control). With low budget — minimal tokens (fast, cheap); with high budget — thousands of reasoning tokens (slow, high quality).
+**Budget Forcing**: the model adapts reasoning depth based on compute budget. OpenAI o-series API: `reasoning_effort` ("low", "medium", "high"). Claude API: `budget_tokens` (explicit token limit for thinking). Gemini API: `thinkingBudget` (similar explicit control). With low budget: minimal tokens (fast, cheap); with high budget, thousands of reasoning tokens (slow, high quality).
 
 ## DeepSeek-R1: Open-Source Reasoning via GRPO
 
-**DeepSeek-R1** demonstrated that reasoning can emerge from pure reinforcement learning using GRPO (see RLHF and Alignment and RLHF Alternatives for the algorithm). R1-Zero — trained with GRPO alone, no supervised fine-tuning on reasoning traces — spontaneously developed chain-of-thought, self-verification, and even 'aha moment' patterns. The R1 full pipeline adds supervised fine-tuning on curated reasoning examples, distillation into smaller models (1.5B-70B), and cold-start data to prevent reward hacking.
+**DeepSeek-R1** demonstrated that reasoning can emerge from pure reinforcement learning using GRPO (see RLHF and Alignment and RLHF Alternatives for the algorithm). R1-Zero: trained with GRPO alone, no supervised fine-tuning on reasoning traces: spontaneously developed chain-of-thought, self-verification, and even 'aha moment' patterns. The R1 full pipeline adds supervised fine-tuning on curated reasoning examples, distillation into smaller models (1.5B-70B), and cold-start data to prevent reward hacking.
 
-Results: AIME 15.6% → 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
+Results: AIME 15.6% to 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
 
-**Distillation** — reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants, demonstrating that even small models can reason impressively when distilled from a strong reasoning teacher.
+**Distillation**: reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants, demonstrating that even small models can reason impressively when distilled from a strong reasoning teacher.
 
-**Impact on the field:** GRPO has been widely adopted for training reasoning models. Qwen 3 (hybrid reasoning, 2025) uses a similar approach. The key insight — that reasoning emerges from proper reward signals without needing reasoning demonstrations — has reshaped how labs approach training reasoning models.
+**Impact on the field:** GRPO has been widely adopted for training reasoning models. Qwen 3 (hybrid reasoning, 2025) uses a similar approach. The key insight, that reasoning emerges from proper reward signals without needing reasoning demonstrations, has reshaped how labs approach training reasoning models.
 
 ## Compute-Optimal Inference Strategies
 
-TTC follows predictable laws: Quality(C) = a × log(C) + b. Doubling inference compute yields a constant absolute improvement.
+TTC follows predictable laws: Quality(C) = a x log(C) + b. Doubling inference compute yields a constant absolute improvement.
 
 **When TTC is more efficient than training:**
 1. The task is complex (math, coding, reasoning)
@@ -106,15 +106,15 @@ TTC follows predictable laws: Quality(C) = a × log(C) + b. Doubling inference c
 3. Massive scale (millions of requests)
 4. No good verifier is available
 
-**Optimal strategy can yield 4× improvement:** PRM for early pruning, adaptive budget, diverse generation, early termination, progressive refinement.
+**Optimal strategy can yield 4x improvement:** PRM for early pruning, adaptive budget, diverse generation, early termination, progressive refinement.
 
 **Smaller Models + TTC vs Larger Models:** A 7B model with optimal TTC can demonstrate quality comparable to 70B in single-pass on reasoning tasks. Cost arbitrage, latency vs quality, democratization of reasoning capabilities.
 
 ## The Test-Time Compute Paradox
 
-A counterintuitive finding: **longer chains of reasoning do not guarantee better answers.** Research shows that the average length of correct solutions is often shorter than that of incorrect ones. More thinking tokens can lead to overthinking, self-doubt loops, circular reasoning, and wrong conclusions — the model "talks itself out of" a correct initial intuition.
+A counterintuitive finding: **longer chains of reasoning do not guarantee better answers.** Research shows that the average length of correct solutions is often shorter than that of incorrect ones. More thinking tokens can lead to overthinking, self-doubt loops, circular reasoning, and wrong conclusions, the model "talks itself out of" a correct initial intuition.
 
-This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens` (Anthropic: 1,024 to 128,000) parameters exist. They are not merely cost controls — they are quality controls. Setting the budget too high for a straightforward question wastes money and can degrade the answer. The optimal budget varies by task: a factual lookup needs minimal reasoning, while a multi-step mathematical proof benefits from a large budget.
+This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens` (Anthropic: 1,024 to 128,000) parameters exist. They are not merely cost controls. They are quality controls. Setting the budget too high for a straightforward question wastes money and can degrade the answer. The optimal budget varies by task: a factual lookup needs minimal reasoning, while a multi-step mathematical proof benefits from a large budget.
 
 **Practical guideline for agentic systems:** In an agent loop where each step makes an LLM call, use low reasoning effort for routine steps (tool selection, formatting, simple classification) and high effort only for the genuinely complex reasoning steps (planning, debugging, analysis). Wrapping every agent step in maximum reasoning is one of the fastest ways to burn budget without improving outcomes.
 
@@ -124,13 +124,13 @@ A growing concern in safety research (as of late May 2026): **chain-of-thought r
 
 - **Order misrepresentation:** The sequence of reasoning steps in the chain-of-thought may not reflect the actual order of the model's internal computation. The model may "know" the answer before generating the reasoning that ostensibly leads to it.
 - **Encoded conclusions:** The final answer can be effectively determined in early hidden layers, with the visible thinking tokens serving as post-hoc rationalization rather than genuine deliberation. Research shows models can encode conclusions before the reasoning chain that supposedly produces them.
-- **RL-induced opacity:** Reinforcement learning training (including GRPO and similar methods) can make reasoning less readable for both humans and automated monitors. RL optimizes for correct final answers, not for faithful or interpretable reasoning traces — the model may learn reasoning shortcuts that are effective but opaque.
+- **RL-induced opacity:** Reinforcement learning training (including GRPO and similar methods) can make reasoning less readable for both humans and automated monitors. RL optimizes for correct final answers, not for faithful or interpretable reasoning traces, the model may learn reasoning shortcuts that are effective but opaque.
 
-**Why this matters for agents:** Many agent safety architectures rely on monitoring the reasoning chain to detect goal hijacking, deceptive alignment, or policy violations. If the visible reasoning is not a faithful representation of the model's actual decision process, these monitoring systems may miss critical failures. This does not mean chain-of-thought monitoring is useless — it remains valuable — but it should not be the sole safety mechanism. Defense in depth (output validation, behavioral testing, permission boundaries) remains essential precisely because reasoning transparency has limits.
+**Why this matters for agents:** Many agent safety architectures rely on monitoring the reasoning chain to detect goal hijacking, deceptive alignment, or policy violations. If the visible reasoning is not a faithful representation of the model's actual decision process, these monitoring systems may miss critical failures. This does not mean chain-of-thought monitoring is useless, it remains valuable, but it should not be the sole safety mechanism. Defense in depth (output validation, behavioral testing, permission boundaries) remains essential precisely because reasoning transparency has limits.
 
 ## Reasoning for Verification, Not Generation
 
-An established cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch — a narrower cognitive task that needs fewer reasoning tokens.
+An established cost optimization pattern: **use a cheap model to generate candidate answers, then use a reasoning model to verify or select the best one.** Verification is cheaper than generation because it requires judging an existing answer rather than creating one from scratch, a narrower cognitive task that needs fewer reasoning tokens.
 
 **The pattern:**
 1. A cheap model (Claude Haiku 4.5, GPT-4o-mini) generates N candidate responses
@@ -142,17 +142,17 @@ This generalizes to any pipeline where "generate many, verify few" applies: code
 ## Practical Implications
 
 **System Architecture:**
-- Request Router — classification by complexity
-- Simple Path (70% of requests) — single call
-- Complex Path — Best-of-N or Tree Search
-- Caching Layer — caching expensive computations
-- Monitoring — cost, latency, quality, distribution
+- Request Router: classification by complexity
+- Simple Path (70% of requests): single call
+- Complex Path: Best-of-N or Tree Search
+- Caching Layer, caching expensive computations
+- Monitoring: cost, latency, quality, distribution
 
 **Cost Modeling:**
-- Easy: 1× base cost
-- Medium: 4× base cost
-- Hard: 16× base cost
-- Extreme: 64× base cost
+- Easy: 1x base cost
+- Medium: 4x base cost
+- Hard: 16x base cost
+- Extreme: 64x base cost
 
 **Latency vs Quality:** streaming partial results, parallel sampling, early termination, async processing, progressive disclosure.
 
@@ -160,22 +160,22 @@ This generalizes to any pipeline where "generate many, verify few" applies: code
 
 TTC is a new scaling dimension alongside parameters, data, and training compute.
 
-o3/o4-mini, Claude extended thinking, and Gemini thinking all demonstrate 5-10× improvement on reasoning through TTC.
+o3/o4-mini, Claude extended thinking, and Gemini thinking all demonstrate 5-10x improvement on reasoning through TTC.
 
 All major providers now offer reasoning models: OpenAI (o3, o4-mini), Anthropic (Claude with extended thinking), Google (Gemini with thinking), DeepSeek (R1).
 
-DeepSeek-R1 and GRPO: reasoning emerges through pure RL with group-relative rewards — no supervised reasoning demonstrations needed.
+DeepSeek-R1 and GRPO: reasoning emerges through pure RL with group-relative rewards: no supervised reasoning demonstrations needed.
 
 Transparent vs. hidden thinking: Claude and Gemini show the reasoning chain; OpenAI hides it. Transparency aids debugging and trust.
 
-4× efficiency gain through optimal TTC strategies.
+4x efficiency gain through optimal TTC strategies.
 
 Smaller models + TTC compete with larger models on complex tasks (o4-mini vs. GPT-4o, R1-distill-7B vs. larger standard models).
 
-Cost modeling becomes more complex — thinking tokens add variable inference cost.
+Cost modeling becomes more complex, thinking tokens add variable inference cost.
 
 Architectural implications: routing, caching, async are critical. Budget control (reasoning_effort, budget_tokens) enables cost-quality trade-offs per request.
 
-More thinking tokens do not guarantee better answers — correct solutions are often shorter than incorrect ones. Use `reasoning_effort` / `budget_tokens` as quality controls, not just cost controls.
+More thinking tokens do not guarantee better answers: correct solutions are often shorter than incorrect ones. Use `reasoning_effort` / `budget_tokens` as quality controls, not just cost controls.
 
-Chain-of-thought reasoning may not faithfully represent the model's actual decision process (reasoning illegibility). Do not rely on monitoring reasoning chains as the sole safety mechanism — use defense in depth.
+Chain-of-thought reasoning may not faithfully represent the model's actual decision process (reasoning illegibility). Do not rely on monitoring reasoning chains as the sole safety mechanism: use defense in depth.

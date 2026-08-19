@@ -14,11 +14,11 @@
 
 ## Why This Course
 
-- **Practical** — Code examples in Java, Python, and Rust. Not toy demos.
-- **Deep** — From attention mechanism internals to RLHF pipelines and GPU optimization
-- **Current** — MCP protocol, Context Engineering (Karpathy 2025), DeepSeek-R1, A2A protocol
-- **Production-focused** — Deployment, observability, security, cost optimization, and governance
-- **Enterprise-grade** — Multi-tenant patterns, compliance frameworks, and real-world case studies
+- **Practical**: Code examples in Java, Python, and Rust. Not toy demos.
+- **Deep**: From attention mechanism internals to RLHF pipelines and GPU optimization
+- **Current**: MCP protocol, Context Engineering (Karpathy 2025), DeepSeek-R1, A2A protocol
+- **Production-focused**: Deployment, observability, security, cost optimization, and governance
+- **Enterprise-grade**: Multi-tenant patterns, compliance frameworks, and real-world case studies
 
 ## Curriculum
 
@@ -53,7 +53,7 @@ Start with [01. LLM Basics](./01_LLM_Fundamentals/01_LLM_Basics.md) and follow t
 
 ### Recommended Learning Path
 
-**Level 1 — Fundamentals**
+**Level 1: Fundamentals**
 1. LLM APIs (OpenAI, Anthropic)
 2. Prompt Engineering
 3. Java frameworks (LangChain4j, Spring AI)
@@ -61,7 +61,7 @@ Start with [01. LLM Basics](./01_LLM_Fundamentals/01_LLM_Basics.md) and follow t
 5. Tool Use / Function Calling
 6. Simple ReAct agent implementation
 
-**Level 2 — Core Agent Development**
+**Level 2: Core Agent Development**
 1. Agent architectures (ReAct, Plan-and-Execute)
 2. LangGraph for stateful agents
 3. Multi-agent patterns
@@ -69,7 +69,7 @@ Start with [01. LLM Basics](./01_LLM_Fundamentals/01_LLM_Basics.md) and follow t
 5. Structured outputs
 6. Agent evaluation
 
-**Level 3 — Production & Scaling**
+**Level 3: Production & Scaling**
 1. MCP protocol
 2. Observability (LangSmith / Langfuse)
 3. Security and guardrails
@@ -84,19 +84,19 @@ Lessons are numbered and grouped by module directory, so the reading order is th
 
 ## Author
 
-**Oleksandr Husiev** — AI Solutions Architect with 14+ years in enterprise engineering.
+**Oleksandr Husiev**, AI Solutions Architect with 14+ years in enterprise engineering.
 
-Building AI agent systems for fintech, enterprise, and Fortune 500 clients. Creator of [Skreaver](https://github.com/shurankain/skreaver) — an open-source AI agent orchestration framework in Rust.
+Building AI agent systems for fintech, enterprise, and Fortune 500 clients. Creator of [Skreaver](https://github.com/shurankain/skreaver), an open-source AI agent orchestration framework in Rust.
 
 - [LinkedIn](https://linkedin.com/in/oleksandr-husiev-90497082)
 - [GitHub](https://github.com/shurankain)
 
 ## License
 
-MIT — use freely, attribution appreciated. See [LICENSE](LICENSE) for details.
+MIT. Use freely, attribution appreciated. See [LICENSE](LICENSE) for details.
 
 ## Contributing
 
 Contributions are welcome. Feel free to open issues for corrections, suggestions, or submit pull requests with improvements.
 
-If you find this course useful, consider giving it a star — it helps others discover the material.
+If you find this course useful, consider giving it a star: it helps others discover the material.

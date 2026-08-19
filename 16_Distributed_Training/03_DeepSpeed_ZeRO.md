@@ -6,7 +6,7 @@ Microsoft Research (2020) introduced DeepSpeed with the central innovation ZeRO 
 
 The philosophy differs from PyTorch: comprehensive solution with its own training loop, configuration via JSON, integration with Hugging Face. An "all-in-one" approach.
 
-ZeRO is mathematically equivalent to DDP — models are identical after an iteration. But the implementation radically optimizes memory down to the theoretical minimum.
+ZeRO is mathematically equivalent to DDP: models are identical after an iteration. But the implementation radically optimizes memory down to the theoretical minimum.
 
 ## ZeRO: Zero Redundancy Optimizer
 
@@ -63,7 +63,7 @@ Each GPU:
 
 Memory: 16N/W
 
-For 8 GPUs: 2N. Savings 8x — linear with the number of GPUs!
+For 8 GPUs: 2N. Savings 8x: linear with the number of GPUs!
 
 Communication: AllGather of parameters before forward and backward of each layer.
 
@@ -96,11 +96,11 @@ In practice: models ~10x larger than GPU memory, but slowdown 2-5x.
 
 The next step: offload to NVMe SSD. Terabytes of storage for training.
 
-Architecture: parameters and optimizer states on NVMe, hierarchical GPU ← CPU ← NVMe, async prefetch hides latency.
+Architecture: parameters and optimizer states on NVMe, hierarchical GPU from CPU from NVMe, async prefetch hides latency.
 
 Requirements: fast NVMe PCIe 4.0+, efficient async I/O, careful tuning.
 
-In practice: rarely used — slowdown is significant for production. For research and fine-tuning on limited hardware — invaluable.
+In practice: rarely used: slowdown is significant for production. For research and fine-tuning on limited hardware, invaluable.
 
 ## Comparison with PyTorch FSDP
 

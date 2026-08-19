@@ -45,15 +45,15 @@ Backpressure is a signal from consumer to producer saying "slow down, I can't ke
 
 There are three main strategies for managing overload in reactive systems with LLMs:
 
-1. **BUFFER** — buffering with a limit. Incoming requests accumulate in a fixed-size buffer (e.g., 100 requests). When the buffer fills up, new requests are either rejected or evict older ones. This strategy works well for handling temporary load spikes but requires memory.
+1. **BUFFER**: buffering with a limit. Incoming requests accumulate in a fixed-size buffer (e.g., 100 requests). When the buffer fills up, new requests are either rejected or evict older ones. This strategy works well for handling temporary load spikes but requires memory.
 
-2. **DROP** — discarding under overload. If the system cannot keep up, incoming requests are simply dropped with logging. Suitable for non-critical operations where losing some requests is acceptable.
+2. **DROP**: discarding under overload. If the system cannot keep up, incoming requests are simply dropped with logging. Suitable for non-critical operations where losing some requests is acceptable.
 
-3. **LATEST** — keeping only the most recent request. Under overload, all intermediate requests are discarded, and only the freshest one is processed. Ideal for real-time scenarios where recency matters more than completeness.
+3. **LATEST**: keeping only the most recent request. Under overload, all intermediate requests are discarded, and only the freshest one is processed. Ideal for real-time scenarios where recency matters more than completeness.
 
 **Implementation with Flux/Mono:**
 
-When integrating LLMs into a reactive pipeline, it is critical not to block the event loop. The model call is wrapped in `Mono.fromCallable()` and executed on a `boundedElastic` scheduler — a dedicated thread pool for blocking operations. The pipeline includes timeout operators to limit wait time (typically 30-60 seconds), retryWhen for automatic retries on rate limit errors with exponential backoff, and onErrorResume for graceful handling of timeouts and other errors.
+When integrating LLMs into a reactive pipeline, it is critical not to block the event loop. The model call is wrapped in `Mono.fromCallable()` and executed on a `boundedElastic` scheduler: a dedicated thread pool for blocking operations. The pipeline includes timeout operators to limit wait time (typically 30-60 seconds), retryWhen for automatic retries on rate limit errors with exponential backoff, and onErrorResume for graceful handling of timeouts and other errors.
 
 **Key operators for LLMs:**
 
@@ -119,21 +119,21 @@ All LLM providers impose limits:
 - **TPM (Tokens per Minute):** number of tokens per minute
 - **RPD (Requests per Day):** daily limit
 
-When the limit is exceeded, the API returns 429 Too Many Requests. Continuing to bombard the API with requests is pointless — you need to wait.
+When the limit is exceeded, the API returns 429 Too Many Requests. Continuing to bombard the API with requests is pointless. You need to wait.
 
 ### Exponential Backoff with Jitter
 
 The standard pattern for handling rate limits:
 
-1. On receiving a 429 error — wait and retry
-2. Wait time increases exponentially: 1s → 2s → 4s → 8s...
+1. On receiving a 429 error: wait and retry
+2. Wait time increases exponentially: 1s, then 2s, then 4s, then 8s...
 3. Add randomness (jitter) to the delay
 
-Jitter is critical: without it, during a mass rate limit event, all clients will retry simultaneously, creating a "thundering herd" — a flood of requests at the same moment.
+Jitter is critical: without it, during a mass rate limit event, all clients will retry simultaneously, creating a "thundering herd", a flood of requests at the same moment.
 
 ### Respect Retry-After
 
-Many APIs include a `Retry-After` header in the 429 response, indicating how many seconds to wait. Always check this header — it provides the exact time after which you can retry the request.
+Many APIs include a `Retry-After` header in the 429 response, indicating how many seconds to wait. Always check this header. It provides the exact time after which you can retry the request.
 
 ### Token Bucket for Rate Control
 
@@ -142,13 +142,13 @@ For proactive control (instead of waiting for a 429, limit requests in advance),
 - A "bucket" holds a certain number of tokens
 - Each request "spends" one token
 - Tokens are replenished at a fixed rate
-- If no tokens are available — the request waits in the queue
+- If no tokens are available: the request waits in the queue
 
 This allows even distribution of load and avoids spikes.
 
 ### Queueing Theory for LLM Serving
 
-Proper capacity planning for LLM systems requires understanding Little's Law (L = λ × W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
+Proper capacity planning for LLM systems requires understanding Little's Law (L = λ x W) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
 
 ---
 
@@ -158,7 +158,7 @@ Caching is one of the most effective ways to optimize LLM integration. It reduce
 
 ### Exact Match Caching
 
-The simplest form of caching: store a "prompt → response" pair and return the stored response when an identical prompt is received again.
+The simplest form of caching: store a "prompt becomes response" pair and return the stored response when an identical prompt is received again.
 
 **When effective:**
 - Deterministic tasks (classification, data extraction)
@@ -181,13 +181,13 @@ A more advanced approach: instead of looking for an exact match, search for sema
 **How it works:**
 1. Create an embedding (vector) for each query
 2. Search the vector store for the nearest stored query
-3. If similarity is above the threshold — return the stored response
-4. Otherwise — generate a new response and store it
+3. If similarity is above the threshold: return the stored response
+4. Otherwise: generate a new response and store it
 
 **Trade-offs:**
 - Requires an embedding model (additional latency and cost)
 - Requires a vector store
-- Choosing the similarity threshold — too high = few hits, too low = inaccurate responses
+- Choosing the similarity threshold: too high = few hits, too low = inaccurate responses
 
 ### Similarity Thresholds: Theory and Practice
 
@@ -220,16 +220,16 @@ Choosing the similarity threshold is a key decision in semantic caching. Setting
 For LLM caches, invalidation is especially important:
 
 **Time-based invalidation (TTL):**
-- The simplest approach — expire after N minutes/hours
+- The simplest approach: expire after N minutes/hours
 - Suitable for FAQ-style queries
 - Not suitable for dynamic content
 
 **Event-based invalidation:**
 
 Cache invalidation is triggered by system events:
-- Knowledge base update → invalidate related queries
-- Business logic change → invalidate affected categories
-- New model release → consider full invalidation
+- Knowledge base update to invalidate related queries
+- Business logic change to invalidate affected categories
+- New model release to consider full invalidation
 
 **Versioning:**
 
@@ -251,12 +251,12 @@ For agents, this is particularly beneficial: the system prompt and tool descript
 
 ### Complexity-Based Routing
 
-Not all queries require a powerful model. A simple question like "How many days are in a week?" does not need GPT-5 — GPT-4o-mini handles it just as well, at a fraction of the cost.
+Not all queries require a powerful model. A simple question like "How many days are in a week?" does not need GPT-5: GPT-4o-mini handles it just as well, at a fraction of the cost.
 
 Model Router pattern:
 1. Classify query complexity (using a cheap model)
 2. Route to the appropriate model
-3. Simple → cheap model, Complex → powerful model
+3. Simple, then cheap model, Complex, then powerful model
 
 The classifier itself requires an LLM call, but this pays off at high query volumes.
 
@@ -264,7 +264,7 @@ The classifier itself requires an LLM call, but this pays off at high query volu
 
 Longer prompts = more input tokens = higher cost. Compression strategies:
 
-**Remove redundancy:** multiple spaces, blank lines, repeated instructions — all of these are tokens.
+**Remove redundancy:** multiple spaces, blank lines, repeated instructions. All of these are tokens.
 
 **Compress context:** if a long document needs to be included, extract only the relevant parts first.
 
@@ -304,9 +304,9 @@ The Circuit Breaker pattern prevents cascading failures:
 
 **Closed (normal state):** requests pass through to the API
 
-**Open (failure state):** after N consecutive errors, the circuit "opens" — requests immediately return an error without attempting to reach the API
+**Open (failure state):** after N consecutive errors, the circuit "opens": requests immediately return an error without attempting to reach the API
 
-**Half-Open (probe state):** periodically allows a single request through to check availability. If successful — returns to Closed; if not — remains Open.
+**Half-Open (probe state):** periodically allows a single request through to check availability. If successful: returns to Closed; if not: remains Open.
 
 This protects the system: when the API is unavailable, resources are not wasted on futile attempts, and errors are returned to the user quickly.
 
@@ -337,10 +337,10 @@ This protects the system: when the API is unavailable, resources are not wasted 
 ### Alerting
 
 Set up alerts for:
-- Error rate > 5% — something is broken
-- P99 latency > 30s — performance has degraded
-- Daily cost > budget — budget overrun
-- Cache hit rate dropped — possible cache issues
+- Error rate > 5%. Something is broken
+- P99 latency > 30s: performance has degraded
+- Daily cost > budget, budget overrun
+- Cache hit rate dropped, possible cache issues
 
 ### Distributed Tracing
 
@@ -355,9 +355,9 @@ LangChain4j integrates with OpenTelemetry, LangSmith, and other tracing systems.
 
 ## Key Takeaways
 
-1. **Asynchronous execution is mandatory** for production. Synchronous calls do not scale — 20 threads cannot serve 200 users.
+1. **Asynchronous execution is mandatory** for production. Synchronous calls do not scale: 20 threads cannot serve 200 users.
 
-2. **Streaming** improves UX — the user sees the response immediately rather than after 10 seconds of waiting.
+2. **Streaming** improves UX, the user sees the response immediately rather than after 10 seconds of waiting.
 
 3. **Rate limiting and retry** are not optional but essential. Exponential backoff with jitter is the industry standard.
 

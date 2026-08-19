@@ -32,7 +32,7 @@ An important point: the model does not execute tools itself. It only generates i
 
 ### The Bridge Between Language and Action
 
-Function Calling solves a fundamental problem: how to transition from fuzzy natural language to precise programmatic calls. The user says "find information about the latest Apple news" — this is an ambiguous request. What exact search query should be used? How many results are needed? What time range?
+Function Calling solves a fundamental problem: how to transition from fuzzy natural language to precise programmatic calls. The user says "find information about the latest Apple news": this is an ambiguous request. What exact search query should be used? How many results are needed? What time range?
 
 A model trained on Function Calling transforms this ambiguity into a specific call with specific parameters. It "understands" the user's intent and translates it into a precise specification.
 
@@ -42,7 +42,7 @@ This works in both directions. A function's result is structured data (JSON, tab
 
 To understand the capabilities and limitations of tool use, it helps to know how models are **trained** to use tools.
 
-The ability of models to use tools evolved gradually. Early approaches relied on zero-shot and few-shot prompting — models received tool descriptions in the prompt and "hoped" to understand the format. Quality was low, with many JSON format errors.
+The ability of models to use tools evolved gradually. Early approaches relied on zero-shot and few-shot prompting: models received tool descriptions in the prompt and "hoped" to understand the format. Quality was low, with many JSON format errors.
 
 The breakthrough came with supervised fine-tuning specifically for tool use. Models were fine-tuned on datasets with examples of correct tool calls. Special tokens were introduced for marking calls and results. This significantly improved accuracy.
 
@@ -57,9 +57,9 @@ Modern models use RLHF (reinforcement learning from human feedback) to optimize 
 
 **Practical implications for design:**
 
-Models were predominantly trained on simple, flat tool schemas like `get_weather(city: string)` or `search(query: string, limit: int)`. These schemas therefore work best. Complex nested structures, callbacks, binary data — all of these require more detailed descriptions and examples, since the model saw few such cases in training data.
+Models were predominantly trained on simple, flat tool schemas like `get_weather(city: string)` or `search(query: string, limit: int)`. These schemas therefore work best. Complex nested structures, callbacks, binary data. All of these require more detailed descriptions and examples, since the model saw few such cases in training data.
 
-Training on "good" examples via RLHF makes models conservative — they tend toward safe, proven choices. Unusual use cases require explicit mention in the tool description.
+Training on "good" examples via RLHF makes models conservative, they tend toward safe, proven choices. Unusual use cases require explicit mention in the tool description.
 
 Function calling is a specialized form of instruction following. Models with high instruction-following quality (high IFEval score) typically use tools well, since both abilities are formed through pre-training, supervised fine-tuning, and RLHF.
 
@@ -71,17 +71,17 @@ Function calling is a specialized form of instruction following. Models with hig
 
 Every tool consists of four inseparably linked parts: name, description, parameter schema, and execution function.
 
-**Name** — a unique identifier for the tool. The model uses it when generating a call. The name should be short but informative: `web_search`, `send_email`, `query_database`. Avoid overly generic names (`do_task`) or overly long ones (`search_the_web_for_information`).
+**Name**: a unique identifier for the tool. The model uses it when generating a call. The name should be short but informative: `web_search`, `send_email`, `query_database`. Avoid overly generic names (`do_task`) or overly long ones (`search_the_web_for_information`).
 
 A good tool name is self-documenting and reflects its purpose. Use snake_case for compatibility with various LLM APIs. The name must be unique within your toolset to avoid confusion during selection. If you have several similar tools, use prefixes for categorization: `db_query`, `db_insert`, `file_read`, `file_write`.
 
-**Description** — a critically important element that is often underestimated. It is an instruction for the model: when to use this tool, what tasks it is designed for, and what tasks it is not designed for. A good description contains examples of appropriate use and explicit limitations.
+**Description**: a critically important element that is often underestimated. It is an instruction for the model: when to use this tool, what tasks it is designed for, and what tasks it is not designed for. A good description contains examples of appropriate use and explicit limitations.
 
 The tool description is your primary communication channel with the model. Through it you explain not only what the tool does, but also when to apply it. A poor description leads to the model either ignoring a useful tool, using it incorrectly, or applying it in situations it was not designed for.
 
-An effective description follows this structure: brief purpose (one sentence), typical use cases (2-3 examples), explicit limitations (what the tool does NOT do), important details (input data format, expected output format). Use language close to user queries — this improves semantic matching during tool selection.
+An effective description follows this structure: brief purpose (one sentence), typical use cases (2-3 examples), explicit limitations (what the tool does NOT do), important details (input data format, expected output format). Use language close to user queries. This improves semantic matching during tool selection.
 
-**Parameter schema** defines what arguments the tool accepts. This is not just a list of names — it is a full specification with types, descriptions, default values, and constraints. The more precise the schema, the more correctly the model will fill in parameters.
+**Parameter schema** defines what arguments the tool accepts. This is not just a list of names. It is a full specification with types, descriptions, default values, and constraints. The more precise the schema, the more correctly the model will fill in parameters.
 
 The parameter schema works as a two-sided contract: it helps the model understand what data to provide and simultaneously serves as a basis for validation on the execution side. A well-designed schema minimizes the number of validation errors, saving tokens and time on retries.
 
@@ -89,21 +89,21 @@ For each parameter, specify: the exact data type (string, number, boolean, array
 
 Enum parameters are especially useful: they explicitly restrict the model's choices to predefined options, preventing typos and incorrect values. Instead of "unit: string" use "unit: enum ['celsius', 'fahrenheit']".
 
-**Execution function** — the actual code that does the work. It receives validated arguments and returns a result. Reliability, security, and predictability are key here.
+**Execution function**: the actual code that does the work. It receives validated arguments and returns a result. Reliability, security, and predictability are key here.
 
 The execution function should be deterministic to the extent possible: identical inputs should produce identical results. This simplifies debugging and makes agent behavior predictable. Handle all expected errors gracefully, returning clear messages instead of exceptions. The model should receive error information in a format that allows it to either correct the call or try an alternative approach.
 
-Set reasonable timeouts for operations that may run for a long time. If a tool makes an external API request, do not wait indefinitely — limit the wait time and return an informative error on timeout. Log all calls for auditing and debugging, but be careful with sensitive data in logs.
+Set reasonable timeouts for operations that may run for a long time. If a tool makes an external API request, do not wait indefinitely: limit the wait time and return an informative error on timeout. Log all calls for auditing and debugging, but be careful with sensitive data in logs.
 
 ### The Art of Tool Descriptions
 
 A tool description is a prompt for the model. Like any prompt, it requires careful crafting. A poor description causes the model to use the tool incorrectly or not use it at all.
 
-An effective description answers three questions. First: what does the tool do? This should be clear from the first sentence. Second: when should it be used? List typical scenarios. Third: when should it NOT be used? This is often more important — the model needs to know the boundaries of applicability.
+An effective description answers three questions. First: what does the tool do? This should be clear from the first sentence. Second: when should it be used? List typical scenarios. Third: when should it NOT be used? This is often more important: the model needs to know the boundaries of applicability.
 
-For example, for a search tool it is insufficient to write "searches the internet." You need to clarify: for current news — yes, for historical facts — no (the model knows those itself). For checking fresh prices — yes, for basic definitions — no.
+For example, for a search tool it is insufficient to write "searches the internet." You need to clarify: for current news: yes, for historical facts: no (the model knows those itself). For checking fresh prices: yes, for basic definitions: no.
 
-Parameter descriptions are equally important. The "query" parameter for search — what should go into it? The user's full question or keywords? In what language? With what level of detail? All of this should be explicitly stated.
+Parameter descriptions are equally important. The "query" parameter for search: what should go into it? The user's full question or keywords? In what language? With what level of detail? All of this should be explicitly stated.
 
 When writing descriptions, consider the psychology of a language model. Models respond better to specific examples than to abstract rules. Instead of "use for temporal data" write "use for exchange rates, stock prices, weather." Models are sensitive to wording: the phrase "read-only data" may be ignored, while "never modifies data" is received better.
 
@@ -115,23 +115,23 @@ Test descriptions empirically. Check how the model behaves with your wording on 
 
 Traditionally, the model generates tool calls as text, which is then parsed. But what if the text is invalid JSON? Or the parameters do not match the schema? The request must be retried, wasting tokens and time.
 
-**Structured Outputs** is a revolutionary solution to this problem. It is a generation mode in which the model **guarantees** valid JSON conforming to a given schema. Not "tries to" — guarantees.
+**Structured Outputs** is a revolutionary solution to this problem. It is a generation mode in which the model **guarantees** valid JSON conforming to a given schema. Not "tries to": guarantees.
 
-How does this work under the hood? It uses constrained decoding — a technique where at each generation step the model selects only those tokens that do not violate JSON validity. An automaton of valid JSON strings is constructed, and token selection is constrained by this automaton.
+How does this work under the hood? It uses constrained decoding, a technique where at each generation step the model selects only those tokens that do not violate JSON validity. An automaton of valid JSON strings is constructed, and token selection is constrained by this automaton.
 
 OpenAI introduced this technology in August 2024 for GPT-4o. When the `strict: true` mode is enabled for a tool, the model physically cannot generate invalid JSON or omit required fields.
 
 **Advantages:**
-- Zero parsing error rate — JSON is always valid
-- Zero schema mismatch rate — all fields are correct
-- No retry-loop overhead — works on the first attempt
-- Predictable behavior — determinism instead of probability
+- Zero parsing error rate: JSON is always valid
+- Zero schema mismatch rate. All fields are correct
+- No retry-loop overhead: works on the first attempt
+- Predictable behavior: determinism instead of probability
 
 **Limitations:**
-- All fields must be required (or nullable) — simplifies constrained decoding
-- additionalProperties must be false — strict validation
-- Nesting depth restrictions — performance overhead
-- Recursive schemas are limited — automaton complexity
+- All fields must be required (or nullable): simplifies constrained decoding
+- additionalProperties must be false, strict validation
+- Nesting depth restrictions: performance overhead
+- Recursive schemas are limited, automaton complexity
 
 Structured Outputs is a paradigm shift from "the model tries to generate correctly" to "the model cannot generate incorrectly." This is especially valuable for production systems where reliability is critical.
 
@@ -141,7 +141,7 @@ Structured Outputs is a paradigm shift from "the model tries to generate correct
 
 ### Information Retrieval Tools
 
-The most common category — tools that fetch data from external sources. Web search, database queries, file reading, API calls.
+The most common category: tools that fetch data from external sources. Web search, database queries, file reading, API calls.
 
 Their distinguishing characteristic is that they do not change the state of the external world. They only read, never write. This makes them relatively safe: even if used incorrectly, they cannot cause irreversible damage.
 
@@ -153,27 +153,27 @@ Information retrieval tools are the foundation of most agents. They allow overco
 
 ### Action Execution Tools
 
-The second category — tools that change the state of the world. Sending emails, creating files, publishing posts, executing transactions.
+The second category: tools that change the state of the world. Sending emails, creating files, publishing posts, executing transactions.
 
 These tools require heightened attention to security. An erroneous call can have irreversible consequences: a deleted file cannot be restored, a sent email cannot be recalled.
 
 The typical practice is to require user confirmation before executing critical actions. The agent plans the action, shows it to the user, and executes it only after explicit approval.
 
-A criticality gradient helps decide what requires confirmation. Reading a file — low criticality, executed automatically. Creating a file — medium criticality, may require confirmation depending on policy. Deleting a file — high criticality, always requires confirmation. Financial transactions — critical operation, requires confirmation and additional authorization.
+A criticality gradient helps decide what requires confirmation. Reading a file: low criticality, executed automatically. Creating a file: medium criticality, may require confirmation depending on policy. Deleting a file: high criticality, always requires confirmation. Financial transactions: critical operation, requires confirmation and additional authorization.
 
-Idempotency is an important property for action tools. An idempotent operation can be executed multiple times with the same result as a single execution. This simplifies error handling and retries. Creating a file with overwrite — idempotent. Appending a line to a file — not idempotent.
+Idempotency is an important property for action tools. An idempotent operation can be executed multiple times with the same result as a single execution. This simplifies error handling and retries. Creating a file with overwrite: idempotent. Appending a line to a file, not idempotent.
 
 ### Computation Tools
 
-The third category — tools that perform precise computations. Calculators, statistical analysis, code execution.
+The third category: tools that perform precise computations. Calculators, statistical analysis, code execution.
 
-Language models are notoriously error-prone in arithmetic. They can incorrectly multiply numbers or make mistakes in complex calculations. Computation tools solve this problem — the model formulates the task, and specialized code executes it.
+Language models are notoriously error-prone in arithmetic. They can incorrectly multiply numbers or make mistakes in complex calculations. Computation tools solve this problem: the model formulates the task, and specialized code executes it.
 
 A special case is tools for executing arbitrary code. They are powerful but dangerous. Code may contain bugs or be malicious. Such tools require isolation (sandboxing) and strict limitations.
 
-Designing computation tools requires a balance between flexibility and security. A calculator for simple mathematical expressions is safe and flexible enough for most tasks. A Python REPL with full library access is maximally flexible but requires serious isolation. A restricted Python interpreter with a whitelist of allowed modules — a trade-off between flexibility and security.
+Designing computation tools requires a balance between flexibility and security. A calculator for simple mathematical expressions is safe and flexible enough for most tasks. A Python REPL with full library access is maximally flexible but requires serious isolation. A restricted Python interpreter with a whitelist of allowed modules, a trade-off between flexibility and security.
 
-Computation tools are especially useful for data science agents, financial analysts, scientific research — anywhere computational accuracy is critical and the language model alone is insufficiently reliable.
+Computation tools are especially useful for data science agents, financial analysts, scientific research: anywhere computational accuracy is critical and the language model alone is insufficiently reliable.
 
 ---
 
@@ -187,29 +187,29 @@ When the model "sees" tool descriptions, it processes them as part of the contex
 
 **Factors influencing selection:**
 
-Position in the list matters — the first and last tools are selected more frequently due to positional bias. Place the most important or frequently used tools at the beginning of the list.
+Position in the list matters: the first and last tools are selected more frequently due to positional bias. Place the most important or frequently used tools at the beginning of the list.
 
 Description length and detail affect selection accuracy. More detailed descriptions help the model better understand the purpose, but overly long descriptions dilute key information. Balance is critical.
 
 Semantic similarity between the query and description is the key factor. Use language in descriptions that is close to actual user queries. If users ask "what's the weather," use the word "weather" in the description rather than "meteorological conditions."
 
-Recent use creates recency bias — tools from recent context are selected more frequently. Account for this during long sessions.
+Recent use creates recency bias: tools from recent context are selected more frequently. Account for this during long sessions.
 
-Name uniqueness reduces confusion. Avoid similar names like `search`, `search_web`, `web_search` — the model may get confused.
+Name uniqueness reduces confusion. Avoid similar names like `search`, `search_web`, `web_search`: the model may get confused.
 
 **Typical selection errors:**
 
 Tool confusion arises when two tools have similar descriptions. Symptom: the model systematically selects the wrong tool from a similar pair. Solution: strengthen the differences in descriptions, explicitly state when to use one versus the other.
 
-Capability overestimation — the model overestimates a tool's capabilities. Symptom: calls with parameters the tool does not support. Solution: explicitly list limitations in the description.
+Capability overestimation: the model overestimates a tool's capabilities. Symptom: calls with parameters the tool does not support. Solution: explicitly list limitations in the description.
 
-No-tool bias — the model ignores tools and tries to answer from its own knowledge. Symptom: outdated information instead of current data. Solution: strengthen usage triggers in the description, explicitly state "use this tool for..."
+No-tool bias: the model ignores tools and tries to answer from its own knowledge. Symptom: outdated information instead of current data. Solution: strengthen usage triggers in the description, explicitly state "use this tool for..."
 
 ### The Scale Problem
 
 When an agent has three tools, the choice is obvious. But what happens when there are thirty? Or three hundred?
 
-As the number of tools grows, two problems arise. First — context size. Descriptions of all tools may not fit in the model's context window. Second — selection quality. The more options there are, the harder it is for the model to choose correctly.
+As the number of tools grows, two problems arise. First: context size. Descriptions of all tools may not fit in the model's context window. Second: selection quality. The more options there are, the harder it is for the model to choose correctly.
 
 Strategies for filtering and prioritizing tools are needed.
 
@@ -223,9 +223,9 @@ This allows efficiently filtering hundreds of tools down to the few most suitabl
 
 ### Categorization and Hierarchy
 
-An alternative approach is to organize tools into a hierarchy. At the top level — categories: data operations, communications, computations, system operations. Within each category — specific tools.
+An alternative approach is to organize tools into a hierarchy. At the top level: categories: data operations, communications, computations, system operations. Within each category: specific tools.
 
-Selection occurs in two stages. First, the model determines the task category. Then it selects a specific tool from that category. This reduces cognitive load: instead of choosing from a hundred options — choosing from five categories, then from twenty tools.
+Selection occurs in two stages. First, the model determines the task category. Then it selects a specific tool from that category. This reduces cognitive load: instead of choosing from a hundred options, choosing from five categories, then from twenty tools.
 
 Categorization also helps with permissions. Access to entire categories can be restricted for certain users or scenarios.
 
@@ -239,25 +239,25 @@ This approach requires feedback mechanisms: how does the system know the selecti
 
 ### Parallel Tool Calls: When You Can and When You Cannot
 
-Modern LLM APIs (GPT-5.4, Claude, Gemini) support **parallel tool calls** — the model can generate multiple tool calls in a single response. This significantly speeds up execution but requires understanding dependencies.
+Modern LLM APIs (GPT-5.4, Claude, Gemini) support **parallel tool calls**: the model can generate multiple tool calls in a single response. This significantly speeds up execution but requires understanding dependencies.
 
 **Types of dependencies between tools:**
 
-Data Dependency — when one tool needs the output of another. For example, `search_user(email)` → `get_orders(user_id)`. The second call requires user_id from the first; parallel execution is not possible.
+Data Dependency, when one tool needs the output of another. For example, `search_user(email)` -> `get_orders(user_id)`. The second call requires user_id from the first; parallel execution is not possible.
 
-Temporal Dependency — when execution order matters for the result. For example, `create_file(path)` → `write_to_file(path, content)`. The file must exist before writing; sequential execution is required.
+Temporal Dependency, when execution order matters for the result. For example, `create_file(path)` -> `write_to_file(path, content)`. The file must exist before writing; sequential execution is required.
 
-Resource Dependency — when tools compete for the same resource. For example, two calls to `update_config(key, value)` can create a race condition. Caution is required.
+Resource Dependency, when tools compete for the same resource. For example, two calls to `update_config(key, value)` can create a race condition. Caution is required.
 
-No Dependency (independent tools) — when tools are completely independent. For example, `get_weather("Kyiv")`, `get_stock_price("AAPL")`, `search_news("AI")` access different sources with no overlap. They can be safely executed in parallel.
+No Dependency (independent tools), when tools are completely independent. For example, `get_weather("Kyiv")`, `get_stock_price("AAPL")`, `search_news("AI")` access different sources with no overlap. They can be safely executed in parallel.
 
 **How the model decides about parallelism:**
 
-Models are trained to recognize independent requests. For the question "What is the weather in Kyiv and the current Bitcoin price?" the model will generate two parallel calls. For the question "Find the user by email and show their orders," the model will execute sequentially — first the search, then the order query with the obtained user_id.
+Models are trained to recognize independent requests. For the question "What is the weather in Kyiv and the current Bitcoin price?" the model will generate two parallel calls. For the question "Find the user by email and show their orders," the model will execute sequentially, first the search, then the order query with the obtained user_id.
 
 **Practical recommendations:**
 
-Allow parallelism for obviously independent requests and read-only operations without overlap. Execute write operations on the same resource sequentially. When dependencies are unclear, be conservative — sequential is better than risking a race condition. For high-latency tools (web APIs), maximize parallelism to reduce overall execution time.
+Allow parallelism for obviously independent requests and read-only operations without overlap. Execute write operations on the same resource sequentially. When dependencies are unclear, be conservative: sequential is better than risking a race condition. For high-latency tools (web APIs), maximize parallelism to reduce overall execution time.
 
 ---
 
@@ -267,7 +267,7 @@ Allow parallelism for obviously independent requests and read-only operations wi
 
 Between the model and actual tool execution sits a component called the Executor or Tool Runner. Its job is not simply to call a function but to ensure safe and predictable execution.
 
-The Executor verifies that the requested tool exists and is available. It validates arguments against the tool's schema. It sets a timeout — a tool cannot run indefinitely. It catches exceptions and converts them into clear error messages.
+The Executor verifies that the requested tool exists and is available. It validates arguments against the tool's schema. It sets a timeout: a tool cannot run indefinitely. It catches exceptions and converts them into clear error messages.
 
 The Executor can also log all operations for auditing, check user permissions, and limit call frequency (rate limiting).
 
@@ -279,15 +279,15 @@ Execution metrics are collected by the Executor automatically: latency of each c
 
 Tools can fail. API unavailable, file not found, request exceeded a limit. The agent must be able to handle failures.
 
-The first level of defense — retries. Many errors are temporary: network timeout, overloaded server. Several retries with exponential backoff often resolve the issue.
+The first level of defense: retries. Many errors are temporary: network timeout, overloaded server. Several retries with exponential backoff often resolve the issue.
 
 Exponential backoff is critical for avoiding overloading an already struggling service. First attempt immediately, second after 1 second, third after 2 seconds, fourth after 4 seconds. With the addition of jitter (random variation) to prevent the thundering herd problem.
 
-The second level — alternative tools. If one search API is unavailable, try another. If a file cannot be read directly, perhaps a copy exists.
+The second level: alternative tools. If one search API is unavailable, try another. If a file cannot be read directly, perhaps a copy exists.
 
-The fallback tool strategy should be explicitly defined in the system configuration. For each critical tool, specify a list of alternatives in order of preference. The model should not decide which alternative to use on its own — this decision is made by the Executor based on predefined rules.
+The fallback tool strategy should be explicitly defined in the system configuration. For each critical tool, specify a list of alternatives in order of preference. The model should not decide which alternative to use on its own. This decision is made by the Executor based on predefined rules.
 
-The third level — strategy change. Perhaps the task can be solved without this tool. The model must be able to adapt its approach when resources are unavailable.
+The third level: strategy change. Perhaps the task can be solved without this tool. The model must be able to adapt its approach when resources are unavailable.
 
 Adaptability requires the model to receive an informative error message. Not just "tool unavailable" but "the search tool is temporarily unavailable, try formulating an answer based on your knowledge or suggest the user try again later." Such a message gives the model context for making a reasonable decision.
 
@@ -297,7 +297,7 @@ The result of tool execution needs to be passed to the model for further process
 
 The model works best with text of moderate length. If the result is too large, it needs to be trimmed. If too structured, converted into a readable format.
 
-Smart truncation preserves important information. For JSON — structure and key fields. For tables — headers and representative rows. For long text — beginning, end, and an indication of omitted middle content.
+Smart truncation preserves important information. For JSON: structure and key fields. For tables: headers and representative rows. For long text, beginning, end, and an indication of omitted middle content.
 
 Truncation strategies depend on data type. For search result lists: show the first 3-5, add "N more results omitted." For JSON objects: show the first level in full, truncate nested objects. For text: first 500 characters, last 200 characters, indication of omitted middle section.
 
@@ -319,7 +319,7 @@ In practice, this means creating separate tools for different operations instead
 
 The granularity of privilege separation is a critical design decision. Too coarse a separation (one tool for all file operations) leaves broad potential for abuse. Too fine a separation (a separate tool for each operation) complicates the system and makes model selection harder.
 
-A reasonable approach is to group operations by risk level. Read operations can be in a single tool since they do not change state. Write operations are separated by object: creating files, modifying files, deleting files — three different tools with different permission levels.
+A reasonable approach is to group operations by risk level. Read operations can be in a single tool since they do not change state. Write operations are separated by object: creating files, modifying files, deleting files: three different tools with different permission levels.
 
 Use Role-Based Access Control (RBAC) for tools. Define user roles (viewer, editor, admin) and assign each role a permitted set of tools. An agent operating on behalf of a viewer physically does not have access to modification tools, even if the model attempts to call them.
 
@@ -331,7 +331,7 @@ The typical solution is execution in an isolated container with restrictions: CP
 
 A container is created for each execution and destroyed afterward. This guarantees that one call cannot affect another.
 
-Modern approaches to sandboxing include multiple layers of protection. The first layer — containerization (Docker, containerd) isolates the process from the host system. The second layer — virtual machines (gVisor, Firecracker) add an additional isolation layer with minimal overhead. The third layer — kernel-level restrictions (seccomp, AppArmor) block dangerous system calls.
+Modern approaches to sandboxing include multiple layers of protection. The first layer: containerization (Docker, containerd) isolates the process from the host system. The second layer: virtual machines (gVisor, Firecracker) add an additional isolation layer with minimal overhead. The third layer: kernel-level restrictions (seccomp, AppArmor) block dangerous system calls.
 
 For interpreted languages (Python, JavaScript), specialized sandboxing libraries exist that restrict available modules and functions. For example, RestrictedPython for Python allows prohibiting imports of dangerous modules (os, subprocess, socket) and restricting access to builtins.
 
@@ -339,15 +339,15 @@ It is critically important to set resource limits: maximum execution time (typic
 
 ### Input Validation
 
-The model may generate incorrect or malicious calls — intentionally (during prompt injection) or accidentally. Tools must defend themselves.
+The model may generate incorrect or malicious calls: intentionally (during prompt injection) or accidentally. Tools must defend themselves.
 
 A SQL tool must block modifying queries if only reads are permitted. A file tool must verify that the path does not escape the allowed directory (path traversal attack). An email tool must validate recipient addresses.
 
 Validation occurs at the Executor level before passing to the execution function. Any suspicious call is blocked with a clear error message.
 
-Types of validation by priority: schema validation (JSON Schema conformance — this is the minimum, always performed automatically), semantic validation (values make sense: date not in the future, email is valid, number is in a reasonable range), security validation (no SQL injection, path traversal, or command injection patterns), and business validation (user has the right to this operation, limits are not exceeded).
+Types of validation by priority: schema validation (JSON Schema conformance: this is the minimum, always performed automatically), semantic validation (values make sense: date not in the future, email is valid, number is in a reasonable range), security validation (no SQL injection, path traversal, or command injection patterns), and business validation (user has the right to this operation, limits are not exceeded).
 
-Special attention should be paid to string parameters used in dangerous contexts. File paths must undergo canonicalization and boundary escape checking. SQL parameters must be used via prepared statements, never through string concatenation. Shell commands should not be constructed from user input without strict validation — or better yet, not at all.
+Special attention should be paid to string parameters used in dangerous contexts. File paths must undergo canonicalization and boundary escape checking. SQL parameters must be used via prepared statements, never through string concatenation. Shell commands should not be constructed from user input without strict validation, or better yet, not at all.
 
 ### Audit and Monitoring
 
@@ -391,7 +391,7 @@ LangChain4j handles edge cases automatically: exceptions inside tool methods are
 
 The framework also supports advanced scenarios: async tools (methods can return CompletableFuture), streaming results (for long-running operations), and context injection (access to chat memory or user context inside a tool).
 
-Integration with Spring Boot is especially convenient — tools can be Spring beans with dependency injection, which simplifies access to services, repositories, and other application components.
+Integration with Spring Boot is especially convenient: tools can be Spring beans with dependency injection, which simplifies access to services, repositories, and other application components.
 
 ---
 
@@ -399,7 +399,7 @@ Integration with Spring Boot is especially convenient — tools can be Spring be
 
 MCP is the industry standard for agent tool integration (as of mid-2026). It follows a client-server architecture where an MCP Host (IDE, CLI, custom app) connects through MCP Clients to MCP Servers that expose three primitives: **Tools** (executable functions), **Resources** (readable data), and **Prompts** (reusable templates). Transport runs over stdio (local) or Streamable HTTP (remote).
 
-MCP solves the fragmentation problem: before MCP, every framework defined tools differently. An MCP server built once works with every MCP-compatible host — Claude Code, Cursor, VS Code, JetBrains IDEs, and custom agents. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers, 28% of Fortune 500 deploying MCP servers.
+MCP solves the fragmentation problem: before MCP, every framework defined tools differently. An MCP server built once works with every MCP-compatible host: Claude Code, Cursor, VS Code, JetBrains IDEs, and custom agents. As of mid-June 2026: 97M+ monthly SDK downloads, 9,400+ verified servers, 28% of Fortune 500 deploying MCP servers.
 
 **Security:** Tool descriptions from untrusted MCP servers are a prompt injection vector. Apply trust levels (first-party, verified, unverified) and OAuth 2.1 with PKCE for credential delegation. See Module 14, Agent Security for details.
 
@@ -423,15 +423,15 @@ Reasoning models (o1, o3, o4-mini, Claude extended thinking, DeepSeek R1) introd
 
 ### Traditional vs Reasoning-Integrated Tool Use
 
-**Traditional agent loop:** Think → Select tool → Execute → Observe → Think → ... The model alternates between reasoning and tool use in discrete steps.
+**Traditional agent loop:** Think, then Select tool, then Execute, then Observe, then Think, then... The model alternates between reasoning and tool use in discrete steps.
 
-**Reasoning-integrated tool use:** The model plans multiple tool calls as part of a single extended reasoning chain. It reasons about which tools to call, in what order, how to combine results — all within the thinking phase before producing any output.
+**Reasoning-integrated tool use:** The model plans multiple tool calls as part of a single extended reasoning chain. It reasons about which tools to call, in what order, how to combine results: all within the thinking phase before producing any output.
 
-OpenAI's o3 and o4-mini can interleave tool calls within their chain-of-thought reasoning. The model might: reason about the problem → call a search tool → reason about the results → call a calculator → reason about the combined information → produce a final answer — all as a single integrated reasoning trace.
+OpenAI's o3 and o4-mini can interleave tool calls within their chain-of-thought reasoning. The model might: reason about the problem, then call a search tool, then reason about the results, then call a calculator, then reason about the combined information, then produce a final answer: all as a single integrated reasoning trace.
 
 ### Implications for Tool Design
 
-**Fewer, more powerful tools:** Reasoning models are better at composing simple tools into complex workflows. Instead of creating a specialized `analyze_sales_data` tool, provide `query_database` and `calculate` — the reasoning model will compose them correctly.
+**Fewer, more powerful tools:** Reasoning models are better at composing simple tools into complex workflows. Instead of creating a specialized `analyze_sales_data` tool, provide `query_database` and `calculate`: the reasoning model will compose them correctly.
 
 **Better error recovery:** When a tool call fails mid-reasoning, the model can adjust its plan within the same reasoning chain rather than requiring a separate retry loop.
 
@@ -443,11 +443,11 @@ OpenAI's o3 and o4-mini can interleave tool calls within their chain-of-thought 
 
 **Traditional ReAct loops work best when:** the task involves many sequential tool calls with unpredictable branching, external state changes between calls matter (e.g., database writes), or fine-grained observability of each step is required for compliance or debugging.
 
-**Token cost comparison:** A traditional ReAct loop over 10 tool calls might require 10 separate LLM calls (each with growing context). A reasoning model can plan and execute the same 10 calls within a single extended reasoning pass — fewer total tokens but higher per-token cost for thinking tokens. For tool-heavy workflows with 20+ calls, the traditional approach with a cheaper model may be more economical.
+**Token cost comparison:** A traditional ReAct loop over 10 tool calls might require 10 separate LLM calls (each with growing context). A reasoning model can plan and execute the same 10 calls within a single extended reasoning pass: fewer total tokens but higher per-token cost for thinking tokens. For tool-heavy workflows with 20+ calls, the traditional approach with a cheaper model may be more economical.
 
 ### Tool Schema Design for Reasoning Models
 
-Reasoning models benefit from **descriptive tool schemas**: detailed parameter descriptions, explicit constraints, and examples of valid inputs. The model uses this information during its reasoning phase to plan tool calls more accurately, reducing failed calls and retries. Invest in schema quality over quantity — fewer well-documented tools outperform many poorly described ones.
+Reasoning models benefit from **descriptive tool schemas**: detailed parameter descriptions, explicit constraints, and examples of valid inputs. The model uses this information during its reasoning phase to plan tool calls more accurately, reducing failed calls and retries. Invest in schema quality over quantity: fewer well-documented tools outperform many poorly described ones.
 
 ## Key Takeaways
 
@@ -463,9 +463,9 @@ Reasoning models benefit from **descriptive tool schemas**: detailed parameter d
 
 6. **Security is a priority**. Least privilege, sandboxing for code, input validation, and auditing of all operations.
 
-7. **Error handling must be graceful**. Retries, alternative tools, strategy adaptation — the agent must be able to handle failures.
+7. **Error handling must be graceful**. Retries, alternative tools, strategy adaptation: the agent must be able to handle failures.
 
-8. **MCP is the standard for tool integration (2025)**. Build tools as MCP servers for cross-framework compatibility. Be aware of security implications — tool descriptions from untrusted servers are an attack vector.
+8. **MCP is the standard for tool integration (2025)**. Build tools as MCP servers for cross-framework compatibility. Be aware of security implications: tool descriptions from untrusted servers are an attack vector.
 
 9. **Reasoning models change tool use patterns**. Tool-integrated reasoning enables planning and execution within a single thinking chain, reducing the need for explicit orchestration frameworks.
 

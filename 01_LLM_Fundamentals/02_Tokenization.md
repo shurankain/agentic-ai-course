@@ -1,6 +1,6 @@
 # Tokenization: How Text Becomes Numbers
 
-Imagine you are trying to teach a computer to read a book. Computers do not understand letters and words — they only work with numbers. How do you bridge this gap? The answer lies in tokenization — converting human text into a sequence of numbers that a neural network can process.
+Imagine you are trying to teach a computer to read a book. Computers do not understand letters and words. They only work with numbers. How do you bridge this gap? The answer lies in tokenization, converting human text into a sequence of numbers that a neural network can process.
 
 Tokenization is the first and arguably one of the most underappreciated stages in any language model's operation. How text is split into tokens affects virtually everything: API request costs, context window limits, prompt efficiency, and even some "strange" errors that LLMs produce.
 
@@ -16,7 +16,7 @@ The most obvious method would seem to be splitting text into individual characte
 
 Consider the word "artificial." In a character-level representation, this is 10 separate tokens: a-r-t-i-f-i-c-i-a-l. Each token is a single letter carrying minimal semantic information. To understand that these 10 characters together mean "artificial," the model must learn complex patterns over very long sequences.
 
-When training on a book with a million words, the sequence stretches to millions of characters. The Transformer attention mechanism has quadratic complexity — doubling the sequence length increases computational cost by a factor of four. The character-level approach simply does not scale.
+When training on a book with a million words, the sequence stretches to millions of characters. The Transformer attention mechanism has quadratic complexity, doubling the sequence length increases computational cost by a factor of four. The character-level approach simply does not scale.
 
 ### Word-Level Approach: Too Many Unique Entries
 
@@ -24,19 +24,19 @@ The other extreme is splitting text by words. Each word becomes a separate token
 
 How many words exist in the English language? Estimates range from 170,000 to over a million when counting technical terms, slang, and neologisms. And if you add Russian, Chinese, Arabic, and hundreds of other languages? The vocabulary inflates to unimaginable sizes.
 
-But even a massive vocabulary does not solve the main problem — new words. "ChatGPT" did not exist in any vocabulary before 2022. "Covidiot" is a 2020 neologism. What do you do with such words? Mark them as "unknown" and lose all information? That is unacceptable.
+But even a massive vocabulary does not solve the main problem: new words. "ChatGPT" did not exist in any vocabulary before 2022. "Covidiot" is a 2020 neologism. What do you do with such words? Mark them as "unknown" and lose all information? That is unacceptable.
 
 Furthermore, word-level tokenization ignores morphology. Words like "run," "runs," "running," "ran" are semantically related concepts but four entirely different tokens. It becomes harder for the model to capture these relationships.
 
 ### The Middle Ground: Subword Tokenization
 
-Modern LLMs use a compromise approach — subword tokenization. Text is split not into characters or words but into fragments — morphemes, syllables, frequent character combinations.
+Modern LLMs use a compromise approach: subword tokenization. Text is split not into characters or words but into fragments: morphemes, syllables, frequent character combinations.
 
-Common words like "the," "and," "to" remain whole tokens — they appear millions of times in training data, and having dedicated representations for them is efficient. Rare words, however, are broken into smaller parts.
+Common words like "the," "and," "to" remain whole tokens, they appear millions of times in training data, and having dedicated representations for them is efficient. Rare words, however, are broken into smaller parts.
 
-The word "tokenization" may become the sequence ["token", "ization"]. "Unbelievable" — ["Un", "believ", "able"]. Even an entirely new word absent from the vocabulary will be split into familiar parts, and the model can infer its meaning by analogy.
+The word "tokenization" may become the sequence ["token", "ization"]. "Unbelievable": ["Un", "believ", "able"]. Even an entirely new word absent from the vocabulary will be split into familiar parts, and the model can infer its meaning by analogy.
 
-The vocabulary size remains reasonable — typically from 32,000 to 100,000 tokens. This is large enough for efficient representation of any text but not so large as to create memory or training issues.
+The vocabulary size remains reasonable: typically from 32,000 to 100,000 tokens. This is large enough for efficient representation of any text but not so large as to create memory or training issues.
 
 ---
 
@@ -46,7 +46,7 @@ Byte Pair Encoding (BPE) is the most widely used tokenization algorithm in moder
 
 ### How BPE Is Trained
 
-Imagine you have a text corpus and want to create a token vocabulary. BPE starts with a base set — all individual characters (or bytes). The algorithm then iteratively improves the vocabulary:
+Imagine you have a text corpus and want to create a token vocabulary. BPE starts with a base set: all individual characters (or bytes). The algorithm then iteratively improves the vocabulary:
 
 1. Count which pairs of adjacent tokens appear most frequently
 2. Merge the most frequent pair into a new token and add it to the vocabulary
@@ -63,9 +63,9 @@ Moreover, merge rules are preserved in the order they were created. When tokeniz
 
 ### Byte-Level BPE: Why GPT Works with Bytes
 
-The original BPE operates at the Unicode character level. However, GPT-2 and subsequent OpenAI models use **Byte-level BPE** — a variant that operates on raw UTF-8 bytes.
+The original BPE operates at the Unicode character level. However, GPT-2 and subsequent OpenAI models use **Byte-level BPE**, a variant that operates on raw UTF-8 bytes.
 
-Why does this matter? Unicode contains over 140,000 characters — from Latin script to Egyptian hieroglyphs. If BPE starts from characters, the base vocabulary is enormous. When working with bytes, the base vocabulary is always exactly **256 elements** (all possible byte values from 0 to 255).
+Why does this matter? Unicode contains over 140,000 characters: from Latin script to Egyptian hieroglyphs. If BPE starts from characters, the base vocabulary is enormous. When working with bytes, the base vocabulary is always exactly **256 elements** (all possible byte values from 0 to 255).
 
 **Byte-level advantages:**
 - **Universality**: Any text in any language is guaranteed to be tokenized. There is no concept of an "unknown character."
@@ -76,7 +76,7 @@ Why does this matter? Unicode contains over 140,000 characters — from Latin sc
 - **Less intuitive**: A single Unicode character can become multiple tokens (e.g., a Cyrillic letter = 2 UTF-8 bytes).
 - **Efficiency for non-ASCII**: Languages with multi-byte characters require more tokens.
 
-Character-level BPE (as in early models) is easier to understand, but byte-level won out due to its universality. GPT-3, GPT-4, Claude — all use the byte-level approach.
+Character-level BPE (as in early models) is easier to understand, but byte-level won out due to its universality. GPT-3, GPT-4, Claude: all use the byte-level approach.
 
 ---
 
@@ -92,7 +92,7 @@ A distinctive feature of WordPiece is the "##" prefix for word continuations. Th
 
 ### SentencePiece: A Universal Approach
 
-Google's SentencePiece addresses an important problem — language dependence. Traditional tokenizers assume that words are separated by spaces, which holds for English or Russian but not for Chinese or Japanese.
+Google's SentencePiece addresses an important problem: language dependence. Traditional tokenizers assume that words are separated by spaces, which holds for English or Russian but not for Chinese or Japanese.
 
 SentencePiece works directly with "raw" Unicode text without prior segmentation. Spaces are treated as regular characters, represented by the special symbol "▁". This makes the tokenizer truly language-independent.
 
@@ -100,7 +100,7 @@ The text "Hello world" may become ["▁Hello", "▁world"]. The "▁" symbol mar
 
 ### Tiktoken: OpenAI's Modern Choice
 
-In 2022, OpenAI introduced **tiktoken** — a new tokenization library written in Rust. It is not a new algorithm but a highly optimized implementation of Byte-level BPE.
+In 2022, OpenAI introduced **tiktoken**: a new tokenization library written in Rust. It is not a new algorithm but a highly optimized implementation of Byte-level BPE.
 
 **Why did OpenAI move away from Python-based solutions?**
 
@@ -110,7 +110,7 @@ In 2022, OpenAI introduced **tiktoken** — a new tokenization library written i
 
 3. **Memory predictability**: No Python garbage collector, fewer memory usage spikes.
 
-4. **Accuracy**: Identical results with OpenAI models — guaranteed compatibility.
+4. **Accuracy**: Identical results with OpenAI models: guaranteed compatibility.
 
 | Characteristic | SentencePiece | Tiktoken |
 |----------------|---------------|----------|
@@ -125,18 +125,18 @@ For working with OpenAI models, use tiktoken. For Llama and open-source models, 
 
 ## Special Tokens: Beyond Text
 
-Every modern tokenizer includes a set of special tokens — service markers that do not correspond to actual text but carry important information for the model.
+Every modern tokenizer includes a set of special tokens, service markers that do not correspond to actual text but carry important information for the model.
 
 **Structural tokens:**
-- `<BOS>` or `<s>` — Beginning of Sequence
-- `<EOS>` or `</s>` — End of Sequence
-- `<PAD>` — Padding for length alignment
-- `<UNK>` — Unknown token
+- `<BOS>` or `<s>`, Beginning of Sequence
+- `<EOS>` or `</s>`: End of Sequence
+- `<PAD>`, Padding for length alignment
+- `<UNK>`: Unknown token
 
 **Chat model tokens:**
-- `<|im_start|>`, `<|im_end|>` — message start and end
-- `<|system|>`, `<|user|>`, `<|assistant|>` — conversation roles
-- `<|endoftext|>` — end of text (GPT)
+- `<|im_start|>`, `<|im_end|>`: message start and end
+- `<|system|>`, `<|user|>`, `<|assistant|>`: conversation roles
+- `<|endoftext|>`: end of text (GPT)
 
 These tokens are particularly important for chat models and agents. Proper role markup allows the model to understand conversation structure and generate responses in the correct context.
 
@@ -148,7 +148,7 @@ When you use the OpenAI or Anthropic API, the library automatically adds these s
 
 ### How Much Does a Token Cost?
 
-Understanding token costs is critically important for budgeting AI projects. LLM providers charge precisely by token count — both input and output.
+Understanding token costs is critically important for budgeting AI projects. LLM providers charge precisely by token count: both input and output.
 
 For English text, the empirical rule applies: **1 token ≈ 4 characters** or **1 token ≈ 0.75 words**. A page of text (~500 words) occupies approximately 650-750 tokens.
 
@@ -160,7 +160,7 @@ This has direct financial implications. At a price of $10 per million tokens, Ru
 
 Understanding tokenization opens opportunities for prompt optimization:
 
-**Removing redundancy.** Extra spaces, empty lines, repeated instructions — all consume tokens. The phrase "Please kindly consider" takes more tokens than simply describing the task.
+**Removing redundancy.** Extra spaces, empty lines, repeated instructions: all consume tokens. The phrase "Please kindly consider" takes more tokens than simply describing the task.
 
 **Language choice.** For some tasks, it may be more cost-effective to formulate prompts in English even if the target language is Russian. English instructions consume fewer tokens.
 
@@ -190,7 +190,7 @@ Program code is tokenized differently from natural language, and this is a sourc
 
 Tokenizers are trained predominantly on English-language data. The result: English is represented maximally efficiently, while other languages suffer.
 
-To quantify this inequality, the **Tokenizer Fertility** metric is used — the average number of tokens per word or character for a given language:
+To quantify this inequality, the **Tokenizer Fertility** metric is used, the average number of tokens per word or character for a given language:
 
 **Fertility = token_count / word_count**
 
@@ -206,9 +206,9 @@ The following table shows how fertility varies across languages for the GPT-4 to
 | Thai | 4.1 | 3.2x |
 
 The same meaning in different languages:
-- "Hello, how are you?" — approximately 6 tokens
-- "Привет, как дела?" (Russian) — approximately 10-12 tokens
-- "你好，你好吗？" (Chinese) — approximately 8-12 tokens
+- "Hello, how are you?", approximately 6 tokens
+- "Привет, как дела?" (Russian): approximately 10-12 tokens
+- "你好，你好吗？" (Chinese): approximately 8-12 tokens
 
 **Why fertility matters:**
 
@@ -216,9 +216,9 @@ The same meaning in different languages:
 
 2. **Effective context**: With the same token limit (e.g., 128K), less semantic content fits in Russian.
 
-3. **Model quality**: Research shows a correlation between fertility and generation quality — languages with high fertility produce worse benchmark results.
+3. **Model quality**: Research shows a correlation between fertility and generation quality: languages with high fertility produce worse benchmark results.
 
-4. **AI fairness**: This creates inequality — users of non-English languages pay more for lower quality.
+4. **AI fairness**: This creates inequality, users of non-English languages pay more for lower quality.
 
 The solution is training tokenizers on more balanced multilingual corpora. Llama 3 and Qwen 2.5 models show improved fertility for non-English languages thanks to targeted work on this aspect.
 
@@ -230,21 +230,21 @@ This creates an interesting effect: models are worse at "remembering" rare names
 
 ### Arithmetic and Numbers: Why LLMs Are Bad at Math
 
-The instability of number tokenization is one of the **primary reasons** for LLM weakness in mathematics. This is not a flaw in architecture or training — it is a fundamental limitation of the representation.
+The instability of number tokenization is one of the **primary reasons** for LLM weakness in mathematics. This is not a flaw in architecture or training. It is a fundamental limitation of the representation.
 
 **Problem 1: Inconsistent splitting**
 
 When "380 + 427" is tokenized as ["380", " +", " ", "42", "7"], the model does not "see" the number 427 as a whole. Different numbers are split differently:
-- "12" → ["12"] (1 token)
-- "123" → ["123"] (1 token)
-- "1234" → ["12", "34"] (2 tokens)
-- "12345" → ["123", "45"] (2 tokens)
+- "12" becomes ["12"] (1 token)
+- "123" becomes ["123"] (1 token)
+- "1234" becomes ["12", "34"] (2 tokens)
+- "12345" becomes ["123", "45"] (2 tokens)
 
 The model has learned patterns for "12" and "34" separately, but their combination "1234" is an entirely different representation.
 
 **Problem 2: Loss of positional information**
 
-In the decimal system, digit position is critical: the 5 in 500 means 5×100, while in 50 it means 5×10. But tokenization destroys this structure. The token "500" is an atomic unit — the model does not "know" that it contains three positions.
+In the decimal system, digit position is critical: the 5 in 500 means 5x100, while in 50 it means 5x10. But tokenization destroys this structure. The token "500" is an atomic unit: the model does not "know" that it contains three positions.
 
 **Problem 3: Rarity of large numbers**
 
@@ -271,8 +271,8 @@ For agent developers, tokenization affects several critical aspects:
 The system prompt is a baseline token expenditure on every request. Verbose instructions increase cost and reduce space for context.
 
 Compare:
-- "You are a helpful assistant that is designed to help users with their questions. You should always try to provide accurate and helpful responses." — verbose, many tokens
-- "You are a helpful, accurate assistant." — same essence, far more compact
+- "You are a helpful assistant that is designed to help users with their questions. You should always try to provide accurate and helpful responses.", verbose, many tokens
+- "You are a helpful, accurate assistant.", same essence, far more compact
 
 ### Tool Descriptions
 
@@ -280,7 +280,7 @@ In agents that use tools, each tool's description consumes tokens. With dozens o
 
 The effective practice is minimalism in descriptions. Instead of verbose explanations, use brief one-line summaries of the tool's function, a list of required parameters with types, and a concise description of the return value. For example, for a web search tool, it suffices to state that it takes a string query as a required parameter and returns a list of objects with title, URL, and text snippet.
 
-Avoid duplicating information the model can infer from context. Do not describe obvious things like "this tool is used to..." — get straight to the point.
+Avoid duplicating information the model can infer from context. Do not describe obvious things like "this tool is used to...", get straight to the point.
 
 ### Conversation History Management
 
@@ -323,9 +323,9 @@ For effective context management, accurate token count estimation is critically 
 
 ### Cost Estimation Without API Calls
 
-Real-world systems often need to estimate request cost before execution. For this, heuristics based on text language are used. English text is estimated as character length divided by 4. Russian — by 2.5. Chinese and Japanese — by 1.5. Program code typically falls in between with a coefficient of about 3.
+Real-world systems often need to estimate request cost before execution. For this, heuristics based on text language are used. English text is estimated as character length divided by 4. Russian: by 2.5. Chinese and Japanese: by 1.5. Program code typically falls in between with a coefficient of about 3.
 
-**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-5.4 input tokens cost $2.50 per 1M, output $15 per 1M. For Claude Sonnet 4.6 — $3 and $15 per 1M respectively. Newer models like GPT-5.5 and Claude Opus 4.8 are priced higher; economy models like GPT-5-mini ($0.25/$2.00 per 1M) and Claude Haiku 4.5 ($0.25/$1.25 per 1M) are dramatically cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
+**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-5.4 input tokens cost $2.50 per 1M, output $15 per 1M. For Claude Sonnet 4.6: $3 and $15 per 1M respectively. Newer models like GPT-5.5 and Claude Opus 4.8 are priced higher; economy models like GPT-5-mini ($0.25/$2.00 per 1M) and Claude Haiku 4.5 ($0.25/$1.25 per 1M) are dramatically cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
 
 Such preliminary estimation helps avoid unexpected expenses in production, especially when processing large volumes of text or lengthy conversations.
 
@@ -343,10 +343,10 @@ This technique ensures the model always has access to the most recent messages, 
 
 When working with chat models, it is important to understand how messages of different roles are formatted. Provider APIs typically abstract away this complexity, but for low-level model interaction, role markers must be explicitly added.
 
-**Message structure** uses special tokens to mark the beginning and end of each block. A system message is wrapped in `<|system|>` ... `<|end|>`. A user message is wrapped in `<|user|>` ... `<|end|>`. An assistant response is wrapped in `<|assistant|>` ... `<|end|>` accordingly.
+**Message structure** uses special tokens to mark the beginning and end of each block. A system message is wrapped in `<|system|>`... `<|end|>`. A user message is wrapped in `<|user|>`... `<|end|>`. An assistant response is wrapped in `<|assistant|>`... `<|end|>` accordingly.
 
 **For agents with tools,** additional special tokens are added to denote function calls. For example, `<|tool_call|>` wraps a JSON object with the tool name and arguments, and `<|end_tool_call|>` closes that block. This allows the model to unambiguously distinguish regular text from tool execution commands.
 
-Correct formatting is critical for proper model behavior — incorrectly placed tokens can lead to misinterpreted roles or loss of dialogue structure.
+Correct formatting is critical for proper model behavior: incorrectly placed tokens can lead to misinterpreted roles or loss of dialogue structure.
 
 **A basic token counting utility** is created by initializing the tokenizer for a specific model (e.g., OpenAiTokenizer) and providing methods for counting tokens in text. The counting method accepts a string and returns the token count after tokenization. An additional efficiency analysis method computes the character-to-token ratio, which helps optimize prompts.

@@ -8,7 +8,7 @@ Semantic Kernel is an SDK from Microsoft for integrating language models into ap
 
 The name "Semantic Kernel" reflects the central idea: a kernel that unifies the semantic capabilities of AI with traditional software components. The model is not an isolated service but an integral part of the application, capable of invoking functions, working with memory, and orchestrating complex workflows.
 
-Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers. .NET, Python, and Java are supported, making it accessible to a wide range of developers.
+Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers..NET, Python, and Java are supported, making it accessible to a wide range of developers.
 
 ## Architectural Concepts
 
@@ -42,13 +42,13 @@ One of the key capabilities of Semantic Kernel is automatic planning. The Planne
 
 **Connection to classical AI planning:**
 
-The idea of automatic planning is not new — it dates back to the 1970s. STRIPS (1971) modeled the world as a set of predicates like on(A,B) for blocks, defined operators with preconditions and effects, and performed planning through state-space search. PDDL (1998) standardized the domain description language, separating domain (what is possible) and problem (the specific goal), using planners such as GraphPlan and FastDownward.
+The idea of automatic planning is not new: it dates back to the 1970s. STRIPS (1971) modeled the world as a set of predicates like on(A,B) for blocks, defined operators with preconditions and effects, and performed planning through state-space search. PDDL (1998) standardized the domain description language, separating domain (what is possible) and problem (the specific goal), using planners such as GraphPlan and FastDownward.
 
 Semantic Kernel adapts these ideas for LLMs. Instead of explicitly modeling the world through predicates, the "world" is understood implicitly by the LLM. Operators are functions with textual descriptions, and planning occurs through LLM reasoning and prompt engineering. The advantage is the ability to work with natural language goals without formal modeling. The disadvantage is a less formal approach, making it harder to guarantee correctness.
 
 **Types of planners:**
 
-Sequential Planner creates the entire plan upfront as a linear sequence of steps — suitable for predictable tasks. Stepwise Planner works iteratively, deciding at each step what to do next with reflection — better for complex tasks with uncertainty. Handlebars Planner generates a plan as a template — useful for repeating patterns. Function Calling Planner uses native LLM planning capabilities — optimal for simple tool-heavy tasks.
+Sequential Planner creates the entire plan upfront as a linear sequence of steps: suitable for predictable tasks. Stepwise Planner works iteratively, deciding at each step what to do next with reflection: better for complex tasks with uncertainty. Handlebars Planner generates a plan as a template: useful for repeating patterns. Function Calling Planner uses native LLM planning capabilities, optimal for simple tool-heavy tasks.
 
 Planning transforms a set of functions into an intelligent system capable of independently determining how to achieve a goal.
 
@@ -134,7 +134,7 @@ The basic architecture of a Semantic Kernel application includes several key pat
 
 **Working with Prompt Templates:** Semantic Kernel supports parameterized templates with placeholders. Variables are passed through a KernelFunctionArguments object. This allows reusing prompts with different input data without modifying their text.
 
-**Creating Native Plugins:** Native plugins are implemented as regular classes. Methods that should be available to the model are annotated with @DefineKernelFunction specifying the function name and description. Method parameters are annotated with @KernelFunctionParameter with a detailed description of their purpose. These descriptions are critically important — the model uses them to decide whether to invoke the function.
+**Creating Native Plugins:** Native plugins are implemented as regular classes. Methods that should be available to the model are annotated with @DefineKernelFunction specifying the function name and description. Method parameters are annotated with @KernelFunctionParameter with a detailed description of their purpose. These descriptions are critically important: the model uses them to decide whether to invoke the function.
 
 Plugins can contain any logic: getting the current time, performing mathematical operations, working with in-memory data, HTTP requests, and database integrations. After creating the plugin class, it is registered in the Kernel. Once registered, the model can independently invoke these functions when processing user requests.
 

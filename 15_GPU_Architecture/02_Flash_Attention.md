@@ -2,7 +2,7 @@
 
 ## The Quadratic Complexity Problem of Attention
 
-The attention mechanism in Transformer requires computing interactions between every pair of positions — N² values. At N = 512, that is 262 thousand values. At N = 4096 — 16 million. At N = 32768 — over a billion. At N = 128000 (Claude, GPT-5) — 16 billion.
+The attention mechanism in Transformer requires computing interactions between every pair of positions, N² values. At N = 512, that is 262 thousand values. At N = 4096: 16 million. At N = 32768: over a billion. At N = 128000 (Claude, GPT-5): 16 billion.
 
 Quadratic complexity created a dual problem: computation time grew quadratically, and memory for storing the attention matrix also grew quadratically. For a 32K token sequence, the attention matrix occupied gigabytes of memory for each layer, for each head.
 
@@ -15,14 +15,14 @@ Tri Dao and colleagues (2022) discovered that the main bottleneck was not comput
 ### Where the Bottleneck Actually Is
 
 The standard attention implementation performs the following steps:
-1. Computes the matrix Q × K^T (N × N values)
+1. Computes the matrix Q x K^T (N x N values)
 2. Stores it in HBM
 3. Applies softmax to each row
 4. Stores the result in HBM again
 5. Multiplies the result by V
 6. Writes the final result to HBM
 
-Each step requires reading from and writing to HBM — O(N²) memory accesses. With HBM bandwidth of ~2-3 TB/s and matrix sizes in the gigabytes, these transfers determine execution time.
+Each step requires reading from and writing to HBM: O(N²) memory accesses. With HBM bandwidth of ~2-3 TB/s and matrix sizes in the gigabytes, these transfers determine execution time.
 
 A GPU with teraflops of performance sits idle, waiting for data.
 
@@ -32,7 +32,7 @@ The solution: rewrite the algorithm to minimize HBM accesses, even at the cost o
 
 The key observation: softmax can be computed incrementally. Instead of obtaining all N² values, data can be processed in blocks, updating the intermediate result.
 
-Softmax admits decomposition. Online softmax — an algorithm known since the 1960s — allows recalculating softmax as new data arrives by correcting through the difference of maxima.
+Softmax admits decomposition. Online softmax, an algorithm known since the 1960s, allows recalculating softmax as new data arrives by correcting through the difference of maxima.
 
 Flash Attention uses online softmax to process small blocks that fit in SRAM:
 1. Loads a block of Q into SRAM
@@ -41,7 +41,7 @@ Flash Attention uses online softmax to process small blocks that fit in SRAM:
 4. Updates running statistics for online softmax
 5. Writes only the final result to HBM
 
-The N × N matrix never exists in full — only small blocks in fast SRAM. IO is reduced from O(N²) to O(N).
+The N x N matrix never exists in full: only small blocks in fast SRAM. IO is reduced from O(N²) to O(N).
 
 ## How Flash Attention Works
 
@@ -49,17 +49,17 @@ The N × N matrix never exists in full — only small blocks in fast SRAM. IO is
 
 Flash Attention partitions the attention matrix into small tiles, processes each in fast memory, and assembles the result.
 
-Block size is chosen so that blocks of Q, K, V and intermediate computations fit in the SRAM of a single SM. Typical sizes are 64×64 or 128×128 elements.
+Block size is chosen so that blocks of Q, K, V and intermediate computations fit in the SRAM of a single SM. Typical sizes are 64x64 or 128x128 elements.
 
-The outer loop iterates over blocks of Q. For each Q block, the inner loop traverses all blocks of K and V. Each Q element "sees" all K elements — full attention is preserved.
+The outer loop iterates over blocks of Q. For each Q block, the inner loop traverses all blocks of K and V. Each Q element "sees" all K elements: full attention is preserved.
 
 ### Online Softmax: The Key Innovation
 
 Softmax is a nonlinear operation that requires all values in a row simultaneously. Online softmax circumvents this limitation.
 
 The algorithm maintains two running statistics for each row:
-- m — the maximum value
-- l — the sum of exponentials for normalization
+- m: the maximum value
+- l: the sum of exponentials for normalization
 
 When processing a new block:
 1. Compute the local maximum of the new block
@@ -69,24 +69,24 @@ When processing a new block:
 
 **Online Softmax Mathematics:**
 
-The algorithm processes blocks B₁, B₂, ..., Bₖ sequentially. The maximum m is initialized to negative infinity, the sum l to zero, and the output O to zero.
+The algorithm processes blocks B₁, B₂,..., Bₖ sequentially. The maximum m is initialized to negative infinity, the sum l to zero, and the output O to zero.
 
 For each block j, three steps are performed:
 1. Maximum update: the new maximum m⁽ʲ⁾ is computed as the maximum between the previous value and the maximum element of the current scores Sⱼ
 2. Sum correction: the sum l⁽ʲ⁾ is corrected by multiplying by the exponential of the difference between old and new maxima, then the contribution of the current block is added
 3. Output update: the output vector O⁽ʲ⁾ is recalculated accounting for the change in maximum and new data
 
-The final result O⁽ᵏ⁾ is mathematically equivalent to the full computation of softmax(QKᵀ) × V, but obtained without materializing the entire N × N matrix.
+The final result O⁽ᵏ⁾ is mathematically equivalent to the full computation of softmax(QKᵀ) x V, but obtained without materializing the entire N x N matrix.
 
 The key insight: the exponential multiplier of the maximum difference corrects all previous computations when a new maximum appears.
 
 ### Recomputation Instead of Storage
 
-For the backward pass, standard attention stores the softmax matrix — O(N²) memory for each layer.
+For the backward pass, standard attention stores the softmax matrix, O(N²) memory for each layer.
 
 Flash Attention uses a radical approach: instead of storing this matrix, it recomputes it during the backward pass. Yes, this doubles the computation. But computation is cheap, and memory is expensive.
 
-For long sequences, memory savings far outweigh the additional computation. Even with recomputation, Flash Attention is often faster than the standard implementation — so great is the gain from reducing IO.
+For long sequences, memory savings far outweigh the additional computation. Even with recomputation, Flash Attention is often faster than the standard implementation, so great is the gain from reducing IO.
 
 ## Practical Results
 
@@ -105,7 +105,7 @@ A ~2000x savings. This enables:
 
 ### Speed: Up to 3x Speedup
 
-Flash Attention not only saves memory — it is faster. On H100 with sequence length 2048, Flash Attention delivers a 2-3x speedup.
+Flash Attention not only saves memory. It is faster. On H100 with sequence length 2048, Flash Attention delivers a 2-3x speedup.
 
 Speedup grows with sequence length:
 - Seq 512: ~1.5x faster
@@ -149,7 +149,7 @@ These optimizations are critical for production LLMs.
 
 Flash Attention 3 (2024) leverages the capabilities of the Hopper architecture (H100):
 
-**Asynchronous execution via warp specialization.** FA3 divides warps into producers (data loading via TMA — Tensor Memory Accelerator) and consumers (computation on Tensor Cores). Producers asynchronously prefetch the next block while consumers process the current one. This hides memory latency almost completely.
+**Asynchronous execution via warp specialization.** FA3 divides warps into producers (data loading via TMA: Tensor Memory Accelerator) and consumers (computation on Tensor Cores). Producers asynchronously prefetch the next block while consumers process the current one. This hides memory latency almost completely.
 
 **FP8 support with incoherent processing.** Native FP8 (E4M3) support using the H100 Transformer Engine. The "incoherent processing" technique applies random orthogonal transformations to Q/K before FP8 quantization, reducing quantization error. Result: FP8 attention with quality nearly indistinguishable from FP16.
 
@@ -172,7 +172,7 @@ FA3 FP16 achieves ~75% peak H100 TFLOPS. FA3 FP8 reaches ~1.2 PFLOPS, approachin
 
 ### FlashDecoding: Optimizing the Decode Phase
 
-Standard Flash Attention is optimized for the prefill phase (long Q sequence). During autoregressive decode, Q has only 1 token — the parallelism strategy must change.
+Standard Flash Attention is optimized for the prefill phase (long Q sequence). During autoregressive decode, Q has only 1 token: the parallelism strategy must change.
 
 **FlashDecoding** (Meta, 2023) parallelizes across the KV sequence length instead of the batch/head dimensions:
 
@@ -188,11 +188,11 @@ Standard Flash Attention is optimized for the prefill phase (long Q sequence). D
 
 NVIDIA Blackwell (B200, GB200) introduces new capabilities relevant to Flash Attention:
 
-**FP4 Tensor Cores:** Blackwell adds native FP4 compute at 2x the throughput of FP8. Flash Attention kernels will need adaptation for FP4 attention — initial work shows FP4 KV cache with FP8 queries provides a good quality-performance trade-off.
+**FP4 Tensor Cores:** Blackwell adds native FP4 compute at 2x the throughput of FP8. Flash Attention kernels will need adaptation for FP4 attention: initial work shows FP4 KV cache with FP8 queries provides a good quality-performance trade-off.
 
 **Fifth-generation NVLink (1.8 TB/s):** Enables faster cross-GPU attention for sequence parallelism. Ring Attention and Ulysses-style sequence splitting benefit directly from the bandwidth increase.
 
-**192 GB HBM3e at 8 TB/s:** Higher bandwidth means the IO-awareness calculus shifts — more operations become compute-bound rather than memory-bound. Block sizes for FA may need retuning for optimal performance on Blackwell.
+**192 GB HBM3e at 8 TB/s:** Higher bandwidth means the IO-awareness calculus shifts: more operations become compute-bound rather than memory-bound. Block sizes for FA may need retuning for optimal performance on Blackwell.
 
 **Expected FA impact on Blackwell:** FA3 principles (warp specialization, async data movement) carry forward, but kernel implementations will be rewritten to exploit Blackwell-specific instructions and the wider memory bus. The community is actively developing Blackwell-optimized FA kernels as of early 2026.
 
@@ -204,30 +204,30 @@ NVIDIA Blackwell (B200, GB200) introduces new capabilities relevant to Flash Att
 
 Tensor Cores are specialized compute units in NVIDIA GPUs, starting from Volta (2017). They perform matrix multiplications significantly faster than CUDA cores.
 
-A standard CUDA core performs one FMA (fused multiply-add) operation per cycle. A Tensor Core performs an entire matrix operation D = A × B + C in a few cycles, where the matrices are 16×16. That is 4096 FMA operations in ~8 cycles — orders of magnitude more efficient.
+A standard CUDA core performs one FMA (fused multiply-add) operation per cycle. A Tensor Core performs an entire matrix operation D = A x B + C in a few cycles, where the matrices are 16x16. That is 4096 FMA operations in ~8 cycles, orders of magnitude more efficient.
 
 ### WMMA Instructions
 
 WMMA (Warp Matrix Multiply Accumulate) are PTX instructions for programming Tensor Cores. Each warp collaboratively performs a matrix multiplication.
 
 Basic WMMA operations:
-- wmma.load — loads a matrix fragment from memory into warp registers
-- wmma.mma — performs matrix multiply-accumulate on the Tensor Core
-- wmma.store — stores the result from registers back to memory
+- wmma.load: loads a matrix fragment from memory into warp registers
+- wmma.mma: performs matrix multiply-accumulate on the Tensor Core
+- wmma.store: stores the result from registers back to memory
 
-Supported sizes: 16 × 16 × 16 (primary), 8 × 32 × 16 and 32 × 8 × 16 (alternative).
+Supported sizes: 16 x 16 x 16 (primary), 8 x 32 x 16 and 32 x 8 x 16 (alternative).
 
 CUDA provides a C++ API through the nvcuda::wmma namespace. The programmer describes matrix fragments, then invokes synchronous operations for loading, multiplication, and storage. Each thread in the warp automatically receives the required portion of data.
 
-Flash Attention uses these WMMA instructions for the matrix multiplications Q×K and Scores×V, achieving full Tensor Core performance.
+Flash Attention uses these WMMA instructions for the matrix multiplications QxK and ScoresxV, achieving full Tensor Core performance.
 
 ### Evolution of Tensor Cores
 
-- Volta (V100) 2017: 125 FP16 TFLOPS, FP16 → FP32
+- Volta (V100) 2017: 125 FP16 TFLOPS, FP16 to FP32
 - Turing (T4) 2018: 65 TFLOPS, FP16, INT8, INT4
 - Ampere (A100) 2020: 312 TFLOPS, FP16, BF16, TF32, INT8
 - Hopper (H100) 2022: 989 TFLOPS, FP8, FP16, BF16, TF32, INT8
-- Blackwell (B200) 2024: ~2500 FP8 TFLOPS, adds FP4 — doubles throughput over FP8
+- Blackwell (B200) 2024: ~2500 FP8 TFLOPS, adds FP4, doubles throughput over FP8
 
 Each generation expanded format support and increased performance. The H100 with FP8 achieves nearly a petaflop on a single GPU. Blackwell's FP4 support enables 4-bit inference at near-FP8 quality with proper calibration.
 
@@ -250,7 +250,7 @@ Result: ~2x speedup, ~50% memory savings, training quality preserved.
 
 **FP16 (Half Precision):**
 - 1 sign bit, 5 exponent bits, 10 mantissa bits
-- Range: ~6×10⁻⁵ to 65504
+- Range: ~6x10⁻⁵ to 65504
 - Problem: narrow dynamic range, risk of overflow/underflow
 
 **BF16 (Brain Float):**
@@ -285,19 +285,19 @@ PyTorch AMP (Automatic Mixed Precision) implements this automatically through Gr
 
 Attention is particularly sensitive to numerical stability. Softmax with large values can produce overflow: if max(x) > 88 in FP16, the exponential yields infinity.
 
-The solution — numerically stable softmax: softmax(x_i) = exp(x_i - max(x)) / sum(exp(x_j - max(x)))
+The solution: numerically stable softmax: softmax(x_i) = exp(x_i - max(x)) / sum(exp(x_j - max(x)))
 
 Flash Attention implements stable softmax in its online algorithm, tracking the running maximum.
 
 Additional considerations:
-- Scaling Q×K: divide by √d_k before softmax to control magnitude
+- Scaling QxK: divide by √d_k before softmax to control magnitude
 - Accumulated values: accumulator in FP32 even when operands are in FP16
 - Residual connections: FP32 to preserve information during addition
 
 ### Practical Recommendations
 
 **For training:**
-- Start with BF16 if hardware supports it — simpler, does not require loss scaling
+- Start with BF16 if hardware supports it, simpler, does not require loss scaling
 - FP16 + dynamic loss scaling for older hardware
 - TF32 as a "free" speedup for existing FP32 code
 
@@ -307,9 +307,9 @@ Additional considerations:
 - FP8 for maximum throughput (requires calibration)
 
 **When to be cautious:**
-- Layer normalization and softmax — critical for precision
-- Embedding layers — can accumulate errors
-- Final layers — affect output quality
+- Layer normalization and softmax: critical for precision
+- Embedding layers: can accumulate errors
+- Final layers: affect output quality
 
 ---
 
@@ -319,7 +319,7 @@ Additional considerations:
 
 Starting with PyTorch 2.0, Flash Attention is integrated into torch.nn.functional.scaled_dot_product_attention. PyTorch automatically selects the optimal implementation: Flash Attention for long sequences, Memory-efficient attention as a fallback, Math attention for debugging.
 
-Simply use F.scaled_dot_product_attention instead of a manual implementation — PyTorch will choose the best backend.
+Simply use F.scaled_dot_product_attention instead of a manual implementation: PyTorch will choose the best backend.
 
 ### Hugging Face Transformers
 
@@ -347,7 +347,7 @@ All modern inference engines (vLLM, TensorRT-LLM, TGI) use Flash Attention by de
 
 3. **Kernel fusion is critical.** Combining operations into a single kernel avoids intermediate writes to HBM. Flash Attention is an extreme example.
 
-4. **Tensor Cores are the key to performance.** WMMA instructions execute 16×16×16 matrix operations in a few cycles.
+4. **Tensor Cores are the key to performance.** WMMA instructions execute 16x16x16 matrix operations in a few cycles.
 
 5. **Mixed-precision yields a 2x speedup.** BF16 is simpler, FP16 requires attention to gradient underflow, FP8 is the future of high-throughput inference.
 

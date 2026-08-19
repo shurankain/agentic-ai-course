@@ -10,15 +10,15 @@ Human communication is multimodal: we use voice with intonation, gestures, facia
 
 Voice is the most natural mode of communication. Children learn to speak long before they learn to write. Voice interaction frees the hands and eyes, allows communication during other activities, and makes technology accessible to people with disabilities.
 
-Speech is linear and ephemeral — a spoken word cannot be "re-read." Voice conveys emotional context that text does not express. Speech perception speed is lower than reading speed, but voice does not require visual attention. Responses should be concise and structured. Important information is repeated. The system provides the ability to interrupt a long response. Pauses and intonation aid comprehension.
+Speech is linear and ephemeral: a spoken word cannot be "re-read." Voice conveys emotional context that text does not express. Speech perception speed is lower than reading speed, but voice does not require visual attention. Responses should be concise and structured. Important information is repeated. The system provides the ability to interrupt a long response. Pauses and intonation aid comprehension.
 
 ### Speech-to-Text
 
 Speech recognition (ASR) has evolved from early systems with limited vocabularies to modern models with human-comparable accuracy. Modern systems work end-to-end: they accept an audio signal and generate text directly, without intermediate stages. Whisper by OpenAI is trained on hundreds of thousands of hours of speech and operates under conditions of noise, accents, and non-standard pronunciation.
 
-Key characteristics: low Word Error Rate (WER) — for modern systems, 2-5% on clean speech, comparable to human performance. In real-world conditions (noise, multiple speakers, specialized terminology), quality degrades.
+Key characteristics: low Word Error Rate (WER): for modern systems, 2-5% on clean speech, comparable to human performance. In real-world conditions (noise, multiple speakers, specialized terminology), quality degrades.
 
-Streaming ASR delivers results in real time as words are spoken. This is critically important for interactive systems — latency affects naturalness. Users expect a response immediately after finishing a phrase.
+Streaming ASR delivers results in real time as words are spoken. This is critically important for interactive systems: latency affects naturalness. Users expect a response immediately after finishing a phrase.
 
 End-of-utterance detection is a non-trivial task. A pause may indicate completion of a thought or a moment of deliberation. Triggering too early interrupts the user. Triggering too late causes unnatural delays. A combination of acoustic features and language models is used.
 
@@ -27,61 +27,61 @@ End-of-utterance detection is a non-trivial task. A pause may indicate completio
 Speech synthesis (TTS) is the inverse task: converting text into natural-sounding speech. Modern neural network systems have reached a level where synthesized speech is difficult to distinguish from a human recording.
 
 High-quality synthesis includes:
-- **Naturalness** — sounds human, without mechanical artifacts
-- **Intelligibility** — words are pronounced clearly and understandably
-- **Expressiveness** — conveys emotions and intonation
-- **Controllability** — ability to control speed, tone, and style
+- **Naturalness**: sounds human, without mechanical artifacts
+- **Intelligibility**: words are pronounced clearly and understandably
+- **Expressiveness**: conveys emotions and intonation
+- **Controllability**: ability to control speed, tone, and style
 
-Voice cloning from a short sample opens opportunities for personalization — the agent speaks in a voice chosen by the user or matching the brand. However, it creates risks of misuse: fraud and deepfakes.
+Voice cloning from a short sample opens opportunities for personalization, the agent speaks in a voice chosen by the user or matching the brand. However, it creates risks of misuse: fraud and deepfakes.
 
 Emotional synthesis conveys coloring: sad news sounds empathetic, happy news sounds upbeat, important warnings sound serious and insistent. This requires emotion markup in the text or automatic detection from context.
 
-Prosody — rhythm, stress, and intonation — is critically important. Incorrect stress changes the meaning of a word; incorrect intonation turns a statement into a question. Modern systems learn from large corpora, but complex cases require manual annotation.
+Prosody (rhythm, stress, and intonation) is critically important. Incorrect stress changes the meaning of a word; incorrect intonation turns a statement into a question. Modern systems learn from large corpora, but complex cases require manual annotation.
 
 ## The Native Speech-to-Speech Paradigm Shift (2024-2025)
 
 ### From Pipeline to Native Processing
 
-The traditional voice agent architecture — ASR → LLM → TTS — is being disrupted by **native speech-to-speech models** that process and generate audio directly, without text as an intermediary.
+The traditional voice agent architecture, ASR, then LLM, then TTS, is being disrupted by **native speech-to-speech models** that process and generate audio directly, without text as an intermediary.
 
-**OpenAI Realtime API (launched October 2024, GA August 2025):** The first production API for native speech-to-speech interaction. Originally built on GPT-4o, it evolved into purpose-built audio models: `gpt-realtime` (August 2025) and `gpt-realtime-1.5` (February 2026) with improved instruction following, multilingual support, and tool calling. The model processes audio tokens directly — speech is not transcribed to text before processing. This enables:
-- **~200-300ms latency** — no ASR/TTS overhead, the model reasons on audio directly
-- **Natural prosody** — the model perceives and generates intonation, emphasis, emotion, and pauses
-- **Voice style control** — choose from preset voices or define tone characteristics
-- **Interruption handling** — native barge-in detection at the model level
-- **WebSocket-based streaming** — persistent bidirectional connection for real-time conversation
-- **MCP server support and image input** — added post-launch, enabling richer agent workflows
+**OpenAI Realtime API (launched October 2024, GA August 2025):** The first production API for native speech-to-speech interaction. Originally built on GPT-4o, it evolved into purpose-built audio models: `gpt-realtime` (August 2025) and `gpt-realtime-1.5` (February 2026) with improved instruction following, multilingual support, and tool calling. The model processes audio tokens directly: speech is not transcribed to text before processing. This enables:
+- **~200-300ms latency**: no ASR/TTS overhead, the model reasons on audio directly
+- **Natural prosody**: the model perceives and generates intonation, emphasis, emotion, and pauses
+- **Voice style control**: choose from preset voices or define tone characteristics
+- **Interruption handling**: native barge-in detection at the model level
+- **WebSocket-based streaming**: persistent bidirectional connection for real-time conversation
+- **MCP server support and image input**: added post-launch, enabling richer agent workflows
 
 The API uses a **session-based model**: create a session with configuration (voice, instructions, tools), stream audio in, receive audio back. The model can use tools (function calling) mid-conversation, enabling voice-driven agents that book appointments, look up data, or control systems. Async tool calls allow long-running functions without blocking the conversation.
 
-**GPT-Realtime-2 (May 7, 2026, GA):** The next generation brings GPT-5-class reasoning to voice interactions (as of late May 2026). Key advances: 128K context window (up from 32K), parallel tool calls with narration (the model explains what it is doing while tools execute), preambles during tool calls to maintain conversational flow, native MCP server support for agent tool access, and SIP phone calling for direct enterprise telephony integration. Pricing: $32/M input audio tokens, $64/M output audio tokens. **Case study:** Zillow deployed GPT-Realtime-2 for property inquiry calls — success rate increased from 69% to 95%.
+**GPT-Realtime-2 (May 7, 2026, GA):** The next generation brings GPT-5-class reasoning to voice interactions (as of late May 2026). Key advances: 128K context window (up from 32K), parallel tool calls with narration (the model explains what it is doing while tools execute), preambles during tool calls to maintain conversational flow, native MCP server support for agent tool access, and SIP phone calling for direct enterprise telephony integration. Pricing: $32/M input audio tokens, $64/M output audio tokens. **Case study:** Zillow deployed GPT-Realtime-2 for property inquiry calls: success rate increased from 69% to 95%.
 
 **OpenAI Translate (May 7, 2026, GA):** Real-time speech translation API. 70+ input languages, 13 output languages. Pricing: $0.034/min. Designed for call centers and international business communication.
 
-**Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min — the cheapest production STT available from a frontier provider.
+**Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min: the cheapest production STT available from a frontier provider.
 
-**Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant existed during the beta period but was deprecated with the Realtime API Beta (May 12, 2026). No waitlist — available to all developers.
+**Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant existed during the beta period but was deprecated with the Realtime API Beta (May 12, 2026). No waitlist: available to all developers.
 
-**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously — a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
+**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously: a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
 
 **Anthropic Claude voice:** Claude processes audio input through transcription but excels at understanding the *content* of conversations, meeting recordings, and spoken instructions. While not natively speech-to-speech, Claude's strength is in deep reasoning about audio-derived content.
 
-**Apple Siri AI (WWDC, June 9, 2026):** The most significant overhaul of Apple's voice assistant in 15 years. Siri AI is rebuilt from the ground up on a custom Google Gemini model under a multi-year deal worth approximately $1 billion per year. The architecture follows a three-tier privacy stack: queries are first processed by on-device Apple Foundation Models, then escalated to Private Cloud Compute (PCC) for more complex tasks, and finally routed to Gemini for the most demanding requests. Siri AI launches as a standalone app (text or voice input) alongside system-wide integration. The deal gives Google distribution across billions of Apple devices — the largest single AI distribution agreement to date.
+**Apple Siri AI (WWDC, June 9, 2026):** The most significant overhaul of Apple's voice assistant in 15 years. Siri AI is rebuilt from the ground up on a custom Google Gemini model under a multi-year deal worth approximately $1 billion per year. The architecture follows a three-tier privacy stack: queries are first processed by on-device Apple Foundation Models, then escalated to Private Cloud Compute (PCC) for more complex tasks, and finally routed to Gemini for the most demanding requests. Siri AI launches as a standalone app (text or voice input) alongside system-wide integration. The deal gives Google distribution across billions of Apple devices: the largest single AI distribution agreement to date.
 
-**iOS 27 Extensions — the BYOAI moment:** iOS 27 introduces Extensions that let users select a third-party AI model as their default assistant. For the first time, Claude, Gemini, and ChatGPT can serve as the primary assistant on iPhone and iPad. This is the "Bring Your Own AI" paradigm — model choice becomes a user preference, not an IT policy decision. For AI providers, Apple's 2+ billion active devices represent the largest potential distribution channel. For architects, it means designing for a multi-model world where the same application may be accessed through different AI frontends. Apple itself is not building a frontier model — it is becoming a multi-model platform, validating the BYOAI approach.
+**iOS 27 Extensions: the BYOAI moment:** iOS 27 introduces Extensions that let users select a third-party AI model as their default assistant. For the first time, Claude, Gemini, and ChatGPT can serve as the primary assistant on iPhone and iPad. This is the "Bring Your Own AI" paradigm: model choice becomes a user preference, not an IT policy decision. For AI providers, Apple's 2+ billion active devices represent the largest potential distribution channel. For architects, it means designing for a multi-model world where the same application may be accessed through different AI frontends. Apple itself is not building a frontier model. It is becoming a multi-model platform, validating the BYOAI approach.
 
 ### Impact on Voice Agent Architecture
 
 The native speech-to-speech approach changes the architecture fundamentally:
 
 **Traditional pipeline (still valid for many use cases):**
-Audio → ASR (Whisper) → Text → LLM → Text → TTS → Audio
+Audio, then ASR (Whisper), then Text, then LLM, then Text, then TTS, then Audio
 - Latency: 600-2000ms total (optimized stacks with Deepgram STT + fast LLM + streaming TTS can approach sub-1s)
 - Each stage adds error and latency
 - But: transparent, debuggable, each component can be swapped
 
 **Native speech-to-speech (2024+):**
-Audio → Multimodal LLM → Audio
+Audio, then Multimodal LLM, then Audio
 - Latency: 200-350ms (OpenAI Realtime ~250-300ms, Gemini Live ~280ms)
 - Preserves prosody, emotion, speaker characteristics
 - But: less transparent, harder to debug, higher API cost
@@ -95,15 +95,15 @@ Use native speech-to-speech for real-time conversation. Fall back to the pipelin
 
 The traditional voice agent remains a pipeline of components, each contributing to latency and quality:
 
-1. **Audio capture** — a microphone converts sound waves into a signal that is digitized. Microphone quality, acoustics, echo cancellation, and noise suppression affect the input signal.
+1. **Audio capture**: a microphone converts sound waves into a signal that is digitized. Microphone quality, acoustics, echo cancellation, and noise suppression affect the input signal.
 
-2. **Speech recognition** — a model converts audio to text. Locally (fast, offline, resource-limited) or on a server (powerful models, network latency).
+2. **Speech recognition**: a model converts audio to text. Locally (fast, offline, resource-limited) or on a server (powerful models, network latency).
 
-3. **Understanding and response generation** — text is passed to a language model that determines intent, extracts entities, and formulates a response. This is typically the most time-consuming part.
+3. **Understanding and response generation**: text is passed to a language model that determines intent, extracts entities, and formulates a response. This is typically the most time-consuming part.
 
-4. **Speech synthesis** — converting the text response to audio. Locally or on a server.
+4. **Speech synthesis**: converting the text response to audio. Locally or on a server.
 
-5. **Playback** — audio output to a speaker or headphones.
+5. **Playback**: audio output to a speaker or headphones.
 
 ### Queue Management and Interruptions
 
@@ -116,7 +116,7 @@ Full-duplex communication: both participants speak simultaneously. This requires
 Latency is the primary enemy of natural interaction. Latency exceeding 300-400 ms is perceived as unnatural and irritating. Total latency accumulates: audio capture (10-50 ms), server transmission (20-100 ms), speech recognition (100-500 ms), language model (200-2000 ms), speech synthesis (100-500 ms), transmission and playback (20-100 ms). The language model is often the bottleneck.
 
 Minimization strategies:
-- Streaming processing at all stages — begin synthesis without waiting for the complete response
+- Streaming processing at all stages: begin synthesis without waiting for the complete response
 - Caching frequent responses
 - Smaller models for simple queries
 - Prediction and pre-generation of probable responses
@@ -132,11 +132,11 @@ Typical scenarios: screenshot analysis for technical support, document recogniti
 
 ### Understanding Visual Context
 
-VLMs do not merely describe an image — they understand it in the context of the conversation. "What is this error?" — the model understands that the screenshot shows an application window with an error message, reads the error text, understands the cause, and suggests a solution.
+VLMs do not merely describe an image: they understand it in the context of the conversation. "What is this error?", the model understands that the screenshot shows an application window with an error message, reads the error text, understands the cause, and suggests a solution.
 
 This requires multiple levels of understanding: low-level object and text recognition, mid-level interpretation of depicted content, and high-level comprehension of meaning in the context of the question. Modern VLMs handle all levels.
 
-Understanding spatial relationships: "the button to the right of the input field," "the chart at the bottom of the screen," "the text above the image" — these are natural for humans and are increasingly well understood by VLMs.
+Understanding spatial relationships: "the button to the right of the input field," "the chart at the bottom of the screen," "the text above the image": these are natural for humans and are increasingly well understood by VLMs.
 
 ### Visual Content Generation
 
@@ -156,9 +156,9 @@ Modalities complement and reinforce each other: voice conveys urgency and emotio
 
 ### Response Modality Selection
 
-An intelligent agent selects the most appropriate modality for the situation. A voice question on the go — the response is voice-based and brief. Working at a computer with code — a text response with formatting.
+An intelligent agent selects the most appropriate modality for the situation. A voice question on the go: the response is voice-based and brief. Working at a computer with code: a text response with formatting.
 
-Context determines the preferred modality: in a car — voice; when working with documents — text with copy capability; when discussing design — visual examples; when explaining a process — step-by-step images.
+Context determines the preferred modality: in a car: voice; when working with documents: text with copy capability; when discussing design, visual examples; when explaining a process, step-by-step images.
 
 User preferences play a role. Some prefer reading, others prefer listening. Some perceive information better visually, others verbally. An adaptive agent learns the preferences of a specific user.
 
@@ -168,11 +168,11 @@ Multimodal context is more complex to store and process. Images consume more mem
 
 Efficient compression: images are replaced with descriptions, retaining only key visual elements; audio is replaced with transcription annotated with emotions and intonation; video is reduced to key frames and summarization.
 
-Preserving connections between modalities is important. "That photo I showed yesterday" — the agent must understand which image is being referenced, even if it has been removed from the immediate context.
+Preserving connections between modalities is important. "That photo I showed yesterday": the agent must understand which image is being referenced, even if it has been removed from the immediate context.
 
 ## MCP Integration for Voice Agents
 
-Voice agents that perform real-world actions — booking appointments, querying databases, controlling smart devices — need tool access. MCP (Model Context Protocol) provides the standard interface for connecting voice agents to external capabilities.
+Voice agents that perform real-world actions (booking appointments, querying databases, controlling smart devices) need tool access. MCP (Model Context Protocol) provides the standard interface for connecting voice agents to external capabilities.
 
 **Architecture pattern:** The voice model (OpenAI Realtime, Gemini Live) receives audio, determines intent, and invokes MCP tools via function calling. Results flow back as audio responses. OpenAI's Realtime API added MCP server support directly, enabling voice-driven tool use without a separate orchestration layer.
 
@@ -208,7 +208,7 @@ Explicit confirmations for critical actions: "You want to cancel an order totali
 
 Voice creates a stronger impression of personality than text. Timbre, speech rate, intonation patterns, and vocabulary shape the perception.
 
-Voice selection should match the tasks and brand: a medical assistant — calm, inspiring trust; a youth-oriented service — energetic and informal; a financial advisor — confident and professional.
+Voice selection should match the tasks and brand: a medical assistant: calm, inspiring trust; a youth-oriented service, energetic and informal; a financial advisor, confident and professional.
 
 Persona consistency matters. An agent should not suddenly change speech style or formality. If it introduced itself with humor, it should not become dry and official. The persona is deliberate and consistent.
 
@@ -220,7 +220,7 @@ Cultural adaptation goes beyond translation: speech rate, acceptable pauses, dir
 
 Voice and images are biometric data. Voice identifies a person, reveals emotional state and medical conditions. Images contain faces, document numbers, and personal information in the background.
 
-Minimizing data collection is the first principle. Collect only what is necessary, store for the minimum time, delete as early as possible. If a transcription suffices — do not store the audio. If extracted information suffices — do not store the image.
+Minimizing data collection is the first principle. Collect only what is necessary, store for the minimum time, delete as early as possible. If a transcription suffices: do not store the audio. If extracted information suffices: do not store the image.
 
 Transparency about data usage. Users must understand whether their voice is being recorded, whether photos are stored, and whether data is used for model training. Consent must be explicit and informed.
 
@@ -228,11 +228,11 @@ On-device processing where possible. Processing voice and images on the device m
 
 ### Countering Misuse
 
-Voice cloning opens opportunities for fraud: social engineering, spoofing voice authentication, and creating compromising content. The risk is not hypothetical — documented cases of CEO voice cloning for wire transfer fraud have caused millions in losses.
+Voice cloning opens opportunities for fraud: social engineering, spoofing voice authentication, and creating compromising content. The risk is not hypothetical: documented cases of CEO voice cloning for wire transfer fraud have caused millions in losses.
 
 **EU AI Act implications (effective February 2025):** Under the EU AI Act, AI-generated audio (including cloned voices) must be clearly labeled as artificially generated. Systems performing emotion recognition through voice are prohibited in workplaces and schools. Failure to label synthetic audio can result in fines. This means any production voice agent must include disclosure mechanisms: watermarking, explicit announcement ("This is an AI-generated voice"), and metadata tagging.
 
-**Detection techniques:** Watermarking embeds invisible markers in synthesized audio that allow origin determination and provenance tracking — emerging standards include C2PA (Coalition for Content Provenance and Authenticity) for media authenticity. Deepfake audio detectors analyze spectral features, prosody patterns, and artifact signatures that distinguish synthetic speech from natural speech. Production approaches combine both: watermark-based detection (fast, reliable for known generators) and neural classifiers (slower, but detect unknown generators). Liveness detection in voice authentication systems uses challenge-response techniques (asking the user to repeat a random phrase) to defeat replay attacks with cloned audio.
+**Detection techniques:** Watermarking embeds invisible markers in synthesized audio that allow origin determination and provenance tracking, emerging standards include C2PA (Coalition for Content Provenance and Authenticity) for media authenticity. Deepfake audio detectors analyze spectral features, prosody patterns, and artifact signatures that distinguish synthetic speech from natural speech. Production approaches combine both: watermark-based detection (fast, reliable for known generators) and neural classifiers (slower, but detect unknown generators). Liveness detection in voice authentication systems uses challenge-response techniques (asking the user to repeat a random phrase) to defeat replay attacks with cloned audio.
 
 Visual content moderation prevents generation and processing of unwanted material. Input filters block problematic content before processing. Output filters verify generated images.
 
@@ -242,11 +242,11 @@ Multimodal interfaces must account for user diversity. A voice interface is usel
 
 Alternative text for images, subtitles for audio, and the ability to switch between modalities are elements of accessible design. The agent asks about preferences and adapts to the user's capabilities.
 
-Accounting for speech diversity is especially important. Accents, dialects, speech impairments, and atypical speech rates — recognition systems must work for all users, not only for those who speak "standard" language. Bias in training data leads to bias in the system.
+Accounting for speech diversity is especially important. Accents, dialects, speech impairments, and atypical speech rates: recognition systems must work for all users, not only for those who speak "standard" language. Bias in training data leads to bias in the system.
 
 ## Voice Agent Market Structure (2026)
 
-The voice agent market has organized into four tiers (as of mid-June 2026): full-stack quality providers, orchestration middleware, developer frameworks, and enterprise telephony — each serving different needs and price points. The market is growing rapidly: projected $2.4B (2026) → $47.5B (2034).
+The voice agent market has organized into four tiers (as of mid-June 2026): full-stack quality providers, orchestration middleware, developer frameworks, and enterprise telephony. Each serving different needs and price points. The market is growing rapidly: projected $2.4B (2026) to $47.5B (2034).
 
 | Tier | Provider | Pricing | Latency | Best For |
 |------|----------|---------|---------|----------|
@@ -264,11 +264,11 @@ The voice agent market has organized into four tiers (as of mid-June 2026): full
 
 The cost range spans approximately 10x from cheapest to most expensive. The choice depends on three factors: voice quality requirements (ElevenLabs leads), volume and cost sensitivity (LiveKit at scale), and compliance needs (Bland AI for regulated industries).
 
-**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard — consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
+**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard, consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
 
-**Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month — evaluate build effort vs managed pricing.
+**Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month: evaluate build effort vs managed pricing.
 
-**Retell AI** deserves special mention for its **emotion detection** capability — detecting frustration, satisfaction, and confusion in real-time from voice signals. This enables automated escalation to human agents based on emotional state, not just explicit requests for help.
+**Retell AI** deserves special mention for its **emotion detection** capability, detecting frustration, satisfaction, and confusion in real-time from voice signals. This enables automated escalation to human agents based on emotional state, not just explicit requests for help.
 
 ---
 
@@ -276,7 +276,7 @@ The cost range spans approximately 10x from cheapest to most expensive. The choi
 
 Multimodality is the natural direction of AI agent evolution. Human communication is inherently multimodal; restricting it to text impoverishes the interaction.
 
-Native speech-to-speech is a paradigm shift. OpenAI Realtime API (now at GPT-Realtime-2 with GPT-5-class reasoning, 128K context, and MCP support) and Gemini Live process audio directly — no ASR/TTS pipeline needed. 200-350ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
+Native speech-to-speech is a paradigm shift. OpenAI Realtime API (now at GPT-Realtime-2 with GPT-5-class reasoning, 128K context, and MCP support) and Gemini Live process audio directly: no ASR/TTS pipeline needed. 200-350ms latency enables truly natural conversation. The traditional pipeline remains valuable for debugging, compliance, and complex workflows, but the direction is clear.
 
 Voice interfaces require a fundamental rethinking of design. Brevity, structure, error tolerance, and natural interruptions distinguish voice interaction from text interaction. Latency is a critical factor: hundreds of milliseconds determine the difference between a natural conversation and an irritating wait.
 
@@ -286,7 +286,7 @@ Modality integration matters more than modality availability. A multimodal agent
 
 Safety and ethics gain a new dimension. Voice and images are biometric data requiring special protection. Voice cloning and deepfake technologies create risks of misuse. Accessibility and inclusivity require support for alternative modalities.
 
-The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI — not platforms.
+The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI, not platforms.
 
 Technical challenges: minimizing latency, ensuring operation in noisy conditions, adapting to various accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
 

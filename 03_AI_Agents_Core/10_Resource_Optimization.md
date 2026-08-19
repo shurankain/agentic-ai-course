@@ -20,7 +20,7 @@ Not all requests require the most powerful model. Smart routing directs requests
 
 ### Model Hierarchy
 
-Production AI systems typically serve requests spanning a wide complexity range. The following hierarchy guides routing decisions — matching task complexity to the appropriate model tier minimizes costs while preserving quality where it matters.
+Production AI systems typically serve requests spanning a wide complexity range. The following hierarchy guides routing decisions, matching task complexity to the appropriate model tier minimizes costs while preserving quality where it matters.
 
 | Tier | Models | Cost | Use Case |
 |------|--------|------|----------|
@@ -97,14 +97,14 @@ Without controls, an agent can spend an unlimited number of tokens:
 
 ### Semantic Caching
 
-Traditional exact-match caching is inefficient for LLMs — identical queries are rare. Semantic caching uses embeddings to find similar queries.
+Traditional exact-match caching is inefficient for LLMs: identical queries are rare. Semantic caching uses embeddings to find similar queries.
 
 **How it works:**
 1. Receive query
 2. Compute embedding
 3. Search cache for close embeddings (cosine > threshold)
-4. If found — return cached response
-5. Otherwise — call the LLM, store in cache
+4. If found: return cached response
+5. Otherwise: call the LLM, store in cache
 
 **When effective:**
 - FAQ-style queries
@@ -196,10 +196,10 @@ A pattern for protection against cascading failures:
 | Half-Open | Test calls to check recovery |
 
 **Transition rules:**
-- Closed → Open: N failures in M seconds
-- Open → Half-Open: After cooldown period
-- Half-Open → Closed: Success in test call
-- Half-Open → Open: Failure in test call
+- Closed to Open: N failures in M seconds
+- Open to Half-Open: After cooldown period
+- Half-Open to Closed: Success in test call
+- Half-Open to Open: Failure in test call
 
 ---
 
@@ -215,7 +215,7 @@ When multiple agents compete for resources:
 
 ### Priority Queue
 
-When multiple agents compete for limited resources, a priority system ensures that critical user-facing work is never starved by background processing. The following tiers provide a practical starting point — tune the boundaries based on actual workload distribution.
+When multiple agents compete for limited resources, a priority system ensures that critical user-facing work is never starved by background processing. The following tiers provide a practical starting point: tune the boundaries based on actual workload distribution.
 
 | Priority | Criteria | Resources |
 |----------|----------|-----------|
@@ -244,7 +244,7 @@ When multiple agents compete for limited resources, a priority system ensures th
 
 ### Token-based Rate Limiting
 
-Rate limits prevent runaway costs and ensure fair resource distribution. Three complementary limits — per-call, per-minute, and daily budget — provide defense in depth against both burst traffic and sustained over-consumption.
+Rate limits prevent runaway costs and ensure fair resource distribution. Three complementary limits (per-call, per-minute, and daily budget) provide defense in depth against both burst traffic and sustained over-consumption.
 
 | Resource | Limit | Window |
 |----------|-------|--------|
@@ -277,7 +277,7 @@ When approaching the limit:
 
 ### Key Cost Metrics
 
-Effective cost monitoring requires a small set of actionable metrics. The four below cover cost per interaction, cost per user, token efficiency, and cache utilization — a minimum viable dashboard for any LLM-powered service.
+Effective cost monitoring requires a small set of actionable metrics. The four below cover cost per interaction, cost per user, token efficiency, and cache utilization: a minimum viable dashboard for any LLM-powered service.
 
 | Metric | Formula | Alert Threshold |
 |--------|---------|-----------------|
@@ -313,10 +313,10 @@ A deployment strategy that connects cost optimization with fine-tuning: use an e
 
 ### The Pattern
 
-1. **Prototype with a premium model** (Claude Opus 4.8, o3) — build the agent, iterate on prompts and tool use until quality is satisfactory
-2. **Collect successful traces** — log every successful agent run: input, chain-of-thought, tool calls, outputs. These traces become training data
-3. **Fine-tune a smaller model** (Claude Haiku 4.5, GPT-4o-mini) on the collected traces — the smaller model learns the agent's behavior patterns
-4. **Deploy the distilled model** — same agent logic, 10-50x cheaper per request
+1. **Prototype with a premium model** (Claude Opus 4.8, o3): build the agent, iterate on prompts and tool use until quality is satisfactory
+2. **Collect successful traces**: log every successful agent run: input, chain-of-thought, tool calls, outputs. These traces become training data
+3. **Fine-tune a smaller model** (Claude Haiku 4.5, GPT-4o-mini) on the collected traces, the smaller model learns the agent's behavior patterns
+4. **Deploy the distilled model**: same agent logic, 10-50x cheaper per request
 
 ### Why This Works
 
@@ -326,9 +326,9 @@ Premium models excel at learning complex behaviors from instructions (zero/few-s
 
 When agents make 10-20 LLM calls per task, costs with reasoning models spiral quickly. Two key parameters for controlling this:
 
-**`budget_tokens` (Anthropic)** — sets an explicit token cap on extended thinking. In agentic loops, use lower budgets for routine steps (tool selection, formatting) and higher budgets only for genuinely complex reasoning steps.
+**`budget_tokens` (Anthropic)**: sets an explicit token cap on extended thinking. In agentic loops, use lower budgets for routine steps (tool selection, formatting) and higher budgets only for genuinely complex reasoning steps.
 
-**`reasoning_effort` (OpenAI)** — coarse control (low/medium/high) over how much thinking o-series models do. Set to "low" for simple agent steps, "high" only for critical decisions.
+**`reasoning_effort` (OpenAI)**: coarse control (low/medium/high) over how much thinking o-series models do. Set to "low" for simple agent steps, "high" only for critical decisions.
 
 **Pattern:** Wrap each agent step with cost-appropriate settings rather than using the same expensive configuration for every LLM call in the loop.
 
@@ -337,7 +337,7 @@ When agents make 10-20 LLM calls per task, costs with reasoning models spiral qu
 - Agent behavior is stable and well-understood (not still iterating on design)
 - Volume justifies fine-tuning cost (hundreds of requests/day+)
 - Quality requirements can be validated automatically (test suites, eval metrics)
-- Latency matters — smaller models are faster
+- Latency matters: smaller models are faster
 
 See Module 10, Fine-Tuning Basics for the technical details of distillation training.
 
@@ -345,7 +345,7 @@ See Module 10, Fine-Tuning Basics for the technical details of distillation trai
 
 ## Agent Project Economics
 
-The techniques above — routing, budgeting, caching, distillation — optimize model-level costs. But model costs are only one dimension of what an agent project actually costs. Understanding the full economic picture is essential for project planning and stakeholder communication.
+The techniques above, routing, budgeting, caching, distillation: optimize model-level costs. But model costs are only one dimension of what an agent project actually costs. Understanding the full economic picture is essential for project planning and stakeholder communication.
 
 ### Development Cost by Complexity
 
@@ -356,15 +356,15 @@ The techniques above — routing, budgeting, caching, distillation — optimize 
 | **Complex multi-agent** | $250K-1M+ | 4-9 months | $8,000-13,000 | Research agents, orchestrated workflows |
 | **Enterprise platform** | $1-5M+ | 6-18 months | $13,000+ | Full agent infrastructure, multi-tenant |
 
-Maintenance costs add 15-25% of the initial development cost annually — model updates, prompt drift, evaluation suite maintenance, infrastructure upgrades.
+Maintenance costs add 15-25% of the initial development cost annually: model updates, prompt drift, evaluation suite maintenance, infrastructure upgrades.
 
 ### The TCO Reality
 
-**Development is only 25-35% of three-year total cost of ownership.** Operations — inference costs, monitoring, maintenance, incident response, model retraining, evaluation pipeline — consume the remaining 65-75%. Budgets that focus on build cost will underestimate total investment by 40-60%.
+**Development is only 25-35% of three-year total cost of ownership.** Operations: inference costs, monitoring, maintenance, incident response, model retraining, evaluation pipeline, consume the remaining 65-75%. Budgets that focus on build cost will underestimate total investment by 40-60%.
 
 **Rule of thumb:** Multiply the initial development estimate by 2.5-3x for three-year total cost. A $200K development project has a realistic three-year TCO of $500-600K.
 
-**The Jevons Paradox in AI:** Model API prices have dropped approximately 280x in two years (as of early 2026). Yet enterprise AI bills are growing, not shrinking — because cheaper tokens enable more ambitious use cases, longer contexts, more agent iterations, and broader deployment. Cost optimization remains essential even as unit prices fall. Verify current pricing before capacity planning — strategies from even 12 months ago may use outdated assumptions.
+**The Jevons Paradox in AI:** Model API prices have dropped approximately 280x in two years (as of early 2026). Yet enterprise AI bills are growing, not shrinking: because cheaper tokens enable more ambitious use cases, longer contexts, more agent iterations, and broader deployment. Cost optimization remains essential even as unit prices fall. Verify current pricing before capacity planning: strategies from even 12 months ago may use outdated assumptions.
 
 ### Build vs Buy Thresholds
 
@@ -377,15 +377,15 @@ The decision between building custom agents and buying platform solutions depend
 | **50-200K** | Custom starts winning | Platform per-unit pricing exceeds infrastructure + development cost |
 | **>200K** | Custom wins decisively | Amortization is favorable; full control over quality and cost |
 
-The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model — they provide infrastructure while allowing custom agent logic. See Module 18, Enterprise AI Adoption for the platform landscape.
+The 2026 standard is hybrid: **buy** compliance, security, infrastructure, and connectors (these are commodity); **build** domain-specific logic and proprietary workflows (these are differentiation). Enterprise agent platforms (Salesforce Agentforce, Amazon Bedrock AgentCore) are designed for this hybrid model. They provide infrastructure while allowing custom agent logic. See Module 18, Enterprise AI Adoption for the platform landscape.
 
 ### The 70/30 Hybrid Model Strategy
 
 A cost optimization pattern gaining traction in production: route **70% of inference volume** to open-source models (DeepSeek V3.2, Qwen 3.5, Llama 4) for routine tasks, and **30% to proprietary frontier models** (Claude Opus 4.8, GPT-5.5) for complex reasoning where quality is critical.
 
-This works because model quality follows a long tail: 70% of agent interactions are routine (classification, simple retrieval, formatting, tool selection) where a capable open-source model performs adequately. The remaining 30% — complex reasoning, nuanced generation, multi-step planning — benefits from frontier model capability.
+This works because model quality follows a long tail: 70% of agent interactions are routine (classification, simple retrieval, formatting, tool selection) where a capable open-source model performs adequately. The remaining 30% (complex reasoning, nuanced generation, multi-step planning) benefits from frontier model capability.
 
-**Implementation:** The cost-aware routing described earlier in this chapter provides the mechanism. The 70/30 split is not fixed — monitor quality metrics by tier and adjust. Some deployments run 80/20 or 60/40 depending on the task distribution.
+**Implementation:** The cost-aware routing described earlier in this chapter provides the mechanism. The 70/30 split is not fixed: monitor quality metrics by tier and adjust. Some deployments run 80/20 or 60/40 depending on the task distribution.
 
 **Why this works economically (as of mid-2026):** DeepSeek V4-Flash costs $0.14/$0.28 per 1M tokens. Claude Opus 4.8 costs $5/$25. The frontier model is 90-180x more expensive per token. Even routing just the simple tasks to open-source saves 50-70% of total inference cost while maintaining quality where it matters.
 
@@ -393,23 +393,23 @@ This works because model quality follows a long tail: 70% of agent interactions 
 
 ## Agent Billing Fragmentation (as of late May 2026)
 
-Agent billing is fragmenting across providers. The era of flat-rate "unlimited" AI pricing is ending — usage-based billing is becoming the standard for agent workloads, and agent-specific costs are diverging from general model API costs.
+Agent billing is fragmenting across providers. The era of flat-rate "unlimited" AI pricing is ending: usage-based billing is becoming the standard for agent workloads, and agent-specific costs are diverging from general model API costs.
 
 ### Provider Billing Changes
 
-**Anthropic** planned to separate Agent SDK credits from general usage on June 15, 2026 — but **the change was paused** and never took effect. All programmatic usage continues drawing from existing subscription limits. Teams using Claude Code in CI/automation pipelines do not need to change billing arrangements (as of late June 2026).
+**Anthropic** planned to separate Agent SDK credits from general usage on June 15, 2026, but **the change was paused** and never took effect. All programmatic usage continues drawing from existing subscription limits. Teams using Claude Code in CI/automation pipelines do not need to change billing arrangements (as of late June 2026).
 
-**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 16 — pricing and model-neutrality implications unclear.
+**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 16, pricing and model-neutrality implications unclear.
 
-**GitHub Copilot** transitioned to **usage-based billing (June 1, 2026)** — all plans now use AI Credits ($0.01/credit). Pro includes $10/month in credits, Pro+ includes $39/month. Usage calculated by token consumption including input, output, and cached tokens. Annual Pro/Pro+ plans remain on legacy request-based pricing until expiration. The era of flat-rate "unlimited" AI coding assistance is ending.
+**GitHub Copilot** transitioned to **usage-based billing (June 1, 2026)**. All plans now use AI Credits ($0.01/credit). Pro includes $10/month in credits, Pro+ includes $39/month. Usage calculated by token consumption including input, output, and cached tokens. Annual Pro/Pro+ plans remain on legacy request-based pricing until expiration. The era of flat-rate "unlimited" AI coding assistance is ending.
 
-**Anthropic SDK billing split:** Originally planned for June 15, 2026 — separate billing for Claude API vs Claude Code usage. **Paused indefinitely** on June 15; the change never took effect.
+**Anthropic SDK billing split:** Originally planned for June 15, 2026: separate billing for Claude API vs Claude Code usage. **Paused indefinitely** on June 15; the change never took effect.
 
 **Google Gemini** is moving to a compute-used pricing model. The new AI Ultra tier ($100/month) provides 5x higher limits than the standard plan, but usage is measured in compute units rather than flat message counts.
 
 ### Why This Matters for Architects and PMs
 
-**Budget for agent billing separately from model API costs.** Agent execution — multi-step loops, tool calls, background tasks, code generation with verification cycles — consumes tokens at 10-20x the rate of a single query. A developer using Claude Code for a refactoring task may trigger 50-100 LLM calls in a single session. An automated CI pipeline running Codex or Claude Code on every PR may generate thousands of calls per day.
+**Budget for agent billing separately from model API costs.** Agent execution: multi-step loops, tool calls, background tasks, code generation with verification cycles: consumes tokens at 10-20x the rate of a single query. A developer using Claude Code for a refactoring task may trigger 50-100 LLM calls in a single session. An automated CI pipeline running Codex or Claude Code on every PR may generate thousands of calls per day.
 
 **The trend:** Providers are discovering that agent workloads have fundamentally different economics from chat workloads. Chat is low-volume, high-margin. Agent execution is high-volume, infrastructure-intensive. Flat-rate pricing that made sense for chat becomes unsustainable when agents are running multi-minute automated workflows. Expect every major provider to have agent-specific billing by late 2026.
 
@@ -419,18 +419,18 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 ## Related Topics
 
-- Planning — efficient planning conserves resources
-- Memory Systems — memory vs re-computation trade-off
-- Module 04, Multi-Agent Fundamentals — resource sharing between agents
-- Module 12, Metrics and Dashboards — resource monitoring
+- Planning: efficient planning conserves resources
+- Memory Systems: memory vs re-computation trade-off
+- Module 04, Multi-Agent Fundamentals: resource sharing between agents
+- Module 12, Metrics and Dashboards: resource monitoring
 
 ---
 
 ## Key Takeaways
 
-1. **Cost-Aware Routing** — route simple tasks to cheaper models
+1. **Cost-Aware Routing**: route simple tasks to cheaper models
 
-2. **Token Budgeting** — set limits for each component:
+2. **Token Budgeting**: set limits for each component:
    - System prompt: fixed
    - Context: dynamic with cap
    - Generation: capped
@@ -462,7 +462,7 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 8. **Agent Billing Fragmentation (as of late May 2026):**
    - Flat-rate "unlimited" AI pricing is ending; usage-based billing is becoming standard for agent workloads
-   - Budget for agent execution separately from model API costs — agents consume 10-20x more tokens than single queries
+   - Budget for agent execution separately from model API costs, agents consume 10-20x more tokens than single queries
    - Track per-agent and per-workflow token consumption in monitoring dashboards
 
 ---

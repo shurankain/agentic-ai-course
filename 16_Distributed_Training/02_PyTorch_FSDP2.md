@@ -4,9 +4,9 @@
 
 DDP replicates the full model on each GPU. For a 10 GB model on 8 GPUs, 80 GB is required, even though 10 GB total would suffice.
 
-FSDP eliminates redundancy through sharding — each GPU stores only a portion of the parameters. For a 70B model on 8 GPUs: instead of 560B parameters total, we store 70B, approximately 9B per GPU.
+FSDP eliminates redundancy through sharding. Each GPU stores only a portion of the parameters. For a 70B model on 8 GPUs: instead of 560B parameters total, we store 70B, approximately 9B per GPU.
 
-FSDP2 (2024) — a redesigned version with 28.54% memory reduction and 68.67% throughput improvement.
+FSDP2 (2024): a redesigned version with 28.54% memory reduction and 68.67% throughput improvement.
 
 ## How FSDP Works
 
@@ -22,10 +22,10 @@ For a model with N parameters on W workers: each stores N/W parameters.
 **Backward pass:**
 1. AllGather of parameters for gradient computation
 2. Gradients computed locally
-3. ReduceScatter of gradients — each worker receives aggregated gradients only for its portion
+3. ReduceScatter of gradients: each worker receives aggregated gradients only for its portion
 4. Temporary parameters are freed
 
-**Pattern:** gather → compute → free for each layer. At peak memory: one layer's parameters in full + sharded remainder. For a 70B model on 8 GPUs with a ~3B layer: ~12B instead of 70B.
+**Pattern:** gather, then compute, then free for each layer. At peak memory: one layer's parameters in full + sharded remainder. For a 70B model on 8 GPUs with a ~3B layer: ~12B instead of 70B.
 
 ### Three Levels of Sharding
 
@@ -35,11 +35,11 @@ For a model with N parameters on W workers: each stores N/W parameters.
 
 **NO_SHARD:** Equivalent to DDP. For debugging and comparison.
 
-**Recommendation:** FULL_SHARD for LLMs on NVLink/InfiniBand — memory savings are critical for increasing batch size.
+**Recommendation:** FULL_SHARD for LLMs on NVLink/InfiniBand: memory savings are critical for increasing batch size.
 
 ### Unit of sharding
 
-FSDP splits the model into "units" — groups of parameters that are sharded and gathered together.
+FSDP splits the model into "units", groups of parameters that are sharded and gathered together.
 
 Too large units: minimal AllGather, but peak memory approaches full model.
 Too small units: many AllGather operations with small volumes, overhead from launching operations.
@@ -83,7 +83,7 @@ Typical strategy: checkpoint every transformer layer. Instead of ~50 GB for all 
 
 Formula for FSDP FULL_SHARD:
 
-Memory per GPU ≈ (Params/N_GPUs) × bytes × multiplier + activations + buffers
+Memory per GPU ≈ (Params/N_GPUs) x bytes x multiplier + activations + buffers
 
 - Params/N_GPUs: even distribution
 - bytes: 2 for BF16
@@ -91,11 +91,11 @@ Memory per GPU ≈ (Params/N_GPUs) × bytes × multiplier + activations + buffer
 - activations: depend on batch and checkpointing
 - buffers: ~5-10% of parameters
 
-**Example 70B on 8×A100-80GB:**
-- Parameters: 70B/8 × 2 × 5 = 87.5 GB
+**Example 70B on 8xA100-80GB:**
+- Parameters: 70B/8 x 2 x 5 = 87.5 GB
 - Activations (batch 16, seq 2048, checkpoint): ~20 GB
 - Buffers: ~5 GB
-- Total: ~112.5 GB — does not fit
+- Total: ~112.5 GB: does not fit
 
 Solution: batch 8 (~10 GB activations) or gradient accumulation.
 

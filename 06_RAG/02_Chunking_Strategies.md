@@ -26,15 +26,15 @@ Chunk size determines how much information each retrieval unit contains. Typical
 
 From an information theory perspective, the optimal chunk size balances utility and cost. Utility is determined by fragment relevance and topic coverage completeness. Costs include noise and context processing overhead.
 
-**Factors affecting optimal size:** Technical constraints — the embedding model has a maximum context length, the LLM context window determines how many chunks can be passed, computational cost of processing large fragments. Content characteristics — information density in technical documents requires smaller chunks, sparseness of fiction requires more context, document structure facilitates splitting into natural fragments. Usage patterns — question types (factoid vs. exploratory), precision vs. recall priority, update frequency.
+**Factors affecting optimal size:** Technical constraints: the embedding model has a maximum context length, the LLM context window determines how many chunks can be passed, computational cost of processing large fragments. Content characteristics: information density in technical documents requires smaller chunks, sparseness of fiction requires more context, document structure facilitates splitting into natural fragments. Usage patterns: question types (factoid vs. exploratory), precision vs. recall priority, update frequency.
 
-**Empirical recommendations by content type:** FAQ and Q&A — 200-500 tokens, each question-answer pair is a self-contained unit. Technical documentation — 500-1000 tokens, a section with examples balancing completeness and focus. Scientific papers — 800-1500 tokens, a paragraph or several related paragraphs with logical coherence. Code — 100-500 tokens, a function or method with documentation and syntactic integrity. Legal documents — 500-1000 tokens, a clause or article in full with accuracy and completeness.
+**Empirical recommendations by content type:** FAQ and Q&A, 200-500 tokens, each question-answer pair is a self-contained unit. Technical documentation: 500-1000 tokens, a section with examples balancing completeness and focus. Scientific papers: 800-1500 tokens, a paragraph or several related paragraphs with logical coherence. Code: 100-500 tokens, a function or method with documentation and syntactic integrity. Legal documents: 500-1000 tokens, a clause or article in full with accuracy and completeness.
 
 ### Fragment Overlap
 
 Overlap is a technique where adjacent fragments partially duplicate each other. If the last 100 tokens of one fragment are repeated at the beginning of the next, context is not lost at boundaries.
 
-**Why overlap is necessary:** The boundary problem is the most common cause of relevant information loss. Imagine an important explanation starting at the end of one fragment and continuing in the next. Without overlap, the first chunk contains an incomplete explanation, the second chunk starts in the middle of a thought, both chunks receive low scores during retrieval, and relevant information is missed. With overlap, both fragments contain the complete explanation — at least one will pass the relevance threshold.
+**Why overlap is necessary:** The boundary problem is the most common cause of relevant information loss. Imagine an important explanation starting at the end of one fragment and continuing in the next. Without overlap, the first chunk contains an incomplete explanation, the second chunk starts in the middle of a thought, both chunks receive low scores during retrieval, and relevant information is missed. With overlap, both fragments contain the complete explanation: at least one will pass the relevance threshold.
 
 **Optimal overlap size:** The typical value is 10-20% of the fragment size. For a 500-token chunk, this means 50-100 tokens of overlap, roughly 1-2 sentences. Too little overlap fails to solve the boundary problem. Too much overlap creates excessive duplication and increases the index size without proportional benefit.
 
@@ -60,9 +60,9 @@ The simplest strategy is splitting into fixed-length fragments. The document is 
 
 A more intelligent approach is splitting by natural text boundaries. The recursive variant attempts to split text first by large boundaries, then by medium ones, then by small ones.
 
-The algorithm works as follows: attempt to split the document by large delimiters (sections), if fragments are still too large — split by medium delimiters (paragraphs), if still too large — by small ones (periods, commas), as a last resort — forced splitting by characters, after splitting add overlap between fragments.
+The algorithm works as follows: attempt to split the document by large delimiters (sections), if fragments are still too large: split by medium delimiters (paragraphs), if still too large, by small ones (periods, commas), as a last resort: forced splitting by characters, after splitting add overlap between fragments.
 
-**When to use:** Text documents with natural structure, books, articles, documentation. The standard choice for most scenarios. **Advantages:** Preserves natural boundaries, logical coherence, balance of simplicity and quality. **Disadvantages:** Variable sizes, does not account for semantics, depends on formatting. **Delimiter hierarchy:** sections → paragraphs → lines → sentences → words.
+**When to use:** Text documents with natural structure, books, articles, documentation. The standard choice for most scenarios. **Advantages:** Preserves natural boundaries, logical coherence, balance of simplicity and quality. **Disadvantages:** Variable sizes, does not account for semantics, depends on formatting. **Delimiter hierarchy:** sections, then paragraphs, then lines, then sentences, then words.
 
 ### 3. Semantic Chunking
 
@@ -72,7 +72,7 @@ Semantic chunking uses embeddings to determine fragment boundaries. The text is 
 
 **Sliding Window Similarity algorithm:** Split the document into sentences, obtain embeddings for each sentence, compute cosine similarity between adjacent sentences, find points of sharp similarity drop (below threshold), draw chunk boundaries at these points, combine sentences between boundaries into chunks.
 
-The system analyzes a sequence of sentences and computes cosine similarity between their embeddings. When several consecutive sentences discuss the same topic, their similarity remains high. As soon as a sentence about a new topic appears, similarity drops — this signals a chunk boundary.
+The system analyzes a sequence of sentences and computes cosine similarity between their embeddings. When several consecutive sentences discuss the same topic, their similarity remains high. As soon as a sentence about a new topic appears, similarity drops, this signals a chunk boundary.
 
 **When to use:** Documents with complex thematic transitions, content without explicit structure, when semantic coherence matters. **Advantages:** Adapts to content, natural topic boundaries, independent of formatting. **Disadvantages:** Computationally expensive, slow for large documents, unpredictable chunk sizes, requires threshold tuning (typically 0.5-0.7).
 
@@ -80,7 +80,7 @@ The system analyzes a sequence of sentences and computes cosine similarity betwe
 
 Structure-based chunking uses the explicit markup of a document. The strategy adapts to the format: an HTML document is split by tags, Markdown by headings, code by functions and classes.
 
-**For Markdown:** Parse headings, each section under a heading is a potential chunk, preserve heading hierarchy as metadata, code blocks and tables remain intact, if a section is too large — split by subsections or paragraphs.
+**For Markdown:** Parse headings, each section under a heading is a potential chunk, preserve heading hierarchy as metadata, code blocks and tables remain intact, if a section is too large: split by subsections or paragraphs.
 
 **For HTML:** section and article are large units, h1-h6 define hierarchy, p elements are paragraphs as minimum units, pre, code, table remain indivisible.
 
@@ -94,7 +94,7 @@ The most advanced approach uses a language model for intelligent chunking. The L
 
 Process: pass the document to the LLM with the prompt "Split this text into logically coherent fragments", the LLM returns boundaries or the chunks themselves, optionally the LLM creates a summary for each chunk.
 
-**When to use:** Small volumes of critically important documents, complex structure, when quality matters more than cost. **Advantages:** Highest quality — contextual understanding, non-trivial decisions (separating digressions, grouping related items), adapts to any content. **Disadvantages:** Expensive, slow, unstable, context window limitation, requires prompt engineering.
+**When to use:** Small volumes of critically important documents, complex structure, when quality matters more than cost. **Advantages:** Highest quality: contextual understanding, non-trivial decisions (separating digressions, grouping related items), adapts to any content. **Disadvantages:** Expensive, slow, unstable, context window limitation, requires prompt engineering.
 
 ## Document Type Specifics
 
@@ -104,19 +104,19 @@ Recommended strategy: Structure-based chunking by level 2-3 headings. Code block
 
 ### Legal Documents
 
-Recommended strategy: Structure-based chunking by clauses and articles. A contract clause with all its subclauses is a single indivisible unit, a term definition must accompany the term itself, references to other parts of the document must preserve sufficient context, exceptions and caveats must not be separated from the main rule, numbering is critical for citation. Metadata: article/clause number, hierarchy, document type, effective date. Typical size: 500-1000 tokens. Overlap is less critical — the structure already provides context.
+Recommended strategy: Structure-based chunking by clauses and articles. A contract clause with all its subclauses is a single indivisible unit, a term definition must accompany the term itself, references to other parts of the document must preserve sufficient context, exceptions and caveats must not be separated from the main rule, numbering is critical for citation. Metadata: article/clause number, hierarchy, document type, effective date. Typical size: 500-1000 tokens. Overlap is less critical: the structure already provides context.
 
 ### Scientific Papers
 
-Recommended strategy: Structure-based chunking by standard sections plus semantic chunking within long sections. Abstract is a separate chunk, Introduction can be split by paragraphs, Methods section benefits from larger chunks to preserve sequence, Results — tables and figures with descriptions stay together, Discussion — can be split by discussed aspects. Metadata: section, authors, year, journal, DOI, keywords, figure/table numbers. Typical size: 800-1500 tokens. Metadata application: filtering by sections.
+Recommended strategy: Structure-based chunking by standard sections plus semantic chunking within long sections. Abstract is a separate chunk, Introduction can be split by paragraphs, Methods section benefits from larger chunks to preserve sequence, Results (tables and figures with descriptions stay together, Discussion) can be split by discussed aspects. Metadata: section, authors, year, journal, DOI, keywords, figure/table numbers. Typical size: 800-1500 tokens. Metadata application: filtering by sections.
 
 ### Correspondence and Chats
 
-Recommended strategy: Grouping by thematic threads or time windows. A single message is rarely self-contained — conversation context is needed, a reply references a question — they should stay together, long threads can be split by topic changes. Grouping options: Thread (question + all replies), sliding window (5-10 messages), semantic clustering, by day for regular correspondence. Metadata: message author, timestamps, Thread ID, channel/topic. Typical size: 300-800 tokens.
+Recommended strategy: Grouping by thematic threads or time windows. A single message is rarely self-contained: conversation context is needed, a reply references a question. They should stay together, long threads can be split by topic changes. Grouping options: Thread (question + all replies), sliding window (5-10 messages), semantic clustering, by day for regular correspondence. Metadata: message author, timestamps, Thread ID, channel/topic. Typical size: 300-800 tokens.
 
 ### Code
 
-Recommended strategy: AST-based chunking (splitting by syntactic units). A function/method with its docstring is the optimal unit, an entire class if small, class split by methods if large. Docstrings and comments stay with the code, the import section can be included in each chunk's context. The ideal code chunk includes a docstring with description, the function signature with types, the function body, and a usage example. Metadata: programming language, file path, function/class name, parameters and return type, tags from comments. Typical size: 100-500 tokens (function) or 500-1000 tokens (class). Summary chunks can be created — natural language descriptions of what the code does.
+Recommended strategy: AST-based chunking (splitting by syntactic units). A function/method with its docstring is the optimal unit, an entire class if small, class split by methods if large. Docstrings and comments stay with the code, the import section can be included in each chunk's context. The ideal code chunk includes a docstring with description, the function signature with types, the function body, and a usage example. Metadata: programming language, file path, function/class name, parameters and return type, tags from comments. Typical size: 100-500 tokens (function) or 500-1000 tokens (class). Summary chunks can be created: natural language descriptions of what the code does.
 
 ## Advanced Optimization Techniques
 
@@ -126,7 +126,7 @@ There are no universally optimal chunking parameters. The optimum depends on you
 
 **Tuning methodology:** Creating a test set (20-50 representative questions with known answers, diverse question types, coverage of different topics). Defining parameters for experiments (chunk size: 256, 512, 1024, 2048 tokens; overlap: 0%, 10%, 20%, 30%; strategy: fixed, recursive, semantic, structure). Evaluation metrics (Retrieval accuracy, MRR, Answer quality, Context efficiency). Analyzing results (which parameters work better for which question types, where the system makes errors, which documents are chunked poorly).
 
-When testing the question "How to configure SSL in Nginx?", the fixed-size strategy with 512 tokens and 10% overlap returns a configuration code fragment without explanations or context. Structure-based chunking by headings with 800 tokens finds an entire "SSL Configuration" section with a full process description — confirming the advantage of structure-based chunking for technical documentation.
+When testing the question "How to configure SSL in Nginx?", the fixed-size strategy with 512 tokens and 10% overlap returns a configuration code fragment without explanations or context. Structure-based chunking by headings with 800 tokens finds an entire "SSL Configuration" section with a full process description, confirming the advantage of structure-based chunking for technical documentation.
 
 ### Hybrid Approaches
 
@@ -138,7 +138,7 @@ Advantages: each content type is processed optimally, code is not split in the m
 
 ### Multi-Level Indexing (Hierarchical Chunking)
 
-An advanced technique — creating multiple index levels with different granularity.
+An advanced technique, creating multiple index levels with different granularity.
 
 A document is indexed at several levels of detail simultaneously. The top level (Level 0) contains a brief description of the entire document at roughly 200 tokens. The first level (Level 1) includes large sections of about 1000 tokens. The second level (Level 2) consists of subsections of about 500 tokens. The third level (Level 3) contains paragraphs of about 200 tokens.
 
@@ -166,9 +166,9 @@ Each chunk is not just text but a structured object with metadata that improves 
 
 **Key metadata types:** Structural (heading hierarchy, position in document, content type, nesting level), Contextual (document and section name, creation/modification date, author, version, language), Semantic (automatic tags, chunk summary, named entities, category/topic).
 
-**Metadata applications:** Search filtering ("What does it say about security in the configuration section?" → filter: section="Configuration"). Improving context for the LLM (instead of passing raw text, the model receives information about the section, document, and content type). Result ranking (boosting chunks from current documentation versions, prioritizing chunks from official sources).
+**Metadata applications:** Search filtering ("What does it say about security in the configuration section?" becomes filter: section="Configuration"). Improving context for the LLM (instead of passing raw text, the model receives information about the section, document, and content type). Result ranking (boosting chunks from current documentation versions, prioritizing chunks from official sources).
 
-**Summary Chunks:** An advanced technique — creating additional summary chunks for large sections. The LLM generates a brief (100-200 token) section description, the summary is indexed alongside regular chunks, useful for overview questions, contains references to detailed chunks for drill-down.
+**Summary Chunks:** An advanced technique, creating additional summary chunks for large sections. The LLM generates a brief (100-200 token) section description, the summary is indexed alongside regular chunks, useful for overview questions, contains references to detailed chunks for drill-down.
 
 ## Key Takeaways
 
@@ -176,7 +176,7 @@ Chunking is a critical RAG system component that directly affects quality. Incor
 
 **Core principles:** There is no universal solution, balance precision and context (small chunks for precision, large for context, medium as a trade-off), overlap is mandatory (10-20% overlap prevents information loss at boundaries), semantic integrity (chunk boundaries should align with logical text boundaries), metadata is critical (preserve hierarchy, content type, dates, authors).
 
-**Strategy selection matrix:** Technical documentation — Structure-based (Markdown/HTML), 500-1000 tokens, by level 2-3 headings. FAQ, Q&A — Pair-based splitting, 200-500 tokens, question+answer as a unit. Scientific papers — Structure-based + semantic, 800-1500 tokens, by IMRAD sections. Legal documents — Structure-based by articles, 500-1000 tokens, clause with all subclauses. Code — AST-based, 100-500 tokens, function with docstring. Correspondence/chats — Thread-based, 300-800 tokens, grouping related messages. Arbitrary text — Recursive, 500-1000 tokens, paragraphs with 15% overlap.
+**Strategy selection matrix:** Technical documentation: Structure-based (Markdown/HTML), 500-1000 tokens, by level 2-3 headings. FAQ, Q&A: Pair-based splitting, 200-500 tokens, question+answer as a unit. Scientific papers: Structure-based + semantic, 800-1500 tokens, by IMRAD sections. Legal documents: Structure-based by articles, 500-1000 tokens, clause with all subclauses. Code: AST-based, 100-500 tokens, function with docstring. Correspondence/chats: Thread-based, 300-800 tokens, grouping related messages. Arbitrary text: Recursive, 500-1000 tokens, paragraphs with 15% overlap.
 
 **Optimization process:** Start with a baseline (recursive splitting, 512 tokens, 10% overlap), create a test set (20-50 representative questions), experiment (vary size, overlap, strategy), measure (Retrieval accuracy, MRR, answer quality), specialize (different strategies for different document types), iterate (chunking is continuous improvement).
 

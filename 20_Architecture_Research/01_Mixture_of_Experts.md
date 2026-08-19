@@ -2,13 +2,13 @@
 
 ## The Problem of Scaling Dense Models
 
-Scaling laws demonstrated a direct relationship: more parameters equals better quality. However, dense models, where every parameter participates in every computation, hit a fundamental limitation — compute grows linearly with the number of parameters.
+Scaling laws demonstrated a direct relationship: more parameters equals better quality. However, dense models, where every parameter participates in every computation, hit a fundamental limitation: compute grows linearly with the number of parameters.
 
 GPT-3 with 175B parameters requires approximately 350 PFLOP per forward pass. GPT-4 with an estimated 1.8T parameters (unconfirmed) has correspondingly astronomical inference and training costs.
 
-Mixture of Experts offers a revolutionary solution: increase the number of parameters without a proportional increase in compute. Instead of using all parameters for every token, MoE activates only a small subset — specialized "experts."
+Mixture of Experts offers a revolutionary solution: increase the number of parameters without a proportional increase in compute. Instead of using all parameters for every token, MoE activates only a small subset: specialized "experts."
 
-Mixtral 8x7B demonstrates the power of this approach: the model has 47B parameters but uses only approximately 13B per token — equivalent to a 7B dense model in compute. Meanwhile, quality is comparable to LLaMA 2 70B. A 5x compute savings while maintaining quality.
+Mixtral 8x7B demonstrates the power of this approach: the model has 47B parameters but uses only approximately 13B per token: equivalent to a 7B dense model in compute. Meanwhile, quality is comparable to LLaMA 2 70B. A 5x compute savings while maintaining quality.
 
 ## MoE Architecture
 
@@ -16,9 +16,9 @@ Mixtral 8x7B demonstrates the power of this approach: the model has 47B paramete
 
 MoE replaces a single large FFN block in a transformer with N specialized FFN blocks (experts) plus a router that decides which experts to use for each token.
 
-A standard Transformer uses the sequence: Input → Attention → FFN → Output. An MoE Transformer transforms this into: Input → Attention → Router → selected Experts → Combine → Output.
+A standard Transformer uses the sequence: Input, then Attention, then FFN, then Output. An MoE Transformer transforms this into: Input, then Attention, then Router, then selected Experts, then Combine, then Output.
 
-**Router** (gating network) — a small neural network, typically a single linear layer, that takes an input token and produces a probability distribution over experts. The gating function G(x) computes the softmax of the product of learnable weights and the input vector, creating a probability distribution over all experts.
+**Router** (gating network): a small neural network, typically a single linear layer, that takes an input token and produces a probability distribution over experts. The gating function G(x) computes the softmax of the product of learnable weights and the input vector, creating a probability distribution over all experts.
 
 **Top-K routing:** Instead of a weighted combination of all experts, only the K experts with the highest probabilities are used. The final output is a weighted sum of the selected experts' outputs, where weights are determined by routing probabilities.
 
@@ -28,13 +28,13 @@ In 2021, Google introduced the Switch Transformer with a radical simplification:
 
 Why this works: maximum sparsity at K=1 means compute does not grow with the number of experts, routing simplicity eliminates the need to combine outputs, and experts are forced to become narrow specialists.
 
-Switch Transformer achieved a 7x speedup compared to T5-Base at equivalent quality, scaling to 1.6T parameters. Hard routing creates a discrete choice — addressed through Gumbel-Softmax or a straight-through estimator for gradient flow.
+Switch Transformer achieved a 7x speedup compared to T5-Base at equivalent quality, scaling to 1.6T parameters. Hard routing creates a discrete choice: addressed through Gumbel-Softmax or a straight-through estimator for gradient flow.
 
 ### GShard: Load Balancing
 
-Google's GShard (2020) introduced a critical optimization — auxiliary load balancing loss. The balancing loss formula: the number of experts N is multiplied by the sum of products of two quantities for each expert — the fraction of tokens routed to the expert and the average routing probability for that expert, all multiplied by coefficient alpha (typically 0.01).
+Google's GShard (2020) introduced a critical optimization: auxiliary load balancing loss. The balancing loss formula: the number of experts N is multiplied by the sum of products of two quantities for each expert: the fraction of tokens routed to the expert and the average routing probability for that expert, all multiplied by coefficient alpha (typically 0.01).
 
-Without balancing, the router tends to "collapse" — routing all tokens to a few experts while ignoring the rest. This wastes MoE advantages (unused experts), creates a bottleneck (overloaded experts), and degrades quality (less specialization).
+Without balancing, the router tends to "collapse", routing all tokens to a few experts while ignoring the rest. This wastes MoE advantages (unused experts), creates a bottleneck (overloaded experts), and degrades quality (less specialization).
 
 **MoE Routing Health Metrics:**
 
@@ -44,7 +44,7 @@ Routing Entropy measures distribution uniformity as the negative sum of products
 
 Expert Collapse Detection identifies collapse when a single expert receives more than 50% of tokens or when active experts number fewer than half the total.
 
-Router Confidence — the average value of the maximum probability after softmax. High confidence means clear selection, low confidence may indicate underfitting.
+Router Confidence: the average value of the maximum probability after softmax. High confidence means clear selection, low confidence may indicate underfitting.
 
 **Token Dropping Under Overload:**
 
@@ -68,9 +68,9 @@ Specifications: 671B total parameters, 37B activated per token, training cost of
 
 **Architectural Innovations:**
 
-**Multi-Head Latent Attention (MLA):** Standard Multi-Head Attention requires storing K and V for each head — KV cache for 128K context x 70B model amounts to hundreds of GB of memory. MLA compresses KV representation through a learned projection into a latent space of much smaller dimensionality. Result: KV cache is reduced by 5-10x with minimal quality loss, enabling long context without proportional memory growth, making inference on 128K context practical.
+**Multi-Head Latent Attention (MLA):** Standard Multi-Head Attention requires storing K and V for each head: KV cache for 128K context x 70B model amounts to hundreds of GB of memory. MLA compresses KV representation through a learned projection into a latent space of much smaller dimensionality. Result: KV cache is reduced by 5-10x with minimal quality loss, enabling long context without proportional memory growth, making inference on 128K context practical.
 
-**Multi-Token Prediction (MTP):** Instead of predicting a single next token, the model predicts several simultaneously — probability distributions for tokens at positions t+1, t+2, and beyond given the context. During training, additional prediction heads are trained in parallel, predicting future tokens at different horizons. During inference, a speculative-like approach is used where the model predicts multiple tokens, then verifies them and accepts or rejects. Result: up to 60 tokens/sec while maintaining quality — a 1.8x speedup compared to the standard autoregressive approach.
+**Multi-Token Prediction (MTP):** Instead of predicting a single next token, the model predicts several simultaneously, probability distributions for tokens at positions t+1, t+2, and beyond given the context. During training, additional prediction heads are trained in parallel, predicting future tokens at different horizons. During inference, a speculative-like approach is used where the model predicts multiple tokens, then verifies them and accepts or rejects. Result: up to 60 tokens/sec while maintaining quality: a 1.8x speedup compared to the standard autoregressive approach.
 
 **FP8 Mixed Precision Training:** DeepSeek V3 became the first model of this scale trained with FP8 precision across all parts of the pipeline. The forward pass uses FP8 for weights and activations, the backward pass applies FP8 for gradients, and master weights are stored in FP32 for stability. Challenges addressed through adaptive loss scaling for the limited FP8 range, gradient overflow handling, and quantization noise compensation. Result: approximately 2x compute efficiency compared to FP16.
 
@@ -78,7 +78,7 @@ Specifications: 671B total parameters, 37B activated per token, training cost of
 
 **Comparison with Competitors:**
 
-GPT-4o: approximately 1.8T total/unknown active params (unconfirmed estimate based on industry speculation — OpenAI has not disclosed architecture details), estimated $100M+ training cost (no official source), 128K context, 88.7 MMLU.
+GPT-4o: approximately 1.8T total/unknown active params (unconfirmed estimate based on industry speculation: OpenAI has not disclosed architecture details), estimated $100M+ training cost (no official source), 128K context, 88.7 MMLU.
 Claude 3.5: unknown params, unknown cost, 200K context, 88.7 MMLU.
 Llama 3.1 405B: 405B total/405B active, approximately $50M cost, 128K context, 88.6 MMLU.
 DeepSeek V3: 671B total/37B active, $5.5M cost, 128K context, 88.5 MMLU.
@@ -122,13 +122,13 @@ Trade-off: Compute efficiency is lost (all experts are active), but training sta
 
 Hash routing: Deterministic routing based on a hash function of the token. No learnable parameters, perfect balance, but no adaptivity.
 
-Random routing: Random expert selection. Surprisingly performs acceptably — experts specialize on "random slices" of data.
+Random routing: Random expert selection. Surprisingly performs acceptably: experts specialize on "random slices" of data.
 
 Cluster routing: Tokens are grouped (k-means on embeddings), each cluster is routed to its own expert. Precomputed, not trained end-to-end.
 
 ## Capacity Factor and Overflow Handling
 
-With a fixed batch size and Top-K routing, the number of tokens for each expert varies. One expert may receive 100 tokens, another — 10.
+With a fixed batch size and Top-K routing, the number of tokens for each expert varies. One expert may receive 100 tokens, another, 10.
 
 The capacity factor defines the maximum tokens per expert: tokens in batch multiplied by K divided by the number of experts multiplied by C, where C is the capacity factor (typically 1.0-2.0). At C = 1.0, there is perfect balance but overflow is inevitable. At C = 2.0, there is double buffer with less overflow but twice the memory.
 
@@ -204,7 +204,7 @@ Positional specialization: Sentence beginnings, sentence endings, and the middle
 
 ### Analysis Methods
 
-Expert activation patterns: For each token, activated experts are recorded, then the data is grouped by token types to identify patterns — which token types are routed to which experts.
+Expert activation patterns: For each token, activated experts are recorded, then the data is grouped by token types to identify patterns, which token types are routed to which experts.
 
 Expert probing: Linear classifiers are trained on hidden states within each expert to verify what information they store, for example whether an expert can determine part of speech or sentiment.
 
@@ -226,7 +226,7 @@ By 2025, MoE has transitioned from a promising approach to the dominant architec
 
 DeepSeek R1 (January 2025) combined the MoE architecture of DeepSeek V3 (671B total, 37B active) with GRPO (Group Relative Policy Optimization) to create a reasoning model that competes with OpenAI o1.
 
-**Key insight:** MoE provides the capacity (671B parameters of knowledge), while GRPO provides the reasoning capability through pure RL training. R1 demonstrated that MoE models can reason at the frontier level — MoE is not just about efficiency but also about enabling new capabilities.
+**Key insight:** MoE provides the capacity (671B parameters of knowledge), while GRPO provides the reasoning capability through pure RL training. R1 demonstrated that MoE models can reason at the frontier level: MoE is not just about efficiency but also about enabling new capabilities.
 
 **R1-Zero:** Applying GRPO to the base MoE model without SFT on reasoning traces led to spontaneous emergence of chain-of-thought reasoning. The MoE architecture's large parameter count (knowledge capacity) combined with RL incentives produced reasoning without explicit teaching.
 
@@ -240,13 +240,13 @@ Meta's Llama 4 (April 2025) advanced MoE architecture significantly:
 
 **Maverick** (400B total, 17B active): 128 experts per MoE layer. Quality-competitive with GPT-4o and Claude Sonnet 4 on general benchmarks.
 
-**Native multimodal early fusion:** Unlike previous approaches that bolt vision onto text models via adapters, Llama 4 tokenizes images, text, and video into a shared representation space from the start. The MoE routing operates over unified multimodal tokens — the same experts can specialize in visual or textual patterns.
+**Native multimodal early fusion:** Unlike previous approaches that bolt vision onto text models via adapters, Llama 4 tokenizes images, text, and video into a shared representation space from the start. The MoE routing operates over unified multimodal tokens: the same experts can specialize in visual or textual patterns.
 
 ### Other Notable MoE Models
 
 **DBRX** (Databricks, 2024): 132B total, 36B active, 16 experts. Focused on enterprise use cases with strong instruction following. Demonstrated that MoE works well for fine-grained enterprise tasks, not just general language modeling.
 
-**Qwen 3 235B** (Alibaba, 2025): 235B total MoE variant alongside dense models. Hybrid thinking mode — can dynamically switch between fast (no thinking) and reasoning (extended thinking) modes. Uses a GRPO-inspired training approach for reasoning.
+**Qwen 3 235B** (Alibaba, 2025): 235B total MoE variant alongside dense models. Hybrid thinking mode: can dynamically switch between fast (no thinking) and reasoning (extended thinking) modes. Uses a GRPO-inspired training approach for reasoning.
 
 **Gemini 2.5 Pro** (Google, 2025): While architectural details are not fully public, it uses MoE with native multimodal processing and 1M+ token context. Demonstrates that MoE scales effectively to very long contexts.
 
@@ -264,7 +264,7 @@ The frontier models converge on several patterns:
 
 Distributed Training (section 16): Expert parallelism is a specific type of model parallelism. AllToAll communication requires optimization just like AllReduce.
 
-Scaling Laws (see Module 01, Scaling Laws): MoE changes scaling laws — parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
+Scaling Laws (see Module 01, Scaling Laws): MoE changes scaling laws: parameters vs compute become decoupled. "Chinchilla optimal" for MoE is different.
 
 Inference (section 17): MoE inference requires loading all experts (memory), AllToAll for distributed inference, and specific KV cache management.
 
@@ -272,7 +272,7 @@ Quantization (section 15): Unused experts can be quantized more aggressively, ac
 
 ## Key Takeaways
 
-MoE decouples parameters and compute. More parameters does not mean proportionally more computation — only active experts consume compute.
+MoE decouples parameters and compute. More parameters does not mean proportionally more computation: only active experts consume compute.
 
 The router is a critical component. Routing quality determines MoE efficiency. Poor routing equals wasted parameters.
 
@@ -286,9 +286,9 @@ Specialization is emergent. Experts automatically specialize on different aspect
 
 Top-K selects precision vs efficiency. K=1 is maximally efficient, K=2 provides a safety margin, K greater than 2 is rarely justified.
 
-MoE is the dominant frontier architecture (2025). DeepSeek V3/R1, Llama 4, Qwen 3 235B, Gemini 2.5/3 Pro — all frontier models use MoE. The debate is no longer "MoE vs Dense" but "which MoE design."
+MoE is the dominant frontier architecture (2025). DeepSeek V3/R1, Llama 4, Qwen 3 235B, Gemini 2.5/3 Pro: all frontier models use MoE. The debate is no longer "MoE vs Dense" but "which MoE design."
 
-MoE is not for every scenario. Small models (<10B), homogeneous data, strict latency — dense may be better.
+MoE is not for every scenario. Small models (<10B), homogeneous data, strict latency: dense may be better.
 
 Memory footprint remains high. All experts must reside in memory, even if only a small fraction is active. This limits inference on edge devices.
 

@@ -55,9 +55,9 @@ Paper-reported results on original LLaMA-7B (2023) illustrate DoRA's advantage o
 
 ### Advantages of GaLore
 
-1. Full-parameter training — all weights are updated
-2. Memory efficiency — comparable to LoRA
-3. No inference overhead — no additional matrices
+1. Full-parameter training: all weights are updated
+2. Memory efficiency: comparable to LoRA
+3. No inference overhead: no additional matrices
 
 GaLore achieves quality close to full fine-tuning while using memory comparable to LoRA. The perplexity results below demonstrate that gradient projection preserves more information than weight-space low-rank constraints.
 
@@ -81,7 +81,7 @@ The practical decision between LoRA and GaLore depends on deployment requirement
 
 ## QA-LoRA: Quantization-Aware LoRA
 
-**Problem:** training in FP16 → merge → quantize loses quality.
+**Problem:** training in FP16, then merge, then quantize loses quality.
 
 **Solution:** train with quantization from the start. The base model is loaded in INT4, LoRA adapters remain in FP16. A trainable scale parameter compensates for the difference between quantized and full-precision computations.
 
@@ -123,33 +123,33 @@ With several PEFT methods now available, selecting the right one requires weighi
 
 ## Decision Framework
 
-**Start with LoRA** — production-proven, broad support, straightforward hyperparameters.
+**Start with LoRA**: production-proven, broad support, straightforward hyperparameters.
 
-**Upgrade to DoRA** if LoRA does not deliver the required quality — expect +2-4% improvement.
+**Upgrade to DoRA** if LoRA does not deliver the required quality, expect +2-4% improvement.
 
-**GaLore** for research/maximum quality — approaches full fine-tuning performance.
+**GaLore** for research/maximum quality: approaches full fine-tuning performance.
 
 **Combine methods:** QLoRA with DoRA-style magnitude, LongLoRA with Flash Attention, Adaptive rank selection.
 
 ## What Comes Next
 
 **Current trends:**
-- Merging adapters — arithmetic for combining LoRAs
-- Sparse adapters — even fewer parameters
-- Automatic rank selection — adaptive rank during training
-- Cross-model transfer — LoRA adapters between similar models
+- Merging adapters: arithmetic for combining LoRAs
+- Sparse adapters: even fewer parameters
+- Automatic rank selection: adaptive rank during training
+- Cross-model transfer: LoRA adapters between similar models
 
 **Papers to watch:** LoRA-FA (Frozen-A), AdaLoRA (Adaptive rank), LoRA Merging techniques.
 
 ## Key Takeaways
 
-DoRA separates weight updates into magnitude and direction — +3.7% over LoRA with the same number of parameters.
+DoRA separates weight updates into magnitude and direction, +3.7% over LoRA with the same number of parameters.
 
-GaLore projects gradients into a low-rank subspace — full training of all parameters with memory efficiency comparable to LoRA.
+GaLore projects gradients into a low-rank subspace, full training of all parameters with memory efficiency comparable to LoRA.
 
-QLoRA combines INT4 quantization of the base with FP16 LoRA adapters — maximum memory savings.
+QLoRA combines INT4 quantization of the base with FP16 LoRA adapters, maximum memory savings.
 
-LongLoRA uses Shift Short Attention — efficient fine-tuning on long context (100K+ tokens).
+LongLoRA uses Shift Short Attention, efficient fine-tuning on long context (100K+ tokens).
 
 LoRA remains the production-proven default; DoRA for improved quality; GaLore for the closest approximation to full fine-tuning.
 

@@ -2,7 +2,7 @@
 
 ## From Chatbots to Autonomous Systems
 
-A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were essentially "smart chatbots" — systems that answer questions in a "question → answer" format — modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
+A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were essentially "smart chatbots", systems that answer questions in a "question becomes answer" format: modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
 
 An **AI agent** is a software system that uses a large language model for autonomous task execution through perceiving the environment, making decisions, and performing actions to achieve specified goals.
 
@@ -10,11 +10,11 @@ An **AI agent** is a software system that uses a large language model for autono
 
 The **BDI (Beliefs-Desires-Intentions)** model is one of the most influential formalizations of agency, developed by philosopher Michael Bratman and formalized in AI by researchers Rao and Georgeff.
 
-**Beliefs** — the agent's representation of the state of the world: information from the system prompt, results of previous observations and actions, knowledge from memory, current understanding of the task and progress.
+**Beliefs**: the agent's representation of the state of the world: information from the system prompt, results of previous observations and actions, knowledge from memory, current understanding of the task and progress.
 
-**Desires** — states of the world the agent wants to achieve: the user's goal, sub-goals from planning, constraints that must be respected.
+**Desires**: states of the world the agent wants to achieve: the user's goal, sub-goals from planning, constraints that must be respected.
 
-**Intentions** — the chosen course of action the agent commits to: the current execution plan, the selected next step, commitment to completing the initiated action.
+**Intentions**: the chosen course of action the agent commits to: the current execution plan, the selected next step, commitment to completing the initiated action.
 
 The **BDI agent cycle** is a continuous process: the agent perceives the environment and updates its beliefs, then analyzes possible courses of action based on its desires and beliefs, selects specific intentions through means-ends reasoning, executes the planned actions, observes results, and returns to the beginning of the cycle.
 
@@ -32,19 +32,19 @@ Consider the simplest chatbot: a user asks a question, the model generates an an
 
 ### Transformation into an Agent
 
-An AI agent removes these limitations. When a user provides a task, the agent does not simply generate a response — it analyzes the task, creates a plan, iteratively executes steps, calls external tools as needed, observes results, and adjusts course.
+An AI agent removes these limitations. When a user provides a task, the agent does not simply generate a response, it analyzes the task, creates a plan, iteratively executes steps, calls external tools as needed, observes results, and adjusts course.
 
 This is similar to the difference between a calculator and a programmer. A calculator gives an answer to a specific expression. A programmer understands the problem, breaks it down into subtasks, uses various tools, tests intermediate results, and changes approach when necessary.
 
 ### Connection to Classical AI Planning
 
-LLM agents did not appear in a vacuum — they inherit ideas from decades of research in classical AI planning.
+LLM agents did not appear in a vacuum, they inherit ideas from decades of research in classical AI planning.
 
-**STRIPS (Stanford Research Institute Problem Solver, 1971)** — one of the first formalisms for automated planning. STRIPS represents the world as a set of predicates (assertions about state), and actions as operators with preconditions and effects. In LLM agents, state corresponds to the context window, actions correspond to tools with descriptions of their capabilities, preconditions are inferred implicitly by the agent through reasoning, effects are observable results after executing an action. The key difference: an LLM agent does not require a formal description of preconditions and effects — it "understands" them from natural language descriptions.
+**STRIPS (Stanford Research Institute Problem Solver, 1971)**: one of the first formalisms for automated planning. STRIPS represents the world as a set of predicates (assertions about state), and actions as operators with preconditions and effects. In LLM agents, state corresponds to the context window, actions correspond to tools with descriptions of their capabilities, preconditions are inferred implicitly by the agent through reasoning, effects are observable results after executing an action. The key difference: an LLM agent does not require a formal description of preconditions and effects, it "understands" them from natural language descriptions.
 
-**PDDL (Planning Domain Definition Language)** — the standard language for describing planning problems. Modern agents use JSON tool descriptions that include name, description, and parameters. The LLM "understands" the textual description and implicitly infers preconditions and effects — what PDDL defines explicitly and formally.
+**PDDL (Planning Domain Definition Language)**: the standard language for describing planning problems. Modern agents use JSON tool descriptions that include name, description, and parameters. The LLM "understands" the textual description and implicitly infers preconditions and effects: what PDDL defines explicitly and formally.
 
-**Hierarchical Task Networks (HTN)** — decompose high-level tasks into subtasks. This is exactly what LLM agents do during planning! When an agent receives the task "deploy the application," it decomposes it into high-level steps (build, test, deploy), then breaks each step into concrete actions, and finally executes primitive tasks through tool calls. The difference is that HTN requires explicit task hierarchy definition, while an LLM agent infers it from context understanding.
+**Hierarchical Task Networks (HTN)**: decompose high-level tasks into subtasks. This is exactly what LLM agents do during planning! When an agent receives the task "deploy the application," it decomposes it into high-level steps (build, test, deploy), then breaks each step into concrete actions, and finally executes primitive tasks through tool calls. The difference is that HTN requires explicit task hierarchy definition, while an LLM agent infers it from context understanding.
 
 **Advantages of LLM agents over classical planning:** no formal domain description required, work with natural language, adapt to unexpected situations, can reason about non-formalizable aspects.
 
@@ -52,19 +52,19 @@ LLM agents did not appear in a vacuum — they inherit ideas from decades of res
 
 ---
 
-## Agent Operation Cycle: Observe → Think → Act → Reflect
+## Agent Operation Cycle: Observe, then Think, then Act, then Reflect
 
 ### Conceptual Model
 
 An AI agent's operation is organized as a cycle resembling human cognitive processes. This cycle consists of four main phases:
 
-**Observe** — the agent perceives the current state of the environment: what the user is saying, what results previous actions returned, what the current task is and what has already been done.
+**Observe**: the agent perceives the current state of the environment: what the user is saying, what results previous actions returned, what the current task is and what has already been done.
 
-**Think** — based on observations, the agent reasons about what to do next. This is the central phase where the LLM makes decisions: which tool to call, what parameters to pass, or whether the task is already complete.
+**Think**: based on observations, the agent reasons about what to do next. This is the central phase where the LLM makes decisions: which tool to call, what parameters to pass, or whether the task is already complete.
 
-**Act** — the agent executes the chosen action: calls a tool, generates a response to the user, or modifies internal state.
+**Act**: the agent executes the chosen action: calls a tool, generates a response to the user, or modifies internal state.
 
-**Reflect** — the agent analyzes the result of the action. Was it successful? Did it move closer to the goal? Does the strategy need to change?
+**Reflect**: the agent analyzes the result of the action. Was it successful? Did it move closer to the goal? Does the strategy need to change?
 
 This cycle repeats until the task is completed, limits are exhausted (steps, tokens, time), or the agent determines the task is infeasible.
 
@@ -108,17 +108,17 @@ The agent works completely independently until the task is completed or limits a
 
 Any AI agent, regardless of specific implementation, consists of several key components:
 
-**Brain** — the large language model that makes decisions. This is the agent's "intelligence," responsible for reasoning, planning, and response synthesis.
+**Brain**: the large language model that makes decisions. This is the agent's "intelligence," responsible for reasoning, planning, and response synthesis.
 
-**Memory** — the system for storing context and experience. Includes short-term memory (current session), long-term memory (across sessions), and working memory (current task state).
+**Memory**: the system for storing context and experience. Includes short-term memory (current session), long-term memory (across sessions), and working memory (current task state).
 
-**Tools** — interfaces to the external world. Web search, database operations, sending emails, code execution — all of these are tools that extend the agent's capabilities.
+**Tools**: interfaces to the external world. Web search, database operations, sending emails, code execution: all of these are tools that extend the agent's capabilities.
 
-**Orchestrator** — manages the agent's operation cycle. Responsible for transitions between phases, error handling, enforcing limits, and guardrails.
+**Orchestrator**: manages the agent's operation cycle. Responsible for transitions between phases, error handling, enforcing limits, and guardrails.
 
 ### Component Interaction
 
-When the agent receives a task, the orchestrator launches the processing cycle. The Brain analyzes the task, consulting Memory for relevant context. Based on reasoning, the Brain selects the next action — a Tool call or response generation. The result of the action is saved in Memory and passed back to the Brain for the next iteration. The orchestrator tracks state, handles errors, and ensures completion.
+When the agent receives a task, the orchestrator launches the processing cycle. The Brain analyzes the task, consulting Memory for relevant context. Based on reasoning, the Brain selects the next action: a Tool call or response generation. The result of the action is saved in Memory and passed back to the Brain for the next iteration. The orchestrator tracks state, handles errors, and ensures completion.
 
 ---
 
@@ -126,15 +126,15 @@ When the agent receives a task, the orchestrator launches the processing cycle. 
 
 AI agents are not universal. Different task types require different agent configurations:
 
-**Research** — searching and synthesizing information from various sources. The agent needs web search tools, the ability to analyze and compare information, and good memory for accumulating findings.
+**Research**: searching and synthesizing information from various sources. The agent needs web search tools, the ability to analyze and compare information, and good memory for accumulating findings.
 
-**Data Analysis** — processing and analyzing structured data. Requires tools for working with databases, statistical calculations, and visualization.
+**Data Analysis**: processing and analyzing structured data. Requires tools for working with databases, statistical calculations, and visualization.
 
-**Automation** — executing sequences of routine operations. Key tools: file handling, API integrations, command execution.
+**Automation**: executing sequences of routine operations. Key tools: file handling, API integrations, command execution.
 
-**Content Creation** — generating text, code, and documents. A quality Brain (powerful model) and well-crafted prompts are essential here.
+**Content Creation**: generating text, code, and documents. A quality Brain (powerful model) and well-crafted prompts are essential here.
 
-**Decision Support** — assisting in data-driven decision making. Requires a combination of analytics, visualization, and quality synthesis.
+**Decision Support**: assisting in data-driven decision making. Requires a combination of analytics, visualization, and quality synthesis.
 
 ---
 
@@ -142,27 +142,27 @@ AI agents are not universal. Different task types require different agent config
 
 ### Advantages
 
-**Autonomy** — the ability to operate without constant human oversight. An agent can process hundreds of tasks overnight while the team sleeps.
+**Autonomy**: the ability to operate without constant human oversight. An agent can process hundreds of tasks overnight while the team sleeps.
 
-**Adaptability** — the ability to handle new situations. Unlike rigidly programmed automation, an agent can improvise and find solutions to previously unseen problems.
+**Adaptability**: the ability to handle new situations. Unlike rigidly programmed automation, an agent can improvise and find solutions to previously unseen problems.
 
-**Scalability** — easy scaling to large task volumes. A single agent can analyze thousands of documents or respond to hundreds of tickets.
+**Scalability**: easy scaling to large task volumes. A single agent can analyze thousands of documents or respond to hundreds of tickets.
 
-**Consistency** — uniform quality of work regardless of time and workload. An agent does not get tired, distracted, or make errors due to inattention.
+**Consistency**: uniform quality of work regardless of time and workload. An agent does not get tired, distracted, or make errors due to inattention.
 
-**Integration** — the ability to work with different systems through tools. An agent can simultaneously use ten different APIs, which would be difficult for a human to achieve.
+**Integration**: the ability to work with different systems through tools. An agent can simultaneously use ten different APIs, which would be difficult for a human to achieve.
 
 ### Limitations and Risks
 
-**Hallucinations** — LLMs can generate incorrect information with full confidence. This is especially dangerous for agents that make decisions based on their "knowledge." Mitigation: result verification, using RAG for ground truth, guardrails for critical decisions.
+**Hallucinations**: LLMs can generate incorrect information with full confidence. This is especially dangerous for agents that make decisions based on their "knowledge." Mitigation: result verification, using RAG for ground truth, guardrails for critical decisions.
 
-**Limited Context** — the LLM's context window limits the amount of information available to the agent at any given moment. For complex tasks with large context, this can be a problem. Mitigation: summarization, RAG, hierarchical memory, intelligent context prioritization.
+**Limited Context**: the LLM's context window limits the amount of information available to the agent at any given moment. For complex tasks with large context, this can be a problem. Mitigation: summarization, RAG, hierarchical memory, intelligent context prioritization.
 
-**Cost** — LLM API calls can be expensive at scale. An agent making dozens of calls per task can become prohibitively expensive. Mitigation: caching, prompt optimization, selecting the appropriate model for the task.
+**Cost**: LLM API calls can be expensive at scale. An agent making dozens of calls per task can become prohibitively expensive. Mitigation: caching, prompt optimization, selecting the appropriate model for the task.
 
-**Unpredictability** — LLM behavior is not fully deterministic. The same request can produce different results, complicating testing and debugging. Mitigation: testing, guardrails, human-in-the-loop for critical operations.
+**Unpredictability**: LLM behavior is not fully deterministic. The same request can produce different results, complicating testing and debugging. Mitigation: testing, guardrails, human-in-the-loop for critical operations.
 
-**Security** — risks of prompt injection, data leaks, and undesirable actions. An agent with access to the file system or database can cause real harm if attacked. Mitigation: input validation, sandboxing, least privilege, audit logs.
+**Security**: risks of prompt injection, data leaks, and undesirable actions. An agent with access to the file system or database can cause real harm if attacked. Mitigation: input validation, sandboxing, least privilege, audit logs.
 
 ---
 
@@ -190,15 +190,15 @@ One of the key mistakes when building AI agents is attempting to build a complex
 
 Agent system evolution happens in stages, from simple to complex:
 
-**Level 1: AUGMENTED LLM** — a base language model with a well-crafted system prompt. This is sufficient for simple tasks: question-answering, text classification, basic content generation.
+**Level 1: AUGMENTED LLM**: a base language model with a well-crafted system prompt. This is sufficient for simple tasks: question-answering, text classification, basic content generation.
 
-**Level 2: + TOOLS** — adding the ability to call tools when external actions are needed: API access, database operations, file read/write, command execution.
+**Level 2: + TOOLS**: adding the ability to call tools when external actions are needed: API access, database operations, file read/write, command execution.
 
-**Level 3: + MEMORY** — implementing a memory system when interaction history matters: multi-turn dialogues, response personalization, context accumulation across sessions.
+**Level 3: + MEMORY**: implementing a memory system when interaction history matters: multi-turn dialogues, response personalization, context accumulation across sessions.
 
-**Level 4: + REASONING PATTERNS** — using reasoning patterns (ReAct, Chain-of-Thought) for complex tasks requiring multi-step analysis and planning.
+**Level 4: + REASONING PATTERNS**: using reasoning patterns (ReAct, Chain-of-Thought) for complex tasks requiring multi-step analysis and planning.
 
-**Level 5: + MULTI-AGENT** — transitioning to a multi-agent architecture only when a single agent is insufficient: different specializations are required, parallel task processing, distributed decision making.
+**Level 5: + MULTI-AGENT**: transitioning to a multi-agent architecture only when a single agent is insufficient: different specializations are required, parallel task processing, distributed decision making.
 
 ### Continuous Evaluation
 
@@ -216,11 +216,11 @@ This approach reduces risk, accelerates time-to-value, and avoids unnecessary co
 
 1. An **AI agent** is an autonomous LLM-based system capable of planning, acting, observing results, and reflecting
 
-2. The **agent cycle** (Observe → Think → Act → Reflect) is the architectural foundation of any agent; reflection distinguishes advanced agents from simple ones
+2. The **agent cycle** (Observe, then Think, then Act, then Reflect) is the architectural foundation of any agent; reflection distinguishes advanced agents from simple ones
 
 3. **Levels of autonomy** range from human-in-the-loop to fully autonomous systems; the choice depends on criticality and risks
 
-4. **Agent components**: brain (LLM), memory, tools, and orchestrator — all are necessary for full-featured operation
+4. **Agent components**: brain (LLM), memory, tools, and orchestrator: all are necessary for full-featured operation
 
 5. **Agents excel** at multi-step tasks with external interactions and clear goals
 

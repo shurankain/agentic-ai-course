@@ -12,7 +12,7 @@ Example: a user asks a support chatbot about order status, providing an order nu
 
 Personally Identifiable Information is data that allows identifying a specific individual. It is critically important to detect and protect PII before sending it to the model provider.
 
-PII categories by sensitivity level. Direct identifiers: full name, email, phone number, SSN/TIN — directly identify an individual. Indirect identifiers: date of birth, address, workplace — in combination also identify an individual. Sensitive categories: medical information, financial data, biometrics — require special protection under regulatory requirements.
+PII categories by sensitivity level. Direct identifiers: full name, email, phone number, SSN/TIN: directly identify an individual. Indirect identifiers: date of birth, address, workplace, in combination also identify an individual. Sensitive categories: medical information, financial data, biometrics: require special protection under regulatory requirements.
 
 Detection combines methods:
 
@@ -32,7 +32,7 @@ Three main approaches: masking (replacement with a placeholder), anonymization (
 
 **Anonymization** completely removes or irreversibly alters data. SSN is replaced with [SSN_REDACTED] without recovery. Stricter than masking, but does not allow de-anonymizing the response.
 
-**Pseudonymization** generates fake data of the same type. Email john@company.com becomes user123@example.com. It preserves data format but requires caution — fake data must not correspond to real entries.
+**Pseudonymization** generates fake data of the same type. Email john@company.com becomes user123@example.com. It preserves data format but requires caution: fake data must not correspond to real entries.
 
 ## System Prompt Protection
 
@@ -50,9 +50,9 @@ The system prompt contains business logic, constraints, and application context.
 
 The data minimization principle: collect and store only the necessary minimum. For LLM: do not include unnecessary information in the context, limit conversation history, do not save full prompts if aggregated metrics are sufficient.
 
-**Context windowing** limits the volume of history in each request. Instead of full history of 100 messages — the last 10 or a smart summary. This reduces the volume of potentially sensitive data.
+**Context windowing** limits the volume of history in each request. Instead of full history of 100 messages: the last 10 or a smart summary. This reduces the volume of potentially sensitive data.
 
-**Retention policies** define storage duration. Conversations — 30-90 days, then deletion or anonymization. Detailed logs — 7-30 days. Aggregated metrics — 1+ year. Policies must comply with GDPR.
+**Retention policies** define storage duration. Conversations: 30-90 days, then deletion or anonymization. Detailed logs: 7-30 days. Aggregated metrics: 1+ year. Policies must comply with GDPR.
 
 **Right to be forgotten** implements complete deletion of user data upon request: conversation history, embeddings in vector store, logs with user ID, caches. The complexity lies in data being distributed across many systems.
 
@@ -60,7 +60,7 @@ The data minimization principle: collect and store only the necessary minimum. F
 
 **Encryption at rest** protects data in storage. Conversations, embeddings, and logs are stored in encrypted form. Modern databases and object storage support transparent encryption.
 
-**Encryption in transit** — HTTPS for all communications, including LLM API calls. Protection from interception at the network level.
+**Encryption in transit**: HTTPS for all communications, including LLM API calls. Protection from interception at the network level.
 
 **Application-level encryption** adds a layer for highly sensitive data. Conversations are encrypted with the user's key. If the database is compromised, the attacker obtains only encrypted text.
 
@@ -72,11 +72,11 @@ The data minimization principle: collect and store only the necessary minimum. F
 
 The audit log records all actions for analysis and compliance: who made the request, what data was in the prompt (hash or categories, not raw data), what response was received, what PII was detected, whether any operations were blocked.
 
-**Immutability** of audit logs is critical — logs are not modifiable after being written. Append-only storage, write-once media, blockchain-based approaches.
+**Immutability** of audit logs is critical: logs are not modifiable after being written. Append-only storage, write-once media, blockchain-based approaches.
 
 **Tamper detection** identifies modification attempts. Cryptographic signatures on records, hash chains (each record includes the hash of the previous one), regular integrity checks.
 
-**Retention** for audit logs is longer than for operational data — 1-7 years depending on regulations. PII in logs is anonymized or encrypted.
+**Retention** for audit logs is longer than for operational data: 1-7 years depending on regulations. PII in logs is anonymized or encrypted.
 
 **Access** to audit logs is strictly restricted. Only security and compliance teams. Access to logs is also logged (meta-audit).
 

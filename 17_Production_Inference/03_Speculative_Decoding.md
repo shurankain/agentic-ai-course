@@ -2,7 +2,7 @@
 
 ## Idea
 
-Autoregressive generation has a fundamental limitation: each token requires a full pass through the model. The next token depends on the previous one — parallelism is impossible.
+Autoregressive generation has a fundamental limitation: each token requires a full pass through the model. The next token depends on the previous one: parallelism is impossible.
 
 Speculative decoding: generate multiple tokens in a single pass of the large model.
 
@@ -23,13 +23,13 @@ Output distribution is identical to pure autoregressive sampling with the large 
 The small model generates K tokens sequentially. It saves not only the tokens but also the probabilities for acceptance/rejection.
 
 **Target verification:**
-The large model receives the prompt + all K draft tokens and performs a single pass. Thanks to causal attention, it computes probabilities for all K positions simultaneously. Instead of K separate passes — one batched pass.
+The large model receives the prompt + all K draft tokens and performs a single pass. Thanks to causal attention, it computes probabilities for all K positions simultaneously. Instead of K separate passes. One batched pass.
 
 **Acceptance/Rejection:**
 For each draft token, probabilities are compared. If the target probability >= draft, the token is accepted. If lower, rejection sampling is triggered: a random number is generated, and the token is accepted with probability target/draft. Upon the first rejection, all subsequent tokens are discarded.
 
 **Bonus token:**
-After acceptance/rejection, an additional token is generated. If all K are accepted — from the target distribution. If rejected — from an adjusted distribution that compensates for the rejected probability mass.
+After acceptance/rejection, an additional token is generated. If all K are accepted: from the target distribution. If rejected: from an adjusted distribution that compensates for the rejected probability mass.
 
 ## Acceptance Rate and Speedup
 
@@ -43,24 +43,24 @@ After acceptance/rejection, an additional token is generated. If all K are accep
 - Speed ratio between models
 - Speculation length K
 
-Calculation example: draft generates 4 tokens at 5ms each, target verification takes 50ms. With 80% acceptance, ~3-4 tokens are accepted plus bonus, totaling ~5 tokens in 70ms. Without speculation: 5 × 50ms = 250ms. Speedup 3.5×.
+Calculation example: draft generates 4 tokens at 5ms each, target verification takes 50ms. With 80% acceptance, ~3-4 tokens are accepted plus bonus, totaling ~5 tokens in 70ms. Without speculation: 5 x 50ms = 250ms. Speedup 3.5x.
 
 Optimal K is usually 3-8 tokens. Too large a K reduces acceptance (error accumulation). Too small a K underutilizes parallelism.
 
 ## Draft Model Selection
 
 **Smaller models from the same family:**
-LLaMA-70B + LLaMA-7B. Identical tokenizer (mandatory), similar training, architectural similarity. High acceptance 70-90%, speedup 1.5-2.5×. Trade-off: draft requires GPU memory.
+LLaMA-70B + LLaMA-7B. Identical tokenizer (mandatory), similar training, architectural similarity. High acceptance 70-90%, speedup 1.5-2.5x. Trade-off: draft requires GPU memory.
 
 **EAGLE and EAGLE-2:**
 Draft operates at the feature level, not the token level. Target generates hidden states, a lightweight network predicts subsequent states, and tokens are extracted.
 
-EAGLE (2024): Acceptance 85-95%, speedup 2-3×. Requires training a small autoregression head for each target model. Adds ~5-10% memory overhead.
+EAGLE (2024): Acceptance 85-95%, speedup 2-3x. Requires training a small autoregression head for each target model. Adds ~5-10% memory overhead.
 
 EAGLE-2 (2024): Introduces **context-aware dynamic draft trees**. Instead of a fixed tree structure, EAGLE-2 builds the draft tree adaptively based on the confidence of each draft token. High-confidence tokens branch further; low-confidence tokens are pruned early. Results: ~10-20% higher acceptance rate than EAGLE-1, and ~3-4x speedup on coding tasks. EAGLE-2 topped the Spec-Bench leaderboard in 2024.
 
 **Medusa:**
-Multiple prediction heads in the target model. Head 1 — next token, Head 2 — one token ahead, and so on. All heads are simple MLPs, running in parallel. Tree-based verification checks combinations. Minimal memory overhead (~2-5%), but requires fine-tuning. Acceptance 60-75%.
+Multiple prediction heads in the target model. Head 1: next token, Head 2: one token ahead, and so on. All heads are simple MLPs, running in parallel. Tree-based verification checks combinations. Minimal memory overhead (~2-5%), but requires fine-tuning. Acceptance 60-75%.
 
 **Draftless Speculative Decoding (2024):**
 Methods that avoid a separate draft model entirely:
@@ -69,14 +69,14 @@ Methods that avoid a separate draft model entirely:
 
 **Lookahead decoding (2024):** Combines Jacobi decoding with n-gram caching. During generation, observed n-grams are cached. When the model generates a token matching the start of a cached n-gram, the cached continuation is verified in parallel. Effectively "free" speculation from patterns already seen in the output.
 
-**Token recycling (2024):** Reuses rejected tokens from previous speculation rounds as draft candidates for subsequent rounds. Rejected tokens are not discarded but stored in a pool. When generating the next draft, the pool is consulted first — tokens already computed by the target model are "recycled" as high-quality draft candidates. This is effectively free since the target model's logits for these positions were already computed during verification. Speedup improvement: +10-20% on top of base speculative decoding.
+**Token recycling (2024):** Reuses rejected tokens from previous speculation rounds as draft candidates for subsequent rounds. Rejected tokens are not discarded but stored in a pool. When generating the next draft, the pool is consulted first: tokens already computed by the target model are "recycled" as high-quality draft candidates. This is effectively free since the target model's logits for these positions were already computed during verification. Speedup improvement: +10-20% on top of base speculative decoding.
 
 ## When to Use
 
 **Ideal:**
 - Single-user or small-batch (1-4 requests)
 - Long-form generation (100+ tokens)
-- Significant size difference between models (at least 5-10×)
+- Significant size difference between models (at least 5-10x)
 - Predictable outputs (code, factual QA, structured data)
 
 **Do NOT use:**
@@ -86,10 +86,10 @@ Methods that avoid a separate draft model entirely:
 - Mismatched vocabularies (different tokenizers)
 
 **Real-world speedups:**
-- Code generation: 2-3×
-- Chat/conversational: 1.5-2.5×
-- Creative writing: 1.3-1.8×
-- Structured data extraction: 2.5-3.5×
+- Code generation: 2-3x
+- Chat/conversational: 1.5-2.5x
+- Creative writing: 1.3-1.8x
+- Structured data extraction: 2.5-3.5x
 
 ## Trade-offs
 
@@ -100,7 +100,7 @@ Draft adds 10-30% to memory usage. In tight constraints, quantizing the target m
 Optimizes per-request latency, may reduce aggregate throughput in batch serving.
 
 **Quality guarantees:**
-Mathematically preserves output distribution — identical quality is guaranteed.
+Mathematically preserves output distribution: identical quality is guaranteed.
 
 **System constraints:**
 Tokenizer compatibility (identical vocabulary is mandatory), hardware requirements (additional memory), implementation complexity.
@@ -119,18 +119,18 @@ Monitoring via Prometheus:
 - spec_decode_efficiency (actual speedup factor)
 - num_spec_tokens (average number of accepted tokens)
 
-Python API is transparent — when initializing LLM, specify speculative_model and num_speculative_tokens, then use standard generation.
+Python API is transparent, when initializing LLM, specify speculative_model and num_speculative_tokens, then use standard generation.
 
 ## Key Takeaways
 
-Mathematical precision — output is identical to the target model, not an approximation.
+Mathematical precision: output is identical to the target model, not an approximation.
 
-Draft model selection is critical — acceptance rate determines speedup. EAGLE-2 leads with context-aware dynamic trees and ~3-4x speedup.
+Draft model selection is critical: acceptance rate determines speedup. EAGLE-2 leads with context-aware dynamic trees and ~3-4x speedup.
 
 Draftless methods (Jacobi, lookahead decoding) eliminate the draft model entirely. Token recycling reuses rejected tokens as free draft candidates.
 
-Optimal for specific workloads — single-user, long-form. Large batch does not benefit.
+Optimal for specific workloads: single-user, long-form. Large batch does not benefit.
 
-Trade-off: memory for latency — 10-30% memory overhead for 1.5-3× latency reduction.
+Trade-off: memory for latency: 10-30% memory overhead for 1.5-3x latency reduction.
 
-Production-ready in vLLM — simple activation, built-in monitoring.
+Production-ready in vLLM: simple activation, built-in monitoring.

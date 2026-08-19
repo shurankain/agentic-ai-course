@@ -1,6 +1,6 @@
 # LLM Providers and Working with APIs
 
-Consider the cloud computing market in the early 2010s: AWS dominated, Azure and Google Cloud were emerging, each offering their services with different APIs, pricing, and capabilities. Today we observe a similar — but far more dynamic — landscape in the world of large language models. OpenAI, Anthropic, Google, Meta, DeepSeek, xAI, and dozens of other providers offer their models through APIs, and choosing the right provider becomes a strategic decision for any project involving AI agents.
+Consider the cloud computing market in the early 2010s: AWS dominated, Azure and Google Cloud were emerging, each offering their services with different APIs, pricing, and capabilities. Today we observe a similar, but far more dynamic, landscape in the world of large language models. OpenAI, Anthropic, Google, Meta, DeepSeek, xAI, and dozens of other providers offer their models through APIs, and choosing the right provider becomes a strategic decision for any project involving AI agents.
 
 Understanding the LLM provider landscape is not simply a matter of picking the "best model." It is a question of balancing quality, cost, speed, reliability, and compliance with security requirements. The market has also split into two paradigms: **standard models** (optimized for speed and general tasks) and **reasoning models** (optimized for complex problem-solving via extended thinking). For agent developers, this knowledge shapes system architecture, fallback strategy, and project budget.
 
@@ -13,27 +13,27 @@ Understanding the LLM provider landscape is not simply a matter of picking the "
 OpenAI popularized LLMs through ChatGPT and continues to set the pace of the industry. Their API remains the de facto standard that other providers emulate.
 
 **Frontier models:**
-- **GPT-5.4** — previous flagship (March 2026), superseded by GPT-5.5. $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
-- **GPT-5.5 Instant** — new default ChatGPT model (May 5, 2026). 88.7% SWE-bench Verified. 52.5% fewer hallucinations on high-stakes prompts (medicine, law, finance). ~$2.50/$10.00 per 1M tokens. Full GPT-5.5 API: $5/$30 per 1M tokens; Pro configuration $30/$180.
-- **GPT-5.4-Cyber** — specialized cybersecurity model for vulnerability analysis and threat detection. Access via Trusted Access for Cyber (TAC), a tiered identity verification system that grants broader access to verified security professionals.
-- **GPT-5.5-Cyber** — expanded Trusted Access for Cyber (May 2026). Tools for vulnerability triage, malware analysis, red teaming, patch validation. Restricted access for verified security professionals.
-- **GPT-Rosalind** — first vertical frontier model, purpose-built for life sciences and drug discovery (June 3, 2026). Combines GPT-5.5's agentic capabilities with stronger performance in medicinal chemistry, genomics, and lab workflows. Uses 31% fewer tokens than GPT-5.5 on research tasks. Named after Rosalind Franklin. Available via trusted-access deployment structure.
-- **GPT-5.6** — reported launching mid-June 2026. Improvements in agentic reasoning and UI generation. Not officially announced by OpenAI as of June 8.
-- **GPT-5.2** — **retired from ChatGPT (June 12, 2026)**: GPT-5.2, GPT-5.2 Instant, GPT-5.2 Thinking, and GPT-5.2 Pro all removed without advance notice. Existing conversations migrated to GPT-5.5 automatically. API deprecation to follow. Previously: natively multimodal, 128K-1M context.
-- **GPT-5** — earlier generation. 128K–1M context.
-- **GPT-5.2-Codex / GPT-5.3-Codex** — specialized agentic coding models optimized for autonomous multi-step code generation and tool use.
-- **GPT-5.3-Codex-Spark** — research preview (April 2026). First model designed for real-time coding, optimized for near-instant feel — delivers 1000+ tokens per second.
-- **GPT-4o** — deprecated from ChatGPT (February 13, 2026). API still available but being phased out. 128K context.
-- **GPT-4.1** — deprecated from ChatGPT (February 13, 2026) and API (February 16, 2026). Previously optimized for coding and instruction following.
+- **GPT-5.4**: previous flagship (March 2026), superseded by GPT-5.5. $2.50/$15.00 per 1M tokens. Extended context and improved reasoning.
+- **GPT-5.5 Instant**: new default ChatGPT model (May 5, 2026). 88.7% SWE-bench Verified. 52.5% fewer hallucinations on high-stakes prompts (medicine, law, finance). ~$2.50/$10.00 per 1M tokens. Full GPT-5.5 API: $5/$30 per 1M tokens; Pro configuration $30/$180.
+- **GPT-5.4-Cyber**: specialized cybersecurity model for vulnerability analysis and threat detection. Access via Trusted Access for Cyber (TAC), a tiered identity verification system that grants broader access to verified security professionals.
+- **GPT-5.5-Cyber**: expanded Trusted Access for Cyber (May 2026). Tools for vulnerability triage, malware analysis, red teaming, patch validation. Restricted access for verified security professionals.
+- **GPT-Rosalind**: first vertical frontier model, purpose-built for life sciences and drug discovery (June 3, 2026). Combines GPT-5.5's agentic capabilities with stronger performance in medicinal chemistry, genomics, and lab workflows. Uses 31% fewer tokens than GPT-5.5 on research tasks. Named after Rosalind Franklin. Available via trusted-access deployment structure.
+- **GPT-5.6**: reported launching mid-June 2026. Improvements in agentic reasoning and UI generation. Not officially announced by OpenAI as of June 8.
+- **GPT-5.2**: **retired from ChatGPT (June 12, 2026)**: GPT-5.2, GPT-5.2 Instant, GPT-5.2 Thinking, and GPT-5.2 Pro all removed without advance notice. Existing conversations migrated to GPT-5.5 automatically. API deprecation to follow. Previously: natively multimodal, 128K-1M context.
+- **GPT-5**: earlier generation. 128K-1M context.
+- **GPT-5.2-Codex / GPT-5.3-Codex**: specialized agentic coding models optimized for autonomous multi-step code generation and tool use.
+- **GPT-5.3-Codex-Spark**: research preview (April 2026). First model designed for real-time coding, optimized for near-instant feel: delivers 1000+ tokens per second.
+- **GPT-4o**: deprecated from ChatGPT (February 13, 2026). API still available but being phased out. 128K context.
+- **GPT-4.1**: deprecated from ChatGPT (February 13, 2026) and API (February 16, 2026). Previously optimized for coding and instruction following.
 
 **Reasoning models:**
-- **o3** — frontier reasoning model. Generates internal "thinking tokens" before the final answer. Excels on math, science, and complex multi-step problems.
-- **o4-mini** — cost-efficient reasoning model. Strong on STEM tasks at a fraction of o3's cost.
+- **o3**: frontier reasoning model. Generates internal "thinking tokens" before the final answer. Excels on math, science, and complex multi-step problems.
+- **o4-mini**: cost-efficient reasoning model. Strong on STEM tasks at a fraction of o3's cost.
 
 **Budget models:**
-- **GPT-5-mini** — next-generation budget model ($0.25/$2.00 per 1M tokens).
-- **GPT-5-nano** — ultra-light model for high-volume simple tasks ($0.05/$0.40 per 1M tokens).
-- **GPT-4o-mini** — previous-gen budget model, still widely available.
+- **GPT-5-mini**: next-generation budget model ($0.25/$2.00 per 1M tokens).
+- **GPT-5-nano**: ultra-light model for high-volume simple tasks ($0.05/$0.40 per 1M tokens).
+- **GPT-4o-mini**: previous-gen budget model, still widely available.
 - GPT-3.5 Turbo is fully deprecated.
 
 **OpenAI highlights:**
@@ -43,7 +43,7 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
-- Responses API (successor to Assistants API — deprecated August 2025, sunset August 2026) and Agents SDK (v0.10.2, provider-agnostic — supports 100+ LLMs) for multi-agent orchestration
+- Responses API (successor to Assistants API: deprecated August 2025, sunset August 2026) and Agents SDK (v0.10.2, provider-agnostic: supports 100+ LLMs) for multi-agent orchestration
 - OpenAI filed a confidential S-1 (May 22, 2026) targeting $852B-$1T valuation, IPO expected Q4 2026
 - **MS-OpenAI exclusivity ended** (April 27, 2026). OpenAI models now available on AWS Bedrock, Google Cloud Vertex, Oracle, and sovereign cloud providers. Microsoft retains non-exclusive license through 2032 and ~27% of OpenAI Group PBC
 
@@ -52,89 +52,89 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 Anthropic, founded by former OpenAI researchers, positions itself as a company focused on AI safety. Their Claude models are distinguished by excellent instruction following, strong code generation, and long context capabilities.
 
 **Claude model family (latest generation):**
-- **Claude Fable 5** — the Mythos-class flagship (launched June 9, 2026; **suspended June 13 due to export controls** — see below). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (+11pp over Opus 4.8, vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to Claude Opus 4.8. Knowledge cutoff January 2026. **Availability (as of late June 2026):** partially restored with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic introducing biometric identity verification (government ID, facial geometry) starting July 8.
-- **Claude Opus 4.8** — previous flagship (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro (+4.9% over 4.7 — significant Pro jump), 74.6% Terminal-Bench 2.1. Sharper judgement — the model is more likely to flag uncertainties and less likely to make unsupported claims. Dynamic workflows for large-scale problems. Fast mode now 3x cheaper than previous models. $5/$25 per 1M tokens. Beats GPT-5.5 on 12+ benchmarks. Messages API now accepts `system` records inside `messages[]`, allowing mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
-- **Claude Opus 4.7** — previous flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP — first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning — the model decides how much to think based on task complexity.
-- **Claude Opus 4.6** — previous flagship. Still widely deployed. Deep reasoning, complex analysis, extended autonomous workflows. $5/$25 per 1M tokens.
-- **Claude Sonnet 4.6** — the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
-- **Claude Haiku 4.5** — fast and cost-effective model for high-volume, simpler tasks.
+- **Claude Fable 5**: the Mythos-class flagship (launched June 9, 2026; **suspended June 13 due to export controls**: see below). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (+11pp over Opus 4.8, vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to Claude Opus 4.8. Knowledge cutoff January 2026. **Availability (as of late June 2026):** partially restored with mandatory identity verification and nationality-based geo-fencing for US customers; international access remains uncertain. Anthropic introducing biometric identity verification (government ID, facial geometry) starting July 8.
+- **Claude Opus 4.8**: previous flagship (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro (+4.9% over 4.7, significant Pro jump), 74.6% Terminal-Bench 2.1. Sharper judgement: the model is more likely to flag uncertainties and less likely to make unsupported claims. Dynamic workflows for large-scale problems. Fast mode now 3x cheaper than previous models. $5/$25 per 1M tokens. Beats GPT-5.5 on 12+ benchmarks. Messages API now accepts `system` records inside `messages[]`, allowing mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
+- **Claude Opus 4.7**: previous flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP: first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning: the model decides how much to think based on task complexity.
+- **Claude Opus 4.6**: previous flagship. Still widely deployed. Deep reasoning, complex analysis, extended autonomous workflows. $5/$25 per 1M tokens.
+- **Claude Sonnet 4.6**: the primary workhorse. Excellent balance of intelligence, speed, and cost. Strong in code generation.
+- **Claude Haiku 4.5**: fast and cost-effective model for high-volume, simpler tasks.
 
-*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-20250514`) were **retired from the API on June 15, 2026** — hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
+*Note:* Claude Opus 4 (`claude-opus-4-20250514`) and Sonnet 4 (`claude-sonnet-4-20250514`) were **retired from the API on June 15, 2026**, hard cutoff, no grace period. Existing code using these model IDs must migrate to Opus 4.8 and Sonnet 4.6 respectively.
 
 **Anthropic now operates a 4-tier model hierarchy (as of mid-June 2026):** Mythos ($10/$50) > Opus ($5/$25) > Sonnet ($3/$15) > Haiku ($0.25/$1.25). Fable 5 is the public-facing Mythos-class model; full Mythos 5 remains restricted.
 
-**Claude Mythos 5** — Anthropic's most capable model, the unrestricted version of the Mythos architecture. Fable 5 is a safety-filtered public release of the same underlying model. Full Mythos 5 is offered in limited availability to approved customers in Project Glasswing. Previously available as "Mythos Preview" to ~52 organizations achieving 93.9% SWE-bench Verified (April 2026). The model succeeds 73% of the time on expert-level cyber-attack simulations that no model could complete before April 2025.
+**Claude Mythos 5**: Anthropic's most capable model, the unrestricted version of the Mythos architecture. Fable 5 is a safety-filtered public release of the same underlying model. Full Mythos 5 is offered in limited availability to approved customers in Project Glasswing. Previously available as "Mythos Preview" to ~52 organizations achieving 93.9% SWE-bench Verified (April 2026). The model succeeds 73% of the time on expert-level cyber-attack simulations that no model could complete before April 2025.
 
-**Export controls (June 13, 2026):** The Trump administration issued the first-ever model-level export ban — targeting Fable 5 and Mythos 5, not hardware. All foreign national access was suspended, including foreign nationals inside the US and foreign employees of Anthropic. Anthropic received the directive at 5:21 PM ET on a Friday and abruptly disabled both models for all customers while working to comply. Officials cited a technique to bypass Fable 5's safeguards as the trigger. This is a landmark precedent: the first time export controls targeted an AI model rather than the chips used to build it.
+**Export controls (June 13, 2026):** The Trump administration issued the first-ever model-level export ban, targeting Fable 5 and Mythos 5, not hardware. All foreign national access was suspended, including foreign nationals inside the US and foreign employees of Anthropic. Anthropic received the directive at 5:21 PM ET on a Friday and abruptly disabled both models for all customers while working to comply. Officials cited a technique to bypass Fable 5's safeguards as the trigger. This is a landmark precedent: the first time export controls targeted an AI model rather than the chips used to build it.
 
-Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI. Growth trajectory: $87M (Jan 2024) → $1B (Dec 2024) → $9B (late 2025) → $30B (April 2026) → $47B (May 2026) — 80x in three years. $65B Series H at $965B post-money — surpassed OpenAI in private round valuations. Claude Code reached $1B ARR within 6 months of launch. Andrej Karpathy joined Anthropic's pre-training team (May 19, 2026). Anthropic acquired Stainless (May 18, 2026) for SDK/API-lifecycle tooling. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming** — background optimization where agents analyze past sessions and rewrite their memory between runs, effectively "sleeping" to improve — the first implementation of continual learning for production agents without model retraining.
+Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI. Growth trajectory: $87M (Jan 2024), then $1B (Dec 2024), then $9B (late 2025), then $30B (April 2026), then $47B (May 2026): 80x in three years. $65B Series H at $965B post-money: surpassed OpenAI in private round valuations. Claude Code reached $1B ARR within 6 months of launch. Andrej Karpathy joined Anthropic's pre-training team (May 19, 2026). Anthropic acquired Stainless (May 18, 2026) for SDK/API-lifecycle tooling. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming**, background optimization where agents analyze past sessions and rewrite their memory between runs, effectively "sleeping" to improve, the first implementation of continual learning for production agents without model retraining.
 
-**Extended thinking:** Claude models support an "extended thinking" mode — Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
+**Extended thinking:** Claude models support an "extended thinking" mode: Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
 **Anthropic highlights:**
-- Context window — 200K tokens standard, 1M available on Opus 4.6 / 4.7 / 4.8
-- "Constitutional AI" — models trained to follow ethical principles
+- Context window: 200K tokens standard, 1M available on Opus 4.6 / 4.7 / 4.8
+- "Constitutional AI": models trained to follow ethical principles
 - Excellent performance in long document analysis and code generation
-- **MCP (Model Context Protocol)** — Anthropic-created open standard for tool integration, now an industry standard governed by AAIF
+- **MCP (Model Context Protocol)**: Anthropic-created open standard for tool integration, now an industry standard governed by AAIF
 - Tool use API compatible with the OpenAI format
-- Computer use capability — Claude can interact with desktop applications via screenshots
+- Computer use capability: Claude can interact with desktop applications via screenshots
 
 ### Google
 
 Google offers models through Vertex AI (enterprise) and Google AI Studio (for developers).
 
 **Gemini family:**
-- **Gemini 3.5 Flash** — new frontier-quality model at Flash speed (May 19, Google I/O 2026). $1.50/$9 per 1M tokens, 1.05M context. 280+ output tok/sec (4x faster than other frontier models). Terminal-Bench 2.1 76.2%, MCP Atlas 83.6%. `thinking_level` enum replaces `thinking_budget` int. Gemini 3.5 Pro in internal testing, expected June 2026.
-- **Gemini 3.1 Pro Preview** — the most advanced Google reasoning model (February 2026). State-of-the-art reasoning and multimodal capabilities.
-- **Gemini 3 Flash** — default Gemini model (December 2025). Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
-- **Gemini Omni** — video output with physics understanding, SynthID watermark on all outputs (Google I/O 2026).
-- **Gemini 2.5 Pro** — previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
-- **Gemini 2.5 Flash** — optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
-- **Gemini 2.0 Flash** — budget model for high-volume workloads. Retired June 1, 2026.
+- **Gemini 3.5 Flash**: new frontier-quality model at Flash speed (May 19, Google I/O 2026). $1.50/$9 per 1M tokens, 1.05M context. 280+ output tok/sec (4x faster than other frontier models). Terminal-Bench 2.1 76.2%, MCP Atlas 83.6%. `thinking_level` enum replaces `thinking_budget` int. Gemini 3.5 Pro in internal testing, expected June 2026.
+- **Gemini 3.1 Pro Preview**: the most advanced Google reasoning model (February 2026). State-of-the-art reasoning and multimodal capabilities.
+- **Gemini 3 Flash**: default Gemini model (December 2025). Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
+- **Gemini Omni**: video output with physics understanding, SynthID watermark on all outputs (Google I/O 2026).
+- **Gemini 2.5 Pro**: previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
+- **Gemini 2.5 Flash**: optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
+- **Gemini 2.0 Flash**: budget model for high-volume workloads. Retired June 1, 2026.
 
 The "Gemini Ultra" branding has been abandoned; the Pro tier is the flagship.
 
 **Google advantages:**
-- Record context sizes — 1M tokens standard (Gemini 3 Flash/Pro), 2M in preview
+- Record context sizes, 1M tokens standard (Gemini 3 Flash/Pro), 2M in preview
 - Native multimodal understanding and generation (text, images, audio, video)
 - Grounding with Google Search for up-to-date information
 - Native integration with Google Cloud services
 - Competitive pricing, especially for Flash models
-- **Antigravity 2.0** (May 19, 2026) — replaced Gemini CLI as the desktop orchestration hub with CLI, SDK, plugins, skills, hooks, and subagent workflows
+- **Antigravity 2.0** (May 19, 2026): replaced Gemini CLI as the desktop orchestration hub with CLI, SDK, plugins, skills, hooks, and subagent workflows
 - Moving from daily prompt limits to compute-used pricing model. AI Ultra $100/month with 5x higher limits. Gemini Spark personal agent for AI Ultra subscribers
-- **Siri AI deal (WWDC, June 9, 2026):** Google Gemini powers the rebuilt Siri AI under a ~$1B/year multi-year agreement. Distribution across 2+ billion Apple devices — the largest AI distribution deal
+- **Siri AI deal (WWDC, June 9, 2026):** Google Gemini powers the rebuilt Siri AI under a ~$1B/year multi-year agreement. Distribution across 2+ billion Apple devices: the largest AI distribution deal
 - **Gemini 3.5 Flash in Google Search** (June 17): folded into Google Search as the global standard, with agents monitoring information continuously and auto-booking capability. Marks the transition of agentic AI from demo to default in the world's most-used search engine
 
 ### xAI
 
-Founded by Elon Musk, xAI formally ceased as a separate company (May 6, 2026) — now operates as the SpaceXAI division. SpaceX-xAI filed an S-1 for IPO, ticker SPCX, targeting $1.75-2T valuation, roadshow June 4-8.
+Founded by Elon Musk, xAI formally ceased as a separate company (May 6, 2026): now operates as the SpaceXAI division. SpaceX-xAI filed an S-1 for IPO, ticker SPCX, targeting $1.75-2T valuation, roadshow June 4-8.
 
 **Models:**
-- **Grok 4.3** — latest frontier model (May 4, 2026). $1.25/M input tokens, 1M-token context, native video input, built-in reasoning. Cost-efficient frontier positioning.
-- **Grok Build 0.1** — dedicated coding model (May 14, 2026). 256K context, $1/$2 per 1M tokens. Optimized for code generation and agent workflows.
-- **Grok 4.20 Beta** — previous flagship (February 2026). Routes queries to 4 parallel specialist agents.
-- **Grok 3** — previous flagship, competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
-- **Grok 3 Mini** — efficient model for standard tasks
+- **Grok 4.3**: latest frontier model (May 4, 2026). $1.25/M input tokens, 1M-token context, native video input, built-in reasoning. Cost-efficient frontier positioning.
+- **Grok Build 0.1**: dedicated coding model (May 14, 2026). 256K context, $1/$2 per 1M tokens. Optimized for code generation and agent workflows.
+- **Grok 4.20 Beta**: previous flagship (February 2026). Routes queries to 4 parallel specialist agents.
+- **Grok 3**: previous flagship, competitive on major benchmarks (MMLU 92.7%, GPQA Diamond 84.6%)
+- **Grok 3 Mini**: efficient model for standard tasks
 
 **xAI highlights:**
 - Competitive pricing aimed at undercutting incumbents
 - Real-time access to X (Twitter) data
 - OpenAI-compatible API format
-- **Connectors** — integrations with SharePoint, Outlook, OneDrive, Google Workspace, Notion, GitHub, Linear, and custom MCP servers
-- **Computer use** — can write code, run programs, install dependencies, create files (competitor to Claude Computer Use)
+- **Connectors**: integrations with SharePoint, Outlook, OneDrive, Google Workspace, Notion, GitHub, Linear, and custom MCP servers
+- **Computer use**: can write code, run programs, install dependencies, create files (competitor to Claude Computer Use)
 
 ### Mistral AI
 
 A French company offering efficient open-weight models. Attractive for European companies due to GDPR compliance.
 
 **Models:**
-- **Mistral Large 3** — flagship model (675B total, 41B active MoE, Apache 2.0), competitive with frontier proprietary models
-- **Mistral Medium 3.5** — new flagship (May 1, 2026). Dense 128B model, 256K context, open weights (modified MIT license). 77.6% SWE-bench Verified. $1.50/$7.50 per 1M tokens. Notable: one model for chat, reasoning, and code (no separate reasoning models). Remote agents via Vibe — async cloud agents for routine tasks with GitHub/Slack integration.
-- **Mistral Medium 3** — mid-tier model ($0.40/$2.00 per 1M tokens), strong cost/quality balance
-- **Mistral Small 3** — compact and efficient for simpler tasks
-- **Magistral** — reasoning-focused models
-- **Devstral 2** — specialized for code generation
-- **Ministral** — edge-friendly compact models
+- **Mistral Large 3**: flagship model (675B total, 41B active MoE, Apache 2.0), competitive with frontier proprietary models
+- **Mistral Medium 3.5**: new flagship (May 1, 2026). Dense 128B model, 256K context, open weights (modified MIT license). 77.6% SWE-bench Verified. $1.50/$7.50 per 1M tokens. Notable: one model for chat, reasoning, and code (no separate reasoning models). Remote agents via Vibe: async cloud agents for routine tasks with GitHub/Slack integration.
+- **Mistral Medium 3**: mid-tier model ($0.40/$2.00 per 1M tokens), strong cost/quality balance
+- **Mistral Small 3**: compact and efficient for simpler tasks
+- **Magistral**: reasoning-focused models
+- **Devstral 2**: specialized for code generation
+- **Ministral**: edge-friendly compact models
 
 **Mistral highlights:**
 - Models available with open weights (can be self-hosted)
@@ -144,13 +144,13 @@ A French company offering efficient open-weight models. Attractive for European 
 
 ### Other Notable Providers
 
-**Amazon Bedrock** — access to models from multiple providers (Anthropic, Meta, Mistral, Cohere, and now OpenAI) through a unified AWS API with enterprise guarantees. OpenAI models became available on Bedrock in April 2026, ending nearly 7 years of Azure exclusivity for OpenAI models. AWS shops no longer need Azure for GPT-5.5 access.
+**Amazon Bedrock**: access to models from multiple providers (Anthropic, Meta, Mistral, Cohere, and now OpenAI) through a unified AWS API with enterprise guarantees. OpenAI models became available on Bedrock in April 2026, ending nearly 7 years of Azure exclusivity for OpenAI models. AWS shops no longer need Azure for GPT-5.5 access.
 
-**Azure OpenAI** — OpenAI models with enterprise SLA, compliance, and integration with the Azure ecosystem. No longer the exclusive hyperscaler for OpenAI models (as of April 27, 2026), but retains deep integration with Microsoft 365 and Azure AI services.
+**Azure OpenAI**: OpenAI models with enterprise SLA, compliance, and integration with the Azure ecosystem. No longer the exclusive hyperscaler for OpenAI models (as of April 27, 2026), but retains deep integration with Microsoft 365 and Azure AI services.
 
-**Microsoft MAI models** (Build 2026, June 2) — Microsoft's first in-house model family, developed without OpenAI. Seven models announced: **MAI-Thinking-1** (35B parameters, 256K context, first Microsoft reasoning model), **MAI-Code-1-Flash** (optimized for code), **MAI-Image-2.5**, **MAI-Transcribe-1.5**, **MAI-Voice-2**, and others. MAI-Thinking-1 in private preview on Microsoft Foundry. This represents a self-sufficiency pivot — Microsoft building its own models to reduce OpenAI dependency, while simultaneously ending OpenAI's exclusivity.
+**Microsoft MAI models** (Build 2026, June 2), Microsoft's first in-house model family, developed without OpenAI. Seven models announced: **MAI-Thinking-1** (35B parameters, 256K context, first Microsoft reasoning model), **MAI-Code-1-Flash** (optimized for code), **MAI-Image-2.5**, **MAI-Transcribe-1.5**, **MAI-Voice-2**, and others. MAI-Thinking-1 in private preview on Microsoft Foundry. This represents a self-sufficiency pivot: Microsoft building its own models to reduce OpenAI dependency, while simultaneously ending OpenAI's exclusivity.
 
-**Cohere** — specializes in enterprise search and RAG. Embed models for embeddings, Command for generation, Rerank for re-ranking search results.
+**Cohere**: specializes in enterprise search and RAG. Embed models for embeddings, Command for generation, Rerank for re-ranking search results.
 
 ---
 
@@ -160,7 +160,7 @@ A French company offering efficient open-weight models. Attractive for European 
 
 Starting with OpenAI's o1 (September 2024) and rapidly expanding through o3, o4-mini, DeepSeek-R1, Claude extended thinking, and Gemini thinking modes, reasoning models represent a fundamentally new API paradigm.
 
-Unlike standard models that generate responses token by token, reasoning models produce **thinking tokens** — an internal chain of reasoning — before generating the visible response. This dramatically improves performance on complex tasks: math, science, multi-step planning, and code.
+Unlike standard models that generate responses token by token, reasoning models produce **thinking tokens**: an internal chain of reasoning: before generating the visible response. This dramatically improves performance on complex tasks: math, science, multi-step planning, and code.
 
 ### How the API Differs
 
@@ -172,7 +172,7 @@ Unlike standard models that generate responses token by token, reasoning models 
 **Parameter restrictions:**
 - Temperature is typically fixed at 1.0 (OpenAI reasoning models) or has limited ranges
 - System prompts may be handled differently (some models use "developer" messages)
-- Streaming behavior differs — thinking tokens may not stream
+- Streaming behavior differs, thinking tokens may not stream
 
 **Cost structure:**
 - Thinking tokens are billed at the output token rate
@@ -191,32 +191,32 @@ Unlike standard models that generate responses token by token, reasoning models 
 
 ## Open-Source Models: In-Depth Comparison
 
-The open-source landscape has transformed. In 2025, open-source models achieved parity with — and in some domains surpassed — proprietary ones. DeepSeek V4, Llama 4, and Qwen 3 are the three flagship families (DeepSeek R1 was the 2025 breakthrough; V4 superseded it in April 2026).
+The open-source landscape has transformed. In 2025, open-source models achieved parity with, and in some domains surpassed, proprietary ones. DeepSeek V4, Llama 4, and Qwen 3 are the three flagship families (DeepSeek R1 was the 2025 breakthrough; V4 superseded it in April 2026).
 
 ### DeepSeek
 
-A Chinese lab that has repeatedly disrupted the industry — first with V3's training efficiency, then with R1's reasoning breakthrough, and now with V4's unified architecture.
+A Chinese lab that has repeatedly disrupted the industry, first with V3's training efficiency, then with R1's reasoning breakthrough, and now with V4's unified architecture.
 
-**DeepSeek V4** (April 24, 2026) — the latest generation. V4-Pro: 1.6T parameters / 49B active. V4-Flash: 284B / 13B active. 1M context. Hybrid CSA+HCA attention achieving 27% inference FLOPs vs V3.2 on 1M context. Open weights under MIT license. SWE-bench Verified 80.6%, GPQA Diamond 90.1%. V4-Flash pricing: $0.14/$0.28 per 1M tokens. The R1 reasoning line has been discontinued — reasoning is now folded into V4 as a mode. **V4-Pro permanent price cut** (May 22, 2026): 75% reduction made permanent — $0.435/$0.87 per 1M tokens. Cached input: $0.003625/MTok (lowest frontier cache-hit price). DeepSeek raised $7.4B at $52-59B valuation.
+**DeepSeek V4** (April 24, 2026): the latest generation. V4-Pro: 1.6T parameters / 49B active. V4-Flash: 284B / 13B active. 1M context. Hybrid CSA+HCA attention achieving 27% inference FLOPs vs V3.2 on 1M context. Open weights under MIT license. SWE-bench Verified 80.6%, GPQA Diamond 90.1%. V4-Flash pricing: $0.14/$0.28 per 1M tokens. The R1 reasoning line has been discontinued, reasoning is now folded into V4 as a mode. **V4-Pro permanent price cut** (May 22, 2026): 75% reduction made permanent: $0.435/$0.87 per 1M tokens. Cached input: $0.003625/MTok (lowest frontier cache-hit price). DeepSeek raised $7.4B at $52-59B valuation.
 
-**DeepSeek V3** — 671B parameters, 37B active (Mixture of Experts). Revolutionized training economics. Superseded by V4.
+**DeepSeek V3**: 671B parameters, 37B active (Mixture of Experts). Revolutionized training economics. Superseded by V4.
 
 **Key innovations:**
-- **Multi-head Latent Attention (MLA)**: KV-cache compression via low-rank projections — 93% memory savings
-- **Multi-Token Prediction (MTP)**: Predicting 2 tokens per step — 1.8x inference speedup
-- **FP8 Training**: Full training in 8-bit floating point — the first successful example at this scale
-- **Training cost**: $5.5M — an order of magnitude cheaper than competitors
+- **Multi-head Latent Attention (MLA)**: KV-cache compression via low-rank projections: 93% memory savings
+- **Multi-Token Prediction (MTP)**: Predicting 2 tokens per step: 1.8x inference speedup
+- **FP8 Training**: Full training in 8-bit floating point: the first successful example at this scale
+- **Training cost**: $5.5M: an order of magnitude cheaper than competitors
 
-**DeepSeek R1** — the reasoning breakthrough. Achieved frontier-level reasoning through pure reinforcement learning (GRPO — Group Relative Policy Optimization), without supervised fine-tuning on reasoning traces. R1-Zero showed that reasoning can emerge from RL alone.
+**DeepSeek R1**: the reasoning breakthrough. Achieved frontier-level reasoning through pure reinforcement learning (GRPO, Group Relative Policy Optimization), without supervised fine-tuning on reasoning traces. R1-Zero showed that reasoning can emerge from RL alone.
 
 - Open-weight with MIT-like license
 - Distilled versions available from 1.5B to 70B parameters
 - Competitive with o3 on math and science benchmarks
 - R1-0528: improved version with better instruction following
 
-**DeepSeek V3.2** — integrates thinking and tool-use into a unified model, eliminating the need for separate standard and reasoning models.
+**DeepSeek V3.2**: integrates thinking and tool-use into a unified model, eliminating the need for separate standard and reasoning models.
 
-**DeepSeek R2** — next-generation reasoning model, building on R1's GRPO approach with further improvements.
+**DeepSeek R2**: next-generation reasoning model, building on R1's GRPO approach with further improvements.
 
 **When to choose DeepSeek:**
 - Mathematical and algorithmic tasks (leader)
@@ -229,15 +229,15 @@ A Chinese lab that has repeatedly disrupted the industry — first with V3's tra
 Meta's latest generation represents a fundamental architectural shift from dense models to Mixture of Experts with native multimodality.
 
 **Models:**
-- **Llama 4 Scout** — 16 experts, 10M token context window (the largest of any production model). Designed for long-context tasks.
-- **Llama 4 Maverick** — 128 experts, ~400B total parameters with 17B active. The performance flagship.
-- **Llama 4 Behemoth** — ~2T parameters, originally planned as the largest open model. Cancelled/delayed (May 2026). No Llama 5 confirmed.
+- **Llama 4 Scout**: 16 experts, 10M token context window (the largest of any production model). Designed for long-context tasks.
+- **Llama 4 Maverick**: 128 experts, ~400B total parameters with 17B active. The performance flagship.
+- **Llama 4 Behemoth**: ~2T parameters, originally planned as the largest open model. Cancelled/delayed (May 2026). No Llama 5 confirmed.
 
 **Key changes from Llama 3:**
-- **MoE architecture** (previously dense) — dramatically better inference efficiency
-- **Native multimodality** — trained from scratch on text, images, and video (not bolt-on adapters)
-- **Massive context** — 10M tokens in Scout, far beyond any predecessor
-- **Interleaved attention** — architectural innovation for efficiency
+- **MoE architecture** (previously dense): dramatically better inference efficiency
+- **Native multimodality**: trained from scratch on text, images, and video (not bolt-on adapters)
+- **Massive context**: 10M tokens in Scout, far beyond any predecessor
+- **Interleaved attention**: architectural innovation for efficiency
 
 *Note:* Meta announced ~8,000 layoffs (~10% of workforce, May 20, 2026) and restructured as Meta Superintelligence Labs with Alexandr Wang as CAO. Llama 4 Behemoth was cancelled and no Llama 5 has been confirmed.
 
@@ -252,18 +252,18 @@ Meta's latest generation represents a fundamental architectural shift from dense
 Alibaba's latest series, leading many benchmarks and offering the broadest size range.
 
 **Models:**
-- **Qwen 3.7 Max/Plus** — API-only closed-weights models (May 20, 2026). $2.50/$7.50 per 1M tokens, 1M context. Intelligence Index 56.6 (#1 Chinese model). Hallucination rate halved from 44.2% to 22.9% (as of late May 2026).
-- **Qwen 3 235B** — MoE flagship (22B active parameters), 119 languages
-- **Qwen 3 72B** — dense flagship
-- **Qwen 3 32B / 14B / 8B** — range of dense models for different GPU budgets
-- **Qwen 3.5 Medium** — mid-tier model (February 2026) with improved reasoning
-- **Qwen 3.5 / 3.6** — open-weight models (Apache 2.0), standard for on-device deployment
-- **Qwen 3 0.6B / 1.7B / 4B** — edge and mobile-friendly
+- **Qwen 3.7 Max/Plus**: API-only closed-weights models (May 20, 2026). $2.50/$7.50 per 1M tokens, 1M context. Intelligence Index 56.6 (#1 Chinese model). Hallucination rate halved from 44.2% to 22.9% (as of late May 2026).
+- **Qwen 3 235B**: MoE flagship (22B active parameters), 119 languages
+- **Qwen 3 72B**: dense flagship
+- **Qwen 3 32B / 14B / 8B**: range of dense models for different GPU budgets
+- **Qwen 3.5 Medium**: mid-tier model (February 2026) with improved reasoning
+- **Qwen 3.5 / 3.6**: open-weight models (Apache 2.0), standard for on-device deployment
+- **Qwen 3 0.6B / 1.7B / 4B**: edge and mobile-friendly
 
 **Key innovations:**
 - **Hybrid reasoning**: can switch between "thinking mode" (extended reasoning) and "non-thinking mode" (fast) within the same model, controlled via system prompt
-- **119 language support** — the most multilingual open model
-- **Apache 2.0 license** — fully permissive
+- **119 language support**: the most multilingual open model
+- **Apache 2.0 license**: fully permissive
 
 **When to choose Qwen 3:**
 - Multilingual applications (broadest language coverage)
@@ -275,7 +275,7 @@ Alibaba's latest series, leading many benchmarks and offering the broadest size 
 
 Google's newest open-weight family (April 2, 2026), distinct from the proprietary Gemini models. Designed for edge AI and personal AI development.
 
-**Models:** Four sizes — Gemma 4 E2B (Effective 2B), E4B (Effective 4B), 26B MoE, and 31B Dense. All released under Apache 2.0 license. Natively multimodal (text + images).
+**Models:** Four sizes, Gemma 4 E2B (Effective 2B), E4B (Effective 4B), 26B MoE, and 31B Dense. All released under Apache 2.0 license. Natively multimodal (text + images).
 
 **Key differentiator:** The smallest open multimodal models that run on consumer hardware. E2B runs on mobile devices, E4B on laptops, 26B MoE on a single GPU. Positioned for on-device AI, privacy-preserving applications, and development environments where sending data to cloud APIs is unacceptable.
 
@@ -283,29 +283,29 @@ Google's newest open-weight family (April 2, 2026), distinct from the proprietar
 
 ### Cohere Command A+
 
-**Cohere Command A+** (May 20, 2026) — the first fully open-source frontier model. 218B Sparse MoE / 25B active parameters, Apache 2.0 license. W4A4 quantization runs on 1xB200 or 2xH100 — changes sovereign deployment economics from ~$240K to ~$60K per rack (as of late May 2026). Designed for enterprise search, RAG, and document processing.
+**Cohere Command A+** (May 20, 2026): the first fully open-source frontier model. 218B Sparse MoE / 25B active parameters, Apache 2.0 license. W4A4 quantization runs on 1xB200 or 2xH100: changes sovereign deployment economics from ~$240K to ~$60K per rack (as of late May 2026). Designed for enterprise search, RAG, and document processing.
 
 **When to choose Command A+:** Sovereign deployment where Apache 2.0 matters, enterprise RAG at frontier quality without proprietary dependencies, GPU-constrained environments where quantized MoE is essential.
 
 ### Kimi K2.6 / K2.7-Code
 
-**Kimi K2.6** (Moonshot AI, April 20, 2026) — 1T MoE / 32B active parameters, modified MIT license. Agent Swarm: up to 300 sub-agents and 4000 steps in a single run. Designed for agentic workflows requiring massive parallelism. Artificial Analysis Intelligence Index 54 — the highest among open-weight models, trailing proprietary leaders (Anthropic, Google, OpenAI at 57) by a narrow margin.
+**Kimi K2.6** (Moonshot AI, April 20, 2026), 1T MoE / 32B active parameters, modified MIT license. Agent Swarm: up to 300 sub-agents and 4000 steps in a single run. Designed for agentic workflows requiring massive parallelism. Artificial Analysis Intelligence Index 54: the highest among open-weight models, trailing proprietary leaders (Anthropic, Google, OpenAI at 57) by a narrow margin.
 
-**Kimi K2.7-Code** (June 12, 2026) — coding-focused successor. Same 1T MoE / 32B active architecture, 256K context. +21.8% on Kimi Code Bench v2, +11.0% on Program Bench, +31.5% on MLS Bench Lite vs K2.6. 30% lower reasoning-token usage. $0.95/$4.00 per 1M tokens. **Caveat:** all published benchmarks are Moonshot proprietary — no independent third-party results on standard public suites at release. Moonshot is also seeking $2B at $30B valuation (its third financing round in six months).
+**Kimi K2.7-Code** (June 12, 2026), coding-focused successor. Same 1T MoE / 32B active architecture, 256K context. +21.8% on Kimi Code Bench v2, +11.0% on Program Bench, +31.5% on MLS Bench Lite vs K2.6. 30% lower reasoning-token usage. $0.95/$4.00 per 1M tokens. **Caveat:** all published benchmarks are Moonshot proprietary: no independent third-party results on standard public suites at release. Moonshot is also seeking $2B at $30B valuation (its third financing round in six months).
 
 ### NVIDIA Nemotron 3 Ultra
 
-**Nemotron 3 Ultra** (June 4, 2026) — 550B MoE (55B active), hybrid Mamba-2/Transformer architecture. Combines Mamba-2 state-space layers for efficient long-context processing with Transformer attention blocks for tasks where attention excels. 1M token context with low memory usage. Artificial Analysis Intelligence Index 48, second among US open-weight models. ~6x higher inference throughput than comparable open LLMs. Includes Multi-Token Prediction (MTP) layers and Latent MoE routing. Available on Hugging Face, NVIDIA NIM, and OpenRouter under the permissive Linux Foundation license — shipped with training data and recipes.
+**Nemotron 3 Ultra** (June 4, 2026): 550B MoE (55B active), hybrid Mamba-2/Transformer architecture. Combines Mamba-2 state-space layers for efficient long-context processing with Transformer attention blocks for tasks where attention excels. 1M token context with low memory usage. Artificial Analysis Intelligence Index 48, second among US open-weight models. ~6x higher inference throughput than comparable open LLMs. Includes Multi-Token Prediction (MTP) layers and Latent MoE routing. Available on Hugging Face, NVIDIA NIM, and OpenRouter under the permissive Linux Foundation license: shipped with training data and recipes.
 
-**Nemotron 3 Nano Omni** (June 10, 2026) — 30B-parameter omni-modal model unifying vision, audio, and language in a single open-weight architecture. Designed for edge and embedded deployments where running separate models per modality is impractical.
+**Nemotron 3 Nano Omni** (June 10, 2026), 30B-parameter omni-modal model unifying vision, audio, and language in a single open-weight architecture. Designed for edge and embedded deployments where running separate models per modality is impractical.
 
 ### MiniMax 3
 
-**MiniMax 3** (China, June 12, 2026) — aggressively priced at approximately $0.53 per 1M tokens, 15-30x cheaper than Western frontier models. 1M-token multimodal context. The pricing makes it relevant for high-volume production workloads where cost dominates model selection — particularly in Asian markets where Chinese models have strong language support.
+**MiniMax 3** (China, June 12, 2026): aggressively priced at approximately $0.53 per 1M tokens, 15-30x cheaper than Western frontier models. 1M-token multimodal context. The pricing makes it relevant for high-volume production workloads where cost dominates model selection, particularly in Asian markets where Chinese models have strong language support.
 
 ### Zyphra ZAYA1-8B
 
-**Zyphra ZAYA1-8B** — first notable fully AMD-trained release (Apache 2.0). Demonstrates viability of AMD MI300X for model training, breaking NVIDIA's training monopoly.
+**Zyphra ZAYA1-8B**: first notable fully AMD-trained release (Apache 2.0). Demonstrates viability of AMD MI300X for model training, breaking NVIDIA's training monopoly.
 
 ### Open-Source Comparison Table
 
@@ -325,7 +325,7 @@ The table below provides a side-by-side comparison of the three leading open-sou
 
 ### Practical Recommendations
 
-**For a startup with a limited budget:** start with Qwen 3 in a 14B or 32B configuration — good balance between quality and resources. Use hybrid reasoning mode to avoid needing separate models. For pure reasoning tasks, DeepSeek V4-Flash (284B/13B active, MIT license) or R1 distilled variants (7B-70B) deliver outstanding performance.
+**For a startup with a limited budget:** start with Qwen 3 in a 14B or 32B configuration: good balance between quality and resources. Use hybrid reasoning mode to avoid needing separate models. For pure reasoning tasks, DeepSeek V4-Flash (284B/13B active, MIT license) or R1 distilled variants (7B-70B) deliver outstanding performance.
 
 **For enterprise self-hosting:** Llama 4 Maverick or Scout are the optimal choices thanks to the mature ecosystem, strong tooling (vLLM, TGI), and clear licensing. Scout's 10M context window eliminates many RAG complexity needs. For reasoning-heavy workloads, DeepSeek V4 folds reasoning into a unified model (no need for separate R1).
 
@@ -361,34 +361,34 @@ Despite differences between providers, most LLM APIs follow similar principles. 
 
 ### Message Format
 
-Virtually all modern APIs use a "messages" format — an array of messages with roles:
+Virtually all modern APIs use a "messages" format, an array of messages with roles:
 
-- **system** (or **developer** in some reasoning model APIs) — instructions for the model defining its behavior, style, and constraints
-- **user** — user messages
-- **assistant** — previous model responses
-- **tool** — results of tool invocations
+- **system** (or **developer** in some reasoning model APIs), instructions for the model defining its behavior, style, and constraints
+- **user**: user messages
+- **assistant**: previous model responses
+- **tool**: results of tool invocations
 
 This format reflects the conversation structure and allows the model to understand dialog context. The system prompt is typically placed first and defines the assistant's "persona."
 
 ### Core Request Parameters
 
 A typical API request includes:
-- **model** — model identifier (e.g., "gpt-5.4", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
-- **messages** — array of messages
-- **temperature** — degree of randomness in responses (0-2; note: some reasoning models fix this)
-- **max_tokens** — maximum response length
-- **top_p** — nucleus sampling
-- **stop** — character sequences that trigger generation stop
-- **tools** — descriptions of available tools (for agents)
-- **reasoning_effort** — for reasoning models: low/medium/high (OpenAI) or budget_tokens (Anthropic)
+- **model**: model identifier (e.g., "gpt-5.4", "claude-sonnet-4-6-20250923", "gemini-2.5-pro")
+- **messages**: array of messages
+- **temperature**: degree of randomness in responses (0-2; note: some reasoning models fix this)
+- **max_tokens**: maximum response length
+- **top_p**: nucleus sampling
+- **stop**: character sequences that trigger generation stop
+- **tools**: descriptions of available tools (for agents)
+- **reasoning_effort**: for reasoning models: low/medium/high (OpenAI) or budget_tokens (Anthropic)
 
 ### Response Format
 
 The response typically contains:
-- **content** — generated text
-- **usage** — token usage statistics (input, output, total; reasoning models also report thinking tokens)
-- **finish_reason** — reason for stopping (stop, length, tool_calls, content_filter)
-- **tool_calls** — requested tool invocations (if the model decided to use a tool)
+- **content**: generated text
+- **usage**: token usage statistics (input, output, total; reasoning models also report thinking tokens)
+- **finish_reason**: reason for stopping (stop, length, tool_calls, content_filter)
+- **tool_calls**: requested tool invocations (if the model decided to use a tool)
 
 ---
 
@@ -414,7 +414,7 @@ Reasoning models carry a premium because thinking tokens are billed at output ra
 | Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Most advanced Google reasoning |
 | Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
 
-GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), though Claude Fable 5 now leads both Verified (95.0%) and Pro (80.3% vs GPT-5.5's 58.6%) as of mid-June 2026. SWE-bench Verified is approaching saturation — the industry is shifting to Pro and domain-specific benchmarks as the meaningful measures.
+GPT-5.5 Instant reached 88.7% on SWE-bench Verified (as of May 2026), though Claude Fable 5 now leads both Verified (95.0%) and Pro (80.3% vs GPT-5.5's 58.6%) as of mid-June 2026. SWE-bench Verified is approaching saturation: the industry is shifting to Pro and domain-specific benchmarks as the meaningful measures.
 
 **Standard models (as of mid-June 2026):**
 
@@ -437,12 +437,12 @@ Standard models cover the broadest range of use cases -- from general-purpose ch
 | Mistral Large 3 | $2.00 | $6.00 |
 | Mistral Medium 3.5 | $1.50 | $7.50 |
 | Qwen 3.7 Max/Plus | $2.50 | $7.50 |
-| Cohere Command A+ | — | — |
-| Grok 4.3 | $1.25 | — |
+| Cohere Command A+ | - | - |
+| Grok 4.3 | $1.25 | - |
 | Grok Build 0.1 | $1.00 | $2.00 |
 | DeepSeek V4-Pro | $0.435 | $0.87 |
 | DeepSeek V4-Flash | $0.14 | $0.28 |
-| Nemotron 3 Ultra | — | — |
+| Nemotron 3 Ultra | - | - |
 
 **Budget models:**
 
@@ -466,7 +466,7 @@ Budget models are designed for high-volume, lower-complexity tasks where cost an
 
 **Thinking token overhead:** Reasoning models may generate 5-50x more thinking tokens than visible output tokens. A 100-token answer might require 5,000 thinking tokens. The `reasoning_effort` parameter helps control this.
 
-**Prompt caching:** OpenAI, Anthropic, and Google offer discounts when the same prefixes are reused. An agent's system prompt repeats in every request — caching can save 50-90% on its cost.
+**Prompt caching:** OpenAI, Anthropic, and Google offer discounts when the same prefixes are reused. An agent's system prompt repeats in every request, caching can save 50-90% on its cost.
 
 ### Prompt Caching: How It Works
 
@@ -475,8 +475,8 @@ Prompt caching is a mechanism where the provider saves the processing results (K
 **How it works:**
 1. On the first request, the model computes the KV-cache for the entire prompt
 2. The provider saves the KV-cache for the repeating **prefix** (beginning of the prompt)
-3. On the next request with the same prefix — cache hit, only the new portion is computed
-4. TTL is typically 5-10 minutes — after that the cache is invalidated
+3. On the next request with the same prefix, cache hit, only the new portion is computed
+4. TTL is typically 5-10 minutes, after that the cache is invalidated
 
 **Conditions for a cache hit:**
 - The prefix must be **byte-identical**
@@ -495,7 +495,7 @@ The economics of prompt caching vary significantly across providers. Anthropic o
 
 **Optimal prompt structure for caching:**
 
-The ideal prompt organization for maximum caching efficiency consists of four layers. At the top is the system prompt — a long, unchanging block of instructions that is fully cached. Next come few-shot examples — multiple request-response examples that teach the model the desired format, also fully cached. Then comes the context — documents or RAG results that may be partially cached if they repeat across requests. Finally, the user message — unique per request and never cached.
+The ideal prompt organization for maximum caching efficiency consists of four layers. At the top is the system prompt, a long, unchanging block of instructions that is fully cached. Next come few-shot examples, multiple request-response examples that teach the model the desired format, also fully cached. Then comes the context: documents or RAG results that may be partially cached if they repeat across requests. Finally, the user message: unique per request and never cached.
 
 **When prompt caching is effective:**
 - Long system prompt (>2000 tokens) with detailed instructions
@@ -517,10 +517,10 @@ The ideal prompt organization for maximum caching efficiency consists of four la
 The batch processing architecture follows an asynchronous pattern: the client submits requests to a Batch Queue, from which they enter the Batch Processor, which executes them at low priority. Results are saved in Results Storage, and the client is notified either via periodic Status Polling or through webhook/callback notifications upon completion.
 
 **How it works (using OpenAI as an example):**
-1. **Submit batch** — you send a JSONL file with requests (up to 50,000 requests)
-2. **Queue** — requests enter a low-priority queue
-3. **Processing** — execution within 24 hours (SLA)
-4. **Results** — you retrieve results via polling or webhook
+1. **Submit batch**: you send a JSONL file with requests (up to 50,000 requests)
+2. **Queue**: requests enter a low-priority queue
+3. **Processing**: execution within 24 hours (SLA)
+4. **Results**: you retrieve results via polling or webhook
 
 **Batching economics:**
 - 50% discount on all tokens (input and output)
@@ -536,7 +536,7 @@ The batch processing architecture follows an asynchronous pattern: the client su
 
 **Client-side code architecture:**
 
-A proper client-side batching implementation follows a specific pattern. First, requests accumulate in a buffer until a threshold is reached — this can be either a certain number of requests or a time interval. When the threshold is met, a batch is formed and submitted to the API, which returns a unique batch identifier (batch_id). The client then either periodically polls the processing status every few minutes or awaits a webhook notification. When processing completes, results are retrieved from storage and used to update downstream systems.
+A proper client-side batching implementation follows a specific pattern. First, requests accumulate in a buffer until a threshold is reached. This can be either a certain number of requests or a time interval. When the threshold is met, a batch is formed and submitted to the API, which returns a unique batch identifier (batch_id). The client then either periodically polls the processing status every few minutes or awaits a webhook notification. When processing completes, results are retrieved from storage and used to update downstream systems.
 
 ---
 
@@ -547,7 +547,7 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Complex Reasoning and Analysis
 
 **Recommended models:**
-- Claude Fable 5 (Mythos-class reasoning, best on complex multi-step tasks — **currently suspended**, see Anthropic section)
+- Claude Fable 5 (Mythos-class reasoning, best on complex multi-step tasks: **currently suspended**, see Anthropic section)
 - Claude Opus 4.8 with extended thinking (accessible Anthropic flagship while Fable 5 is offline)
 - o3 / o4-mini (OpenAI reasoning)
 - Gemini 3.1 Pro Preview or 2.5 Pro with thinking (Google)
@@ -557,8 +557,8 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Code Generation
 
 **Recommended models:**
-- Claude Fable 5 (95.0% Verified, 80.3% Pro — leader on both; **currently suspended**, see Anthropic section)
-- Claude Opus 4.8 (88.6% Verified, 69.2% Pro — accessible flagship while Fable 5 is offline)
+- Claude Fable 5 (95.0% Verified, 80.3% Pro, leader on both; **currently suspended**, see Anthropic section)
+- Claude Opus 4.8 (88.6% Verified, 69.2% Pro: accessible flagship while Fable 5 is offline)
 - Claude Sonnet 4.6 (consistently strong on coding benchmarks)
 - GPT-5.5 Instant (88.7% Verified)
 - GPT-5.3-Codex (specialized agentic coding models)
@@ -604,7 +604,7 @@ The ability to invoke external functions is a key capability for AI agents. It t
 
 ### How It Works
 
-1. **Tool descriptions:** You provide the model with a JSON schema of available tools — their names, descriptions, and parameters
+1. **Tool descriptions:** You provide the model with a JSON schema of available tools: their names, descriptions, and parameters
 2. **Request analysis:** The model analyzes the user's request and decides whether a tool is needed
 3. **Call generation:** If a tool is needed, the model generates structured JSON with the function name and arguments
 4. **Execution:** Your code executes the function and obtains the result
@@ -622,9 +622,9 @@ The ability to invoke external functions is a key capability for AI agents. It t
 
 ### Structured Outputs
 
-An important capability — guaranteed conformance of the response to a JSON schema. OpenAI implemented this through constrained decoding: at the token generation level, the model is physically unable to produce invalid JSON. Anthropic and Google offer similar capabilities.
+An important capability: guaranteed conformance of the response to a JSON schema. OpenAI implemented this through constrained decoding: at the token generation level, the model is physically unable to produce invalid JSON. Anthropic and Google offer similar capabilities.
 
-This is critical for agents, where parsing reliability must be 100%. Previously, you had to handle parsing errors and retry — now that is unnecessary.
+This is critical for agents, where parsing reliability must be 100%. Previously, you had to handle parsing errors and retry, now that is unnecessary.
 
 ---
 
@@ -637,7 +637,7 @@ Production systems cannot depend on a single provider. APIs go down, rate limits
 A good practice is to have a fallback to an alternative provider:
 
 1. **Primary request** to the preferred provider (e.g., Anthropic)
-2. **On failure** — automatic switch to the fallback (OpenAI)
+2. **On failure**: automatic switch to the fallback (OpenAI)
 3. **Monitoring** of success rates for each provider
 4. **Automatic rotation** when the primary degrades
 
@@ -647,10 +647,10 @@ Important: models from different providers are not identical. The same prompt ma
 
 All providers have limits on requests per minute and tokens per minute. Working strategies:
 
-- **Exponential backoff** on receiving 429 errors — wait and retry with increasing intervals
-- **Request queue** with rate control — do not send more than N requests per second
+- **Exponential backoff** on receiving 429 errors: wait and retry with increasing intervals
+- **Request queue** with rate control: do not send more than N requests per second
 - **Load distribution** across multiple API keys
-- **Respect the Retry-After header** — if the API says wait 30 seconds, wait 30 seconds
+- **Respect the Retry-After header**: if the API says wait 30 seconds, wait 30 seconds
 
 ### Timeouts and Retries
 
@@ -677,7 +677,7 @@ When designing production systems, it is important to understand what providers 
 | **Latency P99** | 99th percentile | 15-60 sec |
 | **Error rate** | Percentage of 5xx errors | <0.1% |
 
-**Latency percentiles — why they matter:**
+**Latency percentiles: why they matter:**
 
 Average latency is deceptive. If P50 = 2 sec but P99 = 30 sec, every hundredth user waits half a minute. For interactive applications, this is unacceptable.
 
@@ -690,11 +690,11 @@ System throughput is calculated by the formula: Throughput = Concurrency / Laten
 **SLA monitoring:**
 
 What to track:
-1. **Latency distribution** — not just average, but P50/P95/P99
-2. **Error rate by type** — 429 (rate limit), 500 (server), 503 (overload)
-3. **Token throughput** — tokens/second for capacity planning
-4. **Cost per request** — for budget alerting
-5. **Thinking token ratio** — for reasoning models, monitor thinking-to-output ratio
+1. **Latency distribution**: not just average, but P50/P95/P99
+2. **Error rate by type**: 429 (rate limit), 500 (server), 503 (overload)
+3. **Token throughput**: tokens/second for capacity planning
+4. **Cost per request**: for budget alerting
+5. **Thinking token ratio**: for reasoning models, monitor thinking-to-output ratio
 
 **Degradation strategies:**
 
@@ -709,10 +709,10 @@ A well-designed system defines explicit strategies for each load level, progress
 
 **Practical recommendations:**
 
-1. **Never rely on a single provider** — even with 99.9% SLA, that is 8.7 hours of downtime per year
-2. **Measure your own metrics** — provider SLA ≠ your user experience
-3. **Plan for burst capacity** — LLM load is often spiky (start of business day)
-4. **Budget for latency** — if P99 = 30s, your timeout should be >30s
+1. **Never rely on a single provider**: even with 99.9% SLA, that is 8.7 hours of downtime per year
+2. **Measure your own metrics**: provider SLA ≠ your user experience
+3. **Plan for burst capacity**: LLM load is often spiky (start of business day)
+4. **Budget for latency**: if P99 = 30s, your timeout should be >30s
 
 ---
 
@@ -743,7 +743,7 @@ LangChain4j supports out of the box:
 - **Moderators** for content filtering
 - **Response caching** out of the box
 - **Integration with vector stores** for RAG
-- **AI Services** — a declarative way to create agents through interfaces
+- **AI Services**: a declarative way to create agents through interfaces
 
 ---
 
@@ -761,13 +761,13 @@ Cloud providers are not always the right choice. In some cases, data cannot be s
 
 ### Popular Solutions for Self-Hosting
 
-**Ollama** — the simplest way to run models locally. One-command installation, support for Llama, Mistral, Qwen, DeepSeek, and other open-weight models. Ideal for development and testing.
+**Ollama**: the simplest way to run models locally. One-command installation, support for Llama, Mistral, Qwen, DeepSeek, and other open-weight models. Ideal for development and testing.
 
-**vLLM** — a high-performance inference server for production. Continuous batching, speculative decoding, PagedAttention for efficient GPU memory utilization. OpenAI-compatible API.
+**vLLM**: a high-performance inference server for production. Continuous batching, speculative decoding, PagedAttention for efficient GPU memory utilization. OpenAI-compatible API.
 
-**SGLang** — optimized for multi-turn conversations via RadixAttention. Excellent for chatbots and agents. Strong structured output support.
+**SGLang**: optimized for multi-turn conversations via RadixAttention. Excellent for chatbots and agents. Strong structured output support.
 
-**Text Generation Inference (TGI)** — a production-ready solution from Hugging Face. Good documentation, enterprise features, native HF ecosystem integration.
+**Text Generation Inference (TGI)**: a production-ready solution from Hugging Face. Good documentation, enterprise features, native HF ecosystem integration.
 
 ### Hardware Requirements
 
@@ -787,9 +787,9 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 ## Key Takeaways
 
-1. **The LLM provider market is diverse and fast-moving.** OpenAI, Anthropic, Google, xAI, Mistral, DeepSeek, Meta — each has its own strengths. There is no universally "best" provider.
+1. **The LLM provider market is diverse and fast-moving.** OpenAI, Anthropic, Google, xAI, Mistral, DeepSeek, Meta. Each has its own strengths. There is no universally "best" provider.
 
-2. **Reasoning models are a new paradigm.** o3, Claude extended thinking, Gemini thinking — they trade latency and cost for dramatically better performance on complex tasks. Use them selectively.
+2. **Reasoning models are a new paradigm.** o3, Claude extended thinking, Gemini thinking: they trade latency and cost for dramatically better performance on complex tasks. Use them selectively.
 
 3. **Model choice depends on the task.** Complex reasoning requires reasoning models; standard tasks require standard models; simple tasks require budget models. The right routing strategy saves 70%+ on costs.
 
@@ -799,7 +799,7 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 6. **Tool use / function calling** is the standard for agents. All major providers support this capability with compatible formats.
 
-7. **Reliability requires a multi-provider approach.** Fallback, retry with backoff, circuit breakers — mandatory elements of a production system.
+7. **Reliability requires a multi-provider approach.** Fallback, retry with backoff, circuit breakers, mandatory elements of a production system.
 
 8. **Local models** are suitable for specific requirements: privacy, predictable cost, offline operation, full fine-tuning control. They require infrastructure investment.
 
@@ -819,4 +819,4 @@ Working with different providers through LangChain4j is unified thanks to the sh
 
 **Structured Output:** To guarantee structured data output, the `responseFormat("json_schema")` mode is used with OpenAI models. A Java record is defined with the required fields (e.g., Product with fields name, category, price, features), an interface is created with an extraction method annotated with `@UserMessage`, and AI Services automatically handles parsing the response into a typed object. Thanks to constrained decoding, the model is physically unable to generate invalid JSON, providing 100% parsing reliability.
 
-**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) × inputPrice + (outputTokens / 1,000,000) × outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) × outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120) — an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request — making selective routing essential.
+**Cost calculation:** Monitoring LLM API expenses is critically important. Cost is calculated by the formula: (inputTokens / 1,000,000) x inputPrice + (outputTokens / 1,000,000) x outputPrice. For reasoning models, add thinking tokens: (thinkingTokens / 1,000,000) x outputPrice. For a typical workload, monthly expenses can be projected by multiplying the cost per request by the number of requests per day and by 30 days. For example, at 10,000 requests per day with an average of 500 input / 200 output tokens, GPT-5.4 would cost approximately $1,275/month (input: 300K requests x 500 tokens / 1M x $2.50 = $375; output: 300K x 200 / 1M x $15 = $900), whereas GPT-5-mini would be only about $158/month (input: $37.50, output: $120): an 8x difference with comparable quality for simple tasks. A single complex reasoning query with o3 might use 5,000 thinking tokens, costing $0.20 per request, making selective routing essential.

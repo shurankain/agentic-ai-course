@@ -70,9 +70,9 @@ When multiple agents collaborate, the question of how they share and manage stat
 
 **Shared state (blackboard model).** All agents read from and write to a common state object. LangGraph implements this: the graph state is the shared context, and each node (agent) receives it, modifies it, and returns updates. Advantages: any agent can see what other agents have produced, simple to reason about. Disadvantages: concurrent writes can conflict (LangGraph uses reducer functions to handle this), and the state can grow unboundedly if agents are not disciplined about what they add.
 
-**Isolated state with message passing.** Each agent maintains its own private state and communicates only through explicit messages. The A2A protocol supports this model: agents exchange Tasks and Messages, each maintaining internal state independently. Advantages: no state corruption from concurrent access, easier to scale, cleaner security boundaries (Agent A cannot see Agent B's internal data). Disadvantages: agents must explicitly communicate everything they need — nothing is implicitly shared.
+**Isolated state with message passing.** Each agent maintains its own private state and communicates only through explicit messages. The A2A protocol supports this model: agents exchange Tasks and Messages, each maintaining internal state independently. Advantages: no state corruption from concurrent access, easier to scale, cleaner security boundaries (Agent A cannot see Agent B's internal data). Disadvantages: agents must explicitly communicate everything they need. Nothing is implicitly shared.
 
-**CQRS-like patterns for agent systems.** Inspired by Command Query Responsibility Segregation from microservice architecture: one agent writes decisions (commands), another reads results (queries), and they communicate through an event log. This provides a clean audit trail and allows replaying the decision sequence for debugging. Event sourcing (storing the complete event history rather than current state) enables time-travel debugging — replaying the exact sequence of agent interactions that led to a problem.
+**CQRS-like patterns for agent systems.** Inspired by Command Query Responsibility Segregation from microservice architecture: one agent writes decisions (commands), another reads results (queries), and they communicate through an event log. This provides a clean audit trail and allows replaying the decision sequence for debugging. Event sourcing (storing the complete event history rather than current state) enables time-travel debugging, replaying the exact sequence of agent interactions that led to a problem.
 
 **Conflict resolution when agents modify shared state.** When two agents simultaneously try to update the same field, a resolution strategy is needed. LangGraph's reducer functions define how to merge concurrent updates (e.g., append messages rather than overwrite). Timestamp-based resolution (last write wins) is simple but can lose data. Semantic merging (agents negotiate on conflicting updates) is more robust but adds latency.
 
@@ -84,7 +84,7 @@ A single agent failing in a multi-agent pipeline can cascade unpredictably. Erro
 
 **Retry strategies.** Exponential backoff with jitter for transient failures (rate limits, temporary unavailability). Maximum retry count per agent (3-5 attempts is typical). Idempotency checks: if Agent B partially completed before failing, retrying should not duplicate work. Circuit breaker pattern: if an agent fails repeatedly, stop sending it work and fall back to an alternative.
 
-**Saga pattern for multi-agent transactions.** Borrowed from microservice architecture: each agent action has a compensating action for rollback. Agent A books a hotel → Agent B books a flight → Agent C charges payment. If Agent C fails: compensate by canceling the flight (Agent B rollback), then canceling the hotel (Agent A rollback). This ensures system consistency even when individual agents fail. See the Saga Pattern discussion in the Conflict Resolution section below.
+**Saga pattern for multi-agent transactions.** Borrowed from microservice architecture: each agent action has a compensating action for rollback. Agent A books a hotel, then Agent B books a flight, then Agent C charges payment. If Agent C fails: compensate by canceling the flight (Agent B rollback), then canceling the hotel (Agent A rollback). This ensures system consistency even when individual agents fail. See the Saga Pattern discussion in the Conflict Resolution section below.
 
 **Graceful degradation tiers.** Tier 1: retry the failed agent. Tier 2: fall back to a simpler model (cheaper agent as backup). Tier 3: return partial results with a warning. Tier 4: honestly report the failure. Each tier should be configurable per agent and per task criticality.
 
@@ -98,7 +98,7 @@ Multi-agent systems multiply resource consumption. Without explicit budgeting, c
 
 **Priority queuing.** Not all agents are equally important. A security-checking agent should take priority over a style-checking agent. When resources are constrained, lower-priority agents wait while higher-priority ones execute immediately.
 
-**Timeout and termination.** Runaway agents — stuck in infinite reasoning loops or retrying endlessly — must be killed. Watchdog patterns: set a maximum wall-clock time per agent (e.g., 60 seconds), a maximum iteration count (e.g., 10 LLM calls), and a total session budget (e.g., $0.50). When any limit is exceeded, the orchestrator terminates the agent and falls back to the degradation tier.
+**Timeout and termination.** Runaway agents, stuck in infinite reasoning loops or retrying endlessly, must be killed. Watchdog patterns: set a maximum wall-clock time per agent (e.g., 60 seconds), a maximum iteration count (e.g., 10 LLM calls), and a total session budget (e.g., $0.50). When any limit is exceeded, the orchestrator terminates the agent and falls back to the degradation tier.
 
 ## Conflict Resolution
 

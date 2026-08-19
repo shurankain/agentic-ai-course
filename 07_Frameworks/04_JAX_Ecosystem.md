@@ -14,19 +14,19 @@ JAX is not a replacement for PyTorch in all cases but rather a specialized tool 
 
 JAX can be described by a simple formula: JAX = NumPy API + Automatic Differentiation + XLA Compilation.
 
-**NumPy API** provides a familiar interface for working with arrays. You import jax.numpy as jnp and work with it exactly as with regular NumPy: create arrays, perform multiplication and addition operations, compute dot products. This makes porting existing NumPy code extremely simple — just replace the import.
+**NumPy API** provides a familiar interface for working with arrays. You import jax.numpy as jnp and work with it exactly as with regular NumPy: create arrays, perform multiplication and addition operations, compute dot products. This makes porting existing NumPy code extremely simple: just replace the import.
 
-**Automatic Differentiation** allows automatic computation of gradients for any Python functions. You wrap your function in grad(), and JAX returns a new function that computes the derivative. For example, for a quadratic function f(x) = x² + 3x + 1, the gradient is 2x + 3. JAX can compute not only first derivatives but also higher-order derivatives — simply call grad(grad(f)) for the second derivative or use hessian() for the Hessian matrix.
+**Automatic Differentiation** allows automatic computation of gradients for any Python functions. You wrap your function in grad(), and JAX returns a new function that computes the derivative. For example, for a quadratic function f(x) = x² + 3x + 1, the gradient is 2x + 3. JAX can compute not only first derivatives but also higher-order derivatives: simply call grad(grad(f)) for the second derivative or use hessian() for the Hessian matrix.
 
 **XLA Compilation** (Accelerated Linear Algebra) is a just-in-time compiler that optimizes your code. You decorate a function with @jit, and on the first call JAX compiles it into optimized machine code. Subsequent calls execute tens of times faster. The first call may take 100ms (compilation + execution), but all subsequent ones take only 1ms (execution only).
 
 ### Functional Paradigm
 
-JAX encourages pure functions — functions without side effects. Unlike PyTorch, where the model contains parameters internally as class attributes (stateful approach), in JAX parameters are passed explicitly as function arguments.
+JAX encourages pure functions: functions without side effects. Unlike PyTorch, where the model contains parameters internally as class attributes (stateful approach), in JAX parameters are passed explicitly as function arguments.
 
 In the PyTorch style, you create a class with nn.Parameter, and weights become part of the model object. When calling forward(x), the function implicitly uses self.weight. In the JAX style, you define a function forward(params, x) that explicitly accepts parameters as a dictionary and returns the result without modifying state.
 
-**Advantages of the functional approach**: easier parallelization — without shared state, different devices can independently process data. Determinism — identical inputs always produce identical results, simplifying reproducibility. Easier debugging — no hidden state, all dependencies are explicit, data flow is easier to trace.
+**Advantages of the functional approach**: easier parallelization: without shared state, different devices can independently process data. Determinism: identical inputs always produce identical results, simplifying reproducibility. Easier debugging: no hidden state, all dependencies are explicit, data flow is easier to trace.
 
 ## Key Transformations
 
@@ -34,7 +34,7 @@ JAX provides four core function transformations that can be composed with each o
 
 ### jit: Just-in-Time Compilation
 
-The jit transformation compiles a Python function into optimized XLA code. You decorate a function with @jit or call jit(function). On the first call, JAX traces the function and compiles it — this takes time. On subsequent calls with the same shapes, the cached compiled version is used, running tens of times faster.
+The jit transformation compiles a Python function into optimized XLA code. You decorate a function with @jit or call jit(function). On the first call, JAX traces the function and compiles it. This takes time. On subsequent calls with the same shapes, the cached compiled version is used, running tens of times faster.
 
 **jit limitations**: the function must not have side effects (e.g., modifying global variables or printing). Array dimensions must be known at compile time; otherwise, use static_argnums to mark arguments that affect shapes. Python conditionals (if/else) with data-dependent conditions require special handling via jnp.where or lax.cond.
 
@@ -52,13 +52,13 @@ The vmap transformation automatically converts a function operating on a single 
 
 For example, the function single_example(x, w) computes a dot product for a single example. vmap(single_example, in_axes=(0, None)) creates a function that applies the operation to each element along the first dimension of x while using the same w for all examples.
 
-Combining vmap with grad is particularly powerful — it enables computing per-example gradients (gradients for each example in a batch separately), which is needed for certain advanced training techniques.
+Combining vmap with grad is particularly powerful. It enables computing per-example gradients (gradients for each example in a batch separately), which is needed for certain advanced training techniques.
 
 ### pmap: Parallel Mapping
 
 The pmap transformation distributes computations across multiple devices (GPUs or TPUs). You decorate a function with @pmap, and JAX automatically distributes the first dimension of the input array across available devices. Each device performs computations on its portion of the data in parallel.
 
-This is especially useful for data parallelism in distributed training. Input data must have shape [num_devices, ...], where the first dimension corresponds to the number of available devices.
+This is especially useful for data parallelism in distributed training. Input data must have shape [num_devices,...], where the first dimension corresponds to the number of available devices.
 
 ## Ecosystem: Flax, Optax, Orbax
 
@@ -68,7 +68,7 @@ JAX by itself is a low-level library for numerical computation. An ecosystem of 
 
 Flax is the primary library for building neural networks in JAX. You define models as classes inheriting from nn.Module and use the @nn.compact decorator to define the architecture inside the __call__ method.
 
-**Key difference from PyTorch**: parameters exist separately from the model. First, you call model.init(random_key, example_input), which returns a dictionary of parameters. Then for inference you call model.apply(params, input_batch) instead of simply model(input_batch). This follows the JAX functional paradigm — the model does not store state; everything is passed explicitly.
+**Key difference from PyTorch**: parameters exist separately from the model. First, you call model.init(random_key, example_input), which returns a dictionary of parameters. Then for inference you call model.apply(params, input_batch) instead of simply model(input_batch). This follows the JAX functional paradigm: the model does not store state; everything is passed explicitly.
 
 Explicit management of random state via PRNG keys is also important: you create a key via random.PRNGKey(seed) and pass it during initialization for deterministic generation of initial weights.
 
@@ -92,9 +92,9 @@ Orbax solves the problem of saving and loading model state. You create a PyTreeC
 
 ### Comparison Using an MLP Example
 
-**PyTorch approach**: you create a model class with layers as attributes (self.fc1, self.fc2), instantiate the model and move it to GPU via .cuda(). You create an optimizer by passing model.parameters(). In the training loop, you perform a forward pass via model(x), call loss.backward() to compute gradients, optimizer.step() to update weights, and optimizer.zero_grad() to clear gradients.
+**PyTorch approach**: you create a model class with layers as attributes (self.fc1, self.fc2), instantiate the model and move it to GPU via.cuda(). You create an optimizer by passing model.parameters(). In the training loop, you perform a forward pass via model(x), call loss.backward() to compute gradients, optimizer.step() to update weights, and optimizer.zero_grad() to clear gradients.
 
-**JAX/Flax approach**: you define a model with the @nn.compact decorator, but the model does not contain parameters. Parameters are initialized separately via model.init(). The optimizer is created via Optax, and its state is also initialized separately. The training step is typically wrapped in @jax.jit for compilation. Inside, you define a loss function, compute gradients via value_and_grad, obtain updates from the optimizer, and apply them to parameters — everything is explicit, with no hidden state. Device placement happens automatically.
+**JAX/Flax approach**: you define a model with the @nn.compact decorator, but the model does not contain parameters. Parameters are initialized separately via model.init(). The optimizer is created via Optax, and its state is also initialized separately. The training step is typically wrapped in @jax.jit for compilation. Inside, you define a loss function, compute gradients via value_and_grad, obtain updates from the optimizer, and apply them to parameters. Everything is explicit, with no hidden state. Device placement happens automatically.
 
 ## Practical Patterns
 
@@ -106,13 +106,13 @@ This ensures determinism: the same key always produces the same sequence. A typi
 
 ### Pytrees
 
-JAX works with "pytrees" — arbitrary nested structures of dict, list, and tuple. Model parameters are typically stored as a nested dictionary.
+JAX works with "pytrees": arbitrary nested structures of dict, list, and tuple. Model parameters are typically stored as a nested dictionary.
 
 The function jax.tree_map(fn, tree) applies the function fn to each leaf (terminal array) in the tree. This is convenient for operations like scaling all parameters, applying weight decay, or computing norms. The function jax.tree_util.tree_leaves(tree) returns a flat list of all leaf nodes.
 
 ### Debugging
 
-Debugging compiled code is harder than eager execution. For debugging, you can temporarily disable JIT via the context manager with jax.disable_jit() — functions will then execute in eager mode, and you can use regular breakpoints and print.
+Debugging compiled code is harder than eager execution. For debugging, you can temporarily disable JIT via the context manager with jax.disable_jit(): functions will then execute in eager mode, and you can use regular breakpoints and print.
 
 To print values inside jit-compiled functions, use jax.debug.print() instead of regular print(). Regular print executes during tracing, not on each call, which can be confusing.
 
@@ -126,7 +126,7 @@ When transitioning from PyTorch to JAX, follow these steps:
 
 **Explicit state**: all state is now explicit. Parameters are not stored in the model but passed as arguments. Random keys must be created and split manually. Optimizer state is also passed explicitly at each step.
 
-**Pure functions**: avoid mutations and side effects. No assignments like self.parameter = ..., no modifications to global state. All function inputs and outputs must be explicit arguments and return values.
+**Pure functions**: avoid mutations and side effects. No assignments like self.parameter =..., no modifications to global state. All function inputs and outputs must be explicit arguments and return values.
 
 **Compilation**: wrap the training step in @jit for performance. Ensure that all array shapes are known statically or use static_argnums for arguments that affect shapes.
 
@@ -138,20 +138,20 @@ When transitioning from PyTorch to JAX, follow these steps:
 
 ## JAX in the AI Agent Landscape: Where It Matters
 
-For an AI architect building agentic systems, JAX is not a framework you use directly — it is the infrastructure beneath the models you deploy. Understanding when and why it matters helps make informed decisions about model selection and custom component development.
+For an AI architect building agentic systems, JAX is not a framework you use directly. It is the infrastructure beneath the models you deploy. Understanding when and why it matters helps make informed decisions about model selection and custom component development.
 
-**JAX powers the models you use.** Anthropic trains Claude (including Fable 5) on JAX. Google DeepMind trains Gemini on JAX. When you call the Claude API, the inference runs on a JAX-based serving stack optimized for Google TPUs. When Anthropic deploys over 1 million TPU v7 Ironwood chips for Claude (2026), the JAX ecosystem is the foundation. You do not need to know JAX to use these models — but understanding JAX explains why certain models perform differently on TPU vs GPU infrastructure.
+**JAX powers the models you use.** Anthropic trains Claude (including Fable 5) on JAX. Google DeepMind trains Gemini on JAX. When you call the Claude API, the inference runs on a JAX-based serving stack optimized for Google TPUs. When Anthropic deploys over 1 million TPU v7 Ironwood chips for Claude (2026), the JAX ecosystem is the foundation. You do not need to know JAX to use these models, but understanding JAX explains why certain models perform differently on TPU vs GPU infrastructure.
 
-**When an AI architect needs JAX directly.** Custom training loops for fine-tuning where PyTorch's abstractions are limiting (e.g., research on new PEFT methods, per-example gradient computation for data influence analysis). TPU-native workloads where JAX's XLA compilation provides 2-3x throughput advantage over PyTorch on the same hardware. Custom inference kernels for specialized model architectures (Mamba, hybrid attention, novel quantization schemes) where JAX's composable transformations simplify implementation. Evaluation and interpretability research — computing Hessians, activation patching, and other second-order analysis benefits from JAX's autodiff composability.
+**When an AI architect needs JAX directly.** Custom training loops for fine-tuning where PyTorch's abstractions are limiting (e.g., research on new PEFT methods, per-example gradient computation for data influence analysis). TPU-native workloads where JAX's XLA compilation provides 2-3x throughput advantage over PyTorch on the same hardware. Custom inference kernels for specialized model architectures (Mamba, hybrid attention, novel quantization schemes) where JAX's composable transformations simplify implementation. Evaluation and interpretability research, computing Hessians, activation patching, and other second-order analysis benefits from JAX's autodiff composability.
 
-**When PyTorch is the right choice (most of the time).** Building agent applications (LangChain, LangGraph, CrewAI — all Python/PyTorch ecosystem). Deploying models via vLLM, TGI, or SGLang (all PyTorch-native). Fine-tuning with HuggingFace Transformers and PEFT libraries. Production inference on NVIDIA GPUs (CUDA ecosystem favors PyTorch). Rapid prototyping where ecosystem breadth matters more than compilation speed.
+**When PyTorch is the right choice (most of the time).** Building agent applications (LangChain, LangGraph, CrewAI, all Python/PyTorch ecosystem). Deploying models via vLLM, TGI, or SGLang (all PyTorch-native). Fine-tuning with HuggingFace Transformers and PEFT libraries. Production inference on NVIDIA GPUs (CUDA ecosystem favors PyTorch). Rapid prototyping where ecosystem breadth matters more than compilation speed.
 
-**The practical decision.** If you are building agents, deploying models, or fine-tuning — use PyTorch. If you are training models from scratch, doing ML research, or working on Google TPU infrastructure — evaluate JAX. If you are joining Anthropic or DeepMind — learn JAX. For everyone else, understanding JAX concepts (functional paradigm, composable transformations) improves your thinking about model architecture even if you never write a line of JAX code.
+**The practical decision.** If you are building agents, deploying models, or fine-tuning: use PyTorch. If you are training models from scratch, doing ML research, or working on Google TPU infrastructure: evaluate JAX. If you are joining Anthropic or DeepMind, learn JAX. For everyone else, understanding JAX concepts (functional paradigm, composable transformations) improves your thinking about model architecture even if you never write a line of JAX code.
 
 ## Key Takeaways
 
-JAX represents a functional paradigm for deep learning with an emphasis on composability of transformations. The core transformations — jit for compilation, grad for automatic differentiation, vmap for vectorization, and pmap for parallelization — can be freely combined.
+JAX represents a functional paradigm for deep learning with an emphasis on composability of transformations. The core transformations (jit for compilation, grad for automatic differentiation, vmap for vectorization, and pmap for parallelization) can be freely combined.
 
 The Flax, Optax, and Orbax ecosystem provides the necessary tools for building and training neural networks in a functional style. Explicit state and random key management requires adaptation from PyTorch developers but offers advantages in determinism and parallelization.
 
-JAX is particularly strong for research and TPU workloads. It powers the training infrastructure for Claude and Gemini — the frontier models most AI architects build on. PyTorch remains the leader for rapid prototyping, agent development, and production deployment thanks to its mature ecosystem and CUDA integration.
+JAX is particularly strong for research and TPU workloads. It powers the training infrastructure for Claude and Gemini: the frontier models most AI architects build on. PyTorch remains the leader for rapid prototyping, agent development, and production deployment thanks to its mature ecosystem and CUDA integration.

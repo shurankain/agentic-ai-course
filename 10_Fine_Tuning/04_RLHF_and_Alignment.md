@@ -4,7 +4,7 @@
 
 Supervised fine-tuning (SFT) teaches the model to imitate examples but not to understand what makes a response truly good. The model copies surface-level patterns, missing deeper quality.
 
-RLHF approaches this differently: instead of showing "correct" answers, we show which answers people prefer. The model learns not to imitate but to optimize — generating responses that best match human preferences.
+RLHF approaches this differently: instead of showing "correct" answers, we show which answers people prefer. The model learns not to imitate but to optimize, generating responses that best match human preferences.
 
 ## RLHF Architecture
 
@@ -30,13 +30,13 @@ Training the main model using the Reward Model as the reward function. The model
 
 ### Failure Modes of RLHF
 
-**Reward Hacking** — the model finds ways to achieve high reward without improving actual quality. Examples: verbosity bias, sycophancy, format hacking, hedging.
+**Reward Hacking**: the model finds ways to achieve high reward without improving actual quality. Examples: verbosity bias, sycophancy, format hacking, hedging.
 
-**Goodhart's Law** — the Reward Model is a proxy for human preferences. Optimizing the proxy diverges from the real objective.
+**Goodhart's Law**: the Reward Model is a proxy for human preferences. Optimizing the proxy diverges from the real objective.
 
-**Mode Collapse** — loss of response diversity. The model finds one "success pattern" and uses it everywhere.
+**Mode Collapse**: loss of response diversity. The model finds one "success pattern" and uses it everywhere.
 
-**Specification Gaming** — exploiting the gap between what we wanted to optimize and what we actually optimize.
+**Specification Gaming**: exploiting the gap between what we wanted to optimize and what we actually optimize.
 
 **Mitigation:** KL-penalty, reward ensemble, iterated RLHF, red-teaming.
 
@@ -52,17 +52,17 @@ Full-scale RLHF is typically performed only by major labs for frontier models (G
 
 DPO achieves RLHF results without explicitly training a Reward Model and without RL optimization.
 
-Key insight: one can mathematically show that the optimal policy after RLHF has a specific form. DPO uses this relationship "in reverse" — directly training the model on preference data.
+Key insight: one can mathematically show that the optimal policy after RLHF has a specific form. DPO uses this relationship "in reverse", directly training the model on preference data.
 
-Instead of three stages (SFT → RM → RL), DPO requires only two: SFT followed by direct optimization on preference pairs.
+Instead of three stages (SFT, then RM, then RL), DPO requires only two: SFT followed by direct optimization on preference pairs.
 
 ### Advantages of DPO
 
-**Simplicity** — no need to train a Reward Model. No unstable RL required.
+**Simplicity**: no need to train a Reward Model. No unstable RL required.
 
-**Stability** — supervised learning instead of RL.
+**Stability**: supervised learning instead of RL.
 
-**Efficiency** — 2 models instead of 4.
+**Efficiency**: 2 models instead of 4.
 
 ### Limitations of DPO
 
@@ -80,13 +80,13 @@ DPO is less flexible than RLHF with an explicit Reward Model.
 
 **SimPO** removes the reference model, adding length normalization and margin-based loss.
 
-**GRPO (Group Relative Policy Optimization)** eliminates both the reward model and value model from the RLHF pipeline. Instead of training a separate reward model, GRPO samples K outputs from the current policy and uses group-relative advantages as the reward signal. The full mechanism and its significance — including the R1-Zero emergent reasoning breakthrough — are covered in RLHF Alternatives. GRPO's key insight: reasoning can emerge from pure RL without supervised reasoning traces.
+**GRPO (Group Relative Policy Optimization)** eliminates both the reward model and value model from the RLHF pipeline. Instead of training a separate reward model, GRPO samples K outputs from the current policy and uses group-relative advantages as the reward signal. The full mechanism and its significance, including the R1-Zero emergent reasoning breakthrough, are covered in RLHF Alternatives. GRPO's key insight: reasoning can emerge from pure RL without supervised reasoning traces.
 
 ## RLAIF: AI as Annotator
 
 RLAIF replaces human annotators with an AI model. Instead of people, a powerful LLM compares responses.
 
-**Constitutional AI** is a specific type of RLAIF where the AI evaluates responses for compliance with a set of principles — a "constitution."
+**Constitutional AI** is a specific type of RLAIF where the AI evaluates responses for compliance with a set of principles, a "constitution."
 
 Advantage: transparency and controllability through explicit formulation of principles.
 
@@ -94,7 +94,7 @@ Advantage: transparency and controllability through explicit formulation of prin
 
 RLHF is a paradigm shift from imitation to optimization.
 
-Classical RLHF: SFT → Reward Model → RL optimization.
+Classical RLHF: SFT, then Reward Model, then RL optimization.
 
 Failure modes are critically important: reward hacking, Goodhart's Law, mode collapse, specification gaming.
 

@@ -4,7 +4,7 @@
 
 If MCP servers are bridges to external systems, then clients are orchestrators that coordinate interaction between the user, the language model, and multiple servers. Understanding the client side of MCP is critically important for building fully functional AI applications.
 
-An MCP client performs several key functions. First, it manages connections to servers — establishing, maintaining, and restoring them after failures. Second, it aggregates capabilities of all connected servers and presents them to the language model in an understandable format. Third, it routes model requests to the appropriate servers and returns results.
+An MCP client performs several key functions. First, it manages connections to servers, establishing, maintaining, and restoring them after failures. Second, it aggregates capabilities of all connected servers and presents them to the language model in an understandable format. Third, it routes model requests to the appropriate servers and returns results.
 
 In the MCP ecosystem, the client occupies a central position. It ties together the user interface, the AI model, and external services, creating a cohesive intelligent application.
 
@@ -30,7 +30,7 @@ The nature of MCP implies asynchronous interaction. Requests to servers can take
 
 Modern client implementations use non-blocking I/O and reactive patterns. Requests are sent asynchronously, and responses are processed as they arrive. This enables efficient management of many parallel operations.
 
-Concurrency requires attention to synchronization. Updating shared state — the capability cache, the list of active requests — must be thread-safe.
+Concurrency requires attention to synchronization. Updating shared state (the capability cache, the list of active requests) must be thread-safe.
 
 ## Connecting to Servers
 
@@ -86,7 +86,7 @@ There are four main naming strategies:
 
 ### Multi-Server Architecture
 
-Real-world AI applications often use multiple MCP servers simultaneously. A file system server, a database server, an external API server — each provides its own capabilities.
+Real-world AI applications often use multiple MCP servers simultaneously. A file system server, a database server, an external API server: each provides its own capabilities.
 
 The client aggregates all these capabilities into a unified interface. The language model sees a combined tool list without needing to know which server is responsible for what.
 
@@ -144,7 +144,7 @@ When the model decides to call a tool, it generates a structured request with th
 
 The call result is returned to the model in the next dialog message. The model analyzes the result and decides whether additional actions are needed.
 
-This cycle — call generation, execution, result return — can repeat multiple times within a single user request.
+This cycle (call generation, execution, result return) can repeat multiple times within a single user request.
 
 ### Sampling Processing
 
@@ -154,15 +154,15 @@ The client can filter or modify Sampling requests according to security policies
 
 ### Context Limitations
 
-Language models have context size limitations. With a large number of tools, their descriptions can occupy a significant portion of the context window. A typical tool definition consumes 200–500 tokens (name, description, JSON Schema for parameters). With 100 connected tools, this alone can consume 20,000–50,000 tokens — a significant portion of even a 200K context window, leaving less room for conversation history and resource content.
+Language models have context size limitations. With a large number of tools, their descriptions can occupy a significant portion of the context window. A typical tool definition consumes 200-500 tokens (name, description, JSON Schema for parameters). With 100 connected tools, this alone can consume 20,000-50,000 tokens, a significant portion of even a 200K context window, leaving less room for conversation history and resource content.
 
-**Dynamic tool filtering:** The client selects a subset of relevant tools based on the current conversation. Approaches include: keyword matching (the user mentions "database" → include SQL tools), semantic similarity (embed the user message and tool descriptions, select top-K matches), or LLM-based routing (a fast, cheap model classifies the query and selects a tool category).
+**Dynamic tool filtering:** The client selects a subset of relevant tools based on the current conversation. Approaches include: keyword matching (the user mentions "database" becomes include SQL tools), semantic similarity (embed the user message and tool descriptions, select top-K matches), or LLM-based routing (a fast, cheap model classifies the query and selects a tool category).
 
-**Hierarchical representation:** Instead of exposing hundreds of tools directly, the client presents a meta-tool like `select_toolset(category)` that returns the tools for that category. The model first selects "database tools" or "file tools," then sees only the 5–10 tools in that category. This reduces initial context usage to a few hundred tokens regardless of total tool count.
+**Hierarchical representation:** Instead of exposing hundreds of tools directly, the client presents a meta-tool like `select_toolset(category)` that returns the tools for that category. The model first selects "database tools" or "file tools," then sees only the 5-10 tools in that category. This reduces initial context usage to a few hundred tokens regardless of total tool count.
 
 **Description truncation:** For tools with verbose descriptions, the client can truncate to essential information (name, one-line summary, required parameters) during initial presentation, expanding the full description only when the model selects a tool.
 
-**Tool count budgeting:** A practical guideline — keep active tool definitions under 10% of the total context window. For a 128K context model, this means ~12,800 tokens for tools, accommodating roughly 25–60 tools at full detail or 100+ tools with truncated descriptions.
+**Tool count budgeting:** A practical guideline: keep active tool definitions under 10% of the total context window. For a 128K context model, this means ~12,800 tokens for tools, accommodating roughly 25-60 tools at full detail or 100+ tools with truncated descriptions.
 
 ## User Interface
 
@@ -176,7 +176,7 @@ Additionally, transparency helps diagnose problems. If the result does not meet 
 
 ### Confirmation of Dangerous Operations
 
-Destructive operations — data deletion, message sending, financial transactions — require user confirmation.
+Destructive operations (data deletion, message sending, financial transactions) require user confirmation.
 
 The client can use tool annotations to identify dangerous operations. A tool with the `destructive` flag requests confirmation before execution.
 
@@ -196,9 +196,9 @@ Building an MCP client that works in development is straightforward. Building on
 
 **Connection pooling.** A production client typically connects to 5-20 MCP servers simultaneously. Each connection consumes resources: a child process for stdio servers, a persistent HTTP connection for remote servers. Connection pooling manages this: maintain a pool of initialized connections, reuse them across requests, and limit the total number of concurrent connections. When a request needs a tool from a server with no available connection, queue the request rather than spawning unlimited connections.
 
-**Server health monitoring.** Not all connected servers are equally healthy. A server may be technically connected but responding slowly, returning errors, or timing out. Health monitoring tracks: response latency (P50, P95), error rate over a sliding window, and last successful response time. When a server's health degrades beyond a threshold — mark it unhealthy, stop routing requests to it, and attempt recovery in the background. This prevents a single degraded server from dragging down the entire system.
+**Server health monitoring.** Not all connected servers are equally healthy. A server may be technically connected but responding slowly, returning errors, or timing out. Health monitoring tracks: response latency (P50, P95), error rate over a sliding window, and last successful response time. When a server's health degrades beyond a threshold: mark it unhealthy, stop routing requests to it, and attempt recovery in the background. This prevents a single degraded server from dragging down the entire system.
 
-**Graceful degradation when servers are unavailable.** When a server goes down, the client must continue operating with reduced functionality — not crash entirely. The pattern: maintain a registry of which tools come from which servers. When a server is unavailable, remove its tools from the model's tool list for subsequent requests. If the model attempts to call an unavailable tool, return a clear error message ("The GitHub integration is temporarily unavailable") rather than a cryptic failure. Optionally, suggest alternative tools that provide similar functionality.
+**Graceful degradation when servers are unavailable.** When a server goes down, the client must continue operating with reduced functionality, not crash entirely. The pattern: maintain a registry of which tools come from which servers. When a server is unavailable, remove its tools from the model's tool list for subsequent requests. If the model attempts to call an unavailable tool, return a clear error message ("The GitHub integration is temporarily unavailable") rather than a cryptic failure. Optionally, suggest alternative tools that provide similar functionality.
 
 **Retry logic for tool calls.** Tool calls can fail transiently (network timeout, rate limit, server restart). Retry with exponential backoff: first retry after 1 second, second after 2 seconds, third after 4 seconds, then give up. Idempotency matters: retrying a "read" operation is safe, but retrying a "send email" operation may cause duplicates. The client should check tool metadata for idempotency guarantees before retrying write operations.
 
@@ -208,11 +208,11 @@ MCP security is a shared responsibility between client and server. The client's 
 
 ### Server Trust Levels
 
-Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector — a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See Module 14, Agent Security for the CurXecute CVE and Tool Poisoning attack taxonomy.
+Not all servers deserve equal trust. The client should categorize servers into trust tiers: **first-party servers** (built by your team, full trust, unrestricted capabilities), **verified third-party servers** (from MCP registries with review processes, medium trust, restrict sensitive operations), **unverified third-party servers** (unknown provenance, low trust, strict sandboxing required). Tool descriptions from untrusted servers are a prompt injection vector: a malicious server can embed instructions in tool descriptions that redirect the agent's behavior. See Module 14, Agent Security for the CurXecute CVE and Tool Poisoning attack taxonomy.
 
 ### OAuth 2.1 Integration
 
-MCP's authorization framework (added to the spec in 2025) uses OAuth 2.1 with PKCE for secure credential delegation. The client obtains scoped access tokens on behalf of the user, with limited permissions and expiration. Production implementation: use short-lived tokens (minutes, not hours), request minimum scopes for each tool call, implement token rotation for long-running agent sessions, and log all token grants for audit. Protected Resource Metadata (PRM) allows servers to advertise their authorization requirements — the client discovers what credentials are needed before attempting access.
+MCP's authorization framework (added to the spec in 2025) uses OAuth 2.1 with PKCE for secure credential delegation. The client obtains scoped access tokens on behalf of the user, with limited permissions and expiration. Production implementation: use short-lived tokens (minutes, not hours), request minimum scopes for each tool call, implement token rotation for long-running agent sessions, and log all token grants for audit. Protected Resource Metadata (PRM) allows servers to advertise their authorization requirements: the client discovers what credentials are needed before attempting access.
 
 ### STDIO Vulnerability Awareness
 
@@ -220,7 +220,7 @@ The STDIO transport (MCP servers running as child processes communicating via st
 
 ### Audit and Logging
 
-All interactions with servers should be logged: who called which tool, when, with what parameters, and with what result. These logs serve security (detecting suspicious tool usage patterns), debugging (tracing failures across the client-server boundary), compliance (demonstrating what actions the agent took and why), and cost attribution (tracking which servers consume the most resources). Sensitive data in logs must be masked — see Module 12, Tracing and Logging for PII masking patterns.
+All interactions with servers should be logged: who called which tool, when, with what parameters, and with what result. These logs serve security (detecting suspicious tool usage patterns), debugging (tracing failures across the client-server boundary), compliance (demonstrating what actions the agent took and why), and cost attribution (tracking which servers consume the most resources). Sensitive data in logs must be masked, see Module 12, Tracing and Logging for PII masking patterns.
 
 ## Key Takeaways
 
@@ -234,4 +234,4 @@ Integration with language models requires proper tool representation and efficie
 
 The user interface provides transparency and control. The user understands what the AI is doing and can influence the process.
 
-Security is a cross-cutting concern of the client implementation. From server validation to operation audit — every aspect requires attention.
+Security is a cross-cutting concern of the client implementation. From server validation to operation audit: every aspect requires attention.

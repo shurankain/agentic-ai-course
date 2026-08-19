@@ -40,18 +40,18 @@ Real-time API with strict SLA, stateful long-running connections, mission-critic
 
 **Strategies:**
 
-Checkpointing for batch — saving every N batches, resuming from checkpoint. Overhead ~1-2%, savings 70%.
+Checkpointing for batch, saving every N batches, resuming from checkpoint. Overhead ~1-2%, savings 70%.
 
 Mixed fleet: 2-3 on-demand baseline + 5-10 spot burst. On spot preemption, on-demand absorbs load.
 
-Multi-region/multi-zone deployment — diversification reduces risk.
+Multi-region/multi-zone deployment: diversification reduces risk.
 
-Fallback on spot loss — switching to smaller model or queue.
+Fallback on spot loss, switching to smaller model or queue.
 
 ## Cascading Models
 
 **Concept:**
-Not all requests require a large model. Simple questions — small model (fractions of a cent). Complex ones — large model.
+Not all requests require a large model. Simple questions: small model (fractions of a cent). Complex ones: large model.
 
 Router directs by complexity:
 - Tier 1 (7B): simple factual questions
@@ -66,13 +66,13 @@ Model-based: lightweight classifier predicts complexity. More accurate (85-90% v
 
 Confidence-based: attempt small model, fallback to large if confidence is low (via logprobs). Adaptive, but two inference calls for some.
 
-**Cost savings — real numbers:**
+**Cost savings, real numbers:**
 
 Traffic: 60% simple (7B), 30% medium (13B), 10% complex (70B).
 
-Without cascading: 100K requests/day × $0.01 = $1000/day = $30K/month.
+Without cascading: 100K requests/day x $0.01 = $1000/day = $30K/month.
 
-With cascading: 60K × $0.001 + 30K × $0.003 + 10K × $0.01 = $250/day = $7.5K/month.
+With cascading: 60K x $0.001 + 30K x $0.003 + 10K x $0.01 = $250/day = $7.5K/month.
 
 Savings: 75%.
 
@@ -91,35 +91,35 @@ Llama 7B: T4 (20-30 tok/s, $0.50/hr) or L4 (40-60 tok/s, $1.00/hr) perfectly ade
 
 Llama 70B: A100-40GB will not fit. A100-80GB 1 GPU (8-12 tok/s, $5/hr) with quantization. H100 1 GPU (15-20 tok/s, $7/hr) better price/performance.
 
-Anti-patterns: 7B on H100 (10× overpaying), A100-80GB instead of A100-40GB for models <40GB, multi-GPU without tensor parallelism.
+Anti-patterns: 7B on H100 (10x overpaying), A100-80GB instead of A100-40GB for models <40GB, multi-GPU without tensor parallelism.
 
 **Instance right-sizing:**
 
-CPU bottlenecks — preprocessing can be limiting. If GPU utilization <60% at full load, the problem is CPU. More vCPUs or optimize preprocessing.
+CPU bottlenecks, preprocessing can be limiting. If GPU utilization <60% at full load, the problem is CPU. More vCPUs or optimize preprocessing.
 
-Memory requirements — insufficient RAM leads to swapping. Rule: RAM >= 2x model size. For Llama 70B FP16: 140GB model + 50GB overhead = 190GB+ RAM.
+Memory requirements: insufficient RAM leads to swapping. Rule: RAM >= 2x model size. For Llama 70B FP16: 140GB model + 50GB overhead = 190GB+ RAM.
 
-Network bandwidth — multi-GPU requires high bandwidth. Monitor utilization, if >80% network-bound.
+Network bandwidth: multi-GPU requires high bandwidth. Monitor utilization, if >80% network-bound.
 
 Monitoring: GPU utilization target >70%. CPU 50-70%. Memory <80%.
 
 **Batch size optimization:**
 
-Larger batch → higher throughput, but higher latency. The trade-off depends on the use case.
+Larger batch to higher throughput, but higher latency. The trade-off depends on the use case.
 
 Llama 13B on A100: batch 1 (50 tok/s, 20ms), batch 4 (180 tok/s, 45ms), batch 16 (500 tok/s, 150ms), batch 64 (800 tok/s, 600ms).
 
 Real-time chat: batch 1-4. Document processing: batch 16-64. Async API: batch 8-16.
 
-Dynamic batching — collect up to max_batch_size or timeout (50ms). Low traffic — smaller batches (low latency), high traffic — larger (high throughput).
+Dynamic batching: collect up to max_batch_size or timeout (50ms). Low traffic: smaller batches (low latency), high traffic: larger (high throughput).
 
-Cost impact: batch 32 can be 3-4× cheaper per token than batch 1.
+Cost impact: batch 32 can be 3-4x cheaper per token than batch 1.
 
 ## Autoscaling
 
 **Metrics-based (reactive):**
 
-GPU utilization: scale up >80% for 3-5 min, scale down <40% for 10-15 min. Asymmetric timings — fast up, slow down.
+GPU utilization: scale up >80% for 3-5 min, scale down <40% for 10-15 min. Asymmetric timings: fast up, slow down.
 
 Queue depth: if estimated wait time > target latency, scale up. More direct link to user experience.
 
@@ -151,7 +151,7 @@ Efficiency: GPU utilization (>70%), throughput per GPU, cost vs baseline, cache 
 
 Cost anomalies: daily spend >120% of 7-day average, cost per request >150% baseline, customer spend >$X threshold.
 
-Performance: GPU utilization <50% for 30+ min, latency >2× normal, error rate >5%.
+Performance: GPU utilization <50% for 30+ min, latency >2x normal, error rate >5%.
 
 Budget: 70% daily budget warning, 90% critical, 100% rate limiting or fallback.
 
@@ -161,7 +161,7 @@ Hard limits: max requests per period, max tokens per request, spend caps per cus
 
 Soft limits: warning at 70%, degraded service at 85%, queue prioritization.
 
-Graceful degradation: Normal → 70% warnings → 85% aggressive cascading → 95% queue/rate limiting → 100% free tier disabled.
+Graceful degradation: Normal, then 70% warnings, then 85% aggressive cascading, then 95% queue/rate limiting, then 100% free tier disabled.
 
 ## Serving MoE Models
 
@@ -177,7 +177,7 @@ Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtr
 
 **Quantization is highly effective for MoE:** Since most parameters are expert weights that activate sparsely, aggressive quantization (INT4, even INT2 for inactive experts) has less impact on quality than for dense models. DeepSeek V3 in INT4 fits on 4x A100 80GB with minimal quality loss.
 
-**KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache significantly — 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
+**KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache significantly, 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
 
 **vLLM and SGLang support:** Both support MoE model serving with tensor parallelism. vLLM's V1 engine added optimized MoE routing kernels. SGLang supports expert parallelism (EP) for distributing experts across GPUs independently of tensor parallelism.
 
@@ -185,7 +185,7 @@ Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtr
 
 ## Prompt Caching Economics
 
-For API-based inference (as opposed to self-hosted), **prompt caching** is one of the highest-impact cost optimizations — and it requires no code changes beyond structuring prompts correctly.
+For API-based inference (as opposed to self-hosted), **prompt caching** is one of the highest-impact cost optimizations, and it requires no code changes beyond structuring prompts correctly.
 
 **How it works:** LLM providers cache the KV-cache for the prefix (identical initial portion) of your prompt. If the same prefix appears in the next request, the cached KV-cache is reused, and the provider charges a discounted rate for the cached tokens.
 
@@ -197,9 +197,9 @@ For API-based inference (as opposed to self-hosted), **prompt caching** is one o
 | **OpenAI** | 50% off input | 1,024 tokens | 5-10 min | 25-40% per-turn for agents |
 | **Google** | Varies | 32K tokens | Varies | Significant for long-context |
 
-**The pattern for agents:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [static context]` → `[dynamic context] + [conversation] + [current message]`. The first block is identical across all calls in a session — fully cacheable. The second block varies per call — never cached.
+**The pattern for agents:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [static context]` -> `[dynamic context] + [conversation] + [current message]`. The first block is identical across all calls in a session: fully cacheable. The second block varies per call: never cached.
 
-**Why this matters for multi-turn agents:** An agent making 15 calls per task with a 3K-token system prompt and 5K tokens of tool descriptions saves 8K cached tokens per call × 14 subsequent calls = 112K tokens cached. At Anthropic's 90% discount, this saves approximately $0.50 per task — material at thousands of tasks per day.
+**Why this matters for multi-turn agents:** An agent making 15 calls per task with a 3K-token system prompt and 5K tokens of tool descriptions saves 8K cached tokens per call x 14 subsequent calls = 112K tokens cached. At Anthropic's 90% discount, this saves approximately $0.50 per task, material at thousands of tasks per day.
 
 **Batching API** offers a complementary optimization: 50% discount on all tokens for deferred processing (24-hour SLA). Suitable for evaluation runs, document processing, and any workload that does not require real-time response. Combine prompt caching (for real-time) with batching (for async) for maximum savings.
 
@@ -207,33 +207,33 @@ See Module 02, Context Engineering for the broader context management framework,
 
 ## Queueing Theory for Capacity Planning
 
-**Little's Law — the fundamental law:**
+**Little's Law: the fundamental law:**
 
-The formula `L = λ × W` connects three key metrics:
-- `L` — average number of requests in the system (queue + processing)
-- `λ` — request arrival rate (requests/sec)
-- `W` — average time in the system (queue time + processing time)
+The formula `L = λ x W` connects three key metrics:
+- `L`: average number of requests in the system (queue + processing)
+- `λ`: request arrival rate (requests/sec)
+- `W`: average time in the system (queue time + processing time)
 
 **Application example:**
 
-If you have 10 requests per second and each takes 3 seconds to process, then L = 10 × 3 = 30 requests are simultaneously in the system. This means you need at least 30 concurrent connections. But this is the average case. To handle peaks (P99 latency = 15s), you need peak = 10 × 15 = 150 connections. Therefore, capacity planning should target percentile latency, not the average.
+If you have 10 requests per second and each takes 3 seconds to process, then L = 10 x 3 = 30 requests are simultaneously in the system. This means you need at least 30 concurrent connections. But this is the average case. To handle peaks (P99 latency = 15s), you need peak = 10 x 15 = 150 connections. Therefore, capacity planning should target percentile latency, not the average.
 
 **M/M/c Model for Capacity Planning:**
 
-The classic queueing model helps determine system utilization using the formula `Utilization (ρ) = λ / (c × μ)`, where μ is the service rate (requests per second per worker), and c is the number of workers.
+The classic queueing model helps determine system utilization using the formula `Utilization (ρ) = λ / (c x μ)`, where μ is the service rate (requests per second per worker), and c is the number of workers.
 
 **Utilization rules:**
-- ρ > 1 → the queue grows infinitely (system is overloaded)
-- ρ > 0.8 → sharp latency increase (danger zone)
-- ρ = 0.6-0.7 → optimal load
+- ρ > 1 to the queue grows infinitely (system is overloaded)
+- ρ > 0.8 to sharp latency increase (danger zone)
+- ρ = 0.6-0.7 to optimal load
 
 **Practical capacity planning:**
 
 Suppose you need to handle 100 requests per second, and the LLM latency is 3 seconds on average. Service rate per worker = 1/3 = 0.33 requests per second. Minimum workers: 100 / 0.33 = 300. But accounting for a target utilization of ρ = 0.7 for headroom: 300 / 0.7 ≈ 430 concurrent connections. In practice, plan for ~450 connections to account for burst load.
 
 **Why this matters for LLMs:**
-- LLM latency is high (seconds) and variable — unlike microsecond REST APIs
-- Cost of waiting is high — users leave after a few seconds of waiting
+- LLM latency is high (seconds) and variable, unlike microsecond REST APIs
+- Cost of waiting is high, users leave after a few seconds of waiting
 - API rate limits create an artificial ceiling that cannot be overcome simply by adding workers
 - Load spikes require buffer capacity, otherwise the queue overflows
 
@@ -241,11 +241,11 @@ Suppose you need to handle 100 requests per second, and the LLM latency is 3 sec
 
 ## Key Takeaways
 
-Spot instances — low-hanging fruit. 60-90% savings for eligible workloads. Combine with on-demand for resilience.
+Spot instances: low-hanging fruit. 60-90% savings for eligible workloads. Combine with on-demand for resilience.
 
-Cascading architecture — biggest reducer. With 70% simple requests, savings reach 75%.
+Cascading architecture: biggest reducer. With 70% simple requests, savings reach 75%.
 
-Right-size aggressively. Don't run 7B on H100. Monitor utilization — target >70% GPU, 50-70% CPU.
+Right-size aggressively. Don't run 7B on H100. Monitor utilization, target >70% GPU, 50-70% CPU.
 
 Autoscaling essential for variable traffic. Reactive + predictive for best results.
 
@@ -255,8 +255,8 @@ Implement budget controls. Hard limits prevent surprises. Soft limits balance co
 
 Think about trade-offs: spot (cost vs availability), cascading (cost vs quality), large batches (cost vs latency), quantization (cost vs accuracy).
 
-Prompt caching is free optimization for API users — structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
+Prompt caching is free optimization for API users: structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
 
-**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) → $0.006/1K tokens (mid-2026) = 10x in 18 months**. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference — hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally — overall spending often remains flat or grows.
+**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) to $0.006/1K tokens (mid-2026) = 10x in 18 months**. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference: hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally: overall spending often remains flat or grows.
 
-**Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026) — AWS Trainium handles prefill, Cerebras WSE-3 handles decode — achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see SGLang and Alternatives for benchmarks).
+**Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026): AWS Trainium handles prefill, Cerebras WSE-3 handles decode, achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see SGLang and Alternatives for benchmarks).

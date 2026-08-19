@@ -6,19 +6,19 @@ Docker ensures environment reproducibility: the application runs identically on 
 
 **Docker Layer Theory.** An image consists of layers from bottom to top. Lower layers (base OS, runtime) are fixed. Middle layers (system packages, dependencies) change rarely. Upper layers (source code) change frequently. Typical structure: Base OS debian-slim 70MB, Java runtime 150MB, System packages 50MB, Dependencies 200MB, Application code 4MB.
 
-**Caching Principle.** Each Dockerfile instruction creates an immutable layer with a SHA256 hash. During rebuild, Docker checks for changes: if none — uses cache, if changed — rebuilds that and all subsequent layers. Critical rule: place frequently changing instructions at the bottom, rarely changing ones at the top.
+**Caching Principle.** Each Dockerfile instruction creates an immutable layer with a SHA256 hash. During rebuild, Docker checks for changes: if none: uses cache, if changed, rebuilds that and all subsequent layers. Critical rule: place frequently changing instructions at the bottom, rarely changing ones at the top.
 
 **Anti-pattern:** copying all code at once followed by building. Changing a single file invalidates the cache, forcing re-download of hundreds of megabytes of dependencies. **Correct approach:** first copy only the dependency file (pom.xml, requirements.txt), install dependencies, then copy the code. The dependency layer remains in cache. Rebuild takes seconds instead of minutes.
 
 ## Image Optimization
 
-Instruction order determines cache usage. Base image → system dependencies → application dependencies → source code → build. Base image choice affects size and security. Alpine images are minimal but have compatibility issues with musl instead of glibc. Distroless are even smaller but harder to debug. For production, start with slim variants and transition to distroless as the application stabilizes.
+Instruction order determines cache usage. Base image, then system dependencies, then application dependencies, then source code, then build. Base image choice affects size and security. Alpine images are minimal but have compatibility issues with musl instead of glibc. Distroless are even smaller but harder to debug. For production, start with slim variants and transition to distroless as the application stabilizes.
 
 **Multi-stage build** separates builder and runtime environments. Builder contains compilers, build tools, dev dependencies. Runtime contains only JRE/Python runtime and the compiled application. Reduces image size by 2-5x, lowers the attack surface.
 
 **Java:** Spring Boot layertools splits the JAR into layers: dependencies, spring-boot-loader, snapshot-dependencies, application. When only your code changes, only the last layer is rebuilt. Use a non-root user: create a dedicated user, assign permissions, switch before ENTRYPOINT.
 
-**Python:** use pip install --no-cache-dir, install dependencies into a virtual environment, copy only it to runtime. Compile files to bytecode via python -m compileall — speeds up first startup by 5-15 seconds.
+**Python:** use pip install --no-cache-dir, install dependencies into a virtual environment, copy only it to runtime. Compile files to bytecode via python -m compileall, speeds up first startup by 5-15 seconds.
 
 ## JVM in Containers
 
@@ -28,7 +28,7 @@ The UseContainerSupport flag (enabled by default in Java 11+) forces JVM to resp
 
 ## Health Checks
 
-Liveness probe answers "is the application still running?". Failure leads to restart. For LLM applications, it checks basic functionality: the application responds, main threads are not blocked. Checking external LLM API availability in liveness is dangerous — temporary provider issues will cause infinite restarts.
+Liveness probe answers "is the application still running?". Failure leads to restart. For LLM applications, it checks basic functionality: the application responds, main threads are not blocked. Checking external LLM API availability in liveness is dangerous: temporary provider issues will cause infinite restarts.
 
 Readiness probe determines readiness to accept traffic. Failure removes the pod from load balancing without restart. It checks database connections, vector stores, caches. LLM provider unavailability is a borderline case: depends on whether a fallback provider exists.
 
@@ -38,7 +38,7 @@ Graceful shutdown: upon SIGTERM, the application stops accepting new requests, w
 
 Compose organizes the local environment: application, database, vector store, observability. Ensures consistency between developers. Typical stack: Redis for caching and rate limiting, PostgreSQL for conversations and state, vector database for RAG, optionally Prometheus and Grafana.
 
-Environment variables manage configuration. API keys via environment, never hardcoded. The .env file is excluded from git. Health checks ensure proper startup order: the application starts after the database is ready. Depends_on with condition: service_healthy replaces sleep scripts. Volumes: bind mounts for editing code without rebuilding, named volumes for database persistence.
+Environment variables manage configuration. API keys via environment, never hardcoded. The.env file is excluded from git. Health checks ensure proper startup order: the application starts after the database is ready. Depends_on with condition: service_healthy replaces sleep scripts. Volumes: bind mounts for editing code without rebuilding, named volumes for database persistence.
 
 **Compose file organization:** docker-compose.yml contains the base configuration. docker-compose.override.yml (applied automatically) adds development settings: bind mounts, extended logging, debug ports. docker-compose.prod.yml for production: different images, fewer ports, stricter security. Networks isolate service groups. Profiles enable services optionally: the observability stack is activated with --profile monitoring.
 
@@ -46,11 +46,11 @@ Environment variables manage configuration. API keys via environment, never hard
 
 Kubernetes orchestrates containers: manages deployments, service discovery, scaling, self-healing. For LLM, high availability and elastic scaling under variable loads are critical.
 
-Deployment defines the desired state: replica count, image, resources. Rolling update upgrades pods gradually, ensuring zero-downtime. Resource requests and limits define guaranteed and maximum resources. Too small requests — eviction under resource pressure. Too large — inefficient cluster utilization. Pod Anti-Affinity distributes replicas across different nodes, improving availability. Annotations for Prometheus enable automatic metrics collection.
+Deployment defines the desired state: replica count, image, resources. Rolling update upgrades pods gradually, ensuring zero-downtime. Resource requests and limits define guaranteed and maximum resources. Too small requests: eviction under resource pressure. Too large: inefficient cluster utilization. Pod Anti-Affinity distributes replicas across different nodes, improving availability. Annotations for Prometheus enable automatic metrics collection.
 
 **Rolling update:** MaxSurge defines additional pods during the update. A value of 1 with 3 replicas allows a maximum of 4 pods. MaxUnavailable defines unavailable pods. A value of 0 guarantees the new pod is ready before removing the old one. TerminationGracePeriodSeconds for LLM agents should be 180-300 seconds.
 
-**Probes:** Startup probe solves the slow start problem. Liveness and readiness are disabled until startup succeeds. Critical for LLM applications with long initialization. Liveness with failureThreshold and periodSeconds prevents restart loops. Readiness for LLM should check critical dependencies: if the vector store is unavailable and RAG is a key feature — fail. If there is a fallback source — ignore.
+**Probes:** Startup probe solves the slow start problem. Liveness and readiness are disabled until startup succeeds. Critical for LLM applications with long initialization. Liveness with failureThreshold and periodSeconds prevents restart loops. Readiness for LLM should check critical dependencies: if the vector store is unavailable and RAG is a key feature: fail. If there is a fallback source, ignore.
 
 ## Service and Ingress
 
@@ -60,7 +60,7 @@ Ingress provides HTTP(S) access from outside the cluster. Ingress Controller (ng
 
 Timeout annotations are controller-specific. Nginx: proxy-read-timeout, proxy-send-timeout. For streaming, disable buffering: proxy-buffering: "off". Without this, SSE and WebSocket work incorrectly.
 
-**Session affinity:** for stateful interactions, sessionAffinity: ClientIP may be required — requests from the same IP go to the same pod. For production, external session storage (Redis) is preferable, allowing any pod to handle any request. Rate limiting on Ingress protects against abuse: limit-rps restricts requests per second per IP. CORS settings allow cross-origin requests: specific origins instead of wildcard for production.
+**Session affinity:** for stateful interactions, sessionAffinity: ClientIP may be required, requests from the same IP go to the same pod. For production, external session storage (Redis) is preferable, allowing any pod to handle any request. Rate limiting on Ingress protects against abuse: limit-rps restricts requests per second per IP. CORS settings allow cross-origin requests: specific origins instead of wildcard for production.
 
 ## Horizontal Pod Autoscaler
 
@@ -68,19 +68,19 @@ HPA scales the number of pods based on metrics. CPU is not always the best metri
 
 **KEDA** extends HPA with event-driven triggers. Unlike HPA, it supports scale to zero, event-driven scaling, and native queue integration. Scales by request queue depth, P95 response time, external metrics from Prometheus, messages in Kafka/RabbitMQ. For LLM services: scaling by queue depth (pending requests exceeding 10), by P95 latency (response time exceeding 5 seconds), by custom business metrics (active agent sessions, token volume per minute).
 
-KEDA is useful for batch processing and asynchronous tasks. Tasks in a queue (Redis, RabbitMQ, Kafka) — KEDA scales workers to zero when there is no work and spins them up when work appears. Saves resources for irregular workloads.
+KEDA is useful for batch processing and asynchronous tasks. Tasks in a queue (Redis, RabbitMQ, Kafka): KEDA scales workers to zero when there is no work and spins them up when work appears. Saves resources for irregular workloads.
 
 **KEDA vs HPA comparison:** Scale to zero is KEDA's key advantage. HPA requires a minimum of 1 replica. KEDA's event-driven triggers react to events, not only metrics. External metrics in KEDA are declarative via ScaledObject. HPA requires metrics server and adapter setup. Queue-based scaling is native in KEDA for RabbitMQ, Kafka, SQS, Redis.
 
-The behavior section of HPA controls scaling speed. Scale-up is aggressive during sudden growth. Scale-down is conservative — premature pod removal during temporary dips creates problems. Stabilization window prevents flapping — frequent changes during metric fluctuations. Minimum replicas ensure baseline capacity: 2-3 replicas for production, distributed across nodes.
+The behavior section of HPA controls scaling speed. Scale-up is aggressive during sudden growth. Scale-down is conservative: premature pod removal during temporary dips creates problems. Stabilization window prevents flapping: frequent changes during metric fluctuations. Minimum replicas ensure baseline capacity: 2-3 replicas for production, distributed across nodes.
 
 ## Resource Management
 
-Requests define guaranteed resources for the scheduler. Limits restrict maximum consumption. For LLM, memory is critical: context, prompts, caches. Insufficient limits — OOMKilled. Excessive limits — inefficient utilization. Rule: requests = typical consumption, limits = peak + buffer.
+Requests define guaranteed resources for the scheduler. Limits restrict maximum consumption. For LLM, memory is critical: context, prompts, caches. Insufficient limits: OOMKilled. Excessive limits, inefficient utilization. Rule: requests = typical consumption, limits = peak + buffer.
 
 CPU limits are less critical: most time is spent on network I/O to the LLM API. Throttling is less painful than OOMKilled. Some practices do not set CPU limits, only requests.
 
-QoS classes: Guaranteed (requests = limits for both CPU and memory) — highest priority. Burstable (requests < limits) — medium. BestEffort (no requests or limits) — lowest, first to be evicted.
+QoS classes: Guaranteed (requests = limits for both CPU and memory): highest priority. Burstable (requests < limits): medium. BestEffort (no requests or limits), lowest, first to be evicted.
 
 **Recommendations:** Typical LLM API: memory requests 512Mi-1Gi, limits 1.5-2Gi. CPU requests 250-500m, limits 1-2 CPU or no limit. Agent systems: memory 2-4Gi requests, 4-8Gi limits. ResourceQuotas per namespace restrict total consumption. LimitRanges set default and maximum values.
 
@@ -98,9 +98,9 @@ Mounting as a volume is safer for complex configurations and secrets. Environmen
 
 AI workloads have unique multi-region considerations beyond traditional application deployments: data residency requirements for AI training/inference data, model proximity to users (latency), and the physical location of GPU capacity.
 
-**Data residency and GDPR.** Under GDPR, personal data processed by AI systems must remain within approved jurisdictions. EU users' data must be processed by models running in EU regions — sending prompts containing personal data to a US-based inference endpoint violates GDPR. This means: EU deployment region for EU users, separate vector stores per region (embeddings derived from personal data are personal data), and prompt/response logging in the same region as the user. The practical architecture: a global load balancer routes users to the nearest region, each region runs its own inference stack and vector store, and cross-region replication is limited to anonymized aggregated metrics.
+**Data residency and GDPR.** Under GDPR, personal data processed by AI systems must remain within approved jurisdictions. EU users' data must be processed by models running in EU regions, sending prompts containing personal data to a US-based inference endpoint violates GDPR. This means: EU deployment region for EU users, separate vector stores per region (embeddings derived from personal data are personal data), and prompt/response logging in the same region as the user. The practical architecture: a global load balancer routes users to the nearest region, each region runs its own inference stack and vector store, and cross-region replication is limited to anonymized aggregated metrics.
 
-**Model proximity and latency.** For real-time agent interactions, every 100ms of added latency degrades user experience. A user in Frankfurt connecting to an inference endpoint in Virginia adds ~100ms network round-trip. For streaming responses where every token travels this distance, the cumulative effect is noticeable. Self-hosted models in the user's region eliminate this. For cloud API providers, choose the region closest to your users — most providers now offer multi-region endpoints.
+**Model proximity and latency.** For real-time agent interactions, every 100ms of added latency degrades user experience. A user in Frankfurt connecting to an inference endpoint in Virginia adds ~100ms network round-trip. For streaming responses where every token travels this distance, the cumulative effect is noticeable. Self-hosted models in the user's region eliminate this. For cloud API providers, choose the region closest to your users. Most providers now offer multi-region endpoints.
 
 **Cross-region failover.** When a region goes down (provider outage, infrastructure failure), traffic must fail over to another region. For AI systems, this means: model weights cached in multiple regions (avoid re-downloading 140GB on failover), vector store replicas in the failover region (stale by replication lag but functional), and session state accessible cross-region (Redis Cluster or DynamoDB Global Tables). The failover target: RTO < 5 minutes for the inference layer, RPO < 1 hour for the knowledge base.
 
@@ -112,19 +112,19 @@ GPU nodes are expensive and scarce. Efficient management directly impacts cost.
 
 **Node pools for different GPU types.** Not all workloads need the same GPU. A small classification model runs fine on an L4 ($0.70/hr); a 70B model requires an A100-80GB ($4/hr). Create separate node pools: a "small-gpu" pool with L4/T4 for lightweight models, a "large-gpu" pool with A100/H100 for frontier models. Use node selectors and tolerations to direct workloads to the appropriate pool. This prevents a $0.01/query classification task from occupying a $4/hr A100.
 
-**Bin-packing for GPU utilization.** A single A100-80GB can serve multiple small models simultaneously (if total VRAM fits). vLLM supports serving multiple models on one GPU through model multiplexing. The scheduler should pack small models onto shared GPUs before allocating dedicated GPUs. Target: >70% GPU memory utilization across the cluster. Monitor with NVIDIA DCGM — if average utilization is below 50%, you are overpaying.
+**Bin-packing for GPU utilization.** A single A100-80GB can serve multiple small models simultaneously (if total VRAM fits). vLLM supports serving multiple models on one GPU through model multiplexing. The scheduler should pack small models onto shared GPUs before allocating dedicated GPUs. Target: >70% GPU memory utilization across the cluster. Monitor with NVIDIA DCGM: if average utilization is below 50%, you are overpaying.
 
 ### NVIDIA GPU Operator
 
-Setting up GPU nodes manually requires installing NVIDIA drivers on each node, configuring the NVIDIA Container Toolkit, deploying the device plugin, and managing driver version compatibility across the cluster. The NVIDIA GPU Operator automates all of this through a single Helm chart. It deploys the driver container (compiles the driver for the node's kernel), the container toolkit (nvidia-container-runtime), the device plugin (exposes GPUs as Kubernetes resources), DCGM exporter (GPU metrics for Prometheus), and the GPU Feature Discovery daemon (labels nodes with GPU model, driver version, and capabilities). The result: adding a GPU node to the cluster requires zero manual configuration — the Operator detects the GPU hardware and provisions everything automatically, making GPU nodes as operationally simple as CPU nodes.
+Setting up GPU nodes manually requires installing NVIDIA drivers on each node, configuring the NVIDIA Container Toolkit, deploying the device plugin, and managing driver version compatibility across the cluster. The NVIDIA GPU Operator automates all of this through a single Helm chart. It deploys the driver container (compiles the driver for the node's kernel), the container toolkit (nvidia-container-runtime), the device plugin (exposes GPUs as Kubernetes resources), DCGM exporter (GPU metrics for Prometheus), and the GPU Feature Discovery daemon (labels nodes with GPU model, driver version, and capabilities). The result: adding a GPU node to the cluster requires zero manual configuration, the Operator detects the GPU hardware and provisions everything automatically, making GPU nodes as operationally simple as CPU nodes.
 
 ### Multi-Instance GPU (MIG)
 
-NVIDIA A100 and H100 GPUs support Multi-Instance GPU — hardware-level partitioning of a single physical GPU into up to 7 isolated instances, each with dedicated compute units, memory, and memory bandwidth. Unlike software-based sharing, MIG provides full isolation: a workload in one MIG instance cannot access the memory or affect the performance of another instance. For inference workloads, MIG enables running multiple small models on a single expensive GPU. A single H100 (80GB) can be split into 7 instances of approximately 10GB each, serving 7 independent inference endpoints. Kubernetes supports MIG through extended resource types: instead of requesting `nvidia.com/gpu: 1` (a full GPU), a pod requests `nvidia.com/mig-1g.10gb: 1` (one MIG instance with 1 compute slice and 10GB memory). The GPU Operator's MIG manager handles partition creation and lifecycle.
+NVIDIA A100 and H100 GPUs support Multi-Instance GPU: hardware-level partitioning of a single physical GPU into up to 7 isolated instances, each with dedicated compute units, memory, and memory bandwidth. Unlike software-based sharing, MIG provides full isolation: a workload in one MIG instance cannot access the memory or affect the performance of another instance. For inference workloads, MIG enables running multiple small models on a single expensive GPU. A single H100 (80GB) can be split into 7 instances of approximately 10GB each, serving 7 independent inference endpoints. Kubernetes supports MIG through extended resource types: instead of requesting `nvidia.com/gpu: 1` (a full GPU), a pod requests `nvidia.com/mig-1g.10gb: 1` (one MIG instance with 1 compute slice and 10GB memory). The GPU Operator's MIG manager handles partition creation and lifecycle.
 
 ### Time-Slicing vs MIG
 
-Time-slicing shares a GPU across multiple pods by alternating access — similar to how a CPU time-shares across processes. It is simpler to configure (a single ConfigMap sets the replica count) and works on any NVIDIA GPU, not just A100+. However, time-slicing provides no memory isolation: all pods sharing the GPU see the full GPU memory, and a pod that allocates too much VRAM can cause out-of-memory errors that crash other pods on the same GPU. Performance is also unpredictable — pods contend for compute cycles.
+Time-slicing shares a GPU across multiple pods by alternating access: similar to how a CPU time-shares across processes. It is simpler to configure (a single ConfigMap sets the replica count) and works on any NVIDIA GPU, not just A100+. However, time-slicing provides no memory isolation: all pods sharing the GPU see the full GPU memory, and a pod that allocates too much VRAM can cause out-of-memory errors that crash other pods on the same GPU. Performance is also unpredictable: pods contend for compute cycles.
 
 MIG provides full hardware isolation but requires supported hardware (A100, H100, and newer) and reduces flexibility because partition sizes are fixed to predefined profiles (1g.10gb, 2g.20gb, 3g.40gb, etc.). Changing partitions requires draining workloads from the GPU.
 
@@ -132,7 +132,7 @@ The practical rule: use time-slicing for development and testing environments wh
 
 ### Practical GPU Scheduling
 
-In pod specifications, request GPU resources through `resources.limits` with `nvidia.com/gpu: 1` for a full GPU or `nvidia.com/mig-1g.10gb: 1` for a MIG partition. GPU resources in Kubernetes are limit-only — there is no concept of GPU "requests" separate from "limits," so every GPU resource specified is guaranteed exclusively to the pod. Always pair GPU allocation with explicit memory limits on the container (`resources.limits.memory`) to prevent the application from consuming node memory beyond what the GPU workload requires. For clusters with mixed GPU types, use node selectors (`nvidia.com/gpu.product: NVIDIA-H100-80GB-HBM3`) or node affinity rules to direct workloads to the correct hardware, preventing a lightweight inference task from being scheduled on a premium GPU node.
+In pod specifications, request GPU resources through `resources.limits` with `nvidia.com/gpu: 1` for a full GPU or `nvidia.com/mig-1g.10gb: 1` for a MIG partition. GPU resources in Kubernetes are limit-only. There is no concept of GPU "requests" separate from "limits," so every GPU resource specified is guaranteed exclusively to the pod. Always pair GPU allocation with explicit memory limits on the container (`resources.limits.memory`) to prevent the application from consuming node memory beyond what the GPU workload requires. For clusters with mixed GPU types, use node selectors (`nvidia.com/gpu.product: NVIDIA-H100-80GB-HBM3`) or node affinity rules to direct workloads to the correct hardware, preventing a lightweight inference task from being scheduled on a premium GPU node.
 
 ## Key Takeaways
 

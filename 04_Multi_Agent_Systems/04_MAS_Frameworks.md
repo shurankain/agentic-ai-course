@@ -62,9 +62,9 @@ Checkpointing advantages: Resume after crash (the system automatically continues
 
 ### Production Deployment Patterns
 
-**Checkpointing for resumability.** Production agents crash — providers time out, memory limits are hit, infrastructure fails. LangGraph's checkpoint mechanism means a crashed agent resumes from the last completed node, not from scratch. For a multi-hour research agent, this is the difference between losing 2 hours of work and losing 5 minutes. Checkpoints are stored in PostgreSQL (production) or SQLite (development).
+**Checkpointing for resumability.** Production agents crash: providers time out, memory limits are hit, infrastructure fails. LangGraph's checkpoint mechanism means a crashed agent resumes from the last completed node, not from scratch. For a multi-hour research agent, this is the difference between losing 2 hours of work and losing 5 minutes. Checkpoints are stored in PostgreSQL (production) or SQLite (development).
 
-**Human-in-the-loop gates.** Insert a node that pauses execution and waits for human approval. The graph state is persisted, the human reviews, approves or modifies, and execution continues. This is essential for high-stakes agent decisions — financial transactions, content publication, infrastructure changes. The pattern: agent proposes → human reviews → agent executes.
+**Human-in-the-loop gates.** Insert a node that pauses execution and waits for human approval. The graph state is persisted, the human reviews, approves or modifies, and execution continues. This is essential for high-stakes agent decisions: financial transactions, content publication, infrastructure changes. The pattern: agent proposes, then human reviews, then agent executes.
 
 **Multi-agent handoffs via subgraphs.** LangGraph supports nested graphs: a node in the outer graph invokes a complete inner graph. This enables composable multi-agent systems where each agent is a self-contained graph. The outer graph handles orchestration; inner graphs handle domain logic. This is the recommended pattern for production multi-agent systems on LangGraph.
 
@@ -76,19 +76,19 @@ LangGraph is the right choice when you need: precise control over execution flow
 
 > **Note (February 2026):** AutoGen has entered maintenance mode. Microsoft's strategic investment has shifted to Microsoft Agent Framework, which unifies concepts from AutoGen and Semantic Kernel. Existing AutoGen deployments continue to work and receive security updates, but new projects should evaluate Microsoft Agent Framework, OpenAI Agents SDK, or LangGraph instead.
 
-AutoGen is a framework from Microsoft Research that focuses on conversational agents — agents that interact with each other through natural dialogue.
+AutoGen is a framework from Microsoft Research that focuses on conversational agents, agents that interact with each other through natural dialogue.
 
 ### Agents as Conversationalists
 
 The central metaphor of AutoGen is group chat. Multiple agents participate in a conversation, each with their own role and expertise. One agent generates code, another reviews it, a third runs tests, a fourth coordinates the discussion. They communicate with each other via text messages, like people in a chat.
 
-This approach is intuitive and flexible. There is no need to design complex interaction schemas — agents simply "talk" until they reach a solution. New agents can easily be added to the conversation.
+This approach is intuitive and flexible. There is no need to design complex interaction schemas: agents simply "talk" until they reach a solution. New agents can easily be added to the conversation.
 
 ### Automatic Interaction
 
 The name AutoGen reflects the automatic nature of interaction. When one agent sends a message, the framework determines who should respond and automatically triggers that agent. The chain continues until a termination condition is met.
 
-This simplifies development — there is no need to manually program each transition. But it also creates the risk of infinite loops or unpredictable behavior if agents are not configured carefully.
+This simplifies development: there is no need to manually program each transition. But it also creates the risk of infinite loops or unpredictable behavior if agents are not configured carefully.
 
 ### Human-in-the-Loop
 
@@ -106,15 +106,15 @@ AutoGen 0.4 introduced a completely redesigned architecture that was the last ma
 
 **Improved Testability:** the new architecture significantly simplifies testing. Mock runtimes allow writing isolated unit tests for agents. Deterministic execution mode guarantees reproducible results. Replay capabilities allow recording real interactions and replaying them for debugging.
 
-AutoGen 0.4 is incompatible with version 0.2 — a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
+AutoGen 0.4 is incompatible with version 0.2: a full code rewrite is required. Many of these architectural patterns (event-driven, typed messages, modular components) have been carried forward into Microsoft Agent Framework.
 
 ## CrewAI: Role-Based Collaboration
 
-CrewAI (now at version ~1.14.x) offers the metaphor of a crew — a group of specialists, each with their own role, working toward a common goal.
+CrewAI (now at version ~1.14.x) offers the metaphor of a crew, a group of specialists, each with their own role, working toward a common goal.
 
 ### Roles and Tasks
 
-In CrewAI, you define agents through their roles: researcher, writer, editor, analyst. Each role has a description, a set of tools, and a work style. Then you define tasks — specific units of work that need to be completed.
+In CrewAI, you define agents through their roles: researcher, writer, editor, analyst. Each role has a description, a set of tools, and a work style. Then you define tasks: specific units of work that need to be completed.
 
 The framework automatically assigns tasks to agents based on role matching. Research tasks go to the researcher, writing tasks go to the writer. This creates an intuitive structure similar to how work is organized in real teams.
 
@@ -122,15 +122,15 @@ The framework automatically assigns tasks to agents based on role matching. Rese
 
 CrewAI supports multiple execution modes. In sequential mode, tasks execute one after another, with each subsequent task receiving the result of the previous one. In hierarchical mode, one agent (the manager) coordinates the work of the others.
 
-**Flows** (introduced in CrewAI 1.0+) add event-driven orchestration beyond simple sequential/hierarchical patterns. Flows allow defining conditional routing, parallel execution branches, and state management — addressing the earlier limitation of insufficient expressiveness for complex scenarios.
+**Flows** (introduced in CrewAI 1.0+) add event-driven orchestration beyond simple sequential/hierarchical patterns. Flows allow defining conditional routing, parallel execution branches, and state management, addressing the earlier limitation of insufficient expressiveness for complex scenarios.
 
 CrewAI also added enterprise features including CrewAI Enterprise for managed deployment, built-in memory across crew executions, and integration with major LLM providers.
 
 ### Delegation and Observability
 
-CrewAI's built-in delegation — where one agent asks another for help mid-task — is a differentiator over LangGraph, where delegation requires explicit graph design. A researcher agent can autonomously delegate a sub-question to a fact-checker without the developer pre-defining this path. CrewAI tracks delegation chains for debugging: which agent delegated to which, what was asked, what was returned.
+CrewAI's built-in delegation, where one agent asks another for help mid-task, is a differentiator over LangGraph, where delegation requires explicit graph design. A researcher agent can autonomously delegate a sub-question to a fact-checker without the developer pre-defining this path. CrewAI tracks delegation chains for debugging: which agent delegated to which, what was asked, what was returned.
 
-Built-in observability in CrewAI v1.14.x provides: agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility — seeing how agents delegate, collaborate, and hand off tasks — fills a gap that general-purpose observability tools miss.
+Built-in observability in CrewAI v1.14.x provides: agent-level metrics (tasks completed, tools used, tokens consumed), delegation tracking between agents, and integration with external platforms (Langfuse, LangSmith) via callbacks. The multi-agent visibility, seeing how agents delegate, collaborate, and hand off tasks, fills a gap that general-purpose observability tools miss.
 
 ### When to Use CrewAI vs LangGraph
 
@@ -150,7 +150,7 @@ Semantic Kernel is an SDK from Microsoft for integrating AI into enterprise appl
 
 The main abstraction in Semantic Kernel is plugins containing a set of functions. Functions can be native (regular code in C#, Python, or Java) or semantic (prompts to an LLM). The Kernel orchestrates function calls, manages context, and provides integration with various LLM providers.
 
-This approach allows gradually adding AI capabilities to existing applications. There is no need to rewrite everything from scratch — it is enough to wrap existing services in plugins and add semantic functions for new functionality.
+This approach allows gradually adding AI capabilities to existing applications. There is no need to rewrite everything from scratch. It is enough to wrap existing services in plugins and add semantic functions for new functionality.
 
 ### Planners
 
@@ -164,11 +164,11 @@ Semantic Kernel is developed with enterprise requirements in mind: security, reg
 
 ## OpenAI Agents SDK: Production Handoffs
 
-OpenAI Agents SDK (released March 2025) is the production successor to the experimental Swarm framework. It preserves Swarm's core philosophy of simplicity — agents as instructions + tools + handoffs — while adding production-grade features.
+OpenAI Agents SDK (released March 2025) is the production successor to the experimental Swarm framework. It preserves Swarm's core philosophy of simplicity, agents as instructions + tools + handoffs, while adding production-grade features.
 
 ### From Swarm to Agents SDK
 
-Swarm (October 2024) was an experimental framework demonstrating a minimalist approach: an agent is just a set of instructions and functions, interaction between agents is accomplished through handoff — transferring control from one agent to another. The Agents SDK takes this proven pattern and makes it production-ready.
+Swarm (October 2024) was an experimental framework demonstrating a minimalist approach: an agent is just a set of instructions and functions, interaction between agents is accomplished through handoff, transferring control from one agent to another. The Agents SDK takes this proven pattern and makes it production-ready.
 
 ### Key Capabilities
 
@@ -182,7 +182,7 @@ Swarm (October 2024) was an experimental framework demonstrating a minimalist ap
 
 ### When to Use
 
-The Agents SDK is well-suited for multi-agent systems built on OpenAI models with handoff-based routing. Its simplicity makes it excellent for customer service flows, triage systems, and workflows where agents specialize by domain. The main limitation is tight coupling to the OpenAI API — it does not support non-OpenAI models natively.
+The Agents SDK is well-suited for multi-agent systems built on OpenAI models with handoff-based routing. Its simplicity makes it excellent for customer service flows, triage systems, and workflows where agents specialize by domain. The main limitation is tight coupling to the OpenAI API. It does not support non-OpenAI models natively.
 
 ## Microsoft Agent Framework: Unified Microsoft Platform
 
@@ -198,11 +198,11 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 ### When to Use
 
-**Microsoft Agent Framework reached 1.0 GA on April 3, 2026** — the first stable release with long-term support. Key additions in 1.0: stable APIs (no more preview churn), full MCP support for tool discovery and invocation, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI** that visualizes agent execution, message flows, and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic Claude, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface (`Microsoft.Agents.AI`).
+**Microsoft Agent Framework reached 1.0 GA on April 3, 2026**: the first stable release with long-term support. Key additions in 1.0: stable APIs (no more preview churn), full MCP support for tool discovery and invocation, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI** that visualizes agent execution, message flows, and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic Claude, Bedrock, Gemini, and Ollama..NET and Python SDKs unified under one API surface (`Microsoft.Agents.AI`).
 
-Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration — the 1.0 API is now locked for servicing.
+Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration: the 1.0 API is now locked for servicing.
 
-**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout** — an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ** — a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365** — agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake serves as the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform — leveraging 500M+ M365 users for distribution.
+**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout**: an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ**, a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake serves as the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform, leveraging 500M+ M365 users for distribution.
 
 ### Migration from AutoGen / Semantic Kernel
 
@@ -210,11 +210,11 @@ Migrating to Microsoft Agent Framework varies in effort depending on the source 
 
 | Source | What Carries Over | What Changes | Migration Effort |
 |--------|------------------|--------------|-----------------|
-| **AutoGen 0.4** | Event-driven patterns, typed messages, agent group concepts | Runtime API, message routing, deployment model | Moderate — architectural concepts map well, but API surface differs |
-| **Semantic Kernel** | Plugins, functions (native + semantic), planner concepts | Kernel API replaced by Agent Framework API, SK plugins require adapter wrapping | Low-moderate — plugin model is preserved with minimal changes |
-| **AutoGen 0.2** | High-level concepts only | Everything — 0.2 → 0.4 was already a full rewrite | High — treat as a greenfield migration |
+| **AutoGen 0.4** | Event-driven patterns, typed messages, agent group concepts | Runtime API, message routing, deployment model | Moderate - architectural concepts map well, but API surface differs |
+| **Semantic Kernel** | Plugins, functions (native + semantic), planner concepts | Kernel API replaced by Agent Framework API, SK plugins require adapter wrapping | Low-moderate - plugin model is preserved with minimal changes |
+| **AutoGen 0.2** | High-level concepts only | Everything - 0.2 to 0.4 was already a full rewrite | High - treat as a greenfield migration |
 
-**Practical advice:** For existing AutoGen 0.4 deployments, migration is straightforward — the event-driven and typed message patterns carry over directly. For Semantic Kernel, existing plugins can be wrapped with minimal effort. For AutoGen 0.2 systems, consider this a rewrite and evaluate all framework options (LangGraph, OpenAI Agents SDK) rather than defaulting to Microsoft Agent Framework.
+**Practical advice:** For existing AutoGen 0.4 deployments, migration is straightforward: the event-driven and typed message patterns carry over directly. For Semantic Kernel, existing plugins can be wrapped with minimal effort. For AutoGen 0.2 systems, consider this a rewrite and evaluate all framework options (LangGraph, OpenAI Agents SDK) rather than defaulting to Microsoft Agent Framework.
 
 ## Google Agent Development Kit (ADK)
 
@@ -224,9 +224,9 @@ Google ADK is a unified toolkit for building agents in the Google Cloud ecosyste
 
 **Gemini integration:** native access to Gemini 2.5/3 Pro/Flash capabilities including long context (1M+ tokens), multimodal input, and grounding through Google Search. **A2A support:** built-in support for the Agent-to-Agent protocol for inter-agent communication. **Vertex AI deployment:** managed deployment with auto-scaling, monitoring, and enterprise SLA.
 
-**ADK for Go 1.0** (April 2026) — production-ready Go SDK with native OpenTelemetry integration for deep tracing, a plugin system for self-healing logic, human-in-the-loop confirmations for sensitive operations, and YAML-based configurations for rapid iteration. Google's ADK is now the **only Big Tech framework supporting 4 languages** (Python, TypeScript, Java, Go).
+**ADK for Go 1.0** (April 2026): production-ready Go SDK with native OpenTelemetry integration for deep tracing, a plugin system for self-healing logic, human-in-the-loop confirmations for sensitive operations, and YAML-based configurations for rapid iteration. Google's ADK is now the **only Big Tech framework supporting 4 languages** (Python, TypeScript, Java, Go).
 
-**ADK SkillToolset** — a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see Module 02, Context Engineering).
+**ADK SkillToolset**: a "progressive disclosure" architecture that allows agents to load domain expertise on demand, reducing token usage by up to **90%** compared to traditional monolithic prompts. Instead of loading all capabilities upfront, the agent discovers and loads relevant skill modules as needed. This is the ADK-native implementation of the just-in-time tool loading pattern (see Module 02, Context Engineering).
 
 ### When to Use
 
@@ -236,23 +236,23 @@ ADK is the natural choice for organizations in the GCP ecosystem, especially whe
 
 Each framework occupies its own niche. The choice depends on the specific requirements of the project.
 
-**LangGraph** — choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.2.x with managed deployment via LangGraph Platform.
+**LangGraph**: choose when precise coordination and reproducibility are needed. The graph model gives full control over the execution flow. Integration with the LangChain ecosystem is an additional advantage. Now at 1.2.x with managed deployment via LangGraph Platform.
 
-**OpenAI Agents SDK** — for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
+**OpenAI Agents SDK**: for handoff-based multi-agent systems on OpenAI models. Excellent for customer service, triage, and domain-specialized routing. Simple, production-ready, with built-in guardrails and tracing.
 
-**CrewAI** — a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly. Flows add event-driven orchestration for complex scenarios.
+**CrewAI**: a good choice for content-generation and analytical tasks with a clear division of roles. Low barrier to entry allows getting results quickly. Flows add event-driven orchestration for complex scenarios.
 
-**Microsoft Agent Framework** — for enterprise applications in the Microsoft ecosystem. Replaces both AutoGen and Semantic Kernel as the unified agent platform with Azure integration.
+**Microsoft Agent Framework**: for enterprise applications in the Microsoft ecosystem. Replaces both AutoGen and Semantic Kernel as the unified agent platform with Azure integration.
 
-**Google ADK** — for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
+**Google ADK**: for the GCP ecosystem with Gemini models, Google Search grounding, and A2A protocol support.
 
-**AutoGen / Semantic Kernel** — in maintenance mode (bugfix-only). Existing deployments continue to work, but **all existing AutoGen projects are legacy requiring migration**. New projects should evaluate the alternatives above.
+**AutoGen / Semantic Kernel**: in maintenance mode (bugfix-only). Existing deployments continue to work, but **all existing AutoGen projects are legacy requiring migration**. New projects should evaluate the alternatives above.
 
-**Pydantic AI** — for type-safe Python multi-agent systems with durable execution. From the Pydantic creators. Best when reliability and type checking matter more than ecosystem breadth.
+**Pydantic AI**: for type-safe Python multi-agent systems with durable execution. From the Pydantic creators. Best when reliability and type checking matter more than ecosystem breadth.
 
-**Agno** (formerly Phidata, 39K+ stars as of early 2026) — session-based memory and ReasoningTools for multi-agent coordination. Good middle ground between LangGraph's explicit control and CrewAI's simplicity.
+**Agno** (formerly Phidata, 39K+ stars as of early 2026): session-based memory and ReasoningTools for multi-agent coordination. Good middle ground between LangGraph's explicit control and CrewAI's simplicity.
 
-**CrewAI ecosystem update (as of early 2026):** CrewAI reached 12M+ daily executions with native MCP and A2A support. This makes it one of the few frameworks natively supporting both protocols — agents can use MCP tools and coordinate with external agents via A2A without custom integration code.
+**CrewAI ecosystem update (as of early 2026):** CrewAI reached 12M+ daily executions with native MCP and A2A support. This makes it one of the few frameworks natively supporting both protocols: agents can use MCP tools and coordinate with external agents via A2A without custom integration code.
 
 ### Reasoning Model Support
 
@@ -260,11 +260,11 @@ Reasoning models (o3, Claude extended thinking, Gemini thinking) have changed th
 
 | Framework | Reasoning Model Support | Notes |
 |-----------|------------------------|-------|
-| **LangGraph** | Full — any model via LangChain integrations | Extended thinking tokens flow through the graph naturally; budget control at node level |
-| **OpenAI Agents SDK** | Native — o3/o4-mini with `reasoning_effort` | Built-in support; reasoning and tool calls interleave within agent runs |
-| **CrewAI** | Via provider — works with any reasoning model | No special reasoning-aware features; model handles reasoning internally |
+| **LangGraph** | Full - any model via LangChain integrations | Extended thinking tokens flow through the graph naturally; budget control at node level |
+| **OpenAI Agents SDK** | Native - o3/o4-mini with `reasoning_effort` | Built-in support; reasoning and tool calls interleave within agent runs |
+| **CrewAI** | Via provider - works with any reasoning model | No special reasoning-aware features; model handles reasoning internally |
 | **Microsoft Agent Framework** | Azure OpenAI reasoning models supported | Integrates with Azure o-series deployments |
-| **Google ADK** | Native — Gemini with `thinkingBudget` | Deep integration with Gemini thinking capabilities |
+| **Google ADK** | Native - Gemini with `thinkingBudget` | Deep integration with Gemini thinking capabilities |
 
 **Practical note:** Reasoning models reduce the need for complex multi-agent orchestration on moderate tasks. A single agent with o3 or Claude extended thinking can often replace a 3-4 agent pipeline that was needed with standard models. When evaluating frameworks, consider whether your use case truly needs multi-agent coordination or whether a single reasoning-capable agent suffices.
 
@@ -275,7 +275,7 @@ Selecting a framework requires weighing pattern expressiveness, ecosystem maturi
 | Criterion | LangGraph | CrewAI | OpenAI Agents SDK | MS Agent Framework | Google ADK |
 |-----------|----------|--------|-------------------|-------------------|-----------|
 | **Pattern support** | All (graph = arbitrary flow) | Supervisor, hierarchical, flows | Handoff, routing | All (event-driven) | Supervisor, A2A |
-| **Language** | Python (primary), JS | Python | Python | .NET, Python | Python, TS, Java, Go |
+| **Language** | Python (primary), JS | Python | Python |.NET, Python | Python, TS, Java, Go |
 | **State management** | Explicit (reducers, checkpoints) | Implicit (crew context) | Typed context objects | Event-driven state | Session-based |
 | **Maturity** | Production (1.0+, Klarna/LinkedIn) | Production (1.14.x, 27M+ downloads) | Production (v0.14+) | Production (1.0 GA) | Production (7M+ downloads) |
 | **Observability** | LangSmith (deep) | Built-in + Langfuse | Built-in tracing | DevUI + Azure Monitor | Cloud Trace |
@@ -283,13 +283,13 @@ Selecting a framework requires weighing pattern expressiveness, ecosystem maturi
 | **Best for** | Complex flows, checkpointing | Role-based teams, fast prototyping | Handoff routing on OpenAI | Enterprise MS ecosystem | GCP + Gemini |
 
 **Quick decision guide:**
-- Need checkpointing/resumability? → LangGraph
-- Need fast prototype with role-based agents? → CrewAI
-- Need simple routing on OpenAI models? → OpenAI Agents SDK
-- Enterprise Microsoft stack? → Microsoft Agent Framework
-- GCP + Gemini + A2A? → Google ADK
-- Type-safe Python? → Pydantic AI
-- Go infrastructure team? → Google ADK for Go
+- Need checkpointing/resumability? to LangGraph
+- Need fast prototype with role-based agents? to CrewAI
+- Need simple routing on OpenAI models? to OpenAI Agents SDK
+- Enterprise Microsoft stack? to Microsoft Agent Framework
+- GCP + Gemini + A2A? to Google ADK
+- Type-safe Python? to Pydantic AI
+- Go infrastructure team? to Google ADK for Go
 
 ## Key Takeaways
 

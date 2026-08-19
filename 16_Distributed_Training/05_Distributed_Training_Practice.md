@@ -4,7 +4,7 @@
 
 Distributed training gains meaning when you see it in action. This practice guide will take you from a first multi-GPU experiment to a production-ready pipeline.
 
-Key principle: start simple, add complexity as needed. The path: single GPU → DDP → FSDP → tensor/pipeline parallelism.
+Key principle: start simple, add complexity as needed. The path: single GPU, then DDP, then FSDP, then tensor/pipeline parallelism.
 
 ## Practical Approach Philosophy
 
@@ -38,7 +38,7 @@ Distributed training involves multiple processes that must discover each other.
 
 **torchrun** is the standard for PyTorch. It automatically sets RANK, LOCAL_RANK, WORLD_SIZE. Single-node: torchrun --nproc_per_node=NUM_GPUS train.py.
 
-**DeepSpeed launcher** is convenient for DeepSpeed but not required — it works with torchrun.
+**DeepSpeed launcher** is convenient for DeepSpeed but not required. It works with torchrun.
 
 **SLURM** is the standard in research clusters. Proper --ntasks-per-node configuration is critical.
 
@@ -54,7 +54,7 @@ A complete distributed script consists of mandatory components.
 
 **Training loop:** nearly identical to single-GPU, but logging and saving only on rank 0. Forward, backward, and optimizer step are coordinated automatically through FSDP.
 
-**Gradient clipping:** torch.nn.utils.clip_grad_norm_() after backward. More important in distributed than on single GPU — asynchronous synchronization can cause instability.
+**Gradient clipping:** torch.nn.utils.clip_grad_norm_() after backward. More important in distributed than on single GPU: asynchronous synchronization can cause instability.
 
 **Launch:** torchrun --nproc_per_node=NUM_GPUS train.py. For multi-node: --nnodes and --master_addr.
 
@@ -62,30 +62,30 @@ A complete distributed script consists of mandatory components.
 
 ### Why It Is Not Optional
 
-A model trains for 3 days on 64 GPUs, costing $2,000/day. Hour 67 — hardware failure. Without checkpointing: $5,500 and 3 days lost. With checkpointing every 4 hours: at most 4 hours and $300 lost.
+A model trains for 3 days on 64 GPUs, costing $2,000/day. Hour 67: hardware failure. Without checkpointing: $5,500 and 3 days lost. With checkpointing every 4 hours: at most 4 hours and $300 lost.
 
 Checkpointing saves the complete state: model weights, optimizer state (critical for Adam), LR scheduler, random seeds, and the current step.
 
 ### Practical Frequency
 
-A trade-off between overhead and risk. A synchronous checkpoint can take 30-60 seconds — GPUs sit idle.
+A trade-off between overhead and risk. A synchronous checkpoint can take 30-60 seconds, GPUs sit idle.
 
 **Guidelines:**
 - Research (time is not critical): every 2-4 hours
 - Production: every 30-60 minutes
 - Spot instances: every 15-30 minutes
 
-Do not checkpoint every 100 steps if it takes 30 seconds — the loss from checkpointing exceeds the savings on failure.
+Do not checkpoint every 100 steps if it takes 30 seconds: the loss from checkpointing exceeds the savings on failure.
 
 ### Async Checkpointing
 
 Synchronous checkpointing blocks GPUs while writing to disk. For a large model, that means 30-60 seconds of idle time.
 
-Asynchronous checkpointing solves this in two stages: fast state dict copy GPU→CPU (1-3 seconds), slow write CPU→disk in a background thread.
+Asynchronous checkpointing solves this in two stages: fast state dict copy GPU, then CPU (1-3 seconds), slow write CPU, then disk in a background thread.
 
-**Structure:** first, assemble the full state, transfer to CPU via .cpu() or .state_dict(). A background thread writes without blocking training.
+**Structure:** first, assemble the full state, transfer to CPU via.cpu() or.state_dict(). A background thread writes without blocking training.
 
-**Critical issue:** a crash between the start and completion of an async save results in a corrupted checkpoint. Production solution: atomic operations — write to a temporary file, then perform an atomic rename. Rename is atomic — the checkpoint either exists in full or does not exist at all.
+**Critical issue:** a crash between the start and completion of an async save results in a corrupted checkpoint. Production solution: atomic operations: write to a temporary file, then perform an atomic rename. Rename is atomic: the checkpoint either exists in full or does not exist at all.
 
 **Trade-off:** adds code complexity, requires more CPU memory, but saves GPU time. For expensive training, this is practically mandatory.
 
@@ -93,13 +93,13 @@ Asynchronous checkpointing solves this in two stages: fast state dict copy GPU�
 
 ### Failure Scenarios
 
-**Hardware failures** — a GPU dies, network timeout, node reboots.
+**Hardware failures**: a GPU dies, network timeout, node reboots.
 
-**OOM** — sometimes occurs unexpectedly with variable sequence lengths. One long batch after 10 hours of successful training.
+**OOM**: sometimes occurs unexpectedly with variable sequence lengths. One long batch after 10 hours of successful training.
 
-**NCCL timeouts** — communication stalls. Network issues or mismatched synchronization.
+**NCCL timeouts**: communication stalls. Network issues or mismatched synchronization.
 
-**Spot preemption** — cloud provider reclaims the instance with 30-120 seconds notice.
+**Spot preemption**: cloud provider reclaims the instance with 30-120 seconds notice.
 
 ### Automatic Restart
 
@@ -113,11 +113,11 @@ Production: Kubernetes with restart policies, SLURM requeue, AWS Batch, GCP AI P
 
 Resume finds the latest checkpoint by timestamp/step number, loads the state, and restores everything as it was.
 
-**Search:** scan the directory, match checkpoint-*, sort, take the latest. If none found — step 0.
+**Search:** scan the directory, match checkpoint-*, sort, take the latest. If none found: step 0.
 
 **Loading:** torch.load() reads the dictionary. model.load_state_dict() and optimizer.load_state_dict() restore state. Scheduler too. Random seeds via torch.manual_seed().
 
-**Critical order with FSDP:** the model must be wrapped BEFORE loading state_dict. FSDP changes the parameter structure. Correct order: initialize → FSDP wrap → load state_dict.
+**Critical order with FSDP:** the model must be wrapped BEFORE loading state_dict. FSDP changes the parameter structure. Correct order: initialize, then FSDP wrap, then load state_dict.
 
 **Returning to step:** if crash at step 15000, resume returns 15000, next forward is 15001.
 
@@ -125,15 +125,15 @@ Resume finds the latest checkpoint by timestamp/step number, loads the state, an
 
 ### What to Track
 
-**Loss and gradient norm** — fundamental ML metrics. Loss not decreasing? LR too low or bad data. Gradient norm exploding? Instability or high LR.
+**Loss and gradient norm**: fundamental ML metrics. Loss not decreasing? LR too low or bad data. Gradient norm exploding? Instability or high LR.
 
-**GPU utilization** — efficiency. 50-60% often indicates a bottleneck in data loading. 95%+ is good.
+**GPU utilization**: efficiency. 50-60% often indicates a bottleneck in data loading. 95%+ is good.
 
-**Memory usage** — OOM prevention. Linear growth over time signals a memory leak (often from accumulation without zero_grad()).
+**Memory usage**: OOM prevention. Linear growth over time signals a memory leak (often from accumulation without zero_grad()).
 
-**Throughput (tokens/sec)** — the primary performance metric. Estimates cost and time to completion.
+**Throughput (tokens/sec)**: the primary performance metric. Estimates cost and time to completion.
 
-**Communication overhead** (multi-node) — AllReduce time vs compute. >20% of time in communication — the model may be too small for the number of nodes, or the network is slow.
+**Communication overhead** (multi-node): AllReduce time vs compute. >20% of time in communication: the model may be too small for the number of nodes, or the network is slow.
 
 ### Practical Monitoring
 
@@ -141,7 +141,7 @@ Weights & Biases or TensorBoard is sufficient.
 
 **Initialization:** only rank 0 to avoid duplication. Config with hyperparameters for tracking.
 
-**Periodic logging:** every 10-50 steps with no overhead. Metrics: loss, LR (changes with schedulers), GPU memory. torch.cuda.max_memory_allocated() shows peak memory — useful for detecting memory leaks.
+**Periodic logging:** every 10-50 steps with no overhead. Metrics: loss, LR (changes with schedulers), GPU memory. torch.cuda.max_memory_allocated() shows peak memory, useful for detecting memory leaks.
 
 **Rank 0 synchronization:** if all 64 ranks write to wandb simultaneously, API rate limits kill performance and cause duplication.
 
@@ -179,11 +179,11 @@ More GPUs does not always mean faster. Communication overhead grows. For a 1B mo
 
 ### Practical Optimizations
 
-**Gradient accumulation** instead of larger batches — emulate batch 128 on a single GPU instead of 8 GPUs with batch 16. Slower, but cheaper for research.
+**Gradient accumulation** instead of larger batches: emulate batch 128 on a single GPU instead of 8 GPUs with batch 16. Slower, but cheaper for research.
 
-**Mixed precision (bf16/fp16)** — a nearly free 2x speedup.
+**Mixed precision (bf16/fp16)**: a nearly free 2x speedup.
 
-**Efficient data loading** — a slow dataloader means GPU idle time means wasted money. num_workers, pin_memory, prefetching.
+**Efficient data loading**: a slow dataloader means GPU idle time means wasted money. num_workers, pin_memory, prefetching.
 
 ## Debugging
 
@@ -193,7 +193,7 @@ More GPUs does not always mean faster. Communication overhead grows. For a 1B mo
 
 Causes: one process crashed before a collective, network issues, mismatched code paths.
 
-Solution: NCCL_DEBUG=INFO, check where it stalls. dist.barrier() before the suspect location — if it hangs, the process is not reaching that point.
+Solution: NCCL_DEBUG=INFO, check where it stalls. dist.barrier() before the suspect location: if it hangs, the process is not reaching that point.
 
 **"CUDA out of memory" on some ranks only**
 
@@ -205,11 +205,11 @@ Solution: verify DistributedSampler splits correctly. Variable-length sequences:
 
 In distributed settings, this can stem from synchronization issues or instability amplified by parallelization.
 
-**Gradient synchronization check:** compute gradient norms on each rank, collect via all_gather. If norms differ by >10% — desync. Different ranks see different gradients.
+**Gradient synchronization check:** compute gradient norms on each rank, collect via all_gather. If norms differ by >10%: desync. Different ranks see different gradients.
 
 **Diagnostic mechanism:** iterate over parameters with gradients, compute L2 norm via grad.norm(), create a tensor for each rank, dist.all_gather() collects them. Rank 0 analyzes and outputs a warning on mismatch.
 
-Causes of desync: a process crashed without killing others, mismatched code paths, corrupted NCCL. Once desync is detected — stop and restart.
+Causes of desync: a process crashed without killing others, mismatched code paths, corrupted NCCL. Once desync is detected: stop and restart.
 
 **Slow training / low GPU utilization**
 
@@ -217,7 +217,7 @@ The bottleneck is not in compute but in data loading or I/O.
 
 Check:
 - Dataloader num_workers > 0
-- pin_memory=True for CPU→GPU transfers
+- pin_memory=True for CPU to GPU transfers
 - Checkpoint is non-blocking (async)
 - Network bandwidth is sufficient (iperf)
 
@@ -235,7 +235,7 @@ Once it works in the simple case, gradually increase complexity.
 
 Practical distributed training is a balance of performance, cost, and reliability.
 
-**Start simple.** Single GPU → DDP → FSDP → advanced. Do not start with 3D parallelism unless you are certain.
+**Start simple.** Single GPU, then DDP, then FSDP, then advanced. Do not start with 3D parallelism unless you are certain.
 
 **Checkpointing is critical.** In production, every job must survive interruption. Robust checkpointing and automatic restart.
 

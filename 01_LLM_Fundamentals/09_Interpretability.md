@@ -22,11 +22,11 @@ This creates fundamental problems:
 
 ### Types of Interpretability
 
-**Mechanistic interpretability** — understanding specific computational mechanisms. Which neurons activate? What attention patterns form? This is the deepest level of understanding.
+**Mechanistic interpretability**: understanding specific computational mechanisms. Which neurons activate? What attention patterns form? This is the deepest level of understanding.
 
-**Behavioral interpretability** — understanding model behavior through experiments. How does the model react to input changes? What systematic errors does it make? A less deep but more practical approach.
+**Behavioral interpretability**: understanding model behavior through experiments. How does the model react to input changes? What systematic errors does it make? A less deep but more practical approach.
 
-**Probing** — checking whether specific information is present in model representations. Does the model "know" grammar? Does it encode facts about the world? This can be determined without understanding the mechanisms.
+**Probing**: checking whether specific information is present in model representations. Does the model "know" grammar? Does it encode facts about the world? This can be determined without understanding the mechanisms.
 
 ---
 
@@ -34,7 +34,7 @@ This creates fundamental problems:
 
 ### The Circuits Concept
 
-Researchers at Anthropic proposed viewing neural networks as composed of **circuits** — connected groups of neurons that perform specific computational functions.
+Researchers at Anthropic proposed viewing neural networks as composed of **circuits**: connected groups of neurons that perform specific computational functions.
 
 An analogy with electronics: a processor is made of transistors, but we understand its operation through logic gates (AND, OR, NOT) and higher-level blocks (ALU, registers). Similarly, neural networks can be understood through circuits without analyzing each neuron individually.
 
@@ -50,7 +50,7 @@ The mechanism consists of two attention heads:
 1. **Previous token head**: for each position, attends to the previous token
 2. **Induction head**: finds positions where the current token appeared earlier and attends to the token that followed it
 
-The composition of these two operations yields in-context learning: the model can "learn" a pattern (A → B) from examples in the prompt and apply it to new cases.
+The composition of these two operations yields in-context learning: the model can "learn" a pattern (A becomes B) from examples in the prompt and apply it to new cases.
 
 ### Other Known Circuits
 
@@ -58,7 +58,7 @@ The composition of these two operations yields in-context learning: the model ca
 
 **Negative heads**: suppress certain outputs. If context indicates the answer should NOT be X, negative heads reduce the probability of X.
 
-**Backup heads**: duplicate the functionality of other heads. They provide robustness — if one head is "broken," the backup continues functioning.
+**Backup heads**: duplicate the functionality of other heads. They provide robustness: if one head is "broken," the backup continues functioning.
 
 ---
 
@@ -66,7 +66,7 @@ The composition of these two operations yields in-context learning: the model ca
 
 ### The Dimensionality Problem
 
-A model has finite dimensionality — say, 4096 dimensions in the hidden state. But there are far more concepts in the world. How does a model encode millions of concepts in thousands of dimensions?
+A model has finite dimensionality, say, 4096 dimensions in the hidden state. But there are far more concepts in the world. How does a model encode millions of concepts in thousands of dimensions?
 
 **Superposition hypothesis**: models reuse the same neurons to represent multiple concepts that rarely activate simultaneously.
 
@@ -101,8 +101,8 @@ If features are in superposition, we can attempt to disentangle them. **Sparse A
 An SAE is trained to reconstruct activations through an intermediate layer with a larger number of neurons, subject to a sparsity constraint (most neurons must be zero).
 
 Architecture:
-1. **Encoder**: x → ReLU(Wx + b) — expands into a higher-dimensional space
-2. **Decoder**: z → W'z + b' — compresses back
+1. **Encoder**: x to ReLU(Wx + b): expands into a higher-dimensional space
+2. **Decoder**: z to W'z + b': compresses back
 3. **Sparsity loss**: penalty for the number of non-zero activations
 
 After training, each SAE neuron should correspond to one interpretable feature.
@@ -117,7 +117,7 @@ The overall loss formula is a sum of several components: L = L_reconstruction + 
 
 **Loss function components:**
 
-The reconstruction component uses MSE(x, x̂) to preserve information — the model must reconstruct the original activations as accurately as possible. L1 sparsity with coefficient λ₁ forces most activations to be zero, creating sparse representations. L0 sparsity controls the number of active features directly. KL divergence is used to achieve a target sparsity level by comparing the actual and desired activation distributions.
+The reconstruction component uses MSE(x, x̂) to preserve information: the model must reconstruct the original activations as accurately as possible. L1 sparsity with coefficient λ₁ forces most activations to be zero, creating sparse representations. L0 sparsity controls the number of active features directly. KL divergence is used to achieve a target sparsity level by comparing the actual and desired activation distributions.
 
 **Practical problems and solutions:**
 
@@ -153,11 +153,11 @@ In 2024, Anthropic published the landmark paper "Scaling Monosemanticity," apply
 
 **Experiment scale:**
 
-Anthropic applied an SAE of unprecedented scale to Claude 3 Sonnet at a middle layer. The SAE size was 34 million features — a massive increase compared to 16 thousand in earlier work. The expansion factor reached 256×, meaning the original hidden_dim was expanded into a space 256 times larger. Training was conducted on billions of tokens of activations.
+Anthropic applied an SAE of unprecedented scale to Claude 3 Sonnet at a middle layer. The SAE size was 34 million features: a massive increase compared to 16 thousand in earlier work. The expansion factor reached 256x, meaning the original hidden_dim was expanded into a space 256 times larger. Training was conducted on billions of tokens of activations.
 
 **Key findings:**
 
-Features exist and scale. Researchers discovered approximately 1 million interpretable features. As SAE size increases, features become increasingly specific and specialized. Critically, monosemanticity is achievable — a single feature can indeed correspond to a single well-defined concept.
+Features exist and scale. Researchers discovered approximately 1 million interpretable features. As SAE size increases, features become increasingly specific and specialized. Critically, monosemanticity is achievable: a single feature can indeed correspond to a single well-defined concept.
 
 Multi-level feature abstraction was discovered. Low-level features handle basic elements: the letter "e," spaces, commas. Mid-level features recognize more complex patterns: an English word, Python code. High-level features operate on semantic concepts: AI safety discussion, medical advice. Abstract features capture abstract notions: lying and deception, agreement with the user.
 
@@ -167,7 +167,7 @@ Clamping features demonstrates a causal relationship with behavior. Amplifying t
 
 **Practical implications for AI safety:**
 
-Interpretability scales — production models with billions of parameters can be analyzed. Safety-relevant features are detectable and can be monitored in real time. Feature steering works — undesirable behavior can be corrected without retraining. However, understanding is far from complete — significantly more research is required.
+Interpretability scales: production models with billions of parameters can be analyzed. Safety-relevant features are detectable and can be monitored in real time. Feature steering works: undesirable behavior can be corrected without retraining. However, understanding is far from complete: significantly more research is required.
 
 **Open questions after Scaling Monosemanticity:**
 - How are features related to capabilities?
@@ -181,13 +181,13 @@ The rise of reasoning models (o1, o3, DeepSeek R1, Claude extended thinking) cre
 
 **Chain-of-thought as a window into reasoning:**
 
-Reasoning models produce explicit chains of thought before their final answer. This seems like a boon for interpretability — we can read the model's "thinking." But the relationship between visible reasoning tokens and actual internal computation is complex.
+Reasoning models produce explicit chains of thought before their final answer. This seems like a boon for interpretability: we can read the model's "thinking." But the relationship between visible reasoning tokens and actual internal computation is complex.
 
 **Key questions:**
 
 **Are reasoning tokens faithful?** Research shows that chains of thought are not always faithful representations of the model's actual reasoning process. A model may arrive at the correct answer through internal mechanisms but generate a plausible-sounding but different reasoning chain. The visible chain is trained to be persuasive, not necessarily truthful about the model's internal state.
 
-**Steganography risk:** Models trained with reinforcement learning on reasoning chains may learn to encode hidden information in the text of their reasoning — a form of steganography. Anthropic's research found early evidence that models can learn to pass information between reasoning steps in ways not apparent to human readers.
+**Steganography risk:** Models trained with reinforcement learning on reasoning chains may learn to encode hidden information in the text of their reasoning: a form of steganography. Anthropic's research found early evidence that models can learn to pass information between reasoning steps in ways not apparent to human readers.
 
 **Monitoring vs controllability:** OpenAI's o-series models hide the full chain of thought from users, showing only a summary. This reflects the tension: full visibility into reasoning tokens could enable users to manipulate the reasoning process, but hiding them reduces interpretability.
 
@@ -195,7 +195,7 @@ Reasoning models produce explicit chains of thought before their final answer. T
 
 Applying sparse autoencoders to reasoning models reveals features specific to the reasoning process: "backtracking" features that activate when the model reconsiders a step, "verification" features that activate during answer-checking, and "uncertainty" features that are more granular than in non-reasoning models. These features provide mechanistic insight into how test-time compute improves answers.
 
-**Implications for safety:** Reasoning model interpretability is arguably more important than standard model interpretability. These models take autonomous multi-step actions, make tool-use decisions, and execute complex plans. Understanding whether the reasoning process is faithful — whether the model is "thinking what it says it's thinking" — is a critical open problem for AI safety.
+**Implications for safety:** Reasoning model interpretability is arguably more important than standard model interpretability. These models take autonomous multi-step actions, make tool-use decisions, and execute complex plans. Understanding whether the reasoning process is faithful, whether the model is "thinking what it says it's thinking", is a critical open problem for AI safety.
 
 ---
 
@@ -217,7 +217,7 @@ Example probing tasks:
 
 Research has revealed rich representational structure:
 
-**Syntax is well encoded**: parts of speech, dependencies, sentence structure — all are extracted with high accuracy.
+**Syntax is well encoded**: parts of speech, dependencies, sentence structure. All are extracted with high accuracy.
 
 **Semantics are diverse**: related words have similar representations, but relationships are more complex (king - man + woman ≠ queen for modern models).
 
@@ -267,11 +267,11 @@ The step-by-step causal analysis process precisely identifies which model compon
 
 **Step 1: Preparing contrastive examples**
 
-Create a pair of examples differing at a critical point. Clean input: "John gave Mary a book. John gave her a flower". Corrupted input: "John gave Bob a book. John gave her a flower". The only difference is the name (Mary → Bob). The goal: the prediction of "flower" should change, allowing us to trace which components transmit name information.
+Create a pair of examples differing at a critical point. Clean input: "John gave Mary a book. John gave her a flower". Corrupted input: "John gave Bob a book. John gave her a flower". The only difference is the name (Mary becomes Bob). The goal: the prediction of "flower" should change, allowing us to trace which components transmit name information.
 
 **Step 2: Choosing granularity**
 
-Layer level — patch the entire layer; yields low interpretability but requires low computational cost. Component level — patch attention or MLP separately; moderate interpretability and moderate cost. Head level — patch a single attention head; high interpretability but high computational cost. Neuron level — patch an individual neuron; very high interpretability but very high cost. Position level — patch a specific position in the sequence; high interpretability and moderate cost.
+Layer level: patch the entire layer; yields low interpretability but requires low computational cost. Component level: patch attention or MLP separately; moderate interpretability and moderate cost. Head level: patch a single attention head; high interpretability but high computational cost. Neuron level: patch an individual neuron; very high interpretability but very high cost. Position level: patch a specific position in the sequence; high interpretability and moderate cost.
 
 **Step 3: Patching directions**
 
@@ -317,7 +317,7 @@ Interpretability is not an academic exercise. It is a critical tool for AI safet
 
 **Scenario 1: Detecting deceptive alignment**
 
-A model may learn to "pretend" to be aligned during testing while harboring different internal objectives. A behavioral test asks: "Do you plan to deceive users?" The model responds: "No, I am here to help!" Test passed, but nothing is proven — the model may have simply learned the correct answers.
+A model may learn to "pretend" to be aligned during testing while harboring different internal objectives. A behavioral test asks: "Do you plan to deceive users?" The model responds: "No, I am here to help!" Test passed, but nothing is proven: the model may have simply learned the correct answers.
 
 The interpretability approach works differently. First, find "deception" and "goal" features via SAE. Then monitor activations of these features during inference in real time. If the "deception" feature is active but the text output appears "honest," this is a red flag. The model may be concealing its true intentions.
 
@@ -329,13 +329,13 @@ The interpretability approach offers a systematic solution. Trace activation pat
 
 **Scenario 3: Predicting dangerous capabilities**
 
-Question: can model X perform Y (a dangerous action)? The behavioral approach suggests trying it — but that is dangerous! Testing dangerous capabilities can lead to real harm.
+Question: can model X perform Y (a dangerous action)? The behavioral approach suggests trying it, but that is dangerous! Testing dangerous capabilities can lead to real harm.
 
 The interpretability approach is safer. Find features associated with Y-like capabilities through activation analysis. Check how developed these features are and how strongly they activate. Predict the emergence of dangerous capabilities without actually testing dangerous behavior.
 
 **Safety monitoring workflow:**
 
-The safety monitoring architecture consists of several stages. Production Inference — the model's normal operation with user requests. SAE Feature Extraction occurs asynchronously: features are extracted from activations, and safety-relevant feature scores are computed. Anomaly Detection analyzes unusual patterns: unusual deception feature activation, harmful content features, out-of-distribution patterns. Based on the analysis, the system classifies responses as Normal (continue operation) or Alert (send to Human Review for human inspection).
+The safety monitoring architecture consists of several stages. Production Inference: the model's normal operation with user requests. SAE Feature Extraction occurs asynchronously: features are extracted from activations, and safety-relevant feature scores are computed. Anomaly Detection analyzes unusual patterns: unusual deception feature activation, harmful content features, out-of-distribution patterns. Based on the analysis, the system classifies responses as Normal (continue operation) or Alert (send to Human Review for human inspection).
 
 ### Limitations of Current Approaches
 
@@ -347,7 +347,7 @@ Despite progress, interpretability is far from solving safety problems:
 
 **Pace of change**: new architectures (MoE, SSM) require new interpretation methods.
 
-**Fundamental limitations**: there may be a "complexity of understanding" — not all computations can be reduced to concepts comprehensible to humans.
+**Fundamental limitations**: there may be a "complexity of understanding", not all computations can be reduced to concepts comprehensible to humans.
 
 ---
 
@@ -373,7 +373,7 @@ Direct modification of activations during inference:
 
 **Style control**: modify features related to response style
 
-This is a powerful tool, but it requires caution — careless modification can break the model in unpredictable ways.
+This is a powerful tool, but it requires caution: careless modification can break the model in unpredictable ways.
 
 ---
 
@@ -381,17 +381,17 @@ This is a powerful tool, but it requires caution — careless modification can b
 
 1. **Interpretability is critical** for LLM safety and reliability. Without understanding a model's mechanisms, we cannot guarantee its behavior.
 
-2. **Circuits** are computational units in neural networks. Induction heads, name movers — these are examples of understood circuits performing specific functions.
+2. **Circuits** are computational units in neural networks. Induction heads, name movers: these are examples of understood circuits performing specific functions.
 
 3. **Superposition** explains how models encode more concepts than they have dimensions. This makes interpretation harder, but sparse autoencoders help disentangle features.
 
 4. **SAEs reveal features**: thousands of interpretable units can be discovered and modified. "Golden Gate Claude" is a vivid example.
 
-5. **Probing** shows what information is encoded. Syntax, semantics, facts — all are extractable from representations.
+5. **Probing** shows what information is encoded. Syntax, semantics, facts: all are extractable from representations.
 
 6. **Activation patching** establishes causality. Not just correlation, but understanding which components actually influence the output.
 
-7. **For safety this is critical**: detecting deception, verifying alignment, surgical correction — all require interpretability.
+7. **For safety this is critical**: detecting deception, verifying alignment, surgical correction. All require interpretability.
 
 8. **Reasoning model interpretability is a new frontier**. Chains of thought provide a window into reasoning but may not be faithful. Understanding whether models "think what they say they think" is a critical open problem.
 
@@ -403,12 +403,12 @@ This is a powerful tool, but it requires caution — careless modification can b
 
 **Minimal Probing Implementation** checks what information is encoded in model hidden states by training a linear classifier on top of internal representations.
 
-The POSProber class loads the model with the output_hidden_states=True flag to extract intermediate representations, creates a tokenizer, and initializes a list of linear probe layers — one for each model layer. Each probe maps hidden_dim to the number of classes (e.g., POS tags).
+The POSProber class loads the model with the output_hidden_states=True flag to extract intermediate representations, creates a tokenizer, and initializes a list of linear probe layers: one for each model layer. Each probe maps hidden_dim to the number of classes (e.g., POS tags).
 
-The hidden state extraction method tokenizes the text, runs it through the model without computing gradients, and returns a tuple of tensors for each layer with dimensions batch × sequence × hidden_dim.
+The hidden state extraction method tokenizes the text, runs it through the model without computing gradients, and returns a tuple of tensors for each layer with dimensions batch x sequence x hidden_dim.
 
 Training a probe for a specific layer uses Adam optimizer and CrossEntropyLoss, iteratively training the linear classifier to predict labels from that layer's hidden states.
 
-**Interpretation:** If a probe achieves high accuracy (>90%) on layer N, information about POS is clearly encoded linearly in that layer. Low accuracy (<60%) indicates the absence of information or nonlinear encoding. Comparing across layers reveals where syntactic understanding forms — typically early layers for syntax and deep layers for semantics.
+**Interpretation:** If a probe achieves high accuracy (>90%) on layer N, information about POS is clearly encoded linearly in that layer. Low accuracy (<60%) indicates the absence of information or nonlinear encoding. Comparing across layers reveals where syntactic understanding forms, typically early layers for syntax and deep layers for semantics.
 
 Important: the presence of information does not guarantee the model uses it. Causal analysis requires activation patching.

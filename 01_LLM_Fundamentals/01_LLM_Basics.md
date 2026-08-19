@@ -1,6 +1,6 @@
 # Large Language Model (LLM) Fundamentals
 
-Imagine a library that doesn't just store texts but has "absorbed" their content, internalized language patterns, authorial styles, and reasoning logic. That is essentially what a large language model is — a system that has learned to understand and generate human language.
+Imagine a library that doesn't just store texts but has "absorbed" their content, internalized language patterns, authorial styles, and reasoning logic. That is essentially what a large language model is, a system that has learned to understand and generate human language.
 
 Large Language Models (LLMs) have become a revolution in artificial intelligence. They form the foundation of modern AI agents and determine their ability to understand user queries, reason, generate code, and interact with the external world.
 
@@ -10,9 +10,9 @@ Large Language Models (LLMs) have become a revolution in artificial intelligence
 
 A language model is a statistical model that predicts the probability of the next word (token) in a sequence based on the preceding words. Behind this simple formulation lies tremendous power.
 
-The "large" prefix refers to the scale of these models. Modern LLMs contain billions of parameters — numbers that the model has "learned" during training on massive volumes of text data. GPT-4, for example, is estimated to contain over a trillion parameters.
+The "large" prefix refers to the scale of these models. Modern LLMs contain billions of parameters, numbers that the model has "learned" during training on massive volumes of text data. GPT-4, for example, is estimated to contain over a trillion parameters.
 
-But it is not just about the number of parameters. These models are trained on unprecedented volumes of data — trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn not only grammar and syntax but also factual knowledge, logical relationships, and elements of common sense.
+But it is not just about the number of parameters. These models are trained on unprecedented volumes of data, trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn not only grammar and syntax but also factual knowledge, logical relationships, and elements of common sense.
 
 ---
 
@@ -20,15 +20,15 @@ But it is not just about the number of parameters. These models are trained on u
 
 ### The World Before Transformer
 
-Before 2017, the primary tools for processing text sequences were recurrent neural networks (RNNs) and their improved variants — LSTMs and GRUs. These architectures processed text sequentially, word by word, passing a "memory" of what had been read from one step to the next.
+Before 2017, the primary tools for processing text sequences were recurrent neural networks (RNNs) and their improved variants: LSTMs and GRUs. These architectures processed text sequentially, word by word, passing a "memory" of what had been read from one step to the next.
 
-Imagine reading a book through a small window that shows only one word at a time. You must remember everything you have read in a single "compressed" mental image. The further you progress, the harder it becomes to retain important details from the beginning of the book. This is exactly the problem RNNs faced — information "faded" over long sequences.
+Imagine reading a book through a small window that shows only one word at a time. You must remember everything you have read in a single "compressed" mental image. The further you progress, the harder it becomes to retain important details from the beginning of the book. This is exactly the problem RNNs faced: information "faded" over long sequences.
 
 Furthermore, sequential processing made training slow. It was impossible to begin processing the tenth word until the first nine had been processed. In the era of powerful GPUs, this was a serious limitation.
 
 ### Attention Is All You Need
 
-In 2017, researchers at Google published the paper "Attention Is All You Need." They introduced the Transformer architecture, which solved both problems simultaneously — memory decay and sequential processing.
+In 2017, researchers at Google published the paper "Attention Is All You Need." They introduced the Transformer architecture, which solved both problems simultaneously, memory decay and sequential processing.
 
 The key idea behind the Transformer: instead of passing information sequentially, allow each word to directly "look at" all other words in the text and decide which ones to attend to. This is the Self-Attention mechanism.
 
@@ -40,11 +40,11 @@ The attention mechanism can be thought of as a query system over a database. Sel
 
 For each word (token) in the text, three vectors are created:
 
-**Query** — "what am I looking for?" A vector describing what information the given token wants to obtain from other tokens. For example, if a pronoun "he" is being processed, its Query might implicitly encode the question "who is the subject?"
+**Query**: "what am I looking for?" A vector describing what information the given token wants to obtain from other tokens. For example, if a pronoun "he" is being processed, its Query might implicitly encode the question "who is the subject?"
 
-**Key** — "what can I offer?" Each token has a key describing what information it can provide to other tokens. The word "Watson" might have a key associated with the concept "person, male, subject."
+**Key**: "what can I offer?" Each token has a key describing what information it can provide to other tokens. The word "Watson" might have a key associated with the concept "person, male, subject."
 
-**Value** — "what exact information do I transmit?" The actual content that a token passes to those attending to it.
+**Value**: "what exact information do I transmit?" The actual content that a token passes to those attending to it.
 
 The process: the Query of each token is compared with all Keys in the sequence. The more similar the Query and Key, the higher the "attention score." These scores are normalized through softmax, turning them into weights. The final result for each token is a weighted sum of all Values, where the weights are determined by the attention scores. The result is divided by the square root of the dimension (scaled dot-product attention) to prevent excessively large or small values that could destabilize training.
 
@@ -54,13 +54,13 @@ A single attention mechanism is useful, but what if a word needs to be analyzed 
 
 Multi-Head Attention solves this problem by running multiple attention mechanisms in parallel. Each "head" can learn to focus on different aspects: one on syntactic relationships, another on semantic ones, a third on proximity relationships in the text. The results from all heads are concatenated and projected back into a unified representation.
 
-Modern models use dozens or even hundreds of attention heads. GPT-4 is estimated to use 96 heads in each of its 96 layers (based on community analysis — OpenAI has not officially disclosed GPT-4's architecture).
+Modern models use dozens or even hundreds of attention heads. GPT-4 is estimated to use 96 heads in each of its 96 layers (based on community analysis: OpenAI has not officially disclosed GPT-4's architecture).
 
 ### Multi-Head Attention Optimizations: MQA and GQA
 
 Standard Multi-Head Attention has a significant drawback: each head requires separate Key and Value matrices, creating enormous memory requirements during inference.
 
-**Multi-Query Attention (MQA)**, proposed by Google in 2019, solves this problem radically: all heads share a single Key-Value pair while maintaining separate Queries. This reduces the KV-cache size by a factor of num_heads (e.g., 32x). However, quality suffers slightly — a single KV pair cannot capture the full diversity of attention patterns.
+**Multi-Query Attention (MQA)**, proposed by Google in 2019, solves this problem radically: all heads share a single Key-Value pair while maintaining separate Queries. This reduces the KV-cache size by a factor of num_heads (e.g., 32x). However, quality suffers slightly: a single KV pair cannot capture the full diversity of attention patterns.
 
 **Grouped Query Attention (GQA)** is the middle ground, introduced in 2023. Heads are organized into groups, and each group shares a single KV pair. For example, with 32 heads and 8 groups, every 4 heads share one Key-Value pair.
 
@@ -70,13 +70,13 @@ Standard Multi-Head Attention has a significant drawback: each head requires sep
 | GQA-8  | 32          | 8        | 25%      | ~Baseline |
 | MQA    | 32          | 1        | 3%       | Slightly lower |
 
-GQA is the standard attention mechanism for production models. Llama 2 70B, Llama 3, Mistral, Mixtral — all use GQA. Note that frontier models in 2025-2026 increasingly use Mixture of Experts (MoE) architectures (DeepSeek V3, Llama 4, Qwen 3), but GQA remains the standard attention mechanism within each expert.
+GQA is the standard attention mechanism for production models. Llama 2 70B, Llama 3, Mistral, Mixtral: all use GQA. Note that frontier models in 2025-2026 increasingly use Mixture of Experts (MoE) architectures (DeepSeek V3, Llama 4, Qwen 3), but GQA remains the standard attention mechanism within each expert.
 
 ### Causal Attention: No Peeking into the Future
 
-During text generation, the model must predict the next word based only on the preceding ones. It would be "cheating" to look at words that have not yet been generated. For this purpose, a causal mask — an attention mask — is used.
+During text generation, the model must predict the next word based only on the preceding ones. It would be "cheating" to look at words that have not yet been generated. For this purpose, a causal mask, an attention mask, is used.
 
-Imagine a triangular matrix: a token at position 5 can "see" tokens at positions 1, 2, 3, 4, and 5, but cannot see tokens 6, 7, and beyond. This is achieved by setting attention scores for "future" tokens to negative infinity before softmax — after normalization, their weights become zero.
+Imagine a triangular matrix: a token at position 5 can "see" tokens at positions 1, 2, 3, 4, and 5, but cannot see tokens 6, 7, and beyond. This is achieved by setting attention scores for "future" tokens to negative infinity before softmax, after normalization, their weights become zero.
 
 ---
 
@@ -108,10 +108,10 @@ Residual connections create "shortcuts" for the gradient. Even if the gradient t
 
 Layer normalization stabilizes activations, preventing them from exploding or vanishing. The original Transformer used Layer Normalization (LN), which normalizes across all features for each token: `LN(x) = γ · (x - μ) / σ + β`.
 
-However, modern models (Llama, Mistral, Qwen) have switched to **RMSNorm** — a simplified version: `RMSNorm(x) = γ · x / RMS(x)`, where `RMS(x) = √(mean(x²))`.
+However, modern models (Llama, Mistral, Qwen) have switched to **RMSNorm**: a simplified version: `RMSNorm(x) = γ · x / RMS(x)`, where `RMS(x) = √(mean(x²))`.
 
 Why has RMSNorm become the standard?
-1. **Efficiency**: it does not require computing the mean or subtraction — saving ~10-15% compute in the normalization layer.
+1. **Efficiency**: it does not require computing the mean or subtraction, saving ~10-15% compute in the normalization layer.
 2. **Stability**: empirically yields comparable or better training quality.
 3. **Simplicity**: fewer trainable parameters (no bias β).
 
@@ -121,9 +121,9 @@ Each successive Transformer layer builds increasingly abstract representations. 
 
 ## Positional Encoding: Understanding Word Order
 
-The attention mechanism in its basic form does not account for token positions — for it, "the cat ate the mouse" and "the mouse ate the cat" would look identical. To enable the model to understand word order, positional encoding is used.
+The attention mechanism in its basic form does not account for token positions, for it, "the cat ate the mouse" and "the mouse ate the cat" would look identical. To enable the model to understand word order, positional encoding is used.
 
-The original Transformer paper used sinusoidal positional encodings — a mathematically elegant approach where position is encoded using a combination of sines and cosines at different frequencies. This allows the model to easily compute relative positions and even extrapolate to sequences longer than those seen during training.
+The original Transformer paper used sinusoidal positional encodings, a mathematically elegant approach where position is encoded using a combination of sines and cosines at different frequencies. This allows the model to easily compute relative positions and even extrapolate to sequences longer than those seen during training.
 
 Modern models often use more advanced techniques. **RoPE (Rotary Position Embedding)**, used in Llama, encodes positions through vector rotation in complex space. **ALiBi (Attention with Linear Biases)** adds a linear distance penalty between tokens directly to the attention scores. These techniques show better results when working with long contexts.
 
@@ -149,13 +149,13 @@ Simply increasing model size does not guarantee improved quality. There are "sca
 
 ## Scaling Laws and Emergent Abilities
 
-Model quality follows predictable mathematical laws when scaling — larger models trained on more data improve in regular, measurable ways. The Chinchilla law (Google DeepMind, 2022) established that the optimal ratio is approximately 20 tokens per parameter. Modern practice deliberately over-trains smaller models (Llama 3 8B used 2,000 tokens per parameter — 100x the Chinchilla optimum) to reduce inference cost while maintaining quality.
+Model quality follows predictable mathematical laws when scaling: larger models trained on more data improve in regular, measurable ways. The Chinchilla law (Google DeepMind, 2022) established that the optimal ratio is approximately 20 tokens per parameter. Modern practice deliberately over-trains smaller models (Llama 3 8B used 2,000 tokens per parameter: 100x the Chinchilla optimum) to reduce inference cost while maintaining quality.
 
-Beyond predictable scaling, models exhibit **emergent abilities** — skills that appear abruptly once a certain scale is reached. Multi-step reasoning, code generation, and complex instruction following do not improve gradually but emerge as qualitative jumps. Whether this reflects genuine phase transitions or measurement artifacts is actively debated.
+Beyond predictable scaling, models exhibit **emergent abilities**, skills that appear abruptly once a certain scale is reached. Multi-step reasoning, code generation, and complex instruction following do not improve gradually but emerge as qualitative jumps. Whether this reflects genuine phase transitions or measurement artifacts is actively debated.
 
 A new scaling dimension emerged in 2024-2025: **inference-time compute** (test-time compute). Models like o3 generate chains of reasoning tokens before the final answer, dramatically improving performance on complex tasks. This means quality can be improved by spending more compute at inference, not just at training.
 
-These topics — scaling laws, emergence, over-training, and inference-time compute — are covered in depth in Scaling Laws.
+These topics (scaling laws, emergence, over-training, and inference-time compute) are covered in depth in Scaling Laws.
 
 ---
 
@@ -165,17 +165,17 @@ Another remarkable ability of modern LLMs is in-context learning. The model can 
 
 This capability manifests in three progressively powerful forms:
 
-**Zero-shot learning** — the model receives only a task description, with no examples. "Classify the following review as positive or negative." The model relies entirely on knowledge acquired during pretraining.
+**Zero-shot learning**: the model receives only a task description, with no examples. "Classify the following review as positive or negative." The model relies entirely on knowledge acquired during pretraining.
 
-**One-shot learning** — a single example is provided alongside the task. "Review: 'Great product!' → Positive. Now classify: 'Terrible experience.'" One example is often enough to establish the expected format and reasoning pattern.
+**One-shot learning**: a single example is provided alongside the task. "Review: 'Great product!' becomes Positive. Now classify: 'Terrible experience.'" One example is often enough to establish the expected format and reasoning pattern.
 
-**Few-shot learning** — 2-8 examples demonstrate the desired input-output mapping. Show the model a few examples of translation into a rare language — and it continues translating in the same style. Few-shot is the most reliable form of in-context learning for complex or ambiguous tasks.
+**Few-shot learning**: 2-8 examples demonstrate the desired input-output mapping. Show the model a few examples of translation into a rare language, and it continues translating in the same style. Few-shot is the most reliable form of in-context learning for complex or ambiguous tasks.
 
-Why does in-context learning work at all, given that the model's weights remain frozen? The leading hypothesis: during pretraining on trillions of tokens, the model learns to recognize and continue patterns. Few-shot examples activate the relevant "skill circuit" already encoded in the model's weights — this is not learning new information but retrieving and activating existing capabilities. The examples serve as a kind of address into the model's latent skill space, steering it toward the right behavior.
+Why does in-context learning work at all, given that the model's weights remain frozen? The leading hypothesis: during pretraining on trillions of tokens, the model learns to recognize and continue patterns. Few-shot examples activate the relevant "skill circuit" already encoded in the model's weights. This is not learning new information but retrieving and activating existing capabilities. The examples serve as a kind of address into the model's latent skill space, steering it toward the right behavior.
 
 A practical insight: performance scales with example quality more than quantity. Three well-chosen, diverse examples that clearly illustrate the pattern often outperform ten mediocre or redundant ones. Selecting examples that cover edge cases and represent the true distribution of inputs matters more than simply adding more demonstrations.
 
-In-context learning is the foundation of prompting techniques. Instead of fine-tuning the model for each task (which is expensive and complex), the prompt can simply be formulated with the appropriate examples. This democratized AI usage — one no longer needs to be an ML engineer to adapt a model to specific needs.
+In-context learning is the foundation of prompting techniques. Instead of fine-tuning the model for each task (which is expensive and complex), the prompt can simply be formulated with the appropriate examples. This democratized AI usage. One no longer needs to be an ML engineer to adapt a model to specific needs.
 
 ---
 
@@ -199,7 +199,7 @@ Understanding the Transformer architecture is critically important for developin
 
 2. **The Transformer architecture** revolutionized language processing. The Self-Attention mechanism allows each token to "see" the entire context, and parallel processing makes training efficient.
 
-3. **Multi-Head Attention** allows the model to analyze text from multiple perspectives simultaneously — syntactic, semantic, and logical.
+3. **Multi-Head Attention** allows the model to analyze text from multiple perspectives simultaneously: syntactic, semantic, and logical.
 
 4. **Scaling laws** determine the optimal ratio of model size to data. Chinchilla demonstrated the importance of balancing N and D. Modern practice involves over-training smaller models for inference efficiency.
 

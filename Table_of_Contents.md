@@ -1,4 +1,4 @@
-# AI Agents Course — Full Contents
+# AI Agents Course: Full Contents
 
 > Detailed table of contents for all topics covered in the course.
 > The structure maps exactly to the course files.
@@ -70,10 +70,10 @@
 ### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
 - Major providers and their models
   - OpenAI (GPT-5.5, GPT-5.4, o3, o4-mini, GPT-Rosalind, GPT-5.3-Codex-Spark)
-  - Anthropic (**Claude Fable 5** — Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro; Opus 4.8, Sonnet 4.6, Haiku 4.5; **model export controls June 13**)
+  - Anthropic (**Claude Fable 5**: Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro; Opus 4.8, Sonnet 4.6, Haiku 4.5; **model export controls June 13**)
   - Google (Gemini 3.5 Flash, 3.1 Pro, 3 Flash; Gemma 4; **Siri AI deal ~$1B/year**)
-  - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash — in-house models, Build 2026)
-  - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash — open weights MIT)
+  - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash: in-house models, Build 2026)
+  - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash: open weights MIT)
   - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer) + **Nano Omni** (30B omni-modal)
   - **Kimi K2.7-Code** (June 12, +21.8% vs K2.6); **MiniMax 3** (~$0.53/MTok, 15-30x cheaper)
   - **Huawei Ascend** ramp: 910C ~600K units, Atlas 950 SuperPoD Q4 2026
@@ -132,7 +132,7 @@
   - Power-law dependencies of loss on N, D, C
   - Practical implications
 - Chinchilla: rethinking optimal scaling
-  - D_optimal ≈ 20 × N
+  - D_optimal ≈ 20 x N
   - Compute-optimal training
 - Emergence: qualitative leaps at scale
   - The phenomenon of emergent abilities
@@ -258,7 +258,7 @@
 ### 03.1 What is an AI Agent (`01_What_is_AI_Agent.md`)
 - From chatbots to autonomous systems
 - Chatbot vs AI agent: fundamental differences
-- Agent work cycle: Observe → Think → Act → Reflect
+- Agent work cycle: Observe, then Think, then Act, then Reflect
 - Autonomy levels (L1-L5)
 - Agent components
 - Task types for agents
@@ -267,25 +267,25 @@
 - When to use agents (and when not to)
 - **Iterative approach to building agents**
   - "Start simple, add complexity as needed"
-  - Step-by-step evolution: Augmented LLM → Tools → Memory → Reasoning → Multi-agent
+  - Step-by-step evolution: Augmented LLM, then Tools, then Memory, then Reasoning, then Multi-agent
   - Anthropic's recommendation (December 2024)
 
 ### 03.2 Agent Architectures (`02_Agent_Architectures.md`)
 - Introduction
 - **Academic foundations of agent architectures**
-  - Russell & Norvig: Perceive → Reason → Act → Learn
+  - Russell & Norvig: Perceive, then Reason, then Act, then Learn
   - Wooldridge: Autonomy, Social Ability, Reactivity, Proactivity
   - Andrew Ng's 4 Agentic Design Patterns (Reflection, Tool Use, Planning, Multi-agent)
   - Validated academic patterns (ReAct, Plan-and-Execute, Self-Refine, Reflexion, ToT)
 - Willison's canonical agent definition: "LLM runs tools in a loop to achieve a goal"
-- Software 1.0 / 2.0 / 3.0 (Karpathy): human code → neural weights → agent-orchestrated
+- Software 1.0 / 2.0 / 3.0 (Karpathy): human code, then neural weights, then agent-orchestrated
 - ReAct: Reasoning and action as a unified process
 - Plan-and-Execute: Think first, then act
 - Reflexion: Learning through self-analysis
 - LATS: Exploring the solution space
 - Graph-of-Thought (GoT): arbitrary graph structures, 62% improvement over ToT
 - ReWOO: Reasoning Without Observation, 5x token efficiency
-- The Augmented-LLM Progression (Anthropic): Augmented LLM → Workflows → Agents
+- The Augmented-LLM Progression (Anthropic): Augmented LLM, then Workflows, then Agents
 - Agent Loop Essentials: max iterations, loop detection, circuit breaker, checkpointing
 - The Karpathy Loop: universal optimization pattern from AutoResearch
 - Cognitive architectures: Inspired by the human mind
@@ -325,10 +325,10 @@
 - Memory prioritization
 - Forgetting mechanisms
 - Persistence and storage
-- **Memory Storage Decision Guide** (file-based → pgvector → vector DB → SQL → MCP → LanceDB → JSON)
+- **Memory Storage Decision Guide** (file-based, then pgvector, then vector DB, then SQL, then MCP, then LanceDB, then JSON)
 - **Letta: From MemGPT to Production Memory** (LLM-as-OS, three-tier memory, agent editability, #1 on Terminal-Bench)
 - Mem0 (auto-fact extraction middleware), Amazon Bedrock Episodic Memory
-- **Memory Escalation Ladder** (sliding window → summarization → Mem0 → Letta → Agentic RAG → Graph RAG)
+- **Memory Escalation Ladder** (sliding window, then summarization, then Mem0, then Letta, then Agentic RAG, then Graph RAG)
 
 ### 03.6 Computer Use Agents (`06_Computer_Use_Agents.md`)
 - Introduction: AI masters the human interface
@@ -358,18 +358,18 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96% → 88.6% → **95.0% (Fable 5, June 2026)**; SWE-bench Pro: **80.3%** (Fable 5)
+  - Evolution: 1.96%, then 88.6%, then **95.0% (Fable 5, June 2026)**; SWE-bench Pro: **80.3%** (Fable 5)
   - SWE-bench Verified subset
 - Architectural patterns
-  - Plan → Edit → Test → Debug loop
+  - Plan, then Edit, then Test, then Debug loop
   - Codebase understanding via RAG
   - Multi-file editing
 - Code agent security
   - Sandboxed execution
   - Git-based changes
   - Review before commit
-- **Terminal Agents** — Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
-- **IDE market (late June 2026)** — **SpaceX acquires Cursor $60B** (June 16). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
+- **Terminal Agents**: Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
+- **IDE market (late June 2026)**: **SpaceX acquires Cursor $60B** (June 16). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
@@ -394,22 +394,22 @@
 
 ### 03.9 Practical AI Agent Use Cases (`09_Agent_Use_Cases.md`)
 - Taxonomy of AI agent applications
-- **Coding Agents** — Cursor $4B ARR, Claude Code $1B+ ARR, Devin $26B valuation (as of late May 2026). Terminal agents as new subcategory
-- **Agentic RAG** — Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-agent patterns
-- **Workflow Automation** — n8n (200K+ businesses, MCP support)
-- **Voice Agents** — 4-tier market (ElevenLabs, Vapi, LiveKit, Bland AI)
-- **Computer Use Agents** — Anthropic, ChatGPT agent (formerly Operator) (Beta)
-- **Browser Automation** — Browser Use (50-78K+ stars), Stagehand, Playwright MCP. 80/20 production pattern
-- **Automated Research Agents (Karpathy Loop)** — AutoResearch: 630 lines, 700 experiments, universal optimization pattern
-- **Deep Research** — Gemini, OpenAI, OWL (69.09% GAIA, #1 open-source)
-- **No-Code/Low-Code Builders** — n8n (194K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
+- **Coding Agents**: Cursor $4B ARR, Claude Code $1B+ ARR, Devin $26B valuation (as of late May 2026). Terminal agents as new subcategory
+- **Agentic RAG**: Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-agent patterns
+- **Workflow Automation**: n8n (200K+ businesses, MCP support)
+- **Voice Agents**: 4-tier market (ElevenLabs, Vapi, LiveKit, Bland AI)
+- **Computer Use Agents**: Anthropic, ChatGPT agent (formerly Operator) (Beta)
+- **Browser Automation**: Browser Use (50-78K+ stars), Stagehand, Playwright MCP. 80/20 production pattern
+- **Automated Research Agents (Karpathy Loop)**: AutoResearch: 630 lines, 700 experiments, universal optimization pattern
+- **Deep Research**: Gemini, OpenAI, OWL (69.09% GAIA, #1 open-source)
+- **No-Code/Low-Code Builders**: n8n (194K+ stars), Dify ($180M valuation), Lovable ($100M ARR), Bolt.new, v0, Replit Agent
 - **Code Review / Data Analysis / Internal Employee Agents**
 - Criteria for choosing a use case
 
 ### 03.10 Resource Optimization (`10_Resource_Optimization.md`)
 - AI agent economics: Cost-aware approach
 - Cost-Aware Model Routing
-  - Tiered architecture: Simple → Standard → Complex → Reasoning
+  - Tiered architecture: Simple, then Standard, then Complex, then Reasoning
   - Confidence-based routing
   - Token economics
 - Token Budgeting
@@ -421,17 +421,17 @@
   - Cache invalidation strategies
   - Cost/benefit analysis
 - Circuit Breaker Pattern for LLMs
-  - States: Closed → Open → Half-Open
+  - States: Closed, then Open, then Half-Open
   - Fallback strategies
 - Rate Limiting and Priority Queues
 - Monitoring and Cost Alerts
-- Agent Distillation: prototype → trace → fine-tune → deploy
+- Agent Distillation: prototype, then trace, then fine-tune, then deploy
   - Budget control: `budget_tokens`, `reasoning_effort`
 - KV-Cache Management for Multi-Turn Agents (prefix caching: 50-90% savings)
-- **Agent Project Economics** — TCO framework (dev = 25-35% of 3-year cost), complexity-based cost table
+- **Agent Project Economics**: TCO framework (dev = 25-35% of 3-year cost), complexity-based cost table
 - Build vs Buy Thresholds (<10K buy, >200K build, hybrid in between)
 - The 70/30 Hybrid Model Strategy (open-source for volume, proprietary for frontier)
-- **Agent Billing Fragmentation** — usage-based replacing flat-rate; Anthropic Agent SDK credits separate from June 2026
+- **Agent Billing Fragmentation**: usage-based replacing flat-rate; Anthropic Agent SDK credits separate from June 2026
 
 ---
 
@@ -446,7 +446,7 @@
 - Coordination challenges
 - Agent lifecycle
 
-### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`) — continued
+### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`): continued
 - 8-question decision framework (including cost-focused criteria)
 - Market Reality 2026 (57% have agents in production; most are single-agent)
 
@@ -459,8 +459,8 @@
 - Swarm Intelligence
 - Mixture of Experts for agents
 - Handoff pattern
-- **Fan-Out/Fan-In** — parallel dispatch + aggregation (DAG with barrier sync)
-- **When Single-Agent Suffices** — reasoning models reduce multi-agent need; 10x cost consideration
+- **Fan-Out/Fan-In**: parallel dispatch + aggregation (DAG with barrier sync)
+- **When Single-Agent Suffices**: reasoning models reduce multi-agent need; 10x cost consideration
 
 ### 04.3 Agent Orchestration (`03_Agent_Orchestration.md`)
 - The conductor of an invisible orchestra
@@ -502,11 +502,11 @@
 - MCP Architecture (Host, Client, Server)
 - MCP advantages
 - MCP in the context of agent systems
-- **MCP Apps (January 2026)** — interactive UI components in conversations
-- **MCP Server Cards** — `.well-known` metadata for automated discovery
-- **MCP Tasks (SEP-1686)** — long-running async operations with progress, cancellation, partial results
-- **MCP 2026-07-28 Release Candidate** — stateless core, MCP Apps (interactive HTML UI), horizontal scaling, formal deprecation policy (as of late May 2026)
-- **Protocol Landscape** — MCP (agent→tool) / A2A (agent→agent) / ANP (agent→open network, experimental)
+- **MCP Apps (January 2026)**: interactive UI components in conversations
+- **MCP Server Cards**: `.well-known` metadata for automated discovery
+- **MCP Tasks (SEP-1686)**: long-running async operations with progress, cancellation, partial results
+- **MCP 2026-07-28 Release Candidate**: stateless core, MCP Apps (interactive HTML UI), horizontal scaling, formal deprecation policy (as of late May 2026)
+- **Protocol Landscape**: MCP (agent, then tool) / A2A (agent, then agent) / ANP (agent, then open network, experimental)
 
 ### 05.2 MCP Components (`02_MCP_Components.md`)
 - Introduction to the MCP component model
@@ -531,7 +531,7 @@
 - Error handling
 - Security
 - **Modern MCP ecosystem**
-  - FastMCP — de facto standard Python SDK
+  - FastMCP: de facto standard Python SDK
   - MCP Inspector (CVE warning for versions <0.14.1)
   - Python SDK mcp v1.25.0+, TypeScript @modelcontextprotocol/sdk
   - Support: Claude Desktop, VS Code, Cursor
@@ -647,15 +647,15 @@
 - Corrective RAG (CRAG)
 - Self-RAG
 - **Latest techniques**
-  - CAG (Cache-Augmented Generation) — loading the database into extended context
-  - Late Chunking (Jina AI) — chunking after full embedding
-  - Contextual Retrieval (Anthropic) — LLM generates context for chunks
-  - ColPali — vision-language for multimodal retrieval
+  - CAG (Cache-Augmented Generation), loading the database into extended context
+  - Late Chunking (Jina AI), chunking after full embedding
+  - Contextual Retrieval (Anthropic): LLM generates context for chunks
+  - ColPali: vision-language for multimodal retrieval
 - Evaluation and quality improvement
 - Performance optimization
 
 ### 06.6 Late Interaction Retrieval (`06_Late_Interaction_Retrieval.md`)
-- Evolution of Retrieval architectures: Sparse → Dense → Late Interaction
+- Evolution of Retrieval architectures: Sparse, then Dense, then Late Interaction
 - Late Interaction: principles and advantages
   - Multi-vector document representation
   - MaxSim operator for scoring
@@ -687,7 +687,7 @@
 - **Key player comparison table**
   - LangChain/LangGraph: 100K+ stars, 5M+ downloads/month; LangGraph 1.2 (as of late May 2026)
   - CrewAI: 47.8K stars, 27M+ downloads, $18M Series A (as of late May 2026)
-  - AutoGen → Microsoft Agent Framework **v1.9.0** (June 18) — Agent Harness GA, Hosted Agents, A2A preview; **Build 2026:** Scout, Work IQ, Agent 365
+  - AutoGen to Microsoft Agent Framework **v1.9.0** (June 18): Agent Harness GA, Hosted Agents, A2A preview; **Build 2026:** Scout, Work IQ, Agent 365
   - AWS Bedrock Agents: 100K+ organizations
   - n8n: 200K+ businesses, native MCP support
 - LangChain vs LangGraph: when to use which
@@ -745,7 +745,7 @@
   - Graph-Driven: Explicit workflows (LangGraph, Prefect)
   - Trade-off comparison table
 - AWS Strands architecture
-  - Agent → Model → Tools lifecycle
+  - Agent, then Model, then Tools lifecycle
   - Automatic tool discovery
   - Built-in conversation memory
 - Multi-Agent patterns
@@ -773,8 +773,8 @@
   - Grammar-constrained
 - Choosing the method for your task
 - **Provider Comparison** (OpenAI strict, Anthropic tool use, Google controlled generation, Outlines/Guidance)
-- **Structured Extraction Tooling** (Instructor, BAML, Outlines — dev/production/cost-critical)
-- **Token-Optimized Output Notation (TOON)** — 69% token reduction vs JSON
+- **Structured Extraction Tooling** (Instructor, BAML, Outlines: dev/production/cost-critical)
+- **Token-Optimized Output Notation (TOON)**: 69% token reduction vs JSON
 - Frameworks and libraries
 
 ### 08.2 Data Extraction (`02_Data_Extraction.md`)
@@ -782,7 +782,7 @@
 - Types of extraction tasks
   - Named Entity Recognition
   - Relation extraction
-- **Multi-modal extraction** — ColPali (vision-based, no OCR, +20% nDCG@5)
+- **Multi-modal extraction**: ColPali (vision-based, no OCR, +20% nDCG@5)
   - Event extraction
 - Extraction strategies
 - Working with context
@@ -832,9 +832,9 @@
 - Computer vision in conversational systems
 - Multimodal agents
 - **MCP Integration for Voice Agents** (latency budgets, speech-friendly tool responses)
-- **GPT-Realtime-2** (May 2026, GA) — GPT-5-class reasoning in voice, 128K context, MCP support, SIP calling
-- **Siri AI** (WWDC June 9) — rebuilt on Gemini, ~$1B/year; **iOS 27 Extensions** (BYOAI: Claude/Gemini/ChatGPT as default assistant)
-- **Voice Agent Market Structure (2026)** — 4 tiers: Full-Stack (ElevenLabs sub-100ms), Orchestration (Vapi 1B+ calls, $500M), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Market $2.4B→$47.5B
+- **GPT-Realtime-2** (May 2026, GA): GPT-5-class reasoning in voice, 128K context, MCP support, SIP calling
+- **Siri AI** (WWDC June 9): rebuilt on Gemini, ~$1B/year; **iOS 27 Extensions** (BYOAI: Claude/Gemini/ChatGPT as default assistant)
+- **Voice Agent Market Structure (2026)**: 4 tiers: Full-Stack (ElevenLabs sub-100ms), Orchestration (Vapi 1B+ calls, $500M), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Market $2.4B to $47.5B
 - Voice interface design specifics
 - Security and ethics of multimodal systems
 
@@ -927,7 +927,7 @@
 
 ### 10.6 Test-Time Compute (`06_Test_Time_Compute.md`)
 - OpenAI o1/o3: a reasoning breakthrough
-  - AIME 2024: 13% → 83%
+  - AIME 2024: 13% to 83%
   - Extended thinking and self-correction
 - Test-Time Compute mechanisms
   - Process Reward Models (PRMs)
@@ -938,10 +938,10 @@
 - DeepSeek-R1: Open-Source Reasoning
   - Pure RL approach
   - Distillation into small models
-- **The Test-Time Compute Paradox** — longer CoT does NOT guarantee better answers; correct solutions often shorter
-- **Reasoning for Verification, Not Generation** — cheap model generates, reasoning model verifies (cost optimization)
+- **The Test-Time Compute Paradox**: longer CoT does NOT guarantee better answers; correct solutions often shorter
+- **Reasoning for Verification, Not Generation**: cheap model generates, reasoning model verifies (cost optimization)
 - Compute-Optimal Inference Strategies
-  - 4× efficiency improvement
+  - 4x efficiency improvement
   - Smaller models + TTC vs larger models
 
 ### 10.7 Synthetic Data (`07_Synthetic_Data.md`)
@@ -951,7 +951,7 @@
 - Evol-Instruct: complexity evolution
   - Evolution types (constraints, deepen, concretize)
   - WizardLM results
-- Distillation: teacher → student
+- Distillation: teacher to student
   - Response, Rationale, Preference distillation
   - Legal and ethical considerations
 - Data Augmentation for Fine-Tuning
@@ -1041,11 +1041,11 @@
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
   - **Terminal-Bench 2.1**, **MCP Atlas**, **ITBench-AA** (as of late May 2026)
-- **Benchmark Saturation** — SWE-bench Verified at 95% (Fable 5), industry shifting to Pro and domain-specific benchmarks
-- **Long-horizon agent reliability** — Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50% — real-world multi-step agents still unreliable
-- **Benchmark Reliability and Gaming** — SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
-- **Cost per Correct Answer** — practical metric (77x cost difference hidden by 5% accuracy gap)
-- **What Benchmarks Don't Measure** — error recovery, cost efficiency, consistency, composability
+- **Benchmark Saturation**: SWE-bench Verified at 95% (Fable 5), industry shifting to Pro and domain-specific benchmarks
+- **Long-horizon agent reliability**: Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50%: real-world multi-step agents still unreliable
+- **Benchmark Reliability and Gaming**: SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
+- **Cost per Correct Answer**: practical metric (77x cost difference hidden by 5% accuracy gap)
+- **What Benchmarks Don't Measure**: error recovery, cost efficiency, consistency, composability
 - Principles of metric selection
 - Building an evaluation dataset
 
@@ -1093,7 +1093,7 @@
   - Coverage sampling
   - Practical starting point: 5-10% random, 100% for high-risk
 - **Simulation Testing with Synthetic Personas** (Maxim AI, DeepEval)
-- **CuP: Completion under Policy** — task success + policy compliance
+- **CuP: Completion under Policy**: task success + policy compliance
 - A/B testing
 - A/B test metrics
   - Guardrail metrics
@@ -1169,7 +1169,7 @@
 - The unique nature of bugs in LLM systems
 - Taxonomy of LLM system problems
 - Debugging toolkit
-- Reproducibility — the holy grail of LLM debugging
+- Reproducibility: the holy grail of LLM debugging
 - Debugging response quality issues
 - Debugging RAG systems
 - Debugging call chains
@@ -1180,12 +1180,12 @@
 
 ### 12.4 AgentOps (`04_AgentOps.md`)
 - AgentOps: DevOps + MLOps for AI agents
-- Evolution: DevOps → MLOps → LLMOps → AgentOps
+- Evolution: DevOps, then MLOps, then LLMOps, then AgentOps
 - AgentOps Lifecycle
   - Plan: architecture and requirements
   - Build: development with observability
   - Evaluate: offline and online testing
-  - Deploy: staging → canary → production
+  - Deploy: staging, then canary, then production
   - Monitor: real-time observability
 - Key AgentOps metrics
   - Session Success Rate
@@ -1220,7 +1220,7 @@
 - WebSocket for interactive agents
 - Circuit Breaker and Fallback strategies
 - **Multi-Provider Failover Architecture** (LiteLLM, cost-aware routing)
-- **Serverless Deployment** (Lambda/Cloud Functions — constraints and when to use)
+- **Serverless Deployment** (Lambda/Cloud Functions, constraints and when to use)
 - **Agent-Specific Deployment** (long sessions, graceful termination, resource unpredictability, shm-size)
 - Timeout management
 - LLM response caching
@@ -1262,7 +1262,7 @@
 ### 14.1 Prompt Injection (`01_Prompt_Injection.md`)
 - A new class of vulnerabilities
 - OWASP Top 10 for LLM Applications v2.0 (2025)
-- **OWASP Top 10 for Agentic Applications (2026)** — ASI01-ASI10 (goal hijacking, tool misuse, supply chain, etc.)
+- **OWASP Top 10 for Agentic Applications (2026)**: ASI01-ASI10 (goal hijacking, tool misuse, supply chain, etc.)
 - Anatomy of direct injection attacks
 - Indirect Prompt Injection: the hidden threat
 - Jailbreaking: bypassing restrictions
@@ -1289,14 +1289,14 @@
 - **OWASP MCP Top 10** (Tool Poisoning, NeighborJack, Model Misbinding, Context Spoofing)
 - MCP Security Incidents (mcp-remote RCE, Anthropic Git MCP CVEs, Agent ROME, 84% attack success rate)
 - **April 2026 incidents:** Vercel/Context.ai breach (AI tool supply chain), Mercor/LiteLLM (dependency compromise), AI agent hit 600+ firewalls autonomously
-- **NSA MCP security guidance** (PP-26-1834) — national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
+- **NSA MCP security guidance** (PP-26-1834): national security concern; **MCP Pitfall Lab** (6-class taxonomy, automated detection)
 - **May 2026 CVEs:** CVE-2026-33032 (nginx-ui, CVSS 9.8), CVE-2026-26118 (MS MCP Server), database MCP vulns
-- **First model export controls** (June 13) — Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking** — 20K+ Instagram accounts via AI support chatbot
+- **First model export controls** (June 13), Fable 5/Mythos 5 foreign national ban; **Meta AI hijacking**: 20K+ Instagram accounts via AI support chatbot
 - **June 2026 framework CVEs:** LiteLLM CISA KEV (CVSS 9.8), Semantic Kernel (CVSS 10.0), Spring AI (CVSS 8.6), pgAdmin AI Assistant (CVSS 9.0)
 - **AI-powered attacks:** Sophos EDR evasion lab (Cursor+Claude), malicious JetBrains plugins (70K installs), Chrome extensions stealing AI chats (900K installs), FortiBleed (86K devices)
-- **NSA Mythos testimony** — breached "almost all" classified systems; **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **CVE forecast 66,000** (+46%)
+- **NSA Mythos testimony**: breached "almost all" classified systems; **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **CVE forecast 66,000** (+46%)
 - **OpenClaw: Agent Plugin Security Catastrophe** (247K stars, CVE-2026-25253, 1-in-12 malicious packages)
-- **Claude Mythos cyber capabilities** — 73% on expert cyber simulations; GPT-5.4-Cyber for defense
+- **Claude Mythos cyber capabilities**: 73% on expert cyber simulations; GPT-5.4-Cyber for defense
 - **Advanced Isolation Methods** (MicroVMs/Firecracker, gVisor, E2B, hardened containers)
 - **Agent Governance at Scale** (Microsoft Agent Governance Toolkit, NVIDIA 9 controls)
 - Human-in-the-Loop
@@ -1338,9 +1338,9 @@
 ### 15.1 GPU Architecture (`01_GPU_Architecture.md`)
 - From CPU to GPU: the evolution of ML computation
 - GPU memory hierarchy
-  - HBM (High Bandwidth Memory) — 2-3 TB/s
-  - SRAM — up to 19 TB/s
-  - Registers — thread memory
+  - HBM (High Bandwidth Memory): 2-3 TB/s
+  - SRAM: up to 19 TB/s
+  - Registers: thread memory
 - CUDA programming model
   - Threads, Blocks, Grids
   - Occupancy and its optimization
@@ -1349,7 +1349,7 @@
   - Mixed precision computation
 - Memory coalescing and bandwidth optimization
 - **Vera Rubin in full production** (Computex June 1, 2026); **RTX Spark** ARM AI PC (128GB, 1 PFLOP)
-- **Energy constraint** — ~1,000 TWh data centers by 2026, SMR pipeline 25→45 GW
+- **Energy constraint**: ~1,000 TWh data centers by 2026, SMR pipeline 25 to 45 GW
 - GPU operation profiling
 
 ### 15.2 Flash Attention (`02_Flash_Attention.md`)
@@ -1359,7 +1359,7 @@
   - Tiling: block decomposition
   - Online softmax: processing without materialization
   - Recomputation in the backward pass
-- Memory savings: up to 20× at 4K sequence length
+- Memory savings: up to 20x at 4K sequence length
 - Flash Attention 2 and 3: evolution of optimizations
 - Integration with PyTorch and Hugging Face
 - Practical benchmarks
@@ -1498,7 +1498,7 @@
 - Draft models and verification
 - EAGLE: draft-free speculative decoding
   - Autoregression head architecture
-  - EAGLE-3: up to 2.5× speedup
+  - EAGLE-3: up to 2.5x speedup
 - Medusa: parallel predictions
   - Multiple heads architecture
   - Tree attention
@@ -1561,7 +1561,7 @@
 - SGLang: the next step after vLLM
   - Frontend Language for LLM Programs
   - RadixAttention: KV-cache as a radix tree
-  - Up to 3× throughput for chatbots
+  - Up to 3x throughput for chatbots
 - Inference engine comparison
   - vLLM: PagedAttention reference (v0.23, DiffusionGemma, Model Runner V2, multi-tier KV cache offloading)
   - SGLang: structured generation + RadixAttention
@@ -1585,11 +1585,11 @@
   - Unacceptable risk: prohibited practices
   - High-risk AI: conformity assessment requirements
   - GPAI (General Purpose AI) obligations
-  - Timeline: February 2025 — August 2028 (extended by Digital Omnibus, May 2026)
-- **Great American AI Act** (June 4, 2026) — 269p discussion draft, 3-year state preemption
-- **Illinois SB 315** — first US state frontier AI audit law, penalties $3M, effective Jan 2027
-- **Florida sues OpenAI** (June 19) — first US state lawsuit against an AI company
-- **Bartz v. Anthropic: $1.5B copyright settlement** — largest in US history
+  - Timeline: February 2025: August 2028 (extended by Digital Omnibus, May 2026)
+- **Great American AI Act** (June 4, 2026), 269p discussion draft, 3-year state preemption
+- **Illinois SB 315**: first US state frontier AI audit law, penalties $3M, effective Jan 2027
+- **Florida sues OpenAI** (June 19): first US state lawsuit against an AI company
+- **Bartz v. Anthropic: $1.5B copyright settlement**: largest in US history
 - **China AI Agent Framework** (May 8) + **Anthropomorphic AI regulation** (effective July 15, minors protected)
 - **Fable 5 export ban saga**: NSA testimony, G7 "trusted partners", biometric ID July 8
 - **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **International AI Safety Report 2026**
@@ -1723,15 +1723,15 @@
   - 97% of executives deployed agents; 52% of employees use them
   - Only 29% see significant ROI from GenAI; 34% successfully implementing agentic AI
   - 79% face challenges (up from 2025); 54% of C-suite say "AI is tearing company apart"
-  - AI super-users deliver 5x productivity gains — execution gap, not technology gap
+  - AI super-users deliver 5x productivity gains, execution gap, not technology gap
 - **Key Enterprise AI challenges**
   - Governance & Security (75% of tech leaders, only 6% have an AI security strategy)
   - Compliance: EU AI Act, HIPAA, risk categories
   - ROI Measurement: evaluation framework (Cost Savings, Productivity, Quality, Strategic Value)
-  - Data Quality: 62% — the main obstacle
+  - Data Quality: 62%: the main obstacle
   - Talent Gap: 73% use AI, only 29% have advanced literacy
 - **Governance-first approach**
-  - AI Governance Maturity Model (Ad-hoc → Aware → Managed → Optimized)
+  - AI Governance Maturity Model (Ad-hoc, then Aware, then Managed, then Optimized)
   - Choosing a pilot project
   - Scaling: from pilot to production
 - **Organizational patterns**
@@ -1743,20 +1743,20 @@
   - Tier 2 Vertical: Sierra ($15.8B, $150M ARR, Ghostwriter), Harvey (legal)
   - Tier 3 Embedded: ServiceNow, SAP Joule
   - Anthropic: Claude Managed Agents, Claude Cowork
-- **BYOAI paradigm** (WWDC June 2026) — iOS 27 Extensions, model choice = user preference, end of provider lock-in
-- **Market Landscape (mid-June 2026)** — SaaS $285B shakeout, per-seat→outcome pricing, AI market $601.93B→$3,638B (2033), inference economics as center of gravity
-- **AI, Energy & Sustainability** — ~90 TWh AI-specific, nuclear/SMR procurement (25→45 GW), data center moratoria
-- **Workforce Impact** — augmentation > replacement, 62% AI salary premium, developer productivity ~20-30% (not 10x)
-- **SpaceX acquires Cursor $60B** (June 16); SPCX ATH $225.64 → corrected to ~$185; **Tim Cook steps down Sept 1**
-- **Visa Agent Score** — first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
+- **BYOAI paradigm** (WWDC June 2026): iOS 27 Extensions, model choice = user preference, end of provider lock-in
+- **Market Landscape (mid-June 2026)**: SaaS $285B shakeout, per-seat, then outcome pricing, AI market $601.93B, then $3,638B (2033), inference economics as center of gravity
+- **AI, Energy & Sustainability**: ~90 TWh AI-specific, nuclear/SMR procurement (25 to 45 GW), data center moratoria
+- **Workforce Impact**: augmentation > replacement, 62% AI salary premium, developer productivity ~20-30% (not 10x)
+- **SpaceX acquires Cursor $60B** (June 16); SPCX ATH $225.64 to corrected to ~$185; **Tim Cook steps down Sept 1**
+- **Visa Agent Score**: first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
 - **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale
 - **FERC fast-tracks AI data centers**: 9-17% US electricity by 2030; 370kW rack densities
-- **Funding & Market** — Anthropic S-1 ($1.75-1.8T); SpaceX IPO ($75B); Big Tech CapEx **$725B** (+77%)
-- **Production Case Studies** — Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
+- **Funding & Market**: Anthropic S-1 ($1.75-1.8T); SpaceX IPO ($75B); Big Tech CapEx **$725B** (+77%)
+- **Production Case Studies**: Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
 - **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
-- **Enterprise Integration Patterns** — 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
-- **GDPR and Agents** — vector DB embeddings = personal data, Article 22, PII detection pipeline
-- **Why Agent Projects Fail** — 88% failure rate, $340K average cost, integration #1 cause (46%)
+- **Enterprise Integration Patterns**: 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
+- **GDPR and Agents**: vector DB embeddings = personal data, Article 22, PII detection pipeline
+- **Why Agent Projects Fail**: 88% failure rate, $340K average cost, integration #1 cause (46%)
 
 ---
 
@@ -1953,7 +1953,7 @@
   - Vision-Language-Action (VLA) models (Gemini Robotics, NVIDIA GR00T, Figure AI)
   - AI for Scientific Discovery (GPT-Rosalind, Fable 5 genomics, clinical digital twins)
   - Automated AI R&D (Karpathy AutoResearch, Agent0 adversarial co-evolution)
-  - **DiffusionGemma** (June 10) — first open-weight diffusion LLM, ~4x faster parallel text generation
+  - **DiffusionGemma** (June 10): first open-weight diffusion LLM, ~4x faster parallel text generation
 
 ---
 

@@ -30,9 +30,9 @@ Why does it work? Similarly to ensemble methods in machine learning. Different "
 
 ### Self-Consistency Math
 
-**Majority Voting** — the most frequent answer is selected from N responses.
+**Majority Voting**: the most frequent answer is selected from N responses.
 
-**Empirical confidence**: if all 5 answers match — high confidence; if 3 out of 5 — medium; if all different — low.
+**Empirical confidence**: if all 5 answers match: high confidence; if 3 out of 5, medium; if all different, low.
 
 **Choosing N:** critical tasks 10-20, standard tasks 5-7, quick check 3. Important: doubling N does not double quality; improvement grows logarithmically.
 
@@ -62,7 +62,7 @@ In ToT, each node is a "thought" or intermediate state. Branches extend from eac
 
 ### Connection to Monte Carlo Tree Search
 
-ToT is related to MCTS — an algorithm from game AI (AlphaGo). MCTS operates through four phases: Selection of a promising thought, Expansion — generating new reasoning steps, Simulation — playing out to an answer, Backpropagation — updating ancestor scores.
+ToT is related to MCTS: an algorithm from game AI (AlphaGo). MCTS operates through four phases: Selection of a promising thought, Expansion, generating new reasoning steps, Simulation, playing out to an answer, Backpropagation, updating ancestor scores.
 
 **UCB (Upper Confidence Bound)** balances exploitation (using what is known) and exploration (searching for new options), preventing premature convergence.
 
@@ -76,7 +76,7 @@ ToT is related to MCTS — an algorithm from game AI (AlphaGo). MCTS operates th
 
 **Limitations**: cost (10-100+ requests), complexity (orchestration, state management), latency (minutes vs seconds).
 
-**Note:** Reasoning models (o3, Claude extended thinking) perform ToT-like internal exploration within a single call — see the section below on "Chain-of-Thought Without Prompting." For most tasks, using a reasoning model eliminates the need for explicit ToT orchestration. Explicit ToT remains valuable when you need custom evaluation functions at each node or domain-specific search strategies.
+**Note:** Reasoning models (o3, Claude extended thinking) perform ToT-like internal exploration within a single call, see the section below on "Chain-of-Thought Without Prompting." For most tasks, using a reasoning model eliminates the need for explicit ToT orchestration. Explicit ToT remains valuable when you need custom evaluation functions at each node or domain-specific search strategies.
 
 ---
 
@@ -86,7 +86,7 @@ Until 2024, Chain-of-Thought required explicit instructions. OpenAI o1/o3 change
 
 ### How It Works
 
-**Training through RL**: standard RLHF trains "prompt → answer"; o1-style trains "prompt → reasoning → answer". Reasoning is optimized for final answer accuracy.
+**Training through RL**: standard RLHF trains "prompt, then answer"; o1-style trains "prompt, then reasoning, then answer". Reasoning is optimized for final answer accuracy.
 
 **Key differences**: CoT activates automatically, quality is optimized through RL, the model decides on its own when to think deeper. However: numerous internal iterations increase cost, the reasoning process is hidden, latency is higher.
 
@@ -106,7 +106,7 @@ Traditional LLMs work in a "think then answer" mode, but many tasks require inte
 
 ### ReAct Structure
 
-**Interaction cycle**: Thought (reasoning about the situation, planning a step) → Action (calling a tool with parameters) → Observation (the system returns a result) → Repeat (continues until solved).
+**Interaction cycle**: Thought (reasoning about the situation, planning a step), then Action (calling a tool with parameters), then Observation (the system returns a result), then Repeat (continues until solved).
 
 **Key difference** from simple tool use: explicit "thoughts" between actions. The model explains why it selects a tool, what it expects to receive, and how it advances toward the goal.
 
@@ -134,15 +134,15 @@ Meta-prompting means the language model creates and improves prompts. It works b
 
 The simplest case: describe the task and ask the model to create a prompt to solve it. Why it works: LLMs have seen thousands of effective prompts and know best practices (clear instructions, examples, output format, edge cases, constraints).
 
-**Process**: describe the task → model generates a prompt → test → identify problems → ask for improvement → repeat.
+**Process**: describe the task, then model generates a prompt, then test, then identify problems, then ask for improvement, then repeat.
 
 **When to apply**: unfamiliar domains (the model knows domain-specific patterns), many similar prompts (faster than manual), learning (analysis teaches best practices).
 
 ### Improvement and Self-Analysis
 
-**Iterative improvement**: create a prompt → test → analyze errors → ask the model to improve → repeat. The key: show specific failures, not just "improve it."
+**Iterative improvement**: create a prompt, then test, then analyze errors, then ask the model to improve, then repeat. The key: show specific failures, not just "improve it."
 
-**Self-analyzing prompts**: the model analyzes the task before solving it (type? approach? challenges?) → selects a strategy → solves → verifies.
+**Self-analyzing prompts**: the model analyzes the task before solving it (type? approach? challenges?), then selects a strategy, then solves, then verifies.
 
 ---
 
@@ -156,11 +156,11 @@ Role-Based Prompting is not simply "imagine you are an expert" but a detailed de
 
 ### Multi-Role Analysis
 
-An advanced application — analyzing a task from multiple role-based perspectives. The same code is reviewed through the "eyes" of a security expert, performance engineer, and architect.
+An advanced application, analyzing a task from multiple role-based perspectives. The same code is reviewed through the "eyes" of a security expert, performance engineer, and architect.
 
 **Why multi-role is better**: a single prompt "check the code for everything" produces a superficial analysis. Specialized roles activate focus.
 
-**Process**: define perspectives (security, performance, UX) → create a role for each → run the task separately → aggregate results.
+**Process**: define perspectives (security, performance, UX), then create a role for each, then run the task separately, then aggregate results.
 
 **When to apply**: critical decisions (architecture, production code), important code review, design with competing constraints.
 
@@ -180,9 +180,9 @@ The main problem when integrating LLMs into production is unpredictable output f
 
 **JSON Schema** shows the exact structure (types, required fields, constraints). Models understand it well since they were trained on code.
 
-**TypeScript interfaces** — an alternative that is more intuitive for developers.
+**TypeScript interfaces**: an alternative that is more intuitive for developers.
 
-**Structure examples** — the most reliable method; the model "sees" what is expected. Few-shot (2-3 examples) is even more effective.
+**Structure examples**: the most reliable method; the model "sees" what is expected. Few-shot (2-3 examples) is even more effective.
 
 **Explicit instructions**: "Return ONLY JSON without explanations", "Start with {", "No markdown". These significantly improve reliability.
 
@@ -190,7 +190,7 @@ The main problem when integrating LLMs into production is unpredictable output f
 
 ### Native Structured Outputs
 
-Modern APIs (OpenAI, Anthropic) provide native support for structured outputs — the model is **guaranteed** to return valid JSON conforming to the schema. This is significantly more reliable than prompt-based approaches.
+Modern APIs (OpenAI, Anthropic) provide native support for structured outputs: the model is **guaranteed** to return valid JSON conforming to the schema. This is significantly more reliable than prompt-based approaches.
 
 However, understanding prompt techniques remains important: not all models support native mode, sometimes formats other than JSON are needed, and the understanding helps diagnose problems.
 
@@ -204,7 +204,7 @@ Even a carefully constructed prompt has limitations: the context window is finit
 
 **Prompt Chaining** breaks a complex task into a chain of simple prompts, where the output of one becomes the input of the next.
 
-**Typical architecture** (document analysis): Extraction (extracting facts) → Analysis (analyzing patterns) → Synthesis (synthesizing conclusions) → Formatting (formatting the result). Each step is a separate prompt optimized for its task.
+**Typical architecture** (document analysis): Extraction (extracting facts), then Analysis (analyzing patterns), then Synthesis (synthesizing conclusions), then Formatting (formatting the result). Each step is a separate prompt optimized for its task.
 
 ### Advantages of Chaining
 
@@ -309,7 +309,7 @@ Reason: Will reduce data scanning by 10-100x
 
 Partitioning:
   1. Key: RANGE by date (covers 80% of queries)
-  2. Migration: new table → batch transfer → blue-green switch
+  2. Migration: new table -> batch transfer -> blue-green switch
 ```
 
 ---
@@ -326,25 +326,25 @@ Instruction: Solve in 5 different ways, then select the consensus.
 
 --- Solution 1: System of equations ---
 M = P + 3, P = A/2, P + M + A = 27
-P + (P + 3) + 2P = 27 → 4P = 24 → P = 6
+P + (P + 3) + 2P = 27 -> 4P = 24 -> P = 6
 Answer: Peter = 6, Maria = 9, Anna = 12
 
 --- Solution 2: Starting from Anna ---
-A + A/2 + A/2 + 3 = 27 → 2A = 24 → A = 12
+A + A/2 + A/2 + 3 = 27 -> 2A = 24 -> A = 12
 Answer: Peter = 6, Maria = 9, Anna = 12
 
 --- Solution 3: Starting from Peter ---
-P + (P + 3) + 2P = 27 → 4P = 24 → P = 6
+P + (P + 3) + 2P = 27 -> 4P = 24 -> P = 6
 Answer: Peter = 6, Maria = 9, Anna = 12
 
 --- Solution 4: Substitution ---
-P = 5: total = 23 ✗
-P = 6: total = 27 ✓
-P = 7: total = 31 ✗
+P = 5: total = 23 no
+P = 6: total = 27 yes
+P = 7: total = 31 no
 Answer: Peter = 6, Maria = 9, Anna = 12
 
 --- Solution 5: Via base variable ---
-x + (x + 3) + 2x = 27 → 4x = 24 → x = 6
+x + (x + 3) + 2x = 27 -> 4x = 24 -> x = 6
 Answer: Peter = 6, Maria = 9, Anna = 12
 
 --- Consensus ---
@@ -356,6 +356,6 @@ Confidence: HIGH (100% agreement)
 
 ### Practical Application
 
-**ReAct** — for tasks involving external tools where reasoning transparency is needed
-**Tree of Thoughts** — when alternatives exist and errors at early stages are critical
-**Self-Consistency** — for tasks with a definitive answer and a high cost of error
+**ReAct**: for tasks involving external tools where reasoning transparency is needed
+**Tree of Thoughts**: when alternatives exist and errors at early stages are critical
+**Self-Consistency**: for tasks with a definitive answer and a high cost of error

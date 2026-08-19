@@ -2,9 +2,9 @@
 
 ## The Prompt as a Natural Language Program
 
-When large language models began demonstrating remarkable capabilities in the 2020s, researchers faced an unusual problem: how exactly should one "talk" to these systems to obtain desired results? The answer was a new discipline — **Prompt Engineering**, the art and science of formulating queries for language models.
+When large language models began demonstrating remarkable capabilities in the 2020s, researchers faced an unusual problem: how exactly should one "talk" to these systems to obtain desired results? The answer was a new discipline, **Prompt Engineering**, the art and science of formulating queries for language models.
 
-The key insight: **a prompt is not merely a question or command — it is a program for a language model, written in natural language**. As in programming, there are patterns, anti-patterns, best practices, and debugging methods.
+The key insight: **a prompt is not merely a question or command. It is a program for a language model, written in natural language**. As in programming, there are patterns, anti-patterns, best practices, and debugging methods.
 
 ---
 
@@ -12,8 +12,8 @@ The key insight: **a prompt is not merely a question or command — it is a prog
 
 The ability of modern LLMs to understand and execute instructions results from specialized training through two stages:
 
-1. **SFT (Supervised Fine-Tuning)** — the model is trained on (instruction, response) pairs
-2. **RLHF (Reinforcement Learning from Human Feedback)** — the model learns to prefer responses that humans rate higher
+1. **SFT (Supervised Fine-Tuning)**: the model is trained on (instruction, response) pairs
+2. **RLHF (Reinforcement Learning from Human Feedback)**: the model learns to prefer responses that humans rate higher
 
 A base model simply predicts the next token. A model after SFT takes the user's instruction into account. After RLHF, the model maximizes human preference scores.
 
@@ -21,20 +21,20 @@ A base model simply predicts the next token. A model after SFT takes the user's 
 
 RLHF creates several key behavioral patterns:
 
-**Format adherence** — humans prefer structured responses, so the model becomes better at responding in the requested format.
+**Format adherence**: humans prefer structured responses, so the model becomes better at responding in the requested format.
 
-**Helpfulness** — reward for useful responses makes the model strive to help rather than simply continue text.
+**Helpfulness**: reward for useful responses makes the model strive to help rather than simply continue text.
 
-**Acknowledging uncertainty** — penalties for hallucinations teach the model that "I don't know" is an acceptable answer.
+**Acknowledging uncertainty**: penalties for hallucinations teach the model that "I don't know" is an acceptable answer.
 
-**Safety alignment** — penalties for harmful content create a mechanism for refusing dangerous requests.
+**Safety alignment**: penalties for harmful content create a mechanism for refusing dangerous requests.
 
 ### Practical Implications
 
-1. The model "wants" to help — no need to persuade it, just clearly explain what is needed
+1. The model "wants" to help: no need to persuade it, just clearly explain what is needed
 2. Explicit instructions work better than hints
-3. Format in the prompt → format in the response
-4. Conflict between safety and helpfulness — sometimes the model refuses when it should not
+3. Format in the prompt to format in the response
+4. Conflict between safety and helpfulness: sometimes the model refuses when it should not
 
 ---
 
@@ -42,13 +42,13 @@ RLHF creates several key behavioral patterns:
 
 In the context of AI agents, prompt engineering becomes especially significant:
 
-**System prompts as the agent's constitution** — they define all agent behavior throughout the entire interaction. A poor system prompt produces unpredictable behavior.
+**System prompts as the agent's constitution**: they define all agent behavior throughout the entire interaction. A poor system prompt produces unpredictable behavior.
 
-**Tool prompts as API contracts** — the quality of tool descriptions determines how effectively the agent uses them.
+**Tool prompts as API contracts**: the quality of tool descriptions determines how effectively the agent uses them.
 
-**Reasoning prompts as cognitive architecture** — how you formulate instructions for reasoning directly affects the quality of the agent's decisions.
+**Reasoning prompts as cognitive architecture**: how you formulate instructions for reasoning directly affects the quality of the agent's decisions.
 
-**Output formatting as an integration contract** — if the format is not precisely specified, parsing will break, and the agent will degrade.
+**Output formatting as an integration contract**: if the format is not precisely specified, parsing will break, and the agent will degrade.
 
 ---
 
@@ -60,11 +60,11 @@ Effective prompts typically contain five key components.
 
 Defining the model's role activates specific knowledge patterns. When you tell the model "You are an experienced Java architect with 15 years of experience," you activate expert reasoning patterns the model encountered in training data.
 
-Context acts as a filter: "You are working on an enterprise banking system that must comply with PCI DSS requirements" — this steers all model decisions toward security and compliance.
+Context acts as a filter: "You are working on an enterprise banking system that must comply with PCI DSS requirements", this steers all model decisions toward security and compliance.
 
 ### Instructions
 
-The heart of the prompt — what you want to receive. The more specific the instructions, the better the result.
+The heart of the prompt: what you want to receive. The more specific the instructions, the better the result.
 
 Compare: "Help with the code" vs. "Analyze the code for: (1) performance issues, (2) SOLID violations, (3) security vulnerabilities. For each issue, describe it, explain the consequences, and propose a fix."
 
@@ -82,7 +82,7 @@ Effective strategies: show an example of the desired output, provide a JSON Sche
 
 ### Examples (Few-shot)
 
-Examples are arguably the most powerful tool. Even a few high-quality examples can dramatically improve response quality. Instead of explaining with words, you demonstrate — the model extrapolates the pattern.
+Examples are arguably the most powerful tool. Even a few high-quality examples can dramatically improve response quality. Instead of explaining with words, you demonstrate: the model extrapolates the pattern.
 
 Key principles: representativeness (examples should cover typical cases), diversity, quality, ordering (start with simple ones).
 
@@ -114,7 +114,7 @@ Why does it work? When the model "thinks out loud," it creates intermediate repr
 
 Effective for: mathematical problems, logic puzzles, multi-step tasks, planning, analysis. Less useful for simple factual questions.
 
-**Note on reasoning models:** Models like o1/o3 and Claude with extended thinking perform CoT automatically as part of their inference process — explicit "think step by step" instructions are unnecessary and may even degrade performance. For these models, focus on clear problem statements and constraints rather than prompting for reasoning steps. Explicit CoT prompting remains valuable for standard (non-reasoning) models.
+**Note on reasoning models:** Models like o1/o3 and Claude with extended thinking perform CoT automatically as part of their inference process: explicit "think step by step" instructions are unnecessary and may even degrade performance. For these models, focus on clear problem statements and constraints rather than prompting for reasoning steps. Explicit CoT prompting remains valuable for standard (non-reasoning) models.
 
 ---
 
@@ -130,9 +130,9 @@ For particularly complex prompts, XML tags provide even clearer section separati
 
 ### Format Selection: Recommendations
 
-**Plain text** — for simple requests and creative tasks.
-**Markdown** — for code review, reports, and structured output.
-**XML tags** — for clear section separation, ideal for RAG systems.
+**Plain text**: for simple requests and creative tasks.
+**Markdown**: for code review, reports, and structured output.
+**XML tags**: for clear section separation, ideal for RAG systems.
 
 Practical recommendations:
 - For Claude: XML tags work especially well
@@ -148,7 +148,7 @@ Important: high-quality prompt content matters more than format.
 
 ### Overly General Instructions
 
-"Make it good" or "Improve the code" — these are not instructions, they are wishes. The model is forced to guess what you mean.
+"Make it good" or "Improve the code". These are not instructions, they are wishes. The model is forced to guess what you mean.
 
 Solution: define specific criteria. Instead of "Make it good," specify: "Readability: methods under 20 lines, camelCase for methods, JavaDoc for public methods."
 
@@ -164,7 +164,7 @@ The model is forced to ignore part of the instructions. Always check the prompt 
 
 ### Ignoring Information Order
 
-Research shows primacy and recency effects — models better "remember" information at the beginning and end of the prompt. Long context in the middle can partially "get lost."
+Research shows primacy and recency effects: models better "remember" information at the beginning and end of the prompt. Long context in the middle can partially "get lost."
 
 Practical advice: place the most important information at the beginning, key instructions at the end, and less critical context in the middle.
 
@@ -172,11 +172,11 @@ Practical advice: place the most important information at the beginning, key ins
 
 The order of examples affects results more than many expect.
 
-**Recency bias** — the model tends to "copy" the format of the last example. The final example exerts a disproportionately large influence.
+**Recency bias**: the model tends to "copy" the format of the last example. The final example exerts a disproportionately large influence.
 
-**Label bias** — if most examples have a particular label, the model will be biased toward that label.
+**Label bias**: if most examples have a particular label, the model will be biased toward that label.
 
-Optimal order: start with a simple example (sets the baseline) → add 1-2 medium-complexity examples → end with the example closest to the target query.
+Optimal order: start with a simple example (sets the baseline), then add 1-2 medium-complexity examples, then end with the example closest to the target query.
 
 Research (Min et al., 2022): the format of examples matters more than their "correctness," but correct answers provide +10-15% accuracy.
 
@@ -187,13 +187,13 @@ Research (Min et al., 2022): the format of examples matters more than their "cor
 Prompt development is an iterative process, similar to code development. Nobody writes a perfect prompt on the first attempt.
 
 Effective cycle:
-1. Start simple — a minimal prompt expressing the core idea
-2. Test on diverse inputs — not on a single example
-3. Analyze errors — understand why the result is unsatisfactory
-4. Add refinements — address specific problems
-5. Add examples — for cases that are hard to explain with words
-6. Simplify — remove everything that does not improve the result
-7. Document — record which changes led to which improvements
+1. Start simple, a minimal prompt expressing the core idea
+2. Test on diverse inputs, not on a single example
+3. Analyze errors: understand why the result is unsatisfactory
+4. Add refinements: address specific problems
+5. Add examples, for cases that are hard to explain with words
+6. Simplify: remove everything that does not improve the result
+7. Document: record which changes led to which improvements
 
 ---
 
@@ -203,7 +203,7 @@ Effective cycle:
 
 2. **Five components of an effective prompt**: role/context, instructions, input data, output format, examples
 
-3. **Three basic techniques** — zero-shot, few-shot, and Chain-of-Thought — solve different classes of tasks
+3. **Three basic techniques**: zero-shot, few-shot, and Chain-of-Thought: solve different classes of tasks
 
 4. **Structuring via Markdown and XML** helps the model correctly parse complex prompts
 
@@ -248,7 +248,7 @@ Review: "I want to export data to Excel."
 Category: FEATURE_REQUEST
 Priority: Medium
 
-Review: "Support takes three days to respond — unacceptable for a paid subscription!"
+Review: "Support takes three days to respond - unacceptable for a paid subscription!"
 Category: SERVICE_COMPLAINT
 Priority: High
 
@@ -301,10 +301,10 @@ Requirements: PEP 8, type hints, 80%+ test coverage, security
 # Output Format
 ## [File]
 ### Critical Issues
-- [Description] → [Solution]
+- [Description] -> [Solution]
 
 ### Improvements
-- [Description] → [Recommendation]
+- [Description] -> [Recommendation]
 
 ### Positive Highlights
 - [What is done well]
