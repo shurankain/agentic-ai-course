@@ -81,6 +81,12 @@ Trade-offs: complexity, potential quality degradation, latency overhead ~10-50ms
 **Optimization:**
 Monitor routing accuracy (if >20% negative feedback, router is too aggressive). A/B testing quality. Dynamic thresholds based on load.
 
+**Two costs a naive router misses.** The first is cache invalidation: switching models mid-session can drop the prompt cache, and on a long agentic session that loss can exceed the per-token saving that motivated the switch. Count it in the cost function. The second is retries. A cheaper model that needs two extra attempts is not cheaper, so the unit to optimize is **cost per accepted result**, not cost per token or per call.
+
+That second point generalizes past routing. Every economy in this chapter should be measured against accepted results, because quantization, a smaller model, and a shorter context all buy their savings with some probability of a rerun. A comparison denominated in tokens hides exactly the failure mode that makes the cheap option expensive.
+
+Cursor's production router, published in August 2026, is the most detailed public account of one and reports 41% to 68% cost reductions at equal or better satisfaction. Module 03, Resource Optimization covers its design, its training label, and the reasons to treat its percentages as specific to a coding product.
+
 ## Right-Sizing Infrastructure
 
 **GPU selection:**

@@ -49,6 +49,45 @@ A trained classifier determines query complexity:
 2. If confidence < threshold, retry with Tier 2
 3. Escalate to Tier 3 if necessary
 
+### What a production router actually looks like
+
+The three strategies above are the textbook forms. In August 2026 Cursor published the design of the router it runs on live traffic, which is the first detailed public account of one, and it differs from the textbook in ways worth studying.
+
+**It has two stages, not one.** The first is a complexity predictor called Compass, which scores each turn from 0 to 1 by predicting user satisfaction and keeps simple turns on a price-efficient path. Only complex turns reach the second stage, which classifies the turn against a taxonomy of **domains** (backend, database schemas, frontend), **tasks** (bug fixing, commands, testing), and **modifiers** (bounded edits, product questions, visual changes), then picks from a frontier pool using the current request, recent tool calls, and session context.
+
+Splitting the decision matters because the two questions are different. "Is this hard?" is cheap to answer and applies to everything. "Which model is best at this specific kind of hard?" is expensive and only worth asking for the minority of turns where it changes the answer.
+
+**The training label comes from what the user did next.** Cursor derives the performance signal from the user's following action: moving on to a new task counts positive, immediately correcting the agent counts negative. That label is combined with actual cost, computed from API pricing and observed token usage. The dataset spans hundreds of thousands of production turns. On calibration, turns in Compass's top range produced a positive signal 96% of the time against 71% in the bottom range.
+
+**Model switching is itself a cost.** Changing models mid-session can invalidate the prompt cache, so Cursor counts that in the cost function rather than treating models as free to swap. A router that ignores this will happily trade a cache hit worth more than the model-price difference it was optimizing for.
+
+**Selection is a budgeted optimization, not a rule.** A model enters the candidate set when its observed uplift clears a one-sided threshold at roughly 75% confidence. An optimizer then chooses the traffic-weighted mix expected to deliver the largest gain while keeping average cost per turn inside the mode's budget.
+
+Reported results: Auto Intelligence exceeded Fable-level satisfaction at **68% lower cost**, and Auto Balance beat Opus 4.8 at **41% lower cost** with satisfaction up 3% since launch. These are Cursor's own numbers with no independent replication.
+
+**The durable finding is not the percentages.** It is the per-task breakdown: Grok won on Git operations and routine database work, GPT-5.6 Sol on planning and codebase comprehension, Claude Opus on execution-heavy DevOps and performance work, Claude Fable 5 on debugging and visual implementation. No single model won everywhere. A leaderboard cannot tell you this, because it reports one number per model across a task mix that is not yours.
+
+### Reading these numbers honestly
+
+The label is the weak point, and it is worth naming precisely. "The user moved on" measures the absence of immediate objection. It does not detect a latent defect, a security regression, or a wrong decision the human accepted without checking. A router trained on that signal optimizes for answers that look right at a glance, which is not the same target as answers that are right.
+
+Cursor's task mix, prompts, tools, cache policy, and audience are also specific to a coding product, and the underlying data is not independently accessible. Treat the method as transferable and the percentages as theirs.
+
+### Building one: the parts you need
+
+1. A taxonomy of the tasks your users actually bring, not a generic difficulty scale.
+2. A versioned binding of model, prompt, tools, and harness. Changing any one of them invalidates the measurements.
+3. An outcome label tied to an accepted result, with a stated understanding of what it fails to capture.
+4. Full cost, including retries, cache misses, tool latency, and human review time.
+5. An exploration budget, because a router that only exploits will never discover that a new model is better.
+6. A decision log and a verified fallback path, so a routing failure is diagnosable and recoverable.
+
+### The test that decides whether it pays
+
+Take one task set and run it three ways: through a static frontier default, through a cheap default, and through the router. Compare success@1, review time, and cost per accepted result.
+
+If routing does not move the quality-cost frontier once cache behaviour and retries are accounted for, a separate control plane is not worth its complexity. This is the honest version of the question, and it is answerable in an afternoon. NVIDIA's NeMo Switchyard, an open router pairing a frontier planner with a smaller model for repetitive execution steps, deserves the same test: a cheap model that needs two extra retries loses on total cost, so the routing decision log matters as much as the routing policy.
+
 ---
 
 ## Token Budgeting
@@ -426,39 +465,43 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 ## Key Takeaways
 
-1. **Cost-Aware Routing**: route simple tasks to cheaper models
+1. **Cost-Aware Routing**: route simple tasks to cheaper models. In production this is a trained system rather than a rule table: Cursor's router predicts complexity first, then matches task type to model, learns from what the user did next, and counts prompt-cache loss as part of the switching cost. It reports 41% to 68% lower cost at equal or better satisfaction on its own traffic.
 
-2. **Token Budgeting**: set limits for each component:
+2. **No single model wins everywhere, and that is the argument for routing.** Measured per task type, different frontier models led on Git operations, planning, DevOps, and debugging respectively. A leaderboard reports one number across a task mix that is not yours.
+
+3. **Measure cost per accepted result.** A cheaper model that needs two more retries is not cheaper, and a model switch that drops the prompt cache can cost more than the price difference it was chasing. If routing does not move the quality-cost frontier once cache and retries are counted, the control plane is not worth its complexity.
+
+4. **Token Budgeting**: set limits for each component:
    - System prompt: fixed
    - Context: dynamic with cap
    - Generation: capped
    - History: sliding window
 
-3. **Caching:**
+5. **Caching:**
    - Semantic cache for similar queries
    - Prompt caching from providers
    - TTL tiers based on data stability
 
-4. **Exception Handling:**
+6. **Exception Handling:**
    - Graceful degradation levels
    - Exponential backoff for retries
    - Circuit breaker for protection
 
-5. **Prioritization:**
+7. **Prioritization:**
    - Priority queues for multi-agent
    - Fair scheduling + priority
    - Rate limiting by user tiers
 
-6. **Agent Distillation:**
+8. **Agent Distillation:**
    - Prototype with expensive model, collect traces, fine-tune cheap model
    - Use `budget_tokens` / `reasoning_effort` to control per-step costs in agentic loops
 
-7. **Agent Project Economics:**
+9. **Agent Project Economics:**
    - Development is only 25-35% of 3-year TCO; multiply estimates by 2.5-3x
    - Build vs Buy: <10K interactions/month = buy, >200K = build, hybrid in between
    - 70/30 hybrid strategy: open-source for volume, proprietary for frontier reasoning
 
-8. **Agent Billing Fragmentation (as of late May 2026):**
+10. **Agent Billing Fragmentation (as of late May 2026):**
    - Flat-rate "unlimited" AI pricing is ending; usage-based billing is becoming standard for agent workloads
    - Budget for agent execution separately from model API costs, agents consume 10-20x more tokens than single queries
    - Track per-agent and per-workflow token consumption in monitoring dashboards
