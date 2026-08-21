@@ -690,6 +690,36 @@ In practice, pure architectures are rare. Successful production systems combine 
 
 ---
 
+## The Execution Plane Is a Separate Layer
+
+Every architecture in this chapter describes how an agent decides. None of them says where the resulting commands run, and the usual answer, one container per agent for the life of the session, was never a design decision so much as the obvious default. Two releases in August 2026 argued for treating execution as its own layer, and the argument holds regardless of which vendor you use.
+
+**Cloudflare `@cloudflare/computer`** gives the agent a single interface to files, commands, and network while the platform picks the runtime per operation. A lightweight **isolate** handles file manipulation and data processing, using `just-bash` to translate shell into JavaScript. A full **container** handles npm, native binaries, and Linux dependencies. Both share one SQLite-backed virtual filesystem, populated from object storage or source control and exposed to the container over a FUSE mount, with changes synced back. The stated design target is that containers carry **under 10% of an agent's work**.
+
+Three consequences follow, and each one is a decision the single-container default takes away from you.
+
+A short operation stops paying container startup. Most of what an agent does is read a file, edit a string, run `git status`, and none of that needs a Linux userspace waiting on it.
+
+A dangerous command can be pushed into stricter isolation than a safe one. Under one container per session, every operation inherits whatever isolation the riskiest one required, which means either over-isolating cheap work or under-isolating expensive work.
+
+And the model can change independently of the execution layer. That is the part that matters architecturally: **the model plane and the execution plane have different release cadences**, and coupling them means a model swap becomes an infrastructure change.
+
+Cloudflare published the surrounding cycle as an Agent Development Lifecycle covering build, test, observe, replay, and govern. The name is vendor terminology and not a standard, so do not adopt it as one. The composition is sound for a reason worth stating: agent behaviour depends on the model version, the prompt, the tools, external state, permissions, and the order actions happened in. Reproducing a failure therefore means reproducing the whole run, not the prompt. A bug report that contains only the prompt is not a bug report.
+
+### Training inside the harness that runs production
+
+**Microsoft Orchard**, open-sourced the same week, manages a Kubernetes sandbox with files, commands, network, and REST APIs, usable for collecting trajectories, supervised training, post-training, reinforcement learning, and evaluation. Model calls from Codex, OpenClaw, or ZeroClaw are intercepted by proxy, so the model trains inside the real harness rather than against a dataset.
+
+This addresses a mismatch the earlier architectures in this chapter make easy to overlook. A classical training set shows question and answer pairs. An agent works in a loop where each tool call mutates the environment, the next observation depends on that mutation, and an evaluator judges the end state. A model trained on pairs and deployed into a loop is being asked to do something it never practised. Keeping one environment across training and evaluation is the direct fix. Orchard's own benchmark results remain Microsoft research numbers, while the framework and the approach are independently checkable.
+
+### Persistent environments and what they cost
+
+Cursor Builds prepares environments in advance and forks warm machines. Grok Bot gives an agent a persistent cloud computer that works across applications and runs on a schedule. Both trade a startup cost for a state-management problem.
+
+A persistent agent accumulates files, cookies, credentials, running processes, unfinished task state, and sometimes a stale error that outlives the task that produced it. That environment needs a TTL, snapshot and rollback, base-image patching, secret scanning, permission revocation, and guaranteed destruction. Browser cold start, repository clone, and dependency install all land inside the latency a user perceives, so token generation speed accounts for only part of the wait.
+
+**When none of this is worth it.** If a run finishes in minutes, holds no state between invocations, and calls two read-only APIs, an ordinary container job is the right answer and a runtime layer is complexity you will maintain for nothing. These products earn their cost on multi-step work where environment preparation, recovery from a failed step, and audit already show up in what a result costs to produce.
+
 ## Architecture Comparison Table
 
 The following table summarizes the key characteristics of each architecture discussed in this chapter. Use it as a quick reference when selecting an architecture for a specific use case, keeping in mind that production systems often combine elements from multiple rows.
@@ -709,25 +739,31 @@ The following table summarizes the key characteristics of each architecture disc
 
 ## Key Takeaways
 
-1. **ReAct is the workhorse** of the agent world. Simplicity, transparency, and sufficient effectiveness for most tasks make it the starting point for any project.
+1. **The execution plane is a separate layer from the model plane.** The architectures below describe how an agent decides; none of them says where its commands run. Choosing the runtime per operation rather than per session lets a short edit skip container startup, pushes a dangerous command into stricter isolation, and lets the model change without an infrastructure change. Cloudflare's target of containers covering under 10% of an agent's work is a useful calibration for how skewed that distribution is.
 
-2. **Plan-and-Execute is necessary for complex tasks** where global vision is critical. Separating planning from execution allows optimizing each phase independently.
+2. **Reproducing an agent failure means reproducing the run, not the prompt.** Behaviour depends on model version, prompt, tools, external state, permissions, and the order actions happened in. Anything less than the whole trace is a guess.
 
-3. **Reflexion turns mistakes into lessons**. Instead of blind retries, the agent analyzes failures and improves its approach.
+3. **A persistent agent environment is a stateful resource.** It accumulates files, cookies, credentials, processes, and unfinished state, so it needs a TTL, snapshots, base-image patching, secret scanning, permission revocation, and guaranteed destruction. An idle pod costs money; an idle agent environment costs money and holds live credentials.
 
-4. **LATS explores alternatives** when the best path is unclear. Tree search enables finding solutions where linear approaches stall.
+4. **ReAct is the workhorse** of the agent world. Simplicity, transparency, and sufficient effectiveness for most tasks make it the starting point for any project.
 
-5. **Cognitive architectures** model human thinking. They are complex to implement but provide the most natural and adaptive behavior.
+5. **Plan-and-Execute is necessary for complex tasks** where global vision is critical. Separating planning from execution allows optimizing each phase independently.
 
-6. **Tree-of-Thought transforms linear reasoning into trees**. The ability to backtrack is critical for tasks where an error mid-reasoning is fatal.
+6. **Reflexion turns mistakes into lessons**. Instead of blind retries, the agent analyzes failures and improves its approach.
 
-7. **Self-Consistency is a simple way to improve reliability**. Majority voting across several independent reasoning chains often yields a better result than a single perfect chain.
+7. **LATS explores alternatives** when the best path is unclear. Tree search enables finding solutions where linear approaches stall.
 
-8. **O1-style reasoning blurs the boundary** between model and agent. When the model itself can "think longer," external agent architectures can be simplified.
+8. **Cognitive architectures** model human thinking. They are complex to implement but provide the most natural and adaptive behavior.
 
-9. **The Augmented-LLM Progression**: start at Level 1 (single LLM + tools), escalate to Level 2 (deterministic workflows) only when needed, Level 3 (autonomous agents) only for dynamic decision-making. 80% of use cases are solved at L1-L2.
+9. **Tree-of-Thought transforms linear reasoning into trees**. The ability to backtrack is critical for tasks where an error mid-reasoning is fatal.
 
-10. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
+10. **Self-Consistency is a simple way to improve reliability**. Majority voting across several independent reasoning chains often yields a better result than a single perfect chain.
+
+11. **O1-style reasoning blurs the boundary** between model and agent. When the model itself can "think longer," external agent architectures can be simplified.
+
+12. **The Augmented-LLM Progression**: start at Level 1 (single LLM + tools), escalate to Level 2 (deterministic workflows) only when needed, Level 3 (autonomous agents) only for dynamic decision-making. 80% of use cases are solved at L1-L2.
+
+13. **Choosing an architecture is a trade-off** between simplicity, effectiveness, reliability, and computational cost. Start simple and add complexity only when necessary.
 
 **Reasoning models across this module:** o1/o3-style reasoning is covered from multiple angles: tool use integration in Tool Use, planning implications in Planning, process reward models and verification in Process Reward Models, and code generation applications in Code Generation Agents. For the underlying test-time compute mechanisms, see Module 10, Test-Time Compute.
 

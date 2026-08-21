@@ -362,6 +362,12 @@ Can the agent receive feedback on the results of its actions? The best use cases
 
 What does it cost to have a human perform the task vs. an agent? How many tasks of this type exist? What is the expected ROI?
 
+**5. Environment cost per task**
+
+How much of the work is preparing a place for the agent to work? A task that needs a cloned repository, installed dependencies, a warm browser, and a place to keep state between steps carries a setup cost that has nothing to do with token pricing, and it lands inside the latency the user feels. A task that calls two read-only APIs and finishes in a minute carries none of it.
+
+This separates use cases more sharply than it first appears. Coding agents sit at the expensive end: the environment is most of the job, which is why the category produced pre-warmed environments and persistent runtimes rather than just better prompts. Classification and extraction sit at the cheap end and stay there. When comparing two candidate use cases with similar ROI, the one with the lighter environment is the one that ships. Module 03, Agent Architectures covers the execution plane in detail, and Module 13 covers what a persistent agent environment costs to operate.
+
 ### Red Flags
 
 Exercise caution if:

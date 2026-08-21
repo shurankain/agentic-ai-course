@@ -134,6 +134,18 @@ The practical rule: use time-slicing for development and testing environments wh
 
 In pod specifications, request GPU resources through `resources.limits` with `nvidia.com/gpu: 1` for a full GPU or `nvidia.com/mig-1g.10gb: 1` for a MIG partition. GPU resources in Kubernetes are limit-only. There is no concept of GPU "requests" separate from "limits," so every GPU resource specified is guaranteed exclusively to the pod. Always pair GPU allocation with explicit memory limits on the container (`resources.limits.memory`) to prevent the application from consuming node memory beyond what the GPU workload requires. For clusters with mixed GPU types, use node selectors (`nvidia.com/gpu.product: NVIDIA-H100-80GB-HBM3`) or node affinity rules to direct workloads to the correct hardware, preventing a lightweight inference task from being scheduled on a premium GPU node.
 
+## Deploying an Agent Is Not Deploying a Service
+
+Everything above assumes the unit of deployment is a service: a long-lived process, a stable image, a request that arrives and completes. An agent breaks two of those assumptions, and the deployment shape has to change with them.
+
+**An agent's work is not uniform, so one container per agent is the wrong granularity.** Reading a file, editing a string, and running `git status` do not need a Linux userspace, while `npm install` and native binaries do. Cloudflare's `@cloudflare/computer` splits the difference at runtime: a lightweight isolate for file and data work, a container when the command genuinely needs one, both over a shared SQLite-backed filesystem exposed to the container by FUSE mount. Its stated target is that containers cover under 10% of an agent's operations. The generalizable point is that a single isolation level for a session either over-isolates the cheap work or under-isolates the risky work, and you get to pick which mistake.
+
+**Agent environments hold state that ordinary pods do not.** Cursor Builds pre-warms environments and forks warm machines; Grok Bot keeps a persistent cloud computer running on a schedule. Anything persistent accumulates files, cookies, credentials, running processes, half-finished task state, and occasionally a stale error that outlives its task. Treat that environment as a stateful resource with a lifecycle: TTL, snapshot and rollback, base-image patching, secret scanning, permission revocation, and guaranteed destruction. A pod you forget about is idle cost. An agent environment you forget about is idle cost holding live credentials.
+
+**Cold start belongs in the SLA.** Browser startup, repository clone, and dependency install land inside the latency a user experiences. Optimizing token throughput while an agent waits 40 seconds for `npm install` is measuring the wrong half of the request.
+
+**When to ignore all of this.** A run that finishes in minutes, holds no state, and calls two read-only APIs is a container job. Use one. The machinery above earns its complexity on multi-step work where environment preparation, recovery, and audit already appear in the cost of a result.
+
 ## Key Takeaways
 
 Docker images for LLM require optimization of size and build time. Multi-stage builds, proper layer ordering, and base image selection impact efficiency. JVM in containers requires UseContainerSupport, MaxRAMPercentage, and GC selection. Health checks distinguish between liveness (application is running) and readiness (ready to accept traffic). Readiness can account for caches and connections but not external LLM API availability.
