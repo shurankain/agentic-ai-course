@@ -28,6 +28,43 @@ Permission levels: READ_ONLY (read only), LIMITED_WRITE (write with restrictions
 
 Permission checks occur before every tool invocation. Validated: operation type, parameters, usage limits, invocation context. Any violation blocks the operation and is logged.
 
+## Agent Identity: Who Is Acting, and For How Long
+
+The permission model above answers "what may this tool do". It does not answer "who is doing it", and for agents that second question turns out to be the harder one.
+
+The default answer in most deployments is a service account: one identity, created once, holding the union of every permission any task might need, living until someone revokes it. That design was built for humans and for services with a fixed job. An agent is neither.
+
+**A service account is calibrated to human speed.** A person who misunderstands a permission makes one mistake, notices, and stops. An agent that misunderstands the same permission can repeat the operation thousands of times before anyone opens a dashboard. The July 2026 evaluation incidents make this concrete: one agent executed more than 17,000 recorded actions over a weekend before detection. The permissions were not unusual. The rate was.
+
+**A service account also outlives the reason it was created.** An agent given database write access for a migration keeps it after the migration, because nothing in the model ties the grant to the task.
+
+### Issuing authority per run
+
+Cloudflare's Agent Access Model, published in August 2026, is a clean way to name the parts. The human remains the source of authority. An **Agent Identity Broker** issues that authority for a specific task rather than to an agent in general. A **Task-Scoped Access Engine** narrows the rights to what the task needs. A **Mediation Layer** checks each action against them. And a **Trust Ratchet** forbids silent capability expansion inside a run, so an agent cannot accumulate permissions as it works.
+
+Translated into requirements independent of any vendor:
+
+- Identity is issued per run or per worker, not per agent. A sub-agent doing read-only analysis gets an identity that physically cannot write.
+- Credentials are short-lived and sender-constrained, so a leaked token is useful for minutes and only from where it was issued.
+- Policy decides on more than the verb. Action type, object, amount, environment, the human who initiated the run, and the full delegation chain all belong in the decision.
+- The delegation chain is recorded, because "the agent did it" is not an answer an incident review can use.
+
+### Enforcement belongs before the handler
+
+Where the check runs matters as much as what it checks. Cloudflare's WriteGuard, in private beta for its MCP Portal from August 2026, classifies tool calls by risk from read-only to critical and evaluates policy **before the handler executes**. A merge, a deployment, or a money movement can require human approval, and that requirement is enforced ahead of the side effect.
+
+The placement is the whole point. A check inside the handler, or a rule in the system prompt, can be routed around by a model error or a compromised client-side skill. A check in front of the handler cannot, because the side effect has not happened yet. This is the same argument as Module 14's position on prompt injection, applied to authorization: the boundary has to sit somewhere the model does not control.
+
+Framework-level support arrived in the same window. Qwen Code added per-task allowlists for sub-agents and reusable permission templates, so a read-only worker is incapable of modifying files rather than instructed not to. The same release fixed re-sending a non-idempotent MCP operation after a dropped connection, which is not a coincidence: **retry safety and permission safety are the same conversation**. An operation that can run twice needs the same care as an operation that should not run at all, and the MCP 2026-07-28 removal of stream resumability made both more likely to be tested in production.
+
+### Attribution is not enforcement
+
+Cloudflare's Identity-aware AI Gateway ties spend and anomalies to a specific user, supports per-user budgets, and can fall back to a cheaper model. Useful, and worth being precise about what it is: an attribution layer. Data-loss prevention and action blocking need separate controls.
+
+The distinction matters when an incident happens. To investigate one you need the human initiator, the session, the agent identity, the model, the tool call, and the policy decision that allowed it. A single application API key gives you none of those, and an audit log that records only "the service account called `delete_records`" tells you what happened without telling you who caused it or why it was permitted.
+
+**On certifications.** Cursor announced AIUC-1 certification in August 2026, an audit that included adversarial testing of a live coding agent against secrets handling, unsafe code, MCP, and permissions. The standard is new and the account of it comes from the certified company, so treat the specific claim carefully. The transferable point holds regardless: SOC 2 and ISO certify organizational controls and say nothing about how an autonomous product behaves under attack. If you are evaluating an agent vendor, those certificates answer a different question than the one you are asking.
+
 ## Sandboxing Code Execution
 
 Code execution is the most dangerous capability. Generated code can do anything the environment permits: file access, network calls, system operations. Sandboxing isolates execution, limiting potential damage.
@@ -341,6 +378,12 @@ Security testing for agents requires specific approaches.
 Autonomous agents carry fundamentally greater risk. Their actions are material and often irreversible.
 
 Scope is enforced by infrastructure, never by a prompt. July 2026 supplied the proof: in three documented cases a model was told its environment had no internet access, the statement was false because of a misconfiguration, and the model compromised real production systems using the network that was actually reachable. Egress rules, network namespaces, service identity, secrets, target allowlists, canary credentials, and a kill switch are the boundary. The prompt is a statement of intent.
+
+Issue identity per run, not per agent. A service account is calibrated to human speed and outlives the task that justified it, while an agent can repeat a mistaken operation thousands of times inside the window a person would need to notice one. Short-lived, sender-constrained credentials scoped to a task, with the delegation chain recorded, are what make an incident reviewable.
+
+Put enforcement in front of the handler. A policy check inside the tool, or stated in the prompt, can be routed around by a model error or a compromised skill. A check evaluated before execution cannot, because the side effect has not happened yet.
+
+Attribution is not enforcement. A gateway that ties spend and anomalies to a user answers who paid, not what was permitted. Investigating an incident needs the human initiator, the session, the agent identity, the model, the tool call, and the policy decision, and a single application API key supplies none of them.
 
 An evaluation harness is production infrastructure and needs stricter containment than production, not looser. It holds network access, tokens, and system privileges while deliberately running models with their safeguards removed.
 

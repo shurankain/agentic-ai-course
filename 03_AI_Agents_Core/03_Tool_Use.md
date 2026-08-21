@@ -271,6 +271,12 @@ The Executor can also log all operations for auditing, check user permissions, a
 
 The Executor is a circuit breaker for tools. If a particular tool systematically fails, the Executor can temporarily disable it, preventing cascading errors. This is especially important when interacting with external APIs that may be unstable.
 
+**Classify tools by risk, and check policy before the handler runs.** The Executor is the natural place for this because it is the last component that sees a call while the side effect has not yet happened. Sort tools from read-only through write to critical, where critical covers merges, deployments, payments, and deletions, and attach the policy to the class rather than to each tool. Cloudflare's WriteGuard for MCP takes exactly this shape: risk classification, then policy evaluation, then the handler.
+
+Placement is what makes this work. A permission check written into the tool implementation, or stated in the system prompt, can be bypassed by a model error or a compromised client-side skill. A check in front of the handler cannot, because nothing has executed yet. The same reasoning explains why an approval prompt shown to the user by the model is not a control: the model is the thing being constrained.
+
+**Carry identity into the call, not just arguments.** An Executor that knows only "which tool and which arguments" cannot answer the question an incident review asks. Pass the human who initiated the run, the session, the agent or sub-agent identity, and the delegation chain, and record the policy decision alongside the call. Module 14, Agent Security covers why per-run identity beats a shared service account, and the short version is speed: an agent can repeat a mistaken call thousands of times inside the window a human would need to notice one.
+
 Execution metrics are collected by the Executor automatically: latency of each call, success rate, error types, result sizes. These metrics are critical for monitoring system health and optimizing performance.
 
 ### Graceful Degradation
