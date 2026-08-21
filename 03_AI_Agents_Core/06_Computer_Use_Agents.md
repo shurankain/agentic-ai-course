@@ -203,6 +203,12 @@ This approach combines the advantages of both methods: the accuracy and speed of
 
 **Screenshot-only** approach is necessary for legacy applications without accessibility support, games and custom UI with non-standard elements, and when visual context matters (colors, layout, visual patterns).
 
+**Third option on the web: the page declares its own tools.** Accessibility APIs and screenshots both work by *inferring* what a UI can do from a representation built for something else. **WebMCP**, shown by Cloudflare in developer preview in August 2026, removes the inference. A page declares its capabilities directly through the experimental `document.modelContext` browser API, and the agent calls a named function with typed arguments instead of locating a button and clicking its coordinates.
+
+That collapses both costs in the table above at once. No image tokens, because there is no image, and no coordinate accuracy problem, because there are no coordinates. It also survives a redesign: a tool declaration is a contract, while a screenshot and an accessibility tree are both descriptions of the current layout.
+
+Two caveats keep it in the "watch" column rather than the "adopt" column. The browser API is experimental, so the contract is not stable. And it only exists where a site chose to implement it, which makes it the opposite of computer use in reach: computer use works on everything badly, WebMCP works on a handful of cooperating sites precisely. Module 05 covers how it differs from remote MCP, which matters because a WebMCP tool runs inside the page's origin with the logged-in user's session.
+
 **Hybrid approach** is recommended for production systems requiring maximum reliability, and for complex multi-app workflows where different applications have different levels of accessibility support.
 
 ---

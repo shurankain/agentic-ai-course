@@ -211,6 +211,10 @@ As the number of tools grows, two problems arise. First: context size. Descripti
 
 Strategies for filtering and prioritizing tools are needed.
 
+There is also a distribution problem hiding behind the selection problem. Three hundred tools do not arrive as three hundred independent decisions; they arrive as bundles that someone installed. **Agent Plugins 1.0**, announced in August 2026 by AWS, Cursor, Microsoft, OpenAI, Vercel, and Google, standardizes that bundle: a `plugin.json` manifest, `SKILL.md` files carrying instructions and knowledge, and an optional `mcp.json` declaring MCP servers, all versioned as one package.
+
+This matters for tool selection in a way worth planning around. Installing a plugin adds its whole toolset to the agent's surface at once, so the unit that inflates your context and dilutes your selection quality is the package, not the tool. Audit at that granularity. Module 05 covers the format, including why a plugin should be treated as a supply-chain dependency.
+
 ### Semantic Tool Search
 
 The idea is simple: instead of showing the model all tools, find the most relevant ones for the current request.

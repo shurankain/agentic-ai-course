@@ -306,6 +306,32 @@ The true power of the MCP component model manifests in composition. Resources ca
 
 This composability allows building complex integrations from simple primitives. A database server can provide resources for reading the schema, tools for executing queries, and prompts for typical analytical tasks, all within a single conceptual framework.
 
+### Packaging capability: Agent Plugins
+
+MCP standardizes how an agent reaches a tool. It says nothing about how a capability is distributed, so teams shipping internal capability have been inventing their own layouts: a repository here, an MCP server config there, instructions pasted into a system prompt.
+
+**Agent Plugins 1.0.0**, announced August 6, 2026 by AWS, Cursor, Microsoft, OpenAI, Vercel, and Google, puts those three things in one directory:
+
+- **`plugin.json`** at the root: a required manifest carrying name, version, description, author, and an `extensions` object for client-specific data.
+- **`skills/`**: `SKILL.md` files conforming to the separate Agent Skills specification, which supply knowledge and instructions.
+- **`mcp.json`** (optional): declares MCP servers over stdio, Streamable HTTP, or the legacy HTTP+SSE transport.
+
+Client-specific extensions are isolated behind a reverse-domain namespace, so one client's additions cannot collide with another's. GitHub added support on August 12 across VS Code, Copilot CLI, the SDK, and the Copilot app.
+
+For a platform team the value is versioning: knowledge, instructions, and tool endpoints ship as one package that attaches to any compatible agent, instead of three artifacts that drift apart.
+
+**Read the version number carefully.** The specification's status was Working Draft as of mid-August 2026, and "1.0.0" describes the format rather than its stability. Several things a plugin ecosystem needs are explicitly outside v1: commands, hooks, agents, rules, and LSP servers were judged too client-specific for a portable contract. Also absent are a marketplace, an installation flow, signing, permission UX, and enterprise approval.
+
+That last group is the part to think about before adopting. **A plugin can carry executable code or introduce a new MCP server, which makes it a supply-chain dependency in the ordinary sense.** It needs provenance, an SBOM, an allowlist, and review of updates, and the format itself provides none of that yet. The LiteLLM compromise covered in Module 14 is the precedent: a widely trusted package in the AI tooling chain, and the breach reached the companies that installed it.
+
+### WebMCP: tools declared by the page
+
+Remote MCP puts a tool behind a network service with its own identity and policy. **WebMCP**, shown by Cloudflare in developer preview on August 6, 2026, does something different: a web page declares its own tools through the experimental `document.modelContext` browser API, and the tool executes inside the page's origin using the current browser session.
+
+The gain is precision. An agent working through a page today reconstructs intent from the DOM, screen coordinates, and screenshots, which costs vision tokens and breaks whenever the markup changes. A declared tool states what the page can do and what arguments it takes, so neither cost applies.
+
+Keep the two straight, because they have different security properties. WebMCP lives beside the page and inherits the user's session, so a tool call runs with whatever the logged-in user can do. Remote MCP is a separate service with its own identity, its own credentials, and its own policy enforcement point. The browser API is still experimental, which makes WebMCP a thing to watch rather than a contract to build production on.
+
 ### Design Recommendations
 
 When designing an MCP server, it is important to properly distribute functionality among components. General recommendations are as follows:
@@ -363,5 +389,9 @@ Prompts standardize typical scenarios, lowering the entry barrier for users and 
 Sampling and Elicitation both let a server ask for something it could not produce alone, and neither works by calling into the client any more. As of 2026-07-28 Sampling is deprecated in favour of integrating with a provider API directly, and server-initiated requests are replaced by MRTR: the server returns `input_required` with what it needs, and the client retries. Elicitation still covers the case where servers request user input at runtime for decisions requiring human judgment. Tasks support long-running asynchronous operations with progress tracking and cancellation.
 
 OAuth 2.1 authorization provides a standardized security framework for remote MCP connections, replacing ad-hoc authentication patterns.
+
+Agent Plugins 1.0 packages skills, instructions, and MCP server configuration as one versioned unit, which is how capability now travels between teams and clients. Treat an installed plugin as a supply-chain dependency and as a bulk addition to the agent's tool surface: it can carry executable code, and v1 deliberately omits signing, permission UX, and enterprise approval.
+
+WebMCP lets a page declare its own tools instead of forcing an agent to infer them from the DOM or a screenshot. It is experimental, it runs inside the page origin with the user's session, and it is a different security model from remote MCP, which is a separate service with its own identity.
 
 Understanding these components and their proper use is the key to building effective MCP servers that elegantly integrate into the AI ecosystem.
