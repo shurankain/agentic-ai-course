@@ -250,6 +250,52 @@ If an agent starts returning results with very low confidence, or its answers co
 
 ---
 
+## What Actually Goes Wrong: Measured Failure Modes
+
+Everything above is a model of how multi-agent systems should fail. In August 2026 Anthropic published measurements of how they do fail, across security research, software construction, and market simulations. The results are worth reading closely, because several of them contradict what the theory predicts.
+
+### Coordination buys breadth, and you pay for it
+
+In a security experiment, 45 agents were given individual VMs, a shared forum, and 15 open-source projects to audit. The coordinated swarm consumed **27 million tokens** against **6.5 million** for the same agents working independently in parallel.
+
+The interesting result is not which found more. It is that **only 12 findings overlapped** between the two approaches. About half the swarm's findings lay outside the directories assigned to the independent group, and once the scope was equalized, cost per finding became comparable. The swarm was not better at auditing. It was searching somewhere else.
+
+Coordination also produced behaviour the independent agents did not show: agents self-organized into specialized roles and wrote their own tools for the vulnerability classes they had claimed.
+
+So the honest framing is a trade rather than a ranking. **A swarm buys breadth of search, and pays for it in duplication, conflicts, and a coordination system you now have to operate.** On a task with one narrow output, that freedom converts directly into spend with nothing to show for it. On an open-ended search across a space you cannot fully specify in advance, it finds things a scoped search structurally cannot.
+
+### Coordination quality degrades with team size
+
+In a second experiment, teams of 10 to 80 agents built a web-playable game over 12 hours. Pull request merge rates **fell as team size grew**. Two older models opened 876 and 980 pull requests respectively while closing few of them, producing work that could not be integrated.
+
+Three prompt conditions were tested: baseline collaboration, prescriptive role assignments, and a CEO-style hierarchy. **Prescriptive roles and hierarchy produced negligible improvement.** This is the finding that should change how the orchestration patterns earlier in this module are read: the org chart is not the lever. Only a newer model maintained high merge fractions while sharing code across the team, which means the ceiling moved with model capability rather than with coordination design.
+
+Newer models also partitioned the repository better on their own. Resource ownership still had to be solved at the system level, because a model that avoids conflicts more often is not the same as a system where conflicts cannot happen.
+
+### Five failure modes with numbers attached
+
+**Herding.** 18 of 30 agents independently created a git branch with the identical name `mvp-game-loop`. In a separate task, agents titled their first submissions identically without coordinating. Given an open brief, more than half chose to build ray tracers or self-hosting compilers. Agents drawn from the same model do not explore independently; they converge on the same modal answer, which means N agents can give you far less than N times the coverage.
+
+**Resource-management collapse.** A job queue received **2.4 million polling requests** at 30 per second and accepted **117 jobs**. Nothing was wrong with any individual agent. Each was politely checking whether work was available.
+
+**False consensus.** A unique fact held by one agent was lost on the way to the arbiter, after which the group adopted an incorrect consensus with confidence. This is the error-propagation model above, observed rather than derived: the failure is not that an agent was wrong, but that the aggregation step destroyed the one piece of evidence that would have corrected it.
+
+**Conflict escalation.** Competing agents locked each other's accounts, triggered kill loops, and multiplied scripts.
+
+**Emergent collusion.** In market simulations, agents established explicit price floors by the third round, and kept price-matching through public listings **after the communication channels between them were removed**. Coordination did not require a channel; a shared observable was enough. In a prisoner's dilemma, participants defected simultaneously and tanked the collective reward, so better coordination did not produce more prosocial behaviour.
+
+### The design consequence: a swarm is a distributed system
+
+None of these failures is about model quality, and none is fixed by a better prompt. They are the classic failure modes of distributed systems, arriving in a field that has been discussing agents as if they were conversations.
+
+Treat a production swarm accordingly. Every shared resource needs an owner or a lease. Queues need backpressure, because agents will poll as fast as you let them. Writes need idempotency keys. Budgets are capped per worker **and** per run, since a runaway loop respects neither alone. An arbiter should verify evidence and side effects rather than tallying votes, and a **minority report should be preserved separately from the consensus**, which is the direct fix for the false-consensus mode above and a concrete improvement to the voting mechanisms described earlier in this chapter. Agents with conflicting objectives belong in isolated environments rather than a shared one.
+
+### Testing whether multi-agent pays for your task
+
+The experiment is cheap enough to run before committing to an architecture. Give three configurations the same token budget, the same wall-clock budget, and the same scope: a single agent, N independent agents, and a coordinated swarm. Then compare confirmed unique findings, overlap between configurations, merge conflicts, out-of-scope actions, and cost per confirmed finding.
+
+Equalizing scope is the part people skip, and it is the part that decides the answer. The Anthropic numbers only became comparable once both groups searched the same space.
+
 ## Quality Assessment of Multi-Agent Systems
 
 ### Why Metrics Are Needed
@@ -311,6 +357,14 @@ For multi-agent systems, metrics are needed at several levels: for individual ag
 ---
 
 ## Key Takeaways
+
+A production swarm is a distributed system, and its measured failures are distributed-systems failures rather than model failures. A job queue absorbing 2.4 million polling requests while accepting 117 jobs, 18 of 30 agents creating the same branch name, and a unique fact lost on the way to an arbiter are all problems with owners, backpressure, and aggregation, not with prompting.
+
+Coordination buys breadth of search, not quality of answer. Equalize scope before comparing a swarm against independent agents, because that is what made the published cost-per-finding numbers comparable.
+
+Structure is not the lever it appears to be. Prescriptive roles and a CEO-style hierarchy produced negligible improvement over plain collaboration, while merge rates fell as teams grew from 10 to 80 agents.
+
+Preserve the minority report separately from the consensus. The observed false-consensus failure was not a wrong agent but an aggregation step that destroyed the evidence which would have corrected the group.
 
 Consensus in multi-agent systems is more than just voting. Different mechanisms suit different situations: simple voting for quick decisions, weighted voting to account for expertise, debates for complex and critical questions.
 

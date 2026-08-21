@@ -14,6 +14,10 @@ The question is not "should we use multi-agent?" but "does the task justify the 
 
 **Decision heuristic:** Prototype with a single agent + reasoning model first. If the single agent achieves 90%+ of required quality, stop there. Add multi-agent only when you hit clear capability boundaries: the remaining 10% quality improvement rarely justifies a 3-15x cost increase.
 
+**What the measurements add to this.** Anthropic's August 2026 study of multi-agent systems supports the heuristic and sharpens what "capability boundary" means. Coordinated agents auditing open-source projects consumed 27 million tokens against 6.5 million for the same agents working independently, and only 12 of their findings overlapped. Once both groups searched the same scope, cost per finding was comparable.
+
+So the thing a swarm buys is **breadth of search, not quality of answer**. That is worth paying for when the useful output is a set of things you could not enumerate in advance, and worth nothing when the task has one narrow output. Two more results are worth carrying into any design: merge rates fell as teams grew from 10 to 80 agents, and prescriptive roles and hierarchy produced negligible improvement over plain collaboration. Adding structure does not recover what adding agents costs. Module 04, Multi-Agent Consensus and Reliability has the failure data in full.
+
 ## Why a Single Agent Is Not Enough (When Multi-Agent Is Justified)
 
 When the decision framework above points toward multi-agent, the underlying reasons are fundamental:

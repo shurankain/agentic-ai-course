@@ -194,6 +194,12 @@ As load grows, a multi-agent system must scale - handle more requests without pe
 
 **Sharding:** an effective scaling strategy - dividing the system into independent segments. For example, user requests with names A-M are processed by one agent cluster, N-Z by another. Clusters operate independently, minimizing coordination between them. Sharding requires a smart distribution function that evenly distributes load across shards and minimizes the need for cross-shard communication.
 
+**What measurement says about adding agents.** The reasoning above holds for stateless request handling, where three agents really do process three times the requests. It does not hold for agents collaborating on shared work. Anthropic measured teams of 10 to 80 agents building software over 12 hours and found pull request merge rates **falling** as the team grew, with two models opening 876 and 980 pull requests while closing few of them. Throughput went up and integrated output went down.
+
+Two results from the same study bear directly on orchestration design. Prescriptive role assignments and a CEO-style hierarchy produced **negligible improvement** over baseline collaboration, so the org chart is not the lever it looks like. And a job queue in a related experiment absorbed 2.4 million polling requests at 30 per second while accepting 117 jobs, which is what horizontal scaling looks like when the coordination layer has no backpressure.
+
+The practical rule that follows: scale the number of agents freely when their work is independent, and treat every additional agent on shared work as a coordination cost that has to be justified. Module 04, Multi-Agent Consensus and Reliability has the full failure taxonomy.
+
 **Auto-scaling:** advanced systems automatically scale in response to load changes. When the number of requests grows, new agents are created. When it drops, excess agents are stopped to conserve resources. Auto-scaling requires metrics (how to measure load?), policies (at what load to add agents?), and provisioning mechanisms (how quickly can a new agent be created?).
 
 ## Key Takeaways
