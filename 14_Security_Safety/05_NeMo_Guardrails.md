@@ -1,6 +1,6 @@
 # NeMo Guardrails
 
-NeMo Guardrails (currently at v0.20+, as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection. This gives a programmatic control layer on top of probabilistic models.
+NeMo Guardrails (v0.20+ as of early 2026) is an open-source toolkit from NVIDIA for adding programmable safety controls to LLM applications. It is the leading tool for production-ready protection. This gives a programmatic control layer on top of probabilistic models.
 
 **Recent capabilities (2025+):** Colang 2.0 is now the recommended standard for new projects (Python-like syntax, event-driven programming). Reasoning-capable safety models (e.g., Llama Guard 3, ShieldGemma) can be used as rail backends for faster, cheaper classification. GLiNER-based PII detection provides entity recognition without external API calls. OpenTelemetry tracing integration enables connecting guardrails telemetry to existing observability stacks.
 

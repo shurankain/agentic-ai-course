@@ -194,7 +194,7 @@ NVIDIA Blackwell (B200, GB200) introduces new capabilities relevant to Flash Att
 
 **192 GB HBM3e at 8 TB/s:** Higher bandwidth means the IO-awareness calculus shifts: more operations become compute-bound rather than memory-bound. Block sizes for FA may need retuning for optimal performance on Blackwell.
 
-**Expected FA impact on Blackwell:** FA3 principles (warp specialization, async data movement) carry forward, but kernel implementations will be rewritten to exploit Blackwell-specific instructions and the wider memory bus. The community is actively developing Blackwell-optimized FA kernels as of early 2026.
+**Expected FA impact on Blackwell:** FA3 principles (warp specialization, async data movement) carry forward, but kernel implementations will be rewritten to exploit Blackwell-specific instructions and the wider memory bus. Community work on Blackwell-optimized FA kernels was underway through early 2026.
 
 ---
 

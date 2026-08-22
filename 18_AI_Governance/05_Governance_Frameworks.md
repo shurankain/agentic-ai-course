@@ -372,7 +372,7 @@ Governance metrics (process, compliance, risk, culture) allow tracking effective
 
 ### What Has Actually Happened
 
-As of early 2026, the EU AI Act's enforcement is in its early stages. No fines have been issued yet, but the regulatory infrastructure is building:
+Enforcement began in earnest on August 2, 2026, when Article 50 transparency obligations became enforceable and GPAI penalty powers activated, both carrying fines up to 15 million euro or 3% of worldwide turnover. The AI Office now enforces alongside national market surveillance authorities. The infrastructure that made that possible had been building through the preceding year:
 
 - **Prohibited practices (Feb 2025):** Active monitoring has begun, but national authorities are still developing enforcement procedures and technical expertise. No public enforcement actions yet
 - **GPAI obligations (Aug 2025):** Major providers (OpenAI, Google, Meta, Anthropic, Mistral) signed the GPAI Code of Practice, gaining presumption of compliance. Non-signatories face more scrutiny and must independently demonstrate compliance

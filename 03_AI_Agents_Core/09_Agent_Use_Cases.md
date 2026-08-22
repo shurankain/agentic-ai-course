@@ -16,7 +16,7 @@ Not all agent applications are at the same maturity level. Some already generate
 
 | Category | Maturity | Example Companies | Market Size |
 |-----------|----------|------------------|-------------|
-| **Coding Agents** | Production | Cursor, GitHub Copilot, Claude Code, Devin | Dominant: Cursor $4B ARR, Claude Code $1B+ ARR, Devin $26B valuation (as of mid-June 2026). Terminal agents (Claude Code, Codex CLI, Antigravity) as a category. 7 major contenders |
+| **Coding Agents** | Production | Cursor, GitHub Copilot, Claude Code, Devin | Dominant: Cursor ~$4B ARR, Claude Code $2.5B+ run rate, Devin $26B valuation. Terminal agents (Claude Code, Codex CLI, Antigravity) as a category. 7 major contenders |
 | **Agentic RAG** | Production | Perplexity, Glean, You.com | $9B Perplexity valuation, 22M+ users (as of mid-2025) |
 | **Workflow Automation** | Production | n8n, Make, Zapier AI | 200K+ businesses |
 | **Voice Agents** | Production | ElevenLabs, VAPI, Retell | 75ms latency achieved |

@@ -358,7 +358,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96%, then 88.6%, then **95.0% (Fable 5, June 2026)**; SWE-bench Pro: **80.3%** (Fable 5)
+  - Evolution: 1.96%, then 88.6%, then 95.0% (Fable 5), then **about 96% (Opus 5, July 2026)**; benchmark now saturated. SWE-bench Pro reports 47.1%, 59.1%, or 80.3% depending on the harness
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan, then Edit, then Test, then Debug loop
@@ -368,7 +368,7 @@
   - Sandboxed execution
   - Git-based changes
   - Review before commit
-- **Terminal Agents**: Claude Code (Fable 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
+- **Terminal Agents**: Claude Code (Opus 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
 - **IDE market (late June 2026)**: **SpaceX acquires Cursor $60B** (June 16). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
 - AI coding agent supply chain security
   - Hallucinated package attacks
@@ -394,7 +394,7 @@
 
 ### 03.9 Practical AI Agent Use Cases (`09_Agent_Use_Cases.md`)
 - Taxonomy of AI agent applications
-- **Coding Agents**: Cursor $4B ARR, Claude Code $1B+ ARR, Devin $26B valuation (as of late May 2026). Terminal agents as new subcategory
+- **Coding Agents**: Cursor ~$4B ARR (SpaceX acquisition closed August 14), Claude Code $2.5B+ run rate, Devin $26B valuation. Terminal agents as new subcategory
 - **Agentic RAG**: Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-agent patterns
 - **Workflow Automation**: n8n (200K+ businesses, MCP support)
 - **Voice Agents**: 4-tier market (ElevenLabs, Vapi, LiveKit, Bland AI)
@@ -505,7 +505,7 @@
 - **MCP Apps (January 2026)**: interactive UI components in conversations
 - **MCP Server Cards**: `.well-known` metadata for automated discovery
 - **MCP Tasks (SEP-1686)**: long-running async operations with progress, cancellation, partial results
-- **MCP 2026-07-28 Release Candidate**: stateless core, MCP Apps (interactive HTML UI), horizontal scaling, formal deprecation policy (as of late May 2026)
+- **MCP 2026-07-28 final specification**: stateless core, no handshake or sessions, MRTR replaces server-initiated requests, Tasks as an extension, mandatory caching fields, formal deprecation policy
 - **Protocol Landscape**: MCP (agent, then tool) / A2A (agent, then agent) / ANP (agent, then open network, experimental)
 
 ### 05.2 MCP Components (`02_MCP_Components.md`)
@@ -1041,7 +1041,7 @@
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
   - **Terminal-Bench 2.1**, **MCP Atlas**, **ITBench-AA** (as of late May 2026)
-- **Benchmark Saturation**: SWE-bench Verified at 95% (Fable 5), industry shifting to Pro and domain-specific benchmarks
+- **Benchmark Saturation**: six models within two points at 95-96% on SWE-bench Verified, two of them open-weight; industry shifting to Pro and domain-specific benchmarks
 - **Long-horizon agent reliability**: Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50%: real-world multi-step agents still unreliable
 - **Benchmark Reliability and Gaming**: SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
 - **Cost per Correct Answer**: practical metric (77x cost difference hidden by 5% accuracy gap)
@@ -1591,9 +1591,9 @@
 - **Florida sues OpenAI** (June 19): first US state lawsuit against an AI company
 - **Bartz v. Anthropic: $1.5B copyright settlement**: largest in US history
 - **China AI Agent Framework** (May 8) + **Anthropomorphic AI regulation** (effective July 15, minors protected)
-- **Fable 5 export ban saga**: NSA testimony, G7 "trusted partners", biometric ID July 8
+- **Fable 5 export ban saga**: NSA testimony, G7 "trusted partners", 19-day outage ending July 1
 - **Five-nation agentic AI guidance** (US/AU/CA/NZ/UK); **International AI Safety Report 2026**
-- **Colorado AI Act** delayed to January 1, 2027 (SB 189), scope narrowed to transparency-only
+- **Colorado AI Act** repealed and reenacted before it ever applied (SB 26-189), replacement effective January 1, 2027, scope narrowed to transparency
 - NIST AI Risk Management Framework
   - GOVERN, MAP, MEASURE, MANAGE
   - AI RMF Playbook

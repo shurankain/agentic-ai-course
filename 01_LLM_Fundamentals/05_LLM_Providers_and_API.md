@@ -46,7 +46,7 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
-- Responses API (successor to Assistants API, which was deprecated in August 2025 and scheduled for sunset in August 2026) and Agents SDK (v0.10.2, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
+- Responses API (successor to Assistants API, which was deprecated in August 2025 with sunset scheduled for August 2026, so verify its status before building on it) and Agents SDK (v0.10.2, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
 - OpenAI filed a confidential S-1 (May 22, 2026). Listing timing is unsettled as of August 2026: reports variously describe a public prospectus targeting September, a Q4 2026 listing contingent on completing the for-profit restructuring, and a slip into 2027
 - **Astra** is the model to watch, not to plan around. OpenAI previewed it to US policymakers in late July as a family built to coordinate multiple agents on tasks running hours or days, and reported that it solved ten long-open problems in mathematics and theoretical computer science. Whether it ships as GPT-6 or a point release is undecided, and it is slated to be the first model routed through the government pre-release review
 - **MS-OpenAI exclusivity ended** (April 27, 2026). OpenAI models now available on AWS Bedrock, Google Cloud Vertex, Oracle, and sovereign cloud providers. Microsoft retains non-exclusive license through 2032 and ~27% of OpenAI Group PBC

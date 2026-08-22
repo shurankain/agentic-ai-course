@@ -2,7 +2,7 @@
 
 ## Why vLLM Became the Standard
 
-vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention: an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of late June 2026, vLLM is at **v0.23** (released June 13, 408 commits, 200 contributors). Key v0.23 additions: DiffusionGemma support (first diffusion LLM natively served), DeepSeek-V4 hardening, Model Runner V2 as default for Llama/Mistral dense models, multi-tier KV cache offloading, unified parser for reasoning + tool-call, and Transformers v5 compatibility.
+vLLM (UC Berkeley, 2023) solved the problem of inefficient memory usage through PagedAttention: an algorithm inspired by OS virtual memory. Result: 2-4x throughput increase. The V1 engine (alpha January 2025, default since v0.8.0) brought major architectural improvements; V0 is deprecated. As of August 2026, vLLM is at **v0.24**, whose one breaking change is that vLLM no longer sets `CUDA_VISIBLE_DEVICES` internally: a new `device_ids` argument replaces it, and a deployment relying on the old implicit behaviour will bind GPUs differently after upgrading. Note also that regular releases have incremented the minor version since v0.12.0, so there is no v1.0 pending. The preceding **v0.23** (June 13, 2026: 408 commits, 200 contributors) added: DiffusionGemma support (first diffusion LLM natively served), DeepSeek-V4 hardening, Model Runner V2 as default for Llama/Mistral dense models, multi-tier KV cache offloading, unified parser for reasoning + tool-call, and Transformers v5 compatibility.
 
 Advantages:
 - Memory efficiency through fragmentation elimination
