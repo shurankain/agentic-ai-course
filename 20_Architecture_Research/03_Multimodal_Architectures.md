@@ -242,6 +242,16 @@ The line between "understanding" and "generation" models is blurring:
 
 **Cost implications:** Native multimodal models are more expensive to train (multimodal data is harder to curate, training is more complex) but enable capabilities impossible with the adapter approach.
 
+## A Readable Open-Weight Multimodal: Muse Glimmer
+
+Most of the architectures above are described from papers because the weights are closed. **Muse Glimmer**, released by Meta on August 10, 2026 under Apache 2.0, publishes a full model card for roughly 29.6B parameters, which makes it the practical model to read when you want to see these ideas assembled rather than described.
+
+Its composition maps onto this chapter directly. A **ViT-G/14 perception encoder of about 1.8B parameters** handles vision, so image understanding is a bounded component rather than diffused through the network. The language model runs **52 layers in a repeating `local-local-local-global` pattern**: three layers with sliding-window attention over 2,048 tokens, then one layer attending across the entire context, which exceeds 131K tokens. Attention uses grouped queries with 32 query heads against 2 KV heads, with RoPE for positions.
+
+That local-and-global alternation is the interesting part, and it is a direct answer to the quadratic cost problem. Three cheap local layers cut full-attention compute and KV traffic, then one global layer restores the long-range mixing those layers gave up. The ratio is a tunable knob between cost and reach, and seeing it published with a real number is more instructive than the general claim that hybrid attention exists.
+
+**Be precise about what "runs locally" means.** 4-bit text weights occupy roughly 16.8 to 19.7 GB, which invites the conclusion that a 24 GB card is enough. The vision encoder, the KV cache, activations, and runtime buffers also consume memory, and at 131K context the KV cache is not a rounding error. Any claim that a model fits a given card is incomplete without the quantization, the context length, and the serving stack that produced it. Module 15 covers how to compute the real figure.
+
 ## Emerging Frontiers: Beyond Understanding and Generation (as of mid-June 2026)
 
 Multimodal AI is extending beyond perceiving and generating content toward predicting, acting in, and discovering new knowledge about the physical world. Four research directions are converging toward production in a 12-18 month horizon.

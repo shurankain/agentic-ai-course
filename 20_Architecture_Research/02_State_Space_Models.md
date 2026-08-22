@@ -124,6 +124,16 @@ When to add attention: Early layers (low-level patterns), every N layers (regula
 
 Attention window size: Full attention (maximum quality, maximum cost), Sliding window (trade-off), Sparse patterns (task-specific).
 
+### Nemotron 3.5 Lightning: hybrid shipping as a product
+
+NVIDIA released **Nemotron 3.5 Lightning** on August 11, 2026, and it is worth studying because it combines three ideas this course covers separately. It is a 30B mixture of experts with **3B active parameters per token**, interleaving **Mamba-2 layers, MoE layers, and ordinary attention layers**. So the sparsity of MoE, the linear-time sequence handling of an SSM, and the precise retrieval of attention appear in one stack, aimed at long-running agent execution loops.
+
+The design target explains the mix. An agent loop is long, repetitive, and latency-sensitive, which suits Mamba-2 and sparse activation, while occasional precise lookup into the context still needs attention. NVIDIA reports output speed up to 4x models of comparable size, and on one internal benchmark completing 10,000 tasks about 30% faster than a 35B competitor at similar accuracy. Those are vendor and partner evaluations, so repeat them at a fixed quality threshold with your own prompt and harness before believing the ratio transfers.
+
+**Read the context claim carefully, because it is a property of the deployment rather than the weights.** The 1M-token context is validated on GB200, B200, and 8xH100 topologies. On a single H100 80GB, NVIDIA specifies 256K. A context length quoted without the hardware and serving recipe that produced it tells you almost nothing about what you will get.
+
+The license is OpenMDW 1.1, which permits commercial use on terms that differ from Apache 2.0. Check them rather than assuming, since open-weight licensing diverged sharply during 2026.
+
 ## When SSM vs Transformer
 
 ### SSM Excels

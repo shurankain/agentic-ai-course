@@ -46,7 +46,9 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **AMD MI400 / Helios (as of late May 2026)**: 432 GB HBM4, 40 PFLOPS FP4, 2.9 ExaFLOPS per rack. H2 2026 production. The first serious Blackwell competitor: MI400 offers more memory (432 GB vs 288 GB HBM3e) and competitive raw throughput in a rack-scale configuration. AMD's Helios platform (MI400 + custom interconnect) targets the same hyperscale training and inference market as NVL72.
 
-**NVIDIA Vera Rubin** (Computex, June 1, 2026; production sampling, shipments fall 2026). The next-generation platform after Blackwell. 50 PFLOPS FP4, 288 GB HBM4, 22 TB/s memory bandwidth, 10x performance-per-watt vs Grace Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell). TSMC 3nm process. Supply chain nearly 2x the size of the Grace Blackwell ramp based on what Jensen Huang called "outsized" AI demand. Assembly: 5 minutes per rack. Fall 2026 shipments to hyperscalers. Expected to generate $1T+ in orders through 2027. Major hyperscalers are already deploying ~1,000 NVL72 racks per week each (72,000 Blackwell GPUs per week per hyperscaler).
+**NVIDIA Vera Rubin** (announced Computex, June 1, 2026; **in full production, with first customer deliveries targeted for August 2026** and hyperscaler integration through Q4). The next-generation platform after Blackwell. 50 PFLOPS FP4, 288 GB HBM4, 22 TB/s memory bandwidth, 10x performance-per-watt vs Grace Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell). TSMC 3nm process. Supply chain nearly 2x the size of the Grace Blackwell ramp based on what Jensen Huang called "outsized" AI demand. Assembly: 5 minutes per rack. 336B transistors on TSMC N3, paired with a Vera CPU carrying 88 Olympus ARM cores. Expected to generate $1T+ in orders through 2027.
+
+**Supply is the binding constraint, not demand.** TSMC N3 capacity likely caps 2026 Rubin output at 200,000 to 300,000 units. For capacity planning that means allocation, not purchase: the question is what share you can get rather than what you can afford, and it favours committing early over waiting for better pricing. Major hyperscalers are already deploying ~1,000 NVL72 racks per week each (72,000 Blackwell GPUs per week per hyperscaler).
 
 **NVIDIA RTX Spark** (Computex 2026): the first ARM-based AI PC superchip. Grace CPU (20-core ARM, co-designed with MediaTek) + Blackwell RTX GPU (6,144 CUDA cores, fifth-gen Tensor Cores with FP4) connected via NVLink-C2C. Up to 128 GB unified LPDDR5X memory (300 GB/s bandwidth), 1 PFLOP of AI performance. Runs 120B+ parameter models locally. Ships fall 2026 in laptops and desktops from ASUS, Dell, HP, Lenovo, Microsoft Surface, and MSI. A three-generation roadmap: Spark (Blackwell, 2026), Vera Rubin Spark (2028), Rosa Feynman Spark (2030). This positions NVIDIA to compete directly in the consumer PC market, not just data centers.
 
@@ -176,6 +178,22 @@ GPUs achieve peak performance with sufficient parallelism. A small batch size un
 For training, the optimal batch size balances memory utilization, training dynamics, and throughput. For inference, continuous batching dynamically forms batches from requests, maximizing utilization.
 
 Gradient accumulation allows emulating a large batch size: gradients are accumulated over several forward passes before updating weights.
+
+## The Frontier Labs Started Building Their Own Silicon
+
+Through 2025 the accelerator question was which NVIDIA part to buy, with AMD as the alternative. During 2026 every major lab moved to designing its own, and the pattern is consistent enough to plan around.
+
+OpenAI revealed **Jalapeño** with Broadcom on June 24, 2026, an inference-only accelerator designed end to end in roughly nine months with help from OpenAI's own models, targeted for deployment by the end of 2026. Anthropic entered early talks with Samsung on custom inference silicon, against compute costs reported around $1.25B per month. AMD acquired **Taalas** on August 6, 2026, which designs inference silicon around a model's dataflow rather than as a general-purpose array, and announced its **Helios** rack-scale system plus a Cerebras partnership that splits inference across both vendors' hardware.
+
+Notice what all of these target: **inference, not training**. Training remains general-purpose work where flexibility matters and the hardware must survive whatever architecture comes next. Inference at scale is the opposite: a stable, repeated workload against a known model family, which is exactly the condition under which specialized silicon beats general silicon.
+
+The procurement consequence is a trade rather than a win. Purpose-built inference hardware buys latency and energy efficiency, and costs you lock-in, re-certification when the weights change, and a slower path to adopting a new model. If your model changes quarterly, the specialization has nothing to amortize against.
+
+### Memory became the constraint
+
+The scarce resource shifted during 2026, and it is no longer compute. AI data centers are projected to absorb roughly **70% of global memory output** in 2026 as Samsung, SK Hynix, and Micron redirect wafers toward high-bandwidth memory for accelerators. DRAM went from about **$2.80 per GB in 2025 to roughly $12** across that shift. The three manufacturers face a US price-fixing class action over the reallocation, with the allegations unproven.
+
+Two consequences for anyone sizing infrastructure. Memory-bound decisions that looked marginal at 2025 prices now dominate: the quantization and KV-cache techniques in this module buy real money rather than headroom. And a build-versus-rent calculation done before 2026 is stale, because the hardware line item moved while the API prices in Module 01 fell.
 
 ## Key Takeaways
 

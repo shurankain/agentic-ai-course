@@ -51,6 +51,12 @@ Larger batch size increases throughput but degrades latency and requires more me
 - Batch processing: large batch, high throughput
 - API service: dynamic batching
 
+**Latency as a product tier.** Providers began selling this trade-off directly rather than leaving it to the deployer. OpenAI previewed **Ultrafast** on August 13, 2026: GPT-5.6 Sol served on Cerebras hardware at a claimed 14x standard speed and up to 750 output tokens per second, with no public SLA, pricing, or capacity guarantee at announcement.
+
+The mechanism is less interesting than the packaging. One quality class can be sold as three tiers, batch, interactive, and ultra-low-latency, at different prices, and that maps onto how differently workloads value a second. An incident-response copilot, a live coding assistant, and a voice loop are latency-bound in a way a nightly summarization job is not, and paying frontier latency prices for the batch job is pure waste.
+
+If you route across models (Module 03, Resource Optimization), latency tiers belong in the routing decision alongside quality and cost, together with the burst capacity you can actually get and the fallback you are willing to accept when the fast tier is unavailable.
+
 **Continuous batching:**
 Requests are added to and removed from the batch dynamically. A completed request frees up space immediately. Maximum GPU utilization. All modern inference engines use continuous batching.
 

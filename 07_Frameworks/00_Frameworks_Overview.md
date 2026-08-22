@@ -32,7 +32,7 @@ Frameworks are organized by abstraction level from high to low:
 
 **Microsoft AutoGen** with 55,000+ stars (reflecting historical interest) focused on multi-agent conversations and code execution. Now in maintenance mode: Microsoft has consolidated its agent strategy into **Microsoft Agent Framework**, which unifies AutoGen and Semantic Kernel concepts. New projects should use Microsoft Agent Framework instead.
 
-**LlamaIndex** with 47,000+ stars (as of early 2026) is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, but its focus on information retrieval means fewer capabilities for agent workflows.
+**LlamaIndex** with 47,000+ stars is the leader specifically for RAG scenarios. A vast collection of data connectors makes it indispensable for retrieval tasks, and its focus on information retrieval historically meant fewer agent capabilities. **Workflows 1.0** (June 22, 2026) narrows that gap with an event-driven orchestration layer, so the RAG-versus-agent split between LlamaIndex and LangChain is less sharp than it was.
 
 ### Cloud Provider Solutions
 
@@ -150,7 +150,7 @@ Microsoft AutoGen has entered maintenance mode as Microsoft consolidates its age
 
 Beyond the established leaders and cloud providers, several frameworks have gained significant traction:
 
-**Pydantic AI** (v2.0.0b7 as of late June 2026, v1.107.0 stable): type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities: instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
+**Pydantic AI** (V2 shipped in late June 2026 as a harness-first redesign): type-safe Python agents from the creators of Pydantic. Uses Python's type system to provide compile-time guarantees on agent inputs/outputs. Durable execution support for long-running agents that survive process restarts. Latest additions: **Deferred loading** (on-demand capabilities: instructions, tools, model settings, and hooks load only when the model requests them via a framework-managed `load_capability` tool), **Capabilities** (composable, reusable units of agent behavior), **AgentSpec** for loading agents from YAML/JSON, a cross-provider **Thinking capability**, **MCP/A2A/UI event stream** for unified protocol support, and **HITL tool approval** for human-in-the-loop workflows. Best for: Python teams that value type safety and reliability.
 
 **Mastra**: TypeScript-first agent framework from the team behind Gatsby. 22K GitHub stars (as of late May 2026). Built for suspension/resumption workflows where agents pause for human input or external events and resume later. Strong integration with web frameworks (Next.js, React). **Model Router** routes requests across 3,300+ models from 94 providers. This enables automatic fallback and cost optimization without application changes. Best for: TypeScript/frontend teams building agent-powered web applications.
 

@@ -203,6 +203,10 @@ Anthropic's CLI-based coding agent, one of the most capable autonomous coding to
 - Extended thinking for complex reasoning before acting
 - Hooks system for custom automation (pre/post tool execution)
 - Project memory (CLAUDE.md files for persistent project context)
+- Checkpoints that save state before a change, so a bad edit is revertible without reconstructing the session
+- Scheduled routines for recurring autonomous work
+
+Four of those items are worth reading as agent-architecture patterns rather than product features, because each answers a failure mode this module describes. **Sub-agents** partition work so parallel effort does not contend, which is the decomposition lever Module 04 identifies as the thing that actually helps. **Checkpoints** make an autonomous edit revertible, converting a destructive action into a recoverable one. **Hooks** put deterministic code on either side of a tool call, which is where a policy check belongs, ahead of the side effect rather than inside the model's judgement. **Scheduled routines** turn an agent from a request handler into a persistent process, which brings the state-management costs Module 03, Agent Architectures covers under the execution plane.
 
 **Architecture:** Claude Code operates as an agentic loop: the user provides a task, the agent reads relevant files, forms a plan, executes edits and commands, verifies results (runs tests, checks compilation), and iterates until success. Unlike IDE-integrated tools, it has full system access. It can install dependencies, run Docker containers, interact with APIs, and manage infrastructure.
 
