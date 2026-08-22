@@ -264,25 +264,33 @@ AI projects require specific product management. A traditional PM may not unders
 
 1. **80%+ of companies use AI, but only 25% achieve the expected ROI**: the gap between adoption and value extraction is enormous
 
-2. **Governance-first, not governance-later**: start with policy and processes, then scale
+2. **The measured version of that gap is 8.3x.** OpenAI's August 2026 telemetry shows its most active enterprise customers producing 8.3 times more output tokens per active user than typical ones, on the same licences. Issuing a licence gets the typical number; describing the process, connecting the system of record, and configuring permissions and review gets the other one. Treat this as one vendor's correlation rather than proof of productivity
 
-3. **Data quality is the foundation**: 62% of failures are related to data
+3. **Compare revenue figures only on the same basis.** Anthropic reports ARR gross, counting end-customer spend through cloud resellers, while OpenAI reports closer to net, so the widely quoted $47B against $25B overstates the gap by an unpublished amount
 
-4. **The talent gap is real**: 73% use AI, only 29% understand it
+4. **Open weights carry a regulatory availability risk that a hosted API does not.** Self-hosting protects you from a vendor withdrawing a model and not from a government restricting the weights. Both hazards became concrete in 2026: the Fable 5 export ban, and an active US policy fight over restricting Chinese open-weight releases
 
-5. **Pilot ≠ production**: scaling requires a different approach
+5. **Vertical integration is a two-sided trade.** With the Cursor acquisition closed, one owner controls IDE, agent runtime, model routing, telemetry, and compute. Before that depth becomes structural, get answers on data-processing terms, subprocessors, which provider actually served a request, trace and skill export, and a tested exit path
 
-6. **Measure ROI from day one**: baseline metrics before adoption
+6. **Governance-first, not governance-later**: start with policy and processes, then scale
 
-7. **88% of agent projects fail** (average cost $340K): top cause is integration (46%), not AI capability. Scope creep and data quality account for 61%
+7. **Data quality is the foundation**: 62% of failures are related to data
 
-8. **The hybrid pattern is the real standard**: Klarna's pivot from 100% automation to AI+human demonstrates that full automation is not always optimal
+8. **The talent gap is real**: 73% use AI, only 29% understand it
 
-9. **Enterprise platform choice follows ecosystem**: Salesforce shops use Agentforce, AWS shops use Bedrock AgentCore, Microsoft shops use Copilot Studio. Technical merit is secondary to existing infrastructure
+9. **Pilot ≠ production**: scaling requires a different approach
 
-10. **Agent washing is now a legal risk**: only ~130 of thousands of vendors are genuinely agentic. Exaggerated claims create disclosure liability
+10. **Measure ROI from day one**: baseline metrics before adoption
 
-11. **Start small, prove value, scale gradually**: do not try to transform everything at once
+11. **88% of agent projects fail** (average cost $340K): top cause is integration (46%), not AI capability. Scope creep and data quality account for 61%
+
+12. **The hybrid pattern is the real standard**: Klarna's pivot from 100% automation to AI+human demonstrates that full automation is not always optimal
+
+13. **Enterprise platform choice follows ecosystem**: Salesforce shops use Agentforce, AWS shops use Bedrock AgentCore, Microsoft shops use Copilot Studio. Technical merit is secondary to existing infrastructure
+
+14. **Agent washing is now a legal risk**: only ~130 of thousands of vendors are genuinely agentic. Exaggerated claims create disclosure liability
+
+15. **Start small, prove value, scale gradually**: do not try to transform everything at once
 
 ---
 
@@ -322,6 +330,26 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 **The BYOAI shift (June 2026):** Apple's WWDC announcement of iOS 27 Extensions. This enables users to select Claude, Gemini, or ChatGPT as their default assistant: signals a paradigm shift. Model choice is becoming a user preference, not an IT policy decision. This is the "Bring Your Own AI" moment, analogous to the BYOD movement a decade ago. For enterprise architects, the implication is clear: design for model-agnostic systems. The application that hard-codes a single provider will be at a disadvantage when employees, and customers: expect to use their preferred AI. Google gains billions of Apple devices through the Siri AI deal (~$1B/year). Apple is not building a frontier model; it is becoming a multi-model platform. Microsoft builds its own MAI models while ending OpenAI exclusivity. The era of single-provider lock-in is ending.
 
+### What enterprise usage actually looks like
+
+OpenAI published usage telemetry from its enterprise customers on August 12, 2026, and it is the closest thing to hard adoption data this chapter has. Three findings.
+
+The top 10% of companies by activity, which the report calls frontier firms, generate **8.3 times more output tokens per active user** than a typical organization. Same licences, same models, an order of magnitude difference in what gets produced. **Codex accounted for 64%** of combined Codex and ChatGPT enterprise output in June, so agentic coding is where the volume concentrated rather than chat. And plugins are used weekly by **21% of employees at frontier firms against 9%** at typical ones.
+
+State the limitation before using any of it. This is one vendor's telemetry, it shows correlation between usage depth, company context, and tooling, and it does not demonstrate productivity gains. Heavy token use is a measure of activity, not of value delivered.
+
+What it does support is the boundary this chapter keeps returning to. Issuing a chat licence is easy and produces the typical-organization number. Getting the frontier-firm number requires describing the process, connecting the system of record, and configuring permissions, review, and a metric for a completed outcome. The 8.3x gap is the distance between buying a tool and changing how work happens, and the ROI section above is where that distance gets paid for.
+
+### The open-weight question is now a procurement risk
+
+Whether open-weight models stay available to you is a policy question rather than a technical one, and it turned adversarial during 2026.
+
+In July, Nvidia, Microsoft, Meta, Mistral, and Hugging Face signed an open letter opposing premature restrictions on open-weight models, arguing that distillation is a long-standing legitimate technique and that open models let defenders keep pace with attackers. **OpenAI, Anthropic, Google DeepMind, and SpaceX did not sign.** The split maps onto business model rather than onto any safety argument: the labs selling API access to closed weights are on one side, the ones selling hardware, platforms, or distribution are on the other.
+
+In parallel the US administration accused Moonshot of distilling Anthropic's Fable model to train Kimi K3, Treasury threatened sanctions against Chinese AI firms in July, and a ban on Chinese open-weight models was reportedly under consideration.
+
+For an enterprise architecture decision this matters concretely. An open-weight model chosen for cost, data residency, or independence from a single vendor carries a regulatory availability risk that a hosted API does not, and the risk points the opposite way from the usual assumption. Self-hosting protects you from a vendor withdrawing a model, and it does not protect you from a government restricting the weights you were planning to download. The Fable 5 export ban in June proved the first hazard is real; this fight is about whether the second becomes real too.
+
 ### Tier 1: Horizontal Platforms
 
 **Salesforce Agentforce**: the enterprise market leader. $800M ARR (+169% YoY), 29,000 deals, 2.4 billion agentic work units processed (as of early 2026). Pricing: $2/conversation (vs $6-12 for a human agent). **Agentforce Script** enables hybrid reasoning: deterministic steps for policy checks, discount calculations, and ticket routing run as classic business logic, while the LLM handles only the flexible parts requiring natural language understanding. Agentforce Contact Center (March 2026) combines voice, digital channels, CRM data, and AI agents, directly attacking the Five9/Genesys/NICE market. The "work unit" as a metric is significant: it is a completed business operation that a CFO can understand, not a token count.
@@ -342,11 +370,21 @@ The enterprise agent platform market has consolidated into three tiers. For most
 
 **SAP Joule**: embedded in the SAP ecosystem for ERP, supply chain, and HR processes.
 
+### The model labs entered this market directly (July 2026)
+
+Through 2025 the frontier labs sold API access and left the enterprise product layer to Salesforce, Microsoft, and ServiceNow. In July 2026 they stopped.
+
+**OpenAI Presence** (July 22) deploys voice and chat agents across customer and internal workflows with policies, guardrails, and human escalation built in. The number OpenAI leads with is its own support line, where Presence resolves **75% of inbound issues without a human**, with BBVA, SoftBank, and IAG as design partners. **ChatGPT Work** (July 9) is an agentic product powered by Codex, extended with a small-business program on July 23. Google announced **Gemini Enterprise** with governance as the positioning. Cloudflare shipped **Kitesurf**, a cloud browser built for agents rather than people.
+
+A lab shipping its own support line as the reference customer is a specific kind of claim, and it is stronger than a case study: the vendor is the one absorbing the failure rate. It is also narrow. Inbound support is the most measurable, most repetitive, most escalation-tolerant workflow an enterprise has, which is why it is where every agent platform starts. A 75% resolution rate there does not forecast the rate on a workflow with no escalation path and no clear definition of resolved.
+
 ### Anthropic's Enterprise Play
 
 **Claude Managed Agents** (April 2026 beta, multi-agent orchestration added May 2026): $0.08/session-hour plus token costs. Composable APIs for building and deploying cloud-hosted agents at scale, with infrastructure abstracted away. Self-evaluation loop improves task success rate by ~10 percentage points. The May 2026 update added multi-agent orchestration: a lead agent delegates tasks to specialized sub-agents with their own models, prompts, and tools, running in parallel on a shared filesystem. Early adopters: Notion, Rakuten, Asana, Sentry. **Claude Cowork** (GA) targets knowledge work on desktops, moving between local files and applications to synthesize, assemble, and finish deliverables. Targets 500M knowledge workers (vs ~30M developers for coding tools).
 
-**Anthropic revenue trajectory:** Anthropic reached $47B ARR (as of late May 2026), surpassing OpenAI ($25B). Growth: $87M (Jan 2024), then $1B (Dec 2024), then $9B (late 2025), then $30B (April 2026), then $47B (May 2026): 80x in three years. $65B Series H at $965B post-money valuation. **Anthropic filed a confidential S-1** (June 1, 2026) targeting $1.75-1.8T valuation and up to $75B raise, potentially the largest IPO in history, expected October 2026. 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. KPMG deployed Claude across 276,000 employees; PwC expanded its alliance. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
+**Read the ARR comparison with its accounting caveat.** Anthropic reports revenue on a **gross** basis, counting end-customer spend that flows through cloud resellers, while OpenAI reports closer to **net**. The headline $47B against $25B therefore overstates the gap by an amount neither company publishes. Two figures computed on different bases are not a ranking, and the widely quoted "Anthropic overtook OpenAI" framing rests on that comparison. Treat the growth rates as the informative part and the ordering as unresolved.
+
+**Anthropic revenue trajectory:** Anthropic reported $47B ARR (as of late May 2026) against OpenAI's $25B, on the different bases noted above. Growth: $87M (Jan 2024), then $1B (Dec 2024), then $9B (late 2025), then $30B (April 2026), then $47B (May 2026): 80x in three years. $65B Series H at $965B post-money valuation. **Anthropic filed a confidential S-1** (June 1, 2026) targeting $1.75-1.8T valuation and up to $75B raise, potentially the largest IPO in history, still targeting October 2026 as of August. **OpenAI's timing is unsettled**: reports through mid-August variously describe a public prospectus targeting September, a Q4 2026 listing contingent on completing the restructuring from nonprofit into a public-benefit corporation, and a slip into 2027. Any course, deck, or business case that fixes a date for it is guessing. 1,000+ enterprise clients pay >$1M/year. Claude Code reached $1B ARR within 6 months of launch. KPMG deployed Claude across 276,000 employees; PwC expanded its alliance. The Code with Claude conference (May 6, 2026) announced Dreaming (background agent self-optimization between sessions) and Outcomes (goal-oriented agents that iterate until success criteria are met), plus a partnership with SpaceX for access to the 220,000+ GPU Colossus supercluster.
 
 ### OpenAI's Path to Public Markets
 
@@ -381,6 +419,10 @@ xAI ceased to exist as a separate company on May 6, 2026. It is now the SpaceXAI
 ### Market Landscape & Business Model Disruption (as of mid-June 2026)
 
 The AI industry is undergoing a structural transformation that goes beyond technology improvements. It is reshaping how software is built, sold, and valued.
+
+**Big Tech earnings now move with frontier-lab valuations.** Amazon's Q2 2026 net income more than tripled to $62.6B, and the figure included a one-time, non-operating **pre-tax gain of $53.4B** tied largely to the rising value of its Anthropic investment. Strip that mark out and underlying profit growth was far more modest.
+
+The structural point matters more than the number. A cloud provider's reported earnings can now swing on the valuation of an AI partner it also sells compute to, which means the same relationship appears twice on the income statement in opposite directions. When you read hyperscaler results as evidence of AI demand, separate the revenue from the mark.
 
 **The SaaS Shakeout.** In February 2026, Anthropic's launch of Claude Cowork triggered a 48-hour selloff that wiped approximately $285 billion from SaaS company valuations. The rolling impact exceeded $2 trillion in total SaaS market cap erosion since the start of 2026. The mechanism: AI agents demonstrated they could replace entire categories of knowledge work previously handled by SaaS tools with per-seat licenses. One AI-equipped user does the work of five, reducing seats needed. Software P/S ratios compressed from 9x to 6x: levels not seen since the mid-2010s. The "SaaSpocalypse" (financial press term) is not a temporary correction, it reflects a structural repricing of the value of traditional software.
 
