@@ -489,6 +489,9 @@
 - Distributed consensus protocols (CFT, BFT)
 - Market-based consensus mechanisms
 - Error propagation: how errors spread in MAS
+- **Measured failure modes**: herding (18 of 30 agents on one branch), queue collapse (2.4M polls, 117 jobs), false consensus, conflict escalation, emergent price collusion
+- **Coordination buys breadth, not quality**: 27M vs 6.5M tokens, only 12 findings overlapping
+- **Structure is not the lever**: prescriptive roles and CEO hierarchy gave negligible improvement, merge rates fell from 10 to 80 agents
 - Evaluating multi-agent system quality
 
 ---
@@ -519,7 +522,11 @@
   - Progress reporting
   - Cancellation
 - Prompts: interaction templates
-- Sampling: reverse model queries
+- Sampling: reverse model queries (**deprecated 2026-07-28**, migrate to a provider API)
+- Elicitation and **MRTR**: the server states what it needs, the client retries
+- Tasks: now the `io.modelcontextprotocol/tasks` extension, polled via `tasks/get`
+- **Agent Plugins 1.0**: `plugin.json`, `SKILL.md` skills, optional `mcp.json`, and why a plugin is a supply-chain dependency
+- **WebMCP**: a page declares its own tools through `document.modelContext`
 - Component interaction
 - Lifecycle and discovery
 

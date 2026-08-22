@@ -16,7 +16,7 @@
 
 - **Practical**: Code examples in Java, Python, and Rust. Not toy demos.
 - **Deep**: From attention mechanism internals to RLHF pipelines and GPU optimization
-- **Current**: MCP protocol, Context Engineering (Karpathy 2025), DeepSeek-R1, A2A protocol
+- **Current**: content through August 2026. Stateless MCP (2026-07-28), agent runtime and model routing as separate layers, EU AI Act enforcement, measured multi-agent failure data
 - **Production-focused**: Deployment, observability, security, cost optimization, and governance
 - **Enterprise-grade**: Multi-tenant patterns, compliance frameworks, and real-world case studies
 
