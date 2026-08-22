@@ -50,6 +50,12 @@ The most common multi-agent pattern in production. A manager agent decomposes th
 
 Use cases: complex multi-level tasks (creating a marketing campaign: strategist, then channel agents, then copywriters/designers), software projects with natural decomposition, research tasks with specialized sub-questions. Complexity isolation: the top level has no knowledge of lower-level details.
 
+**What the org-chart analogy does and does not buy.** Anthropic's 2026 multi-agent study tested prescriptive roles and a CEO-style hierarchy against plain collaboration on teams of 10 to 80 agents building software, and found negligible improvement from either. That result does not contradict this pattern, and the distinction is worth being precise about, because the two are easy to conflate.
+
+What failed in the study was imposing an org chart on peers working the same codebase. Every agent still saw the whole problem, still chose its own work, and the hierarchy existed only as instruction. What works here is different: the manager **decomposes the task**, so each worker receives a bounded subtask with its own inputs and its own definition of done, and never contends with a peer over the same file.
+
+The lever is the decomposition, not the reporting line. A manager that assigns roles without partitioning the work produces the arrangement the study measured, where merge rates fell as the team grew. Module 04, Multi-Agent Consensus and Reliability has the failure data.
+
 Challenges: communication overhead (information passes up/down, losing detail at each level), cross-branch coordination (communication through a distant common ancestor), manager as bottleneck (the manager must be capable enough to decompose correctly, a weak manager undermines the entire system).
 
 ## Peer-to-Peer Collaboration

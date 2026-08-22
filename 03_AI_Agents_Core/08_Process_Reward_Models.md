@@ -490,4 +490,4 @@ Temperature scaling is a post-processing technique for improving calibration: di
 
 **Related materials:**
 - Module 10, RLHF and Alignment
-- Module 01, Inference-time compute and o1-style reasoning
+- Module 10, Test-Time Compute, for the dedicated treatment of inference-time compute, and Module 01, Scaling Laws, for it as a scaling regime

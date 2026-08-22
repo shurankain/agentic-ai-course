@@ -209,7 +209,7 @@ The open-weight landscape stopped trailing during 2026. On SWE-bench Verified, D
 
 Two qualifications keep this honest. Licenses have diverged: some of the strongest releases carry custom terms rather than MIT or Apache 2.0, so "open weights" no longer implies "usable on your terms". And serving capacity bounds real availability. Moonshot halted new subscriptions for Kimi K3 when demand outran its compute, which is a constraint a benchmark table cannot show you.
 
-The open-weight question has also become a policy question. In July 2026 Nvidia, Microsoft, Meta, Mistral, and Hugging Face signed an open letter opposing premature restrictions on open-weight models, arguing that distillation is a long-standing legitimate technique and that open models help defenders. OpenAI, Anthropic, Google DeepMind, and SpaceX did not sign. In parallel the US administration accused Moonshot of distilling Anthropic's Fable model to train Kimi K3, and Treasury threatened sanctions against Chinese AI firms. Module 18 covers where that fight stands.
+The open-weight question has also become a policy question. In July 2026 Nvidia, Microsoft, Meta, Mistral, and Hugging Face signed an open letter opposing premature restrictions on open-weight models, arguing that distillation is a long-standing legitimate technique and that open models help defenders. OpenAI, Anthropic, Google DeepMind, and SpaceX did not sign. In parallel the US administration accused Moonshot of distilling Anthropic's Fable model to train Kimi K3, and Treasury threatened sanctions against Chinese AI firms. This is a live fault line rather than a settled question, and it decides whether the open-weight tier stays available to you at all.
 
 ### DeepSeek
 
