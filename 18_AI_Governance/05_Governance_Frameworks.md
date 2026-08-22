@@ -124,6 +124,16 @@ Comprehensive policies covering:
 
 Model cards ensure transparency and accountability. They help users understand a model's capabilities and limitations. They support audits and regulatory compliance.
 
+### Artifact Lineage
+
+A model card documents the model. It does not document what the model produced, and since August 2, 2026 that second record carries regulatory weight: Article 50 of the EU AI Act and California's SB 942 both require generated content to be marked and detectable.
+
+Vendors supply two external signals toward that, and both are weaker than they sound. A statistical watermark such as SynthID-Text lives in the token distribution and degrades under editing or rewriting, with poor detectability on short or factual text. C2PA metadata is attached to the file and disappears on re-save, screenshot, or format conversion. Neither establishes authorship, and neither survives an ordinary editing workflow intact.
+
+The record that does survive is the one you keep. For every consequential artifact, store alongside it: the model and version that produced it, the prompt or source data, the policy that applied at the time, the edit history, and the human who approved it. That lineage answers the question a regulator, an auditor, or an incident review actually asks, which is who is accountable for this output, rather than whether a model touched it.
+
+Two design consequences follow. First, treat vendor watermarks as **boundary controls**, useful for content arriving from outside where no lineage exists, and not as a substitute for internal records. Second, **never let a detector result stand alone as evidence against a person**. It is probabilistic, it misclassifies, and an organization that disciplines an employee on that basis has adopted a tool with a known false-positive rate as a verdict. Module 14 covers the failure modes in detail.
+
 ### Model Lifecycle Management
 
 AI models require lifecycle governance from ideation to retirement:

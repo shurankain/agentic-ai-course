@@ -164,9 +164,49 @@ Users have the right to know how the system works and how their data is processe
 
 **Audit trails** for accountability: who made what decisions, on what basis, when. Especially important for consequential decisions.
 
+## Marking Generated Content: What the Obligation Buys
+
+Article 50 requires synthetic text, audio, image, and video to be marked in a machine-readable format and detectable as AI-generated, enforceable since August 2, 2026. California's SB 942 became operative the same day with a similar demand. So the question stops being whether to mark generated content and becomes what marking actually proves.
+
+The answer is less than the regulation implies, and knowing the gap is the practical part.
+
+### How the marks work
+
+**Statistical watermarking of text.** Anthropic described its implementation in August 2026, having signed the Article 50(2) Code of Practice. Text from Claude models launched on or after August 2 carries an invisible watermark produced with SynthID-Text, which slightly biases token selection according to a secret key. Nothing is inserted into the text: no hidden characters, no personal identifiers, no special tokens. The bias lives in the distribution, which is why it survives copying and reformatting.
+
+**File-bound provenance.** For generated `.svg`, `.png`, and `.jpg` files, Anthropic attaches signed C2PA metadata, the cross-industry standard for content credentials. Google applies SynthID across Gemini outputs on the same principle.
+
+### What they do not prove
+
+Anthropic states the limits plainly, and they are worth repeating because a compliance checkbox invites over-reading. Detectability drops on short text, on factual answers where correct output is heavily constrained, on code, and after editing or a full rewrite. A statistical watermark needs enough tokens of free choice to encode a signal, and a two-sentence factual answer does not have them.
+
+More important is what a positive detection means. It says the text **may** have been produced with Claude. It does not establish authorship, and it says nothing about how much a human contributed afterwards. **A detector result must not be the sole basis for an accusation or a sanction against an employee or a student.** Given who reads this course, that is the operational sentence in this section.
+
+The industry has already run this experiment in public. When Substack added a detection tool that scores a post as AI or human, its own writers revolted, on the well-documented grounds that such detectors regularly misclassify human writing. A probabilistic signal presented as a verdict produces false accusations at a predictable rate, and the people wrongly accused have no way to prove a negative.
+
+### The three-source model
+
+The useful architectural conclusion is that provenance is not one thing. Three separate sources exist, they fail differently, and a design should know which one it is relying on.
+
+| Source | Where it lives | How it fails |
+|--------|----------------|--------------|
+| Statistical watermark | In the token distribution | Degrades under rewriting, weak on short or constrained text |
+| C2PA metadata | Attached to the file | Vanishes on re-save, screenshot, or format conversion |
+| Internal audit trail | In your own systems | Only covers what your systems mediated |
+
+For an enterprise process the lineage record is primary and the other two are supplementary external signals. Store model version, origin, the policy that applied, the edit history, and the human approval alongside the artifact. That record is the only one of the three you control, the only one that survives a rewrite, and the only one that can answer "who approved this" rather than "was a model involved".
+
+Watermarks and C2PA earn their place at the boundary, where content arrives from outside and no lineage record exists. Inside your own process, relying on them instead of an audit trail means choosing the weakest of the three.
+
 ## Key Takeaways
 
 The LLM system operator bears responsibility for generated content. Moderation is a mandatory component of any production application.
+
+Marking generated content is now a legal obligation in the EU and California, and marking proves far less than the obligation implies. A statistical watermark degrades under editing and is weak on short or factual text; C2PA metadata vanishes on re-save. A positive detection means a model may have been involved, and nothing about authorship or how much a human contributed.
+
+Never use a detector result as the sole basis for accusing or sanctioning a person. These tools misclassify human writing at a known rate, and the accused cannot prove a negative.
+
+Provenance has three sources with different failure modes: the watermark in the token distribution, the C2PA metadata on the file, and your own audit trail. Only the third one survives a rewrite and answers who approved the output, so keep it as the primary record and treat the other two as boundary controls for content arriving from outside.
 
 Multi-layered moderation combines keyword filtering (fast, coarse), ML classifiers (fast, more precise), LLM-as-Judge (slow, complex cases). Cascade architecture balances latency, cost, and accuracy.
 
