@@ -136,7 +136,7 @@ Anthropic researchers applied SAE to Claude and discovered thousands of interpre
 - **Deception feature**: activates on texts about deception or manipulation
 - **Sycophancy feature**: activates on excessively agreeable responses
 
-Importantly, these features can be detected and **modified**. Amplifying the "Golden Gate Bridge feature" causes the model to mention the bridge more frequently (the famous "Golden Gate Claude" experiment).
+These features can be detected and also **modified**. Amplifying the "Golden Gate Bridge feature" causes the model to mention the bridge more frequently (the famous "Golden Gate Claude" experiment).
 
 ### SAE Limitations
 

@@ -6,7 +6,7 @@ Inference requires significant expenditure. A single GPT-5.6 request with long c
 
 **Cost Structure:**
 
-GPU compute is the primary expense. Cloud service prices (approximate, vary by provider and region):
+GPU compute is the primary expense. Cloud service prices (approximate, vary by provider and region, as of August 2026):
 - T4: $0.50-1.00/hour
 - L4: $0.70-1.20/hour
 - A100 40GB: $2.50-4.00/hour
@@ -18,6 +18,8 @@ GPU compute is the primary expense. Cloud service prices (approximate, vary by p
 Llama 70B on A100-80GB: ~$0.001-0.002 per 1000 tokens. At 100M tokens per day: $3000-6000 per month (compute only).
 
 Memory limits model size and batch size. Networking in multi-GPU adds 10-20%. Storage negligible.
+
+**Treat these hourly rates as the least stable line in your model.** Memory, not silicon, became the binding cost during 2026: DRAM went from about $2.80 per GB to roughly $12 as AI data centers absorbed the bulk of global output, and Microsoft attributed $25B of its CapEx increase to memory and component prices alone. Accelerator rental prices lag that move rather than escaping it. Two practical consequences. A twelve-month cost projection built on today's rates needs a sensitivity band rather than a point estimate, and any optimization that cuts memory footprint, meaning quantization, KV-cache compression, and paged attention, now buys more than it did when memory was cheap. Module 15, GPU Architecture covers the supply picture.
 
 **Metrics:**
 

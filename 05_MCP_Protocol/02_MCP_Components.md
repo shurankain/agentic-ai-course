@@ -20,7 +20,7 @@ Each resource in MCP is identified by a URI: a universal resource identifier. Th
 
 A resource contains data and metadata. The MIME type indicates the content format: text, JSON, image, or another type. The name and description help the client and user understand the resource's purpose. This metadata is critically important for proper information processing and presentation.
 
-Notably, MCP supports two types of resource content: text and binary. Text content is transmitted directly, while binary content is encoded in base64. This allows working with documents and code, with images, audio, and other media files.
+MCP supports two types of resource content: text and binary. Text content is transmitted directly, while binary content is encoded in base64. This allows working with documents and code, with images, audio, and other media files.
 
 ### URI Design for Resources
 
@@ -166,7 +166,7 @@ Understanding the complete Sampling request cycle is important for secure implem
 
 **Model Interaction:** Only after all checks and modifications does the client perform the actual API call to the language model. This is the single point of contact with the LLM in MCP architecture. The model processes the request and returns a response to the client.
 
-**Filtering and Return:** After receiving the response from the model, the client can additionally filter or modify it before sending it to the server. This is the second layer of protection, preventing sensitive information leakage. Finally, the filtered response is sent back to the server in the `SamplingResponse` format.
+**Filtering and Return:** After receiving the response from the model, the client can filter or modify it once more before sending it to the server. This is the second layer of protection, preventing sensitive information leakage. Finally, the filtered response is sent back to the server in the `SamplingResponse` format.
 
 **Processing Stages on the Client Side:**
 

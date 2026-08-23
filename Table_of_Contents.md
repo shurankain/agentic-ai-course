@@ -75,12 +75,15 @@
   - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash: in-house models, Build 2026)
   - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash: open weights MIT)
   - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer) + **Nano Omni** (30B omni-modal)
-  - **Kimi K2.7-Code** (June 12, +21.8% vs K2.6); **MiniMax 3** (~$0.53/MTok, 15-30x cheaper)
+  - **Kimi K3** (Moonshot, ~2.8T MoE, 1M context, custom licence, signups paused on capacity); **Kimi K2.7-Code**; **MiniMax 3** (~$0.53/MTok)
   - **Huawei Ascend** ramp: 910C ~600K units, Atlas 950 SuperPoD Q4 2026
-  - Meta (Llama)
+  - Meta (Llama; **Muse Glimmer**, Apache 2.0 multimodal)
   - Mistral
+- **Open weights now lead on some benchmarks**: DeepSeek V4 Pro ~96.4% SWE-bench Verified, licences diverging from MIT and Apache 2.0, serving capacity as the real limit
+- **Open-weight availability as a policy risk**: the July open letter, the Kimi K3 distillation accusation, threatened sanctions
 - API structure: common principles
 - Pricing comparison
+- **ARR figures on different accounting bases**: gross against net, the ordering unresolved
 - Choosing a model for different tasks
 - Tool Use / Function Calling
 - Reliability strategies
@@ -364,6 +367,7 @@
   - Plan, then Edit, then Test, then Debug loop
   - Codebase understanding via RAG
   - Multi-file editing
+- **IDE market consolidation**: SpaceX and Cursor closed August 14, one owner across IDE, runtime, routing, telemetry, and compute, and the five contract questions that follow
 - Code agent security
   - Sandboxed execution
   - Git-based changes
@@ -1356,6 +1360,9 @@
   - Mixed precision computation
 - Memory coalescing and bandwidth optimization
 - **Vera Rubin in full production** (Computex June 1, 2026); **RTX Spark** ARM AI PC (128GB, 1 PFLOP)
+- **Supply, not demand, is the constraint**: TSMC N3 caps 2026 Rubin output at 200-300K units
+- **Frontier labs building their own silicon**: OpenAI Jalapeño with Broadcom, AMD acquiring Taalas, Anthropic in talks with Samsung
+- **Memory became the binding cost**: ~70% of global output to AI data centers, DRAM $2.80 to ~$12 per GB
 - **Energy constraint**: ~1,000 TWh data centers by 2026, SMR pipeline 25 to 45 GW
 - GPU operation profiling
 
@@ -1485,6 +1492,7 @@
   - Decode: token generation
 - KV-cache: mechanics and size calculation
 - Latency vs Throughput trade-offs
+- **Latency sold as a product tier**: Ultrafast preview (GPT-5.6 Sol on Cerebras, ~750 tok/s, no SLA)
 - Batching strategies
 - GPU characteristics for inference
 
@@ -1498,6 +1506,7 @@
   - Preemption strategies
 - Prefix Caching: KV-cache reuse
 - Tensor Parallelism in vLLM
+- **v0.24 and the version scheme**: `CUDA_VISIBLE_DEVICES` no longer set internally (`device_ids` replaces it), minor bumps can break, no v1.0 pending
 - Practical vLLM deployment
 
 ### 17.3 Speculative Decoding (`03_Speculative_Decoding.md`)
@@ -1754,7 +1763,11 @@
 - **Market Landscape (mid-June 2026)**: SaaS $285B shakeout, per-seat, then outcome pricing, AI market $601.93B, then $3,638B (2033), inference economics as center of gravity
 - **AI, Energy & Sustainability**: ~90 TWh AI-specific, nuclear/SMR procurement (25 to 45 GW), data center moratoria
 - **Workforce Impact**: augmentation > replacement, 62% AI salary premium, developer productivity ~20-30% (not 10x)
-- **SpaceX acquires Cursor $60B** (June 16); SPCX ATH $225.64 to corrected to ~$185; **Tim Cook steps down Sept 1**
+- **What enterprise usage actually looks like**: frontier firms at 8.3x output tokens per user, Codex 64% of enterprise output, one vendor's telemetry and what it cannot show
+- **Open weights as a procurement risk**: the July open letter and who declined to sign, availability risk that a hosted API does not carry
+- **Model labs entered the market directly**: OpenAI Presence, ChatGPT Work, Gemini Enterprise, Cloudflare Kitesurf
+- **ARR on different accounting bases**: Anthropic gross against OpenAI net, so $47B to $25B is not a ranking
+- **SpaceX acquires Cursor $60B** (announced June 16, closed August 14); SPCX ATH $225.64 to corrected to ~$185; **Tim Cook steps down Sept 1**
 - **Visa Agent Score**: first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
 - **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale
 - **FERC fast-tracks AI data centers**: 9-17% US electricity by 2030; 370kW rack densities
@@ -1926,6 +1939,7 @@
   - RetNet: Retentive Networks
 - Hybrid Architectures
   - Jamba: SSM + Attention + MoE
+  - **Nemotron 3.5 Lightning** (30B MoE, 3B active, Mamba-2 + MoE + attention interleaved, OpenMDW 1.1): 1M context is a property of the serving topology, 256K on a single H100
   - When SSM vs Transformer
 - Current SSM Limitations
   - In-context learning challenges
@@ -1955,6 +1969,7 @@
   - Temporal modeling challenges
   - Frame sampling strategies
   - Efficiency considerations
+- **Muse Glimmer** (Meta, August 10, Apache 2.0): ~29.6B with a ~1.8B ViT-G/14 encoder, three local layers to one global across 52 layers, why the memory claim needs quantization and context stated
 - **Emerging Frontiers (mid-2026)**
   - World Models (environment prediction, digital twins, convergence 2027)
   - Vision-Language-Action (VLA) models (Gemini Robotics, NVIDIA GR00T, Figure AI)
