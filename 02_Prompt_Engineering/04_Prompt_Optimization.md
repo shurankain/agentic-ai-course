@@ -89,8 +89,8 @@ Consider a concrete scenario. You have a customer support agent and want to test
 
 Every token costs money. At scale this is critical:
 - 1,000 tokens per prompt x 1M requests per day = 1B tokens per day
-- At $3 per 1M input tokens (e.g., Claude Sonnet 4.6) = $3,000 per day = $90,000 per month
-- Using a cheaper model like GPT-4o-mini ($0.15 per 1M) = $150 per day
+- At $3 per 1M input tokens (Claude Sonnet 5 at its standard rate) = $3,000 per day = $90,000 per month
+- On a high-volume tier such as GPT-5.6 Luna ($0.20 per 1M) = $200 per day
 
 Reducing the prompt by 30% yields proportional savings regardless of model tier.
 
@@ -214,7 +214,7 @@ DSPy from Stanford NLP reimagines working with prompts: instead of manually writ
 
 **Why Manual Prompting Does Not Scale**
 
-Traditional prompting suffers from several problems: Brittleness (small changes radically alter results), Non-composability (difficult to combine prompts into pipelines), Model-specificity (a prompt optimized for GPT-4o may perform poorly on Claude), No systematic improvement (iterations are based on intuition, not data).
+Traditional prompting suffers from several problems: Brittleness (small changes radically alter results), Non-composability (difficult to combine prompts into pipelines), Model-specificity (a prompt optimized for GPT-5.6 may perform poorly on Claude), No systematic improvement (iterations are based on intuition, not data).
 
 DSPy addresses this through a **declarative approach**: you describe *what* needs to be done, and the system determines *how*.
 

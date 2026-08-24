@@ -93,16 +93,18 @@ Ideal: already in the HF ecosystem, enterprise features needed, team familiar wi
 
 ## Comparison Table
 
+Rated 1 to 5, where 5 is the best of these four for that dimension rather than an absolute score.
+
 | Feature | vLLM | SGLang | TensorRT-LLM | TGI |
 |---------|------|--------|--------------|-----|
-| Throughput batch | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Throughput chat | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Latency | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Ease of Use | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ |
-| Constrained Gen | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Model Support | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| FP8 Support | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Maturity | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Throughput, batch | 5 | 4 | 5 | 4 |
+| Throughput, chat | 4 | 5 | 4 | 3 |
+| Latency | 4 | 4 | 5 | 4 |
+| Ease of use | 5 | 4 | 2 | 5 |
+| Constrained generation | 3 | 5 | 2 | 3 |
+| Model support | 5 | 4 | 3 | 5 |
+| FP8 support | 3 | 3 | 5 | 3 |
+| Maturity | 5 | 4 | 4 | 5 |
 
 ## Decision Framework
 

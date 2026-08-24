@@ -449,8 +449,6 @@
 - Agent roles and specialization
 - Coordination challenges
 - Agent lifecycle
-
-### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`): continued
 - 8-question decision framework (including cost-focused criteria)
 - Market Reality 2026 (57% have agents in production; most are single-agent)
 

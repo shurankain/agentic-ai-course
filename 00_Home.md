@@ -70,7 +70,7 @@ Welcome to the course on AI agent and agentic system development. This curriculu
 
 ## About Code Examples
 
-All code examples in this course are written in **Java** (preferred) or **Rust** (where more appropriate). Examples closely reflect real-world usage scenarios.
+The course teaches architecture and decisions rather than syntax, so most lessons carry tables, worked numbers, and prose walkthroughs instead of listings. Where a listing earns its place, meaning prompt structures, framework wiring, and guardrail configuration, it is in **Java** first, then **Python**. Module 19 and Module 21 are the two places with runnable end-to-end material.
 
 ---
 

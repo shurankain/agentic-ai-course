@@ -14,7 +14,7 @@
 
 ## Why This Course
 
-- **Practical**: Code examples in Java, Python, and Rust. Not toy demos.
+- **Practical**: architecture, tradeoffs, and real numbers, with Java and Python listings where syntax is the point. Not toy demos.
 - **Deep**: From attention mechanism internals to RLHF pipelines and GPU optimization
 - **Current**: content through August 2026. Stateless MCP (2026-07-28), agent runtime and model routing as separate layers, EU AI Act enforcement, measured multi-agent failure data
 - **Production-focused**: Deployment, observability, security, cost optimization, and governance

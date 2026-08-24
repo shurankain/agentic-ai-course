@@ -355,12 +355,12 @@ The table below provides a side-by-side comparison of the three leading open-sou
 | **Architecture** | MoE (671B/37B) | MoE (400B/17B) | MoE (235B/22B) |
 | **Context** | 128K | 1M+ | 128K |
 | **Licensing** | MIT-like | Llama License | Apache 2.0 |
-| **Commercial use** | ✅ | ✅ (with restrictions) | ✅ |
-| **Reasoning** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ (hybrid) |
-| **Coding** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Math** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Multilingual** | ⭐⭐ (CN focus) | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ (119 langs) |
-| **Multimodal** | Text only (V3) | ✅ Native | ✅ |
+| **Commercial use** | Yes | Yes, with restrictions | Yes |
+| **Reasoning** | 5 of 5 | 3 of 5 | 4 of 5, hybrid |
+| **Coding** | 4 of 5 | 3 of 5 | 4 of 5 |
+| **Math** | 5 of 5 | 3 of 5 | 4 of 5 |
+| **Multilingual** | 2 of 5, Chinese focus | 3 of 5 | 5 of 5, 119 languages |
+| **Multimodal** | Text only (V3) | Native | Yes |
 
 ### Practical Recommendations
 

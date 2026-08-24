@@ -62,7 +62,7 @@ During fine-tuning, model weights are adjusted based on examples of desired beha
 
 ## Cost and Resources
 
-**Direct training costs:** OpenAI charges approximately $0.003 per 1000 training tokens for GPT-4o-mini (as of early 2026). Training on 1000 examples can cost $50-200.
+**Direct training costs:** hosted fine-tuning is billed per training token, at rates on the order of $0.003 per 1000 tokens for a small model, so 1000 examples land somewhere between $50 and $200. Check the provider's current rate card rather than this figure, because fine-tuning prices move with inference prices and both fell through 2026.
 
 **Indirect costs:** collecting, labeling, and validating the dataset can take weeks.
 

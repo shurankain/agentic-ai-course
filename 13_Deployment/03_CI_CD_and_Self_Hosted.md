@@ -14,7 +14,7 @@ Prompt versioning deserves special attention. A prompt is an artifact like code 
 
 **Second stage**: unit tests. Executed with mocked LLM clients, no API keys required. Tests cover request and response processing logic, prompt construction, result parsing, and error handling. High coverage is critically important.
 
-**Third stage**: integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, use cheaper models (GPT-4o-mini instead of GPT-5.6).
+**Third stage**: integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, run them on a high-volume tier such as GPT-5.6 Luna or Claude Haiku 4.5 rather than the frontier model.
 
 **Fourth stage**: building and publishing the Docker image. Tagged with commit SHA for unique identification. The latest tag is updated only for the main branch. Parallel execution of independent stages accelerates the pipeline. Integration tests wait for unit test success.
 
@@ -130,7 +130,7 @@ A circuit breaker monitors self-hosted health. When the error rate or latency is
 
 Fallback between local and cloud models improves availability. API unification is achieved through OpenAI-compatible endpoints: vLLM exports the OpenAI API, and the client works identically. Differences in capabilities are handled through a capability registry: before sending, it checks whether the target model supports the required features; otherwise, fallback or error.
 
-Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially GPT-4o-mini ($0.0005). 5% are complex tasks, GPT-5.6 ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
+Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially a high-volume hosted tier such as GPT-5.6 Luna ($0.0005). 5% are complex tasks, GPT-5.6 Sol ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
 
 ## Monitoring Inference Servers
 

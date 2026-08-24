@@ -529,13 +529,15 @@ Choosing a vector database is an infrastructure decision with long-term implicat
 
 ### Red Flags in Interviews
 
-❌ "Just use ChatGPT with all documents in context": lack of understanding of cost/latency
-❌ "We'll use the best embedding model", no domain-specific understanding
-❌ "Vector search will find everything", lack of understanding of semantic search limitations
-❌ "We'll evaluate with accuracy", lack of understanding of RAG-specific metrics
-❌ Ignoring production concerns: no production experience
+Five answers that end the conversation, and what each one tells the interviewer:
 
-✅ **Correct approach:** Analyze trade-offs, consider domain, combine dense + BM25, use specific metrics (faithfulness, relevance), address monitoring/fallbacks/cost.
+- "Just use ChatGPT with all documents in context" says you have not costed a long-context call or measured its latency
+- "We'll use the best embedding model" says you have not tested retrieval on domain text
+- "Vector search will find everything" says you have not hit the limits of semantic search
+- "We'll evaluate with accuracy" says you do not know the RAG-specific metrics
+- Saying nothing about production says you have not run one
+
+What lands instead: analyse the trade-offs out loud, name the domain constraint, combine dense retrieval with BM25, quote faithfulness and relevance rather than accuracy, and cover monitoring, fallbacks, and cost without being asked.
 
 ---
 
