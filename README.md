@@ -78,7 +78,7 @@ Start with [01. LLM Basics](./01_LLM_Fundamentals/01_LLM_Basics.md) and follow t
 
 ## How to Use
 
-Start from [00_Home.md](./00_Home.md) or the [Table of Contents](./Table_of_Contents.md). Both link straight to every module.
+Start from [00_Home.md](./00_Home.md) for the seven-part map, or the [Table of Contents](./Table_of_Contents.md), which links to all 117 lessons and lists the topics inside each one.
 
 Lessons are numbered and grouped by module directory, so the reading order is the file order. Each lesson stands on its own, and where a topic is covered in depth elsewhere the text names the module. Read it on GitHub, in Obsidian, or in any Markdown viewer.
 

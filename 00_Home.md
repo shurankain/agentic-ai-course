@@ -2,6 +2,8 @@
 
 Welcome to the course on AI agent and agentic system development. This curriculum is designed for Java engineers transitioning into AI agent development.
 
+This page is the coarse map: seven parts, 21 modules, each link opening that module's first lesson. For the full index, meaning all 117 lessons with the topics inside each one, go to the [Table of Contents](Table_of_Contents.md).
+
 ## Course Structure
 
 ### Part I: Foundation

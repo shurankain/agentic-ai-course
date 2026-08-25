@@ -1,13 +1,13 @@
 # AI Agents Course: Full Contents
 
-> Detailed table of contents for all topics covered in the course.
-> The structure maps exactly to the course files.
+> Every lesson in the course, with the topics inside it. Each heading links to the file.
+> 21 modules, 117 lessons. [00_Home](00_Home.md) is the shorter map if you want the seven parts first.
 
 ---
 
 ## 01. LLM Fundamentals
 
-### 01.1 LLM Basics (`01_LLM_Basics.md`)
+### 01.1 [LLM Basics](01_LLM_Fundamentals/01_LLM_Basics.md)
 - What LLMs are and why they are "large"
 - Transformer architecture: a revolution in language processing
   - The world before Transformers (RNN, LSTM, GRU)
@@ -23,7 +23,7 @@
 - In-Context Learning: learning without training
 - Connection to AI agents
 
-### 01.2 Tokenization (`02_Tokenization.md`)
+### 01.2 [Tokenization](01_LLM_Fundamentals/02_Tokenization.md)
 - Why you can't just use characters or words
   - Character-level approach
   - Word-level approach
@@ -40,7 +40,7 @@
 - Tokenization problems and their consequences
 - Tokenization in the context of AI agents
 
-### 01.3 Context Windows (`03_Context_Windows.md`)
+### 01.3 [Context Windows](01_LLM_Fundamentals/03_Context_Windows.md)
 - What goes into the context window
 - Evolution of context sizes
 - Why context is limited
@@ -54,7 +54,7 @@
 - Working with long documents
 - Optimizing context usage
 
-### 01.4 Generation Parameters (`04_Generation_Parameters.md`)
+### 01.4 [Generation Parameters](01_LLM_Fundamentals/04_Generation_Parameters.md)
 - How LLMs generate text
 - Temperature: degree of randomness
 - Top-p (Nucleus Sampling): adaptive selection
@@ -67,7 +67,7 @@
 - Generation parameters in AI agents
 - Impact on cost and performance
 
-### 01.5 LLM Providers and APIs (`05_LLM_Providers_and_API.md`)
+### 01.5 [LLM Providers and APIs](01_LLM_Fundamentals/05_LLM_Providers_and_API.md)
 - Major providers and their models
   - OpenAI (**GPT-5.6**: Sol, Terra, Luna; GPT-5.5, o3, o4-mini, GPT-Rosalind, GPT-5.6-Cyber)
   - Anthropic (**Claude Opus 5**: about 96% SWE-bench Verified; **Fable 5**: Mythos-class, 95.0%; Sonnet 5, Haiku 4.5; **model export ban June 12, lifted July 1**)
@@ -93,7 +93,7 @@
   - PagedAttention, Speculative Decoding
   - Quantization (INT8, INT4, GPTQ, AWQ)
 
-### 01.6 Integration Patterns (`06_Integration_Patterns.md`)
+### 01.6 [Integration Patterns](01_LLM_Fundamentals/06_Integration_Patterns.md)
 - Synchronous vs Asynchronous requests
   - The synchronous approach problem
   - Asynchronous approach (CompletableFuture)
@@ -112,7 +112,7 @@
 - Error handling
 - Monitoring and metrics
 
-### 01.7 Modern Architectures (`07_Modern_Architectures.md`)
+### 01.7 [Modern Architectures](01_LLM_Fundamentals/07_Modern_Architectures.md)
 - Mixture of Experts (MoE)
   - The philosophy of sparse computation
   - MoE architecture: router, experts
@@ -130,7 +130,7 @@
   - Architectural patterns of hybrid models
 - Choosing an architecture: decision framework
 
-### 01.8 Scaling Laws (`08_Scaling_Laws.md`)
+### 01.8 [Scaling Laws](01_LLM_Fundamentals/08_Scaling_Laws.md)
 - Original OpenAI Scaling Laws
   - Power-law dependencies of loss on N, D, C
   - Practical implications
@@ -148,7 +148,7 @@
   - o1/o3 models
   - A new dimension of scaling
 
-### 01.9 Interpretability (`09_Interpretability.md`)
+### 01.9 [Interpretability](01_LLM_Fundamentals/09_Interpretability.md)
 - Why understanding what's inside a model matters
 - Circuits and Features
   - Attention heads as pattern matchers
@@ -166,7 +166,7 @@
 - Connection to alignment and safety
 - Current limitations of interpretability
 
-### 01.10 Implementation from Scratch (`10_Implementation_from_Scratch.md`)
+### 01.10 [Implementation from Scratch](01_LLM_Fundamentals/10_Implementation_from_Scratch.md)
 - Why understanding the internals matters
 - Self-Attention mechanism
   - Query, Key, Value intuition
@@ -191,7 +191,7 @@
 
 ## 02. Prompt Engineering
 
-### 02.1 Introduction to Prompting (`01_Prompting_Basics.md`)
+### 02.1 [Introduction to Prompting](02_Prompt_Engineering/01_Prompting_Basics.md)
 - The prompt as a natural language program
 - Why this is critical for AI agents
 - Anatomy of an effective prompt
@@ -205,7 +205,7 @@
 - Common mistakes and how to avoid them
 - Iterative development process
 
-### 02.2 Advanced Prompting (`02_Advanced_Prompting.md`)
+### 02.2 [Advanced Prompting](02_Prompt_Engineering/02_Advanced_Prompting.md)
 - From basic techniques to mastery
 - Self-Consistency: the power of consensus
 - Tree of Thoughts: exploring the solution space
@@ -215,7 +215,7 @@
 - Structured Output: guaranteed formats
 - Prompt Chaining: decomposing complexity
 
-### 02.3 Agent Prompts (`03_Agent_Prompts.md`)
+### 02.3 [Agent Prompts](02_Prompt_Engineering/03_Agent_Prompts.md)
 - The special nature of agent prompts
 - System prompt: the agent's constitution
 - Role-based design
@@ -225,7 +225,7 @@
 - Multi-agent prompts
 - Agent prompt anti-patterns
 
-### 02.4 Prompt Optimization (`04_Prompt_Optimization.md`)
+### 02.4 [Prompt Optimization](02_Prompt_Engineering/04_Prompt_Optimization.md)
 - From a working prompt to production-ready
 - Prompt testing: the foundation of optimization
 - A/B testing prompts
@@ -235,7 +235,7 @@
 - Automated optimization
 - Optimization checklist
 
-### 02.5 Context Engineering (`05_Context_Engineering.md`)
+### 02.5 [Context Engineering](02_Prompt_Engineering/05_Context_Engineering.md)
 - Evolution: from Prompt Engineering to Context Engineering (Karpathy 2025)
 - Context Engineering philosophy: everything that shapes the context
 - 70% of errors from context, not model quality; scaffolding > model selection
@@ -258,7 +258,7 @@
 
 ## 03. AI Agents Core
 
-### 03.1 What is an AI Agent (`01_What_is_AI_Agent.md`)
+### 03.1 [What is an AI Agent](03_AI_Agents_Core/01_What_is_AI_Agent.md)
 - From chatbots to autonomous systems
 - Chatbot vs AI agent: fundamental differences
 - Agent work cycle: Observe, then Think, then Act, then Reflect
@@ -273,7 +273,7 @@
   - Step-by-step evolution: Augmented LLM, then Tools, then Memory, then Reasoning, then Multi-agent
   - Anthropic's recommendation (December 2024)
 
-### 03.2 Agent Architectures (`02_Agent_Architectures.md`)
+### 03.2 [Agent Architectures](03_AI_Agents_Core/02_Agent_Architectures.md)
 - Introduction
 - **Academic foundations of agent architectures**
   - Russell & Norvig: Perceive, then Reason, then Act, then Learn
@@ -294,7 +294,7 @@
 - Cognitive architectures: Inspired by the human mind
 - Choosing an architecture: Practical recommendations
 
-### 03.3 Tool Use (`03_Tool_Use.md`)
+### 03.3 [Tool Use](03_AI_Agents_Core/03_Tool_Use.md)
 - Introduction
 - The Function Calling concept
 - Anatomy of a tool
@@ -306,7 +306,7 @@
 - Tool security
 - Integration with LangChain4j
 
-### 03.4 Planning (`04_Planning.md`)
+### 03.4 [Planning](03_AI_Agents_Core/04_Planning.md)
 - Introduction
 - Task decomposition
 - Hierarchical planning
@@ -315,7 +315,7 @@
 - Adaptive planning
 - Parallel execution
 
-### 03.5 Memory Systems (`05_Memory_Systems.md`)
+### 03.5 [Memory Systems](03_AI_Agents_Core/05_Memory_Systems.md)
 - Introduction
 - Types of memory
   - Short-term memory
@@ -333,7 +333,7 @@
 - Mem0 (auto-fact extraction middleware), Amazon Bedrock Episodic Memory
 - **Memory Escalation Ladder** (sliding window, then summarization, then Mem0, then Letta, then Agentic RAG, then Graph RAG)
 
-### 03.6 Computer Use Agents (`06_Computer_Use_Agents.md`)
+### 03.6 [Computer Use Agents](03_AI_Agents_Core/06_Computer_Use_Agents.md)
 - Introduction: AI masters the human interface
 - Claude Computer Use: architecture and capabilities
   - Three tools: computer, text_editor, bash
@@ -350,7 +350,7 @@
 - Use Cases: QA automation, Legacy integration, Data entry
 - The future of Computer Use agents
 
-### 03.7 Code Generation Agents (`07_Code_Generation_Agents.md`)
+### 03.7 [Code Generation Agents](03_AI_Agents_Core/07_Code_Generation_Agents.md)
 - From autocomplete to autonomous developers
 - IDE-integrated tools
   - GitHub Copilot: 55% accepted suggestions
@@ -379,7 +379,7 @@
   - AI-to-AI code review
   - MCP tool description injection
 
-### 03.8 Process Reward Models (`08_Process_Reward_Models.md`)
+### 03.8 [Process Reward Models](03_AI_Agents_Core/08_Process_Reward_Models.md)
 - Why separate reward models for agents
 - Process vs Outcome Reward Models
   - PRM: reward for each step
@@ -396,7 +396,7 @@
   - Mitigation strategies
 - Connection to RLHF and Test-Time Compute
 
-### 03.9 Practical AI Agent Use Cases (`09_Agent_Use_Cases.md`)
+### 03.9 [Practical AI Agent Use Cases](03_AI_Agents_Core/09_Agent_Use_Cases.md)
 - Taxonomy of AI agent applications
 - **Coding Agents**: Cursor ~$4B ARR (SpaceX acquisition closed August 14), Claude Code $2.5B+ run rate, Devin $26B valuation. Terminal agents as new subcategory
 - **Agentic RAG**: Perplexity ($9B, 22M+ users, as of mid-2025). Router and Multi-agent patterns
@@ -410,7 +410,7 @@
 - **Code Review / Data Analysis / Internal Employee Agents**
 - Criteria for choosing a use case
 
-### 03.10 Resource Optimization (`10_Resource_Optimization.md`)
+### 03.10 [Resource Optimization](03_AI_Agents_Core/10_Resource_Optimization.md)
 - AI agent economics: Cost-aware approach
 - Cost-Aware Model Routing
   - Tiered architecture: Simple, then Standard, then Complex, then Reasoning
@@ -441,7 +441,7 @@
 
 ## 04. Multi-Agent Systems
 
-### 04.1 Multi-Agent System Fundamentals (`01_MAS_Basics.md`)
+### 04.1 [Multi-Agent System Fundamentals](04_Multi_Agent_Systems/01_MAS_Basics.md)
 - Introduction to the world of multiple agents
 - Why a single agent is not enough
 - What a multi-agent system is
@@ -452,7 +452,7 @@
 - 8-question decision framework (including cost-focused criteria)
 - Market Reality 2026 (57% have agents in production; most are single-agent)
 
-### 04.2 Multi-Agent System Patterns (`02_MAS_Patterns.md`)
+### 04.2 [Multi-Agent System Patterns](04_Multi_Agent_Systems/02_MAS_Patterns.md)
 - Architectural patterns as a design language
 - Supervisor pattern
 - Hierarchical agents
@@ -464,7 +464,7 @@
 - **Fan-Out/Fan-In**: parallel dispatch + aggregation (DAG with barrier sync)
 - **When Single-Agent Suffices**: reasoning models reduce multi-agent need; 10x cost consideration
 
-### 04.3 Agent Orchestration (`03_Agent_Orchestration.md`)
+### 04.3 [Agent Orchestration](04_Multi_Agent_Systems/03_Agent_Orchestration.md)
 - The conductor of an invisible orchestra
 - Routing and dispatching
 - Load balancing
@@ -473,7 +473,7 @@
 - Agent lifecycle management
 - Scaling
 
-### 04.4 MAS Frameworks (`04_MAS_Frameworks.md`)
+### 04.4 [MAS Frameworks](04_Multi_Agent_Systems/04_MAS_Frameworks.md)
 - Why frameworks are needed
 - LangGraph: graph-oriented orchestration
 - AutoGen: multi-agent dialog from Microsoft
@@ -482,7 +482,7 @@
 - OpenAI Swarm: experimental simplicity
 - Comparison and selection
 
-### 04.5 Consensus and Reliability of Multi-Agent Systems (`05_MAS_Consensus_and_Reliability.md`)
+### 04.5 [Consensus and Reliability of Multi-Agent Systems](04_Multi_Agent_Systems/05_MAS_Consensus_and_Reliability.md)
 - When agents must agree
 - Types of consensus in AI systems
 - Voting mechanisms
@@ -500,7 +500,7 @@
 
 ## 05. MCP Protocol (Model Context Protocol)
 
-### 05.1 MCP Basics (`01_MCP_Basics.md`)
+### 05.1 [MCP Basics](05_MCP_Protocol/01_MCP_Basics.md)
 - Introduction: a new standard for AI interaction
 - The problem MCP solves
 - What MCP is
@@ -513,7 +513,7 @@
 - **MCP 2026-07-28 final specification**: stateless core, no handshake or sessions, MRTR replaces server-initiated requests, Tasks as an extension, mandatory caching fields, formal deprecation policy
 - **Protocol Landscape**: MCP (agent, then tool) / A2A (agent, then agent) / ANP (agent, then open network, experimental)
 
-### 05.2 MCP Components (`02_MCP_Components.md`)
+### 05.2 [MCP Components](05_MCP_Protocol/02_MCP_Components.md)
 - Introduction to the MCP component model
 - Resources: access to data and content
   - URI schemes
@@ -532,7 +532,7 @@
 - Component interaction
 - Lifecycle and discovery
 
-### 05.3 MCP Server Development (`03_MCP_Server_Development.md`)
+### 05.3 [MCP Server Development](05_MCP_Protocol/03_MCP_Server_Development.md)
 - Introduction to server development
 - Architectural principles
 - Server lifecycle
@@ -548,7 +548,7 @@
 - Testing MCP servers
 - Monitoring and observability
 
-### 05.4 MCP Client Integration (`04_MCP_Client_Integration.md`)
+### 05.4 [MCP Client Integration](05_MCP_Protocol/04_MCP_Client_Integration.md)
 - Introduction to client integration
 - Client application architecture
 - Connecting to servers
@@ -557,7 +557,7 @@
 - User interface
 - Client-side security
 
-### 05.5 Agent-to-Agent Protocol (A2A) (`05_A2A_Protocol.md`)
+### 05.5 [Agent-to-Agent Protocol (A2A)](05_MCP_Protocol/05_A2A_Protocol.md)
 - Introduction: inter-agent communication
 - MCP vs A2A: different levels of abstraction
   - Vertical vs horizontal integration
@@ -577,7 +577,7 @@
 
 ## 06. RAG (Retrieval-Augmented Generation)
 
-### 06.1 RAG Basics (`01_RAG_Basics.md`)
+### 06.1 [RAG Basics](06_RAG/01_RAG_Basics.md)
 - Introduction to RAG
 - Problems RAG solves
   - Information freshness
@@ -597,7 +597,7 @@
 - Comparison with alternative approaches
 - RAG quality metrics
 
-### 06.2 Chunking Strategies (`02_Chunking_Strategies.md`)
+### 06.2 [Chunking Strategies](06_RAG/02_Chunking_Strategies.md)
 - Introduction to chunking
 - Fundamental considerations
   - Chunk size
@@ -610,7 +610,7 @@
 - Document type specifics
 - Chunking optimization
 
-### 06.3 Embeddings and Vector Stores (`03_Embeddings_and_Vector_Stores.md`)
+### 06.3 [Embeddings and Vector Stores](06_RAG/03_Embeddings_and_Vector_Stores.md)
 - The nature of embeddings
 - How embedding models work
 - Choosing an embedding model
@@ -626,7 +626,7 @@
 - Efficiency optimization
 - Monitoring and metrics
 
-### 06.4 Retrieval Methods (`04_Retrieval_Methods.md`)
+### 06.4 [Retrieval Methods](06_RAG/04_Retrieval_Methods.md)
 - The role of retrieval in RAG
 - Basic search methods
   - Semantic search
@@ -643,7 +643,7 @@
 - Filtering and metadata
 - Iterative and multi-hop retrieval
 
-### 06.5 Advanced RAG (`05_Advanced_RAG.md`)
+### 06.5 [Advanced RAG](06_RAG/05_Advanced_RAG.md)
 - Beyond basic RAG
 - **RAG architecture taxonomy**
   - Naive RAG (Retrieve-Read)
@@ -663,7 +663,7 @@
 - Evaluation and quality improvement
 - Performance optimization
 
-### 06.6 Late Interaction Retrieval (`06_Late_Interaction_Retrieval.md`)
+### 06.6 [Late Interaction Retrieval](06_RAG/06_Late_Interaction_Retrieval.md)
 - Evolution of Retrieval architectures: Sparse, then Dense, then Late Interaction
 - Late Interaction: principles and advantages
   - Multi-vector document representation
@@ -687,7 +687,7 @@
 
 ## 07. Frameworks
 
-### 07.0 AI Frameworks Overview (`00_Frameworks_Overview.md`)
+### 07.0 [AI Frameworks Overview](07_Frameworks/00_Frameworks_Overview.md)
 - Framework categories by abstraction level
   - High-level (No-code): n8n, Make, Zapier AI
   - Mid-level (Agent Frameworks): CrewAI, LangGraph, AutoGen
@@ -706,7 +706,7 @@
 - **JVM Ecosystem Parity:** JetBrains Koog (March 2026), MCP Java SDK 1.0 GA, Spring AI MCP starters, Java 26
 - Framework selection criteria (updated by language/need)
 
-### 07.1 LangChain4j (`01_LangChain4j.md`)
+### 07.1 [LangChain4j](07_Frameworks/01_LangChain4j.md)
 - Introduction to LangChain4j
 - Architecture and core components
   - ChatLanguageModel
@@ -716,7 +716,7 @@
 - Spring integration
 - Working with tools
 
-### 07.2 Spring AI (`02_Spring_AI.md`)
+### 07.2 [Spring AI](07_Frameworks/02_Spring_AI.md)
 - Introduction to Spring AI
 - Project philosophy
 - Spring AI architecture
@@ -728,7 +728,7 @@
 - Retrieval Augmented Generation
 - Observability
 
-### 07.3 Semantic Kernel (`03_Semantic_Kernel.md`)
+### 07.3 [Semantic Kernel](07_Frameworks/03_Semantic_Kernel.md)
 - Introduction to Semantic Kernel
 - Architectural concepts
   - Kernel
@@ -739,7 +739,7 @@
 - Connectors and extensions
 - Observability and debugging
 
-### 07.4 JAX Ecosystem (`04_JAX_Ecosystem.md`)
+### 07.4 [JAX Ecosystem](07_Frameworks/04_JAX_Ecosystem.md)
 - JAX philosophy: NumPy + Autodiff + XLA
 - Key transformations (jit, grad, vmap, pmap)
 - Ecosystem: Flax, Optax, Orbax
@@ -747,7 +747,7 @@
 - Practical patterns
 - Migrating from PyTorch
 
-### 07.5 AWS Strands Agents (`05_AWS_Strands_Agents.md`)
+### 07.5 [AWS Strands Agents](07_Frameworks/05_AWS_Strands_Agents.md)
 - AWS Strands: Open-Source SDK for agents (May 2025, GA July 2025)
 - Model-Driven vs Graph-Driven approaches
   - Model-Driven: LLM as orchestrator (Strands, Claude)
@@ -772,7 +772,7 @@
 
 ## 08. Structured Outputs
 
-### 08.1 Structured Output Techniques (`01_Structured_Output_Techniques.md`)
+### 08.1 [Structured Output Techniques](08_Structured_Outputs/01_Structured_Output_Techniques.md)
 - Introduction: when text is not enough
 - The unstructured text problem
 - Structured output guarantee levels
@@ -786,7 +786,7 @@
 - **Token-Optimized Output Notation (TOON)**: 69% token reduction vs JSON
 - Frameworks and libraries
 
-### 08.2 Data Extraction (`02_Data_Extraction.md`)
+### 08.2 [Data Extraction](08_Structured_Outputs/02_Data_Extraction.md)
 - Introduction: turning chaos into order
 - Types of extraction tasks
   - Named Entity Recognition
@@ -798,7 +798,7 @@
 - Handling ambiguity
 - Scaling extraction
 
-### 08.3 Validation and Error Handling (`03_Validation_and_Error_Handling.md`)
+### 08.3 [Validation and Error Handling](08_Structured_Outputs/03_Validation_and_Error_Handling.md)
 - Introduction: why the model isn't always right
 - Validation levels
   - Syntactic validation
@@ -814,7 +814,7 @@
 
 ## 09. Conversational AI
 
-### 09.1 Dialog Management (`01_Dialog_Management.md`)
+### 09.1 [Dialog Management](09_Conversational_AI/01_Dialog_Management.md)
 - Introduction: conversation as a dance
 - Anatomy of a dialog
 - Dialog state
@@ -822,7 +822,7 @@
 - Slot filling
 - Multi-turn dialogs
 
-### 09.2 Conversation Design (`02_Conversation_Design.md`)
+### 09.2 [Conversation Design](09_Conversational_AI/02_Conversation_Design.md)
 - Introduction: the art of dialog
 - Conversation flows
 - Handling misunderstandings
@@ -832,7 +832,7 @@
 - Handling problematic situations
 - Personalization
 
-### 09.3 Voice and Multimodality (`03_Voice_and_Multimodality.md`)
+### 09.3 [Voice and Multimodality](09_Conversational_AI/03_Voice_and_Multimodality.md)
 - Introduction to multimodal interfaces
 - Voice interface: from sound to meaning
   - Speech-to-Text
@@ -851,7 +851,7 @@
 
 ## 10. Fine-Tuning
 
-### 10.1 Fine-Tuning Basics (`01_Fine_Tuning_Basics.md`)
+### 10.1 [Fine-Tuning Basics](10_Fine_Tuning/01_Fine_Tuning_Basics.md)
 - What fine-tuning is
 - Where fine-tuning fits in the methods ecosystem
 - When fine-tuning is justified
@@ -861,7 +861,7 @@
 - Cost and resources
 - Risks and limitations
 
-### 10.2 Data Preparation (`02_Data_Preparation.md`)
+### 10.2 [Data Preparation](10_Fine_Tuning/02_Data_Preparation.md)
 - The importance of data quality
 - Data sources
 - Data formats (JSONL, conversations)
@@ -873,7 +873,7 @@
 - Handling imbalance
 - Dataset documentation
 
-### 10.3 Techniques and Evaluation (`03_Techniques_and_Evaluation.md`)
+### 10.3 [Techniques and Evaluation](10_Fine_Tuning/03_Techniques_and_Evaluation.md)
 - Full fine-tuning vs Parameter-Efficient methods
 - LoRA: Low-Rank Adaptation
   - Rank selection
@@ -889,7 +889,7 @@
 - Production monitoring
 - Model versioning and management
 
-### 10.4 RLHF and Alignment (`04_RLHF_and_Alignment.md`)
+### 10.4 [RLHF and Alignment](10_Fine_Tuning/04_RLHF_and_Alignment.md)
 - Why classical fine-tuning is not enough
 - RLHF Architecture
   - SFT (Supervised Fine-Tuning)
@@ -912,7 +912,7 @@
   - Safety alignment
   - Value alignment
 
-### 10.5 RLHF Alternatives (`05_RLHF_Alternatives.md`)
+### 10.5 [RLHF Alternatives](10_Fine_Tuning/05_RLHF_Alternatives.md)
 - Problems with classical RLHF
   - PPO instability
   - Computational cost
@@ -934,7 +934,7 @@
 - Method comparison table
 - Hugging Face TRL Integration
 
-### 10.6 Test-Time Compute (`06_Test_Time_Compute.md`)
+### 10.6 [Test-Time Compute](10_Fine_Tuning/06_Test_Time_Compute.md)
 - OpenAI o1/o3: a reasoning breakthrough
   - AIME 2024: 13% to 83%
   - Extended thinking and self-correction
@@ -953,7 +953,7 @@
   - 4x efficiency improvement
   - Smaller models + TTC vs larger models
 
-### 10.7 Synthetic Data (`07_Synthetic_Data.md`)
+### 10.7 [Synthetic Data](10_Fine_Tuning/07_Synthetic_Data.md)
 - Self-Instruct: instruction generation
   - Self-Instruct pipeline
   - Limitations and risks
@@ -974,7 +974,7 @@
   - Mitigation strategies
 - Practical Pipelines
 
-### 10.8 Continued Pretraining (`08_Continued_Pretraining.md`)
+### 10.8 [Continued Pretraining](10_Fine_Tuning/08_Continued_Pretraining.md)
 - Why continued pretraining matters
   - Domain adaptation without losing general knowledge
   - When CPT vs SFT vs few-shot
@@ -991,7 +991,7 @@
   - Learning rate scheduling
   - Evaluation on domain and general tasks
 
-### 10.9 Preference Data (`09_Preference_Data.md`)
+### 10.9 [Preference Data](10_Fine_Tuning/09_Preference_Data.md)
 - The importance of quality preference data for alignment
 - Bradley-Terry Model
   - Mathematical formulation
@@ -1008,7 +1008,7 @@
   - Bias in annotators
 - Practical pipelines for preference collection
 
-### 10.10 DoRA and Advanced PEFT Methods (`10_DoRA_and_Beyond.md`)
+### 10.10 [DoRA and Advanced PEFT Methods](10_Fine_Tuning/10_DoRA_and_Beyond.md)
 - Beyond LoRA: the evolution of PEFT methods
 - DoRA (Weight-Decomposed Low-Rank Adaptation)
   - Decomposition: magnitude + direction
@@ -1024,7 +1024,7 @@
 
 ## 11. Evaluation & Testing
 
-### 11.1 Metrics and Benchmarks (`01_Metrics_and_Benchmarks.md`)
+### 11.1 [Metrics and Benchmarks](11_Evaluation_Testing/01_Metrics_and_Benchmarks.md)
 - Why LLM evaluation is a hard problem
 - Multi-dimensionality of quality
   - Correctness, Relevance, Completeness
@@ -1058,7 +1058,7 @@
 - Principles of metric selection
 - Building an evaluation dataset
 
-### 11.2 Human Evaluation (`02_Human_Evaluation.md`)
+### 11.2 [Human Evaluation](11_Evaluation_Testing/02_Human_Evaluation.md)
 - Why human evaluation remains the gold standard
 - Task design for evaluators
 - Rating scales (Likert, ordinal)
@@ -1069,7 +1069,7 @@
 - Organizing the evaluation process
 - When to use human evaluation
 
-### 11.3 LLM as Judge (`03_LLM_as_Judge.md`)
+### 11.3 [LLM as Judge](11_Evaluation_Testing/03_LLM_as_Judge.md)
 - The idea of using LLMs for evaluation
 - LLM-as-Judge architecture
 - The judge prompt
@@ -1091,7 +1091,7 @@
 - Specialized evaluation types
 - Scaling and automation
 
-### 11.4 Continuous Evaluation (`04_Continuous_Evaluation.md`)
+### 11.4 [Continuous Evaluation](11_Evaluation_Testing/04_Continuous_Evaluation.md)
 - From one-time evaluation to continuous monitoring
 - Continuous evaluation system architecture
 - Sampling strategies
@@ -1114,7 +1114,7 @@
 - Feedback loops
 - Organizational aspects
 
-### 11.5 RAG Evaluation (`05_RAG_Evaluation.md`)
+### 11.5 [RAG Evaluation](11_Evaluation_Testing/05_RAG_Evaluation.md)
 - The specifics of RAG system evaluation: Retrieval + Generation
 - BEIR Benchmark
   - 18 datasets, 9 tasks
@@ -1142,7 +1142,7 @@
 
 ## 12. Observability
 
-### 12.1 Tracing and Logging (`01_Tracing_and_Logging.md`)
+### 12.1 [Tracing and Logging](12_Observability/01_Tracing_and_Logging.md)
 - Unique challenges of LLM system observability
 - Three pillars of observability (Logs, Metrics, Traces)
 - Anatomy of an LLM application trace
@@ -1154,7 +1154,7 @@
   - Weights & Biases
 - Storage and retention
 
-### 12.2 Metrics and Dashboards (`02_Metrics_and_Dashboards.md`)
+### 12.2 [Metrics and Dashboards](12_Observability/02_Metrics_and_Dashboards.md)
 - Metrics philosophy in the world of language models
 - LLM system metrics hierarchy
 - Tokens as the currency of the LLM economy
@@ -1174,7 +1174,7 @@
 - Cost monitoring and budgeting
 - Production quality monitoring
 
-### 12.3 LLM Debugging (`03_LLM_Debugging.md`)
+### 12.3 [LLM Debugging](12_Observability/03_LLM_Debugging.md)
 - The unique nature of bugs in LLM systems
 - Taxonomy of LLM system problems
 - Debugging toolkit
@@ -1187,7 +1187,7 @@
 - Production debugging
 - Tools for systematic debugging
 
-### 12.4 AgentOps (`04_AgentOps.md`)
+### 12.4 [AgentOps](12_Observability/04_AgentOps.md)
 - AgentOps: DevOps + MLOps for AI agents
 - Evolution: DevOps, then MLOps, then LLMOps, then AgentOps
 - AgentOps Lifecycle
@@ -1217,7 +1217,7 @@
 
 ## 13. Deployment
 
-### 13.1 Deployment Strategies (`01_Deployment_Strategies.md`)
+### 13.1 [Deployment Strategies](13_Deployment/01_Deployment_Strategies.md)
 - Deployment specifics in the language model world
 - LLM application architecture
   - API Gateway
@@ -1236,7 +1236,7 @@
   - Exact match caching
   - Semantic caching
 
-### 13.2 Containerization and Kubernetes (`02_Containerization_and_Kubernetes.md`)
+### 13.2 [Containerization and Kubernetes](13_Deployment/02_Containerization_and_Kubernetes.md)
 - Containerization as the foundation of modern deployment
 - Docker image optimization
   - Multi-stage builds
@@ -1250,7 +1250,7 @@
 - Resource Management
 - ConfigMaps and Secrets
 
-### 13.3 CI/CD and Self-Hosted (`03_CI_CD_and_Self_Hosted.md`)
+### 13.3 [CI/CD and Self-Hosted](13_Deployment/03_CI_CD_and_Self_Hosted.md)
 - Continuous integration for LLM applications
 - CI Pipeline structure
 - Continuous Deployment and release strategies
@@ -1268,7 +1268,7 @@
 
 ## 14. Security & Safety
 
-### 14.1 Prompt Injection (`01_Prompt_Injection.md`)
+### 14.1 [Prompt Injection](14_Security_Safety/01_Prompt_Injection.md)
 - A new class of vulnerabilities
 - OWASP Top 10 for LLM Applications v2.0 (2025)
 - **OWASP Top 10 for Agentic Applications (2026)**: ASI01-ASI10 (goal hijacking, tool misuse, supply chain, etc.)
@@ -1280,7 +1280,7 @@
 - LLM-as-Guard: using the model for protection
 - System prompt protection
 
-### 14.2 Data Protection (`02_Data_Protection.md`)
+### 14.2 [Data Protection](14_Security_Safety/02_Data_Protection.md)
 - New dimensions of the privacy problem
 - PII Detection: the first line of defense
 - Masking and anonymization
@@ -1290,7 +1290,7 @@
 - Audit Logging for Compliance
 - Integration with external providers
 
-### 14.3 Agent Security (`03_Agent_Security.md`)
+### 14.3 [Agent Security](14_Security_Safety/03_Agent_Security.md)
 - Autonomy as a source of risk
 - Principle of least privilege
 - Permission System for tools
@@ -1311,7 +1311,7 @@
 - Human-in-the-Loop
 - Agent security testing
 
-### 14.4 Moderation and Compliance (`04_Moderation_and_Compliance.md`)
+### 14.4 [Moderation and Compliance](14_Security_Safety/04_Moderation_and_Compliance.md)
 - Content responsibility
 - Moderation architecture
 - Harmful content categories
@@ -1324,7 +1324,7 @@
 - Security monitoring and incident response
 - Transparency and accountability
 
-### 14.5 NeMo Guardrails (`05_NeMo_Guardrails.md`)
+### 14.5 [NeMo Guardrails](14_Security_Safety/05_NeMo_Guardrails.md)
 - Open-source toolkit from NVIDIA
 - Colang: the Rails definition language
   - User Messages and Intents
@@ -1344,7 +1344,7 @@
 
 ## 15. GPU Architecture
 
-### 15.1 GPU Architecture (`01_GPU_Architecture.md`)
+### 15.1 [GPU Architecture](15_GPU_Architecture/01_GPU_Architecture.md)
 - From CPU to GPU: the evolution of ML computation
 - GPU memory hierarchy
   - HBM (High Bandwidth Memory): 2-3 TB/s
@@ -1364,7 +1364,7 @@
 - **Energy constraint**: ~1,000 TWh data centers by 2026, SMR pipeline 25 to 45 GW
 - GPU operation profiling
 
-### 15.2 Flash Attention (`02_Flash_Attention.md`)
+### 15.2 [Flash Attention](15_GPU_Architecture/02_Flash_Attention.md)
 - The quadratic complexity problem of attention
 - IO-awareness as the key idea
 - The Flash Attention algorithm
@@ -1376,7 +1376,7 @@
 - Integration with PyTorch and Hugging Face
 - Practical benchmarks
 
-### 15.3 Triton Programming (`03_Triton_Programming.md`)
+### 15.3 [Triton Programming](15_GPU_Architecture/03_Triton_Programming.md)
 - Triton vs CUDA: the complexity-flexibility tradeoff
 - Block-level programming model
 - Writing custom kernels
@@ -1386,7 +1386,7 @@
 - PyTorch integration
 - Debugging and profiling Triton kernels
 
-### 15.4 GPU Profiling (`04_GPU_Profiling.md`)
+### 15.4 [GPU Profiling](15_GPU_Architecture/04_GPU_Profiling.md)
 - Profiling tools
   - torch.profiler
   - Nsight Systems
@@ -1396,7 +1396,7 @@
 - Optimizing kernel launch overhead
 - Practical approach to profiling
 
-### 15.5 Quantization Deep Dive (`05_Quantization_Deep_Dive.md`)
+### 15.5 [Quantization Deep Dive](15_GPU_Architecture/05_Quantization_Deep_Dive.md)
 - Why quantization matters (not just for inference)
 - Quantization types
   - Weight quantization vs Activation quantization
@@ -1423,7 +1423,7 @@
 
 ## 16. Distributed Training
 
-### 16.1 Distributed Training Basics (`01_Distributed_Training_Basics.md`)
+### 16.1 [Distributed Training Basics](16_Distributed_Training/01_Distributed_Training_Basics.md)
 - Why distributed training is needed
 - Types of parallelism
   - Data Parallelism (DP)
@@ -1436,7 +1436,7 @@
 - Collective communication libraries (NCCL)
 - Calculating required resources
 
-### 16.2 PyTorch FSDP2 (`02_PyTorch_FSDP2.md`)
+### 16.2 [PyTorch FSDP2](16_Distributed_Training/02_PyTorch_FSDP2.md)
 - Evolution from DDP to FSDP
 - FSDP2: architecture redesign
   - fully_shard API
@@ -1450,7 +1450,7 @@
 - Checkpointing large models
 - Metrics: 28.54% memory savings, 68.67% throughput increase
 
-### 16.3 DeepSpeed ZeRO (`03_DeepSpeed_ZeRO.md`)
+### 16.3 [DeepSpeed ZeRO](16_Distributed_Training/03_DeepSpeed_ZeRO.md)
 - The ZeRO optimization philosophy
 - ZeRO Stage 1: Optimizer State Partitioning
 - ZeRO Stage 2: Gradient Partitioning
@@ -1460,7 +1460,7 @@
 - Configuration and setup
 - HuggingFace Trainer integration
 
-### 16.4 3D Parallelism (`04_3D_Parallelism.md`)
+### 16.4 [3D Parallelism](16_Distributed_Training/04_3D_Parallelism.md)
 - Combining types of parallelism
 - Megatron-DeepSpeed architecture
 - Process group organization
@@ -1470,7 +1470,7 @@
 - Fault tolerance and checkpoint recovery
 - Communication profiling
 
-### 16.5 Distributed Training Practice (`05_Distributed_Training_Practice.md`)
+### 16.5 [Distributed Training Practice](16_Distributed_Training/05_Distributed_Training_Practice.md)
 - End-to-end distributed training example
 - Setting up the environment and dependencies
 - Launch scripts (torchrun, deepspeed)
@@ -1483,7 +1483,7 @@
 
 ## 17. Production Inference
 
-### 17.1 Inference Architecture (`01_Inference_Architecture.md`)
+### 17.1 [Inference Architecture](17_Production_Inference/01_Inference_Architecture.md)
 - Autoregressive generation: token by token
 - Inference phases
   - Prefill: prompt processing
@@ -1494,7 +1494,7 @@
 - Batching strategies
 - GPU characteristics for inference
 
-### 17.2 vLLM Internals (`02_vLLM_internals.md`)
+### 17.2 [vLLM Internals](17_Production_Inference/02_vLLM_internals.md)
 - PagedAttention: a revolution in memory management
   - The fragmentation problem (60-80% waste)
   - Paging as a solution
@@ -1507,7 +1507,7 @@
 - **v0.24 and the version scheme**: `CUDA_VISIBLE_DEVICES` no longer set internally (`device_ids` replaces it), minor bumps can break, no v1.0 pending
 - Practical vLLM deployment
 
-### 17.3 Speculative Decoding (`03_Speculative_Decoding.md`)
+### 17.3 [Speculative Decoding](17_Production_Inference/03_Speculative_Decoding.md)
 - The idea of speculative generation
 - Draft models and verification
 - EAGLE: draft-free speculative decoding
@@ -1520,7 +1520,7 @@
 - vLLM integration
 - Choosing the method for the task
 
-### 17.4 Model Quantization (`04_Model_Quantization.md`)
+### 17.4 [Model Quantization](17_Production_Inference/04_Model_Quantization.md)
 - Why quantization is needed
 - Data types
   - FP32, FP16, BF16
@@ -1533,7 +1533,7 @@
 - Accuracy vs Latency trade-offs
 - Practical application
 
-### 17.5 Inference Cost Optimization (`05_Inference_Cost_Optimization.md`)
+### 17.5 [Inference Cost Optimization](17_Production_Inference/05_Inference_Cost_Optimization.md)
 - LLM inference economics
 - Spot instances: 60-90% savings
   - Resilience strategies
@@ -1549,7 +1549,7 @@
 - Cost monitoring and budgeting
 - TCO calculation
 
-### 17.6 Long Context Inference (`06_Long_Context_Inference.md`)
+### 17.6 [Long Context Inference](17_Production_Inference/06_Long_Context_Inference.md)
 - The long context problem
   - KV-cache memory explosion
   - Quadratic attention cost
@@ -1571,7 +1571,7 @@
   - "Lost in the Middle" problem
   - Hybrid approaches
 
-### 17.7 SGLang and Alternatives (`07_SGLang_and_Alternatives.md`)
+### 17.7 [SGLang and Alternatives](17_Production_Inference/07_SGLang_and_Alternatives.md)
 - SGLang: the next step after vLLM
   - Frontend Language for LLM Programs
   - RadixAttention: KV-cache as a radix tree
@@ -1592,7 +1592,7 @@
 
 ## 18. AI Governance
 
-### 18.1 Regulatory Landscape (`01_Regulatory_Landscape.md`)
+### 18.1 [Regulatory Landscape](18_AI_Governance/01_Regulatory_Landscape.md)
 - Introduction: AI at the intersection of law and technology
 - EU AI Act: the first law
   - Risk-based framework (4 risk levels)
@@ -1618,7 +1618,7 @@
 - Global regulatory map
 - Practical compliance strategies
 
-### 18.2 AI Risk Management (`02_AI_Risk_Management.md`)
+### 18.2 [AI Risk Management](18_AI_Governance/02_AI_Risk_Management.md)
 - Why AI systems require a special approach to risk
 - AI risk taxonomy
   - Technical risks (hallucinations, adversarial, drift)
@@ -1634,7 +1634,7 @@
 - Mitigations: technical, organizational, contractual
 - Continuous Monitoring
 
-### 18.3 Red Teaming (`03_Red_Teaming.md`)
+### 18.3 [Red Teaming](18_AI_Governance/03_Red_Teaming.md)
 - From penetration testing to AI red teaming
 - Taxonomy of attacks on AI systems
   - Prompt Injection (direct, indirect)
@@ -1656,7 +1656,7 @@
   - Engagement models (internal, external, bug bounty)
 - Multi-Turn Attack Scenarios
 
-### 18.4 Enterprise RAG (`04_Enterprise_RAG.md`)
+### 18.4 [Enterprise RAG](18_AI_Governance/04_Enterprise_RAG.md)
 - Why enterprise RAG differs from a prototype
 - Multi-Tenancy architectures
   - Shared vs Isolated Infrastructure
@@ -1679,7 +1679,7 @@
   - Anomaly Detection
 - Security Architecture (Defense in Depth)
 
-### 18.5 Governance Frameworks (`05_Governance_Frameworks.md`)
+### 18.5 [Governance Frameworks](18_AI_Governance/05_Governance_Frameworks.md)
 - From technology to organizational maturity
 - Organizational models of AI Governance
   - Centralized model (AI CoE)
@@ -1702,7 +1702,7 @@
   - Process, Compliance, Risk, Culture metrics
   - Executive Dashboard
 
-### 18.6 Alignment Research (`06_Alignment_Research.md`)
+### 18.6 [Alignment Research](18_AI_Governance/06_Alignment_Research.md)
 - Introduction: why alignment is the central AI problem
 - Connection between Interpretability and Safety
   - Circuits and Features in transformers
@@ -1732,7 +1732,7 @@
   - Corrigibility
   - Value learning
 
-### 18.7 Enterprise AI Adoption (`07_Enterprise_AI_Adoption.md`)
+### 18.7 [Enterprise AI Adoption](18_AI_Governance/07_Enterprise_AI_Adoption.md)
 - **The reality of AI transformation (April 2026)**
   - 97% of executives deployed agents; 52% of employees use them
   - Only 29% see significant ROI from GenAI; 34% successfully implementing agentic AI
@@ -1780,7 +1780,7 @@
 
 ## 19. Practical Projects
 
-### 19.1 RAG Chatbot (`01_RAG_Chatbot.md`)
+### 19.1 [RAG Chatbot](19_Practical_Projects/01_RAG_Chatbot.md)
 - Introduction: from theory to a production-ready system
 - Phase 1: Document Ingestion Pipeline
   - Multi-format parsing (PDF, DOCX, HTML)
@@ -1803,7 +1803,7 @@
   - Quality metrics
   - Cost tracking
 
-### 19.2 Multi-Agent System (`02_Multi_Agent_System.md`)
+### 19.2 [Multi-Agent System](19_Practical_Projects/02_Multi_Agent_System.md)
 - Introduction: collective intelligence in action
 - Code Review system architecture
 - Specialized agents
@@ -1821,7 +1821,7 @@
   - Check runs
 - Monitoring and metrics
 
-### 19.3 MCP Server (`03_MCP_Server.md`)
+### 19.3 [MCP Server](19_Practical_Projects/03_MCP_Server.md)
 - Introduction: standardized data access
 - Designing a Knowledge Base MCP Server
 - MCP Components
@@ -1838,7 +1838,7 @@
 - Testing MCP servers
 - Claude Desktop integration
 
-### 19.4 Fine-Tuning Pipeline (`04_Fine_Tuning_Pipeline.md`)
+### 19.4 [Fine-Tuning Pipeline](19_Practical_Projects/04_Fine_Tuning_Pipeline.md)
 - Introduction: from data to a deployed model
 - Phase 1: Data Collection
   - Data sources (support tickets, knowledge base)
@@ -1862,7 +1862,7 @@
   - Gradual rollout
   - Monitoring in production
 
-### 19.5 Production Agent (`05_Production_Agent.md`)
+### 19.5 [Production Agent](19_Practical_Projects/05_Production_Agent.md)
 - Introduction: from prototype to production
 - Phase 1: Architecture and infrastructure
   - Stateless design
@@ -1894,7 +1894,7 @@
 
 ## 20. Architecture Research
 
-### 20.1 Mixture of Experts (`01_Mixture_of_Experts.md`)
+### 20.1 [Mixture of Experts](20_Architecture_Research/01_Mixture_of_Experts.md)
 - Why sparse models
   - Conditional computation
   - Scaling without linear compute growth
@@ -1918,7 +1918,7 @@
   - Inference challenges
   - Expert specialization analysis
 
-### 20.2 State Space Models (`02_State_Space_Models.md`)
+### 20.2 [State Space Models](20_Architecture_Research/02_State_Space_Models.md)
 - Attention limitations
   - Quadratic complexity O(L²)
   - Memory requirements scaling
@@ -1943,7 +1943,7 @@
   - In-context learning challenges
   - Retrieval tasks
 
-### 20.3 Multimodal Architectures (`03_Multimodal_Architectures.md`)
+### 20.3 [Multimodal Architectures](20_Architecture_Research/03_Multimodal_Architectures.md)
 - Vision Encoders
   - ViT: Vision Transformer
   - CLIP: Contrastive Language-Image Pretraining
@@ -1979,7 +1979,7 @@
 
 ## 21. Interview Preparation
 
-### 21.1 ML System Design (`01_ML_System_Design.md`)
+### 21.1 [ML System Design](21_Interview_Preparation/01_ML_System_Design.md)
 - RESHAPE Framework for system design
   - Requirements, Estimation, Service Architecture, How ML Works, API Design, Production Concerns, Edge Cases
 - Case Study 1: Enterprise RAG System
@@ -1994,7 +1994,7 @@
 - Typical questions and answers
 - Red Flags in interviews
 
-### 21.2 Coding Exercises (`02_Coding_Exercises.md`)
+### 21.2 [Coding Exercises](21_Interview_Preparation/02_Coding_Exercises.md)
 - Category 1: Implementations from scratch
   - Self-Attention (NumPy)
   - Multi-Head Attention
@@ -2010,7 +2010,7 @@
   - Prompt engineering
 - Tips for success
 
-### 21.3 Papers Reading Guide (`03_Papers_Reading_Guide.md`)
+### 21.3 [Papers Reading Guide](21_Interview_Preparation/03_Papers_Reading_Guide.md)
 - Three-Pass Approach to reading papers
 - Essential papers (with discussion points)
   - Attention Is All You Need
@@ -2025,7 +2025,7 @@
 - How to discuss papers in interviews
 - Paper note template
 
-### 21.4 Behavioral for Staff+ (`04_Behavioral_Staff_Plus.md`)
+### 21.4 [Behavioral for Staff+](21_Interview_Preparation/04_Behavioral_Staff_Plus.md)
 - Staff+ level expectations
   - Technical Leadership
   - Cross-team Impact
@@ -2038,7 +2038,7 @@
 - Red Flags and Green Flags
 - How to structure your answers
 
-### 21.5 AI Safety Interview (`05_AI_Safety_Interview.md`)
+### 21.5 [AI Safety Interview](21_Interview_Preparation/05_AI_Safety_Interview.md)
 - Anthropic/OpenAI specifics
 - Alignment and its complexity
   - Inner vs Outer Alignment
