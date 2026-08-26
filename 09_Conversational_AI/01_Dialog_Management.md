@@ -169,9 +169,3 @@ Multi-turn dialogs require context management, topic switching, nested dialogs, 
 State machines provide predictability for structured flows; LLMs provide naturalness for open-ended interaction. The hybrid approach (state machine for flow control + LLM for understanding) is the 2026 production standard.
 
 Handoff patterns (bot-to-human, agent-to-agent, cross-channel) must preserve full context. Users should never have to repeat information after a handoff.
-
-## Practical Implementation
-
-The dialog manager controls the conversation state through phases: intent detection, slot filling, confirmation, execution. State includes intent, slots, history, and the current phase. The system transitions between phases based on information completeness. Upon detecting an intent, slots are extracted from context. If all slots are filled, the system moves to confirmation. Upon positive confirmation, the action is executed.
-
-LLMs are used for intent recognition and slot extraction from natural language utterances. The model analyzes the message in the context of the history and determines the intent and slots simultaneously. For production systems, state persistence, error handling, more sophisticated transitions, and multiple intent handling are added.

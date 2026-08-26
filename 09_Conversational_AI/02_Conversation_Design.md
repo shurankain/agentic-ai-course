@@ -186,11 +186,3 @@ Personalization makes interactions unique. Remember names, preferences, and hist
 Error recovery should preserve collected information: never force users to repeat themselves. Always leave the user with a next step, never at a dead end.
 
 Measure conversations quantitatively: resolution rate, turns to resolution, CSAT correlation with dialog patterns, abandonment rate. CSAT prediction from dialog features enables continuous quality monitoring without surveys.
-
-## Practical Implementation
-
-Handling misunderstanding is built on progressive escalation. On the first failure, the system asks for rephrasing. On the second, it offers a list of capabilities. On the third, it recommends alternative channels or a live agent. It is critical not to keep guessing when confidence is low.
-
-Generating clarifying questions uses an LLM to create natural follow-up questions based on possible interpretations. The model receives the user's message and a list of possible intents, then formulates a question to resolve the ambiguity.
-
-Tone adaptation analyzes the user's communication style from their history (formality, level of detail, technical level) and applies the corresponding style to system responses. This creates a sense of mutual understanding and improves interaction comfort.

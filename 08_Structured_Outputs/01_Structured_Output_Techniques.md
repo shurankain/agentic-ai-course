@@ -52,7 +52,7 @@ Different tasks require different levels of guarantees. Excessive complexity cre
 
 **Direct API usage**: full control through OpenAI or Anthropic APIs with manual schema construction and parsing. More code, more flexibility. For non-standard scenarios and optimizations.
 
-## Practical Implementation Details
+## Choosing Between the Five Techniques
 
 **Prompt engineering** asks the model to return JSON with specific fields and a format example. Problems: the model wraps JSON in markdown blocks, adds preambles, uses single quotes, forgets brackets, adds comments. The solution is a response cleaning layer (remove markdown, extract JSON, parse). Works in 80-90% of cases, but the code is fragile. For prototypes and non-critical experiments.
 

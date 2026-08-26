@@ -223,6 +223,20 @@ The compliance architecture includes two layers:
 
 When deploying across multiple jurisdictions, a unified approach covering the strictest requirements is necessary. For the EU: EU AI Act with risk level determination. For the USA: NIST AI RMF plus sector-specific regulations. For China: Generative AI Measures with mandatory content moderation. For the UK: principles-based approach through existing regulators.
 
+## Classifying Your Own System
+
+Everything above is the map. Placing your own system on it takes four questions, in this order.
+
+**What is the use case, and is it on a list?** Work down from the strictest. Social scoring and untargeted biometric scraping are prohibited outright. Employment, credit scoring, law enforcement, education, and critical infrastructure are high-risk. Chatbots, emotion recognition, and deepfake generation are limited-risk and owe transparency rather than conformity assessment. Anything left over is minimal risk. Note that the classification follows the use case and not the technology, so the same model can be minimal risk in one product and high-risk in another.
+
+**Is the model itself a GPAI?** Trained on broad data and capable across many tasks means the GPAI obligations attach on top of whatever the use case triggered. Above 10^25 FLOPS of training compute, systemic-risk duties attach as well: adversarial testing, incident reporting, and energy reporting.
+
+**Where does it run?** In the EU the AI Act applies with fines reaching 7% of global turnover. In the US the NIST AI RMF is voluntary and the binding rules are sectoral and increasingly per-state. In China registration and content moderation are mandatory before launch. Deploying in all three means building to the strictest of the three, since a system cannot be architected two ways at once.
+
+**What does that add up to in obligations?** High-risk brings a risk management system, data governance, technical documentation, automatic logging, human oversight, accuracy validation, cybersecurity measures, conformity assessment, and registration in the EU database. Limited risk brings disclosure that the user is talking to an AI and labelling of generated content. GPAI brings model documentation, information for downstream providers, a copyright policy, and a training data summary.
+
+Then check the clock, because the obligations do not all start together. Prohibited practices have been unusable since February 2025 and GPAI obligations since August 2025, while standalone high-risk requirements now begin in December 2027 after the Digital Omnibus delay.
+
 ## Key Takeaways
 
 The EU AI Act is actively enforced: prohibited practices banned since February 2025, GPAI obligations in force since August 2025. High-risk requirements were delayed by the Digital Omnibus (May 2026): standalone high-risk (Annex III) now December 2027, product-embedded high-risk (Annex I) now August 2028. The GPAI Code of Practice provides a compliance safe harbor.
@@ -236,17 +250,3 @@ The US landscape is in flux (as of August 2026): Biden's EO rescinded (Jan 2025)
 GPAI obligations now affect all foundation model providers: technical documentation, training data summaries, copyright compliance, and (for systemic risk models) adversarial testing and incident reporting.
 
 Global differences are significant: a multi-jurisdiction strategy is needed. The EU is the strictest, the US is fragmented across states, China requires registration and content moderation. Compliance requires architectural decisions: logging, human oversight, documentation.
-
-## Practical Example: Determining Compliance Requirements
-
-When developing an AI system, the process of determining requirements includes several stages:
-
-**Risk level classification:** Determine the category per the EU AI Act depending on the use case. Systems for recruiting, credit scoring, critical infrastructure: high-risk. Chatbots and emotion recognition systems: limited risk. Social scoring and mass biometrics: prohibited.
-
-**Determining GPAI requirement applicability:** If the model is a General Purpose AI (trained on large data, solves a broad range of tasks), additional requirements apply. The 10^25 FLOPS threshold indicates systemic risk: adversarial testing, incident reporting, energy consumption reporting.
-
-**Accounting for deployment geography:** For systems in the EU, the EU AI Act applies with fines up to 7% of turnover. In the USA, the voluntary NIST AI RMF with sector-specific regulations is in effect. In China, registration and content moderation are mandatory.
-
-**Compiling the requirements list:** For high-risk: risk management system, data governance, technical documentation, automatic logging, human oversight, accuracy validation, cybersecurity, conformity assessment, registration in the EU database. For limited risk: informing users about interaction with AI, labeling AI-generated content. For GPAI: model technical documentation, information for downstream providers, copyright policy, training data summary.
-
-For risk classification, the following logic applies: if the use case is on the prohibited list (social scoring, public biometrics), UNACCEPTABLE. If on the high-risk list (employment, credit scoring, law enforcement, education, critical infrastructure): HIGH. If on the limited-risk list (chatbot, emotion recognition, deepfake): LIMITED. Otherwise: MINIMAL. This approach ensures systematic assessment and understanding of the timeline: prohibited practices cannot be used from February 2025, GPAI obligations from August 2025, full requirements for standalone high-risk from December 2027 (delayed from August 2026 by the Digital Omnibus).

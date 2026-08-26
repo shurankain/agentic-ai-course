@@ -142,7 +142,7 @@ When a RAG system gives a wrong answer, the bug can be in any of four stages: re
 
 **The debugging shortcut:** Start from Stage 4 and work backward. If the grounding ratio is high but the answer is wrong, the problem is in retrieval (wrong context). If the grounding ratio is low but good documents exist in the index, the problem is in the generation stage (model ignoring context). This top-down approach finds the root cause faster than bottom-up inspection.
 
-## Practical Examples
+## Snapshots, Replay, and Testable Hypotheses
 
 The snapshot mechanism captures system state: timestamp, user input, model, parameters, prompts, response, latency, tokens, errors. The replay mechanism re-executes the request with exactly the same parameters to verify fixes.
 

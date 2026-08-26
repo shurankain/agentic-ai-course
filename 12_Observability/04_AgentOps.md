@@ -156,7 +156,7 @@ As agent fleets grow, individual agent monitoring becomes impractical. An aggreg
 
 **Health score trends.** A declining health score over time (e.g., 85, then 75, then 65 over 3 weeks) signals gradual degradation: perhaps the model provider's behavior changed, or the knowledge base became stale, or the user query distribution shifted. Trend alerts catch slow degradation that point-in-time metrics miss.
 
-## Practical Examples
+## Instrumentation and Alert Thresholds
 
 **Basic Observability Integration:**
 
@@ -166,15 +166,15 @@ LangSmith integration uses a callback mechanism. You create a LangChainTracer wi
 
 Langfuse uses a decorator approach. You annotate agent functions with the observe decorator, and all calls are automatically traced. Alternatively, you can explicitly create trace objects with metadata.
 
-**Custom Metrics System Architecture:**
+**What to record per session:**
 
-The AgentSessionMetrics class includes: session_id, start_time, end_time, success, llm_calls, tool_calls, tokens_in, tokens_out, and a cost_estimate property for cost calculation.
+The session is the right unit, not the individual call, because an agent that solves a task in three calls and one that thrashes for twenty both look fine at call granularity. Record the session identifier, start and end time, a success flag, the count of model calls and tool calls separately, input and output tokens, and cost derived from the last two.
 
-The metrics collector creates a metrics object at session start, increments counters on events, finalizes on completion, and stores history.
+Aggregate that into five figures: success rate, mean duration, mean calls per session, total cost, and how often a guardrail fired. Mean calls per session is the leading indicator of a regression that has not yet become a failure, since an agent usually starts looping before it starts erroring.
 
-The statistics aggregator computes summary metrics: success rate, average duration, average call count, total cost, and guardrail frequency.
+**Where to set the thresholds:**
 
-The alerting system checks metrics against thresholds. On anomalies (success rate <80%, budget overrun, guardrail trigger rate >10%) it sends notifications through handlers (Slack webhooks, incident management tickets, critical logs).
+Three alerts are worth the noise they generate. Success rate below 80% means the agent is failing more than a user will tolerate. A guardrail trigger rate above 10% means the agent is routinely attempting things it should not, which is a prompt or permission problem rather than a guardrail success. And a budget overrun on the session cost, which is the one that catches infinite loops before the invoice does. Route them to a channel a human reads, not only to a log.
 
 **Continuous Evaluation Pipeline:**
 

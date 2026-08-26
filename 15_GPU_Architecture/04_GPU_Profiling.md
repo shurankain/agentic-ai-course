@@ -267,27 +267,11 @@ Solution: batch tokenization instead of per-request, use fast tokenizers (Rust-b
 
 Result: 4x improvement in throughput for batch inference.
 
-## Key Takeaways
+## Reading a Profile: Bottlenecks, Memory, and Latency
 
-**Measure, do not guess.** Performance intuition is often wrong. Only measurements reveal the real bottlenecks.
+Profile a training loop on a schedule rather than end to end: skip the first iterations, which are dominated by kernel compilation and allocator warm-up, then warm up, then record. A profile that includes the cold iterations reports the startup cost as if it were steady-state behaviour, and the largest entry in the table will be something you never pay again.
 
-**Use the right tool for the job.** torch.profiler for quick analysis, Nsight Systems for a system-level view, Nsight Compute for detailed analysis of specific kernels.
-
-**Understand compute-bound vs memory-bound.** Identifying the type of bottleneck determines the optimization strategy.
-
-**Fusion is usually the answer.** For memory-bound operations (the majority of ML operations), kernel fusion is the primary source of speedup.
-
-**Eliminate synchronization.** Hidden syncs (.item(),.cpu(), print) can destroy performance.
-
-**Profile in production-like conditions.** Batch size, sequence length, hardware. Everything affects the profile. Optimizing for the wrong workload is useless.
-
-## Practical Application
-
-### Comprehensive Profiling
-
-Full training loop profiling involves initializing the profiler with specified activities (CPU and CUDA), a schedule (skipping cold iterations, warmup, active profiling), and callbacks for saving results. The training loop calls prof.step() after each iteration. Results are analyzed via prof.key_averages().table() sorted by metrics: CUDA time, CPU time, memory usage. Data is exported to Chrome trace format (export_chrome_trace) and stack traces (export_stacks) for detailed analysis in visual tools.
-
-The with_flops=True parameter enables FLOPS counting for operations, helping assess arithmetic intensity and identify the type of bottleneck.
+Turn on FLOP counting when you collect. It is what lets you compute arithmetic intensity per operation, and that number decides which of the two categories below you are in.
 
 ### Identifying Bottleneck Type
 
@@ -313,3 +297,19 @@ For accurate inference latency measurement:
 - Warm up the GPU before measurements (50+ iterations) to stabilize frequencies and fill caches
 - Test batch sizes to assess GPU utilization and determine the optimal operating range
 - With good utilization, latency should grow sublinearly with batch size (throughput grows faster than latency)
+
+---
+
+## Key Takeaways
+
+**Measure, do not guess.** Performance intuition is often wrong. Only measurements reveal the real bottlenecks.
+
+**Use the right tool for the job.** torch.profiler for quick analysis, Nsight Systems for a system-level view, Nsight Compute for detailed analysis of specific kernels.
+
+**Understand compute-bound vs memory-bound.** Identifying the type of bottleneck determines the optimization strategy.
+
+**Fusion is usually the answer.** For memory-bound operations (the majority of ML operations), kernel fusion is the primary source of speedup.
+
+**Eliminate synchronization.** Hidden syncs (.item(),.cpu(), print) can destroy performance.
+
+**Profile in production-like conditions.** Batch size, sequence length, hardware. Everything affects the profile. Optimizing for the wrong workload is useless.

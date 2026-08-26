@@ -62,7 +62,7 @@ The most powerful improvement mechanism is feedback loops with the model.
 
 **Alerts**: configure notifications for anomalies: error spikes, too many retries, complete validation failure for critical documents. The sooner you learn about a problem, the smaller the consequences.
 
-## Practical Example: Validation with Retries
+## Validation with Retries, Stage by Stage
 
 Architecture: ValidationService implements the extraction-with-retries pattern. The extractWithValidation method takes the source text and the target type class.
 

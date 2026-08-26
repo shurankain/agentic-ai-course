@@ -148,7 +148,7 @@ One of the most insidious quality issues in LLM applications: the model provider
 
 **Resources**: evaluation requires compute resources, storage, and possibly human evaluators. Budget accordingly.
 
-## Practical Implementation
+## Running the Experiment
 
 Experiment management creates an experiment with configuration: variants, traffic allocation, primary and guardrail metrics. Before launch, power analysis is conducted to determine the required sample size based on the expected effect size, baseline metric, desired test power, and significance level.
 

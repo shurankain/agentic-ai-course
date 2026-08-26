@@ -216,6 +216,10 @@ After 10 exchanges, the history can occupy 5,000-15,000 tokens. After 50, it can
 
 The simplest approach: when the context fills up, remove old messages while keeping recent ones.
 
+Work out the budget before you traverse anything. Available capacity is the maximum context size minus the system prompt minus a reserve for the model's response, and skipping that last term is the common bug: the history fits, the answer has nowhere to go, and the call fails at generation rather than at admission.
+
+Then walk the history backwards. Start at the newest message, prepend each one that still fits, and stop at the first that does not. Everything older is dropped. Walking forwards instead is the other common bug, because it fills the budget with the oldest messages and truncates the ones the model actually needs.
+
 Advantages: simplicity, predictability.
 
 Disadvantages: critically important information from the beginning of the conversation may be lost. "Remind me what we agreed on at the start", but that information has already been removed.
@@ -226,7 +230,11 @@ A smarter approach: instead of deleting old messages, compress them into a brief
 
 "Previously we discussed: the user wants to build an expense tracking application, chose React for the frontend, PostgreSQL for the database..."
 
-The summary takes far fewer tokens but preserves key information. Recent messages remain in full. This gives context for the current query.
+Count the history first and return it untouched when it already fits, since summarizing a conversation that fits costs a call and buys nothing. When it does not fit, compute how many tokens to free and add a buffer of around 500, because the summary itself occupies space and a summary that exactly fills the gap leaves you over budget again.
+
+Split at that boundary: the oldest messages go to the summarizer, the rest stay verbatim. Render the old ones as "role: content" lines, ask for two or three sentences, and put the result back as a system message at the head of the list, labelled as a summary of earlier conversation. Placing it at the head matters, since a summary buried mid-history reads to the model as something that happened at that point in time.
+
+The summary takes far fewer tokens but preserves key information. Recent messages remain in full. This gives context for the current query. The cost is one extra model call on the turn where compression triggers, which shows up as a latency spike rather than a steady tax.
 
 ### Prioritization Strategy
 
@@ -326,26 +334,3 @@ When truncation is necessary, the least important parts will be affected.
 
 6. **Prompt optimization saves context.** Compact system prompts and tool descriptions leave more room for useful information.
 
----
-
-## Practical Implementation of Context Management Strategies
-
-### Implementing the History Truncation Strategy (FIFO)
-
-The "first in, first out" strategy is implemented through a component that tracks three key parameters: the model's maximum context window size, the number of tokens reserved for the model's future response, and a token counter for measuring message sizes.
-
-The logic is built on the principle of reverse traversal: the algorithm starts from the end of the message history and moves toward the beginning, sequentially adding messages to the result list as long as space remains available. Before starting the traversal, the available capacity is calculated: the system prompt size and the response reserve are subtracted from the maximum context size. Then, for each message from the end of the history, it checks whether the message fits in the remaining space. If yes: the message is prepended to the result; if no: the traversal stops, and all older messages are discarded.
-
-The key advantage of this approach is simplicity and predictability. The disadvantage is the potential loss of important information from the beginning of the conversation, which can lead to context loss during long sessions.
-
-### Implementing the Summarization Strategy
-
-The summarization strategy works as an intelligent memory archiver for the agent. The component receives the message history and the available token limit as input, then decides whether compression is needed.
-
-The algorithm works in several stages. First, the total history size is counted in tokens. If it fits within the limit, the history is returned unchanged. If it exceeds the limit, the algorithm calculates how many tokens need to be freed (with a small 500-token buffer).
-
-Next, the history is divided into two parts: old messages for summarization and recent messages to preserve in full. The algorithm iterates through the history from the beginning, adding messages to the summarization list until enough tokens have been accumulated for freeing. The remaining messages are marked as "preserve in full."
-
-The old messages are combined into a textual conversation representation (each message in "role: content" format), which is sent to a language model with a request to create a brief summary in 2-3 sentences. The resulting summary is wrapped in a special system message labeled "Summary of previous conversation," placed at the beginning of the final list, followed by all recent messages in full.
-
-This approach preserves key information from the entire interaction history while consuming fewer tokens than the full history would. The disadvantage is an additional LLM call to create the summary, which increases latency and cost.

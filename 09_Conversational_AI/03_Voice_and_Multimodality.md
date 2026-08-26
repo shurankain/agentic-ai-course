@@ -287,17 +287,3 @@ Safety and ethics gain a new dimension. Voice and images are biometric data requ
 The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI, not platforms.
 
 Technical challenges: minimizing latency. This ensures operation in noisy conditions, adapting to accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
-
-## Practical Implementation
-
-A multimodal agent combines speech recognition, a language model with image support, and speech synthesis. The processing pipeline includes: audio transcription via a recognition API (Whisper), multimodal query formation combining text and images, response generation via a vision model, and speech synthesis from the text response.
-
-Speech recognition integration requires audio preprocessing (volume normalization, noise suppression, format conversion), asynchronous processing with timeouts, and retries. The result contains text and metadata: language, confidence level, and temporal segments.
-
-Speech synthesis converts the text response into natural speech. APIs provide multiple voices with different characteristics. Optimization includes caching frequently used phrases (greetings, confirmations) and streaming synthesis for long texts (splitting into sentences, playback as segments become ready).
-
-Computer vision integration uses a multimodal language model (GPT-5.5, Claude Opus 4.8) that accepts combinations of text and images. Query formation includes text parts and images in the correct order. Images are passed as base64-encoded data or URLs.
-
-Multimodal memory stores conversation history including images and their context. Direct storage of all images requires significant memory. Summarization strategy: a VLM creates a text description of the image that is stored instead of the full image, and thumbnails are stored for quick access.
-
-Adapting responses for voice differs from text: long responses are shortened, Markdown formatting is removed, natural pauses are added through punctuation, and the agent's persona style is applied (formal, friendly, empathetic).

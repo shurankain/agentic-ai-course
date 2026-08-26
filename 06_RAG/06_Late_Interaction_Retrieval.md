@@ -269,29 +269,3 @@ For documents with visual content:
    - Resources available for multi-vector storage
 
 5. **Production pattern:** Dense retrieval (recall) to Late Interaction (precision)
-
----
-
-## Practical Code Examples
-
-### Basic Usage of PyLate with ColBERT
-
-To work with ColBERT through the PyLate library, you need to import the models and rank modules. The process begins with loading a pretrained ColBERT model, for example "colbert-ir/colbertv2.0" from Hugging Face Hub, which is initialized via the models.ColBERT constructor with the model identifier.
-
-A list of documents is prepared for indexing. These can be strings of content, such as text about the Python and Rust programming languages. Document encoding is performed using the encode method with the mandatory parameter is_query=False, which signals the model to use document processing mode. The batch_size parameter controls the batch size when processing multiple documents; for example, a value of 32 allows processing 32 documents simultaneously for faster throughput.
-
-The result of document encoding is a multi-vector representation where each document is represented not by a single vector but by a set of vectors (one per token). Similarly, the query is encoded using the encode method but with is_query=True, which switches the model to query processing mode. The query is also transformed into a set of token embeddings.
-
-The final step is computing scores via the rank.colbert_score function, which takes query embedding and doc_embeddings and returns a list of relevance scores for each document. Internally, this function implements the MaxSim algorithm: for each query token, it finds the maximum similarity to tokens of each document, sums these maximums, and produces the final document score. For example, for a query about memory safety in programming, a document about Rust will receive a higher score (e.g., 0.89) than a document about Python (0.72), since the tokens "memory" and "safety" will find closer matches in the Rust description.
-
-**Key implementation points:**
-
-**PyLate with multilingual models:** To work with texts in Russian, Chinese, and other languages, the `jinaai/jina-colbert-v2` model is used, which supports 89 languages. When encoding, it is important to specify the `output_value="token_embeddings"` parameter to obtain a multi-vector representation instead of a single vector.
-
-**ColPali for PDF documents:** The model processes PDF pages as images via `ColPali.from_pretrained("vidore/colpali-v1.2")`. The process involves loading a page image, obtaining visual embeddings through `process_images()`, encoding the text query through `process_queries()`, and computing MaxSim between the text query and visual document patches. This completely eliminates the need for OCR and preserves visual information.
-
-**Hybrid Retrieval pattern:** The two-stage architecture starts with fast dense retrieval to obtain 100-1000 candidates from a vector store (using a standard model like `all-MiniLM-L6-v2`). These candidates are then reranked through a ColBERT model to produce precise top-K results. The first stage ensures high recall, the second, high precision.
-
-**Visual Document Store:** For PDF indexing, a dictionary is created where the key is `{pdf_path}:page_{i}` and the value is the multi-vector embeddings of the page. Each page is converted to an image, processed through ColPali, and the embeddings are stored. During search, the text query is encoded, a score is computed with each page via MaxSim, and results are sorted by relevance.
-
-**Efficient storage:** PyLate provides `indexes.ColBERTIndex` with support for residual compression and quantization (`n_bits=2`), which reduces memory requirements. The index is created with a specified path and compression parameters, then documents are added in batches, and search is performed via the `search()` method returning (doc_id, score) pairs.

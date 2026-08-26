@@ -80,7 +80,7 @@ GPT-3 scale (175B parameters):
 - Activations: 20-30 GB
 - Total: 40-60 GB: fits within 80 GB
 
-## Practical Example: 100B+ Model
+## Sizing a 100B Model Run
 
 ### Hardware planning
 

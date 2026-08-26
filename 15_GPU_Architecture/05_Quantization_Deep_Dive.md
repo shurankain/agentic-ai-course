@@ -400,6 +400,46 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 
 **Relationship to FA3:** The "incoherent processing" technique in Flash Attention 3's FP8 mode is directly inspired by QuIP#'s approach. Both use random rotations to improve quantization quality.
 
+## Choosing a Quantization Method
+
+### What Each Toolchain Costs You
+
+Three settings dominate, whichever tool you use: bit width, group size, and how much calibration data you feed it. Group size 128 is the usual default and the usual right answer, since smaller groups mean more scales to store and larger groups mean one outlier ruins a wider span. Calibration wants 128 to 512 texts from your own domain, and the domain part is not optional: calibrating a medical model on WikiText produces a model quantized for the wrong distribution.
+
+**AutoGPTQ** takes 30 to 60 minutes for a 7B model on an A100 and returns a model that occupies about a quarter of the memory. Most of that time is Hessian computation.
+
+**AutoAWQ** takes 10 to 20 minutes for the same model because it skips the Hessian, identifying important channels and protecting them with scaling instead. It asks you to pick a kernel variant by workload: GEMM for batched inference, GEMV when batch size is 1. Getting that wrong costs throughput, not quality.
+
+**llama.cpp and GGUF** target CPU rather than GPU. Q4_K_M is the balance point for most uses, Q5_K_M buys quality for size, Q8_0 loses almost nothing, and Q3_K_M is for when the model has to fit at any cost. The real advantage is memory mapping, which lets a model larger than RAM run from disk.
+
+### Evaluating Quality After Quantization
+
+The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate. This is the perplexity. Lower is better. Typical results for 4-bit GPTQ: perplexity increase of 0.5-2.0 points, which is negligible for practical use. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
+
+An additional check is qualitative evaluation: generate responses to prompts characteristic of your use case with both models and compare. Sometimes perplexity does not correlate with user-perceived quality: the model may preserve quality on simple tasks but degrade on complex reasoning tasks.
+
+### The Mechanics Underneath
+
+Symmetric per-group quantization is four steps: split the tensor into groups of 128, take the maximum absolute value in each group, set the scale to that maximum divided by `2^(bits-1) - 1`, then divide, round, and clamp. Dequantization multiplies back by the group's scale. On a random 1024x1024 tensor, 4-bit reconstruction lands around 0.001 to 0.01 mean squared error at an eightfold size reduction with efficient INT4 packing.
+
+Knowing this matters for one reason: the scale is per group, so a single large outlier inside a group stretches the scale and coarsens every other value sharing it. That is the whole reason outlier handling exists as a research area, and it is why AWQ's channel protection and SmoothQuant's redistribution both attack the same failure. Production libraries add fused kernels, mixed-precision compute, and byte-level INT4 packing on top of these four steps.
+
+### Practical Recommendations for Method Selection
+
+**For production GPU inference**: use GPTQ or AWQ with 4-bit precision. The choice between them is usually determined by compatibility with the inference engine (vLLM supports both, TGI works better with AWQ, exllama2 is optimized for GPTQ). Quality is comparable. Calibration data is critical: use 256-512 examples from your actual data distribution, not generic Wikipedia texts.
+
+**For CPU/edge inference**: GGUF format via llama.cpp. Start with Q4_K_M; if quality is insufficient, move to Q5_K_M. The advantage: memory mapping allows running large models on limited RAM systems.
+
+**For fine-tuning**: QLoRA (4-bit base model + LoRA adapters in FP16). This allows fine-tuning a 70B model on a single 80GB GPU. The base model is quantized to 4-bit via bitsandbytes (nf4 format), adapters are trained at full precision.
+
+**For maximum quality**: stay at 8-bit (W8A8 or W8A16). Quality loss is nearly imperceptible, memory savings are 2x, and all modern frameworks are well optimized for INT8.
+
+**Do not use quantization for**: training (except QAT), critical tasks where the slightest degradation is unacceptable (medical, legal), models smaller than 7B (they are already small; the overhead from quantization is not justified).
+
+For deployment-oriented guidance: hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks, see Module 17, Model Quantization for Production.
+
+---
+
 ## Key Takeaways
 
 1. **Quantization exploits neural network redundancy**. Most weights do not require high precision, patterns matter, not exact values.
@@ -423,45 +463,3 @@ KV-cache grows with sequence length and batch size, often consuming more memory 
 10. **Quantization enables democratization**. Thanks to 4-bit quantization, 70B models are accessible for running on consumer GPUs.
 
 ---
-
-## Practical Application
-
-### Using Ready-made Quantization Tools
-
-**AutoGPTQ** is the primary tool for GPTQ quantization. The process consists of creating a quantization configuration (specifying bitwidth of 4 or 8, group size typically 128, symmetry), loading the source model, preparing calibration data (128-512 representative texts from your domain), running the quantization process, and saving the result. For a LLaMA-7B model, the process takes 30-60 minutes on an A100. After quantization, the model is loaded via AutoGPTQForCausalLM.from_quantized() and used as a regular Transformers model, but occupies 4x less memory.
-
-**AutoAWQ** is an analogous tool for AWQ quantization. The interface is similar to AutoGPTQ, but the process is typically faster (10-20 minutes for LLaMA-7B), since AWQ does not require Hessian computation. Configuration is simpler: you specify bitwidth, group size, and version (GEMM for batch inference, GEMV for batch_size=1). AWQ automatically identifies important channels and applies protective scaling. The result is optimized for fast inference through custom CUDA kernels.
-
-**llama.cpp and GGUF**: for CPU inference. Conversion is done through Python scripts from the llama.cpp repository. You choose the quantization type: Q4_K_M: optimal balance for most cases, Q5_K_M: slightly better quality at the cost of size, Q8_0, minimal quality loss, Q3_K_M, extreme compression. After conversion, the model runs through the llama.cpp CLI or through bindings (llama-cpp-python). The advantage: works on any processor, supports memory mapping for RAM savings.
-
-### Evaluating Quality After Quantization
-
-The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate. This is the perplexity. Lower is better. Typical results for 4-bit GPTQ: perplexity increase of 0.5-2.0 points, which is negligible for practical use. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
-
-An additional check is qualitative evaluation: generate responses to prompts characteristic of your use case with both models and compare. Sometimes perplexity does not correlate with user-perceived quality: the model may preserve quality on simple tasks but degrade on complex reasoning tasks.
-
-### Minimal Per-group Quantization Example
-
-To understand the inner workings, consider a simplified implementation of symmetric per-group quantization:
-
-The quantize_per_group function takes a tensor, bitwidth (default 4), and group size (default 128). The tensor is reshaped into groups via reshape, then for each group the maximum absolute value is found. Scale is computed as max_abs / (2^(bits-1) - 1). Values are quantized by rounding the division by scale, converted to int8, and clamped to the range [-max_int, max_int]. The quantized tensor and the array of scales are returned.
-
-The dequantize_per_group function performs the inverse operation: takes the quantized tensor and scales, reshapes into groups, converts to float, multiplies by the corresponding scales, and returns to the original shape.
-
-A test on a random 1024x1024 tensor shows an MSE error of ~0.001-0.01 for 4-bit quantization and an 8x size reduction (when using efficient INT4 packing into bytes).
-
-This code demonstrates the core mechanics: divide the tensor into groups, find the scale for each group, round and clamp. Real libraries add optimizations: fused kernels, mixed precision compute, efficient INT4 packing into bytes.
-
-### Practical Recommendations for Method Selection
-
-**For production GPU inference**: use GPTQ or AWQ with 4-bit precision. The choice between them is usually determined by compatibility with the inference engine (vLLM supports both, TGI works better with AWQ, exllama2 is optimized for GPTQ). Quality is comparable. Calibration data is critical: use 256-512 examples from your actual data distribution, not generic Wikipedia texts.
-
-**For CPU/edge inference**: GGUF format via llama.cpp. Start with Q4_K_M; if quality is insufficient, move to Q5_K_M. The advantage: memory mapping allows running large models on limited RAM systems.
-
-**For fine-tuning**: QLoRA (4-bit base model + LoRA adapters in FP16). This allows fine-tuning a 70B model on a single 80GB GPU. The base model is quantized to 4-bit via bitsandbytes (nf4 format), adapters are trained at full precision.
-
-**For maximum quality**: stay at 8-bit (W8A8 or W8A16). Quality loss is nearly imperceptible, memory savings are 2x, and all modern frameworks are well optimized for INT8.
-
-**Do not use quantization for**: training (except QAT), critical tasks where the slightest degradation is unacceptable (medical, legal), models smaller than 7B (they are already small; the overhead from quantization is not justified).
-
-For deployment-oriented guidance: hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks, see Module 17, Model Quantization for Production.

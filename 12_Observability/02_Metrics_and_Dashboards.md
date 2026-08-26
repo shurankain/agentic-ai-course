@@ -151,11 +151,13 @@ User feedback integration links technical metrics with user ratings.
 
 Automated Quality Gates prevent deploying changes that degrade quality. Continuous Evaluation on live traffic (shadow testing) enables assessing changes before full rollout.
 
-## Practical Example: Simplified Metrics Collector
+## What a Minimal Metrics Layer Tracks
 
-The SimpleLLMMetrics class tracks the total number of calls, input and output tokens, and total cost. The record_call method accepts token counts and a model, computes cost based on a pricing table (input and output tokens are priced differently), and accumulates metrics. The get_summary method returns aggregated data: total call count, token count, average input and output tokens, total cost, and average cost per call.
+The smallest useful version records four things per call: the model, the input token count, the output token count, and the cost derived from them against a pricing table. Keep input and output separate rather than summing, since output is priced three to six times higher and a total hides which side is driving the bill.
 
-Production systems extend this approach: thread safety, histograms for distributions, integration with Prometheus/Grafana, specialized metrics for RAG and quality scoring.
+Aggregate into six numbers: calls, total tokens, mean input tokens, mean output tokens, total cost, and mean cost per call. Mean input tokens is the one that moves first when a prompt template changes or context injection grows, so it is worth watching even when the total looks flat.
+
+Production systems extend this in four directions: thread safety on the counters, histograms instead of means so the tail is visible, export to Prometheus and Grafana, and separate metrics for retrieval quality and answer scoring.
 
 ## Key Takeaways
 

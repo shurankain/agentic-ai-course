@@ -72,7 +72,7 @@ Extraction is no longer limited to text. Vision-language models (GPT-5.6, Claude
 
 ---
 
-## Practical Example: Extraction with Validation
+## Extraction with a Validation Loop
 
 Architecture: an EntityExtractor interface with an extract method takes text and returns a list of entities. Each entity contains text, type (PERSON, ORGANIZATION, LOCATION, DATE, MONEY, PRODUCT), and confidence level.
 

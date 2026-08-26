@@ -103,6 +103,8 @@ A ~2000x savings. This enables:
 - Using longer contexts
 - Training larger models on fewer GPUs
 
+Verify in a profile that you actually got it, because a silent fallback to the math backend looks like a slow model rather than a misconfiguration. Four things should hold: the Flash kernel accounts for more than 90% of attention time, peak memory scales as O(N) rather than O(N squared) when you double the sequence length, GPU utilization stays above 80% on long sequences, and the saving at 4096 tokens reaches 90% or more against a naive implementation. If memory still curves quadratically, the kernel is not running whatever the configuration says.
+
 ### Speed: Up to 3x Speedup
 
 Flash Attention not only saves memory. It is faster. On H100 with sequence length 2048, Flash Attention delivers a 2-3x speedup.
@@ -356,31 +358,3 @@ All modern inference engines (vLLM, TensorRT-LLM, TGI) use Flash Attention by de
 7. **Hardware-aware design.** An efficient algorithm accounts for specific hardware characteristics: SRAM size, bandwidth at each memory level, Tensor Core features.
 
 8. **Practical impact.** Flash Attention enabled long contexts in modern LLMs. Without this optimization, 128K contexts in Claude or GPT-4 would be impractical.
-
-## Practical Application
-
-### Using Flash Attention via PyTorch
-
-To use Flash Attention, test data Q, K, V are created in float16 format on a CUDA device. The first approach is explicitly specifying the backend via the sdpa_kernel(SDPBackend.FLASH_ATTENTION) context manager, useful for testing and performance comparison. The second approach is automatic selection via F.scaled_dot_product_attention, where PyTorch chooses the optimal backend.
-
-The is_causal=True parameter enables causal masking for autoregressive models without requiring explicit creation of an attention mask. Flash Attention efficiently handles causal masking within its kernel.
-
-For benchmarking, CUDA Events with enable_timing=True are used, measuring time between start.record() and end.record(). Flash Attention, Memory-efficient attention, and the standard Math backend are compared.
-
-### Integration into Production Models
-
-For Hugging Face models, attn_implementation="flash_attention_2" is specified when loading via AutoModelForCausalLM.from_pretrained(). Activation is verified via model.config._attn_implementation.
-
-For custom PyTorch models, replace manual attention implementation with F.scaled_dot_product_attention(). PyTorch automatically uses Flash Attention for sequences longer than ~512 tokens.
-
-### Profiling and Optimization
-
-torch.profiler with parameters activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA] and profile_memory=True enables performance analysis.
-
-Key metrics:
-- CUDA kernel time: the Flash Attention kernel should account for >90% of attention operation time
-- Memory footprint: peak usage should scale as O(N), not O(N²)
-- Throughput: measured in tokens/second for different batch sizes and sequence lengths
-- GPU utilization: target utilization >80% for long sequences
-
-Memory savings grow quadratically with sequence length: for seq_len=4096, savings reach 90%+ compared to a naive implementation. This allows increasing batch size by 2-4x or using longer contexts.

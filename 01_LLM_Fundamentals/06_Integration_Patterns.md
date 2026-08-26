@@ -368,15 +368,3 @@ LangChain4j integrates with OpenTelemetry, LangSmith, and other tracing systems.
 6. **Circuit breaker and fallback** ensure reliability. The system must function even during provider outages.
 
 7. **Monitoring** covers latency, tokens, cost, and errors. Without metrics, you are flying blind.
-
----
-
-## Brief Code Example
-
-Below is a minimal example demonstrating key LLM integration patterns in a single class:
-
-A **production-ready LLM client** combines several critical patterns. The class is initialized with a model and a thread pool for asynchronous execution. Internally, it creates an LRU cache with a size limit (e.g., 1000 entries) and a TTL (1 hour via Caffeine), a rate limiter to control request frequency (e.g., 10 per second via Guava), and a circuit breaker to prevent cascading failures with a 50% error threshold and a 30-second wait time.
-
-The asynchronous generation method first checks the cache by prompt hash, returning the stored result on a match. If there is no cache hit, the request is executed asynchronously via CompletableFuture: first, the rate limiter is acquired to respect limits, then the circuit breaker executes the request with retry logic and exponential backoff, and finally the result is stored in the cache before being returned.
-
-This approach provides asynchronous execution for scalability, caching for cost reduction, rate limiting for API compliance, circuit breaker for fault tolerance, and retry for handling transient failures.

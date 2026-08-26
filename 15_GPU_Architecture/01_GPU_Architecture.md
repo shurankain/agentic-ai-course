@@ -107,6 +107,8 @@ Matrix multiplication has high intensity. For NxNxN matrices, the number of oper
 
 **Attention in Transformers** is an example of a memory-bound operation. The standard implementation requires materializing a (sequence_length x sequence_length) matrix, creating a massive volume of reads and writes.
 
+The number that turns this into a decision is the ridge point, where the roofline bends from bandwidth-limited to compute-limited. On current data-center GPUs it sits somewhere between 20 and 50 FLOP per byte. Compute the intensity of your kernel, compare it to that band, and you know which side you are on before profiling anything: below it, faster arithmetic buys nothing and only fewer memory trips help, and above it the reverse. Most attention kernels land far below, which is why Flash Attention attacks memory traffic rather than the multiply count.
+
 ## CUDA Programming Model
 
 ### Thread Hierarchy
@@ -152,6 +154,8 @@ Constraints: matrix dimensions must be multiples of 8 or 16, data must be in spe
 **FP4**: new in Blackwell. Doubles performance over FP8 for inference. Requires careful calibration but enables 4-bit inference at near-FP8 quality. DeepSeek V3 demonstrated that aggressive low-precision training is practical; FP4 extends this further.
 
 **INT8**: for inference with quantization. Maximum performance with acceptable quality loss.
+
+The gap between these formats is larger than most people expect. On an A100, dense matrix multiplication runs at roughly 19 TFLOPS in FP32 and roughly 150 TFLOPS in FP16 or BF16, an eight-fold difference for a one-line change in dtype. Part of that is available without touching the model at all: enabling TF32 through `torch.backends.cuda.matmul.allow_tf32` and `torch.backends.cudnn.allow_tf32` routes FP32 matmuls through Tensor Cores while keeping FP32 range. If a training job is compute-bound and still running plain FP32, those two flags are the cheapest speedup on the list.
 
 ## Relationship Between GPU Architecture and Model Design
 
@@ -210,21 +214,3 @@ Two consequences for anyone sizing infrastructure. Memory-bound decisions that l
 **Energy is becoming a constraint, not just a cost.** A single NVL72 rack draws ~120 kW. Data centers are projected to consume ~1,000 TWh by 2026 (IEA). Hyperscalers are procuring nuclear (SMR pipeline: 25 to 45 GW in 16 months) and geothermal to power AI infrastructure. Performance-per-watt (Vera Rubin: 10x over Grace Blackwell) is now an accelerator selection criterion alongside raw throughput. See Module 18, Enterprise AI Adoption for the full energy landscape.
 
 **Profiling reveals real bottlenecks.** Only profiling shows the true picture. torch.profiler and Nsight are essential tools.
-
-## Practical Examples
-
-### Memory Hierarchy Demonstration
-
-A CUDA kernel divides work into threads, where each thread processes a data element. Sequential (coalesced) access is 2-5x faster than strided access thanks to memory transaction merging.
-
-### Using Tensor Cores via PyTorch
-
-To compare performance across different formats, matrices are created in FP32, FP16, and BF16, then matrix multiplication is performed with timing measured via CUDA Events. TFLOPS (teraflops) is computed for each format. Typical results on A100: FP32 around 19 TFLOPS, FP16 around 150 TFLOPS (8x speedup), BF16 similar to FP16.
-
-Enabling TF32 via torch.backends.cuda.matmul.allow_tf32 and torch.backends.cudnn.allow_tf32 parameters automatically accelerates FP32 operations through Tensor Cores without code changes.
-
-### Profiling and Bottleneck Analysis
-
-torch.profiler is used for performance analysis with CPU and CUDA time tracking, tensor shapes, and memory usage. Results are exported to TensorBoard or Chrome trace viewer.
-
-Arithmetic intensity determines the type of bottleneck: operations with intensity below the ridge point are memory-bound, above: compute-bound. The ridge point for modern GPUs typically falls in the 20-50 FLOP/byte range.

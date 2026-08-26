@@ -237,6 +237,10 @@ In practice, parameters are often used together. The typical order of applicatio
 4. **Top-p** removes tokens outside the nucleus
 5. **Selection** from the remaining set
 
+Three details in that pipeline decide whether your settings do what you think. Top-k finds the k-th largest probability and zeroes everything below it, then renormalizes, so the surviving probabilities are not the ones you saw before the cut. Top-p sorts descending and accumulates until the running sum reaches the threshold, which means the nucleus is a different size on every token: wide where the model is unsure, one or two tokens where it is confident. Selection is a roulette wheel over what is left, drawing a random number and walking the tokens until the cumulative probability passes it.
+
+At temperature 0 the rest of the pipeline stops mattering. The implementation takes the highest logit directly, so top-k and top-p are ignored and the output is reproducible. Setting `temperature=0, top_p=0.9` and expecting the top_p to do something is a common misreading.
+
 ### Recommended Combinations
 
 **For precise tasks (code, data)**: temperature = 0, top_p = 1.0 (irrelevant at temp=0), top_k = 1 (greedy decoding).
@@ -385,33 +389,3 @@ Generation parameters affect quality and economics:
 6. **Reasoning models override standard parameters**. o-series forces temperature=1, Claude extended thinking fixes temperature for the thinking phase. A new `thinking budget` parameter (reasoning_effort, budget_tokens) controls the depth of reasoning: a new cost-latency-quality lever.
 
 7. **Experimentation is essential**. Optimal parameters depend on the specific model, task, and user expectations.
-
----
-
-## Practical Implementation
-
-### How Parameters Are Applied in a Real Sampler
-
-In production systems, all parameters are applied sequentially in a strict order. First, temperature scales the logits. This makes the distribution more or less "sharp". Then softmax converts logits into probabilities. After that, top-k removes all tokens except the k most probable. Next, top-p finds the minimal set of tokens covering the specified probability mass. Finally, a random selection is made from the remaining tokens according to their probabilities.
-
-The key point: at temperature = 0, all other parameters are ignored, and the system simply selects the token with the maximum logit (greedy decoding). This guarantees determinism and reproducibility of results.
-
-Top-k works by finding the k-th largest element: all tokens with probability below this threshold are zeroed out, and the remaining ones are renormalized so their sum equals one again.
-
-Top-p requires sorting tokens by descending probability. Then a cumulative sum is accumulated until it reaches the topP threshold. All tokens beyond this "nucleus" are discarded, and the remaining ones are renormalized.
-
-Final sampling uses the "roulette wheel" method: a random number between 0 and 1 is generated, then tokens are traversed while accumulating their probabilities until the sum exceeds the random number. That token is selected.
-
-### Configuration for Different Agent Modes
-
-In agentic systems, it is critically important to use different generation parameters at different stages of operation. This is not merely a recommendation but a necessity for reliable operation.
-
-**Tool selection mode**: Temperature must be strictly 0 to guarantee deterministic selection. Max_tokens is limited to 100 tokens since tool names are short. The stop sequence is set to "\n" to prevent the model from generating explanations after the tool name. Repetition penalties are disabled since they are unnecessary for such short generation.
-
-**Argument generation mode**: Also requires temperature = 0 for JSON accuracy. Max_tokens is expanded to 500, as arguments can be complex objects. Stop sequences include "```" (end of code block) and a double newline. This prevents generation of extraneous text after the arguments.
-
-**Reasoning mode (Chain of Thought)**: A small degree of creativity is acceptable here: temperature = 0.5. Top-p is set to 0.9 for diversity of thought. Max_tokens is increased to 1000, as reasoning can be extensive. Stop sequences include "Action:" and "Final Answer:" to prevent the model from advancing to the next stage on its own. Small repetition penalties (presence = 0.3, frequency = 0.1) prevent the model from fixating on the same phrases.
-
-**User response mode**: Temperature is raised to 0.7 for natural language. Top-p = 0.95 provides more freedom in word choice. Max_tokens up to 2000 for detailed explanations. Stop sequences are empty: the model decides when to finish. Repetition penalties are more significant (presence = 0.5, frequency = 0.3) to keep the text from becoming monotonous.
-
-This differentiation of parameters allows the agent to be precise where precision is needed and natural where fluent communication matters.

@@ -346,6 +346,22 @@ Debugging MoE routing issues or SSM state corruption requires deep understanding
 
 **When hybrids are justified:** Enterprise scenarios with diverse workloads where neither quality nor efficiency can be sacrificed, and engineering resources exist for custom optimization.
 
+### The Same Three Architectures, Measured
+
+Percentages are easier to argue with than absolutes, so here are one representative model per family on a single GPU, at 4K context.
+
+| | Dense, Mistral 7B | MoE, Mixtral 8x7B | SSM, Mamba 2.8B |
+|---|---|---|---|
+| Active / total parameters | 7B / 7B | 13B / 47B | 2.8B / 2.8B |
+| Memory, bf16 | ~14 GB | ~94 GB, or ~24 GB at 4-bit | ~6 GB |
+| Throughput at 4K | ~150 tok/s | ~100 tok/s | ~200 tok/s |
+| Time to first token | ~50 ms | ~40 ms | ~20 ms |
+| Throughput at 32K | falls to ~30 tok/s | falls similarly | holds ~180 tok/s |
+
+Two readings matter here. Mixtral carries 47B of weights and runs at the speed of a 13B model, which is the whole MoE bargain: total parameters buy quality, active parameters set the speed, and memory pays for the difference. And the last row is where SSM stops being a research curiosity. At 4K the Transformer is competitive; at 32K it has lost six times the throughput while Mamba has lost almost none.
+
+Measure this yourself before believing any of it. Run a warm-up pass so CUDA kernel initialization does not land inside the first timing, call `torch.cuda.synchronize()` on both sides of the measurement since kernel launches are asynchronous and an unsynchronized timer measures the launch rather than the work, and test at the context length you actually serve. Benchmarks published at 2K context tell you nothing about a 32K workload.
+
 ### Architecture Landscape in 2025: Confirmed Trends
 
 **MoE is the dominant frontier architecture:** What was a prediction is now reality. DeepSeek V3/R1 (671B total, 37B active), Llama 4 Scout and Maverick, Qwen 3 235B, Gemini 2.5 Pro, and GPT-5 all use MoE. At scales >100B parameters, dense inference is economically impractical. MoE is no longer experimental. It is the default.
@@ -371,83 +387,3 @@ Debugging MoE routing issues or SSM state corruption requires deep understanding
 **The senior engineer's responsibility:** Understanding these trade-offs distinguishes experienced engineering from simply "using an API." You need to know "how Mamba works" and "why Mamba could save $200K per month for our use case, but would require 3 months of infrastructure work."
 
 **Tooling gap:** New architectures have less mature tooling. Be prepared for additional engineering investment, or accept the conservative choice (Dense Transformer) with full awareness of the missed opportunities.
-
----
-
-## Practical Examples
-
-### Working with Modern Architectures
-
-**Loading and using MoE models (Mixtral):**
-
-MoE models require more GPU memory (all 47B parameters must be loaded), but use only ~13B active parameters during inference. For deployment on consumer hardware, apply 4-bit quantization via BitsAndBytes. Mixtral uses the ChatML format for prompts: use the tokenizer's `apply_chat_template()` for proper formatting.
-
-**Key considerations:**
-- MoE requires device_map="auto" for automatic expert distribution across GPUs
-- Quantization reduces memory footprint from ~94GB (bf16) to ~24GB (4-bit)
-- Router decisions are not visible through the standard API: custom hooks are needed for analysis
-
-**Working with SSM models (Mamba):**
-
-SSM models demonstrate linear scaling with context length. When benchmarking on sequences of 1K, 4K, 16K, 32K tokens, you will observe:
-- Time per token remains constant (O(1))
-- Memory grows linearly, not quadratically
-- At contexts >16K tokens, the advantage over Transformers becomes dramatic
-
-**Performance testing:**
-
-When comparing architectures, measure three key metrics:
-1. Time to First Token (TTFT): generation start latency
-2. Tokens per second: throughput after generation begins
-3. Peak memory usage: maximum memory consumption
-
-For correct benchmarking:
-- Perform a warm-up run to initialize CUDA kernels
-- Use torch.cuda.synchronize() before and after measurements
-- Test at realistic context lengths for your use case
-
-**Architectural trade-offs in real numbers:**
-
-Dense Transformer (e.g., Mistral 7B) has 7B active parameters out of 7B total, requires approximately 14GB of memory in bf16 format, generates roughly 150 tokens per second at 4K context, with a Time to First Token of approximately 50ms.
-
-MoE architecture (Mixtral 8x7B) activates 13B parameters out of 47B total, requiring more memory: approximately 94GB in bf16 or ~24GB with 4-bit quantization. Generation speed is approximately 100 tokens per second at 4K context with a TTFT of approximately 40ms. Key point: more total parameters yield better quality, but active parameters determine inference speed.
-
-SSM models (Mamba 2.8B) demonstrate the best efficiency for their size: 2.8B parameters, only ~6GB of memory, speeds up to 200 tokens per second on short context with a TTFT of just ~20ms. The critical advantage emerges on long context: at 32K tokens, Mamba maintains ~180 tok/s, while a comparable Transformer drops to ~30 tok/s due to the quadratic complexity of attention.
-
-### Practical Decision-Making Framework
-
-**Choosing an architecture by workload profile:**
-
-If your median context length is < 8K tokens AND precise retrieval is required: use a Dense Transformer. Tooling is mature, quality is predictable, deployment is straightforward.
-
-If you need long context (>32K) OR streaming processing: consider SSM (Mamba). Dramatic efficiency advantages on long sequences compensate for less mature tooling.
-
-If inference cost is critical but GPU memory is available: MoE delivers large-model quality at small-model computational cost. Trade-off: more complex deployment, more memory required.
-
-For enterprise use cases with diverse requirements: hybrid models (Jamba-style) balance characteristics but require greater investment in infrastructure and R&D.
-
-**Hardware considerations:**
-
-On consumer GPU (24GB): Dense 7B quantized or Mamba up to 8B
-On single A100 (80GB): Dense up to 34B, MoE like Mixtral (quantized), Mamba up to 13B
-On multi-GPU setup: any architecture, but MoE requires high-speed interconnect
-
-**Team competency assessment:**
-
-If you lack a dedicated ML infrastructure team: start with Dense Transformer. Massive ecosystem, ready-made solutions, minimal surprises.
-
-If you have ML engineers and willingness to optimize: SSM or MoE can deliver significant gains in performance and cost.
-
-Only for teams with strong research competencies, experiment with hybrid architectures. Newer technology, but limited production experience.
-
-## Brief Code Example
-
-### Basic Inference with Different Architectures
-
-All modern architectures use a unified API through the Transformers library. The basic loading and generation pattern is identical: use `AutoTokenizer` and `AutoModelForCausalLM`, specify `torch_dtype=torch.bfloat16` for memory efficiency, and `device_map="auto"` for automatic GPU distribution. For Dense models, load a model such as "mistralai/Mistral-7B-v0.1"; for MoE, "mistralai/Mixtral-8x7B-v0.1"; for SSM, "state-spaces/mamba-2.8b-hf". After tokenizing the input, call `model.generate()` with specified maximum length and temperature to control diversity.
-
-**Quantizing MoE for consumer GPUs:** Running Mixtral on consumer hardware requires 4-bit quantization via BitsAndBytesConfig. It reduces memory from ~94GB (bf16) to ~24GB. This allows the model to fit on a single consumer GPU. Use the parameters `load_in_4bit=True`, `bnb_4bit_compute_dtype=torch.bfloat16` for computation precision, and `bnb_4bit_quant_type="nf4"` for the optimal balance of quality and compression.
-
-**Long-context benchmarking:** For a correct comparison of SSM and Transformer on long sequences, test across lengths (1K, 4K, 16K, 32K tokens). Always perform a warm-up run to initialize CUDA kernels, then use `torch.cuda.synchronize()` before and after timing for accuracy. SSM will show constant or near-linear processing time, while Transformers demonstrate quadratic growth with increasing context length.
-
-**Memory footprint analysis:** For MoE models, it is important to distinguish total from active parameters. Compute the total parameter count via `sum(p.numel() for p in model.parameters())`, then for MoE check for the `num_experts_per_tok` attribute in config. Active parameters are a fraction of total: shared parameters (attention, embeddings) plus only selected experts. This explains why Mixtral with 47B parameters uses only ~13B during inference, delivering the efficiency of a smaller model with the capacity of a larger one.

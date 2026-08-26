@@ -128,19 +128,21 @@ For production AI systems processing millions of requests, evaluation must scale
 
 **Problem investigation**: when users complain but automated metrics look good.
 
-## Practical Implementation
+## Running an Evaluation Campaign
 
-The campaign management service includes creating a campaign with configuration validation, forming tasks from examples, adding attention checks at a specified ratio, selecting qualified evaluators, distributing tasks, and notifying participants.
+A campaign is easy to launch and easy to poison, and the difference is in three controls that have to exist before the first task goes out.
 
-When retrieving the next task, the evaluator's qualifications are verified, tasks the evaluator has not yet completed are filtered, and assignment is taken into account.
+**Attention checks, mixed in at a fixed ratio.** These are items with a known correct answer, indistinguishable from real ones. Without them you cannot tell a careful evaluator from a fast one, and paid annotation attracts fast ones.
 
-Submitting an evaluation includes validation, checking completion time (excessively fast completion is rejected), and verifying attention checks with possible evaluator blocking upon systematic failures.
+**A minimum completion time.** A submission that arrives faster than the text can be read is not an evaluation. Reject on time as well as on content, and block an evaluator who fails attention checks systematically rather than once, since anyone can misread a single item.
+
+**Qualification and no repeats.** Route each task only to evaluators who qualify for it, and never to one who has already judged it, or the same opinion arrives twice wearing different names.
 
 Result analysis aggregates evaluations by task. For numerical ratings, the mean, median, and standard deviation are computed. For pairwise comparisons: majority voting with confidence as the proportion of votes for the winner.
 
 Inter-annotator agreement is computed via Krippendorff's alpha: observed disagreement and expected disagreement are calculated, alpha = 1 - observed/expected. Interpretation: >=0.8: strong agreement, >=0.6: moderate, >=0.4, fair, otherwise poor.
 
-The pairwise comparison system implements Elo rating. When creating a pair, the order is randomized to eliminate positional bias. When recording a result, the order is restored, and Elo ratings are updated using the formula: new rating = old + K x (actual outcome - expected outcome). The expected outcome is computed via the formula 1 / (1 + 10^((opponent_rating - own_rating)/400)).
+Pairwise comparison scales through Elo. Randomize which system is shown first on every pair and restore the true order only when recording the result, because evaluators favour the left or first option at a measurable rate and an unrandomized harness turns that bias into a ranking. Update with `new = old + K x (actual - expected)`, where expected is `1 / (1 + 10^((opponent - own)/400))`.
 
 Statistical significance is verified through a binomial test on direct comparisons between systems. With fewer than 10 direct matches: insufficient data. A p-value < 0.05 is considered significant.
 

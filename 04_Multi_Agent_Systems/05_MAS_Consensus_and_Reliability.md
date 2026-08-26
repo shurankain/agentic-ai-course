@@ -50,6 +50,10 @@ A more advanced approach is to weight the votes. The weight can be determined by
 
 **Expertise relevance**: an agent specializing in the given task type receives greater weight. A security expert agent should have more influence on vulnerability questions than a general-purpose agent.
 
+Weighting on historical accuracy needs two guards, and systems that skip them misbehave in predictable ways. Start every agent at 0.5 rather than at 1.0, since a fresh agent has no record and starting it at full weight lets an untested participant outvote a proven one. Then damp the weight by a confidence factor that rises with the number of votes cast and saturates somewhere around a hundred, because otherwise an agent that happened to be right three times in a row arrives at a perfect score and dominates the next decision.
+
+Update the accuracy with an exponential moving average rather than a running mean: new accuracy is the old one times `1 - rate`, plus 1.0 or 0.0 for the latest outcome times `rate`, at a rate of 0.1 to 0.2. A running mean over the full history stops responding once the sample is large, which is the wrong behaviour when an agent degrades after a model upgrade. Report the winning weight as a fraction of total weight alongside the decision, since a 51% win and a 95% win are different events and a bare answer hides which one happened.
+
 ### Supermajority
 
 For critical decisions, one can require not a simple majority but a supermajority, for example, 2/3 or 3/4 of votes. This reduces the risk of accepting an erroneous decision due to a random tilt, but increases the probability of a "deadlock" when no option gathers enough votes.
@@ -77,6 +81,8 @@ Effective AI debates usually follow a structured format:
 **Rounds 2-N: Rebuttals.** Agents see opponents' positions and attempt to refute them. They point out logical errors, provide counterexamples, and challenge premises.
 
 **Final round: Judge.** An independent agent (or multiple agents) evaluates the arguments of both sides and renders a decision. The judge did not participate in the debate and evaluates only the quality of argumentation.
+
+Two parameters set the cost. Ask each debater for three to five arguments in round 1 rather than an open-ended case, because an unbounded opening produces a wall the opponent cannot engage with specifically. And cap the rebuttal rounds at two to four: below two there is no refutation, above four the agents restate rather than advance, and every round costs a full pass from both debaters. Keep the judge blind to which side is which where the framework allows it, since position labels carry their own bias.
 
 ### When to Use Debates
 
@@ -377,91 +383,3 @@ Error propagation is a critical MAS problem. Knowledge provenance, confidence pr
 Quality metrics are needed at three levels: for individual agents, for interactions, and for the system as a whole. Without measurements, systematic improvement is impossible.
 
 The choice of consensus mechanisms and quality assessment should match the requirements of the specific system. Over-engineering is just as dangerous here as under-engineering.
-
----
-
-## Practical Implementation of Reliable Systems
-
-### Weighted Voting with Adaptive Weights
-
-A weighted voting system automatically adjusts each agent's influence based on its historical accuracy. The key idea: agents that were correct more often in the past receive greater weight in future decisions.
-
-**Main components:**
-
-**Agent profile** stores performance metrics: base weight (static), current accuracy (dynamic), number of voting participations. Initial accuracy is set neutrally (0.5) to avoid bias toward new agents.
-
-**Weight computation** combines several factors. The final weight equals the product of base weight, current accuracy, and the confidence factor. The confidence factor grows with the number of votes, reaching maximum around 100 votes. This protects against situations where an agent happened to answer correctly a few times in a row and gained disproportionate influence.
-
-**Voting process** groups votes by answer variant, sums weighted scores for each variant, and selects the variant with the maximum weighted score. The confidence of the final decision is computed as the ratio of the winner's weight to the sum of all weights.
-
-**Weight updates** occur after receiving ground truth (the correct answer). Exponential moving average is used: new accuracy equals old accuracy multiplied by (1 - learning_rate) plus the correctness indicator (1.0 or 0.0) multiplied by learning_rate. Learning rate is typically 0.1-0.2, which ensures smooth but stable updates.
-
-**Result transparency:** the system returns the final decision and voting details for each variant: list of votes, total weight, percentage breakdown. This enables auditing and understanding why a particular decision was made.
-
-### Agent Debate System
-
-The adversarial approach to consensus organizes formalized debates between two agents defending opposing positions, with an independent judge.
-
-**Architecture:** three roles: "for" debater, "against" debater, judge. Each agent is independent and has no access to the internal state of others.
-
-**Debate protocol:**
-
-Round 0 (initial positions): each debater receives the question and context, formulates 3-5 strong arguments supporting their position, and anticipates the opponent's counterarguments.
-
-Rebuttal rounds: debaters see the opponent's arguments and the full debate history, point out logical errors in the opponent's arguments, provide counterexamples and counter-evidence, and strengthen their position with new arguments. The number of rounds is typically 2-4 for a balance between depth and cost.
-
-Final round (judge): an independent agent receives the complete debate transcript, evaluates both sides on criteria (logical coherence, evidence quality, rebuttal effectiveness, overall persuasiveness), and renders a decision in a structured format (winner, confidence, scores for both sides, key factors, detailed justification).
-
-**Consensus detection:** in rare cases, debaters may reach agreement early. The system checks whether both sides acknowledge each other's validity (searching for phrases like "valid point", "agree that"). When consensus is detected, the debate ends early.
-
-**Advantages of the approach:** identifying weak points in argumentation through active challenging, avoiding confirmation bias (each side is forced to consider the alternative). This makes all reasoning steps explicit.
-
-**Limitations:** high cost (6+ LLM calls per question), need for an independent judge, possibility of "convincing lies" (agents can generate plausible but false arguments).
-
-### Knowledge Provenance for Error Tracking
-
-The provenance system tracks the origin of every fact in a multi-agent system, which is critically important for diagnosing and isolating errors.
-
-**Provenance record structure:** each fact has a unique identifier, content (type, content, attributes), source (creator agent ID), own confidence (agent's confidence), effective confidence (accounting for dependencies), list of dependencies (prerequisite fact IDs), creation timestamp, metadata (validity flags, invalidation reasons).
-
-**Effective confidence computation:** the key principle is that confidence in a conclusion cannot exceed confidence in the premises. Effective confidence is taken as the minimum between the fact's own confidence and the minimum effective confidence of all dependencies. This creates cascading propagation of uncertainty: if there was an unreliable fact somewhere in the chain, all dependent facts receive reduced effective confidence.
-
-**Building the provenance chain:** recursive traversal of the dependency graph with cycle protection creates a linearized chain from initial facts to the target. This allows understanding what information an inference was based on.
-
-**Finding affected facts:** when an error is discovered in fact X, the system finds all facts that directly or indirectly depend on X. For each fact Y, it checks whether a dependency path exists from Y to X. The result is a set of facts that may be compromised by the error.
-
-**Fact invalidation:** when an error is discovered, the erroneous fact is invalidated and all facts dependent on it. The metadata of each affected fact records an invalidation flag, the reason (reference to the original error), and the invalidation time. This prevents the use of potentially erroneous data.
-
-**Audit report generation:** for any fact, a complete report on its origin can be generated, including the full dependency chain, confidence metrics at each step, and source information. This is critically important for decision explainability in high-risk applications.
-
-### Circuit Breaker for Protection Against Cascading Failures
-
-Circuit breaker is a pattern from distributed systems, adapted to protect multi-agent systems from error propagation.
-
-**Three states:**
-
-CLOSED (normal operation): all requests pass through to the agent, errors are registered but do not block operation. When the error threshold is reached (e.g., 5 consecutive failures), transition to the OPEN state occurs.
-
-OPEN (blocking): all requests are immediately rejected without calling the agent, the system uses a fallback strategy (backup agent, cached result, honest "I don't know"). After a timeout (e.g., 30 seconds), transition to HALF_OPEN.
-
-HALF_OPEN (testing): limited test requests are allowed through. On success: transition back to CLOSED (agent has recovered). On failure: return to OPEN (agent is still non-operational).
-
-**Operation logic:**
-
-The execute method accepts an operation and a fallback strategy. If the circuit is in the OPEN state, the operation is not executed and the fallback is returned immediately. If the circuit allows the request, the operation is executed with exception handling. On success, the error counter is reset; in HALF_OPEN, transition to CLOSED occurs. On failure, the counter is incremented, transition to OPEN is possible, and the fallback is returned.
-
-**Advantages for MAS:**
-
-Failure isolation: a non-functional agent does not infect the entire system with its errors. Automatic recovery: the system periodically checks whether the agent has recovered. Graceful degradation: the system continues operating in a limited mode instead of complete failure. Monitoring: state transitions are logged. This gives a signal about problems.
-
-**Parameter tuning:**
-
-Error threshold (failureThreshold): typically 3-10. Lower values are more sensitive to problems but may produce false positives. Higher values are more tolerant of temporary failures but respond more slowly to systemic problems.
-
-Reset timeout (resetTimeout): typically 10-60 seconds. Should be sufficient for the agent's potential recovery.
-
-Half-open window (halfOpenWindow): time during which the recovery decision is made. Typically 5-15 seconds.
-
-### Implementation Example
-
-A weighted voting system is created with a set of agents and a learning rate. Each agent votes by specifying an answer variant and confidence level. The system weights votes based on agents' historical accuracy, selects the winning variant, and computes overall confidence. After receiving the correct answer, the system updates agent weights using exponential moving average for smooth adaptation to performance changes.

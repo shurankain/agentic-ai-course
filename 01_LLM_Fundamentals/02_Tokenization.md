@@ -295,29 +295,13 @@ All these strategies rely on accurate token counting.
 
 ---
 
-## Key Takeaways
-
-1. **Tokenization is not a trivial process.** Text is converted to numbers through complex algorithms, and understanding this process helps write effective prompts.
-
-2. **Subword tokenization (BPE, WordPiece, SentencePiece)** is the standard in modern LLMs. It balances vocabulary compactness with the flexibility to represent any text.
-
-3. **Token count determines everything:** API request costs, processing speed, available context size. Saving tokens means saving money and resources.
-
-4. **Different languages tokenize differently.** English is the most efficient; Russian and other languages require more tokens for the same meaning.
-
-5. **Numbers and rare words are tokenization's weak spot.** This explains some "strange" LLM errors in arithmetic and name handling.
-
-6. **For AI agents,** tokenization affects prompt design, tool descriptions, and context management strategies.
-
----
-
-## Practical Implementation Aspects
+## Counting Tokens and Estimating Cost
 
 ### Token Counting in Production Systems
 
-For effective context management, accurate token count estimation is critically important. In production systems, this is achieved through specialized tokenization libraries matching the specific model.
+For effective context management, accurate token count estimation is critically important. Count with the tokenizer that matches the model you are calling, since a count from the wrong tokenizer is wrong by 10% to 30% and the error is not in a consistent direction.
 
-**The basic approach** involves creating a token counting utility that initializes the tokenizer for the chosen model (e.g., OpenAI or Claude) and provides methods for estimating both individual texts and entire message chains. This enables predictable context budget management.
+Count two things separately: a single text, and a whole message chain including role markers and tool definitions. The second is what actually fills the context window, and it is routinely 15% larger than summing the message bodies.
 
 **Prompt efficiency analysis** is based on measuring the character-to-token ratio. If a prompt shows 3.5+ characters per token, this indicates predominantly English text. A ratio of 2.5-3.5 suggests mixed content, and below 2.5 indicates a large amount of Cyrillic or other multi-byte characters. This metric helps optimize language choice for prompts.
 
@@ -325,7 +309,7 @@ For effective context management, accurate token count estimation is critically 
 
 Real-world systems often need to estimate request cost before execution. For this, heuristics based on text language are used. English text is estimated as character length divided by 4. Russian: by 2.5. Chinese and Japanese: by 1.5. Program code typically falls in between with a coefficient of about 3.
 
-**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-5.6 Sol input tokens cost $5 per 1M and output $30 per 1M. For Claude Sonnet 5: $3 and $15 per 1M respectively. Newer models like GPT-5.5 and Claude Opus 4.8 are priced higher; economy models like GPT-5-mini ($0.25/$2.00 per 1M) and Claude Haiku 4.5 ($0.25/$1.25 per 1M) are dramatically cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
+**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-5.6 Sol input tokens cost $5 per 1M and output $30 per 1M. For Claude Sonnet 5: $3 and $15 per 1M respectively. Frontier tiers such as Claude Opus 5 and Claude Fable 5 cost more; high-volume tiers such as GPT-5.6 Luna ($0.20/$1.20 per 1M) and Claude Haiku 4.5 ($0.25/$1.25 per 1M) are an order of magnitude cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
 
 Such preliminary estimation helps avoid unexpected expenses in production, especially when processing large volumes of text or lengthy conversations.
 
@@ -349,4 +333,20 @@ When working with chat models, it is important to understand how messages of dif
 
 Correct formatting is critical for proper model behavior: incorrectly placed tokens can lead to misinterpreted roles or loss of dialogue structure.
 
-**A basic token counting utility** is created by initializing the tokenizer for a specific model (e.g., OpenAiTokenizer) and providing methods for counting tokens in text. The counting method accepts a string and returns the token count after tokenization. An additional efficiency analysis method computes the character-to-token ratio, which helps optimize prompts.
+---
+
+## Key Takeaways
+
+1. **Tokenization is not a trivial process.** Text is converted to numbers through complex algorithms, and understanding this process helps write effective prompts.
+
+2. **Subword tokenization (BPE, WordPiece, SentencePiece)** is the standard in modern LLMs. It balances vocabulary compactness with the flexibility to represent any text.
+
+3. **Token count determines everything:** API request costs, processing speed, available context size. Saving tokens means saving money and resources.
+
+4. **Different languages tokenize differently.** English is the most efficient; Russian and other languages require more tokens for the same meaning.
+
+5. **Numbers and rare words are tokenization's weak spot.** This explains some "strange" LLM errors in arithmetic and name handling.
+
+6. **For AI agents,** tokenization affects prompt design, tool descriptions, and context management strategies.
+
+---

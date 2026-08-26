@@ -207,6 +207,8 @@ Probing is a simple yet powerful method: train a small classifier on top of the 
 
 If the classifier succeeds, information about the property is encoded in the representations. If not, the model "does not know" this property (or stores it in a form inaccessible to a linear probe).
 
+Read the probe's accuracy against two rough thresholds. Above about 90% on a given layer, the property is encoded linearly and plainly. Below about 60%, either the information is absent or it is encoded in a form a linear probe cannot reach, and those two cases look identical from the outside. The band between them is where most real results land and where most overclaiming happens.
+
 Example probing tasks:
 - Parts of speech: can the POS tag be predicted from a token's hidden state?
 - Syntactic tree: is the dependency hierarchy encoded?
@@ -396,19 +398,3 @@ This is a powerful tool, but it requires caution: careless modification can brea
 8. **Reasoning model interpretability is a new frontier**. Chains of thought provide a window into reasoning but may not be faithful. Understanding whether models "think what they say they think" is a critical open problem.
 
 9. **We are at the beginning**: current methods work on small models and find individual circuits. Full understanding remains a distant goal, but Scaling Monosemanticity (2024) showed feasibility at production scale.
-
----
-
-## Practical Code Example
-
-**Minimal Probing Implementation** checks what information is encoded in model hidden states by training a linear classifier on top of internal representations.
-
-The POSProber class loads the model with the output_hidden_states=True flag to extract intermediate representations, creates a tokenizer, and initializes a list of linear probe layers: one for each model layer. Each probe maps hidden_dim to the number of classes (e.g., POS tags).
-
-The hidden state extraction method tokenizes the text, runs it through the model without computing gradients, and returns a tuple of tensors for each layer with dimensions batch x sequence x hidden_dim.
-
-Training a probe for a specific layer uses Adam optimizer and CrossEntropyLoss, iteratively training the linear classifier to predict labels from that layer's hidden states.
-
-**Interpretation:** If a probe achieves high accuracy (>90%) on layer N, information about POS is clearly encoded linearly in that layer. Low accuracy (<60%) indicates the absence of information or nonlinear encoding. Comparing across layers reveals where syntactic understanding forms, typically early layers for syntax and deep layers for semantics.
-
-Important: the presence of information does not guarantee the model uses it. Causal analysis requires activation patching.

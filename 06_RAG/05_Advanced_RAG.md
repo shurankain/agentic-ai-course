@@ -662,33 +662,3 @@ Advanced RAG goes beyond simple "find and answer." Main directions of developmen
 **Production landscape (mid-2026):** Adaptive RAG has become the dominant production pattern, a query classifier routes requests by complexity: simple factual queries to direct retrieval, multi-hop queries to agentic RAG, entity-relationship queries to GraphRAG. Microsoft and Thomson Reuters run GraphRAG in production for legal and compliance workflows. Continuous ingestion is replacing batch reindexing: documents are embedded and indexed on arrival, not in nightly batches. Agentic memory (persistent cross-session memory for agents) is now table stakes, not a differentiator.
 
 **Choosing an approach:** Depends on question complexity, data types, quality requirements, and performance. The best systems combine multiple approaches: Hybrid Search (dense + BM25) + Reranking + Contextual Retrieval as the baseline, adding Graph/Multimodal/Agentic for specific scenarios. Adaptive RAG (query classifier to pipeline selection) is the recommended starting point for production systems (as of mid-June 2026). Long context (1M+ tokens) reduces RAG complexity for small corpora but does not replace RAG at scale: the 40x cost difference and need for citations keep RAG essential for production.
-
----
-
-## Practical Code Examples
-
-In production, use frameworks (LangChain, LlamaIndex) instead of writing from scratch. Below is a minimal example for understanding the architecture.
-
-### Hybrid RAG with Reranking
-
-An advanced RAG system is implemented through a class encapsulating the full query processing pipeline. During system initialization, four key components are configured: vector_store for semantic search via embeddings, bm25_index for lexical keyword search, reranker for precise candidate reranking, and llm for final answer generation. These components are stored as instance attributes for subsequent use.
-
-The query processing method takes a user question and two parameters: top_k determines the number of candidates for initial retrieval (default 20), and rerank_k sets the final number of documents after reranking (default 5).
-
-The first stage, hybrid retrieval, performs parallel search across two channels. Dense retrieval via vector_store finds top_k/2 semantically similar documents (10 in this case) using cosine similarity of embeddings. Simultaneously, sparse retrieval via bm25_index finds top_k/2 documents (10) with maximum lexical term overlap. Results from both searches are combined by the merge_results method, which removes duplicates and can apply weighting coefficients to scores from different sources, forming a unified candidate list.
-
-The second stage, reranking: passes all candidates along with the question to the reranker, which typically uses a cross-encoder model. The cross-encoder processes each (question, candidate document) pair jointly through a transformer, obtaining a precise relevance score. This is more accurate than simply comparing vectors but is feasible only for a small set of candidates due to computational complexity. The result is the top rerank_k most relevant documents (5).
-
-The third stage: generation: formats the reranked documents into context via format_context, which can combine document texts with their metadata. This context along with the original question is passed to the LLM for answer generation. The LLM synthesizes information from the provided context, creating a coherent answer.
-
-The final result is returned as a structured object with three fields: answer contains the LLM-generated response text, sources includes metadata of the documents used (titles, URLs, dates) for transparency and verifiability, and confidence represents the system's confidence in the answer, computed based on the relevance scores of reranked documents (e.g., high scores of top documents indicate high confidence).
-
-**Conceptual explanation of the remaining approaches:**
-
-**Agentic RAG** is implemented through a planning system where the LLM analyzes the question, creates a search plan in JSON format with steps and tools, then iteratively executes each step. The agent has access to a dictionary of tools (vector_search, SQL, web_search) and dynamically selects the appropriate one based on query type. When results are insufficient, the agent revises the plan and adds new steps.
-
-**Corrective RAG (CRAG)** adds a relevance evaluation stage after retrieval. Each document receives a score via an evaluator (which can be a separate model or LLM-as-judge). A decision is made based on scores: if all scores are high (>0.8): use documents as-is; if moderate (0.5-0.8), filter and refine irrelevant parts; if low (<0.5): fall back to alternative sources (web search, another index).
-
-**Graph RAG** works through extracting entities from the question, searching for those entities in the knowledge graph, traversing the graph 1-2 hops to obtain related entities and facts, retrieving documents linked to this subgraph, and generating an answer considering the graph structure. This enables answering multi-hop questions that require connecting multiple entities.
-
-**Evaluation with RAGAS** is implemented by computing four key metrics for each example: faithfulness (is the answer based on the context?), answer relevance (does the answer address the question?), context precision (is the context relevant?), and context recall (was all necessary context found?). Metrics are computed using the LLM-as-judge approach: a prompt with evaluation criteria returning a score from 0 to 1. Results are aggregated for an overall system assessment.

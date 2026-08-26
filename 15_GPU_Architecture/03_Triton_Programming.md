@@ -83,7 +83,7 @@ Triton automatically optimizes memory coalescing for standard patterns. Sequenti
 
 For accessing multidimensional data (e.g., matrices), indices for rows and columns are created via tl.arange, then combined through broadcasting (using [:, None] and [None,:]) to create 2D grid indices from 1D ranges. Final offsets are computed as row_idx * stride_row + col_idx * stride_col, matching the memory layout.
 
-## Practical Examples
+## What Fusion Actually Saves
 
 ### Fused Softmax
 
@@ -211,35 +211,3 @@ Triton opens GPU programming to Python developers while retaining most of CUDA's
 **Start simple, optimize incrementally.** The first version should be correct. Optimization is an iterative process with profiling at every step.
 
 **Know when to use CUDA.** For extreme performance or non-standard patterns, CUDA may be necessary. Triton is a tool, not a replacement for everything.
-
-## Brief Example
-
-### Full Example: Softmax with Autograd
-
-To demonstrate the full Triton kernel development cycle, consider a softmax implementation with automatic differentiation support.
-
-**Forward kernel:**
-- Gets the program ID to determine the row
-- Loads the row with masking (out-of-bounds values = negative infinity)
-- Computes max for numerical stability
-- Applies exp to (x - max)
-- Sums the results and normalizes
-- Stores the result
-
-**Backward kernel:**
-- Loads the saved output and incoming gradient
-- Computes the gradient using the formula: output * (grad_output - sum(output * grad_output))
-- This is the analytical expression of the softmax derivative
-- Stores the gradient for the input
-
-**Autograd class:**
-- forward: creates the output tensor, determines the grid size (one program per row), calls the forward kernel, saves the output for backward
-- backward: creates the grad_input tensor, calls the backward kernel, returns the gradient
-- Used via a wrapper function: triton_softmax = TritonSoftmaxFunction.apply
-
-**Testing:**
-- Comparison with PyTorch reference: torch.allclose(triton_output, torch_output)
-- Gradient verification: backward pass should produce identical gradients
-- Performance benchmark: Triton version is often faster thanks to fusion
-
-This pattern (forward kernel + backward kernel + autograd wrapper) is applicable to any differentiable operation in Triton.
