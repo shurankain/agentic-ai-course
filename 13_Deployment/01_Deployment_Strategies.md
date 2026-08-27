@@ -40,25 +40,51 @@ Production systems should not depend on a single LLM provider. A robust failover
 
 Exact match caching for deterministic operations with temperature=0. Cache key: model, system prompt, user message, generation parameters. Semantic caching uses embeddings: similar queries share a common cache. Effective for FAQ scenarios where different phrasings yield the same answer. TTL depends on data nature: static information is cached for hours, dynamic data requires a short TTL. Caching is not suitable for creative generation where variability is a desired property.
 
+## Releasing a Change
+
+Classic release strategy assumes one artefact: you built a binary, you ship it gradually, you watch the error rate, you roll back if it spikes. An LLM system has four release surfaces and only the first is a binary.
+
+The application code is one. The prompt is a second, and it changes far more often. The model version is a third, and it can change without you doing anything at all when a provider updates an alias. The retrieval index is a fourth, and reindexing changes answers without touching a line of code. A release process that only gates the first surface will let the other three reach production unreviewed, which is how a system that passed every test starts giving different answers on Tuesday.
+
+**Pin the model, never the alias.** `claude-opus-4-5` style aliases resolve to whatever the provider currently considers that model. Pin the dated identifier, record it alongside every stored response, and treat a version bump as a release. Then when quality moves you can ask which of the four surfaces moved, instead of guessing.
+
+**Canary by user, not by request.** Routing 5% of requests to the new configuration gives a clean sample and a broken experience: the same user gets the old prompt and then the new one in the same conversation, and the inconsistency reads as the system being unreliable. Hash the user identifier and route by that, so a user stays on one side for the whole session. The cost is that you need more traffic before the sample means anything.
+
+**Shadow before canary when the metric is quality.** Send a copy of live traffic to the new configuration, discard its output, and compare offline. No user is exposed, which matters because a quality regression cannot be detected from a single response the way an error can. This is the only safe way to evaluate a model upgrade on real traffic, and it costs a second inference on every shadowed request, so sample rather than mirror everything.
+
+**Rollback triggers have to include quality, and quality is slow.** Error rate and latency are visible within minutes, so wire them to automatic rollback in the usual way. A quality regression is silent: the system returns confident, well-formed, wrong answers at the same latency and the same cost. Detecting it needs the continuous evaluation pipeline from Module 11, and it needs hours rather than minutes. Plan the canary window around the slower signal, and keep the previous configuration warm for the full window rather than tearing it down once the error rate looks clean.
+
+**Blue-green is awkward here, and the reason is instructive.** Blue-green assumes the two environments are equivalent apart from your change. When the model runs on the provider's infrastructure, both environments call the same model, so the switch does not isolate the variable you most want to isolate. Blue-green earns its keep for self-hosted inference, where the model weights genuinely live in the environment you are swapping.
+
 ## Central Orchestrator
 
-The LLM Orchestration Layer coordinates all calls through a single interface. It manages multiple providers (OpenAI, Anthropic, local models), registering each under an identifier. It implements multi-level caching: computes a hash key, looks up the cache, and registers hits. It applies Circuit Breaker per provider: on persistent errors, the circuit opens. The built-in monitoring system measures latency and tracks errors with detailed breakdowns. The fallback strategy defines an alternative model on exception and logs switchovers.
+Every provider call goes through one layer, and that layer owns five things the application code should never see: which provider serves this request, whether the answer is already cached, whether this provider's circuit is open, how long the call took, and what to do when it fails. Scattering those five across call sites is how a codebase ends up with three different retry policies and no way to answer "what did we spend on Claude last week".
 
-The cache key is formed via SHA-256 hashing of all parameters: model, message roles and content, temperature, max tokens. This ensures uniform distribution and eliminates collisions.
+Build the cache key by hashing every input that can change the output: model identifier, each message with its role, temperature, and max tokens. Omitting temperature is the classic bug, because a cached deterministic answer then gets served to a request that asked for variation. Hash rather than concatenate, since prompts are long and a key that contains the prompt makes the cache store the corpus twice.
+
+Keep the circuit breaker per provider rather than global. One provider degrading should shift traffic to another, and a global breaker turns a single vendor's bad afternoon into a full outage.
 
 ## Asynchronous Processing
 
-The controller accepts a POST request, generates a UUID, creates a task with PENDING status, saves it to the repository, and places it in the queue. It returns 202 Accepted with a Location header and the task ID. A GET status request returns details: status, progress percentage, current step, result or error, timestamps. Retry-After header: 5 seconds for PENDING, 2 seconds for PROCESSING.
+The contract is worth stating precisely, because clients get written against it. The submit endpoint returns 202 with a task identifier and a `Location` header, never the result. The status endpoint returns the state, a progress percentage, the current step, and either the result or the error. Set `Retry-After` to about 5 seconds while the task is queued and about 2 seconds once it is running, since a client that polls at a fixed 1 second will generate more load than the work itself on a queue that is backed up.
 
-The worker subscribes to the queue, updates the status to PROCESSING, and invokes the agent with callbacks: onProgress updates the percentage and step, onThought and onAction add entries to the log. On completion, it saves the result and updates the status to COMPLETED. On exception: FAILED with a message. The architecture ensures fault tolerance: a worker crash leaves the task in the queue for processing by another worker.
+Durability comes from where the task lives, not from the worker. Write the task to storage before acknowledging the request, and have the worker take it from the queue rather than from an in-memory handoff. Then a worker that dies leaves the task claimable by another one, which is the entire reason for choosing this pattern over synchronous processing with a long timeout.
+
+Progress reporting is what makes an asynchronous agent bearable to use. Emit the step and the percentage on every meaningful transition, and record the agent's reasoning and actions to the task log as they happen. A task that sits at PENDING for four minutes and then returns an answer is indistinguishable from a hung one.
 
 ## Streaming via SSE
 
-The controller uses the reactive Flux type for the event stream. Each chunk is wrapped in a ServerSentEvent with an event type. Content-type is set to text/event-stream. Error handling via onErrorResume transforms the exception into an error-type event. The service loads the conversation context, adds the new message, and initiates a streaming request to the LLM. As tokens arrive, it accumulates the full response and increments the counter. On completion, it saves the response to the repository. The client subscribes via the EventSource API and automatically reconnects on disconnection.
+Stream at the token level, tag every chunk with an event type, and set the content type to `text/event-stream`. The part that breaks in production is error handling: an exception thrown mid-stream cannot become an HTTP 500, because the status line was sent minutes ago. Convert it into a terminal error event on the same stream, and make sure the client treats an unexpected stream end as a failure rather than as completion.
+
+Two infrastructure details defeat more SSE deployments than any application bug. Response buffering must be off at every hop, since a reverse proxy that buffers will hold the whole response and deliver it at once, which looks exactly like streaming not being implemented. And the accumulated response has to be persisted server-side on completion, because the client that reconnects mid-stream has no way to recover what it missed.
 
 ## WebSocket for Agents
 
-The handler creates an AgentSession when a connection is established and stores it in a concurrent map. Incoming messages are routed by type: start_task initiates execution, provide_input delivers a response, cancel aborts. The onThought callback sends reasoning to the client, onAction sends an execution indicator, onToolResult sends the tool result. onNeedInput switches the session to a waiting state, saves the request ID, and blocks the agent until a response arrives. provide_input unblocks execution through a resolution mechanism. When the connection closes, the session is removed and the current task is canceled.
+Use WebSocket when the agent needs to ask the user something mid-run, and not otherwise, since SSE covers one-way streaming at a fraction of the operational cost.
+
+The message vocabulary carries the design. Inbound: start a task, supply input, cancel. Outbound: a thought, an action being taken, a tool result, a request for input, completion, and error. Keep them as distinct types rather than a single message with a flag, because the client renders each one differently and a flag invites the renderer to guess.
+
+The request-for-input path is where implementations go wrong. The agent must genuinely suspend at that point, with the pending request keyed by an identifier, and resume only when the matching reply arrives. An implementation that polls for input or times out into a default answer produces an agent that quietly decides on the user's behalf. On disconnect, cancel the running task rather than orphaning it, and decide explicitly whether the session is resumable, because an agent still burning tokens for a browser tab that closed is a cost leak nobody watches.
 
 ## Serverless Deployment
 
@@ -116,4 +142,14 @@ Load testing AI systems differs fundamentally from load testing web APIs. A web 
 
 ## Key Takeaways
 
-LLM applications require rethinking traditional approaches. High latency, dependence on external APIs, and variable costs affect every decision. Pattern selection depends on operation characteristics: synchronous for short, asynchronous for long, streaming for interactivity, WebSocket for bidirectional communication. The LLM Orchestration Layer centralizes management: retry, fallback, caching, monitoring. Circuit Breaker and fallback strategies protect against cascading failures. Timeouts are differentiated by operation type and coordinated across all levels. Caching reduces cost and latency for repeated queries.
+1. **Pick the pattern from the operation, not from habit.** Synchronous under 30 seconds, asynchronous with polling for anything longer, SSE when the user should see progress, WebSocket only when the agent has to ask a question mid-run. WebSocket costs sticky sessions or shared state, so do not reach for it to get one-way streaming.
+
+2. **One orchestration layer owns provider choice, caching, breaking, timing, and failure.** Spread those five across call sites and you get three retry policies and no answer to what you spent per provider. Keep the circuit breaker per provider, since a global one turns one vendor's bad afternoon into your outage.
+
+3. **An LLM system has four release surfaces: code, prompt, model version, and retrieval index.** Only the first is a binary, and the third can change without you acting when a provider updates an alias. Pin dated model identifiers, record the version with every stored response, and gate all four.
+
+4. **Quality regressions are silent, so plan the canary window around the slow signal.** Error rate and latency surface in minutes and can drive automatic rollback. A model that returns confident wrong answers at normal latency and normal cost surfaces in hours, through the evaluation pipeline in Module 11. Canary by user rather than by request, and shadow before canary whenever the metric is quality.
+
+5. **Agents break the assumptions the rest of this list rests on.** A session runs for minutes to days, makes 1 or 50 model calls for the same nominal task, mutates external state as it goes, and must not be killed mid-action. That means checkpointing after every tool call, idempotency keys so a resumed agent does not send the email twice, a termination grace period of 3 to 5 minutes, and capacity planned at P99 rather than the mean.
+
+6. **Capacity for agent systems is measured in concurrent sessions, not requests per second.** Ramp a load test by 1 or 2 users per minute, watch for HTTP 429 as the real saturation signal, and plan production at 60% to 70% of the point where completion rate falls below 95%.

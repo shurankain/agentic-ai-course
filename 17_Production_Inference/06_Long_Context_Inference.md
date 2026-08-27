@@ -69,7 +69,9 @@ LLaMA-2-70B with 8 KV heads (instead of 80): 128K cache 419 GB to 42 GB (10x red
 
 Long context is not free. Understanding the cost structure helps decide when it is justified and when RAG is cheaper.
 
-**Attention cost scales quadratically.** Doubling the context from 32K to 64K tokens quadruples the attention computation. This affects prefill latency directly: 32K: ~800ms, 64K: ~2s, 128K: ~4s on A100. For interactive applications, 4-second prefill latency is noticeable.
+**Attention cost scales quadratically, but measured prefill does not.** The attention term is quadratic in sequence length while the feed-forward term is linear, and at the lengths most systems actually run the feed-forward work still dominates. So doubling the context quadruples one component and doubles the other, and what you observe is growth between linear and quadratic: about 800 ms at 32K, 2 seconds at 64K, and 3 to 4 seconds at 128K on an A100. The quadratic term takes over as length grows, which is why the gap widens at the top of the range rather than at the bottom. Quoting either "linear" or "quadratic" alone will mislead a capacity estimate; measure at your own lengths.
+
+For an interactive product this is the number that hurts. A 4-second time to first token is the user's whole impression of the system, and it arrives before a single output token has been generated.
 
 **KV-cache cost scales linearly but is large.** A 70B model with GQA at 128K context uses ~42 GB of KV-cache per request. At 10 concurrent requests: 420 GB just for KV-cache: more than the model weights. This limits how many concurrent long-context requests a server can handle, directly impacting throughput and cost per request.
 
@@ -118,7 +120,17 @@ Hierarchical: summarize documents, retrieve summaries, expand as needed.
 - 128K+: 160+ GB (Multi-GPU tensor parallelism)
 
 **Latency:**
-Prefill scales linearly: 4K ~100ms on A100, 32K ~800ms, 128K ~3-4s. Decode is relatively constant (memory-bound).
+Prefill grows faster than linearly and slower than quadratically over this range: 4K ~100ms on A100, 32K ~800ms, 128K ~3-4s. Decode stays roughly constant per token, since it is bound by memory bandwidth rather than by context length.
+
+## Prompt Caching Changes the Arithmetic
+
+Everything above assumes each request pays full prefill. In a real long-context product it usually does not, and that changes which approach wins.
+
+The pattern that makes long context affordable is a stable prefix. Put the large document, the system prompt, and the tool definitions at the front, put the user's question at the end, and every turn after the first reuses the cached KV-cache for the prefix. The first question against an 80K-token manual pays 3 seconds and full input price. The tenth question pays for the question alone. Providers price cached input at a fraction of fresh input, and self-hosted engines get the same effect through automatic prefix caching.
+
+Three rules follow from how the cache is keyed. It matches on an exact prefix, so anything that varies must go after everything that does not: a timestamp or a session identifier injected at the top of the prompt invalidates the cache on every single call, and this is the most common way teams accidentally pay full price forever. Caches expire on the order of minutes, so a user who returns after lunch pays prefill again. And switching model mid-conversation drops the cache entirely, which is a cost the routing logic in Module 03 has to account for.
+
+This is what narrows the gap with RAG. The 40x cost difference in the comparison above assumes uncached input on every query. Hold the document in a cached prefix across a ten-question session and long context becomes competitive on cost while keeping the cross-document reasoning that chunking loses. RAG still wins outright when the corpus exceeds any context window, when it changes constantly, or when you owe the user source attribution.
 
 ## Key Takeaways
 
@@ -134,4 +146,8 @@ Long context vs RAG is not a binary choice. Hybrid approaches combine scalabilit
 
 Hardware requirements grow rapidly. 128K requires enterprise GPUs or multi-GPU setups.
 
-Prefill latency scales linearly. This determines practical limits for real-time applications.
+Prefill latency grows faster than linearly and slower than quadratically, because the linear feed-forward term dominates at moderate lengths and the quadratic attention term takes over as context grows. Measure at the lengths you actually serve rather than extrapolating from either label.
+
+Prompt caching is what makes long context affordable, and it decides the comparison against RAG. Keep the document, system prompt, and tool definitions in a stable prefix and the variable question last, since anything that changes at the front invalidates the cache on every call. Caches expire in minutes and do not survive a model switch, so a routing layer has to price that.
+
+Information in the middle of a long context is retrieved 10% to 25% less accurately than information at the edges. Place the highest-relevance material first and last, and test the effect with your own model by inserting a known fact at varying positions rather than assuming it away.

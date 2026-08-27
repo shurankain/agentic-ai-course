@@ -106,6 +106,12 @@ KV-cache memory scales with batch_size x sequence_length x num_layers x hidden_d
 
 **Production impact:** Quantizing KV-cache from FP16 to INT8 doubles the number of concurrent users a single GPU can serve (or doubles the maximum context length). This is one of the highest-ROI optimizations for production serving.
 
+**Weights and cache are two separate decisions, and they pay off at different points.** Quantizing weights buys memory once, and every byte it frees becomes cache. Quantizing the cache buys memory per concurrent request, so its value scales with how many users you serve. Below a handful of concurrent sessions the weights dominate the memory budget and weight quantization is the lever. Once the model comfortably fits and the card is full of cache, further weight compression buys almost nothing while cache compression keeps paying.
+
+Work it through on the example from Inference Architecture. A 70B model at FP16 needs about 140 GB and does not fit on an 80 GB card at all. At INT4 the weights drop to roughly 35 GB, leaving about 38 GB usable after reserving for activations, which at 4K context and FP16 cache holds around 29 concurrent conversations. Quantizing the cache to FP8 halves the per-request cost and takes the same card to about 58. Quantizing the weights further, to INT3, would free perhaps 9 GB more and add roughly 7 conversations, at a quality cost far worse than the FP8 cache change.
+
+The quality profiles differ too, which is why the order matters. Weight quantization to INT4 costs 2% to 3% perplexity and is well characterized. KV-cache quantization to INT8 is close to free because cache values have a narrower dynamic range than weights, and FP8 on H100 and later avoids the dequantization step entirely. So the ordinary sequence is: quantize the cache first because it is nearly free, quantize weights to the coarsest level your task tolerates, and check the task-sensitivity table above before assuming INT4 is safe for code or mathematical reasoning.
+
 ## GGUF Importance Quantization (IQ)
 
 GGUF IQ (Importance Quantization) methods in llama.cpp go beyond standard k-quants:

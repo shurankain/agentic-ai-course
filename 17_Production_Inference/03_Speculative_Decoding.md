@@ -91,6 +91,18 @@ Methods that avoid a separate draft model entirely:
 - Creative writing: 1.3-1.8x
 - Structured data extraction: 2.5-3.5x
 
+## Why Batching Cancels Speculation
+
+The rule "do not use above batch 8 to 16" is the most surprising line in this lesson, and the reason behind it explains the whole technique.
+
+Speculative decoding is free because decode is memory-bound. Generating one token at batch size 1 reads the entire KV-cache and performs almost no arithmetic, so the GPU's compute units sit idle waiting on memory. Verifying four draft tokens in that same pass costs almost nothing extra: the memory read already happened, and the extra matrix work fits in capacity that was going to waste. You are spending idle compute to buy latency.
+
+Batching spends that same idle compute. Each additional concurrent request amortizes the weight read across more tokens, which is exactly what raises arithmetic intensity. Somewhere around batch 8 to 16 the workload crosses from memory-bound to compute-bound, and at that point the spare capacity speculation was living on is gone. Verification now competes with real requests for the same units, rejected tokens become pure waste, and aggregate throughput falls.
+
+So the two techniques draw on one budget. A service optimizing time to first token for a handful of interactive users should speculate. A service maximizing tokens per dollar across a full queue should batch. Running both hard is a configuration that looks thorough and performs worse than either alone.
+
+Two consequences for capacity planning. The acceptance rate is the number to watch, not the speedup: below about 70% the rejected work outweighs the saving, and a draft model that was fine on English prose can fall below that on code or on another language without anything else changing. And speculation raises cost per token even when it lowers latency, because rejected tokens were computed and thrown away. On self-hosted hardware that shows up as reduced concurrency rather than as a line on an invoice, which makes it easy to miss.
+
 ## Trade-offs
 
 **Memory vs Speed:**
@@ -129,7 +141,11 @@ Draft model selection is critical: acceptance rate determines speedup. EAGLE-2 l
 
 Draftless methods (Jacobi, lookahead decoding) eliminate the draft model entirely. Token recycling reuses rejected tokens as free draft candidates.
 
-Optimal for specific workloads: single-user, long-form. Large batch does not benefit.
+Optimal for specific workloads: single-user, long-form. Large batch does not benefit, and the reason is that speculation and batching spend the same resource. Speculation is cheap only while decode is memory-bound and compute sits idle; batching raises arithmetic intensity until that idle compute is gone, somewhere around batch 8 to 16. Running both hard performs worse than either alone.
+
+Watch the acceptance rate rather than the advertised speedup. Below about 70% the rejected work outweighs the saving, and a draft model that holds up on English prose can fall under that on code or another language with nothing else changed.
+
+Speculation raises cost per token even while lowering latency, since rejected tokens were computed and discarded. On self-hosted hardware that surfaces as reduced concurrency rather than as an invoice line, which is why it goes unnoticed.
 
 Trade-off: memory for latency: 10-30% memory overhead for 1.5-3x latency reduction.
 

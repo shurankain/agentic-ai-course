@@ -118,10 +118,42 @@ Understanding what happens between "user sends a prompt" and "user receives a re
 
 **Optimization opportunities by stage:** Tokenization (negligible). Prefill (prompt caching: 50-90% savings on repeated prefixes). Decode (speculative decoding: 2-3x speedup; KV-cache quantization: more concurrent requests). Delivery (streaming: perceived latency reduction).
 
+## How Many Users Fit on One GPU
+
+The KV-cache formula above is not trivia. It is the capacity model, and it answers the question every deployment eventually asks: how many concurrent users does this box hold before requests start queueing?
+
+Work it in three steps. **Subtract the weights first.** An 80 GB A100 serving a 70B model in FP16 gives up about 140 GB, so the model does not fit at all and you are already in multi-GPU territory. Serve the same model at INT4 and the weights drop to roughly 35 GB, leaving about 45 GB on the card. **Reserve for activations and fragmentation**, conventionally 10% to 15%, which leaves around 38 GB of usable cache.
+
+**Then divide by the per-request cache.** With GQA at 8 KV heads, 80 layers, head dimension 128, and FP16, one token costs about 328 KB. A 4K-token conversation therefore holds about 1.3 GB of cache, and 38 GB divided by 1.3 GB is roughly 29 concurrent conversations. Push the same users to 32K context and each one costs about 10.5 GB, so the card holds three. The context length in your product specification is a capacity decision wearing different clothes.
+
+Three consequences follow, and they are the reason to do this arithmetic before choosing hardware rather than after.
+
+Concurrency is set by the cache, not by compute. The GPU in the example above is idle most of the time in decode, and adding a faster GPU with the same memory changes nothing about how many users fit.
+
+Quantizing the KV-cache buys concurrency at a fixed quality cost, and it buys more than quantizing the weights does once the weights already fit. FP8 cache halves the per-request figure, taking the 4K example from 29 concurrent conversations to about 58.
+
+And a long-context feature is a capacity cut, not a feature flag. Advertising 128K context on the hardware above means one user per GPU. That is a pricing decision, and it belongs in the conversation before the feature ships. Module 17, Long Context Inference covers what to do when you need it anyway.
+
+## Setting the Numbers That Matter
+
+TTFT, ITL, and throughput are the three metrics, and a deployment that has not decided which one it optimizes will optimize none of them. Three rough targets, worth adjusting to your own product rather than adopting as law.
+
+Under about 200 ms, time to first token feels immediate, and up to about a second it feels responsive. Beyond two seconds users start checking whether the page is broken, which is why streaming exists: it converts a five-second wait into a 500 ms wait followed by visible progress.
+
+Inter-token latency matters against reading speed. A person reads at roughly 5 to 10 tokens per second, so anything under about 100 ms per token already outruns the reader and further gains are invisible in a chat product. In a coding assistant that emits a whole file the user does not read line by line, the same improvement is worth real money.
+
+Throughput is the one to optimize when nobody is watching in real time. Batch classification, nightly summarization, and evaluation runs should use the largest batch that fits, accept the latency, and buy back the cost.
+
 ## Key Takeaways
 
-- Autoregressive generation creates unique bottlenecks distinct from training
-- Memory bandwidth is the main limitation of the decode phase
-- KV-cache grows linearly with context and can exceed the model size
-- The trade-off between throughput and latency is inevitable
-- Continuous batching is critical for production
+1. **Decode is memory-bound, and that governs everything downstream.** Reading the whole KV-cache to produce one token puts arithmetic intensity near the floor, so a GPU rated at 1000 TFLOPS delivers around 1% of it. Faster arithmetic does not help; fewer or smaller memory trips do.
+
+2. **Prefill and decode are different workloads sharing a device.** Prefill is compute-bound and parallel, decode is memory-bound and sequential. Disaggregated serving exists because putting them on hardware suited to each is worth about 5x at high volume.
+
+3. **KV-cache size is the capacity model.** Subtract weights, reserve 10% to 15%, divide by per-request cache. That gives concurrent users directly, and it shows why a 128K context option can cut a card from 29 concurrent conversations to one.
+
+4. **Continuous batching is not optional.** Static batching holds the whole batch until the slowest request finishes; continuous batching frees each slot on completion. Every serious engine does this, and the gap against static batching is large enough that nothing else you tune will close it.
+
+5. **Pick one of TTFT, ITL, and throughput per workload.** Interactive work optimizes the first two and pays in throughput; batch work does the reverse. Latency tiers sold as products are this same trade-off priced by the provider, so route to them by workload rather than buying the fast tier for everything.
+
+6. **Choose the architecture from volume, sensitivity, and budget, in that order.** Cloud API until volume makes cost unpredictable, self-hosted when data cannot leave or the bill justifies the operations burden, edge when the network round-trip is the problem.
