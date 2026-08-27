@@ -25,6 +25,16 @@ Memory limits model size and batch size. Networking in multi-GPU adds 10-20%. St
 
 Cost per token (separate input/output). Cost per request (look at p50, p90, p99, not just average). GPU utilization (target >70%). Throughput per dollar (tokens/second/$).
 
+### Write Cost Models in Ratios
+
+Every absolute price in this lesson has a shelf life measured in months. Every ratio in it has held across several rounds of cuts. That difference should shape how you write a cost model, and it is a rule worth applying beyond this course.
+
+Use a ratio wherever the question is relative. How much more does the frontier tier cost than the high-volume tier, what fraction of the bill is output tokens, how much cheaper is a self-hosted GPU-hour than the equivalent API call, where does a self-assembled stack overtake a managed one. Those answers survive a price cut, and a model built from them still works after the rate card changes.
+
+Use absolute numbers only where the reader has to size something: a monthly budget, a hardware purchase, a break-even point. When you do, date the figure in the text and name the tier it came from, so the next reader can tell at a glance whether it is still worth trusting. An undated dollar figure in a cost model reads as current forever.
+
+The practical test: if a provider halved its prices tomorrow, would this sentence become wrong? If yes, it needs a date. If no, it is a ratio and it is doing its job.
+
 ## Spot Instances: 60-90% Savings
 
 **What they are:**
@@ -197,17 +207,21 @@ For API-based inference (as opposed to self-hosted), **prompt caching** is one o
 
 **How it works:** LLM providers cache the KV-cache for the prefix (identical initial portion) of your prompt. If the same prefix appears in the next request, the cached KV-cache is reused, and the provider charges a discounted rate for the cached tokens.
 
-**Provider economics (as of early 2026):**
+**Provider economics.** Four parameters decide whether caching pays, and they differ enough between providers to change the design.
 
-| Provider | Cache Hit Discount | Min Prefix Length | TTL | Effective Savings |
-|----------|-------------------|-------------------|-----|-------------------|
-| **Anthropic** | 90% off input | 1,024 tokens | 5 min | 50-80% per-turn for agents |
-| **OpenAI** | 50% off input | 1,024 tokens | 5-10 min | 25-40% per-turn for agents |
-| **Google** | Varies | 32K tokens | Varies | Significant for long-context |
+| Provider | Cache hit discount | Min prefix | Cache lifetime | Effective saving for agents |
+|----------|-------------------|-----------|---------------|----------------------------|
+| **Anthropic** | ~90% off input | 1,024 tokens | ~5 min, extended on hit | 50-80% per turn |
+| **OpenAI** | ~50% off input | 1,024 tokens | 5-10 min | 25-40% per turn |
+| **Google** | Varies by tier | ~32K tokens | Varies | Meaningful only for long context |
+
+The discount rates and prefix minimums are structural product features rather than list prices, so they move on the order of a release rather than a quarter. Re-verify them at the provider's documentation before sizing a budget, and treat the two rightmost columns as estimates from agent workloads rather than published figures.
+
+**The write premium is the part that gets missed.** Populating a cache costs more than an uncached call, on the order of a 25% surcharge on the tokens being written. That inverts the arithmetic on short sessions: a two-call task pays the premium once and collects the discount once, which is close to a wash, and a one-call task strictly loses. Caching pays from roughly the third call onward, which is why it is an agent optimization rather than a general one.
 
 **The pattern for agents:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [static context]` -> `[dynamic context] + [conversation] + [current message]`. The first block is identical across all calls in a session: fully cacheable. The second block varies per call: never cached.
 
-**Why this matters for multi-turn agents:** An agent making 15 calls per task with a 3K-token system prompt and 5K tokens of tool descriptions saves 8K cached tokens per call x 14 subsequent calls = 112K tokens cached. At Anthropic's 90% discount, this saves approximately $0.50 per task, material at thousands of tasks per day.
+**Why this matters for multi-turn agents:** An agent making 15 calls per task with a 3K-token system prompt and 5K tokens of tool descriptions carries 8K cacheable tokens, reused across 14 subsequent calls, so 112K tokens hit the cache. On a frontier tier around $5 per million input tokens those 112K would cost about $0.56 undiscounted, so a 90% discount saves roughly $0.50 per task net of the write premium. On a high-volume tier at $0.20 per million the same structure saves about two cents, which is the point: caching matters in proportion to the price of the model you are caching against.
 
 **Batching API** offers a complementary optimization: 50% discount on all tokens for deferred processing (24-hour SLA). Suitable for evaluation runs, document processing, and any workload that does not require real-time response. Combine prompt caching (for real-time) with batching (for async) for maximum savings.
 
@@ -265,6 +279,6 @@ Think about trade-offs: spot (cost vs availability), cascading (cost vs quality)
 
 Prompt caching is free optimization for API users: structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
 
-**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) to $0.006/1K tokens (mid-2026) = 10x in 18 months**. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference: hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally: overall spending often remains flat or grows.
+**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) to $0.006/1K tokens (mid-2026) = 10x in 18 months**. Read the 280x with its endpoints attached, because a multiplier that large is comparing a frontier model at the start of the window against a much smaller model of comparable usefulness at the end of it. The 10x figure is the more transferable one, since it tracks a narrower quality band over a shorter period. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference: hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally: overall spending often remains flat or grows.
 
 **Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026): AWS Trainium handles prefill, Cerebras WSE-3 handles decode, achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see SGLang and Alternatives for benchmarks).

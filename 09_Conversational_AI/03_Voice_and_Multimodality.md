@@ -253,14 +253,11 @@ The voice agent market has organized into four tiers (as of mid-June 2026): full
 | **Developer Framework** | LiveKit | $0.004/min audio | Varies | Open-source core, up to 80% cheaper at scale, on-premise possible |
 | **Enterprise Phone** | Bland AI | $0.07-0.12/min | ~200ms | Up to 1M parallel calls, SOC2/GDPR/HIPAA, enterprise telephony |
 
-**Cost comparison across the stack (as of early 2026):**
-- OpenAI Realtime API: ~$0.15-0.20/min (native audio processing, no intermediate STT step)
-- Full-stack managed (ElevenLabs): premium pricing, best quality
-- Orchestration layer (Vapi): $0.05-0.13/min depending on STT/TTS choices
-- Open-source stack (LiveKit + Whisper + open TTS): $0.02-0.05/min
-- Enterprise phone (Bland AI): $0.07-0.12/min with compliance guarantees
+**Cost comparison across the stack.** Absolute per-minute rates move with every provider release, so read this as a shape rather than a price list, and check the table above against current rate cards before committing.
 
-The cost range spans approximately 10x from cheapest to most expensive. The choice depends on three factors: voice quality requirements (ElevenLabs leads), volume and cost sensitivity (LiveKit at scale), and compliance needs (Bland AI for regulated industries).
+Take a self-assembled open-source stack, meaning LiveKit with Whisper and an open text-to-speech model, as the unit. An enterprise telephony provider with compliance guarantees runs roughly 2 to 3 times that. A managed orchestration layer such as Vapi runs roughly 2 to 4 times, depending on which speech-to-text and text-to-speech engines you configure underneath it. A native speech-to-speech API runs roughly 4 to 8 times, and you are paying for the removal of the transcription hop rather than for the audio itself. A premium full-stack voice provider sits at the top and prices on voice quality.
+
+The whole range spans about an order of magnitude, and that ratio has held across several rounds of price cuts even as every absolute figure in it changed. Three factors decide where you land: voice quality requirements, where premium providers lead in blind tests; volume, where a self-assembled stack wins once you are large enough to operate it; and compliance, where the enterprise telephony vendors earn their premium through certification rather than technology.
 
 **Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard, consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
 

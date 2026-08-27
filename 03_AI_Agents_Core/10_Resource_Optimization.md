@@ -176,12 +176,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 
 **Why order matters:** Providers cache the KV-cache for the prefix of the prompt (the identical initial portion). If the first 10K tokens are the same system prompt + tool descriptions across all calls in a session, that prefix is computed once and reused. Dynamic content (user message, tool results, conversation turns) goes after the cached prefix.
 
-**Economics by provider (as of early 2026):**
-
-| Provider | Cache Hit Discount | Practical Session Savings |
-|----------|-------------------|--------------------------|
-| Anthropic | 90% off cached input | 50-80% per-turn cost reduction |
-| OpenAI | 50% off cached input | 25-40% per-turn cost reduction |
+**What it is worth.** Cached input is discounted heavily rather than marginally, which is why prompt order is an architectural decision and not a micro-optimization. Anthropic and OpenAI both publish substantial cache discounts, and Module 17, Inference Cost Optimization carries the current rates, the minimum prefix lengths, the cache lifetimes, and the write premium that decides whether caching pays on a short session. Those parameters move; the rule that static content goes first does not.
 
 **Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix is a stable foundation, while dynamic content varies naturally.
 
@@ -401,7 +396,11 @@ Maintenance costs add 15-25% of the initial development cost annually: model upd
 
 **Rule of thumb:** Multiply the initial development estimate by 2.5-3x for three-year total cost. A $200K development project has a realistic three-year TCO of $500-600K.
 
-**The Jevons Paradox in AI:** Model API prices have dropped approximately 280x in two years (as of early 2026). Yet enterprise AI bills are growing, not shrinking: because cheaper tokens enable more ambitious use cases, longer contexts, more agent iterations, and broader deployment. Cost optimization remains essential even as unit prices fall. Verify current pricing before capacity planning: strategies from even 12 months ago may use outdated assumptions.
+**The Jevons Paradox in AI:** unit prices keep falling and enterprise bills keep rising. Both are true at once, and the second follows from the first: cheaper tokens make longer contexts, more agent iterations, and wider deployment affordable, so consumption grows faster than price falls.
+
+The headline multipliers, meaning the roughly 280x drop from early 2024 to early 2026 that Module 17, Inference Cost Optimization documents, compare a frontier model at the start of the window against a much cheaper model of comparable usefulness at the end. Real, and measured against a moving definition of quality. A cleaner anchor for planning is a single model in a single generation: OpenAI cut the GPT-5.6 Luna tier by 80%, from $1.00 to $0.20 per million input tokens, on July 30, 2026, three weeks after the family reached general availability. That is the pace to plan against, and it means a cost model built on last quarter's rate card is not conservative, it is simply wrong.
+
+Two consequences for capacity planning. Re-verify rates before every planning cycle rather than every budget year. And prefer a cost model expressed in ratios, meaning how much more the frontier tier costs than the high-volume tier, since the ratio survives a price cut while the absolute figure does not.
 
 ### Build vs Buy Thresholds
 
