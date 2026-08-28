@@ -282,7 +282,7 @@ Effective receptive field: with L layers of window w, information can propagate 
 
 Combination patterns: Mistral uses sliding window in every layer. Longformer combines local window with global tokens (CLS, special tokens). BigBird adds random attention connections. These hybrid patterns balance efficiency and expressiveness.
 
-Connection to modern models: Mistral 7B uses w=4096 sliding window attention. GPT-4 and Claude likely use similar sparse patterns for long contexts. Flash Attention can exploit sparsity patterns for further speedup.
+Connection to modern models: Mistral 7B uses w=4096 sliding window attention, and Meta's Muse Glimmer interleaves three local layers with a 2,048-token window against one global layer. Frontier closed models publish nothing about their attention patterns, so say that in an interview rather than guessing; the open architectures are what you can reason about. Flash Attention can exploit sparsity patterns for further speedup.
 
 ---
 

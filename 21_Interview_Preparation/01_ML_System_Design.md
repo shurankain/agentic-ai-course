@@ -152,9 +152,21 @@ Tenant Preferences: the first level checks tenant configuration. If a client has
 
 Task Classification: prompt analysis to determine the task type: simple Q&A, coding, complex reasoning, summarization, and so on. A lightweight classifier or rule-based approach based on keywords and query structure is used.
 
-Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, the most cost-effective models are used (gpt-5-mini, claude-haiku-4.5). This gives sufficient quality at minimal cost. For coding tasks, specialized models are chosen (claude-sonnet-5, gpt-5.6) with high scores on code benchmarks. For complex_reasoning, the most powerful models are applied (claude-opus-4-8, o3), despite high cost.
+Cost-Quality Optimization: based on the task type, the optimal model is selected. For simple_qa, a high-volume tier is enough (GPT-5.6 Luna, Claude Haiku 4.5). For coding, models with strong benchmark results (Claude Sonnet 5, GPT-5.6 Terra). For complex reasoning, the frontier tier (Claude Opus 5, GPT-5.6 Sol) despite the cost.
 
 Fallback Chain: if the primary model is unavailable or returns an error, the request is automatically rerouted to a fallback model. This ensures high service availability.
+
+### Where the Keyword Router Falls Down
+
+The design above is the answer most candidates give, and it is a reasonable first pass. Expect the interviewer to push on it, because production routers have moved past it and the gaps are specific.
+
+**Complexity and task type are separate questions.** A keyword classifier answers "what kind of task is this" and then infers difficulty from the category, which fails on the easy instance of a hard category and the hard instance of an easy one. Production designs split the decision: predict complexity first, keep the easy majority on a cheap path regardless of category, and route only the remainder by task type. Cursor's system does exactly this, scoring each turn for predicted user satisfaction before any category is considered.
+
+**Where do the labels come from?** This is the question that separates a designed router from a described one, and a candidate who has not thought about it will stall. Human labelling does not scale and gets stale. The usable answer is behavioural: derive the signal from what the user did next, counting moving on to a new task as positive and immediately correcting or retrying as negative. That gives a continuously refreshed training set at no annotation cost, which is what lets the router track model changes instead of decaying against them.
+
+**Switching models has a cost the routing table does not show.** Changing model mid-session drops the prompt cache, so a router that switches to save a fraction of a cent on one turn can pay for a full prefill on the next. Routing decisions belong at session or task granularity rather than per turn, and the cache state belongs in the decision.
+
+**Build the taxonomy from your own traffic.** A generic easy-medium-hard scale is not a taxonomy. The useful one enumerates what your tenants actually send, and it is the artefact that makes per-task model specialization possible. Module 03, Resource Optimization has the full treatment.
 
 ### Cost Optimization Strategies
 

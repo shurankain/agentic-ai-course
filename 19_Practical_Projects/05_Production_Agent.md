@@ -134,6 +134,10 @@ Authorization: RBAC (roles and permissions), ABAC (decisions based on attributes
 
 For agents, authorization at the tool and data level is important. Different users get different tools and documents.
 
+**That model answers what may be done and not who is doing it**, and for an agent the second question is the harder one. The default is a service account: one identity holding the union of every permission any task might need, living until someone revokes it. Two properties make that a poor fit here. A person who misreads a permission makes one mistake and stops; an agent can repeat it thousands of times before a dashboard is opened. And a grant issued for one task outlives it, so an agent given write access for a migration still has it a month later.
+
+For this project that means three concrete additions on top of RBAC. Issue authority per run rather than per agent, deriving it from the human who initiated the task. Narrow it to what that task needs, so a ticket-triage run cannot write to the knowledge base even though the agent is capable of it. And enforce at a mediation layer that sees every action, rather than inside each tool handler, since a check that lives in the handler is absent from the tool nobody remembered to update. Module 14, Agent Security covers the model and the incidents that motivated it.
+
 ### Input Validation and Prompt Security
 
 Validation of size, format, characters. But for agents this is not enough.
@@ -154,7 +158,7 @@ Data retention policy: how long data is stored, when it is deleted. Right to era
 
 Instead of hardcoding tool implementations, expose them as MCP servers:
 
-**Internal tools as MCP servers:** Knowledge base search, ticket creation, user lookup: each becomes an MCP server. The agent connects as an MCP client, discovering available tools at startup. Benefits: tools are reusable across different agents and AI clients, versioned independently, testable in isolation.
+**Internal tools as MCP servers:** Knowledge base search, ticket creation, user lookup: each becomes an MCP server. The agent connects as an MCP client and calls `server/discover` to learn what each server offers, which under the stateless 2026-07-28 specification replaces the old initialization handshake and can be repeated rather than done once. Benefits: tools are reusable across different agents and AI clients, versioned independently, testable in isolation.
 
 **External MCP servers:** Connect to third-party MCP servers for capabilities like file system access, database queries, web search, or Slack integration. The growing MCP ecosystem provides pre-built servers for common integrations.
 

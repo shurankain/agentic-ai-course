@@ -142,6 +142,8 @@ Production RAG requires attention to every layer. Document processing is underes
 
 Hybrid retrieval (dense + sparse + reranking) outperforms naive semantic search. Query expansion and HyDE further improve quality.
 
+This project builds a static pipeline on purpose, because it is the right thing to get working first and most questions do not need more. Know where the ceiling is: on multi-hop questions that require synthesizing across sources, a static pipeline answers correctly about a third of the time, and adding an orchestrator that can search again when the retrieved context is insufficient roughly doubles that. Module 06, Advanced RAG has the measurement and the five components that produce it. Build this version, evaluate it on your own multi-hop questions, and add the loop only if those questions are the ones failing.
+
 Evaluation is essential: RAGAS provides RAG-specific metrics (faithfulness, relevancy, precision, recall). Automate evaluation as a quality gate in the deployment pipeline.
 
 Conversation context is critical for multi-turn dialogs. Query rewriting handles anaphora resolution.

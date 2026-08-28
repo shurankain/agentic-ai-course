@@ -70,11 +70,15 @@ Training 80% (gradient updates), Validation 10% (hyperparameter tuning, early st
 
 ### Base Model
 
-**Recommended:** Llama 3.3 70B or Llama 4 Scout for maximum quality. Llama 3.1 8B Instruct: strong reasoning, 128K context, excellent instruction following. Qwen 2.5/3 7B Instruct: strong multilingual support, competitive on benchmarks. Mistral v0.3 7B Instruct: efficient, good European language support.
+Pick on four criteria rather than on a name, because the specific models turn over every few months while the criteria do not: parameter count you can afford to train and then serve, licence terms that permit your use, quality on your language and domain, and whether the ecosystem has tested LoRA against that architecture. The last one is underrated and costs the most time when it fails.
 
-**Larger models:** Llama 3.1 70B for maximum quality (requires multi-GPU or quantization for fine-tuning). Qwen 2.5 72B for multilingual enterprise use.
+**Around 7B to 8B** is the workhorse tier for a first fine-tune. It trains on a single 24 GB card with QLoRA, serves cheaply, and is where the tooling is most reliable. Llama 3.1 8B Instruct and Qwen 7B Instruct are the long-standing reference points here, and Mistral's 7B line is the usual choice when European languages matter.
 
-**Smaller models:** Llama 3.2 3B or Qwen 2.5 3B for edge/mobile deployment. Gemma 2 2B for constrained environments. Smaller models fine-tune faster and are easier to deploy but sacrifice capability.
+**Around 70B** buys quality at the cost of multi-GPU training or aggressive quantization, and it changes the serving bill more than the training bill. Worth it when the 8B tier demonstrably fails your evaluation rather than as a starting point.
+
+**Around 2B to 3B** is for edge and mobile, where the model has to fit on the device. It fine-tunes fast and gives up real capability, so validate against your task before committing to the form factor.
+
+Check the current open-weight field in Module 01, LLM Providers and APIs before choosing, since that lesson tracks which releases lead and, more importantly, which of them carry custom licences rather than MIT or Apache 2.0. A model that cannot be used commercially is not a candidate no matter how it benchmarks.
 
 ### LoRA Configuration
 
