@@ -370,7 +370,7 @@ Evaluating a RAG system involves several independent dimensions. It is important
 
 ### Automated Evaluation
 
-**LLM-as-judge:** A strong model (GPT-5.6, Claude) is shown the question, context, answer, and evaluation criteria. It returns a score (0-1 or 1-5) and justification. This enables rapid evaluation of thousands of examples without manual effort.
+**LLM-as-judge:** A strong model (GPT-6, Claude) is shown the question, context, answer, and evaluation criteria. It returns a score (0-1 or 1-5) and justification. This enables rapid evaluation of thousands of examples without manual effort.
 
 **Frameworks:** RAGAS, TruLens, DeepEval provide ready-made metrics and pipelines. They standardize evaluation and allow comparing different versions of the system. RAGAS has become the de facto standard. It includes faithfulness, answer relevancy, context precision, and context recall.
 

@@ -4,7 +4,7 @@
 
 Human understanding of the world is multimodal. We read text, see images, hear sounds, and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
 
-GPT-5.6, Claude Opus 5, Gemini 3.7 Flash, Llama 4: modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
+GPT-6, Claude Opus 5.5, Gemini 4 Argon, Llama 4: modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
 
 The field has shifted from "adapter-based" multimodality (bolting vision onto text models) to **native multimodality** (processing all modalities from the start in a unified architecture). This chapter covers the architectural solutions that make multimodal AI possible, from the foundational adapter approaches to the latest native multimodal designs.
 
@@ -332,4 +332,4 @@ Image/video generation is converging with understanding. Unified architectures t
 
 The next wave goes beyond understanding and generation. World models predict environment evolution. VLA models translate language into physical actions. Scientific AI generates hypotheses and runs experiments. Automated AI R&D (AutoResearch, Agent0) marks the beginning of AI systems improving themselves. These frontiers, expected to reach production between 2026-2028, will define the next generation of AI applications beyond text and code.
 
-This is a rapidly evolving field. GPT-5.6, Gemini 3.7, Claude Opus 5 and Sonnet 5, Llama 4, new multimodal capabilities emerge every few months, with native multimodality as the clear direction.
+This is a rapidly evolving field. GPT-6, Gemini 4, the Claude 5.5 family, Llama 4, new multimodal capabilities emerge every few months, with native multimodality as the clear direction.

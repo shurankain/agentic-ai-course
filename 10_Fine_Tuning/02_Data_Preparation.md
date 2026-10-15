@@ -12,7 +12,7 @@ Data preparation is typically the most labor-intensive stage of fine-tuning. Fro
 
 **Expert labeling** provides controlled quality. You create queries and engage experts to write reference responses. Advantage: quality control. Limitation: cost and speed.
 
-**Synthetic generation** uses a strong model (GPT-5.6) to create examples. Advantage: scalability and speed. Limitation: risk of inheriting issues from the generating model.
+**Synthetic generation** uses a strong model (GPT-6 Astra, Claude Opus 5.5) to create examples. Advantage: scalability and speed. Limitation: risk of inheriting issues from the generating model.
 
 **Knowledge distillation** involves running real queries through a powerful model and using its responses to train a smaller model.
 

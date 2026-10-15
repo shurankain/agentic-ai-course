@@ -14,7 +14,7 @@ Prompt versioning deserves special attention. A prompt is an artifact like code 
 
 **Second stage**: unit tests. Executed with mocked LLM clients, no API keys required. Tests cover request and response processing logic, prompt construction, result parsing, and error handling. High coverage is critically important.
 
-**Third stage**: integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, run them on a high-volume tier such as GPT-5.6 Luna or Claude Haiku 4.5 rather than the frontier model.
+**Third stage**: integration tests with real APIs. A small set of smoke tests verifies basic integration functionality. API keys are provided through CI system secrets. To save costs, run them on a high-volume tier such as GPT-6 Luna or Claude Haiku 5.5 rather than the frontier model.
 
 **Fourth stage**: building and publishing the Docker image. Tagged with commit SHA for unique identification. The latest tag is updated only for the main branch. Parallel execution of independent stages accelerates the pipeline. Integration tests wait for unit test success.
 
@@ -44,7 +44,7 @@ Quality gates define criteria for a successful deployment. Quantitative gates: e
 
 Deterministic checks use test cases with precisely known answers. Math problems, JSON formatting, information extraction: verified programmatically. The regression suite accumulates over time; each bug becomes a test case.
 
-LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-5.6 evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
+LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-6 Astra or Claude Opus 5.5 evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
 
 Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation: pre-prepared test cases with reference answers.
 
@@ -122,7 +122,7 @@ Dynamic batching parameters affect the latency-throughput trade-off. A small bat
 
 The optimal architecture often combines self-hosted and cloud models. Self-hosted for high-frequency operations and privacy-critical data. Cloud APIs for complex tasks requiring frontier models.
 
-A router determines where to direct a request. Criteria include: task complexity, data sensitivity, required model, and current load. Simple classifications go to the local Llama; complex reasoning tasks go to GPT-5.6 or o3.
+A router determines where to direct a request. Criteria include: task complexity, data sensitivity, required model, and current load. Simple classifications go to the local Llama; complex reasoning tasks go to GPT-6 Astra or Claude Opus 5.5.
 
 **Router logic:** A privacy flag in the metadata immediately routes to self-hosted. Complexity estimation is based on heuristics: prompt length, required capabilities (code generation, complex reasoning), and expected output length. Scoring system: prompt > 4000 chars (+2), code generation (+2), reasoning (+3), output > 2000 tokens (+1). Score 0-1 = simple (self-hosted), 2-3 = medium (self-hosted if available), 4+ = complex (cloud).
 

@@ -239,9 +239,15 @@ When a similar task arrives, the system immediately suggests the proven set of t
 
 This approach requires feedback mechanisms: how does the system know the selection was successful? Typically, a combination of explicit signals (user approved the result) and implicit signals (task completed without errors) is used.
 
+### Forcing a Tool Call
+
+Most APIs let you force the model to call a particular tool, through a `tool_choice` setting or its equivalent. It is the obvious way to guarantee structured output or to make a step deterministic, and it is less portable than it looks. On Claude Opus 5.5, forced tool use returns an error, and thinking can no longer be disabled (as of October 2026). Code that pinned `tool_choice` to a specific tool on an earlier model breaks on upgrade, before any prompt or schema changes.
+
+Two habits avoid the problem. Make the tool the only reasonable choice through its description and the instructions rather than through a flag, and validate the response shape in the executor regardless. And if a step must produce a typed result with no reasoning around it, use a structured-output mode or a dedicated decision endpoint for that step, rather than forcing a tool call on a reasoning model.
+
 ### Parallel Tool Calls: When You Can and When You Cannot
 
-Modern LLM APIs (GPT-5.6, Claude, Gemini) support **parallel tool calls**: the model can generate multiple tool calls in a single response. This speeds up execution but requires understanding dependencies.
+Modern LLM APIs (GPT-6, Claude, Gemini) support **parallel tool calls**: the model can generate multiple tool calls in a single response. This speeds up execution but requires understanding dependencies.
 
 **Types of dependencies between tools:**
 

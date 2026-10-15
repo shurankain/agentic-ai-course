@@ -90,7 +90,7 @@ Without thorough evaluation, it is impossible to determine whether fine-tuning h
 
 **Human evaluation**: the gold standard.
 
-**LLM-as-judge**: using a powerful model (GPT-5.6) for evaluating answers.
+**LLM-as-judge**: using a powerful model (GPT-6 Astra, Claude Opus 5.5) for evaluating answers.
 
 ## Iterative Improvement Process
 

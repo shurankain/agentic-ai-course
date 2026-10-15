@@ -68,7 +68,7 @@ Before writing code, the critical decisions are architectural. A multi-agent cod
 
 Two things follow for this project. The synthesis step is not optional formatting, it is deduplication, and it needs to match findings by file and line span rather than by text, since the three descriptions above share no wording. And the model tiering below is doing double duty: assigning different models to different reviewers is the cheapest available reduction in overlap, because two agents on the same weights make correlated judgements while two on different weights do not.
 
-**Model selection per agent.** Not all reviewers need the same model. The Security Reviewer benefits from a frontier model (Claude Opus 5) because security analysis requires deep reasoning about attack vectors. The Style Reviewer works well with a cheaper model (Claude Sonnet 5 or Haiku 4.5) because style checks are pattern-matching. The Orchestrator can use a fast model (Haiku): it routes and synthesizes, it does not analyze. This tiered approach reduces cost by 40-60% compared to using a frontier model for all agents.
+**Model selection per agent.** Not all reviewers need the same model. The Security Reviewer benefits from a frontier model (Claude Opus 5.5) because security analysis requires deep reasoning about attack vectors. The Style Reviewer works well with a cheaper model (Claude Sonnet 5.5 or Haiku 5.5) because style checks are pattern-matching. The Orchestrator can use a fast model (Haiku): it routes and synthesizes, it does not analyze. This tiered approach reduces cost by 40-60% compared to using a frontier model for all agents.
 
 ## Evaluation: How to Know If Multi-Agent Is Worth It
 

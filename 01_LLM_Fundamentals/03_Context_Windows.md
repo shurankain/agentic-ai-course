@@ -36,6 +36,8 @@ The history of context windows is a story of rapid growth. The table below trace
 | GPT-5 | 2025 | 128K-1M tokens |
 | Claude 4.6 / 4.7 | 2026 | 200K (1M available) |
 | GPT-5.6 | 2026 | 128K-1M tokens |
+| Claude 5.5 family (Opus, Sonnet, Haiku) | 2026 | 1,000,000 tokens |
+| GPT-6 | 2026 | 1,050,000 tokens |
 | Gemini 2.5 Pro | 2025 | 1,000,000 tokens |
 | Llama 4 Scout | 2025 | 10,000,000 tokens |
 
@@ -128,7 +130,7 @@ This has practical implications for prompt design and RAG systems. If you load 2
 
 **Explicit citations.** Instruct the model to cite specific document IDs or section numbers when answering. This forces attention to all provided documents, partially mitigating the middle-neglect effect. When the model must justify its answer with references, it scans the context more thoroughly.
 
-**Frontier model improvements.** Models with the latest architectures (Gemini 3.7 Flash, Claude Opus 5 and Sonnet 5 with 1M context) have reduced but not eliminated this effect (as of August 2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
+**Frontier model improvements.** Models with the latest architectures (Gemini 3.8 Flash, the Claude 5.5 family, and GPT-6 with 1M-token contexts) have reduced but not eliminated this effect (as of August 2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
 
 ---
 

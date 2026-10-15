@@ -59,6 +59,8 @@ The progression from 14.9% to above 80% in two years is remarkable. Top agents n
 
 **Effort settings move small models more than large ones.** Anthropic reports Haiku 5.5 at 39.2% on Terminal-Bench 4.0 at maximum effort and about 20% at the default medium setting. A benchmark score quoted without its effort level can therefore be off by a factor of two for the configuration you will actually run, and the cheaper the model, the more of its capability sits behind the effort dial.
 
+**Tool versions are part of the integration.** Claude Opus 5.5 rejects the older `computer_20251124` computer-use tool on the Claude API and Google Cloud (as of October 2026). An agent that hard-codes the tool version breaks on a model upgrade even when nothing else changed, so keep the tool version in configuration next to the model identifier and upgrade them together.
+
 **WebArena** (web navigation):
 - Claude-based agents achieve 40%+ on WebArena, up from single-digit scores in 2024
 - Browser-specialized agents (Browser Use, Nova Act) perform even better on web-specific tasks
@@ -370,7 +372,7 @@ Google's computer use research project, leveraging Gemini's multimodal capabilit
 
 ### Browser Use (Open Source)
 
-An open-source Python framework for building browser automation agents. Browser Use provides a high-level API for controlling browsers programmatically through AI, supporting multiple LLM backends (Claude, GPT-5.6, Gemini, local models). Key advantages: fully open source (MIT license), self-hosted, supports custom LLMs, and provides both visual and DOM-based interaction modes. Popular for building custom browser automation workflows.
+An open-source Python framework for building browser automation agents. Browser Use provides a high-level API for controlling browsers programmatically through AI, supporting multiple LLM backends (Claude, GPT-6, Gemini, local models). Key advantages: fully open source (MIT license), self-hosted, supports custom LLMs, and provides both visual and DOM-based interaction modes. Popular for building custom browser automation workflows.
 
 ### Comparison of Computer Use Platforms
 
@@ -378,7 +380,7 @@ Multiple platforms now compete in the computer use space, each targeting differe
 
 | Platform | Environment | Strengths | Model |
 |----------|-------------|-----------|-------|
-| Claude Computer Use | Full desktop | Most capable general-purpose, 81.2% OSWorld (Sonnet 5) | Claude Sonnet 5 / Opus 5 |
+| Claude Computer Use | Full desktop | Most capable general-purpose, 83.9% OSWorld 2.1 offline subset (Sonnet 5.5) | Claude Sonnet 5.5 / Opus 5.5 |
 | Claude for Chrome | Browser only | Low-latency web tasks | Claude |
 | Cowork | Hosted VM | Supervised workflows, real-time observation | Claude |
 | Nova Act | Browser only | Deterministic replay, AWS integration | Amazon Nova |

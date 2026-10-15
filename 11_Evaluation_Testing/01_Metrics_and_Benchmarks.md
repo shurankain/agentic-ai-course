@@ -126,7 +126,7 @@ The pattern is consistent: a new benchmark is introduced, models improve rapidly
 
 For practitioners, this means two things. First, absolute scores on saturating benchmarks are increasingly meaningless: the difference between 93% and 95% on a contaminated benchmark tells you nothing about real-world capability. Second, the benchmarks that matter most are the ones where scores are still low: SWE-bench Pro (59.1% on standardized scaffolding), AutomationBench (Gemini 4 Argon at 51.3%, Gemini 3.7 Flash at 30.4%), Terminal-Bench 4.0 (about 65% at the top), ITBench-AA (<50%), Odysseys (44.5%), RoadmapBench (39.1%). These unsaturated benchmarks reveal genuine capability gaps, especially in long-horizon agent reliability, enterprise operations, and multi-step reasoning under uncertainty.
 
-The AutomationBench number deserves a moment. Google's own documentation reports Gemini 3.7 Flash at 30.4%, up from 17 for the previous Flash release. A current model failing roughly 70% of an agentic benchmark, published by the vendor, is a more useful calibration for what agents can be trusted with than any coding score in the nineties.
+The AutomationBench number deserves a moment. Google's own documentation reports Gemini 3.7 Flash at 30.4%, up from 17 for the previous Flash release. A then-current model failing roughly 70% of an agentic benchmark, published by the vendor, and Gemini 4 Argon still failing about half of it seven weeks later, is a more useful calibration for what agents can be trusted with than any coding score in the nineties.
 
 ### Agent-Specific Evaluation Benchmarks
 

@@ -78,7 +78,7 @@ Composition can be explicit (the developer defines the sequence) or automatic (t
 
 ### Azure OpenAI
 
-Semantic Kernel is deeply integrated with Azure OpenAI Service. Configuration requires an endpoint, deployment name, and key. All Azure models are supported: GPT-5.6, GPT-4.1, o3, and embedding models.
+Semantic Kernel is deeply integrated with Azure OpenAI Service. Configuration requires an endpoint, deployment name, and key. All Azure OpenAI models are supported, from the current GPT generation back to GPT-4.1 and o3, plus embedding models.
 
 Azure meets enterprise requirements: compliance, regionalization, and private endpoints. For enterprise applications, Azure is often the preferred choice.
 
