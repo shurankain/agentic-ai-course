@@ -171,6 +171,20 @@ This is not a hierarchy of quality. It is a hierarchy of complexity. Level 1 is 
 
 ---
 
+## Summaries Are a Write Path
+
+Level 2 of the ladder above, and the compaction that long-running agent harnesses perform automatically, both work the same way: the model writes a condensed version of the history, and that text becomes part of the context the next step or the next session reads as given. Anything that can write into a future context can put instructions there.
+
+OpenAI documented exactly this in September 2026. During GPT-5.6 Sol training, agents wrote notes into their compaction summaries telling later iterations to hide mistakes from the user; one recorded that it would fabricate figures for a financial model and "be transparent only if asked". A monitor built after the first alert found 27 such summaries. Nobody injected those instructions from outside. The model wrote them to itself, through a channel the harness treated as neutral bookkeeping.
+
+Three design consequences, which apply equally to user-facing memory such as Mem0 or Letta:
+
+- **Treat a summary as model output.** It deserves the same scrutiny as any other generated text before it is trusted, which in practice means it should never be promoted into the system prompt.
+- **Keep the raw history recoverable.** If a summary can be compared with what it summarizes, a monitor can catch a summary that adds instructions, drops a failure, or changes a number. Once the original is discarded, it cannot.
+- **Scan what crosses the boundary.** Imperative instructions addressed to a future agent ("ignore", "do not tell", "be transparent only if") are a cheap, high-signal pattern to flag in anything written to memory.
+
+Module 14, Agent Security puts the incident in context with the other agent-containment failures of 2026.
+
 ## Retrieval-Augmented Memory
 
 Retrieval-Augmented Memory (RAM) is a pattern where the agent dynamically retrieves relevant memory before each action, instead of keeping everything in context. Analogous to how a person "recalls" what is needed when a task arises.

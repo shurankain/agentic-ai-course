@@ -658,6 +658,14 @@ LLMs sometimes suggest package names that do not exist. Attackers monitor these 
 - Maintain an allow-list of approved packages for automated agents
 - Tools like Socket.dev and Snyk can flag suspicious new packages
 
+### Pins, Hooks, and the Workspace
+
+Two September 2026 disclosures moved the attack surface from the code an agent writes to the agent tooling itself. Module 14, Agent Security has the details and fixed versions; the controls they imply belong here.
+
+**A pin is a claim, a verification is a check.** Plugin4Shell showed that the plugin marketplaces of four major coding agents pinned plugins to a reviewed commit and never confirmed that the code on disk matched it. Label each supply-chain control by which of the two it is. Lockfile hashes that the installer verifies are checks; a commit reference recorded in a manifest is a claim until something compares it with what was fetched.
+
+**The workspace is untrusted input to the host.** Sandbox escapes disclosed the same month in Cursor, Codex, Claude Code, Gemini CLI, and Antigravity worked by getting the agent to write a file that trusted software outside the sandbox later executed, usually repository configuration such as a Git hook. Run the agent's workspace on a checkout that host tools do not execute hooks from, or review configuration files the agent touched before any host-side tool opens the repository.
+
 ### AI-to-AI Code Review
 
 A defense pattern gaining traction: use one AI agent to security-review code produced by another. The reviewer agent operates with a security-focused system prompt and checks for known vulnerability patterns, suspicious dependencies, and unsafe operations. This is not a replacement for human review but adds a fast automated layer.

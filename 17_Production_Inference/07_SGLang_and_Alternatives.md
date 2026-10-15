@@ -201,6 +201,9 @@ Kubernetes HorizontalPodAutoscaler with custom metrics (llm_queue_depth). Queue 
 **Fallback:**
 Primary service (SGLang) with a short timeout (5s), then fallback to backup (vLLM) with increased timeout, then last resort external API (OpenAI, Anthropic). High availability at reasonable cost.
 
+**Security of the serving stack:**
+The engine is rarely the only component, and the add-ons carry their own risk. In October 2026 JFrog disclosed CVE-2026-105192, an unauthenticated remote-code-execution flaw rated CVSS 9.8 in the multiprocess mode of LMCache, a KV-cache layer commonly paired with vLLM, with no fixed version at disclosure. Three habits limit the damage of the next one: inventory every component in the serving path, including the add-ons around the engine; keep cache and control endpoints off any network a client can reach; and pin and track each component's version the same way the engine is pinned, since a two-week release cadence applies to the ecosystem as well. Check the LMCache advisory for a fix before deploying it.
+
 With production infrastructure understood: from GPU architecture to inference serving: Module 18 addresses the governance, regulatory, and organizational constraints that shape how these systems are deployed in enterprises.
 
 ## Key Takeaways

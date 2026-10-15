@@ -46,6 +46,8 @@ Deterministic checks use test cases with precisely known answers. Math problems,
 
 LLM-as-Judge uses another (more powerful) model to evaluate quality. GPT-6 Astra or Claude Opus 5.5 evaluates responses by criteria: relevance, coherence, correctness, helpfulness. Scoring is 1-5, aggregated across dozens of cases. If the average score < 4.0, the deployment fails.
 
+**Policy gates for generated infrastructure.** When a model scaffolds the backend, the access policy is part of what it wrote, and it needs the same gate as the code. UpGuard found 16,326 Supabase databases with publicly readable tables in September 2026, concentrated in AI-built apps whose row-level security nobody had reviewed. The platform was not at fault; the pipeline had no step that looked. Add one: fail the build when a table lacks a row-level security policy, when a storage bucket is public, or when a service key appears in client code. These checks are deterministic, cheap, and catch the class of mistake a generated scaffold makes most often.
+
 Rollback criteria are defined in advance. Automatic rollback on critical errors. Rollback on quality degradation requires fast evaluation: pre-prepared test cases with reference answers.
 
 ## Prompt Versioning and Registry
