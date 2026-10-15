@@ -75,7 +75,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 **Earlier generations:**
 - **Claude Fable 5**: the Mythos-class flagship (launched June 9, 2026). 95.0% SWE-bench Verified (independently confirmed), 80.3% SWE-bench Pro (vendor-reported). $10/$50 per 1M tokens. 1M context, 128K max output. Multi-day agentic coding sessions. Genomics: outperformed Science paper results at 100x smaller scale. In high-risk domains (cybersecurity, biology, chemistry, distillation), Fable 5 blocks responses and falls back to a lower tier. Knowledge cutoff January 2026. Access was suspended June 12 under an export-control directive and restored globally on July 1, 2026 after the Department of Commerce lifted it. The outage ran 19 days; see the export controls section below. From July 20, Max and Team Premium include Fable 5 up to 50% of weekly limits, while Pro and Team Standard reach it through usage credits.
 - **Claude Opus 5**: Opus tier from July 24 until Opus 5.5, at $5/$25 per 1M tokens. Anthropic positions it as approaching Fable 5's intelligence at half the price, and it scores about 96% on SWE-bench Verified, at the top of a cluster where the leaderboard has stopped separating models. 1M context, 128K max output, adaptive thinking by default, and a five-level effort dial. Fast mode runs about 2.5x faster at twice the base price. Default model for Claude Max. Two features matter for agent architecture rather than for a spec sheet: automatic fallback routing, and tool swapping mid-conversation without breaking the prompt cache.
-- **Claude Sonnet 5**: Sonnet tier from June 30 until Sonnet 5.5, and at release the most agentic Sonnet so far. 1M-token context, 63.2% SWE-bench Pro, 81.2% OSWorld on computer use, and it edges Opus 4.8 on GDPval knowledge work. Anthropic reports lower rates of hallucination, sycophancy, and susceptibility to prompt injection than Sonnet 4.6. Became the default for Free and Pro users on July 1. Launched at introductory pricing of $2/$10 per 1M tokens scheduled to end August 31, 2026; Sonnet 5.5 then shipped at that same $2/$10.
+- **Claude Sonnet 5**: Sonnet tier from June 30 until Sonnet 5.5, and at release the most agentic Sonnet so far. 1M-token context, 63.2% SWE-bench Pro, 81.2% OSWorld on computer use, and it edges Opus 4.8 on GDPval knowledge work. Anthropic reports lower rates of hallucination, sycophancy, and susceptibility to prompt injection than Sonnet 4.6. Became the default for Free and Pro users on July 1. Launched at introductory pricing of $2/$10 per 1M tokens with a step to $3/$15 scheduled for September 1. On August 10 Anthropic made $2/$10 permanent and cancelled the increase, and Sonnet 5.5 then shipped at the same price. Now listed among Anthropic's legacy models, still available.
 - **Claude Haiku 4.5**: the previous small tier at $1/$5 per 1M tokens, superseded by Haiku 5.5 at a tenth of the input price.
 - **Claude Opus 4.8**: superseded by Opus 5 (May 28, 2026). 88.6% SWE-bench Verified, 69.2% SWE-bench Pro, 74.6% Terminal-Bench 2.1. Sharper judgement: the model is more likely to flag uncertainties and less likely to make unsupported claims. $5/$25 per 1M tokens. Messages API accepts `system` records inside `messages[]`. This allows mid-task system prompt changes without breaking prefix cache. Released alongside Anthropic's $65B funding round at $965B valuation.
 - **Claude Opus 4.7**: earlier flagship (April 16, 2026). 87.6% SWE-bench Verified (13% lift over 4.6). High-resolution vision (2576px / 3.75MP, first Claude model with this capability). Task budgets give the model a running countdown to prioritize work and finish agentic loops gracefully. Effort levels enable adaptive reasoning: the model decides how much to think based on task complexity.
@@ -458,67 +458,75 @@ The response typically contains:
 
 Cost is a critical factor when choosing a provider and model. All providers charge by token count, with input and output tokens priced differently. Prices are quoted **per 1M tokens** (the industry convention since 2025).
 
-### Pricing Tiers (approximate, August 2026)
+### Pricing Tiers (approximate, October 2026)
 
 **Reasoning models:**
 
-Reasoning models carry a premium because thinking tokens are billed at output rates and can represent 80-90% of total output for complex queries. The table below lists current pricing for the major reasoning-capable models. This enables direct cost comparison when selecting between providers for reasoning-heavy workloads.
+Reasoning models carry a premium because thinking tokens are billed at output rates and can represent 80-90% of total output for complex queries. Every frontier model in this table reasons by default, so the column that matters is output.
 
 | Model | Input | Output | Notes |
 |--------|-------|--------|-------|
-| Claude Fable 5 | $10.00 | $50.00 | Mythos-class, 95.0% SWE-bench Verified, 80.3% Pro |
-| Claude Opus 5 | $5.00 | $25.00 | About 96% SWE-bench Verified, top of a saturated cluster |
-| GPT-5.6 Sol | $5.00 | $30.00 | Frontier tier for coding, science, cyber |
-| GPT-5.5 (full API) | $5.00 | $30.00 | Pro config: $30/$180 |
+| Claude Fable 5.1 | $10.00 | $50.00 | Mythos-class public tier |
+| GPT-6 Astra | $10.00 | $50.00 | Critical cyber rating, gated capabilities |
+| GPT-5.6 Sol | $5.00 list, $4.00 promo | $30.00 list, $20.00 promo | Promotion runs at least to Nov 21, 2026 |
+| Claude Opus 5 | $5.00 | $25.00 | Legacy, superseded by Opus 5.5 |
+| Claude Opus 5.5 | $4.00 | $20.00 | Cheapest Opus listed |
+| Gemini 4 Argon | $2.00 to Nov 30, then $4.00 | $10.00 to Nov 30, then $20.00 | Introductory rate |
+| GPT-6.1 Sol | $2.00 | $10.00 | Cache reads $0.10 |
 | o3 | $2.00 | $8.00 | 80% price cut since launch (June 2025) |
 | o4-mini | $1.10 | $4.40 | Cost-efficient reasoning |
-| Claude Opus 4.8 (extended thinking) | $5.00 | $25.00 | Superseded by Opus 5, 88.6% Verified |
-| Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Google's most capable published reasoning model |
-| Gemini 2.5 Pro (thinking) | $1.25-2.50 | $10.00-15.00 | Tiered by context length (<=/>200K) |
+| Gemini 3.1 Pro Preview (thinking) | $2.00 | $12.00 | Superseded by Argon |
+
+Read the table by ratio rather than by row. OpenAI and Anthropic now price their frontier tier at five times their balanced tier and a hundred times their high-volume tier. In August the frontier-to-high-volume gap at OpenAI was about 25 times, so the bottom of the range fell four times faster than the top, and the case for routing simple work away from the frontier tier got stronger.
 
 The ranking moved twice in two months. Claude Fable 5 took SWE-bench Verified at 95.0% in June, then Claude Opus 5 passed it at about 96% in July at half the price, with GPT-5.6 Sol at roughly 96.2% and the open-weight DeepSeek V4 Pro at about 96.4% on vals.ai. Six models now sit inside two points of each other, which means the order depends on which harness you read. Treat Verified as saturated and read Module 11 before quoting a SWE-bench Pro number, because that benchmark reports three different "best" scores depending on the harness.
 
-**Standard models (as of August 2026):**
+**Standard models (as of October 2026):**
 
-Standard models cover the broadest range of use cases, from general-purpose chat to code generation and document analysis. Prices vary by an order of magnitude, reflecting differences in model size, capability, and provider strategy.
+Standard models cover the broadest range of use cases, from general-purpose chat to code generation and document analysis. Prices vary by two orders of magnitude, reflecting differences in model size, capability, and provider strategy.
 
 | Model | Input | Output |
 |--------|-------|--------|
-| Claude Fable 5 | $10.00 | $50.00 |
-| Claude Opus 5 | $5.00 | $25.00 |
-| GPT-5.6 Sol | $5.00 | $30.00 |
-| Claude Sonnet 5 | $2.00 promo / $3.00 from Sept 1 | $10.00 promo / $15.00 from Sept 1 |
-| GPT-5.6 Terra | $2.50 | $15.00 |
-| GPT-5.5 Instant | $2.50 | $10.00 |
-| GPT-5 | $1.25 | $10.00 |
-| Gemini 3.7 Flash | $0.75 to Dec 31, then $1.50 | $3.75 to Dec 31, then $7.50 |
-| Gemini 3.5 Flash | $1.50 | $9.00 |
-| Gemini 3.1 Pro Preview | $2.00 | $12.00 |
-| Gemini 3 Flash | $0.50 | $3.00 |
-| Grok 4.6 | $2.00 below 200K, doubles above | $6.00 below 200K, doubles above |
+| GPT-6 Sol | $2.00 | $10.00 |
+| GPT-6.1 Sol | $2.00 | $10.00 |
+| Claude Sonnet 5.5 | $2.00 | $10.00 |
+| Claude Sonnet 5 (legacy) | $2.00 | $10.00 |
+| GPT-5.6 Terra | $2.00 | $12.00 |
+| Grok 4.7 | $2.00 below 200K, doubles above | $6.00 below 200K, doubles above |
+| Qwen 3.7 Max/Plus | $2.50 | $7.50 |
 | Mistral Large 3 | $2.00 | $6.00 |
 | Mistral Medium 3.5 | $1.50 | $7.50 |
-| Qwen 3.7 Max/Plus | $2.50 | $7.50 |
-| Grok Build 0.1 | $1.00 | $2.00 |
+| Gemini 3.8 Flash | $0.75 to Dec 31, then $1.50 | $3.75 to Dec 31, then $7.50 |
 | DeepSeek V4-Pro | $0.435 | $0.87 |
+| GLM-5.3-Flash | about $0.15 | about $0.50 |
 | DeepSeek V4-Flash | $0.14 | $0.28 |
-| GPT-5.6 Luna | $0.20 | $1.20 |
 
-Four entries in this table carry an expiry date rather than a price: Sonnet 5 on September 1, 2026, Gemini 3.7 Flash on January 1, 2027, Grok 4.6 above 200K tokens, and GPT-5.6 Luna after an 80% cut three weeks into general availability. Any cost model built on a single quoted rate has a shelf life measured in weeks. Build the rate into configuration, not into a spreadsheet.
+DeepSeek reportedly raised prices by 2.3 to 4.5 times in September without losing meaningful demand, so check its current rate card before relying on the two rows above.
+
+Five entries across these tables carry an expiry date rather than a price: Gemini 4 Argon on November 30, GPT-5.6 Sol's promotion no earlier than November 21, Gemini 3.8 Flash on January 1, 2027, Grok above 200K tokens, and the DeepSeek rows. One scheduled change went the other way: Anthropic cancelled the September 1 increase for Sonnet 5 and kept $2/$10. Any cost model built on a single quoted rate has a shelf life measured in weeks. Build the rate into configuration, not into a spreadsheet.
+
+**Long prompts change the rate.** OpenAI bills GPT-6 family requests above 272K input tokens at 2x on input and 1.5x on output, for the whole request. Claude Haiku 5.5 moves from $0.10/$0.50 to $0.50/$2.50 above 100K. Grok doubles above 200K. A context-stuffing strategy can therefore cross a pricing threshold partway through a session, and the cost model has to know where the threshold sits.
 
 **Budget models:**
 
-Budget models are designed for high-volume, lower-complexity tasks where cost and latency matter more than peak reasoning quality. They are typically 10-50x cheaper than frontier models. This makes them the default choice for classification, extraction, simple Q&A, and routing layers within agentic systems.
+Budget models are designed for high-volume, lower-complexity tasks where cost and latency matter more than peak reasoning quality. This makes them the default choice for classification, extraction, simple Q&A, and routing layers within agentic systems.
 
 | Model | Input | Output |
 |--------|-------|--------|
+| GPT-6 Luna | $0.10 | $0.50 |
+| Claude Haiku 5.5 | $0.10 to 100K, then $0.50 | $0.50 to 100K, then $2.50 |
+| GPT-5.6 Luna | $0.20 | $1.20 |
 | GPT-5-mini | $0.25 | $2.00 |
 | GPT-5-nano | $0.05 | $0.40 |
-| GPT-4o-mini | $0.15 | $0.60 |
-| Claude Haiku 4.5 | $0.25 | $1.25 |
+| Claude Haiku 4.5 (legacy) | $1.00 | $5.00 |
 | Gemini 2.5 Flash | $0.15 | $0.60 |
-| Gemini 2.0 Flash *(retired)* | $0.10 | $0.40 |
 | Mistral Small 3 | $0.10 | $0.30 |
+
+**The floor is ten cents, and two vendors reached it on the same day.** GPT-6 Luna and Claude Haiku 5.5 both list $0.10 input and $0.50 output, Haiku 5.5 arriving on October 7, 2026 as OpenAI rolled Luna out to ChatGPT's free tier. That is a tenth of Haiku 4.5's input price. A competent small model is now cheap enough that the deciding cost in a high-volume pipeline is usually the number of calls, not the rate per call.
+
+**A per-token price is still not a per-task price.** Anthropic's newer tokenizers produce about 30% more tokens than their predecessors for the same text, Sonnet 5's and Haiku 5.5's included, while Anthropic reports Haiku 5.5 about 75% cheaper on typical workloads. Comparing rates across a tokenizer change gets the size of the saving wrong. Module 01, Tokenization shows how to measure it on your own text.
+
+**Measured cost per task diverges further.** Artificial Analysis measured an average task at about $1.99 on Gemini 4 Argon, $3.26 on GPT-6 Astra, and $5.98 on Claude Opus 5.5 (as of October 2026), an ordering that does not follow from the list prices alone, because models differ in how many tokens they spend reasoning and how many tool calls they make to finish.
 
 **Note:** Reasoning model costs can be deceptive. A query that costs $0.01 with a standard model might cost $0.10-0.50 with a reasoning model due to thinking tokens. Always account for thinking token overhead in cost estimates.
 

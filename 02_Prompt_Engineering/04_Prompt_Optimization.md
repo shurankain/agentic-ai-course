@@ -89,8 +89,8 @@ Consider a concrete scenario. You have a customer support agent and want to test
 
 Every token costs money. At scale this is critical:
 - 1,000 tokens per prompt x 1M requests per day = 1B tokens per day
-- At $3 per 1M input tokens (Claude Sonnet 5 at its standard rate) = $3,000 per day = $90,000 per month
-- On a high-volume tier such as GPT-5.6 Luna ($0.20 per 1M) = $200 per day
+- At $2 per 1M input tokens (Claude Sonnet 5.5 or GPT-6 Sol, as of October 2026) = $2,000 per day = $60,000 per month
+- On a high-volume tier such as GPT-6 Luna or Claude Haiku 5.5 ($0.10 per 1M) = $100 per day
 
 Reducing the prompt by 30% yields proportional savings regardless of model tier.
 

@@ -22,9 +22,11 @@ Production AI systems typically serve requests spanning a wide complexity range.
 
 | Tier | Models | Cost | Use Case |
 |------|--------|------|----------|
-| Tier 1 (Economy) | GPT-5.6 Luna, Claude Haiku 4.5, Gemini 3.7 Flash | $0.05-1.20/1M | Simple tasks, classification |
-| Tier 2 (Standard) | GPT-5.6 Terra, Claude Sonnet 5 | $2-15/1M | Most tasks |
-| Tier 3 (Premium) | GPT-5.6 Sol, Claude Opus 5, Claude Fable 5 | $5-50/1M | Complex reasoning |
+| Tier 1 (Economy) | GPT-6 Luna, Claude Haiku 5.5, Gemini 3.8 Flash | $0.10-3.75/1M | Simple tasks, classification |
+| Tier 2 (Standard) | GPT-6 Sol, GPT-6.1 Sol, Claude Sonnet 5.5 | $2-10/1M | Most tasks |
+| Tier 3 (Premium) | GPT-6 Astra, Claude Opus 5.5, Claude Fable 5.1, Gemini 4 Argon | $2-50/1M | Complex reasoning |
+
+Prices as of October 2026. Note that the tiers overlap: Gemini 4 Argon is a frontier model at a standard-tier introductory price until November 30, which is exactly the kind of case a router keyed on price alone misclassifies.
 
 ### Routing Strategies
 

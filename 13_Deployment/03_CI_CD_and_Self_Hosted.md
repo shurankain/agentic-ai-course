@@ -68,7 +68,7 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Latency and throughput** for high-load systems. At very high volumes, self-hosted is more economical than cloud APIs. Network latency to the provider is eliminated.
 
-**Economics:** OpenAI API costs $0.20/1M input tokens for GPT-5.6 Luna and $5/1M for GPT-5.6 Sol. At a million requests per day with an average of 500 tokens: hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
+**Economics:** OpenAI API costs $0.10/1M input tokens for GPT-6 Luna and $2/1M for GPT-6 Sol (as of October 2026). The high-volume tier halved in a quarter, and each cut like that raises the volume at which self-hosting starts to pay. At a million requests per day with an average of 500 tokens: hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
 
 **Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-5.6, but with limited control over the process. Self-hosted Llama 3.x/4, Mistral, and Qwen 2.5/3 can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 
@@ -130,7 +130,7 @@ A circuit breaker monitors self-hosted health. When the error rate or latency is
 
 Fallback between local and cloud models improves availability. API unification is achieved through OpenAI-compatible endpoints: vLLM exports the OpenAI API, and the client works identically. Differences in capabilities are handled through a capability registry: before sending, it checks whether the target model supports the required features; otherwise, fallback or error.
 
-Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially a high-volume hosted tier such as GPT-5.6 Luna ($0.0005). 5% are complex tasks, GPT-5.6 Sol ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
+Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially a high-volume hosted tier such as GPT-6 Luna ($0.0005). 5% are complex tasks, GPT-6 Sol ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
 
 ## Monitoring Inference Servers
 

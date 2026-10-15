@@ -309,7 +309,15 @@ Count two things separately: a single text, and a whole message chain including 
 
 Real-world systems often need to estimate request cost before execution. For this, heuristics based on text language are used. English text is estimated as character length divided by 4. Russian: by 2.5. Chinese and Japanese: by 1.5. Program code typically falls in between with a coefficient of about 3.
 
-**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-5.6 Sol input tokens cost $5 per 1M and output $30 per 1M. For Claude Sonnet 5: $3 and $15 per 1M respectively. Frontier tiers such as Claude Opus 5 and Claude Fable 5 cost more; high-volume tiers such as GPT-5.6 Luna ($0.20/$1.20 per 1M) and Claude Haiku 4.5 ($0.25/$1.25 per 1M) are an order of magnitude cheaper. Multiplying token counts by prices and summing yields a realistic cost estimate.
+**Cost calculation** accounts for both input and output tokens, since providers price them differently. For example, GPT-6 Sol and Claude Sonnet 5.5 both cost $2 per 1M input tokens and $10 per 1M output (as of October 2026). Frontier tiers such as GPT-6 Astra and Claude Fable 5.1 cost five times that; high-volume tiers such as GPT-6 Luna and Claude Haiku 5.5, both at $0.10/$0.50, cost a twentieth. Multiplying token counts by prices and summing yields a realistic cost estimate.
+
+### When the Tokenizer Changes Under You
+
+The price per token assumes the token count stays still, and across model generations it does not. Anthropic's newer tokenizers produce about 30% more tokens than their predecessors for the same text: a passage that came to roughly 10,000 tokens on Sonnet 4.6 comes to roughly 13,000 on Sonnet 5, and Haiku 5.5 shows a similar increase over Haiku 4.5. A 30% inflation is invisible on a price sheet and fully visible on the invoice.
+
+It cuts both ways. Haiku 5.5 lists at a tenth of Haiku 4.5's input price, so even with 30% more tokens the per-task cost falls sharply; Anthropic puts the reduction at about 75% on typical workloads. A model whose list price is unchanged but whose tokenizer grew, on the other hand, is a price rise nobody announced.
+
+The only reliable comparison is measured. Take a sample of your real prompts and outputs, tokenize them with each candidate model's own tokenizer or count endpoint, and multiply by each model's rates. Comparing rates alone across a tokenizer change gets the size of the saving, and sometimes its direction, wrong.
 
 Such preliminary estimation helps avoid unexpected expenses in production, especially when processing large volumes of text or lengthy conversations.
 
