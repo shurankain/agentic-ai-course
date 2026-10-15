@@ -45,13 +45,19 @@ The core loop of a Computer Use agent is built on continuous interaction between
 ### Benchmark Results
 
 **OSWorld benchmark** (complex multi-step tasks):
+- Claude Sonnet 5.5 (September 2026): 83.9% on the OSWorld 2.1 offline subset, vendor-reported
+- Claude Sonnet 5 (June 2026): 81.2%, vendor-reported
+- GPT-6 Astra (September 2026): 72.6%, vendor-reported
+- Claude Haiku 5.5 (October 2026): 72.4% on the OSWorld 2.1 offline subset, vendor-reported, up from 15.7% for Haiku 4.5
 - AGI OSAgent (early 2026): 76.26% (exceeds 72% human baseline)
 - Claude Computer Use (2025, with Claude Sonnet 4): 61.4%
 - Claude Computer Use (October 2024 launch): 14.9%
 - GPT-4V (2024): 7.7%
 - Human baseline: ~72%
 
-The progression from 14.9% to 76.26% in under two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies by task category.
+The progression from 14.9% to above 80% in two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies by task category. Two cautions when comparing these rows. Vendors increasingly report on OSWorld 2.1 or an offline subset of it rather than the original, so numbers from different rows are not on one scale. And the small-model jump is the more consequential result for architecture: a model at a tenth of a cent per thousand input tokens scoring 72% means computer use no longer requires a frontier-tier model for routine tasks.
+
+**Effort settings move small models more than large ones.** Anthropic reports Haiku 5.5 at 39.2% on Terminal-Bench 4.0 at maximum effort and about 20% at the default medium setting. A benchmark score quoted without its effort level can therefore be off by a factor of two for the configuration you will actually run, and the cheaper the model, the more of its capability sits behind the effort dial.
 
 **WebArena** (web navigation):
 - Claude-based agents achieve 40%+ on WebArena, up from single-digit scores in 2024

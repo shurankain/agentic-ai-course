@@ -479,7 +479,7 @@ Reasoning models carry a premium because thinking tokens are billed at output ra
 
 Read the table by ratio rather than by row. OpenAI and Anthropic now price their frontier tier at five times their balanced tier and a hundred times their high-volume tier. In August the frontier-to-high-volume gap at OpenAI was about 25 times, so the bottom of the range fell four times faster than the top, and the case for routing simple work away from the frontier tier got stronger.
 
-The ranking moved twice in two months. Claude Fable 5 took SWE-bench Verified at 95.0% in June, then Claude Opus 5 passed it at about 96% in July at half the price, with GPT-5.6 Sol at roughly 96.2% and the open-weight DeepSeek V4 Pro at about 96.4% on vals.ai. Six models now sit inside two points of each other, which means the order depends on which harness you read. Treat Verified as saturated and read Module 11 before quoting a SWE-bench Pro number, because that benchmark reports three different "best" scores depending on the harness.
+SWE-bench Verified finished its run in the summer, with six models including two open-weight ones inside two points at about 95% to 96%. The October releases are compared on harder benchmarks, and none of them produces a clean winner. Claude Opus 5.5 leads Terminal-Bench 4.0 at 64.8% running in Claude Code, ahead of GPT-6 Astra at 58.2% in Codex. On DeepSWE v1.1, Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra sit within 0.3 points of each other against a 7-point margin of error. Opus 5.5's 89.9% on SWE-bench Pro is Anthropic's own figure. Read Module 11 before quoting any of these, because each depends on the harness that produced it.
 
 **Standard models (as of October 2026):**
 
@@ -617,25 +617,24 @@ Different tasks require different models. Using a reasoning model for simple cla
 ### Complex Reasoning and Analysis
 
 **Recommended models:**
-- Claude Opus 5 (about 96% SWE-bench Verified, at half the Fable 5 price)
-- Claude Fable 5 (Mythos-class, strongest on multi-day agentic sessions)
-- GPT-5.6 Sol (frontier tier for science and long-horizon work)
-- o3 / o4-mini (OpenAI reasoning)
-- Gemini 3.1 Pro Preview or 2.5 Pro with thinking (Google)
+- Claude Opus 5.5 (Opus tier at $4/$20, leads Terminal-Bench 4.0)
+- GPT-6 Astra (frontier tier, leads FrontierSWE v2; cyber capabilities gated)
+- Gemini 4 Argon (leads Google's own comparison table on legal, finance, and long-context work)
+- Claude Fable 5.1 (Mythos-class, strongest on multi-day agentic sessions)
+- o3 / o4-mini (OpenAI reasoning, earlier generation)
 
 **Typical tasks:** multi-step planning, complex document analysis, mathematical proofs, scientific reasoning, architectural decisions, research tasks.
 
 ### Code Generation
 
 **Recommended models:**
-- Claude Opus 5 (about 96% SWE-bench Verified)
-- GPT-5.6 Sol (about 96.2% Verified, roughly 54% more token-efficient on coding than GPT-5.5)
-- Claude Fable 5 (95.0% Verified, 80.3% Pro)
-- Claude Sonnet 5 (63.2% SWE-bench Pro at a fraction of flagship cost)
+- Claude Opus 5.5 (64.8% Terminal-Bench 4.0 in Claude Code; 89.9% SWE-bench Pro, vendor-reported)
+- GPT-6.1 Sol (tied with Opus 5.5 on DeepSWE v1.1 at about a fifth of Astra's token price)
+- GPT-6 Astra (65.5% on FrontierSWE v2 against Argon's 55.0%, from Google's own comparison table)
+- Claude Sonnet 5.5 (61.8% Terminal-Bench 4.0 at the balanced-tier price)
 - DeepSeek V4 Pro (about 96.4% Verified per vals.ai, open weights)
 - Kimi K3 (first on Arena.ai Frontend Code Arena, about 93.4% Verified, custom license)
-- Gemini 3.7 Flash (43.6 FrontierCode, cheapest of the current frontier-tier options)
-- GPT-5.3-Codex (specialized agentic coding models)
+- Gemini 3.8 Flash (cheapest of the current frontier-adjacent options)
 
 **Typical tasks:** writing new code, refactoring, debugging, writing tests, code review, documentation.
 
