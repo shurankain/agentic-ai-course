@@ -115,6 +115,26 @@ See Module 02, Context Engineering for the broader discussion of token budget ma
 
 ---
 
+## Decision Models: Typed Answers Without Text (October 2026)
+
+Every technique above asks a generative model to write a structure. A category that appeared at the end of September 2026 skips the writing. A decision model takes text or an image plus a set of named questions and returns typed answers, meaning probabilities, a selected option, or a score, with no prose to parse.
+
+OpenAI's Decisions API, in public beta from October 6, shows the shape. A request to `POST /v1/decisions` carries the input and a list of questions, each of one of three types:
+
+- **predicate**: a yes-or-no question, answered with a probability between 0 and 1
+- **choice**: one option from a supplied set, with a probability for each option and a confidence
+- **score**: a rating against ordered levels, answered with a probability-weighted average that can fall between steps
+
+It runs only on `gpt-6-luna`, at $0.10 per million input tokens with no output or cache charges. OpenAI claims about ten times the speed of the same model through the Responses API, without a published benchmark.
+
+Five other vendors shipped the same product within two weeks. Microsoft's Decision-1, a post-trained Qwen 3.5 9B, charges $0.042 per million input tokens with output free. AWS's Strands Decider 2B is open and runs in about 115 ms on an RTX 3090. Cloudflare's Clef is Apache 2.0 at about 39 ms. Liquid released d1, and the vLLM Semantic Router project released five Apache 2.0 decision models from 0.8B to 27B parameters. All prices and latencies are vendor-reported (as of October 2026).
+
+**Where they fit.** An agent loop is full of closed questions: which tool, which route, whether an output passes the guardrail, how an answer ranks against a rubric. Asking a generative model to answer each one in prose and then parsing the prose pays for tokens nobody reads and adds a parsing failure. A decision endpoint answers the branch directly at a fraction of the cost. The first stage of a production router, the complexity classifier described in Module 03, Resource Optimization, has exactly this shape.
+
+**What to check before trusting one.** None of the six vendors published calibration data at launch. A probability is useful against a threshold only if 0.8 means right about 80% of the time on your inputs, and nothing guarantees that across domains. Measure it: label a few hundred real examples, group the returned probabilities into buckets, and compare each bucket's predicted rate with its observed accuracy. Then set the threshold from the cost of each kind of error. The endpoint returns probabilities instead of a verdict so that the application can make that choice.
+
+Two limits in the OpenAI beta are typical of the category and worth designing for: images must be sent inline rather than by URL or file reference, and refusals arrive as a separate case the calling code has to handle.
+
 ## Streaming with Structured Output
 
 ### The Challenge
@@ -156,3 +176,5 @@ Guarantee levels: prompt engineering (hope only), JSON Mode (syntax), Function C
 The choice depends on criticality: prototypes (prompts, integrations) Function Calling, critical systems, full stack with validation.
 
 Java ecosystem: LangChain4j AI Services (declarative approach), Spring AI (Spring integration). They hide the complexity of working with JSON Schema and parsing.
+
+Decision models answer closed questions with typed probabilities and no text, at a fraction of a generative call's cost, which suits routing, tool selection, guardrails, and rubric grading. No vendor published calibration data at launch, so measure calibration on your own labelled sample before choosing a threshold.

@@ -92,6 +92,8 @@ This elegantly solves the problem of extracting structured data from model respo
 
 Complex types are supported: nested objects, collections, enums. The framework generates a JSON Schema from the return type and passes it to the model.
 
+For closed questions there is now a lighter path. LangChain4j 1.21 and 1.22, released between late September and early October 2026, added `OpenAiDecisionModel` and `OpenAiOfficialDecisionModel` classes for OpenAI's Decisions API, which returns typed probabilities instead of generated JSON. A routing or guardrail step that only needs "which category" or "pass or fail" can call that instead of a full AI Service. Module 08, Structured Output Techniques covers the category and its calibration caveat.
+
 ### Moderators and Guardrails
 
 AI Services can include moderators, components that verify requests and responses against policies. A moderator can block undesirable content, filter sensitive information, and ensure compliance with corporate standards.
@@ -154,7 +156,7 @@ This pattern demonstrates the core capabilities: declarativeness, memory managem
 
 ## Key Takeaways
 
-LangChain4j (currently at version 1.3.0 (February 2026), which introduced the new `langchain4j-agentic` module for agent workflows) is a mature and feature-rich framework that brings modern LLM development capabilities to the Java ecosystem. Unified interfaces abstract providers, declarative AI Services reduce boilerplate code, and Spring integration simplifies adoption.
+LangChain4j (at version 1.22.0 as of October 2026, on a release cadence of two to four weeks; the `langchain4j-agentic` module for agent workflows arrived in 1.3.0 in February) is a mature and feature-rich framework that brings modern LLM development capabilities to the Java ecosystem. Unified interfaces abstract providers, declarative AI Services reduce boilerplate code, and Spring integration simplifies adoption.
 
 Key advantages of the framework: broad provider support, declarative approach through annotations, complete set of RAG components, powerful tool system, and deep integration with Spring Boot.
 
