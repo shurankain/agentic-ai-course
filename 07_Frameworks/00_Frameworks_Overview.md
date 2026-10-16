@@ -112,6 +112,10 @@ OpenAI has transitioned from the Assistants API to a new architecture. The Assis
 
 **Agents SDK** (released March 2025, now at v0.14.0+ as of April 15, 2026): a production-grade Python framework for multi-agent systems. Key capabilities: **Handoffs** for routing between specialized agents, **Guardrails** for input/output validation running in parallel with the agent, **Tracing** for built-in observability of every agent run. The SDK evolved from the experimental Swarm framework, preserving its simplicity while adding production features. Recent additions (as of late May 2026): **sandbox providers** (Blaxel, Cloudflare, Daytona, E2B, Modal, Runloop, Vercel) for isolated code execution, **filesystem tools** + `apply_patch` for structured file manipulation, **Manifest** for workspace portability, **snapshotting + rehydration** for long-horizon tasks that survive process restarts, and **secure MCP tunneling** for accessing private MCP servers without exposing them to the public internet.
 
+### Three levels of build choice (as of October 2026)
+
+The build decision now has three levels rather than two. At the lowest, call a model API such as the Responses API and write the agent loop yourself. In the middle, use an open-source harness or SDK, such as the Agents SDK, LangGraph, or Pydantic AI, and run it on your own infrastructure. At the top, rent the harness as a service, as OpenAI's Agents API now offers, with sessions, compaction, subagents, and sandboxes managed for you. Each step up trades control for operations work, and the top level also hands over data residency, so check where the service runs before choosing it: OpenAI's is US-only at launch.
+
 ### Claude SDK and Claude Code
 
 Anthropic provides the Claude API with tool use capabilities and the Claude Code CLI as its agent platform. Rather than a separate agent framework, Anthropic's approach emphasizes the model's native tool use ability combined with MCP for extensibility.

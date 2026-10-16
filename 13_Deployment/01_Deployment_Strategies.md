@@ -110,6 +110,8 @@ Deploying AI agents differs from deploying standard LLM applications in several 
 
 **Graceful termination.** Agents must not be killed mid-action. A SIGTERM during a database write or API call can leave systems in an inconsistent state. On Kubernetes, set `terminationGracePeriodSeconds: 180-300` (3-5 minutes) to give agents time to reach a safe checkpoint. The agent's shutdown handler should: complete the current tool call, save state for resumption, release any locks or resources.
 
+**Billing is diverging from metered compute.** Agent hosting is starting to be priced like a seat: DigitalOcean began selling agent runtimes with serverless inference and persistent memory as $50 and $200 monthly subscriptions in October 2026. For a team planning capacity, that turns a variable cost into a fixed one per agent, which is cheaper for steady workloads and wasteful for bursty ones.
+
 **Resource unpredictability.** A standard LLM app makes one API call per request: resource usage is predictable. An agent may make 1 or 50 LLM calls per task, depending on the complexity of the problem it encounters. This makes capacity planning harder, provision for the P99 case, not the average. Autoscaling should monitor token throughput and active agent sessions, not just CPU.
 
 **Shared memory for inference.** Self-hosted models via vLLM require large shared memory allocations (`shm-size: 16Gi` in Docker/Kubernetes) for the KV-cache. Default container shared memory (64MB) is insufficient and will cause silent failures or crashes.

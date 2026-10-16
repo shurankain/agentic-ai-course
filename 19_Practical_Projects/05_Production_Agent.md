@@ -138,6 +138,8 @@ For agents, authorization at the tool and data level is important. Different use
 
 For this project that means three concrete additions on top of RBAC. Issue authority per run rather than per agent, deriving it from the human who initiated the task. Narrow it to what that task needs, so a ticket-triage run cannot write to the knowledge base even though the agent is capable of it. And enforce at a mediation layer that sees every action, rather than inside each tool handler, since a check that lives in the handler is absent from the tool nobody remembered to update. Module 14, Agent Security covers the model and the incidents that motivated it.
 
+**Keep policy out of the system prompt.** Meta's Muse personal agent, launched in September 2026, shows why. A leaked copy of its system prompt instructed the agent that the user's "authority over their own household" overrides its safety training. Whatever the intent, a rule written into the prompt is a rule the model weighs against everything else in its context, and a prompt can be extracted, quoted back, or argued with. For this project, permissions, refunds above a threshold, and account changes are enforced by the mediation layer above; the system prompt describes the role and nothing it would be dangerous for a user to read.
+
 ### Input Validation and Prompt Security
 
 Validation of size, format, characters. But for agents this is not enough.

@@ -706,6 +706,14 @@ And the model can change independently of the execution layer. That is the part 
 
 Cloudflare published the surrounding cycle as an Agent Development Lifecycle covering build, test, observe, replay, and govern. The name is vendor terminology and not a standard, so do not adopt it as one. The composition is sound for a reason worth stating: agent behaviour depends on the model version, the prompt, the tools, external state, permissions, and the order actions happened in. Reproducing a failure therefore means reproducing the whole run, not the prompt. A bug report that contains only the prompt is not a bug report.
 
+### The layer became a product
+
+Within two months of the August releases, the execution plane was being sold and published as a component in its own right. DeepSeek's DSec paper describes the infrastructure it trains agents on: four sandbox backends, function call, container, microVM, and full VM, behind one interface, running more than 380,000 sandboxes concurrently. That is the per-operation choice of isolation described above, at training scale. Microsoft Execution Containers and Nvidia's OpenShell put the same choice into the operating system and the data-centre fabric; Module 14, Agent Security covers both.
+
+OpenAI went further and sold the harness itself. Its **Agents API**, in public beta from September 10, 2026, runs the harness behind Codex as a service, modelled as four objects: an Agent (model, tools, MCP servers), an Environment (the sandbox), a Session (durable, potentially days long), and Events (the streamed output). Context compaction runs per agent and per subagent, subagents run in parallel, and the sandbox can be OpenAI-hosted, a third party's, or absent. There is no fee beyond tokens and sandbox time. Two limits shape where it fits: data residency is US-only, and zero data retention is not supported.
+
+OpenAI's **Dots**, shown at DevDay on September 29, are the consumer-facing end of the same idea: named, persistent agents on GPT-6 Astra, each with its own cloud machine, reachable from Slack and Teams, and within days able to drive local desktops as well. The architectural point is that the agent's runtime now outlives any conversation with it, which moves session state, identity, and cost control from the application into the platform.
+
 ### Training inside the harness that runs production
 
 **Microsoft Orchard**, open-sourced the same week, manages a Kubernetes sandbox with files, commands, network, and REST APIs, usable for collecting trajectories, supervised training, post-training, reinforcement learning, and evaluation. Model calls from Codex, OpenClaw, or ZeroClaw are intercepted by proxy, so the model trains inside the real harness rather than against a dataset.
