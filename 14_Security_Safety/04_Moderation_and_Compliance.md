@@ -80,17 +80,19 @@ The EU AI Act is no longer future regulation. It is active law with enforcement:
 
 **December 2, 2027: Standalone high-risk system requirements** (moved from August 2026 by Regulation (EU) 2026/1744, in force since July 27, 2026): Mandatory certification for AI in HR, credit scoring, law enforcement, healthcare, education, critical infrastructure (Annex III). **August 2028** for high-risk AI embedded in regulated products (Annex I). Requirements unchanged: only deadlines shifted: risk management systems, data governance, technical documentation, automatic logging, human oversight, accuracy validation.
 
-**Implications for AI architects:** Every production AI system deployed in the EU needs a risk classification. High-risk systems need conformity assessment architecture from the start. GPAI providers must maintain technical documentation as a continuous process, not a one-time effort.
+**October 2026: first enforcement files.** The AI Office sent its first formal requests for information, to OpenAI and Anthropic, over models that escaped evaluation environments; Module 18, Regulatory Landscape covers the open question of whether incidents during testing fall under the Act at all.
+
+**Implications for AI architects:** Every production AI system deployed in the EU needs a risk classification, and classification starts with an inventory. A September 2026 analysis by Snyk of 1.39 million repositories across 3,044 enterprise accounts found roughly half of the accounts running AI with no model declared anywhere in their code. You cannot document a model you have not inventoried, so the first compliance task is usually finding out which models are in use. High-risk systems need conformity assessment architecture from the start. GPAI providers must maintain technical documentation as a continuous process, not a one-time effort.
 
 ### US Regulatory Landscape: Federal and State
 
-**Federal level:** The Biden Executive Order on AI (October 2023) was rescinded in January 2025, removing federal safety reporting requirements. NIST AI RMF remains as voluntary guidance. Sector-specific regulations continue: SEC/FINRA for finance, FDA for healthcare, FedRAMP for government.
+**Federal level:** The Biden Executive Order on AI (October 2023) was rescinded in January 2025, removing federal safety reporting requirements. In October 2026 the White House declared AI incident notification mandatory without a penalty, deadline, or statute behind it, and the FTC opened an investigation into OpenAI and Anthropic that includes harm from agents; Module 18 covers both. NIST AI RMF remains as voluntary guidance. Sector-specific regulations continue: SEC/FINRA for finance, FDA for healthcare, FedRAMP for government.
 
 **State level, the new regulatory frontier:**
 
 **Colorado AI Act (SB 24-205):** signed May 2024 as the first comprehensive US state AI law, and it never took effect in any form. SB 26-189 (signed May 14, 2026) **repealed and reenacted** it after a federal court paused enforcement, replacing the risk-based framework with automated-decision-making transparency and dropping the duty of care and most deployer obligations. The replacement applies from January 1, 2027 and only once the attorney general completes rulemaking. Module 18 has the full sequence.
 
-**California:** SB-1047 was vetoed (September 2024), but California passed **SB-53** (signed into law September 2024): a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
+**California:** SB-1047 was vetoed (September 2024), but California passed **SB-53** (signed into law September 2025): a narrower alternative requiring frontier model developers to publish transparency reports about safety testing and precautions. California also passed 18+ additional AI-related bills in 2024 addressing AI literacy, election integrity, deepfakes, and AI watermarking. California remains the most active US state on AI regulation.
 
 **Other states:** Illinois (AI Video Interview Act), Texas, Connecticut: sector-specific AI legislation is proliferating. The trend: in the absence of federal legislation, states are creating a patchwork of requirements.
 
@@ -173,6 +175,8 @@ The answer is less than the regulation implies, and knowing the gap is the pract
 ### How the marks work
 
 **Statistical watermarking of text.** Anthropic described its implementation in August 2026, having signed the Article 50(2) Code of Practice. Text from Claude models launched on or after August 2 carries an invisible watermark produced with SynthID-Text, which slightly biases token selection according to a secret key. Nothing is inserted into the text: no hidden characters, no personal identifiers, no special tokens. The bias lives in the distribution, which is why it survives copying and reformatting.
+
+**The first large text-watermark deployment came with its own limits.** In October 2026 OpenAI began watermarking ChatGPT and Codex text for EU users under the name textGrain, citing Article 50, with the feature available but off by default for API developers elsewhere. It published the weakness alongside the launch: replacing 10% of the words with synonyms drops detection accuracy from 92% to 66%, and short or translated passages fare worse. Google opened its SynthID checker to the public on October 7. Two vendors, two schemes, and one shared result, which is that a text watermark survives copying and fails under light editing.
 
 **File-bound provenance.** For generated `.svg`, `.png`, and `.jpg` files, Anthropic attaches signed C2PA metadata, the cross-industry standard for content credentials. Google applies SynthID across Gemini outputs on the same principle.
 
