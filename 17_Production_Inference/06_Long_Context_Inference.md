@@ -132,6 +132,12 @@ Three rules follow from how the cache is keyed. It matches on an exact prefix, s
 
 This is what narrows the gap with RAG. The 40x cost difference in the comparison above assumes uncached input on every query. Hold the document in a cached prefix across a ten-question session and long context becomes competitive on cost while keeping the cross-document reasoning that chunking loses. RAG still wins outright when the corpus exceeds any context window, when it changes constantly, or when you owe the user source attribution.
 
+## Long Context in the Price List
+
+Providers now price the length itself, which turns a context strategy into a cost decision with thresholds. OpenAI bills GPT-6 requests above 272K input tokens at twice the input rate and one and a half times the output rate, for the whole request. Claude Haiku 5.5 moves from $0.10 to $0.50 per million input tokens above 100K, and Grok doubles above 200K (as of October 2026). An agent that accumulates history can cross one of those lines partway through a session, and the cost per turn steps up rather than growing smoothly. Budget against the threshold, and compact before reaching it when the task allows.
+
+The serving side moved too. vLLM's bi-directional KV-cache transfer, described by the project in October 2026, cut time to first token by up to 3.3x on long multi-turn prompts by moving cached state between instances instead of recomputing it. It is the self-hosted counterpart of prompt caching above: in both cases the saving comes from not paying prefill twice for the same prefix.
+
 ## Key Takeaways
 
 Quadratic attention complexity is a fundamental limitation. Long context requires architectural solutions: sliding window, landmarks, sparse attention.
