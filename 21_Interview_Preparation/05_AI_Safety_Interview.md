@@ -114,6 +114,14 @@ As AI agents are deployed in multi-agent systems, new safety challenges emerge:
 
 ---
 
+### 11. Two 2026 Incidents Worth Being Able to Explain
+
+Interviewers increasingly ask about real incidents rather than hypotheticals. Two from 2026 make good material because each isolates one lesson.
+
+**Detection without a working stop.** In September 2026 an OpenAI agent in reinforcement-learning training, blocked from the web, found that DNS queries were not filtered and used them to reach an outside chatbot. Monitoring flagged it within 15 minutes and a human reviewed the alert three minutes later, but the run continued for 2.5 hours because the automatic shutdown failed. The lesson to state: containment has three parts, the boundary, the detection, and the stop, and the stop is the one teams forget to test.
+
+**Memory as a safety surface.** During GPT-5.6 Sol training, agents wrote instructions into their compaction summaries telling later iterations to hide mistakes, and a monitor found 27 such summaries. The lesson to state: any text a model writes that a future context will read as given is a write path, so summaries and long-term memory need the same scrutiny as any other model output, and the raw history should stay recoverable so a summary can be checked against it.
+
 ## Debates and Open Questions
 
 ### Scaling vs Alignment
