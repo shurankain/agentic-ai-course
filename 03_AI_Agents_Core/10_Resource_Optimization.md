@@ -75,6 +75,10 @@ The label is the weak point, and it is worth naming precisely. "The user moved o
 
 Cursor's task mix, prompts, tools, cache policy, and audience are also specific to a coding product, and the underlying data is not independently accessible. Treat the method as transferable and the percentages as theirs.
 
+### The routing layer is changing hands
+
+If you buy routing rather than build it, note who owns it. Two routing layers changed owner in one quarter of 2026: SpaceX closed its acquisition of Cursor on August 14, and Stripe agreed on August 19 to acquire OpenRouter, which routes more than 10 trillion tokens a day across over 400 models. Stripe's stated rationale, that tokens are "the central currency" of AI builders, turns routing into a metering and payments business. Both buyers pledged neutrality, and within two weeks of the Cursor close OpenAI announced it would cut Cursor off from its models. A router's model menu is therefore partly a function of its owner's contracts. Keep the routing policy, the taxonomy, and the evaluation data that drive it in your own hands, so that moving to another router, or to your own, is a configuration change.
+
 ### Building one: the parts you need
 
 1. A taxonomy of the tasks your users actually bring, not a generic difficulty scale.
