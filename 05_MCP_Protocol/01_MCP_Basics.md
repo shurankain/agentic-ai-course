@@ -226,6 +226,8 @@ That last change has a consequence worth stating plainly, because the specificat
 
 **MCP Apps and Enterprise Managed Authorization** join Tasks as official extensions under the same framework, which is what makes the core small enough to be stateless.
 
+**Status as of October 2026.** 2026-07-28 remains the current specification; no newer version has been published. The core maintainers released an updated roadmap on August 22 naming five priorities for review time: agentic messaging primitives, HTTP transport unification and hardening, agent identity and enterprise security, improved primitives, and SDK developer experience. Under the new lifecycle rules, anything those produce is likely to arrive first as an opt-in extension rather than as a change to the core.
+
 ---
 
 ## Why MCP Won: The Adoption Story

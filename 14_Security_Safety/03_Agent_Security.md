@@ -59,6 +59,8 @@ Framework-level support arrived in the same window. Qwen Code added per-task all
 
 Identity for the agent itself started shipping as a product in October 2026. Google's Gemini Enterprise agent gets its own Workspace account, with an email address and an audit trail attributed to the agent rather than to the person who invoked it. That closes half the problem this section describes. The other half, issuing authority per run and expiring it with the task, still has to be built around it.
 
+The same question has an outward-facing half. When a person's agent acts inside a business the person does not control, someone has to decide what it may do there. The Personal Agent Protocol draft published by Sierra and Meta in October 2026 answers it with OAuth: the customer signs in on the business's own page, approves scopes, and the agent receives a token limited to them. Module 05, A2A Protocol covers the mechanics; the design point for this section is that inbound agent access needs the same per-task scoping as outbound.
+
 ### Attribution is not enforcement
 
 Cloudflare's Identity-aware AI Gateway ties spend and anomalies to a specific user, supports per-user budgets, and can fall back to a cheaper model. Useful, and worth being precise about what it is: an attribution layer. Data-loss prevention and action blocking need separate controls.

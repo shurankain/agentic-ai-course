@@ -162,7 +162,24 @@ A2A is not the only approach to inter-agent communication. Understanding the alt
 
 **Actual timeline:** A2A was announced by Google in April 2025 with initial partner support. It was donated to the Linux Foundation in June 2025. In December 2025, MCP was donated to the Agentic AI Foundation (AAIF) co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon, establishing AAIF as the primary governance body for agent protocol standardization. Both MCP and A2A are now under AAIF governance, which may help with interoperability and convergence over time. In practice, MCP has seen far broader real-world adoption with 9,400+ verified servers and 97M+ monthly SDK downloads (as of mid-June 2026), while A2A has moved into early production in major enterprise platforms (Azure AI Foundry, Bedrock AgentCore, Salesforce, SAP, ServiceNow).
 
-**Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium).
+**Open ecosystem questions:** Centralized vs. federated agent registry, approaches to Agent Card versioning, standardization path (W3C, IETF, or industry consortium). As of October 2026 the current A2A release is still 1.0.1 from May.
+
+### A Third Layer: Agents Signing In to Businesses
+
+MCP connects an agent to tools and A2A connects agents to each other. Neither says how a person's own agent gets into a business it does not control, such as a retailer, a bank, or an airline, and acts there with the person's authority. Until October 2026 the working answer was for the agent to drive the website as if it were the person, which businesses blocked and could not audit.
+
+The **Personal Agent Protocol**, code name Poppy, is the first serious attempt at that layer. Sierra and Meta announced it on October 6, 2026 and published draft 0.1 under Apache 2.0 on October 9, adding 35 design partners that include OpenAI, Visa, Mastercard, PayPal, Bank of America, Shopify, Stripe, Walmart, Okta, and Cloudflare. Anthropic was not among them.
+
+Mechanically it is OAuth applied to agents:
+
+1. **Discovery.** A business publishes a file at `/.well-known/poppy.json` describing how agents may start a session, how customers sign in, and which APIs or company agents it exposes.
+2. **Identification.** The agent identifies itself with an HTTPS client identifier and a public key, and may begin as a guest, for example to check stock or a returns policy.
+3. **Consent.** When the task needs the customer's account, the customer signs in through standard OAuth 2.0 on the business's own page and approves scopes, such as `poppy:read`, `poppy:write`, or scopes the business defines.
+4. **Continuity.** The resulting token works across the business's website, its APIs, and its own customer-service agent, so a session can move between channels without re-authenticating.
+
+It builds on OAuth 2.0, JSON Web Tokens, OpenAPI, and MCP rather than replacing any of them. The gaps are as instructive as the design. Payments, push notifications, and fine-grained permissions are not in the draft. As of mid-October Sierra's promised reference implementation was not yet public, and only third-party implementations existed. And the decisive question is commercial: a front door helps only if businesses outside the founding coalition choose to build one.
+
+For an architect the useful reading is that agent identity now has two halves. Module 14, Agent Security covers the enterprise half, meaning who inside an organization authorized an agent and for how long. Poppy addresses the customer half, meaning which outside service lets an agent in and with what scope. A design that handles only one of them leaves the other to whoever builds it next.
 
 ### A2A Partners
 
