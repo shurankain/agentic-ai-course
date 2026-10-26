@@ -39,6 +39,7 @@
 - Code tokenization specifics
 - Tokenization problems and their consequences
 - Tokenization in the context of AI agents
+- **When the tokenizer changes under you**: about 30% more tokens on newer Anthropic tokenizers; compare cost per task on your own text
 
 ### 01.3 [Context Windows](01_LLM_Fundamentals/03_Context_Windows.md)
 - What goes into the context window
@@ -69,9 +70,9 @@
 
 ### 01.5 [LLM Providers and APIs](01_LLM_Fundamentals/05_LLM_Providers_and_API.md)
 - Major providers and their models
-  - OpenAI (**GPT-5.6**: Sol, Terra, Luna; GPT-5.5, o3, o4-mini, GPT-Rosalind, GPT-5.6-Cyber)
-  - Anthropic (**Claude Opus 5**: about 96% SWE-bench Verified; **Fable 5**: Mythos-class, 95.0%; Sonnet 5, Haiku 4.5; **model export ban June 12, lifted July 1**)
-  - Google (**Gemini 3.7 Flash**; 3.6 Flash, 3.5 Flash, 3.1 Pro; Gemma 4; **3.5 Pro still unshipped**; **Siri AI deal ~$1B/year**)
+  - OpenAI (**GPT-6**: Astra, Sol, Luna; GPT-6.1 Sol; GPT-6.1 Astra cancelled; GPT-5.6 previous generation; o3, o4-mini, GPT-Rosalind)
+  - Anthropic (**Claude 5.5 family**: Opus $4/$20, Sonnet $2/$10, Haiku $0.10/$0.50; Fable 5.1 and Mythos 5.1; Opus 5.5 migration breaks; **model export ban June 12, lifted July 1**)
+  - Google (**Gemini 4 Argon**, **Gemini 3.8 Flash**; 3.7 Flash, 3.1 Pro; Gemma 4; 3.5 Pro never shipped; **Siri AI deal ~$1B/year**)
   - **Microsoft MAI family** (MAI-Thinking-1, MAI-Code-1-Flash: in-house models, Build 2026)
   - DeepSeek (V4-Pro **permanent -75%**: $0.435/$0.87, V4-Flash: open weights MIT)
   - **NVIDIA Nemotron 3 Ultra** (550B MoE, hybrid Mamba-2/Transformer) + **Nano Omni** (30B omni-modal)
@@ -83,7 +84,7 @@
 - **Open-weight availability as a policy risk**: the July open letter, the Kimi K3 distillation accusation, threatened sanctions
 - API structure: common principles
 - Pricing comparison
-- **ARR figures on different accounting bases**: gross against net, the ordering unresolved
+- **ARR figures on different accounting bases**: gross against net; OpenAI about $50B net (September) against Anthropic above $65B gross (July)
 - Choosing a model for different tasks
 - Tool Use / Function Calling
 - Reliability strategies
@@ -92,6 +93,7 @@
   - vLLM, Ollama, LocalAI
   - PagedAttention, Speculative Decoding
   - Quantization (INT8, INT4, GPTQ, AWQ)
+- **Long prompts change the rate**: GPT-6 above 272K, Haiku 5.5 above 100K, Grok above 200K; the ten-cent floor; measured cost per task
 
 ### 01.6 [Integration Patterns](01_LLM_Fundamentals/06_Integration_Patterns.md)
 - Synchronous vs Asynchronous requests
@@ -293,6 +295,7 @@
 - The Karpathy Loop: universal optimization pattern from AutoResearch
 - Cognitive architectures: Inspired by the human mind
 - Choosing an architecture: Practical recommendations
+- **The execution plane became a product**: DeepSeek DSec (380K concurrent sandboxes), OpenAI Agents API (Agent, Environment, Session, Events), Dots
 
 ### 03.3 [Tool Use](03_AI_Agents_Core/03_Tool_Use.md)
 - Introduction
@@ -305,6 +308,7 @@
 - Execution and error handling
 - Tool security
 - Integration with LangChain4j
+- **Forcing a tool call**: `tool_choice` errors on Opus 5.5; enforce the shape in the executor instead
 
 ### 03.4 [Planning](03_AI_Agents_Core/04_Planning.md)
 - Introduction
@@ -332,6 +336,7 @@
 - **Letta: From MemGPT to Production Memory** (LLM-as-OS, three-tier memory, agent editability, #1 on Terminal-Bench)
 - Mem0 (auto-fact extraction middleware), Amazon Bedrock Episodic Memory
 - **Memory Escalation Ladder** (sliding window, then summarization, then Mem0, then Letta, then Agentic RAG, then Graph RAG)
+- **Summaries are a write path**: agents left instructions to successors in compaction summaries; three design rules for memory
 
 ### 03.6 [Computer Use Agents](03_AI_Agents_Core/06_Computer_Use_Agents.md)
 - Introduction: AI masters the human interface
@@ -349,6 +354,7 @@
 - OSWorld Benchmark: 14.9% success rate
 - Use Cases: QA automation, Legacy integration, Data entry
 - The future of Computer Use agents
+- **OSWorld 2.1 and effort settings**: Haiku 5.5 at 72.4%, score halves at default effort; tool versions belong in configuration
 
 ### 03.7 [Code Generation Agents](03_AI_Agents_Core/07_Code_Generation_Agents.md)
 - From autocomplete to autonomous developers
@@ -361,7 +367,7 @@
   - OpenHands (ex-OpenDevin): open-source alternative
   - Claude Code: Anthropic's terminal agent
 - SWE-bench: the evaluation standard
-  - Evolution: 1.96%, then 88.6%, then 95.0% (Fable 5), then **about 96% (Opus 5, July 2026)**; benchmark now saturated. SWE-bench Pro reports 47.1%, 59.1%, or 80.3% depending on the harness
+  - Evolution: 1.96%, then 88.6%, then 95.0% (Fable 5), then **about 96% (Opus 5, July 2026)**; Verified now retired. October leaders reported on SWE-bench Pro (89.9% vendor-reported), Terminal-Bench 4.0, and DeepSWE
   - SWE-bench Verified subset
 - Architectural patterns
   - Plan, then Edit, then Test, then Debug loop
@@ -372,12 +378,13 @@
   - Sandboxed execution
   - Git-based changes
   - Review before commit
-- **Terminal Agents**: Claude Code (Opus 5 default), Codex CLI (5M weekly), Antigravity (replaces Gemini CLI June 18); composable stack trend
+- **Terminal Agents**: Claude Code (leads Terminal-Bench 4.0 with Opus 5.5), Codex CLI (offers GPT-6.1 Sol), Antigravity (replaces Gemini CLI June 18); composable stack trend
 - **IDE market (late June 2026)**: **SpaceX acquires Cursor $60B** (June 16). OpenCode (160K stars, #1 OSS). Junie GA (#1 SWE-Rebench). Devin Desktop ACP. Uber burned AI budget in 4 months
 - AI coding agent supply chain security
   - Hallucinated package attacks
   - AI-to-AI code review
   - MCP tool description injection
+- **Pins, hooks, and the workspace**: Plugin4Shell and sandbox escapes through host-trusted files; OpenAI's November 12 Cursor cutoff as a worked exit-path case
 
 ### 03.8 [Process Reward Models](03_AI_Agents_Core/08_Process_Reward_Models.md)
 - Why separate reward models for agents
@@ -436,6 +443,7 @@
 - Build vs Buy Thresholds (<10K buy, >200K build, hybrid in between)
 - The 70/30 Hybrid Model Strategy (open-source for volume, proprietary for frontier)
 - **Agent Billing Fragmentation**: usage-based replacing flat-rate; Anthropic Agent SDK credits separate from June 2026
+- **The routing layer is changing hands**: Cursor and OpenRouter acquired in one quarter; keep the routing policy and data in your own hands
 
 ---
 
@@ -512,6 +520,7 @@
 - **MCP Tasks (SEP-1686)**: long-running async operations with progress, cancellation, partial results
 - **MCP 2026-07-28 final specification**: stateless core, no handshake or sessions, MRTR replaces server-initiated requests, Tasks as an extension, mandatory caching fields, formal deprecation policy
 - **Protocol Landscape**: MCP (agent, then tool) / A2A (agent, then agent) / ANP (agent, then open network, experimental)
+- **Status as of October 2026**: 2026-07-28 still current; August 22 roadmap priorities
 
 ### 05.2 [MCP Components](05_MCP_Protocol/02_MCP_Components.md)
 - Introduction to the MCP component model
@@ -572,6 +581,7 @@
   - Capability-based access
 - Comparison with alternatives
 - MCP + A2A integration
+- **A third layer, agents signing in to businesses**: Personal Agent Protocol draft 0.1 (`poppy.json`, OAuth scopes, cross-channel tokens) and its gaps
 
 ---
 
@@ -705,6 +715,7 @@
 - **Specialized:** DSPy (automatic prompt optimization), Dify (93K+ stars, low-code)
 - **JVM Ecosystem Parity:** JetBrains Koog (March 2026), MCP Java SDK 1.0 GA, Spring AI MCP starters, Java 26
 - Framework selection criteria (updated by language/need)
+- **Three levels of build choice**: call the model, run an open harness, or rent the harness as a service
 
 ### 07.1 [LangChain4j](07_Frameworks/01_LangChain4j.md)
 - Introduction to LangChain4j
@@ -715,6 +726,7 @@
 - Declarative AI Services
 - Spring integration
 - Working with tools
+- **Decision models in LangChain4j**: `OpenAiDecisionModel` classes (1.21 and 1.22); version 1.22.0
 
 ### 07.2 [Spring AI](07_Frameworks/02_Spring_AI.md)
 - Introduction to Spring AI
@@ -785,6 +797,7 @@
 - **Structured Extraction Tooling** (Instructor, BAML, Outlines: dev/production/cost-critical)
 - **Token-Optimized Output Notation (TOON)**: 69% token reduction vs JSON
 - Frameworks and libraries
+- **Decision models**: typed predicate, choice, and score answers without text; six vendors; how to measure calibration before choosing a threshold
 
 ### 08.2 [Data Extraction](08_Structured_Outputs/02_Data_Extraction.md)
 - Introduction: turning chaos into order
@@ -846,6 +859,7 @@
 - **Voice Agent Market Structure (2026)**: 4 tiers: Full-Stack (ElevenLabs sub-100ms), Orchestration (Vapi 1B+ calls, $500M), Developer Framework (LiveKit), Enterprise Phone (Bland AI). Market $2.4B to $47.5B
 - Voice interface design specifics
 - Security and ethics of multimodal systems
+- **Full duplex and the autumn price cuts**: GPT-Live-1, Grok Voice 3.0, Qwen-Audio 3.1; voice and reasoning as two meters; the cost ratio that broke
 
 ---
 
@@ -1050,7 +1064,7 @@
   - GAIA, TAU-bench, AgentBench, ToolBench
   - Agent trajectory evaluation
   - **Terminal-Bench 2.1**, **MCP Atlas**, **ITBench-AA** (as of late May 2026)
-- **Benchmark Saturation**: six models within two points at 95-96% on SWE-bench Verified, two of them open-weight; industry shifting to Pro and domain-specific benchmarks
+- **Benchmark Saturation**: SWE-bench Verified retired; Terminal-Bench 4.0 ranks model-and-harness pairs; DeepSWE v1.1 three-way tie inside a 7-point margin
 - **Long-horizon agent reliability**: Odysseys 44.5%, RoadmapBench 39.1%, ITBench-AA <50%: real-world multi-step agents still unreliable
 - **Benchmark Reliability and Gaming**: SWE-bench leakage (32.67%), contamination (94%), scaffolding > model (17-task variance)
 - **Cost per Correct Answer**: practical metric (77x cost difference hidden by 5% accuracy gap)
@@ -1263,6 +1277,7 @@
 - Inference optimization
 - Hybrid approach: self-hosted + cloud
 - Inference server monitoring
+- **Policy gates for generated infrastructure**: 16,326 exposed Supabase databases and the CI checks that catch them
 
 ---
 
@@ -1310,6 +1325,9 @@
 - **Agent Governance at Scale** (Microsoft Agent Governance Toolkit, NVIDIA 9 controls)
 - Human-in-the-Loop
 - Agent security testing
+- **From anecdote to base rate (August to October 2026)**: Gemini, Medicare, US government sites, the DNS stop failure, notes to successors, 1.5% escape attempts; four rules
+- **Agent tooling CVEs (September and October 2026)**: sandbox escapes via host-trusted files, Plugin4Shell, LMCache, AI-built app exposure, attackers using agent harnesses
+- **Containment moved into the platform**: Microsoft Execution Containers, Nvidia OpenShell and Sentry, Apple Full Disk Access, Australian harness guidance
 
 ### 14.4 [Moderation and Compliance](14_Security_Safety/04_Moderation_and_Compliance.md)
 - Content responsibility
@@ -1323,6 +1341,7 @@
 - Data retention and deletion
 - Security monitoring and incident response
 - Transparency and accountability
+- **First enforcement files and the inventory problem**; OpenAI textGrain watermarking and its published limits
 
 ### 14.5 [NeMo Guardrails](14_Security_Safety/05_NeMo_Guardrails.md)
 - Open-source toolkit from NVIDIA
@@ -1363,6 +1382,7 @@
 - **Memory became the binding cost**: ~70% of global output to AI data centers, DRAM $2.80 to ~$12 per GB
 - **Energy constraint**: ~1,000 TWh data centers by 2026, SMR pipeline 25 to 45 GW
 - GPU operation profiling
+- **Memory cost passes through**: server prices up 15%+ for early-2027 shipments; Micron shortage into 2028; Maia 300 and the train-on-Nvidia, infer-on-your-own split
 
 ### 15.2 [Flash Attention](15_GPU_Architecture/02_Flash_Attention.md)
 - The quadratic complexity problem of attention
@@ -1504,7 +1524,7 @@
   - Preemption strategies
 - Prefix Caching: KV-cache reuse
 - Tensor Parallelism in vLLM
-- **v0.24 and the version scheme**: `CUDA_VISIBLE_DEVICES` no longer set internally (`device_ids` replaces it), minor bumps can break, no v1.0 pending
+- **v0.32 and the version scheme**: releases every two weeks, `CUDA_VISIBLE_DEVICES` no longer set internally since v0.24, minor bumps can break, no v1.0 pending
 - Practical vLLM deployment
 
 ### 17.3 [Speculative Decoding](17_Production_Inference/03_Speculative_Decoding.md)
@@ -1570,6 +1590,7 @@
   - Cost/latency analysis
   - "Lost in the Middle" problem
   - Hybrid approaches
+- **Long context in the price list**: per-request thresholds that step cost up mid-session; vLLM bi-directional KV transfer
 
 ### 17.7 [SGLang and Alternatives](17_Production_Inference/07_SGLang_and_Alternatives.md)
 - SGLang: the next step after vLLM
@@ -1587,6 +1608,7 @@
   - Primitives: gen, select, fork, join
   - Constrained decoding
 - Practical deployment
+- **vLLM v0.31 and v0.32**: admission control, generic parser, a choice-and-score endpoint; serving-stack security after the LMCache CVE
 
 ---
 
@@ -1617,6 +1639,8 @@
   - FedRAMP: AI in the public sector
 - Global regulatory map
 - Practical compliance strategies
+- **First enforcement files (October 2026)**: AI Office requests to OpenAI and Anthropic, the research-exemption question, Italy's log disclosure
+- **The autumn US turn**: the Accord, the renaming order, the incident-notification mandate without a mechanism, the FTC probe, the AI Agent Accountability Act
 
 ### 18.2 [AI Risk Management](18_AI_Governance/02_AI_Risk_Management.md)
 - Why AI systems require a special approach to risk
@@ -1731,6 +1755,7 @@
   - Reward hacking and Goodhart's Law
   - Corrigibility
   - Value learning
+- **Evidence from deployment (2026)**: readable reasoning as a safety property, concealment in compaction summaries, the R&D Automation Index and its agreement rates, agent-conduct measurement
 
 ### 18.7 [Enterprise AI Adoption](18_AI_Governance/07_Enterprise_AI_Adoption.md)
 - **The reality of AI transformation (April 2026)**
@@ -1764,12 +1789,12 @@
 - **What enterprise usage actually looks like**: frontier firms at 8.3x output tokens per user, Codex 64% of enterprise output, one vendor's telemetry and what it cannot show
 - **Open weights as a procurement risk**: the July open letter and who declined to sign, availability risk that a hosted API does not carry
 - **Model labs entered the market directly**: OpenAI Presence, ChatGPT Work, Gemini Enterprise, Cloudflare Kitesurf
-- **ARR on different accounting bases**: Anthropic gross against OpenAI net, so $47B to $25B is not a ranking
-- **SpaceX acquires Cursor $60B** (announced June 16, closed August 14); SPCX ATH $225.64 to corrected to ~$185; **Tim Cook steps down Sept 1**
+- **ARR on different accounting bases**: Anthropic gross against OpenAI net, and the $70B to $50B correction that showed the size of the effect; run rate against booked revenue
+- **SpaceX acquires Cursor $60B** (announced June 16, closed August 14); SPCX ATH $225.64 to corrected to ~$185; **Tim Cook stepped down Sept 1**
 - **Visa Agent Score**: first financial network AI trust framework; **OpenAI Partner Network** ($150M, 300K consultants)
 - **Sovereign AI**: Saudi HUMAIN ($23B+$50B), Stargate UAE 1 GW, SoftBank €75B France, Alphabet $80B stock sale
 - **FERC fast-tracks AI data centers**: 9-17% US electricity by 2030; 370kW rack densities
-- **Funding & Market**: Anthropic S-1 ($1.75-1.8T); SpaceX IPO ($75B); Big Tech CapEx **$725B** (+77%)
+- **Funding & Market**: Anthropic S-1 (confidential June 1, leaked draft September 28, listing targeted mid-November); OpenAI listing reportedly early 2027; Nvidia and Hugging Face; Stripe and OpenRouter; Big Tech CapEx **$725B** (+77%)
 - **Production Case Studies**: Klarna (hybrid pivot), Goldman Sachs + Devin, Air Canada (legal precedent), DPD, Chevrolet, Copilot oversharing, Shopify CEO memo
 - **Emerging Patterns:** Decagon AOPs, Agent Washing (legal risk, ~130 genuine vendors)
 - **Enterprise Integration Patterns**: 5 patterns (API Gateway, RPA+Agent, DB Direct, Event-Driven, Screen Scraping), MCP-First Architecture
@@ -1889,6 +1914,7 @@
   - A/B testing
   - Feedback loops
   - Canary deployments
+- **Keep policy out of the system prompt**: the leaked Muse prompt as the counterexample
 
 ---
 
@@ -2055,6 +2081,7 @@
   - Methodology
   - Types of attacks
 - Governance questions
+- **Two 2026 incidents worth explaining**: detection without a working stop; memory as a safety surface
 
 ---
 

@@ -55,7 +55,7 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
-- Responses API (successor to Assistants API, which was deprecated in August 2025 with sunset scheduled for August 2026, so verify its status before building on it) and Agents SDK (v0.10.2, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
+- Responses API (successor to the Assistants API, which OpenAI shut down on August 26, 2026, with no grace period and no automated migration of threads) and Agents SDK (v0.10.2, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
 - OpenAI filed a confidential S-1 (May 22, 2026). As of October 2026 the listing is reported to have slipped to early 2027, with Sam Altman ruling out 2026
 - **Astra went through the government pre-release review** before shipping, the first named use of the voluntary arrangement under which the administration can examine some advanced models for up to 30 days before launch
 - **MS-OpenAI exclusivity ended** (April 27, 2026). OpenAI models now available on AWS Bedrock, Google Cloud Vertex, Oracle, and sovereign cloud providers. Microsoft retains non-exclusive license through 2032 and ~27% of OpenAI Group PBC
@@ -364,7 +364,7 @@ Be careful with the deployment claim. 4-bit text weights occupy roughly 16.8 to 
 ### Other notable open-weight releases
 
 - **GLM-5.3-Flash** (Z.ai, August 26, 2026): 320B total parameters with 18B active, 1M context, MIT licence, weights on Hugging Face, priced at about $0.15/$0.50 per 1M tokens through Z.ai's API. It had circulated anonymously on OpenRouter as "Ox Alpha" before launch.
-- **Reflection Beam** (announced October 5, 2026): a 501B mixture of experts with 23B active, aimed at coding and agent work and positioned as the US answer to Chinese open models. Reflection published benchmark scores ahead of the weights, which were promised for later in October, so it is an announcement rather than a release until they land.
+- **Reflection Beam** (announced October 5, weights released October 16, 2026): a 501B mixture of experts with 23B active, 1M context, aimed at coding and agent work and positioned as the US answer to Chinese open models. Released under Apache 2.0 on Hugging Face in BF16, FP8, and NVFP4, with a speculative-decoding drafter, training recipes, and serving configurations; the NVFP4 build alone needs about 273 GiB. Benchmark figures remain Reflection's own.
 - **Thinking Machines Inkling** (around July 15, 2026): the first release from Mira Murati's lab, reported at 975B parameters.
 - **GLM-5.3** (Z.ai, August 14, 2026): vendor claims strong coding and high cyber capability, with sensitive functions behind trusted access. Anthropic reported that it completed roughly 50 of 410 end-to-end exploits on ExploitBench, a meaningful offensive score for a model anyone can download.
 - **GLM-5.2** (Zhipu, June 13, 2026): released under MIT with no regional limits, explicitly courting developers locked out of US models by export-control directives. A clean illustration that restrictions redirect demand rather than removing it.

@@ -447,6 +447,8 @@ Boundary probing is a base rate, not an anecdote. Anthropic reports Opus 5.5 att
 
 The tools around the agent are attack surface too. A sandbox is as strong as the host software that reads what the agent writes, a plugin pin protects nothing unless the checked-out code is verified against it, and attackers now use the same orchestration harnesses defenders do.
 
+Containment is moving into the platform. Microsoft Execution Containers enforce one policy file at the kernel, Nvidia's Sentry watches an agent from hardware the host cannot reach, and macOS now asks before an agent reads a user's data. Check what each layer reports as well as what it blocks: a control that stops an attempt without telling anyone gives no evidence that the boundary is being tested.
+
 Principle of Least Privilege is critical: an agent should have only the minimum necessary permissions, specific to the task context.
 
 Permission system defines allowed operations, parameters, limits, and HITL requirements for each tool. Whitelist approach is safer than blacklist.

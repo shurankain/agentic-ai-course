@@ -130,7 +130,7 @@ This has practical implications for prompt design and RAG systems. If you load 2
 
 **Explicit citations.** Instruct the model to cite specific document IDs or section numbers when answering. This forces attention to all provided documents, partially mitigating the middle-neglect effect. When the model must justify its answer with references, it scans the context more thoroughly.
 
-**Frontier model improvements.** Models with the latest architectures (Gemini 3.8 Flash, the Claude 5.5 family, and GPT-6 with 1M-token contexts) have reduced but not eliminated this effect (as of August 2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
+**Frontier model improvements.** Models with the latest architectures (Gemini 3.8 Flash, the Claude 5.5 family, and GPT-6 with 1M-token contexts) have reduced but not eliminated this effect (as of October 2026). Testing on your specific workload remains essential: do not assume that a larger context window automatically solves the problem.
 
 ---
 

@@ -16,7 +16,7 @@
 
 - **Practical**: architecture, tradeoffs, and real numbers, with Java and Python listings where syntax is the point. Not toy demos.
 - **Deep**: From attention mechanism internals to RLHF pipelines and GPU optimization
-- **Current**: content through August 2026. Stateless MCP (2026-07-28), agent runtime and model routing as separate layers, EU AI Act enforcement, measured multi-agent failure data
+- **Current**: content through October 2026. GPT-6, Claude 5.5, and Gemini 4 with harness-labelled benchmarks, measured agent-containment failures and the OS and silicon controls that followed, typed decision models, the Personal Agent Protocol, and the EU AI Office's first enforcement files
 - **Production-focused**: Deployment, observability, security, cost optimization, and governance
 - **Enterprise-grade**: Multi-tenant patterns, compliance frameworks, and real-world case studies
 
