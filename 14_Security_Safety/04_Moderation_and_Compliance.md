@@ -122,7 +122,7 @@ AWS Bedrock Guardrails (April 3, 2026 update) are now enforceable cross-account 
 
 ### Anthropic Runtime Controls, Beyond Refusals
 
-Anthropic introduced runtime controls that go beyond traditional model refusals: **cyber-risk blocks** prevent the model from executing actions that could cause security harm (not just refusing to answer, but actively blocking dangerous tool calls and code execution at the runtime level). The **Cyber Verification Program** provides a pathway for legitimate security researchers and professionals to access capabilities that are blocked for general users.
+Anthropic introduced runtime controls that go beyond traditional model refusals: **cyber-risk blocks** prevent the model from executing actions that could cause security harm (blocking dangerous tool calls and code execution at the runtime level, on top of refusing to answer). The **Cyber Verification Program** provides a pathway for legitimate security researchers and professionals to access capabilities that are blocked for general users.
 
 **Architectural implication:** Safety has moved beyond the prompt-response layer into runtime control. The model does not just refuse dangerous requests: the runtime prevents them from executing. This is the difference between a firewall that logs bad packets (refusals) and a firewall that drops them (runtime controls). For architects building agent systems with tool use, this means safety enforcement happens at the execution layer, not just the generation layer.
 

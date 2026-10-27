@@ -164,7 +164,7 @@ Scaling does not change the result (mathematically), but improves quantization q
 
 Comparison aspects:
 - Approach: GPTQ: optimal error compensation, AWQ: protection of important weights
-- Calibration: GPTQ (requires the Hessian, AWQ) requires only activations
+- Calibration: GPTQ requires the Hessian, AWQ requires only activation statistics
 - Quantization speed: GPTQ: slower (hours), AWQ: faster (minutes)
 - Quality @ 4-bit: roughly equal
 - Inference speed: GPTQ: baseline, AWQ: optimized for AutoAWQ
@@ -300,7 +300,7 @@ Format comparison:
 
 **Perplexity increase vs bitwidth** (typical for LLMs):
 - 8-bit: +0.1-0.5 PPL
-- 4-bit GPTQ/AWQ: +0.5-2.0 PPL
+- 4-bit GPTQ/AWQ: +0.1-0.3 PPL on 70B-class models, up to 1-2 points on small models
 - 3-bit: +2-5 PPL
 - 2-bit: +5-20 PPL (often unusable)
 
@@ -329,10 +329,10 @@ Full INT8 quantization:
 Quantization is critical for production serving:
 
 **Memory savings to larger batches**:
-A 4-bit model uses 4x less memory, then can serve 4x more concurrent requests, then higher throughput.
+A 4-bit model uses 4x less memory for weights, which leaves room for more concurrent requests and higher throughput.
 
-**Faster prefill**:
-Weight loading is the bottleneck of the prefill phase. Smaller weights = faster prefill.
+**Faster decode**:
+Weight loading is the bottleneck of the decode phase, which is memory-bound. Smaller weights = faster decode; prefill, being compute-bound, gains less.
 
 **KV cache competition**:
 Memory freed by model quantization = more room for KV cache = support for longer contexts.
@@ -414,7 +414,7 @@ Three settings dominate, whichever tool you use: bit width, group size, and how 
 
 ### Evaluating Quality After Quantization
 
-The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate. This is the perplexity. Lower is better. Typical results for 4-bit GPTQ: perplexity increase of 0.5-2.0 points, which is negligible for practical use. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
+The primary metric for evaluation is perplexity on a test dataset (typically WikiText-2). The procedure: load the original model in FP16 and the quantized version, run both through the same set of texts, compute cross-entropy loss for each token, average and exponentiate. This is the perplexity. Lower is better. Typical results for 4-bit GPTQ: a perplexity increase of 0.1-0.3 points on 70B-class models (2-3% relative), rising to 1-2 points on small models, where it starts to show. It is also important to test on downstream tasks: for summarization and translation, quantization usually causes little harm; for code generation and math reasoning, losses are more noticeable.
 
 An additional check is qualitative evaluation: generate responses to prompts characteristic of your use case with both models and compare. Sometimes perplexity does not correlate with user-perceived quality: the model may preserve quality on simple tasks but degrade on complex reasoning tasks.
 
@@ -436,7 +436,7 @@ Knowing this matters for one reason: the scale is per group, so a single large o
 
 **Do not use quantization for**: training (except QAT), critical tasks where the slightest degradation is unacceptable (medical, legal), models smaller than 7B (they are already small; the overhead from quantization is not justified).
 
-For deployment-oriented guidance: hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks, see Module 17, Model Quantization for Production.
+For deployment-oriented guidance: hardware decision frameworks, serving framework integration (vLLM, TensorRT-LLM), FP8 format details, and production benchmarks, see Module 17, Quantization: Memory vs Quality.
 
 ---
 
@@ -446,7 +446,7 @@ For deployment-oriented guidance: hardware decision frameworks, serving framewor
 
 2. **Weight-only quantization is the standard for LLMs**. W4A16 (4-bit weights, 16-bit activations) provides 4x memory savings with minimal quality loss.
 
-3. **GPTQ and AWQ are state-of-the-art methods**. GPTQ compensates errors through the Hessian, AWQ protects important weights through scaling. Both deliver comparable quality.
+3. **GPTQ and AWQ are the standard methods**. GPTQ compensates errors through the Hessian, AWQ protects important weights through scaling. Both deliver comparable quality.
 
 4. **Calibration is critical**. 128-512 representative samples is usually sufficient, but data must reflect real-world usage.
 

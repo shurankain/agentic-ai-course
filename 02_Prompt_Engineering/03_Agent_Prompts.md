@@ -167,7 +167,7 @@ Planning also allows **assessing feasibility**. If the agent cannot produce a co
 
 ### Plan Structure: From Idea to Specification
 
-An effective plan is not just a list of actions but an **execution specification** with clear inputs, outputs, and dependencies.
+An effective plan is an **execution specification**: each action has clear inputs, outputs, and dependencies.
 
 Each plan step should contain: number and description (what exactly it does), tool (which tool to use), expected result (what will be obtained and in what format), dependencies (which previous steps must be completed).
 

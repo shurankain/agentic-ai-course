@@ -2,7 +2,7 @@
 
 Consider the cloud computing market in the early 2010s: AWS dominated, Azure and Google Cloud were emerging, each offering their services with different APIs, pricing, and capabilities. Today we observe a similar, but far more dynamic, landscape in the world of large language models. OpenAI, Anthropic, Google, Meta, DeepSeek, xAI, and dozens of other providers offer their models through APIs, and choosing the right provider becomes a strategic decision for any project involving AI agents.
 
-Understanding the LLM provider landscape is not simply a matter of picking the "best model." It is a question of balancing quality, cost, speed, reliability, and compliance with security requirements. The market has also split into two paradigms: **standard models** (optimized for speed and general tasks) and **reasoning models** (optimized for complex problem-solving via extended thinking). For agent developers, this knowledge shapes system architecture, fallback strategy, and project budget.
+Choosing an LLM provider means balancing quality, cost, speed, reliability, and compliance with security requirements. The market has also split into two paradigms: **standard models** (optimized for speed and general tasks) and **reasoning models** (optimized for complex problem-solving via extended thinking). For agent developers, this knowledge shapes system architecture, fallback strategy, and project budget.
 
 ---
 
@@ -55,7 +55,7 @@ OpenAI popularized LLMs through ChatGPT and continues to set the pace of the ind
 - Structured outputs (guaranteed JSON via constrained decoding)
 - Batching API for bulk processing at a 50% discount
 - Prompt caching for savings on repeated prefixes
-- Responses API (successor to the Assistants API, which OpenAI shut down on August 26, 2026, with no grace period and no automated migration of threads) and Agents SDK (v0.10.2, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
+- Responses API (successor to the Assistants API, which OpenAI shut down on August 26, 2026, with no grace period and no automated migration of threads) and Agents SDK (v0.14.0+ as of April 2026, provider-agnostic, supports 100+ LLMs) for multi-agent orchestration
 - OpenAI filed a confidential S-1 (May 22, 2026). As of October 2026 the listing is reported to have slipped to early 2027, with Sam Altman ruling out 2026
 - **Astra went through the government pre-release review** before shipping, the first named use of the voluntary arrangement under which the administration can examine some advanced models for up to 30 days before launch
 - **MS-OpenAI exclusivity ended** (April 27, 2026). OpenAI models now available on AWS Bedrock, Google Cloud Vertex, Oracle, and sovereign cloud providers. Microsoft retains non-exclusive license through 2032 and ~27% of OpenAI Group PBC
@@ -91,7 +91,7 @@ Anthropic, founded by former OpenAI researchers, positions itself as a company f
 
 The episode is a landmark precedent worth remembering even though the models are back: the first time export controls targeted an AI model rather than the chips used to build it. For anyone designing on a single provider, it is also the clearest available argument for a fallback path. A capability you depend on can disappear on a Friday evening for reasons that have nothing to do with your architecture, your contract, or the vendor's intentions.
 
-Anthropic reached $47B ARR (as of late May 2026) against OpenAI's $25B, and above $65B by the end of July, while OpenAI told investors it was near $50B net at the end of September. Read every such pair with its accounting caveat: Anthropic reports gross, counting end-customer spend that flows through cloud resellers, while OpenAI reports closer to net, so the gap is smaller than the headline by an amount neither company publishes and the ordering is unresolved. Growth trajectory: $87M (Jan 2024), then $1B (Dec 2024), then $9B (late 2025), then $30B (April 2026), then $47B (May 2026): 80x in three years. $65B Series H at $965B post-money, the largest private round in the sector to that point. Module 18, Enterprise AI Adoption carries the full comparison. Claude Code reached $1B ARR within 6 months of launch. Andrej Karpathy joined Anthropic's pre-training team (May 19, 2026). Anthropic acquired Stainless (May 18, 2026) for SDK/API-lifecycle tooling. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming**, background optimization where agents analyze past sessions and rewrite their memory between runs, effectively "sleeping" to improve, the first implementation of continual learning for production agents without model retraining.
+Anthropic reached $47B ARR (as of late May 2026) against OpenAI's $25B, and above $65B by the end of July, while OpenAI told investors it was near $50B net at the end of September. Read every such pair with its accounting caveat: Anthropic reports gross, counting end-customer spend that flows through cloud resellers, while OpenAI reports closer to net, so the gap is smaller than the headline by an amount neither company publishes and the ordering is unresolved. Growth trajectory: $87M (Jan 2024), then $1B (Dec 2024), then $9B (late 2025), then $30B (April 2026), then $47B (May 2026): about 540x in under two and a half years. $65B Series H at $965B post-money, the largest private round in the sector to that point. Module 18, Enterprise AI Adoption carries the full comparison. Claude Code reached $1B ARR within 6 months of launch. Andrej Karpathy joined Anthropic's pre-training team (May 19, 2026). Anthropic acquired Stainless (May 18, 2026) for SDK/API-lifecycle tooling. At the Code with Claude conference (May 6, 2026), Anthropic announced **Dreaming**, background optimization where agents analyze past sessions and rewrite their memory between runs, effectively "sleeping" to improve, the first implementation of continual learning for production agents without model retraining.
 
 **Extended thinking:** Claude models support an "extended thinking" mode: Anthropic's approach to reasoning. The model produces a chain-of-thought in a dedicated thinking block before generating the final response. Controlled via the `budget_tokens` parameter.
 
@@ -115,7 +115,7 @@ Google offers models through Vertex AI (enterprise) and Google AI Studio (for de
 - **Gemini 3.5 Flash**: frontier-quality model at Flash speed (May 19, Google I/O 2026). $1.50/$9 per 1M tokens, 1.05M context. 280+ output tok/sec. Terminal-Bench 2.1 76.2%, MCP Atlas 83.6%. `thinking_level` enum replaces `thinking_budget` int.
 - **Gemini 3.5 Pro**: announced at I/O on May 19, 2026, targeted for June, then delayed after internal testing showed shortfalls on coding and long-horizon reasoning. It never reached general release; Google went from 3.1 Pro to Gemini 4 Argon, and as of mid-October the Gemini app's model picker lists 3.1 Pro and 4 Argon with no 3.5 Pro.
 - **Gemini 3.1 Pro Preview**: Google's most capable published reasoning model from February 2026 until Argon.
-- **Gemini 3 Flash**: default Gemini model (December 2025). Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
+- **Gemini 3 Flash**: the default Gemini model from December 2025 until the 3.5 line. Outperforms 2.5 Pro at 3x the speed. Excellent cost/performance ratio.
 - **Gemini Omni**: video output with physics understanding, SynthID watermark on all outputs (Google I/O 2026).
 - **Gemini 2.5 Pro**: previous flagship with 1M token context and built-in thinking capabilities. Still widely available.
 - **Gemini 2.5 Flash**: optimized for speed and cost with configurable "thinking budgets," ideal for real-time applications.
@@ -126,7 +126,7 @@ The "Gemini Ultra" branding has been abandoned. Google spent the summer of 2026 
 The Gemini 3.7 Flash AutomationBench score is worth sitting with: 30.4 means the model fails roughly 70% of that benchmark's agentic tasks, and Argon's 51.3 on the same benchmark seven weeks later still fails about half. Coding benchmarks near saturation make current models look finished. Agentic benchmarks show how much room is left.
 
 **Google advantages:**
-- Record context sizes, 1M tokens standard (Gemini 3 Flash/Pro), 2M in preview
+- 1M-token context standard across current Gemini models
 - Native multimodal understanding and generation (text, images, audio, video)
 - Grounding with Google Search for up-to-date information
 - Native integration with Google Cloud services
@@ -138,7 +138,7 @@ The Gemini 3.7 Flash AutomationBench score is worth sitting with: 30.4 means the
 
 ### xAI
 
-Founded by Elon Musk, xAI formally ceased as a separate company (May 6, 2026): now operates as the SpaceXAI division. SpaceX-xAI filed an S-1 for IPO, ticker SPCX, targeting $1.75-2T valuation, roadshow June 4-8.
+Founded by Elon Musk, xAI formally ceased as a separate company (May 6, 2026): now operates as the SpaceXAI division. SpaceX listed on Nasdaq as SPCX on June 12, 2026, raising $75B at about a $1.75T valuation (Module 18, Enterprise AI Adoption).
 
 **Models:**
 - **Grok 4.7** (September 21, 2026): the current frontier model, moving to a 2.1T-parameter base, about 40% larger than 4.6, with the same 500K context and the same $2/$6 per 1M tokens. Released without a waitlist across the Grok app, the xAI API, Cursor, and GitHub Copilot. xAI reports 46.3% on CursorBench 4.0 and 71.0% on DeepSWE v1.1 at high effort, both vendor figures.
@@ -259,7 +259,7 @@ A Chinese lab that has repeatedly disrupted the industry, first with V3's traini
 
 **DeepSeek V3.2**: integrates thinking and tool-use into a unified model, eliminating the need for separate standard and reasoning models.
 
-**DeepSeek R2**: next-generation reasoning model, building on R1's GRPO approach with further improvements.
+**DeepSeek R2** never shipped as a separate model: DeepSeek ended the R line and folded reasoning into V4 as a mode.
 
 **When to choose DeepSeek:**
 - Mathematical and algorithmic tasks (leader)
@@ -371,7 +371,7 @@ Be careful with the deployment claim. 4-bit text weights occupy roughly 16.8 to 
 
 ### Open-Source Comparison Table
 
-The table below provides a side-by-side comparison of the three leading open-source model families across architecture, licensing, and capability dimensions. Use it to quickly identify which model best fits a given deployment scenario -- whether the priority is reasoning strength, multilingual coverage, or licensing flexibility.
+The table below provides a side-by-side comparison of three open-weight model families that led in 2025 (DeepSeek has since folded R1 into V4) across architecture, licensing, and capability dimensions. Use it to quickly identify which model best fits a given deployment scenario, whether the priority is reasoning strength, multilingual coverage, or licensing flexibility.
 
 | Criterion | DeepSeek R1 | Llama 4 Maverick | Qwen 3 235B |
 |----------|-------------|------------------|-------------|
@@ -479,11 +479,11 @@ Reasoning models carry a premium because thinking tokens are billed at output ra
 
 Read the table by ratio rather than by row. OpenAI and Anthropic now price their frontier tier at five times their balanced tier and a hundred times their high-volume tier. In August the frontier-to-high-volume gap at OpenAI was about 25 times, so the bottom of the range fell four times faster than the top, and the case for routing simple work away from the frontier tier got stronger.
 
-SWE-bench Verified finished its run in the summer, with six models including two open-weight ones inside two points at about 95% to 96%. The October releases are compared on harder benchmarks, and none of them produces a clean winner. Claude Opus 5.5 leads Terminal-Bench 4.0 at 64.8% running in Claude Code, ahead of GPT-6 Astra at 58.2% in Codex. On DeepSWE v1.1, Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra sit within 0.3 points of each other against a 7-point margin of error. Opus 5.5's 89.9% on SWE-bench Pro is Anthropic's own figure. Read Module 11 before quoting any of these, because each depends on the harness that produced it.
+SWE-bench Verified finished its run in the summer, with five models from three labs inside 1.4 points (95.0% to 96.4%), one of them open-weight, and a second open-weight model, Kimi K3, at 93.4%. The October releases are compared on harder benchmarks, and none of them produces a clean winner. Claude Opus 5.5 leads Terminal-Bench 4.0 at 64.8% running in Claude Code, ahead of GPT-6 Astra at 58.2% in Codex. On DeepSWE v1.1, Opus 5.5, GPT-6.1 Sol, and GPT-6 Astra sit within 0.3 points of each other against a 7-point margin of error. Opus 5.5's 89.9% on SWE-bench Pro is Anthropic's own figure. Read Module 11 before quoting any of these, because each depends on the harness that produced it.
 
 **Standard models (as of October 2026):**
 
-Standard models cover the broadest range of use cases, from general-purpose chat to code generation and document analysis. Prices vary by two orders of magnitude, reflecting differences in model size, capability, and provider strategy.
+Standard models cover the broadest range of use cases, from general-purpose chat to code generation and document analysis. Prices vary by two orders of magnitude, with model size, capability, and provider strategy driving the spread.
 
 | Model | Input | Output |
 |--------|-------|--------|
@@ -522,7 +522,7 @@ Budget models are designed for high-volume, lower-complexity tasks where cost an
 | Gemini 2.5 Flash | $0.15 | $0.60 |
 | Mistral Small 3 | $0.10 | $0.30 |
 
-**The floor is ten cents, and two vendors reached it on the same day.** GPT-6 Luna and Claude Haiku 5.5 both list $0.10 input and $0.50 output, Haiku 5.5 arriving on October 7, 2026 as OpenAI rolled Luna out to ChatGPT's free tier. That is a tenth of Haiku 4.5's input price. A competent small model is now cheap enough that the deciding cost in a high-volume pipeline is usually the number of calls, not the rate per call.
+**The floor is ten cents, and two vendors reached it within three weeks.** GPT-6 Luna (September 22) and Claude Haiku 5.5 (October 7, 2026) both list $0.10 input and $0.50 output. That is a tenth of Haiku 4.5's input price. A competent small model is now cheap enough that the deciding cost in a high-volume pipeline is usually the number of calls, not the rate per call.
 
 **A per-token price is still not a per-task price.** Anthropic's newer tokenizers produce about 30% more tokens than their predecessors for the same text, Sonnet 5's and Haiku 5.5's included, while Anthropic reports Haiku 5.5 about 75% cheaper on typical workloads. Comparing rates across a tokenizer change gets the size of the saving wrong. Module 01, Tokenization shows how to measure it on your own text.
 
@@ -555,11 +555,11 @@ Prompt caching is a mechanism where the provider saves the processing results (K
 
 **Savings by provider:**
 
-The economics of prompt caching vary across providers. Anthropic offers the steepest discount (90%) but with a shorter TTL, while OpenAI provides a more moderate 50% discount. The minimum prefix length determines how long a system prompt must be before caching provides any benefit.
+The economics of prompt caching vary across providers. Anthropic and the GPT-6 generation both discount cache hits by 90%; older OpenAI models gave 50%. The minimum prefix length determines how long a system prompt must be before caching provides any benefit.
 
 | Provider | Cache hit discount | Min prefix length | TTL |
 |-----------|-------------------|-------------------|-----|
-| OpenAI | 50% | 1024 tokens | 5-10 min |
+| OpenAI | 90% on GPT-6 (50% on older models) | 1024 tokens | 5-10 min |
 | Anthropic | 90% | 1024 tokens | 5 min |
 | Google | Varies | 32K tokens | - |
 
@@ -640,30 +640,30 @@ Different tasks require different models. Using a reasoning model for simple cla
 
 ### Simple Tasks and Classification
 
-**Recommended models:**
-- GPT-5-mini / GPT-5-nano
-- GPT-4o-mini
-- Claude Haiku 4.5
-- Gemini 2.5 Flash
+**Recommended models (as of October 2026):**
+- GPT-6 Luna ($0.10/$0.50)
+- Claude Haiku 5.5 ($0.10/$0.50; its tokenizer counts about 30% more tokens for the same text)
+- GLM-5.3-Flash (open weights, MIT licence)
+- Gemini 3.8 Flash (introductory pricing through December 31, 2026)
 
 **Typical tasks:** text categorization, entity extraction, sentiment analysis, simple format conversions, filtering.
 
 ### Long Documents
 
-**Recommended models:**
-- Gemini 3.7 Flash (1,048,576 tokens, 65,536 max output)
-- Claude Opus 5 and Sonnet 5 (1M tokens each)
-- Grok 4.6 (500K, but note the price doubles above 200K)
-- GPT-5.5 / GPT-5.6 (128K-1M context)
+**Recommended models (as of October 2026):**
+- Claude 5.5 family (1M tokens on every tier, Haiku included)
+- Gemini 3.8 Flash and Gemini 4 Argon (1M context)
+- GPT-6 Astra and GPT-6.1 Sol (1.05M context, with the long-prompt surcharge above 272K)
+- Grok 4.7 (500K, but note the price doubles above 200K)
 
 **Typical tasks:** analyzing books, lengthy reports, codebases, legal documents, scientific papers.
 
 ### Real-Time Applications
 
-**Recommended models:**
-- Gemini 3 Flash / 2.5 Flash
-- GPT-5-mini
-- Claude Haiku 4.5
+**Recommended models (as of October 2026):**
+- Gemini 3.8 Flash
+- GPT-6 Luna
+- Claude Haiku 5.5 at a low effort setting
 
 **Typical tasks:** chatbots with instant responses, autocomplete, interactive assistants.
 
@@ -846,13 +846,13 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 | Model Size | GPU RAM (FP16) | GPU RAM (INT4) | Examples |
 |---------------|---------|---------|---------|
-| 7-8B | 16 GB | 4-6 GB | Llama 4 8B, Qwen 3 8B, Mistral 7B |
+| 7-8B | 16 GB | 4-6 GB | Llama 3.1 8B, Qwen 3 8B, Mistral 7B |
 | 14B | 28 GB | 8-10 GB | Qwen 3 14B |
 | 32B | 64 GB | 16-20 GB | Qwen 3 32B |
 | 70B | 140 GB | 35-40 GB | Llama 3.3 70B, Qwen 3 72B, DeepSeek R1 70B distill |
-| MoE 100B+ active | 200+ GB | 80+ GB | Llama 4 Maverick, Qwen 3 235B |
+| MoE 100B+ total | 200+ GB | 80+ GB | Llama 4 Maverick, Qwen 3 235B |
 
-**Quantization** reduces requirements by 2-4x with a small quality loss. 4-bit quantization (GPTQ, AWQ, GGUF) allows running a 70B model on a single 24GB GPU.
+**Quantization** reduces requirements by 2-4x with a small quality loss. 4-bit quantization (GPTQ, AWQ, GGUF) brings a 70B model to 35-40 GB, which fits a single 48GB GPU or two 24GB cards.
 
 ---
 
@@ -870,7 +870,7 @@ Modern LLMs require significant resources. The table below maps model size to GP
 
 6. **A model's tier no longer predicts its ranking.** Claude Opus 5.5 leads several agentic coding benchmarks from a tier below Fable 5.1 at less than half the price, and Gemini 4 Argon, at the price of a balanced tier, leads Google's own comparison table. Read the current numbers rather than the price list, and check which harness produced them.
 
-7. **Quoted prices expire.** GPT-5.6 Luna dropped 80% three weeks after general availability, then GPT-6 Luna and Claude Haiku 5.5 both landed at $0.10 per 1M input tokens on the same day in October. Gemini 4 Argon's introductory rate doubles after November 30, Gemini 3.8 Flash's after December 31, and Grok doubles above 200K tokens. Put rates in configuration, not in a spreadsheet.
+7. **Quoted prices expire.** GPT-5.6 Luna dropped 80% three weeks after general availability, then GPT-6 Luna and Claude Haiku 5.5 landed at $0.10 per 1M input tokens within three weeks of each other. Gemini 4 Argon's introductory rate doubles after November 30, Gemini 3.8 Flash's after December 31, and Grok doubles above 200K tokens. Put rates in configuration, not in a spreadsheet.
 
 8. **Model availability is now a policy and safety variable.** Claude Fable 5 was disabled worldwide for 19 days by an export-control directive, GPT-5.6 and GPT-6 Astra shipped only after a government review, and GPT-6.1 Astra was cancelled outright over safety regressions. A single-provider design has failure modes that have nothing to do with uptime.
 

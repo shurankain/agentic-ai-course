@@ -44,7 +44,7 @@ Advantages: dramatically more efficient, provides full ranking, robust to noise,
 
 **Inter-Annotator Agreement:**
 
-Cohen's Kappa measures agreement adjusted for chance. Interpretation: <0.2: poor, 0.2-0.4: fair, 0.4-0.6: moderate, 0.6-0.8, substantial, >0.8, almost perfect.
+Cohen's Kappa measures agreement adjusted for chance. Interpretation: <0.2: poor, 0.2-0.4: fair, 0.4-0.6: moderate, 0.6-0.8: substantial, >0.8: almost perfect.
 
 Typical values: simple tasks >0.7, complex 0.4-0.6, subjective 0.3-0.5.
 

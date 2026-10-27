@@ -106,7 +106,7 @@ The training of reasoning models (o1, o3, DeepSeek R1, Qwen QwQ) created massive
 
 ### Reasoning Trace Generation
 
-**Teacher-generated reasoning chains:** A strong reasoning model (o1, Claude with extended thinking) generates detailed step-by-step solutions. These traces are then used to train smaller models. DeepSeek used this approach: R1 (the full reasoning model) generates reasoning traces to distilled into R1-distill models (1.5B to 70B parameters). The distilled models achieve remarkable performance, R1-distill-Qwen-32B matches o1-mini on many benchmarks.
+**Teacher-generated reasoning chains:** A strong reasoning model (o1, Claude with extended thinking) generates detailed step-by-step solutions. These traces are then used to train smaller models. DeepSeek used this approach: R1 (the full reasoning model) generated about 800K training samples, which were distilled into R1-distill models (1.5B to 70B parameters). R1-distill-Qwen-32B outscored o1-mini on AIME 2024 and MATH-500.
 
 **Self-play and rejection sampling:** Generate many candidate solutions, keep only those that arrive at the correct answer. For math and code, correctness is verifiable programmatically. This produces a dataset of verified correct reasoning chains without human annotation. Scale: DeepSeek R1 training used millions of such verified examples.
 

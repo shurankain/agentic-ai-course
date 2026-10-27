@@ -6,9 +6,9 @@ The Transformer architecture, introduced in 2017, reshaped natural language proc
 
 ### Fundamental Limitations of the Classic Approach
 
-**Quadratic complexity of the attention mechanism** is not merely a technical detail. When you process a sequence of N tokens, attention computes an NxN matrix of relationships. For 1K tokens, that is one million elements. For 100K tokens, ten billion elements. The growth in computational requirements is quadratic: doubling the context length increases computation fourfold.
+**Quadratic complexity of the attention mechanism** sets the cost of every long prompt. When you process a sequence of N tokens, attention computes an NxN matrix of relationships. For 1K tokens, that is one million elements. For 100K tokens, ten billion elements. The growth in computational requirements is quadratic: doubling the context length increases computation fourfold.
 
-This limitation defines the fundamental economics of modern LLM systems. Why did most models before 2024 have a context window of 4K-8K tokens? Not because training on long contexts was impossible, but because of the prohibitively high cost of inference. Each request to a model with a 100K token context costs roughly 100 times more than one with a 4K token context.
+This limitation defines the fundamental economics of modern LLM systems. Why did most models before 2024 have a context window of 4K-8K tokens? Training on long contexts was possible; inference was what cost too much. A 100K-token context is 25 times longer than a 4K one, and its attention computation is 625 times larger.
 
 **The problem of dense computation** is less obvious but no less critical. In a classic Transformer, every model parameter is activated for every token. Consider a model with 70B parameters: generating a single token requires 70 billion multiplications and additions. But think about the nature of queries: a question about Python programming activates the same parameters as a discussion of quantum physics.
 
@@ -76,7 +76,7 @@ Mixtral, released by Mistral AI in December 2023, became the first widely availa
 
 **Architectural characteristics:**
 
-Mixtral contains eight experts with 7 billion parameters each in FFN layers (56B total), plus approximately 11B shared parameters in the attention and embedding layers. The total parameter count reaches approximately 47 billion. Thanks to the Top-2 routing mechanism, only 2 of 8 experts are activated for each token, meaning approximately 13B parameters (~28% of the total) are used per token.
+The name Mixtral 8x7B suggests eight 7B models, but only the FFN layers are replicated: the eight experts hold about 45B parameters together, and the shared attention and embedding layers about 1.6B. The total parameter count reaches approximately 47 billion. Thanks to the Top-2 routing mechanism, only 2 of 8 experts are activated for each token, meaning approximately 13B parameters (~28% of the total) are used per token.
 
 **Results:** Mixtral achieves quality comparable to Llama 2 70B while using only ~25% of the computation at inference. This is not marketing exaggeration: the results are confirmed on standard benchmarks.
 
@@ -115,7 +115,7 @@ MoE deployment differs from dense models: instead of tensor parallelism (each GP
 
 The self-attention mechanism computes relationships between all pairs of tokens: it multiplies the Query matrix by the transposed Key matrix, normalizes through softmax, and applies the result to the Value matrix. The resulting attention scores matrix has size (seq_len x seq_len). For a 100K token sequence, that is 10 billion elements, for just one attention head of one layer.
 
-This is not merely a memory problem, even with Flash Attention, which optimizes memory access patterns, the computational complexity remains O(n²).
+Memory is only part of the problem: even with Flash Attention, which optimizes memory access patterns, the computational complexity remains O(n²).
 
 **Why is this critical?** Because the context window has become a competitive advantage. Gemini 3.8 Flash and Gemini 4 Argon with 1M tokens, every Claude 5.5 tier and GPT-6 with about 1M, Llama 4 Scout with 10M: long context has shifted from a desirable feature to a necessity for enterprise use cases. But quadratic complexity makes this prohibitively expensive with classic attention.
 
@@ -310,7 +310,7 @@ If your median context length is < 8K tokens, the quadratic complexity of attent
 
 **2. Infrastructure constraints are often underestimated**
 
-MoE models require not just "more memory" but specific infrastructure. If you have a fleet of GPU servers across different generations (A100 + V100), expert parallelism may be impractical: different memory capacities and interconnect bandwidths will create bottlenecks.
+MoE models need specific infrastructure on top of the extra memory. If you have a fleet of GPU servers across different generations (A100 + V100), expert parallelism may be impractical: different memory capacities and interconnect bandwidths will create bottlenecks.
 
 **Real-world trap:** "We have 4xA100 80GB, let's run Mixtral." But efficient MoE inference requires high-speed interconnect. On servers without NVLink, you will get only 30% of theoretical throughput due to communication overhead.
 
@@ -341,7 +341,7 @@ Debugging MoE routing issues or SSM state corruption requires deep understanding
 **Hybrid architectures:**
 - Balance: 70-80% of SSM efficiency + 85-90% of Transformer quality
 - Development overhead: 2-3x more compared to a pure architecture
-- Production track record: limited (Jamba is the only widely known example)
+- Production track record: limited (Jamba was the first widely known example, and the hybrid models covered below came later)
 - **Optimal scenario:** When neither Dense nor SSM fully satisfies requirements
 
 **When hybrids are justified:** Enterprise scenarios with diverse workloads where neither quality nor efficiency can be sacrificed, and engineering resources exist for custom optimization.
@@ -358,7 +358,7 @@ Percentages are easier to argue with than absolutes, so here are one representat
 | Time to first token | ~50 ms | ~40 ms | ~20 ms |
 | Throughput at 32K | falls to ~30 tok/s | falls similarly | holds ~180 tok/s |
 
-Two readings matter here. Mixtral carries 47B of weights and runs at the speed of a 13B model, which is the whole MoE bargain: total parameters buy quality, active parameters set the speed, and memory pays for the difference. And the last row is where SSM stops being a research curiosity. At 4K the Transformer is competitive; at 32K it has lost six times the throughput while Mamba has lost almost none.
+Two readings matter here. Mixtral carries 47B of weights and runs at the speed of a 13B model, which is the whole MoE bargain: total parameters buy quality, active parameters set the speed, and memory pays for the difference. And the last row is where SSM stops being a research curiosity. At 4K the Transformer is competitive; at 32K its throughput has fallen fivefold while Mamba has lost almost none.
 
 Measure this yourself before believing any of it. Run a warm-up pass so CUDA kernel initialization does not land inside the first timing, call `torch.cuda.synchronize()` on both sides of the measurement since kernel launches are asynchronous and an unsynchronized timer measures the launch rather than the work, and test at the context length you actually serve. Benchmarks published at 2K context tell you nothing about a 32K workload.
 

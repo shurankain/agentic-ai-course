@@ -188,7 +188,7 @@ Dynamo complements the Amazon+Cerebras disaggregated approach (AWS Trainium for 
 
 A counterintuitive finding from 2026 production deployments: longer chain-of-thought does **not** guarantee better answers. Correct solutions are often **shorter** than incorrect ones, the model spends more tokens when it is uncertain or going down a wrong path.
 
-This has direct implications for agent loops: use `reasoning_effort` (OpenAI) or `budget_tokens` (Anthropic) not just as cost controls but as quality controls. Low reasoning effort on routine steps (tool call formatting, simple decisions), high reasoning only on complex decisions (architectural choices, ambiguous requirements).
+This has direct implications for agent loops: use `reasoning_effort` (OpenAI) or `budget_tokens` (Anthropic) as quality controls as well as cost controls. Low reasoning effort on routine steps (tool call formatting, simple decisions), high reasoning only on complex decisions (architectural choices, ambiguous requirements).
 
 **Reasoning for verification, not generation:** A cost-effective pattern: use a cheap, fast model to generate candidate responses, then use a reasoning model to **verify** the best one. Verification is cheaper than generation because the reasoning model works with a concrete answer rather than an open-ended problem. This mirrors the Architect/Editor pattern from coding agents (see Module 03, Code Generation Agents).
 

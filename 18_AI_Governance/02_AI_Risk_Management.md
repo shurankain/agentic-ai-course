@@ -154,4 +154,4 @@ Continuous monitoring is critically important for AI systems. Unlike traditional
 
 ## Further Reading
 
-For production implementation of AI risk assessment frameworks, see the NIST AI RMF Playbook and ISO/IEC 23894 standard. The concepts above (risk scoring, continuous monitoring, audit trails) translate directly to code, the risk scoring formula, monitoring thresholds, and hash-chain audit patterns described in this lesson provide the specification that your implementation should follow.
+For production implementation of AI risk assessment frameworks, see the NIST AI RMF Playbook and ISO/IEC 23894 standard. The concepts above, meaning risk scoring, continuous monitoring, and audit trails, are the specification an implementation should follow; the Playbook supplies the detailed controls.

@@ -40,7 +40,7 @@ The practical test: if a provider halved its prices tomorrow, would this sentenc
 **What they are:**
 Unused compute capacity at a discount. AWS Spot 60-90% cheaper (average ~70%), GCP Preemptible 60-80%, Azure Spot 60-90%.
 
-A100 $4/hour on-demand, spot $0.80-1.20/hour. Running 24/7 saves $60-75K per year per instance.
+A100 $4/hour on-demand, spot $0.80-1.20/hour. Running 24/7 saves about $24-28K per year per instance.
 
 Catch: instances can be reclaimed with 30 seconds notice.
 
@@ -189,11 +189,11 @@ Mixture-of-Experts (MoE) models like DeepSeek V3 (671B total, 37B active), Mixtr
 
 **Serving strategies:**
 
-**Tensor parallelism across GPUs:** Distribute the full model across multiple GPUs. For DeepSeek V3 in INT8: 8-9x A100 80GB or 4x H100. Expert layers are distributed so each GPU holds a subset of experts, with all-to-all communication during expert routing.
+**Tensor parallelism across GPUs:** Distribute the full model across multiple GPUs. For DeepSeek V3 in INT8 (about 671 GB of weights): a single 8x H200 node (1.1 TB), or two 8x A100 80GB nodes once KV-cache is counted. Expert layers are distributed so each GPU holds a subset of experts, with all-to-all communication during expert routing.
 
 **Expert offloading:** Keep inactive experts on CPU/NVMe and load them on demand. Dramatically reduces GPU memory (serve DeepSeek V3 on 2x A100 instead of 8), but adds latency per token. Viable for batch or latency-tolerant workloads. Implementations: llama.cpp, ExLlamaV2.
 
-**Quantization is highly effective for MoE:** Since most parameters are expert weights that activate sparsely, aggressive quantization (INT4, even INT2 for inactive experts) has less impact on quality than for dense models. DeepSeek V3 in INT4 fits on 4x A100 80GB with minimal quality loss.
+**Quantization is highly effective for MoE:** Since most parameters are expert weights that activate sparsely, aggressive quantization (INT4, even INT2 for inactive experts) has less impact on quality than for dense models. DeepSeek V3 in INT4 (about 335 GB) fits on one 8x A100 80GB node with room left for KV-cache, at minimal quality loss.
 
 **KV-cache considerations:** MoE models with MLA (Multi-head Latent Attention, used by DeepSeek V3) compress the KV-cache, 3-5x smaller than standard MHA. This partially offsets the high parameter memory. For MoE models without MLA (Mixtral), KV-cache follows standard sizing.
 
@@ -217,7 +217,7 @@ For API-based inference (as opposed to self-hosted), **prompt caching** is one o
 
 The discount rates and prefix minimums are structural product features rather than list prices, so they move on the order of a release rather than a quarter. Re-verify them at the provider's documentation before sizing a budget, and treat the two rightmost columns as estimates from agent workloads rather than published figures.
 
-**The write premium is the part that gets missed.** Populating a cache costs more than an uncached call, on the order of a 25% surcharge on the tokens being written. That inverts the arithmetic on short sessions: a two-call task pays the premium once and collects the discount once, which is close to a wash, and a one-call task strictly loses. Caching pays from roughly the third call onward, which is why it is an agent optimization rather than a general one.
+**The write premium is the part that gets missed.** Populating a cache costs more than an uncached call, on the order of a 25% surcharge on the tokens being written. That inverts the arithmetic on short sessions: a two-call task pays the premium once and collects the discount once, which still saves about a third on the cached prefix (1.25 + 0.1 against 2.0), and a one-call task strictly loses. The saving grows with every further call, which is why caching matters most in agent loops that resend the same prefix dozens of times.
 
 **The pattern for agents:** Structure every LLM call as: `[system prompt] + [tool descriptions] + [static context]` -> `[dynamic context] + [conversation] + [current message]`. The first block is identical across all calls in a session: fully cacheable. The second block varies per call: never cached.
 
@@ -279,6 +279,6 @@ Think about trade-offs: spot (cost vs availability), cascading (cost vs quality)
 
 Prompt caching is free optimization for API users: structure prompts with static prefix for automatic 50-90% input cost reduction on multi-turn agent sessions.
 
-**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) to $0.006/1K tokens (mid-2026) = 10x in 18 months**. Read the 280x with its endpoints attached, because a multiplier that large is comparing a frontier model at the start of the window against a much smaller model of comparable usefulness at the end of it. The 10x figure is the more transferable one, since it tracks a narrower quality band over a shorter period. The combination of Blackwell hardware (~1,000 NVL72 racks/week per major hyperscaler), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference: hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally: overall spending often remains flat or grows.
+**Hardware cost trajectory (as of mid-June 2026):** Inference costs have fallen approximately 280x over two years (early 2024 to early 2026), and the decline continues: **$0.06/1K tokens (early 2025) to $0.006/1K tokens (mid-2026) = 10x in 18 months**. Read the 280x with its endpoints attached, because a multiplier that large is comparing a frontier model at the start of the window against a much smaller model of comparable usefulness at the end of it. The 10x figure is the more transferable one, since it tracks a narrower quality band over a shorter period. The combination of Blackwell hardware (~1,000 NVL72 racks/week across NVIDIA's customers), optimized serving stacks, and open-source MoE models drives an additional **4-10x reduction**. The economic center of gravity is shifting from training to inference: hyperscalers now evaluate accelerators on cost/million tokens and revenue/watt, not peak FLOPS. The Jevons Paradox applies: as per-unit costs fall, total usage rises proportionally: overall spending often remains flat or grows.
 
 **Disaggregated inference alliances:** Amazon and Cerebras formed a "disaggregated inference" partnership (March 2026): AWS Trainium handles prefill, Cerebras WSE-3 handles decode, achieving 5x token throughput versus H100. This is a direct challenge to NVIDIA's memory monopoly. NVIDIA responded with **Dynamo**, a disaggregated serving framework that separates prefill and decode onto optimal hardware. Disaggregated serving is now a production-standard approach, not experimental (see SGLang and Alternatives for benchmarks).

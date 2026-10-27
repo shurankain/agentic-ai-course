@@ -70,7 +70,7 @@ A self-hosted LLM means running models on your own infrastructure instead of clo
 
 **Latency and throughput** for high-load systems. At very high volumes, self-hosted is more economical than cloud APIs. Network latency to the provider is eliminated.
 
-**Economics:** OpenAI API costs $0.10/1M input tokens for GPT-6 Luna and $2/1M for GPT-6 Sol (as of October 2026). The high-volume tier halved in a quarter, and each cut like that raises the volume at which self-hosting starts to pay. At a million requests per day with an average of 500 tokens: hundreds to thousands of dollars daily. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) pays for itself at a certain volume. The crossover point is typically around 100M tokens/day.
+**Economics:** OpenAI API costs $0.10/1M input tokens for GPT-6 Luna and $2/1M for GPT-6 Sol (as of October 2026). The high-volume tier halved in a quarter, and each cut like that raises the volume at which self-hosting starts to pay. A million requests per day at 500 tokens each is 500M tokens, about $50 a day on Luna and $1,000 a day on Sol. A self-hosted Llama-70B on a dedicated GPU server ($1,500-3,000/month for an A100, depending on provider) breaks even against Sol at roughly 25-50M tokens/day, and against Luna only at 500M-1B tokens/day, before counting the engineers who run it.
 
 **Customization and fine-tuning.** Self-hosted infrastructure allows running custom fine-tuned models that are better than base models for specific tasks. A fine-tuned model for medical diagnostics, legal analysis, or technical support can outperform frontier models on domain-specific tasks at a smaller size. OpenAI now offers fine-tuning for GPT-5.6, but with limited control over the process. Self-hosted Llama 3.x/4, Mistral, and Qwen 2.5/3 can be fully fine-tuned with complete control over hyperparameters, data, and training process.
 
@@ -132,7 +132,7 @@ A circuit breaker monitors self-hosted health. When the error rate or latency is
 
 Fallback between local and cloud models improves availability. API unification is achieved through OpenAI-compatible endpoints: vLLM exports the OpenAI API, and the client works identically. Differences in capabilities are handled through a capability registry: before sending, it checks whether the target model supports the required features; otherwise, fallback or error.
 
-Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially a high-volume hosted tier such as GPT-6 Luna ($0.0005). 5% are complex tasks, GPT-6 Sol ($0.01). The blended average cost drops from $0.01 (pure cloud) to $0.003 (hybrid), 70% savings.
+Cost optimization through the hybrid approach: 80% of requests are simple tasks (classification, extraction, simple QA), served by self-hosted Llama-8B at $0.0001 per request (amortized GPU cost). 15% are medium tasks, partially self-hosted, partially a high-volume hosted tier such as GPT-6 Luna ($0.0005). 5% are complex tasks, GPT-6 Sol ($0.01). The blended average cost drops from $0.01 (every request on Sol) to about $0.00066 (hybrid), a saving of about 93%, and the $0.0001 self-hosted figure holds only at high GPU utilization.
 
 ## Monitoring Inference Servers
 
@@ -144,7 +144,7 @@ Inference-specific metrics: tokens per second, time to first token, batch size d
 
 Alerting: GPU temperature > 85°C for more than 5 minutes (warning), > 90°C (critical). GPU memory utilization > 95% for more than 2 minutes. Throughput drop > 50% over 5 minutes. Queue depth > 100 requests. P95 latency increase > 2x baseline. Each alert is sent to PagerDuty with severity and a runbook link.
 
-Capacity planning is based on historical data. Analysis: average 100 requests/minute, peak 500 requests/minute. Average processing time is 5 seconds, so peak load requires handling 500 * 5/60 = ~42 concurrent requests. Each request uses 2GB of KV-cache. 42 * 2GB = 84GB, requiring a minimum of 2x A100-80GB. Adding 50% headroom for bursts and failover = 3x A100-80GB as the minimum configuration.
+Capacity planning is based on historical data. Analysis: average 100 requests/minute, peak 500 requests/minute. Average processing time is 5 seconds, so peak load requires handling 500 * 5/60 = ~42 concurrent requests. Each request uses 2GB of KV-cache. 42 * 2GB = 84GB of KV-cache, and 50% headroom for bursts and failover brings it to about 126GB. The weights come on top: a 70B model in FP8 adds 70GB, for about 196GB in total, so 3x A100-80GB (240GB) is the minimum configuration.
 
 ## Disaster Recovery for AI Systems
 
@@ -152,9 +152,9 @@ Traditional disaster recovery focuses on database backups and application state.
 
 **What to back up and how often.** Model weights: back up once after each deployment (they do not change between deployments). Use object storage (S3, GCS) with versioning. For self-hosted models, the HuggingFace cache directory is the backup target. Vector stores: continuous replication for production (pgvector replication, Qdrant snapshots, Pinecone managed backups). RPO target: <1 hour: a stale knowledge base gives wrong answers, not errors. Conversation history and agent state: continuous replication (PostgreSQL streaming replication, Redis persistence). RPO target: <5 minutes for active sessions. Prompts and configuration: version-controlled in git: recovery is a git checkout.
 
-**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic, then OpenAI, then self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture is not just a reliability pattern. It is a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
+**RTO/RPO targets for AI-dependent services.** The blast radius of a model provider outage depends on your failover architecture. With multi-provider failover (Anthropic, then OpenAI, then self-hosted): RTO < 30 seconds (automatic circuit breaker switch), RPO = 0 (stateless failover, no data loss). Without failover: RTO = provider's recovery time (potentially hours), RPO = lost sessions. The lesson: multi-provider architecture doubles as a disaster recovery strategy. See Deployment Strategies for multi-provider failover architecture.
 
-**Provider outage scenario.** On June 12, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive: at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. This is not a hypothetical. It is the canonical case for why multi-provider failover is mandatory for production AI systems.
+**Provider outage scenario.** On June 12, 2026, Anthropic abruptly disabled Fable 5 and Mythos 5 for all customers following a government export control directive: at 5:21 PM on a Friday. Any system hard-coded to use these models went down with no warning. Systems with model-agnostic abstractions (LiteLLM, framework-level model routing) failed over to alternative providers within seconds. It is the canonical case for mandatory multi-provider failover in production AI systems.
 
 ## Key Takeaways
 

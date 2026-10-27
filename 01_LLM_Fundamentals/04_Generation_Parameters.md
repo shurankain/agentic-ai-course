@@ -50,13 +50,13 @@ At different temperatures, the probabilities distribute as follows:
 
 | Temperature | "the" | "a" | "an" | "this" |
 |-------------|-------|-----|------|--------|
-| 0.1 | 99.3% | 0.6% | 0.1% | 0.0% |
-| 0.5 | 76.4% | 16.8% | 4.9% | 1.4% |
-| 1.0 | 43.7% | 26.5% | 16.1% | 9.8% |
-| 1.5 | 33.6% | 24.7% | 18.1% | 13.3% |
-| 2.0 | 29.0% | 23.4% | 18.9% | 15.3% |
+| 0.1 | 99.3% | 0.7% | 0.0% | 0.0% |
+| 0.5 | 64.4% | 23.7% | 8.7% | 3.2% |
+| 1.0 | 45.5% | 27.6% | 16.7% | 10.2% |
+| 1.5 | 38.5% | 27.6% | 19.8% | 14.2% |
+| 2.0 | 35.0% | 27.3% | 21.2% | 16.5% |
 
-At temperature 0.1, the choice almost always falls on "the". At temperature 2.0, the distribution is nearly uniform: any token has a realistic chance.
+At temperature 0.1, the choice almost always falls on "the". At temperature 2.0, the distribution flattens toward uniform: even "this" is picked about one time in six.
 
 ### When to Use Which Temperature
 

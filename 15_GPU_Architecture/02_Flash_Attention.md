@@ -90,7 +90,7 @@ For long sequences, memory savings far outweigh the additional computation. Even
 
 ## Practical Results
 
-### Memory: Revolutionary Savings
+### Memory: Linear Instead of Quadratic
 
 For a 2048-token sequence, standard attention consumes ~16 MB per matrix (one head, FP32). Flash Attention requires only O(N) memory.
 
@@ -162,15 +162,15 @@ Flash Attention 3 (2024) uses the capabilities of the Hopper architecture (H100)
 
 **FA3 Benchmarks (H100 SXM):**
 
-The benchmarks below quantify FA3's throughput gains over FA2 across different sequence lengths and precision formats. FP8 results demonstrate that FA3 approaches the theoretical peak of the H100 Transformer Engine, achieving over 1 PFLOPS on a single GPU.
+The table below compares FA3's peak throughput with FA2's in both precisions. In FP8, FA3 passes 1 PFLOPS on a single GPU.
 
-| Sequence Length | FA2 (TFLOPS) | FA3 FP16 (TFLOPS) | FA3 FP8 (TFLOPS) | FA3 vs FA2 |
-|----------------|-------------|-------------------|------------------|------------|
-| 2K | ~300 | ~420 | ~740 | 1.4-2.5x |
-| 8K | ~350 | ~480 | ~800 | 1.4-2.3x |
-| 16K+ | ~370 | ~510 | ~840 | 1.4-2.3x |
+| Measure | FA2 | FA3 FP16 | FA3 FP8 |
+|----------------|-------------|-------------------|------------------|
+| Peak forward throughput, long sequences | ~350 TFLOPS | ~740 TFLOPS | ~1.2 PFLOPS |
+| Share of H100 dense peak | ~35% of 989 | ~75% of 989 | ~60% of 1,979 |
+| Speedup over FA2 | 1x | 1.5-2.0x | up to ~3x |
 
-FA3 FP16 achieves ~75% peak H100 TFLOPS. FA3 FP8 reaches ~1.2 PFLOPS, approaching the theoretical maximum of the H100 Transformer Engine.
+Figures are the peaks reported in the FlashAttention-3 paper (2024); short sequences and small head dimensions land well below them.
 
 ### FlashDecoding: Optimizing the Decode Phase
 
@@ -231,7 +231,7 @@ Flash Attention uses these WMMA instructions for the matrix multiplications QxK 
 - Hopper (H100) 2022: 989 TFLOPS, FP8, FP16, BF16, TF32, INT8
 - Blackwell (B200) 2024: ~2500 FP8 TFLOPS, adds FP4, doubles throughput over FP8
 
-Each generation expanded format support and increased performance. The H100 with FP8 achieves nearly a petaflop on a single GPU. Blackwell's FP4 support enables 4-bit inference at near-FP8 quality with proper calibration.
+Each generation expanded format support and increased performance. The H100 reaches 1,979 dense TFLOPS in FP8, about two petaflops on a single GPU. Blackwell's FP4 support enables 4-bit inference at near-FP8 quality with proper calibration.
 
 ---
 
@@ -285,7 +285,7 @@ PyTorch AMP (Automatic Mixed Precision) implements this automatically through Gr
 
 ### Numerical Stability in Attention
 
-Attention is particularly sensitive to numerical stability. Softmax with large values can produce overflow: if max(x) > 88 in FP16, the exponential yields infinity.
+Attention is particularly sensitive to numerical stability. Softmax with large values can produce overflow: in FP16, exp(x) overflows to infinity once x exceeds about 11 (the FP32 limit is about 88).
 
 The solution: numerically stable softmax: softmax(x_i) = exp(x_i - max(x)) / sum(exp(x_j - max(x)))
 

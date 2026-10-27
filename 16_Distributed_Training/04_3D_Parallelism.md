@@ -92,7 +92,7 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 
 **Step 1: TP degree** = GPUs per node = 8 (use all NVLink).
 
-**Step 2: PP degree** = 8. 96 layers / 8 stages = 12 layers per stage. 100B / 8 stages ≈ 12.5B per stage x 2 bytes = 25 GB: fits.
+**Step 2: PP degree** = 8. 80 layers / 8 stages = 10 layers per stage. 100B / 8 stages ≈ 12.5B per stage x 2 bytes = 25 GB: fits.
 
 **Step 3: DP degree** = Total GPU / (TP x PP) = 512 / 64 = 8.
 
@@ -111,9 +111,9 @@ A 100B model requires a minimum of 64-128 GPU A100-80GB/H100. 256+ recommended f
 - DATA_PARALLEL = 8 (auto)
 
 **Model:**
-- NUM_LAYERS = 96
-- HIDDEN_SIZE = 12288
-- NUM_HEADS = 96
+- NUM_LAYERS = 80
+- HIDDEN_SIZE = 10240
+- NUM_HEADS = 80
 - SEQ_LENGTH = 2048
 
 **Training:**

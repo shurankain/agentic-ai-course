@@ -2,7 +2,7 @@
 
 ## Conversation as a Dance
 
-Dialog is not a series of isolated utterances but a coherent dance. Topics flow into one another, the unsaid is implied, and references to prior context are understood without explanation. Building an AI system capable of participating in this dance is an extremely challenging task. A simple chatbot answers questions in isolation. A true dialog system remembers context, understands intents, and steers the conversation toward a goal.
+In a dialog, each utterance depends on the ones before it. Topics flow into one another, the unsaid is implied, and references to prior context are understood without explanation. Building an AI system that can follow those threads is hard. A simple chatbot answers questions in isolation. A true dialog system remembers context, understands intents, and steers the conversation toward a goal.
 
 ## Anatomy of a Dialog
 

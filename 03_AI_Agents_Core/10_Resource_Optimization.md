@@ -67,7 +67,7 @@ Splitting the decision matters because the two questions are different. The firs
 
 Reported results: Auto Intelligence exceeded Fable-level satisfaction at **68% lower cost**, and Auto Balance beat Opus 4.8 at **41% lower cost** with satisfaction up 3% since launch. These are Cursor's own numbers with no independent replication.
 
-**The durable finding is not the percentages.** It is the per-task breakdown: Grok won on Git operations and routine database work, GPT-5.6 Sol on planning and codebase comprehension, Claude Opus on execution-heavy DevOps and performance work, Claude Fable 5 on debugging and visual implementation. No single model won everywhere. A leaderboard cannot tell you this, because it reports one number per model across a task mix that is not yours.
+**The durable finding is the per-task breakdown:** Grok won on Git operations and routine database work, GPT-5.6 Sol on planning and codebase comprehension, Claude Opus on execution-heavy DevOps and performance work, Claude Fable 5 on debugging and visual implementation. No single model won everywhere. A leaderboard cannot tell you this, because it reports one number per model across a task mix that is not yours.
 
 ### Reading these numbers honestly
 
@@ -182,7 +182,7 @@ Prompt caching becomes especially powerful in multi-turn agent sessions where th
 
 **Why order matters:** Providers cache the KV-cache for the prefix of the prompt (the identical initial portion). If the first 10K tokens are the same system prompt + tool descriptions across all calls in a session, that prefix is computed once and reused. Dynamic content (user message, tool results, conversation turns) goes after the cached prefix.
 
-**What it is worth.** Cached input is discounted heavily rather than marginally, which is why prompt order is an architectural decision and not a micro-optimization. Anthropic and OpenAI both publish substantial cache discounts, and Module 17, Inference Cost Optimization carries the current rates, the minimum prefix lengths, the cache lifetimes, and the write premium that decides whether caching pays on a short session. Those parameters move; the rule that static content goes first does not.
+**What it is worth.** Cached input is discounted heavily rather than marginally, which is why prompt order is an architectural decision and not a micro-optimization. Anthropic and OpenAI both publish substantial cache discounts, and Module 17, Cost Optimization Strategies carries the current rates, the minimum prefix lengths, the cache lifetimes, and the write premium that decides whether caching pays on a short session. Those parameters move; the rule that static content goes first does not.
 
 **Agent identity stability:** Beyond cost savings, this pattern ensures that the agent's "identity" (system prompt, role, constraints) is always processed identically, reducing behavioral variance across turns. The static prefix is a stable foundation, while dynamic content varies naturally.
 
@@ -398,13 +398,13 @@ Maintenance costs add 15-25% of the initial development cost annually: model upd
 
 ### The TCO Reality
 
-**Development is only 25-35% of three-year total cost of ownership.** Operations: inference costs, monitoring, maintenance, incident response, model retraining, evaluation pipeline, consume the remaining 65-75%. Budgets that focus on build cost will underestimate total investment by 40-60%.
+**Development is only 25-35% of three-year total cost of ownership.** Operations: inference costs, monitoring, maintenance, incident response, model retraining, evaluation pipeline, consume the remaining 65-75%. A budget that covers only the build misses 65-75% of the total.
 
-**Rule of thumb:** Multiply the initial development estimate by 2.5-3x for three-year total cost. A $200K development project has a realistic three-year TCO of $500-600K.
+**Rule of thumb:** Multiply the initial development estimate by 3-4x for three-year total cost. A $200K development project has a realistic three-year TCO of $570-800K.
 
 **The Jevons Paradox in AI:** unit prices keep falling and enterprise bills keep rising. Both are true at once, and the second follows from the first: cheaper tokens make longer contexts, more agent iterations, and wider deployment affordable, so consumption grows faster than price falls.
 
-The headline multipliers, meaning the roughly 280x drop from early 2024 to early 2026 that Module 17, Inference Cost Optimization documents, compare a frontier model at the start of the window against a much cheaper model of comparable usefulness at the end. Real, and measured against a moving definition of quality. A cleaner anchor for planning is a single model in a single generation: OpenAI cut the GPT-5.6 Luna tier by 80%, from $1.00 to $0.20 per million input tokens, on July 30, 2026, three weeks after the family reached general availability. That is the pace to plan against, and it means a cost model built on last quarter's rate card is not conservative, it is simply wrong.
+The headline multipliers, meaning the roughly 280x drop from early 2024 to early 2026 that Module 17, Cost Optimization Strategies documents, compare a frontier model at the start of the window against a much cheaper model of comparable usefulness at the end. Real, and measured against a moving definition of quality. A cleaner anchor for planning is a single model in a single generation: OpenAI cut the GPT-5.6 Luna tier by 80%, from $1.00 to $0.20 per million input tokens, on July 30, 2026, three weeks after the family reached general availability. That is the pace to plan against, and it means a cost model built on last quarter's rate card is not conservative, it is simply wrong.
 
 Two consequences for capacity planning. Re-verify rates before every planning cycle rather than every budget year. And prefer a cost model expressed in ratios, meaning how much more the frontier tier costs than the high-volume tier, since the ratio survives a price cut while the absolute figure does not.
 
@@ -443,11 +443,9 @@ Agent billing is fragmenting across providers. The era of flat-rate "unlimited" 
 
 **Anthropic** planned to separate Agent SDK credits from general usage on June 15, 2026, but **the change was paused** and never took effect. All programmatic usage continues drawing from existing subscription limits. Teams using Claude Code in CI/automation pipelines do not need to change billing arrangements (as of late June 2026).
 
-**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. **Acquired by SpaceX for ~$60B** on June 16, pricing and model-neutrality implications unclear.
+**Cursor 3.8** (June 2026) restructured pricing: Free/$20 Pro/$60 Pro+/$200 Ultra. Cloud agents (isolated VMs, parallel multi-repo) use metered pricing on top of seat cost. Parallel agents consume 3-5x the API credits of single-agent Cursor 2. SpaceX agreed on June 16 to acquire Cursor for ~$60B and closed the deal on August 14; OpenAI then announced it would cut Cursor's model access on November 12 (Module 03, Code Generation Agents).
 
 **GitHub Copilot** transitioned to **usage-based billing (June 1, 2026)**. All plans now use AI Credits ($0.01/credit). Pro includes $10/month in credits, Pro+ includes $39/month. Usage calculated by token consumption including input, output, and cached tokens. Annual Pro/Pro+ plans remain on legacy request-based pricing until expiration. The era of flat-rate "unlimited" AI coding assistance is ending.
-
-**Anthropic SDK billing split:** Originally planned for June 15, 2026: separate billing for Claude API vs Claude Code usage. **Paused indefinitely** on June 15; the change never took effect.
 
 **Google Gemini** is moving to a compute-used pricing model. The new AI Ultra tier ($100/month) provides 5x higher limits than the standard plan, but usage is measured in compute units rather than flat message counts.
 

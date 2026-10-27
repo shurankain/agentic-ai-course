@@ -110,7 +110,7 @@ Understanding what happens between "user sends a prompt" and "user receives a re
 
 **2. Tokenization.** The assembled prompt is converted from text to token IDs using the model's tokenizer (BPE). This is CPU-bound and fast (<10ms for most prompts). Token count determines cost and whether the prompt fits the model's context window.
 
-**3. Prefill (prompt processing).** All input tokens are processed in a single forward pass through the model. Compute-intensive: matrix multiplications across all layers. Generates the initial KV-cache: the key and value vectors for every input token at every layer. Latency scales linearly with input length: ~100ms for 4K tokens, ~800ms for 32K, ~3-4 seconds for 128K on an A100. This is the phase where prompt caching saves time: if the prefix matches a cached KV-cache, only the new tokens need prefill.
+**3. Prefill (prompt processing).** All input tokens are processed in a single forward pass through the model. Compute-intensive: matrix multiplications across all layers. Generates the initial KV-cache: the key and value vectors for every input token at every layer. Latency grows roughly linearly with input length, a little faster at the top of the range: ~100ms for 4K tokens, ~800ms for 32K, ~4-5 seconds for 128K on an A100. This is the phase where prompt caching saves time: if the prefix matches a cached KV-cache, only the new tokens need prefill.
 
 **4. Decode (token generation).** Tokens are generated one at a time, autoregressively. Each token requires reading the entire KV-cache (memory-bound) and performing a small amount of computation. Inter-token latency (ITL) is typically 20-50ms per token on modern hardware. For a 500-token response: 10-25 seconds of decode time. This is where speculative decoding helps: a smaller draft model generates candidate tokens in bulk, and the main model verifies them in parallel.
 
@@ -132,7 +132,7 @@ Concurrency is set by the cache, not by compute. The GPU in the example above is
 
 Quantizing the KV-cache buys concurrency at a fixed quality cost, and it buys more than quantizing the weights does once the weights already fit. FP8 cache halves the per-request figure, taking the 4K example from 29 concurrent conversations to about 58.
 
-And a long-context feature is a capacity cut, not a feature flag. Advertising 128K context on the hardware above means one user per GPU. That is a pricing decision, and it belongs in the conversation before the feature ships. Module 17, Long Context Inference covers what to do when you need it anyway.
+And a long-context feature is a capacity cut. On the hardware above, one 128K conversation needs about 43 GB of FP16 cache against 38 GB free, so it does not fit at all, and an FP8 cache gets it to one user per GPU. That is a pricing decision, and it belongs in the conversation before the feature ships. Module 17, Long Context Inference covers what to do when you need it anyway.
 
 ## Setting the Numbers That Matter
 
@@ -150,7 +150,7 @@ Throughput is the one to optimize when nobody is watching in real time. Batch cl
 
 2. **Prefill and decode are different workloads sharing a device.** Prefill is compute-bound and parallel, decode is memory-bound and sequential. Disaggregated serving exists because putting them on hardware suited to each is worth about 5x at high volume.
 
-3. **KV-cache size is the capacity model.** Subtract weights, reserve 10% to 15%, divide by per-request cache. That gives concurrent users directly, and it shows why a 128K context option can cut a card from 29 concurrent conversations to one.
+3. **KV-cache size is the capacity model.** Subtract weights, reserve 10% to 15%, divide by per-request cache. That gives concurrent users directly, and it shows why a 128K context option can cut a card from 29 concurrent conversations to none in FP16, or one with an FP8 cache.
 
 4. **Continuous batching is not optional.** Static batching holds the whole batch until the slowest request finishes; continuous batching frees each slot on completion. Every serious engine does this, and the gap against static batching is large enough that nothing else you tune will close it.
 

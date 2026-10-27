@@ -48,7 +48,7 @@ The history begins with Kepler (2012), followed by Maxwell, Pascal, Volta. Volta
 
 **NVIDIA Vera Rubin** (announced Computex, June 1, 2026; **in full production, with first customer deliveries due from August 2026** and hyperscaler integration through Q4). The next-generation platform after Blackwell. 50 PFLOPS FP4, 288 GB HBM4, 22 TB/s memory bandwidth, 10x performance-per-watt vs Grace Blackwell. NVLink 6 at 3.6 TB/s (2x Blackwell). TSMC 3nm process. Supply chain nearly 2x the size of the Grace Blackwell ramp based on what Jensen Huang called "outsized" AI demand. Assembly: 5 minutes per rack. 336B transistors on TSMC N3, paired with a Vera CPU carrying 88 Olympus ARM cores. Expected to generate $1T+ in orders through 2027.
 
-**Supply is the binding constraint, not demand.** TSMC N3 capacity likely caps 2026 Rubin output at 200,000 to 300,000 units. For capacity planning that means allocation, not purchase: the question is what share you can get rather than what you can afford, and it favours committing early over waiting for better pricing. Major hyperscalers are already deploying ~1,000 NVL72 racks per week each (72,000 Blackwell GPUs per week per hyperscaler).
+**Supply is the binding constraint, not demand.** TSMC N3 capacity likely caps 2026 Rubin output at 200,000 to 300,000 units. For capacity planning that means allocation, not purchase: the question is what share you can get rather than what you can afford, and it favours committing early over waiting for better pricing. NVIDIA's output is running at about 1,000 NVL72 racks per week across all customers (72,000 Blackwell GPUs a week), consistent with the 60,000-rack projection for 2026.
 
 **NVIDIA RTX Spark** (Computex 2026): the first ARM-based AI PC superchip. Grace CPU (20-core ARM, co-designed with MediaTek) + Blackwell RTX GPU (6,144 CUDA cores, fifth-gen Tensor Cores with FP4) connected via NVLink-C2C. Up to 128 GB unified LPDDR5X memory (300 GB/s bandwidth), 1 PFLOP of AI performance. Runs 120B+ parameter models locally. Ships fall 2026 in laptops and desktops from ASUS, Dell, HP, Lenovo, Microsoft Surface, and MSI. A three-generation roadmap: Spark (Blackwell, 2026), Vera Rubin Spark (2028), Rosa Feynman Spark (2030). This positions NVIDIA to compete directly in the consumer PC market, not just data centers.
 
@@ -107,7 +107,7 @@ Matrix multiplication has high intensity. For NxNxN matrices, the number of oper
 
 **Attention in Transformers** is an example of a memory-bound operation. The standard implementation requires materializing a (sequence_length x sequence_length) matrix, creating a massive volume of reads and writes.
 
-The number that turns this into a decision is the ridge point, where the roofline bends from bandwidth-limited to compute-limited. On current data-center GPUs it sits somewhere between 20 and 50 FLOP per byte. Compute the intensity of your kernel, compare it to that band, and you know which side you are on before profiling anything: below it, faster arithmetic buys nothing and only fewer memory trips help, and above it the reverse. Most attention kernels land far below, which is why Flash Attention attacks memory traffic rather than the multiply count.
+The number that turns this into a decision is the ridge point, where the roofline bends from bandwidth-limited to compute-limited. On an H100 it sits near 300 FLOP per byte in dense FP16 (989 TFLOPS over 3.35 TB/s), and roughly twice that in FP8. Compute the intensity of your kernel, compare it to that band, and you know which side you are on before profiling anything: below it, faster arithmetic buys nothing and only fewer memory trips help, and above it the reverse. Most attention kernels land far below, which is why Flash Attention attacks memory traffic rather than the multiply count.
 
 ## CUDA Programming Model
 
@@ -169,7 +169,7 @@ Researchers design architectures with hardware constraints in mind. Mixture of E
 
 ### Model Sizes and GPU Memory
 
-Rule of thumb: each billion parameters requires ~2 GB of memory in FP16 (or 4 GB in FP32). Training requires gradients and optimizer states. This increases requirements by 3-4x for AdamW.
+Rule of thumb: each billion parameters requires ~2 GB of memory in FP16 (or 4 GB in FP32). Training requires gradients and optimizer states. Mixed-precision AdamW needs about 16 bytes per parameter, eight times the FP16 weights alone.
 
 A 70B parameter model requires ~140 GB for weights alone in FP16. Model parallelism is necessary, distributing the model across multiple GPUs.
 

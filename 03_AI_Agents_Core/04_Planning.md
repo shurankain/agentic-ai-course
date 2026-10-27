@@ -231,7 +231,7 @@ MCTS is an algorithm from model-based RL, applied in LATS.
 
 **Continuous feedback:** Online replanning (adaptation in progress).
 
-Understanding the connection between planning and RL helps design effective agents, leveraging decades of research.
+The connection between planning and RL gives agent designers decades of research to draw on.
 
 ---
 
@@ -241,7 +241,7 @@ Understanding the connection between planning and RL helps design effective agen
 
 No plan survives contact with reality unchanged. Tools fail. Data differs from expectations. New information emerges that changes priorities. Requirements evolve during execution.
 
-Adaptive planning is the ability to adjust the plan during execution without losing the overall direction toward the goal. This is not just error handling. It is continuous situation monitoring and readiness to revise the approach.
+Adaptive planning is the ability to adjust the plan during execution without losing the overall direction toward the goal. That takes continuous monitoring of the situation and readiness to revise the approach, well beyond catching errors.
 
 An agent with adaptive planning asks itself questions at every step:
 - Is this still the best path to the goal?

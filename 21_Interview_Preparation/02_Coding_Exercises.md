@@ -298,7 +298,7 @@ Forgetting numerical stability: softmax overflow, log(zero). Incorrect dimension
 
 ### Preparation
 
-Practice on paper: interviews are often on a whiteboard. Know formulas by heart: attention, LSTM gates. Understand why, not just how but why it works. Prepare questions: what batch size to use.
+Practice on paper: interviews are often on a whiteboard. Know formulas by heart: attention, LSTM gates. Understand why each one works. Prepare questions: what batch size to use.
 
 ## Key Takeaways
 

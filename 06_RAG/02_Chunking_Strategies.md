@@ -106,7 +106,7 @@ Recommended strategy: Structure-based chunking by clauses and articles. A contra
 
 ### Scientific Papers
 
-Recommended strategy: Structure-based chunking by standard sections plus semantic chunking within long sections. Abstract is a separate chunk, Introduction can be split by paragraphs, Methods section benefits from larger chunks to preserve sequence, Results (tables and figures with descriptions stay together, Discussion) can be split by discussed aspects. Metadata: section, authors, year, journal, DOI, keywords, figure/table numbers. Typical size: 800-1500 tokens. Metadata application: filtering by sections.
+Recommended strategy: Structure-based chunking by standard sections plus semantic chunking within long sections. Abstract is a separate chunk, Introduction can be split by paragraphs, Methods section benefits from larger chunks to preserve sequence, Results keeps tables and figures together with their descriptions, and Discussion can be split by the aspects it discusses. Metadata: section, authors, year, journal, DOI, keywords, figure/table numbers. Typical size: 800-1500 tokens. Metadata application: filtering by sections.
 
 ### Correspondence and Chats
 
@@ -160,7 +160,7 @@ Consider a document about Apple. With the traditional approach, the sentence "It
 
 ### Metadata Enrichment
 
-Each chunk is not just text but a structured object with metadata that improves retrieval and context.
+Each chunk is a structured object: the text plus metadata that improves retrieval and context.
 
 **Key metadata types:** Structural (heading hierarchy, position in document, content type, nesting level), Contextual (document and section name, creation/modification date, author, version, language), Semantic (automatic tags, chunk summary, named entities, category/topic).
 

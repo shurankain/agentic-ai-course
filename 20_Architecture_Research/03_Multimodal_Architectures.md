@@ -4,7 +4,7 @@
 
 Human understanding of the world is multimodal. We read text, see images, hear sounds, and all of this integrates into a unified picture. LLMs trained only on text exist in a "blind" world: they can reason about images but have never seen them.
 
-GPT-6, Claude Opus 5.5, Gemini 4 Argon, Llama 4: modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens revolutionary possibilities: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
+GPT-6, Claude Opus 5.5, Gemini 4 Argon, Llama 4: modern frontier models can "see," "hear," and increasingly "speak" and "draw." This opens new applications: understanding documents with charts, analyzing medical scans, robot navigation, creative design assistance, real-time voice conversations, and image generation.
 
 The field has shifted from "adapter-based" multimodality (bolting vision onto text models) to **native multimodality** (processing all modalities from the start in a unified architecture). This chapter covers the architectural solutions that make multimodal AI possible, from the foundational adapter approaches to the latest native multimodal designs.
 
@@ -258,7 +258,7 @@ Multimodal AI is extending beyond perceiving and generating content toward predi
 
 ### World Models
 
-World models are AI systems that learn to predict how environments evolve over time, not just recognizing a scene but simulating what happens next. A world model takes a current state and an action as input and predicts the resulting state. This is fundamentally different from image classification or generation: it requires understanding physics, causality, and temporal dynamics.
+World models are AI systems that learn to predict how environments evolve over time: given a scene, they simulate what happens next. A world model takes a current state and an action as input and predicts the resulting state. This is fundamentally different from image classification or generation: it requires understanding physics, causality, and temporal dynamics.
 
 The practical applications are converging rapidly: autonomous navigation (Wayve's GAIA-2 learns driving behavior from video rather than hand-coded rules), digital twins (simulating factory layouts, supply chains, or clinical trials before physical execution), AR/VR (predicting how objects will behave in mixed-reality environments), and robotics (planning movements in unstructured environments). Industry consensus points toward unified foundation world models with persistent memory by 2027, a single model that can simulate diverse physical environments rather than domain-specific simulators.
 

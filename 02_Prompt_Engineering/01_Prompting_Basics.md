@@ -4,7 +4,7 @@
 
 When large language models began demonstrating remarkable capabilities in the 2020s, researchers faced an unusual problem: how exactly should one "talk" to these systems to obtain desired results? The answer was a new discipline, **Prompt Engineering**, the art and science of formulating queries for language models.
 
-The key insight: **a prompt is not merely a question or command. It is a program for a language model, written in natural language**. As in programming, there are patterns, anti-patterns, best practices, and debugging methods.
+The key insight: **a prompt is a program for a language model, written in natural language**. As in programming, there are patterns, anti-patterns, best practices, and debugging methods.
 
 ---
 
@@ -100,7 +100,7 @@ Advantages: token savings, simplicity, speed. Limitations: less predictable form
 
 ### Few-shot: Learning Through Examples
 
-Few-shot prompting is a game changer for complex tasks. You provide several input-output example pairs, and the model learns the pattern on the fly through in-context learning.
+Few-shot prompting helps most on complex tasks. You provide several input-output example pairs, and the model learns the pattern on the fly through in-context learning.
 
 Recommendations: the optimal number of examples is 3-5, choose examples semantically close to the expected query, include edge cases, pay attention to ordering (models often better "remember" recent examples).
 

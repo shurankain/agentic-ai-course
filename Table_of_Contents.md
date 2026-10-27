@@ -2088,10 +2088,7 @@
 ## Appendices
 
 ### Code Examples
-Each chapter contains a "Practical Code Examples" section with Java implementations:
-- LangChain4j
-- Spring AI
-- Semantic Kernel
+Six lessons carry a "Practical Code Examples" section: Module 03, Tool Use; the LangChain4j, Spring AI, and Semantic Kernel lessons in Module 07; Module 19, RAG Chatbot; and Module 21, Coding Exercises. The rest of the course teaches through tables, worked numbers, and prose.
 
 ---
 
@@ -2124,4 +2121,4 @@ Each chapter contains a "Practical Code Examples" section with Java implementati
 
 ---
 
-*Generated based on actual course file contents. Last updated: late June 2026.*
+*Last updated: October 26, 2026.*

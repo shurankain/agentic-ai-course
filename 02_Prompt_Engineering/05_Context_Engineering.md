@@ -4,7 +4,7 @@
 
 In 2025, Andrej Karpathy proposed the term **Context Engineering**, which was quickly adopted by the industry as a more accurate description of working with LLMs. Harrison Chase (CEO of LangChain) formalized the shift further: "When agents mess up, they mess up because they don't have the right context; when they succeed, they succeed because they have the right context."
 
-This is not merely a rebranding. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context, not from model limitations.** The same Claude Sonnet 4.6 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
+The new name tracks a real shift in where failures come from. Research shows that **70% of LLM application errors stem from incomplete, irrelevant, or poorly structured context, not from model limitations.** The same Claude Sonnet 4.6 model differs by 17 tasks on SWE-bench Verified depending solely on the scaffolding and context harness wrapping it. Investing in better context engineering yields more improvement than upgrading the model.
 
 ### Why Context, not Prompt?
 
@@ -47,7 +47,7 @@ Karpathy and his followers identified four core context management strategies: *
 
 ### 1. WRITE, Persisting Outside the Context
 
-**Problem:** The context window is limited (8K-200K tokens); information is lost between sessions.
+**Problem:** The context window is limited (8K-200K tokens in 2024, about 1M at the frontier by 2026); information is lost between sessions.
 
 **Solution:** Write important information to external storage.
 
@@ -215,11 +215,11 @@ In traditional RAG, the context assembly pipeline is fixed: query, then embed, t
 
 **Claude Code's compaction pattern** illustrates a more practical approach: when the conversation context exceeds approximately 60% of the maximum window, the system automatically summarizes earlier turns into a compressed representation. The agent continues working with the summary + recent context. This enables effectively infinite-length sessions within a finite window.
 
-**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience, not just managing what the agent sees during a task, but optimizing what the agent knows before the next task begins. See Module 03, Memory Systems for details.
+**Dreaming (Anthropic, May 2026)** extends self-directed context to an offline dimension. Between sessions, a background process analyzes the agent's past interactions, identifies recurring patterns, and rewrites memory blocks to improve future performance. This is self-directed context engineering applied to the agent's own experience: it optimizes what the agent knows before the next task begins. See Module 03, Memory Systems for details.
 
 **Claude Messages API: inline system records (Opus 4.8 and later, including Opus 5 and Fable 5).** The Claude Messages API now accepts `system` records inside the `messages[]` array, not just at the top-level `system` parameter. This means the system prompt can be changed mid-conversation without breaking prefix cache. For agentic loops, this is a practical context engineering advancement: an orchestrator can inject updated system instructions (e.g., new constraints, tool availability changes, phase transitions) at any point in the conversation while retaining cache efficiency for all preceding turns. Previously, any system prompt modification invalidated the entire prefix cache, forcing a full recomputation.
 
-**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering, see Module 04, Multi-Agent Basics.
+**Agent Teams** decompose a complex task so that each sub-agent receives only the context relevant to its subtask. Instead of one agent with an overloaded context, multiple agents each have focused, high-quality context. This is the ISOLATE strategy applied to context engineering, see Module 04, Multi-Agent System Fundamentals.
 
 The common thread: context engineering is shifting from something engineers build around the model to something the agent manages for itself. The agent is becoming its own context engineer.
 
@@ -308,7 +308,7 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 
 - Prompt Optimization: foundational prompt techniques
 - Module 06, RAG Basics: the SELECT strategy in detail
-- Module 04, Multi-Agent Basics: the ISOLATE strategy
+- Module 04, Multi-Agent System Fundamentals: the ISOLATE strategy
 - Module 03, Memory Systems: the WRITE strategy
 - Module 05, MCP Basics: standardized context engineering protocol
 
@@ -328,4 +328,4 @@ The two approaches are complementary: LLM Wiki for curated, synthesis-heavy know
 
 6. **LLM Wiki is the anti-RAG pattern** for curated, synthesis-heavy knowledge bases. RAG wins for large corpora and real-time data. Both are complementary.
 
-7. **MCP is the industry-standard context engineering protocol.** 97M+ monthly downloads, 9,400+ verified servers, 28% F500 deployed. WSCI maps directly to MCP primitives.
+7. **MCP is the industry-standard context engineering protocol.** 97M+ monthly downloads, 9,400+ verified servers, 28% F500 deployed (as of mid-June 2026). WSCI maps directly to MCP primitives.

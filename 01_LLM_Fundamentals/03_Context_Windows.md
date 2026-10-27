@@ -8,7 +8,7 @@ The context window is one of the key constraints of LLMs, directly affecting the
 
 ## What Goes Into the Context Window
 
-It is important to understand that the context window is not just what you send to the model. It includes:
+The context window covers more than the prompt you send. It includes:
 
 **System prompt**: baseline instructions that define the model's behavior. For an agent, this might be a description of its role, available tools, and response format.
 
@@ -16,7 +16,7 @@ It is important to understand that the context window is not just what you send 
 
 **Current user query**: what the model needs to respond to right now.
 
-**And most importantly: the model's response.** This is often overlooked. The context limit applies to input data and to the generated response. If a model has a context of 8,000 tokens and 7,000 are already occupied by the prompt and history, the model can generate at most 1,000 tokens of response.
+**The model's response**, the item most often forgotten. The context limit applies to input data and to the generated response. If a model has a context of 8,000 tokens and 7,000 are already occupied by the prompt and history, the model can generate at most 1,000 tokens of response.
 
 ---
 
@@ -81,7 +81,7 @@ Several KV-cache compression techniques have been developed for working with lon
 
 How MLA works: instead of saving full Key and Value matrices for each attention head (which have dimensionality d), the system saves a compact latent vector with dimensionality 4-8x smaller. When needed, this latent vector is projected back into the full space to compute Key and Value. This is similar to image compression: instead of storing each pixel individually, we save a compact representation and decompress it when viewing.
 
-MLA in DeepSeek-V2 compresses the KV-cache by **5-10x** without noticeable quality loss. This allows a model with 236B parameters to process a 128K context on hardware that otherwise could not handle it.
+MLA in DeepSeek-V2 shrinks the KV-cache by **about 93%, roughly 14x**, without noticeable quality loss. This allows a model with 236B parameters to process a 128K context on hardware that otherwise could not handle it.
 
 **Quantized KV-Cache**: Stores KV in INT8 or INT4 instead of FP16. Achieves 2-4x compression with minimal quality degradation.
 

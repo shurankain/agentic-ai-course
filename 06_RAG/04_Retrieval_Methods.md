@@ -100,7 +100,7 @@ Understanding the difference between these architectures is critical for buildin
 
 The bi-encoder architecture processes the query and document independently of each other. The query "How does..." passes through its encoder and becomes a query_emb vector. The document "GC uses..." passes through the encoder (the same or a separate one) and becomes a doc_emb vector. These two vectors are then compared via cosine similarity to obtain a relevance score.
 
-Key advantage: document embeddings can be precomputed once and stored in the index. Search executes in constant time O(1) using approximate nearest neighbor (ANN) search. This makes bi-encoders ideal for initial search across millions of documents.
+Key advantage: document embeddings can be precomputed once and stored in the index. Approximate nearest neighbor (ANN) indexes such as HNSW make search roughly logarithmic in corpus size. This makes bi-encoders ideal for initial search across millions of documents.
 
 Critical drawback: no interaction between the query and document at the model level. The encoder does not see the document text when processing the query, which limits accuracy.
 

@@ -28,7 +28,7 @@ For read operations, idempotency is natural. For write operations, it can often 
 
 If an operation cannot be idempotent by nature (for example, sending a message), this should be explicitly stated in the documentation and tool annotations.
 
-The 2026-07-28 specification raised the stakes here. Stream resumability was removed from Streamable HTTP: `Last-Event-ID` and SSE event IDs are gone, and a broken response stream loses the in-flight request, which the client **must** re-issue as a new request with a new request ID. The protocol used to offer a chance of resuming; now it guarantees a retry. A non-idempotent `create_invoice` or `deploy` will therefore run twice on any connection blip unless your handler prevents it. Idempotency keys, a deduplication window, and a transaction boundary are no longer good practice on this protocol. They are the only thing standing between a dropped TCP connection and a duplicate side effect.
+The 2026-07-28 specification raised the stakes here. Stream resumability was removed from Streamable HTTP: `Last-Event-ID` and SSE event IDs are gone, and a broken response stream loses the in-flight request, which the client **must** re-issue as a new request with a new request ID. The protocol used to offer a chance of resuming, and now it guarantees a retry. A non-idempotent `create_invoice` or `deploy` will therefore run twice on any connection blip unless your handler prevents it. Idempotency keys, a deduplication window, and a transaction boundary are no longer good practice on this protocol. They are the only thing standing between a dropped TCP connection and a duplicate side effect.
 
 ### Principle of Least Privilege
 
@@ -52,7 +52,7 @@ A server declares which primitives it provides through `server/discover`, an RPC
 
 Per request, the client's protocol version and capabilities arrive in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`), and the server puts its own identity in each result's `_meta`. A version the server cannot serve returns `UnsupportedProtocolVersionError`.
 
-The practical consequence for server design is worth stating: because every request is self-describing, any request can be handled by any instance. That is what allows an MCP server to sit behind a plain round-robin load balancer with no sticky sessions and no shared session store. Business state has not disappeared, and the section on idempotency below covers where it went.
+The practical consequence for server design is worth stating: because every request is self-describing, any request can be handled by any instance. That is what allows an MCP server to sit behind a plain round-robin load balancer with no sticky sessions and no shared session store. Business state has not disappeared, and the Idempotency Principle section above covers where it went.
 
 ### Request Processing
 
@@ -160,7 +160,7 @@ Special attention should be paid to injection protection. If parameters are used
 
 ### Authorization and Authentication
 
-The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks: critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and Enterprise Managed Authorization, which is now an official extension. Two changes arrived with 2026-07-28: authorization servers should include the `iss` parameter in responses per RFC 9207, and clients must validate it against the recorded issuer before redeeming the code. Dynamic Client Registration (RFC 7591) is deprecated in favour of Client ID Metadata Documents, remaining available only for authorization servers that do not support them. Client credentials are also bound to the issuer that granted them: key them by issuer identifier, never reuse them with a different authorization server, and re-register when the authorization server changes. This is for organizational deployments.
+The MCP specification recommends OAuth 2.1 with PKCE (Proof Key for Code Exchange) for remote servers accessed over Streamable HTTP. The flow: the MCP client initiates an OAuth authorization request, the user authenticates with the identity provider, and the client receives a scoped access token. The MCP server validates the token on each request. PKCE prevents authorization code interception attacks: critical because MCP clients may run in environments where the client secret cannot be securely stored (desktop applications, CLI tools, browser extensions). The specification also supports Protected Resource Metadata (RFC 9728) and Enterprise Managed Authorization, which is now an official extension. Two changes arrived with 2026-07-28: authorization servers should include the `iss` parameter in responses per RFC 9207, and clients must validate it against the recorded issuer before redeeming the code. Dynamic Client Registration (RFC 7591) is deprecated in favour of Client ID Metadata Documents, remaining available only for authorization servers that do not support them. Client credentials are also bound to the issuer that granted them: key them by issuer identifier, never reuse them with a different authorization server, and re-register when the authorization server changes.
 
 **Token scoping.** Scope tokens to the minimum permissions required. An MCP server exposing a database should request read-only scope unless the tool explicitly performs writes. Use separate scopes for different tool categories (e.g., `tools:read`, `tools:write`, `admin:manage`). The principle of least privilege applies directly: a compromised token with narrow scope limits the blast radius. Short-lived tokens (minutes rather than hours) with refresh token rotation further reduce exposure from token theft.
 
@@ -230,7 +230,7 @@ Distributed tracing allows tracking a request through the entire system: from cl
 
 ### FastMCP: The De Facto Standard
 
-FastMCP is a library created by Jeremiah Lowin (founder of Prefect) that became the de facto standard for developing MCP servers in Python. In late 2024, FastMCP was integrated into the official MCP SDK under the name `mcp.server.fastmcp`.
+FastMCP is a library created by Jeremiah Lowin (founder of Prefect) that became the de facto standard for developing MCP servers in Python. In late 2024, FastMCP was integrated into the official MCP SDK under the name `mcp.server.fastmcp`. Python SDK v2, which implements the 2026-07-28 specification, renamed the class to `MCPServer`; the decorator model described below carries over.
 
 **Advantages of FastMCP:**
 FastMCP provides declarative syntax with decorators, automatic JSON Schema generation from Python type hints, built-in parameter validation via Pydantic, and minimal boilerplate code. Developers do not need to manually describe tool schemas. They are automatically generated from type annotations.
@@ -254,13 +254,13 @@ Inspector provides viewing of the complete list of registered tools, resources, 
 ### Current Ecosystem State
 
 **Official SDKs:**
-Python (`mcp` on PyPI), TypeScript (`@modelcontextprotocol/sdk`), Java/Kotlin (`mcp-kotlin-sdk`), C#/.NET (`ModelContextProtocol` on NuGet), Go (`github.com/mark3labs/mcp-go`), Swift, and Rust. The Python and TypeScript SDKs are the most mature with the broadest adoption, while the Java/Kotlin and C#/.NET SDKs have reached production readiness. Total SDK downloads exceed 97M per month.
+Python (`mcp` on PyPI), TypeScript (`@modelcontextprotocol/sdk`), Java/Kotlin (`mcp-kotlin-sdk`), C#/.NET (`ModelContextProtocol` on NuGet), Go (`github.com/mark3labs/mcp-go`), Swift, and Rust. The Python and TypeScript SDKs are the most mature with the broadest adoption, while the Java/Kotlin and C#/.NET SDKs have reached production readiness. Total SDK downloads exceeded 97M per month as of mid-June 2026.
 
 **Supporting Clients:**
 Claude Desktop and Claude Code (production, first official clients), VS Code (native MCP support since version 1.102), Cursor (production), ChatGPT (production since mid-2025), Gemini (production), Microsoft Copilot (production), JetBrains IDEs (production), Devin Desktop (formerly Windsurf, production), Kiro (Amazon, production), Zed (production), and many others. Most major AI-powered development tools now support MCP natively.
 
 **Key Ecosystem Events:**
-In November 2024, Anthropic launched MCP. Throughout 2025, all major AI providers adopted MCP as the standard for tool integration. The official MCP Registry launched in September 2025, cataloging approximately 2,000 verified servers. In December 2025, MCP governance was transferred to the Agentic AI Foundation (AAIF), co-founded by Anthropic, OpenAI, Block, Google DeepMind, Meta, Microsoft, and Amazon, operating under the Linux Foundation. By mid-June 2026, the ecosystem includes 9,400+ verified servers (~9,652 in the official registry), with 28% of Fortune 500 deploying MCP servers and 41% of software organizations in production (Stacklok). MCP has become the cross-industry standard for AI agent integration.
+In November 2024, Anthropic launched MCP. Throughout 2025, all major AI providers adopted MCP as the standard for tool integration. The official MCP Registry launched in September 2025, cataloging approximately 2,000 verified servers. In December 2025, MCP governance was transferred to the Agentic AI Foundation (AAIF), co-founded by Anthropic, Block, and OpenAI, with Google, Microsoft, and Amazon among its members, operating under the Linux Foundation. By mid-June 2026, the ecosystem includes 9,400+ verified servers (~9,652 in the official registry), with 28% of Fortune 500 deploying MCP servers and 41% of software organizations in production (Stacklok). MCP has become the cross-industry standard for AI agent integration.
 
 ### Security Considerations
 
@@ -292,7 +292,7 @@ The `claude_desktop_config.json` configuration file is located in different plac
 1. **Use type hints**: FastMCP generates JSON Schema from type hints
 2. **Write docstrings**: they become descriptions for the LLM
 3. **Validate input data**: Pydantic Fields for constraints
-4. **Log everything**: MCP supports structured logging
+4. **Log everything**: write to `stderr` or export through OpenTelemetry, since MCP's own Logging feature is deprecated
 5. **Test via Inspector**: before integrating with clients
 6. **Version your API**: for backwards compatibility
 

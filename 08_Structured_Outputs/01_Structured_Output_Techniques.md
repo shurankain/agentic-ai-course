@@ -147,7 +147,7 @@ In conversational chat, streaming is straightforward, each token extends the vis
 
 **OpenAI.** Streaming with `response_format: { type: "json_schema" }` produces valid partial JSON. Each streamed chunk is guaranteed to be a prefix of the final valid JSON object. Developers can parse progressively: field values become available as soon as the closing delimiter for that field is emitted. This works with both Structured Outputs (`strict: true`) and basic JSON Mode.
 
-**Anthropic.** Tool use results are returned as complete JSON after the stream ends. The streamed events include `content_block_delta` updates, but the tool input JSON is assembled server-side and delivered as a complete object. For streaming structured data outside of tool use, the recommended pattern is text blocks with explicit JSON formatting instructions followed by post-stream parsing.
+**Anthropic.** Tool input streams as partial JSON: each `content_block_delta` event carries an `input_json_delta` fragment, and the client concatenates the fragments and parses the result when the `content_block_stop` event arrives. The fragments are not valid JSON on their own, so parse only at the end or use a tolerant incremental parser. For streaming structured data outside of tool use, the recommended pattern is text blocks with explicit JSON formatting instructions followed by post-stream parsing.
 
 **Google Gemini.** Supports streaming with `response_mime_type: "application/json"` and an optional `response_schema`. Behavior is similar to OpenAI, the model streams valid partial JSON that can be progressively parsed.
 
@@ -173,7 +173,7 @@ Structured output is the bridge between language model text and program data str
 
 Guarantee levels: prompt engineering (hope only), JSON Mode (syntax), Function Calling/JSON Schema (structure), Schema + Validation + Retry (maximum reliability with business rule validation).
 
-The choice depends on criticality: prototypes (prompts, integrations) Function Calling, critical systems, full stack with validation.
+The choice depends on criticality: prompts for prototypes, Function Calling for integrations, and the full stack with validation for critical systems.
 
 Java ecosystem: LangChain4j AI Services (declarative approach), Spring AI (Spring integration). They hide the complexity of working with JSON Schema and parsing.
 

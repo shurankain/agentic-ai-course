@@ -134,7 +134,7 @@ Instead of storing all activations, a selective saving strategy is used. Only ev
 
 Without checkpointing, O(L) memory is used for activations, and 1x forward + 1x backward pass is performed (equivalent to 2x forward in computation).
 
-With checkpointing every √L layers, memory is reduced to O(√L) for checkpoints plus O(√L) for recomputation. Compute increases: 1x forward + √L x (forward between checkpoints) + 1x backward, which amounts to approximately 2x additional forward (roughly 3x forward total instead of 2x).
+With checkpointing every √L layers, memory is reduced to O(√L) for checkpoints plus O(√L) for recomputation. Compute increases by about one extra forward pass, because each segment between checkpoints is recomputed once during the backward pass. With the backward pass costing about twice the forward, that is roughly +33% of total training compute.
 
 ### Practical Strategies
 
@@ -143,7 +143,7 @@ The table below compares four gradient checkpointing strategies along the memory
 | Strategy | Memory | Compute overhead | When to use |
 |-----------|--------|------------------|-------------------|
 | No checkpoint | O(L) | 0% | Memory is sufficient |
-| Every layer | O(1) | +100% (2x compute) | Minimum memory |
+| Every layer | O(L) layer inputs, no intermediate activations | about +33% | Simplest to implement |
 | Every √L layers | O(√L) | +33% | Balance |
 | Selective | Variable | Variable | Checkpoint only attention |
 

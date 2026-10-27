@@ -4,7 +4,7 @@
 
 Supervised fine-tuning (SFT) teaches the model to imitate examples but not to understand what makes a response truly good. The model copies surface-level patterns, missing deeper quality.
 
-RLHF approaches this differently: instead of showing "correct" answers, we show which answers people prefer. The model learns not to imitate but to optimize, generating responses that best match human preferences.
+RLHF approaches this differently: instead of showing "correct" answers, we show which answers people prefer. The model learns to optimize for the responses people prefer, where SFT only taught it to imitate.
 
 ## RLHF Architecture
 

@@ -375,7 +375,7 @@ Governance metrics (process, compliance, risk, culture) allow tracking effective
 Enforcement began in earnest on August 2, 2026, when Article 50 transparency obligations became enforceable and GPAI penalty powers activated, both carrying fines up to 15 million euro or 3% of worldwide turnover. The AI Office now enforces alongside national market surveillance authorities. The infrastructure that made that possible had been building through the preceding year:
 
 - **Prohibited practices (Feb 2025):** Active monitoring has begun, but national authorities are still developing enforcement procedures and technical expertise. No public enforcement actions yet
-- **GPAI obligations (Aug 2025):** Major providers (OpenAI, Google, Meta, Anthropic, Mistral) signed the GPAI Code of Practice, gaining presumption of compliance. Non-signatories face more scrutiny and must independently demonstrate compliance
+- **GPAI obligations (Aug 2025):** Major providers (Amazon, Anthropic, Google, Microsoft, Mistral, and OpenAI among them; Meta declined) signed the GPAI Code of Practice, gaining presumption of compliance. Non-signatories face more scrutiny and must independently demonstrate compliance
 - **Models placed on market before Aug 2025** have a grace period until August 2027 for full compliance
 
 ### Common Compliance Failure Patterns

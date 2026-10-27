@@ -6,7 +6,7 @@ Semantic Kernel is an SDK from Microsoft for integrating language models into ap
 
 The name "Semantic Kernel" reflects the central idea: a kernel that unifies the semantic capabilities of AI with traditional software components. The model is not an isolated service but an integral part of the application, capable of invoking functions, working with memory, and orchestrating complex workflows.
 
-Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers..NET, Python, and Java are supported. This makes it accessible to a wide range of developers.
+Microsoft develops Semantic Kernel as part of its AI strategy. The framework is deeply integrated with Azure AI Services but also works with other providers. .NET, Python, and Java are supported. This makes it accessible to a wide range of developers.
 
 ## Architectural Concepts
 

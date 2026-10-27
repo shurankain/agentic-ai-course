@@ -54,7 +54,7 @@ Use cases: complex multi-level tasks (creating a marketing campaign: strategist,
 
 What failed in the study was imposing an org chart on peers working the same codebase. Every agent still saw the whole problem, still chose its own work, and the hierarchy existed only as instruction. What works here is different: the manager **decomposes the task**, so each worker receives a bounded subtask with its own inputs and its own definition of done, and never contends with a peer over the same file.
 
-The lever is the decomposition, not the reporting line. A manager that assigns roles without partitioning the work produces the arrangement the study measured, where merge rates fell as the team grew. Module 04, Multi-Agent Consensus and Reliability has the failure data.
+The lever is the decomposition; the reporting line barely matters. A manager that assigns roles without partitioning the work produces the arrangement the study measured, where merge rates fell as the team grew. Module 04, Multi-Agent Consensus and Reliability has the failure data.
 
 Challenges: communication overhead (information passes up/down, losing detail at each level), cross-branch coordination (communication through a distant common ancestor), manager as bottleneck (the manager must be capable enough to decompose correctly, a weak manager undermines the entire system).
 

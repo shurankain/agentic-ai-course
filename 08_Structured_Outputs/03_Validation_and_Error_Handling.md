@@ -4,11 +4,11 @@
 
 There is a temptation to treat language model output as truth. The model is trained on trillions of tokens, knows more than any individual person, and its answers sound confident and authoritative. But this temptation is dangerous.
 
-Language models hallucinate. They make mistakes. They confuse facts, fabricate nonexistent information, and misinterpret context. This is not a bug. It is a fundamental property of generative models. They generate the most probable continuation, and probable does not always mean correct.
+Language models hallucinate. They make mistakes. They confuse facts, fabricate nonexistent information, and misinterpret context. Hallucination is a fundamental property of generative models. They generate the most probable continuation, and probable does not always mean correct.
 
 For structured output: even syntactically correct JSON with a perfect structure can contain incorrect values. A negative age. A date from a future millennium. An email without @. An amount as a string instead of a number.
 
-Validation is not paranoia. It is professionalism. In critical systems, it is the only path to reliability.
+In critical systems, validation is the only path to reliability.
 
 ## Validation Levels
 

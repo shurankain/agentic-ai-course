@@ -2,7 +2,7 @@
 
 ## Evolution of AI in Software Development
 
-The history of AI assistants in programming began with simple autocomplete, suggesting the next few characters based on code statistics. Copilot raised the bar by generating entire functions. But the real revolution happened when AI systems started not just writing code, but fully solving tasks: understanding requirements, exploring the codebase. This makes changes across multiple files, running tests, and iterating until success.
+The history of AI assistants in programming began with simple autocomplete, suggesting the next few characters based on code statistics. Copilot raised the bar by generating entire functions. The larger shift came when AI systems started solving whole tasks: understanding requirements, exploring the codebase, making changes across multiple files, running tests, and iterating until success.
 
 This chapter examines the spectrum from interactive assistants (Cursor, Copilot) to fully autonomous agents (Devin, OpenHands). Understanding the capabilities and limitations of each approach is critical for an AI architect making tooling decisions for a development team.
 
@@ -119,7 +119,7 @@ The IDE agent market has expanded beyond the original Copilot/Cursor duopoly. As
 | **Trae** (ByteDance) | Free frontier model access | GPT and Claude models included | **Privacy warning:** extensive telemetry, 5-year data retention, no opt-out |
 
 **Devin Desktop** (formerly Windsurf, rebranded June 2, 2026):
-Windsurf was rebranded from Codeium in late 2024, acquired by Cognition (April 2026) after Google hired Windsurf's CEO for $2.4B, then rebranded again to Devin Desktop (June 2). The Cascade local agent was rewritten in Rust as "Devin Local" (Cascade EOL July 1, 2026). New features: Agent Command Center (Spaces, Kanban view, multi-agent management), Agent Client Protocol support, Devin Cloud agent on $20 Pro plan. All Windsurf settings auto-ported.
+Windsurf was rebranded from Codeium in late 2024, acquired by Cognition (July 2025) after Google paid $2.4B to license its technology and hire its CEO, then rebranded again to Devin Desktop (June 2). The Cascade local agent was rewritten in Rust as "Devin Local" (Cascade EOL July 1, 2026). New features: Agent Command Center (Spaces, Kanban view, multi-agent management), Agent Client Protocol support, Devin Cloud agent on $20 Pro plan. All Windsurf settings auto-ported.
 - Supports 40+ IDEs including the full JetBrains stack
 - Multi-model support (Claude, GPT, custom)
 
@@ -139,12 +139,12 @@ The following comparison focuses on the core capabilities that differentiate IDE
 
 | Feature | Copilot | Cursor | Devin Desktop (ex-Windsurf) | Tabnine |
 |---------|---------|--------|----------|---------|
-| Multi-file edit | Agent mode | yes | yes (Cascade) | no |
+| Multi-file edit | Agent mode | yes | yes (Devin Local) | no |
 | Codebase RAG | Limited | yes | yes | yes |
-| Agent mode | yes (2025) | yes (Composer) | yes (Cascade) | no |
+| Agent mode | yes (2025) | yes (Composer) | yes (Devin Local) | no |
 | Terminal integration | Agent mode | yes | yes | no |
 | Custom models | Limited | yes | yes | Limited |
-| Price/month | $10-39 | $20 | Free-$15 | $12 |
+| Price/month | $10-39 | $20 | Free-$20 | $12 |
 
 ---
 
@@ -171,7 +171,7 @@ Cognition introduced Devin (March 2024) as the "first AI software engineer," mar
 **Context:** Devin pioneered the category but faced scrutiny over marketing claims. The initial 13.86% SWE-bench score, impressive at launch, was quickly surpassed by open-source alternatives and model-native coding agents. Devin's value proposition shifted toward being an "AI teammate" that works asynchronously on tasks via Slack integration, rather than competing purely on benchmark scores.
 
 **Pricing:**
-- $500/month for teams
+- $500/month for teams at launch, cut to $20/month within a year (see below)
 - Metered usage for compute
 
 ### OpenHands (formerly OpenDevin)
@@ -215,7 +215,7 @@ Four of those items are worth reading as agent-architecture patterns rather than
 - **MCP extensibility**: connects to any MCP server, giving it access to databases, APIs, and custom tools beyond file/terminal operations
 - **Spec-driven development**: excels at implementing features from detailed specifications. This makes it effective for the "write spec becomes agent implements" workflow pattern
 
-**SWE-bench performance:** Claude Code achieved 72.7% on SWE-bench Verified with Claude Sonnet 4 (mid-2025). With the latest Claude models, scores have continued to improve dramatically, with frontier agents reaching 88.6% (Claude Opus 4.8, as of late May 2026).
+**SWE-bench performance:** Claude Code achieved 72.7% on SWE-bench Verified with Claude Sonnet 4 (mid-2025). Later Claude models pushed the figure to 88.6% (Claude Opus 4.8, May 2026) and about 96% (Opus 5, July 2026), after which the benchmark was retired.
 
 ### OpenAI Codex (2025)
 
@@ -243,15 +243,15 @@ OpenAI's cloud-based autonomous coding agent, released mid-2025:
 
 ### Devin Desktop (formerly Windsurf, formerly Codeium)
 
-Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE. Acquired by Cognition (Devin's parent company) in April 2026 after Google hired Windsurf's CEO and co-founder for $2.4B.
+Codeium rebranded to Windsurf in late 2024, pivoting from autocomplete to an agentic IDE. Acquired by Cognition (Devin's parent company) in July 2025, days after Google paid $2.4B to license Windsurf's technology and hire its CEO and co-founder.
 
 **Key features:**
-- **Cascade**: an agentic coding engine that can reason across multiple files, run terminal commands, and iterate on solutions
+- **Cascade** (replaced by Devin Local on July 1, 2026): an agentic coding engine that can reason across multiple files, run terminal commands, and iterate on solutions
 - **Flows**: persistent context that tracks what you're working on across sessions
 - Multi-model support (Claude, GPT, custom models)
 - Combined with Devin's autonomous agent capabilities post-acquisition
 
-**Positioning:** Now part of the Cognition ecosystem ($26B valuation, as of late May 2026), combining Windsurf's IDE experience with Devin's autonomous agent capabilities. Targets the "agent-first" pole of the market alongside Cursor (IDE-first) and Claude Code (CLI-first).
+**Positioning:** Now part of the Cognition ecosystem ($48B valuation as of September 2026, up from $26B in May), combining Windsurf's IDE experience with Devin's autonomous agent capabilities. Targets the "agent-first" pole of the market alongside Cursor (IDE-first) and Claude Code (CLI-first).
 
 ---
 
@@ -288,8 +288,8 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | **DeepSeek V4 Pro 0813** | **about 96.4%** | August 2026 (open weights, vals.ai) |
 | Claude Mythos 5 | 95.5% | June 2026 (restricted access) |
 | **Claude Fable 5** | **95.0%** | June 2026 (Mythos-class, independently confirmed) |
-| Kimi K3 | about 93.4% | July 2026 (open weights, custom license) |
 | Claude Mythos Preview | 93.9% | April 2026 (restricted access) |
+| Kimi K3 | about 93.4% | July 2026 (open weights, custom license) |
 | GPT-5.5 Instant | 88.7% | May 2026 |
 | Claude Opus 4.8 | 88.6% | May 2026 |
 | Claude Opus 4.7 | 87.6% | April 2026 |
@@ -304,7 +304,7 @@ Curated subset with verified solutions (500 tasks, manually verified):
 | GPT-4o | 33.2% | 2024 |
 | Devin (launch) | 13.86% | 2024 |
 
-*Note:* The acceleration ran 13.86% (2024), then 72% (mid-2025), then 79.2% (early 2026), then 87.6% (April 2026), then 88.6-88.7% (late May 2026), then 95.0% (Fable 5, June 2026), then about 96% (Opus 5, July 2026). It has now stopped mattering. The top six entries span two points and include two open-weight models, on a benchmark with documented solution leakage in about a third of tasks. OpenAI stopped reporting Verified scores in May 2026 citing confirmed contamination.
+*Note:* The acceleration ran 13.86% (2024), then 72% (mid-2025), then 79.2% (early 2026), then 87.6% (April 2026), then 88.6-88.7% (late May 2026), then 95.0% (Fable 5, June 2026), then about 96% (Opus 5, July 2026). It has now stopped mattering. The top five entries span 1.4 points and include an open-weight model, with a second open-weight model three points behind, on a benchmark with documented solution leakage in about a third of tasks. OpenAI stopped reporting Verified scores in May 2026 citing confirmed contamination.
 
 Read the table as a record of when a benchmark died, not as a ranking. Module 11 covers what replaced it, including why a SWE-bench Pro score means nothing without naming the harness that produced it.
 
@@ -343,7 +343,7 @@ One rule when quoting it. Three numbers circulate as the best Pro score, and the
 
 ### Agentic Coding Loop: The Autonomous Development Cycle
 
-Before examining the components, it is important to understand the fundamental cycle of a coding agent. This is not simply "generate code". It is an iterative process with feedback, consisting of four sequential phases: **PLAN, then EDIT, then TEST, then DEBUG**, where the last phase creates a feedback loop to the beginning of the cycle. This allows the agent to replan and fix errors until success.
+Before examining the components, it is important to understand the fundamental cycle of a coding agent. The cycle is iterative and driven by feedback, with four sequential phases: **PLAN, then EDIT, then TEST, then DEBUG**, where the last phase creates a feedback loop to the beginning of the cycle. This allows the agent to replan and fix errors until success.
 
 **PLAN Phase:**
 1. Task analysis (issue, feature request)
@@ -483,7 +483,7 @@ A Coding Agent consists of three main top-level modules: **Context Manager** (ma
 
 ## Connection to Formal Verification
 
-An interesting question: can we not just test generated code, but **prove** its correctness? This is the intersection of LLM code generation and formal methods.
+Testing generated code raises a further question: can we **prove** its correctness? This is the intersection of LLM code generation and formal methods.
 
 ### Spectrum of Correctness Guarantees
 
@@ -568,7 +568,7 @@ For an enterprise buyer that turns into five specific questions, none of which t
 
 The fifth question got a worked answer within weeks. OpenAI announced it would end Cursor's access to its models on November 12, 2026, invoking a change-of-ownership clause and citing past contract disputes with Musk's companies. Cursor said OpenAI models carried about 5% of its traffic, which made the cut survivable for Cursor and still disruptive for any customer whose workflow was tuned to an OpenAI model inside it. Read it from the buyer's side: a tool that routes across vendors inherits every vendor's contract terms with the tool's owner, and a change of owner can remove a model from your stack without anything changing in your own contract.
 
-Market position elsewhere shifted too: GitHub Copilot's share of the coding-assistant market reportedly fell from 67% to 51% while it kept the largest installed base at roughly 20M cumulative users, of whom 4.7M pay. Read those two Copilot numbers as different things, since reach and revenue have separated for it in a way they have not for the subscription-only tools. Claude Code passed a $2.5B run rate by February 2026. Seven major contenders remain: **Claude Code** (CLI-first, $1B+ ARR), **Cursor/SpaceX** (IDE-first, $60B acquisition), **Devin Desktop** (agent-first, Cognition $48B), **Codex** (5M weekly, knowledge work expansion), **Copilot** (4.7M paying subscribers, usage-based since June 1), **Kiro** (Amazon, spec-driven), **Antigravity** (Google, replaces Gemini CLI). The future split is "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget).
+Market position elsewhere shifted too: GitHub Copilot's share of the coding-assistant market reportedly fell from 67% to 51% while it kept the largest installed base at roughly 20M cumulative users, of whom 4.7M pay. Read those two Copilot numbers as different things, since reach and revenue have separated for it in a way they have not for the subscription-only tools. Claude Code passed a $2.5B run rate by February 2026. Seven major contenders remain: **Claude Code** (CLI-first, $2.5B+ run rate), **Cursor/SpaceX** (IDE-first, $60B acquisition), **Devin Desktop** (agent-first, Cognition $48B), **Codex** (5M weekly, knowledge work expansion), **Copilot** (4.7M paying subscribers, usage-based since June 1), **Kiro** (Amazon, spec-driven), **Antigravity** (Google, replaces Gemini CLI). The future split is "interactive" (human-in-the-loop, real-time) vs. "autonomous" (assign and forget).
 
 **Composable stack trend:** Rather than consolidating on a single tool, the fastest-shipping developers compose multiple agents: Cursor for IDE editing + Claude Code for terminal automation + Codex for async batch tasks + Antigravity for Google ecosystem orchestration. The tools form a layered ecosystem, not a winner-take-all market. "Developers shipping fastest are composing, not choosing" (as of late May 2026).
 
@@ -611,7 +611,7 @@ The phrase "1000x developer" has entered the discourse, but the reality is more 
 
 **The real multiplier comes from orchestrating agent fleets.** Instead of one developer using one agent, a developer assigns tasks to multiple autonomous agents running in parallel, each working on a different file, feature, or repository. The output is not "writing code 1000x faster" but "managing systems that write code", a coordination challenge more than a coding challenge.
 
-This creates a new **"Orchestrator" role** distinct from the traditional "Coder" role. The orchestrator writes specifications, reviews agent output, manages context, and makes architectural decisions. The shift is from "how do I implement this?" to "how do I specify this clearly enough for agents to implement?", which is,, a return to the core skill of software engineering: clear thinking about requirements.
+This creates a new **"Orchestrator" role** distinct from the traditional "Coder" role. The orchestrator writes specifications, reviews agent output, manages context, and makes architectural decisions. The shift is from "how do I implement this?" to "how do I specify this clearly enough for agents to implement?", which is a return to the core skill of software engineering: clear thinking about requirements.
 
 **The cost reality: Uber's cautionary tale.** Uber burned its entire 2026 AI tooling budget in four months after Claude Code adoption jumped from 32% to 84% of its 5,000-engineer organization. Monthly API costs reached $500-2,000 per engineer. The 10x developer is also a 10x cost center. Without per-engineer budgets, cost alerts, and usage-based routing (cheap models for routine tasks, frontier models only when needed), AI coding tools can consume budgets faster than they generate value. This is not an argument against adoption. It is an argument for treating AI tool costs as infrastructure spend that requires capacity planning, not as a free productivity boost.
 
@@ -623,7 +623,7 @@ This creates a new **"Orchestrator" role** distinct from the traditional "Coder"
 
 2. **Autonomous agents (Claude Code, Codex, OpenHands) solve tasks end-to-end** on the tasks these benchmarks contain. Verified scores of 95-96% say more about the benchmark than about the agents: under standardized scaffolding on unseen repositories the same class of system solves closer to half
 
-3. **SWE-bench Verified is retired**: six models finished within two points at about 95-96%, two of them open-weight. **SWE-bench Pro**, Terminal-Bench 4.0, and DeepSWE replaced it, and a Pro score is only meaningful with its harness named, since the reported best ranges from 47.1% to 89.9% depending on who ran it
+3. **SWE-bench Verified is retired**: five models finished within 1.4 points at 95.0-96.4%, one of them open-weight. **SWE-bench Pro**, Terminal-Bench 4.0, and DeepSWE replaced it, and a Pro score is only meaningful with its harness named, since the reported best ranges from 47.1% to 89.9% depending on who ran it
 
 4. **Context management is critical**: the agent must understand the codebase, not just the current file
 

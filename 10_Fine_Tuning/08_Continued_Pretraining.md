@@ -98,17 +98,17 @@ Early stopping if general perplexity starts increasing.
 
 **Decision tree:**
 
-**Step 1:** Do you have >1 billion tokens of domain text?
-- No to SFT or few-shot
-- Yes to Step 2
+**Step 1:** Do you have more than 100 million tokens of domain text?
+- No: SFT or few-shot
+- Yes: go to Step 2
 
 **Step 2:** Is deep understanding or format/style needed?
-- Format/style only to SFT
-- Deep understanding to Step 3
+- Format/style only: SFT
+- Deep understanding: go to Step 3
 
 **Step 3:** How much does the domain differ?
-- Slightly to Light CPT (100M-1B tokens)
-- To Full CPT (1-10B+ tokens)
+- Slightly: Light CPT (100M-1B tokens)
+- Substantially: Full CPT (1-10B+ tokens)
 
 ## Combining CPT and SFT
 

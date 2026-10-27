@@ -72,7 +72,7 @@ Anthropic's RSP (2023, updated 2024) defines **AI Safety Levels (ASL)**, a frame
 
 **ASL-1:** Systems that pose no meaningful catastrophic risk. Current narrow AI systems.
 
-**ASL-2:** Systems that show early signs of dangerous capabilities but cannot yet cause catastrophic harm. Current frontier models (Claude, GPT-5). Requires: standard safety evaluations, red teaming, usage monitoring.
+**ASL-2:** Systems that show early signs of dangerous capabilities but cannot yet cause catastrophic harm. Most frontier models until mid-2025; Anthropic moved Claude Opus 4 to ASL-3 protections in May 2025. Requires: standard safety evaluations, red teaming, usage monitoring.
 
 **ASL-3:** Systems substantially increase risk above the baseline (e.g., could provide meaningful uplift for bioweapons or cyberattacks). Requires: enhanced containment, robust safety cases, restricted deployment, ongoing monitoring.
 
@@ -208,13 +208,13 @@ Books: Human Compatible by Stuart Russell, The Alignment Problem by Brian Christ
 
 ## Final Thoughts
 
-AI Safety is not only for safety researchers. As a practicing ML engineer you make design decisions with safety implications, can notice red flags in model behavior, influence team culture.
+AI Safety concerns every ML engineer. As a practicing ML engineer you make design decisions with safety implications, can notice red flags in model behavior, influence team culture.
 
 Demonstrating awareness of safety shows maturity as an engineer, long-term thinking, alignment with the company's mission. Even if the interview is not directly about safety, the ability to discuss these topics differentiates you from candidates with a purely technical focus.
 
 ## Key Takeaways
 
-1. **The alignment problem is the central challenge in AI safety.** Ensuring a system does what we actually want -- across outer alignment, inner alignment, and robust alignment -- is the thread connecting every other safety topic.
+1. **The alignment problem is the central challenge in AI safety.** Ensuring a system does what we actually want, across outer alignment, inner alignment, and robust alignment, is the thread connecting every other safety topic.
 
 2. **RLHF works but has fundamental limitations.** Reward hacking, sycophancy, annotator biases, and the inability of humans to evaluate superhuman outputs mean RLHF alone is insufficient for safe frontier models.
 

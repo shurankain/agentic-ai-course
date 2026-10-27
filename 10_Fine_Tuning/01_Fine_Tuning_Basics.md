@@ -20,7 +20,7 @@ During fine-tuning, model weights are adjusted based on examples of desired beha
 
 **RAG** loads relevant context from an external knowledge base. The model remains unchanged but receives up-to-date information.
 
-**Fine-tuning** modifies the model itself. Appropriate when you need to change not what the model knows, but how it behaves: style, format, reasoning sequence, domain terminology.
+**Fine-tuning** modifies the model itself. Appropriate when the change you need is in behaviour: style, format, reasoning sequence, domain terminology.
 
 **RAG + fine-tuning** provides maximum flexibility for complex enterprise applications.
 
@@ -62,7 +62,7 @@ During fine-tuning, model weights are adjusted based on examples of desired beha
 
 ## Cost and Resources
 
-**Direct training costs:** hosted fine-tuning is billed per training token, at rates on the order of $0.003 per 1000 tokens for a small model, so 1000 examples land somewhere between $50 and $200. Check the provider's current rate card rather than this figure, because fine-tuning prices move with inference prices and both fell through 2026.
+**Direct training costs:** hosted fine-tuning is billed per training token, at rates on the order of $0.003 per 1000 tokens for a small model, so 1,000 examples of about 1,000 tokens each over three epochs cost about $9, and the bill grows linearly with example length and epoch count. Check the provider's current rate card rather than this figure, because fine-tuning prices move with inference prices and both fell through 2026.
 
 **Indirect costs:** collecting, labeling, and validating the dataset can take weeks.
 

@@ -36,7 +36,7 @@ The LLM independently decides which tools to use and in what order. Agent Loop i
 
 **Tool** is a function that the agent can invoke. It has strictly typed inputs/outputs, a description for the LLM, and automatic serialization of results.
 
-**Agentic Loop** is the execution cycle consisting of the following steps: receive a task from the user, the model decides whether to use a tool or respond directly, if a tool is needed (execute it and return to step two, if a response is ready) return it to the user. This cycle repeats until a final answer is reached.
+**Agentic Loop** is the execution cycle consisting of the following steps: receive a task from the user; the model decides whether to use a tool or respond directly; if a tool is needed, execute it and return to step two; if a response is ready, return it to the user. This cycle repeats until a final answer is reached.
 
 ## Multi-Agent Patterns in Strands
 

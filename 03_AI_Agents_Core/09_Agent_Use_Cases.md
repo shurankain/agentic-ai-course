@@ -51,7 +51,7 @@ Coding agents have become the most successful category of AI agents, and this is
 
 **GitHub Copilot**: the category pioneer, integrated into most IDEs. Evolved from autocomplete to a full-featured agent with Copilot Workspace.
 
-**Devin (Cognition)**: an autonomous software engineer valued at $4B+ (as of mid-2025). Operates in its own development environment and can execute tasks end-to-end.
+**Devin (Cognition)**: an autonomous software engineer; Cognition was valued at $4B+ in mid-2025 and $48B in September 2026. Operates in its own development environment and can execute tasks end-to-end.
 
 **Roo Code (Roo Cline)**: an open-source alternative with 20K+ stars (as of early 2026). Runs in VS Code and supports LLMs.
 
@@ -252,7 +252,7 @@ AutoResearch represents a philosophical shift from "agents that help humans do r
 
 Deep Research Agents are autonomous systems for conducting in-depth investigations. The agent receives a question or topic, then independently formulates sub-questions, searches for information, analyzes sources, and synthesizes findings.
 
-This is not simply "search and summarize". It is a full research process involving:
+A research agent runs a full research process involving:
 - Iterative deepening into the topic
 - Verification through multiple sources
 - A structured final report

@@ -99,7 +99,7 @@ Speculative decoding is free because decode is memory-bound. Generating one toke
 
 Batching spends that same idle compute. Each additional concurrent request amortizes the weight read across more tokens, which is exactly what raises arithmetic intensity. Somewhere around batch 8 to 16 the workload crosses from memory-bound to compute-bound, and at that point the spare capacity speculation was living on is gone. Verification now competes with real requests for the same units, rejected tokens become pure waste, and aggregate throughput falls.
 
-So the two techniques draw on one budget. A service optimizing time to first token for a handful of interactive users should speculate. A service maximizing tokens per dollar across a full queue should batch. Running both hard is a configuration that looks thorough and performs worse than either alone.
+So the two techniques draw on one budget. A service optimizing per-token latency for a handful of interactive users should speculate. A service maximizing tokens per dollar across a full queue should batch. Running both hard is a configuration that looks thorough and performs worse than either alone.
 
 Two consequences for capacity planning. The acceptance rate is the number to watch, not the speedup: below about 70% the rejected work outweighs the saving, and a draft model that was fine on English prose can fall below that on code or on another language without anything else changing. And speculation raises cost per token even when it lowers latency, because rejected tokens were computed and thrown away. On self-hosted hardware that shows up as reduced concurrency rather than as a line on an invoice, which makes it easy to miss.
 

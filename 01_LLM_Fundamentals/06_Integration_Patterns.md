@@ -57,7 +57,7 @@ When integrating LLMs into a reactive pipeline, it is critical not to block the 
 
 **Key operators for LLMs:**
 
-The following table summarizes the most useful reactive operators for building LLM integration pipelines. Each operator addresses a specific concern -- concurrency control, error recovery, or backpressure -- and combining them creates a pipeline that survives partial failure.
+The following table summarizes the most useful reactive operators for building LLM integration pipelines. Each operator addresses a specific concern (concurrency control, error recovery, or backpressure), and combining them creates a pipeline that survives partial failure.
 
 | Operator | Purpose |
 |----------|---------|
@@ -148,7 +148,7 @@ This allows even distribution of load and avoids spikes.
 
 ### Queueing Theory for LLM Serving
 
-Proper capacity planning for LLM systems requires understanding Little's Law (`L = lambda * W`) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Inference Cost Optimization.
+Proper capacity planning for LLM systems requires understanding Little's Law (`L = lambda * W`) and the M/M/c queueing model. These tools help determine the number of concurrent connections needed for a given request rate and latency distribution. For the full treatment with worked examples, see Module 17, Cost Optimization Strategies.
 
 ---
 

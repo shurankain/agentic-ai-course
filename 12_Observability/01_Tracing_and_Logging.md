@@ -34,7 +34,7 @@ Unlike traditional distributed systems, LLM traces have specific nesting pattern
 
 **Span**: an individual operation with a span_id and a reference to parent_span_id. Spans form a tree structure.
 
-**LLM Span**: a specialized span for model invocation. Contains: model name and provider, full prompt, response, token count, generation parameters, latency.
+**LLM Span**: a specialized span for model invocation. Contains: model name and provider, the prompt (full text or a hash, depending on privacy policy), response, token count, generation parameters, latency.
 
 **Tool Span** captures tool name, parameters, result, execution time, status.
 
@@ -79,10 +79,6 @@ There is a subtler reason to record the runtime. The model plane and the executi
 **Span structure for agent traces.** A typical agent trace has a hierarchical span structure: root span (the full user request) contains an agent loop span, which in turn contains LLM call spans and tool call spans. Each LLM call span captures: model name, prompt hash (not the full prompt text, to preserve privacy and reduce storage), token usage (input and output), latency, and finish reason. Tool call spans capture: tool name, input parameters (with PII masking applied), execution duration, and success or failure status. For multi-step agents, each iteration of the agent loop is a child span. This makes it straightforward to identify which iteration caused a failure or consumed excessive tokens.
 
 **Practical integration.** Most LLM frameworks ship OpenTelemetry instrumentation libraries: LangChain via `opentelemetry-instrumentation-langchain`, LlamaIndex via its built-in callback handler, and Spring AI via Micrometer-to-OTLP bridge. For custom agents, wrap each LLM call and tool call in a span, set the `gen_ai.*` semantic attributes, and export to your preferred backend (Jaeger, Grafana Tempo, Datadog, or New Relic). The key derived metric to track is **tokens per successful task completion**. This efficiency metric combines cost and quality into a single number. A rising tokens-per-task trend signals prompt degradation, unnecessary tool calls, or agent loops growing longer over time.
-
-Propagation passes trace context between services.
-
-Exporters send data to backends: Jaeger, Zipkin, Datadog, New Relic.
 
 ## Specialized LLM Observability Platforms
 
@@ -133,7 +129,7 @@ LLM traces contain sensitive data by nature: user inputs often include names, em
 
 **Regex-based masking**: pattern matching for structured PII (emails, phone numbers, credit cards, SSNs). Fast and deterministic. Handles well-formatted data but misses unstructured mentions ("my social is nine four three..."). Typical implementation: a pre-processing pipeline that runs regex patterns before trace storage. Effectiveness: catches 60-70% of PII in typical LLM traces.
 
-**NER-based masking**: Named Entity Recognition models identify PERSON, LOCATION, ORGANIZATION entities in free text. Microsoft Presidio is the standard open-source library for this. Higher recall than regex (catches names, addresses in narrative text) but slower and can produce false positives (masking product names that resemble person names). Effectiveness: catches 85-90% of PII.
+**NER-based masking**: Named Entity Recognition models identify PERSON, LOCATION, ORGANIZATION entities in free text. Microsoft Presidio is the standard open-source library for this. Higher recall than regex (catches names, addresses in narrative text) but slower and can produce false positives (masking product names that resemble person names). On its own it misses structured identifiers such as card and account numbers, which is why it is paired with regex.
 
 **Hybrid approach**: regex for structured patterns (fast, cheap, high precision) + NER for unstructured text (higher recall). Run regex first, NER second, union the results. This is the production standard for regulated industries. For LLM traces specifically, apply masking to: user inputs, model outputs, tool call arguments, and tool results. Leave trace metadata (trace_id, timestamps, model name, token counts) unmasked. These are needed for debugging and contain no PII.
 
@@ -151,11 +147,11 @@ When a single observability platform serves multiple customers or business units
 
 ## Compliance Audit Trails
 
-For regulated industries, observability is not just debugging. It is a legal requirement. Auditors will ask: what data did the AI system process? What decisions did it make? Who approved those decisions? Can you prove the system behaved correctly at a specific point in time?
+For regulated industries, observability is a legal requirement. Auditors will ask: what data did the AI system process? What decisions did it make? Who approved those decisions? Can you prove the system behaved correctly at a specific point in time?
 
 **What auditors actually ask for:** In healthcare (HIPAA): who accessed patient data, when, for what purpose, and what the AI recommended. In finance (SOX): complete trace of every AI-influenced financial decision, with timestamps and approval chains. In any EU deployment (AI Act): evidence of human oversight for high-risk AI decisions, conformity assessment documentation.
 
-**Immutable audit logs:** Audit trails must be tamper-proof, append-only storage where entries cannot be modified or deleted (except under a court-ordered data deletion). Options: append-only databases (Amazon QLDB), cryptographic chaining (each log entry includes a hash of the previous entry), write-once storage (S3 Object Lock, Azure Immutable Blob Storage). The cost of immutable storage is higher, but for regulated deployments, it is non-negotiable.
+**Immutable audit logs:** Audit trails must be tamper-proof, append-only storage where entries cannot be modified or deleted (except under a court-ordered data deletion). Options: append-only ledger databases (immudb; Amazon QLDB filled this role until AWS retired it in July 2025), cryptographic chaining (each log entry includes a hash of the previous entry), write-once storage (S3 Object Lock, Azure Immutable Blob Storage). The cost of immutable storage is higher, but for regulated deployments, it is non-negotiable.
 
 **Practical architecture:** LLM observability traces, then PII masking pipeline, then two output streams: (1) debugging traces with masked PII to the observability platform (Langfuse, LangSmith) with short retention, and (2) compliance audit records to immutable storage with long retention and full metadata (but PII replaced with pseudonymous identifiers).
 

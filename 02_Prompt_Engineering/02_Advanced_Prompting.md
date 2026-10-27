@@ -150,7 +150,7 @@ The simplest case: describe the task and ask the model to create a prompt to sol
 
 ### Activating Expert Knowledge
 
-Role-Based Prompting is not simply "imagine you are an expert" but a detailed description of expertise, experience, and approach. Detail improves quality: the model "tunes in," activating relevant knowledge.
+Role-Based Prompting works through a detailed description of expertise, experience, and approach, which goes well past "imagine you are an expert". Detail improves quality: the model "tunes in," activating relevant knowledge.
 
 **Role anatomy**: Expertise (specific domain, specialization, experience), Context (industry, systems, scale), Methodologies (expert approaches), Philosophy (Security-first vs Move fast), Communication style.
 

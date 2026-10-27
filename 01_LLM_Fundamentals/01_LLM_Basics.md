@@ -12,7 +12,7 @@ A language model is a statistical model that predicts the probability of the nex
 
 The "large" prefix refers to the scale of these models. Modern LLMs contain billions of parameters, numbers that the model has "learned" during training on massive volumes of text data. GPT-4, for example, is estimated to contain over a trillion parameters.
 
-But it is not just about the number of parameters. These models are trained on unprecedented volumes of data, trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn grammar and syntax, factual knowledge, logical relationships, and elements of common sense.
+Parameter count is half the story. These models are trained on unprecedented volumes of data, trillions of text tokens, including books, scientific papers, code, and web pages. This allows them to learn grammar and syntax, factual knowledge, logical relationships, and elements of common sense.
 
 ---
 
@@ -131,7 +131,7 @@ Modern models often use more advanced techniques. **RoPE (Rotary Position Embedd
 
 ## Scale of Modern Models
 
-Modern LLMs are staggering in their scale. The table below compares key architectural parameters across generations of frontier models, illustrating the shift from fully disclosed dense architectures (GPT-3) to opaque Mixture-of-Experts designs where only total and active parameter counts are public. Understanding these numbers helps calibrate expectations about memory requirements, inference cost, and the practical feasibility of self-hosting.
+Modern LLMs are staggering in their scale. The table below compares key architectural parameters across generations of frontier models. Disclosure shrank over time, from fully published dense architectures (GPT-3) to Mixture-of-Experts designs where at most total and active parameter counts are public. Understanding these numbers helps calibrate expectations about memory requirements, inference cost, and the practical feasibility of self-hosting.
 
 | Model | Parameters | Layers | Dimension | Attention Heads |
 |-------|-----------|--------|-----------|-----------------|

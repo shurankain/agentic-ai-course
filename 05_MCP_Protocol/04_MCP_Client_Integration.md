@@ -16,9 +16,9 @@ This separation allows each layer to be developed and tested independently. The 
 
 ### State Management
 
-The client must track the state of each server connection. A connection can be in the "connecting", "initializing", "ready", "reconnecting", or "disconnected" state. These states determine which operations are available.
+The client must track the state of each server connection. A connection can be in the "connecting", "ready", "reconnecting", or "disconnected" state. Clients written for specifications before 2026-07-28 also had an "initializing" state for the handshake, which no longer exists. These states determine which operations are available.
 
-Beyond connection state, the client caches information about server capabilities. Lists of resources, tools, and prompts are requested during initialization and updated upon receiving change notifications.
+Beyond connection state, the client caches information about server capabilities. Lists of resources, tools, and prompts are requested when the connection opens and updated upon receiving change notifications.
 
 Subscription state also requires tracking. The client remembers which resources it is subscribed to and processes incoming notifications.
 
@@ -34,7 +34,7 @@ Concurrency requires attention to synchronization. Updating shared state (the ca
 
 ### Server Launch Methods
 
-An MCP client can connect to servers in ways. The most common is launching a server as a child process with data exchange via stdio. The client specifies the launch command and arguments, then establishes the connection.
+An MCP client can connect to servers in two ways, over stdio or Streamable HTTP. The most common is launching a server as a child process with data exchange via stdio. The client specifies the launch command and arguments, then establishes the connection.
 
 For remote servers, **Streamable HTTP** is the standard network transport (the earlier SSE transport was deprecated in March 2025). The client connects to the specified URL and begins message exchange.
 
@@ -50,7 +50,7 @@ A client that wants to know what it is talking to before committing may call `se
 
 ### Capability Discovery
 
-An initialized client queries the server for available components. The `resources/list` method returns the list of resources. The `tools/list` method returns the list of tools. The `prompts/list` method returns the list of prompts.
+Once connected, the client queries the server for available components. The `resources/list` method returns the list of resources. The `tools/list` method returns the list of tools. The `prompts/list` method returns the list of prompts.
 
 This information is cached by the client and provided to the language model. The model sees all available tools and can select the appropriate ones for solving the task.
 

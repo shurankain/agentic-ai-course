@@ -328,9 +328,9 @@ Reading groups: start your own with colleagues, one paper per week, discussion t
 
 1. **The three-pass reading approach maximizes retention per hour invested.** Survey in ten minutes to decide relevance, comprehend in an hour to explain it, deep-dive only for papers you plan to implement or extend.
 
-2. **Know the motivation behind each paper, not just the method.** Interviewers ask "what problem does this solve?" before "how does it work?" -- understanding why Transformers replaced RNNs matters more than reciting the attention formula.
+2. **Know the motivation behind each paper, not just the method.** Interviewers ask "what problem does this solve?" before "how does it work?", so understanding why Transformers replaced RNNs matters more than reciting the attention formula.
 
-3. **The foundational papers form a dependency chain you must internalize.** Attention Is All You Need leads to GPT-3 (scaling), InstructGPT (alignment via RLHF), Constitutional AI (scalable safety), and DPO (simplified alignment) -- each builds on the last.
+3. **The foundational papers form a dependency chain you must internalize.** Attention Is All You Need leads to GPT-3 (scaling), InstructGPT (alignment via RLHF), Constitutional AI (scalable safety), and DPO (simplified alignment). Each builds on the last.
 
 4. **Discuss trade-offs and limitations, not just results.** Saying "Flash Attention trades recomputation for memory" or "DPO is simpler than RLHF but requires paired preference data" shows the critical thinking interviewers value at Staff+ level.
 

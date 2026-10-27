@@ -30,14 +30,14 @@ Anthropic introduced extended thinking with Claude 3.7 Sonnet (February 2025), m
 
 **How it works:** The model generates explicit chain-of-thought in `<thinking>` blocks before producing the final answer. These thinking tokens are visible to the developer (though not always shown to end users by default).
 
-**API control:** The `budget_tokens` parameter sets the maximum number of thinking tokens the model can use. Higher budgets allow more thorough reasoning. Thinking tokens are billed at a reduced rate.
+**API control:** The `budget_tokens` parameter sets the maximum number of thinking tokens the model can use. Higher budgets allow more thorough reasoning. Thinking tokens are billed as output tokens. That parameter belongs to the Claude 4 generation: the Claude 5 models default to adaptive thinking with an effort dial, and on Opus 5.5 thinking can no longer be disabled (Module 01, LLM Providers and APIs).
 
 **Key differences from o1/o3:**
 - **Transparent thinking**: developers can see the full reasoning chain, aiding debugging and trust
 - **Explicit budget control**: `budget_tokens` gives fine-grained control (vs. o-series `reasoning_effort` which is coarse: low/medium/high)
 - **Same model architecture**: extended thinking is a capability of the same Claude models, not a separate model family
 
-**Results:** Claude Opus 4.6 / 4.7 / 4.8 with extended thinking achieves competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
+**Results:** Claude Opus 4.6 / 4.7 / 4.8 with extended thinking achieved competitive results with o3 on GPQA, AIME, and coding benchmarks, with the added benefit of transparent reasoning.
 
 ## Gemini Thinking
 
@@ -47,7 +47,7 @@ Google introduced thinking capabilities with Gemini 2.0 Flash Thinking (late 202
 
 **API control:** The `thinking` configuration in the generation config enables thinking mode. Budget control is available through `thinkingBudget` parameter.
 
-**Gemini 2.5 Pro with thinking** achieves strong results on reasoning benchmarks, leveraging Google's long-context capabilities (1M+ tokens) for reasoning over large inputs.
+**Gemini 2.5 Pro with thinking** achieves strong results on reasoning benchmarks and can reason over inputs of 1M+ tokens.
 
 ## Scaling Laws for Test-Time Compute
 
@@ -84,7 +84,7 @@ The optimum depends on task complexity, number of requests, and the current mode
 
 Results: AIME 15.6% to 71.0%, competitive with o1 at lower cost. Open-weight (MIT license).
 
-**Distillation**: reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants, demonstrating that even small models can reason impressively when distilled from a strong reasoning teacher.
+**Distillation**: reasoning capabilities can be distilled into smaller models. DeepSeek distilled R1 into 1.5B, 7B, 8B, 14B, 32B, and 70B variants. The 32B distill outscored OpenAI's o1-mini on AIME 2024 and MATH-500.
 
 **Impact on the field:** GRPO has been widely adopted for training reasoning models. Qwen 3 (hybrid reasoning, 2025) uses a similar approach. The key insight, that reasoning emerges from proper reward signals without needing reasoning demonstrations, has reshaped how labs approach training reasoning models.
 
@@ -112,7 +112,7 @@ TTC follows predictable laws: Quality(C) = a x log(C) + b. Doubling inference co
 
 A counterintuitive finding: **longer chains of reasoning do not guarantee better answers.** Research shows that the average length of correct solutions is often shorter than that of incorrect ones. More thinking tokens can lead to overthinking, self-doubt loops, circular reasoning, and wrong conclusions, the model "talks itself out of" a correct initial intuition.
 
-This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens` (Anthropic: 1,024 to 128,000) parameters exist. They are not merely cost controls. They are quality controls. Setting the budget too high for a straightforward question wastes money and can degrade the answer. The optimal budget varies by task: a factual lookup needs minimal reasoning, while a multi-step mathematical proof benefits from a large budget.
+This is why the `reasoning_effort` (OpenAI: low/medium/high) and `budget_tokens` (Anthropic: 1,024 to 128,000) parameters exist. They control quality as well as cost. Setting the budget too high for a straightforward question wastes money and can degrade the answer. The optimal budget varies by task: a factual lookup needs minimal reasoning, while a multi-step mathematical proof benefits from a large budget.
 
 **Practical guideline for agentic systems:** In an agent loop where each step makes an LLM call, use low reasoning effort for routine steps (tool selection, formatting, simple classification) and high effort only for the genuinely complex reasoning steps (planning, debugging, analysis). Wrapping every agent step in maximum reasoning is one of the fastest ways to burn budget without improving outcomes.
 
@@ -160,7 +160,7 @@ TTC is a new scaling dimension alongside parameters, data, and training compute.
 
 o3/o4-mini, Claude extended thinking, and Gemini thinking all demonstrate 5-10x improvement on reasoning through TTC.
 
-All major providers now offer reasoning models: OpenAI (o3, o4-mini), Anthropic (Claude with extended thinking), Google (Gemini with thinking), DeepSeek (R1).
+By 2025 every major provider offered reasoning models: OpenAI (o3, o4-mini), Anthropic (Claude with extended thinking), Google (Gemini with thinking), DeepSeek (R1, since folded into V4 as a reasoning mode).
 
 DeepSeek-R1 and GRPO: reasoning emerges through pure RL with group-relative rewards: no supervised reasoning demonstrations needed.
 

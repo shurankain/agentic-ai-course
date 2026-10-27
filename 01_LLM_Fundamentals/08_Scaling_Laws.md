@@ -64,7 +64,7 @@ This was a shocking discovery. The industry had spent hundreds of millions of do
 
 The new formulation of the optimal ratio reveals symmetry: the optimal number of parameters N and tokens D scale equally with compute C, both proportional to the square root of C. Mathematically, N_opt is proportional to C^0.5, and D_opt is also proportional to C^0.5.
 
-This differs drastically from the original OpenAI scaling laws, which recommended N proportional to C^0.73 and D proportional to C^0.27. The difference is enormous: with a 100x increase in compute, OpenAI recommended increasing parameters 50x and data 2x, while Chinchilla recommended parameters 10x and data 10x.
+This differs drastically from the original OpenAI scaling laws, which recommended N proportional to C^0.73 and D proportional to C^0.27. The difference is enormous: with a 100x increase in compute, OpenAI's exponents called for increasing parameters about 29x and data about 3.5x, while Chinchilla recommended parameters 10x and data 10x.
 
 **Chinchilla rule of thumb:** For compute-optimal training, the number of tokens should approximately equal 20 multiplied by the number of parameters. This simple rule is easy to remember and apply: a 7B parameter model should be trained on 140B tokens, a 70B model on 1.4T tokens.
 
@@ -86,7 +86,7 @@ Note: GPT-3 with 175 billion parameters was trained on only 300 billion tokens, 
 
 DeepMind did not just propose a theory: they proved it experimentally. Chinchilla (70B parameters, 1.4T tokens) outperformed Gopher (280B parameters, 300B tokens) on all 152 benchmarks, using the same compute budget. The result was not marginal, Chinchilla won by 5-10% on most metrics.
 
-This led to revolutionary conclusions:
+This led to four conclusions:
 - **4x fewer parameters to store**: instead of 560GB (Gopher in FP16), only 140GB (Chinchilla)
 - **4x faster inference**: proportionally fewer computations per token
 - **Better quality**: despite the smaller size
@@ -116,7 +116,7 @@ Over a year of operation, inference will cost 3.65 billion dollars, while traini
 
 **When to overtrain a small model:**
 
-The optimal training strategy depends on the deployment scenario. The table below maps four common situations to their recommended approach, illustrating that Chinchilla-optimal is rarely the best choice for production systems with high request volumes or edge constraints.
+The optimal training strategy depends on the deployment scenario. The table below maps four common situations to their recommended approach. Chinchilla-optimal is rarely the best choice for production systems with high request volumes or edge constraints.
 
 | Scenario | Strategy | Example |
 |----------|-----------|--------|
@@ -309,7 +309,7 @@ If you plan to train your own model (typically done by large companies or resear
 
 **Step 1:** Determine your compute budget C in FLOPS or in dollars. For example, you have 1000 A100 GPUs for 2 months, or a budget of 5 million dollars.
 
-**Step 2:** Compute the optimal number of parameters N_opt using the Chinchilla formula. Simplified: N_opt approximately equals the square root of (C divided by 6). This yields a balanced distribution between model size and training volume.
+**Step 2:** Compute the optimal number of parameters N_opt using the Chinchilla formula. Simplified: with C = 6ND and D = 20N, N_opt approximately equals the square root of (C divided by 120). This yields a balanced distribution between model size and training volume.
 
 **Step 3:** Compute the optimal number of tokens D_opt. Formula: D_opt = C divided by (6 multiplied by N_opt). Or more simply: D_opt is approximately 20 multiplied by N_opt per the Chinchilla rule.
 
@@ -345,7 +345,7 @@ Example: you additionally spent 5 million dollars on overtraining 7B instead of 
 
 ### When to Increase Model vs Data vs Compute: Decision Matrix
 
-In practice, teams face constrained resources and must decide where to invest next -- in a larger model, more training data, or more compute. The table below provides a decision matrix for the most common resource profiles, showing the recommended strategy and the reasoning behind it.
+In practice, teams face constrained resources and must decide where to invest next: a larger model, more training data, or more compute. The table below provides a decision matrix for the most common resource profiles, showing the recommended strategy and the reasoning behind it.
 
 | Situation | Recommendation | Rationale |
 |----------|--------------|-------------|
@@ -353,7 +353,7 @@ In practice, teams face constrained resources and must decide where to invest ne
 | Abundant compute, limited data | Large model, undertrain | Large model uses limited data more efficiently |
 | Balanced resources | Chinchilla-optimal | Optimal use of both resources |
 | Inference-critical (high volume) | Overtrain small model | Inference savings outweigh training cost |
-| Quality-critical (low volume) | Large model + overtrain | Maximum quality matters more than efficiency |
+| Quality-critical (low volume) | Chinchilla-optimal large model | Maximum quality matters more than inference efficiency |
 
 ---
 
@@ -420,7 +420,7 @@ Reasoning tasks have distinct scaling laws, different from general tasks:
 
 DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pure reinforcement learning: GRPO (Group Relative Policy Optimization) replaces the traditional reward model and value model with group-relative advantages computed from sampled outputs (see Module 10, RLHF Alternatives for the full mechanism). The scaling insight: training compute invested in RL-based reasoning yields disproportionate quality gains on math and coding benchmarks, often matching models 10x larger.
 
-**Distillation scaling:** DeepSeek distilled R1's reasoning into smaller models (1.5B, 7B, 8B, 14B, 32B, 70B variants). Distillation follows its own scaling law: smaller distilled models retain a surprising fraction of the teacher's reasoning capability. R1-distill-32B outperforms many larger standard models on reasoning benchmarks, demonstrating that reasoning can be efficiently compressed.
+**Distillation scaling:** DeepSeek distilled R1's reasoning into smaller models (1.5B, 7B, 8B, 14B, 32B, 70B variants). Distillation follows its own scaling law: smaller distilled models retain a surprising fraction of the teacher's reasoning capability. R1-distill-32B outperforms many larger standard models on reasoning benchmarks: reasoning compresses well into smaller models.
 
 ### Implications for System Architecture
 
@@ -434,7 +434,7 @@ DeepSeek's R1 models demonstrated that reasoning capabilities can emerge from pu
 
 ## Key Takeaways
 
-**Scaling laws are predictable power-law relationships** between compute, parameters, data, and quality. This is not merely an empirical observation but a fundamental property of neural network training. This enables model development planning with mathematical precision. If you know the budget, you can predict quality before training begins.
+**Scaling laws are predictable power-law relationships** between compute, parameters, data, and quality. The relationships have held across several orders of magnitude of compute, which enables model development planning with mathematical precision. If you know the budget, you can predict quality before training begins.
 
 **Chinchilla optimal: D ≈ 20N**: for compute-optimal training, the number of tokens should be approximately 20 times the number of parameters. This radically changed the industry in 2022, showing that GPT-3 and other models were catastrophically undertrained. Modern models follow this rule or deliberately deviate from it for economic reasons.
 

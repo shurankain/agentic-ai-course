@@ -34,7 +34,7 @@ Function Calling solves a fundamental problem: how to transition from fuzzy natu
 
 A model trained on Function Calling transforms this ambiguity into a specific call with specific parameters. It "understands" the user's intent and translates it into a precise specification.
 
-This works in both directions. A function's result is structured data (JSON, table, text). The model must interpret this data and convert it into a response the user can understand. Not simply output raw data, but make sense of it and present it in the context of the original question.
+This works in both directions. A function's result is structured data (JSON, table, text). The model must interpret this data and convert it into a response the user can understand. That means making sense of the raw data and presenting it in the context of the original question.
 
 ### How Function Calling Is Implemented in Model Training
 
@@ -79,7 +79,7 @@ The tool description is your primary communication channel with the model. Throu
 
 An effective description follows this structure: brief purpose (one sentence), typical use cases (2-3 examples), explicit limitations (what the tool does NOT do), important details (input data format, expected output format). Use language close to user queries. This improves semantic matching during tool selection.
 
-**Parameter schema** defines what arguments the tool accepts. This is not just a list of names. It is a full specification with types, descriptions, default values, and constraints. The more precise the schema, the more correctly the model will fill in parameters.
+**Parameter schema** defines what arguments the tool accepts. It is a full specification with types, descriptions, default values, and constraints. The more precise the schema, the more correctly the model will fill in parameters.
 
 The parameter schema works as a two-sided contract: it helps the model understand what data to provide and simultaneously is a basis for validation on the execution side. A well-designed schema minimizes the number of validation errors, saving tokens and time on retries.
 
@@ -113,7 +113,7 @@ Test descriptions empirically. Check how the model behaves with your wording on 
 
 Traditionally, the model generates tool calls as text, which is then parsed. But what if the text is invalid JSON? Or the parameters do not match the schema? The request must be retried, wasting tokens and time.
 
-**Structured Outputs** is a revolutionary solution to this problem. It is a generation mode in which the model **guarantees** valid JSON conforming to a given schema. Not "tries to": guarantees.
+**Structured Outputs** solves this problem. It is a generation mode in which the model **guarantees** valid JSON conforming to a given schema. Not "tries to": guarantees.
 
 How does this work under the hood? It uses constrained decoding, a technique where at each generation step the model selects only those tokens that do not violate JSON validity. An automaton of valid JSON strings is constructed, and token selection is constrained by this automaton.
 
@@ -273,7 +273,7 @@ Allow parallelism for obviously independent requests and read-only operations wi
 
 ### Executor as a Protective Layer
 
-Between the model and actual tool execution sits a component called the Executor or Tool Runner. Its job is not simply to call a function but to ensure safe and predictable execution.
+Between the model and actual tool execution sits a component called the Executor or Tool Runner. Its job is to make each function call safe and predictable.
 
 The Executor verifies that the requested tool exists and is available. It validates arguments against the tool's schema. It sets a timeout: a tool cannot run indefinitely. It catches exceptions and converts them into clear error messages.
 

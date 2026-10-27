@@ -182,7 +182,7 @@ Swarm (October 2024) was an experimental framework demonstrating a minimalist ap
 
 ### When to Use
 
-The Agents SDK is well-suited for multi-agent systems built on OpenAI models with handoff-based routing. Its simplicity makes it excellent for customer service flows, triage systems, and workflows where agents specialize by domain. The main limitation is tight coupling to the OpenAI API. It does not support non-OpenAI models natively.
+The Agents SDK is well-suited for multi-agent systems built on OpenAI models with handoff-based routing. Its simplicity makes it excellent for customer service flows, triage systems, and workflows where agents specialize by domain. The main limitation is that it is designed around the OpenAI Responses API. Other providers work through its LiteLLM integration, but hosted tools and the built-in tracing assume OpenAI.
 
 ## Microsoft Agent Framework: Unified Microsoft Platform
 
@@ -198,11 +198,11 @@ The framework combines AutoGen's event-driven multi-agent patterns with Semantic
 
 ### When to Use
 
-**Microsoft Agent Framework reached 1.0 GA on April 3, 2026**: the first stable release with long-term support. Key additions in 1.0: stable APIs (no more preview churn), full MCP support for tool discovery and invocation, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI** that visualizes agent execution, message flows, and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic Claude, Bedrock, Gemini, and Ollama..NET and Python SDKs unified under one API surface (`Microsoft.Agents.AI`).
+**Microsoft Agent Framework reached 1.0 GA on April 3, 2026**: the first stable release with long-term support. Key additions in 1.0: stable APIs (no more preview churn), full MCP support for tool discovery and invocation, A2A 1.0 for cross-framework agent collaboration, and a browser-based **DevUI** that visualizes agent execution, message flows, and tool calls in real time. Connectors for Azure OpenAI, OpenAI, Anthropic Claude, Bedrock, Gemini, and Ollama. .NET and Python SDKs unified under one API surface (`Microsoft.Agents.AI`).
 
 Microsoft Agent Framework 1.0 is the recommended choice for new enterprise projects in the Microsoft ecosystem. Organizations with existing AutoGen or Semantic Kernel investments should plan migration: the 1.0 API is now locked for servicing.
 
-**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout**: an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ**, a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake is the agent memory layer. This represents the most aggressive enterprise multi-agent deployment by any platform, leveraging 500M+ M365 users for distribution.
+**Build 2026 vision (June 2):** Microsoft unveiled the full enterprise agent stack built on Agent Framework. **Scout**: an always-on personal agent across M365, Teams, Outlook, OneDrive, and SharePoint. **Work IQ**, a workplace intelligence layer providing organizational context to agents (GA June 16), using A2A/MCP/REST. **Agent 365**: agents spanning M365, Azure, Dynamics, and Power Platform, with Entra identity services, Intune device management, Defender threat protection, and Purview data governance (preview July). OneLake is the agent memory layer. Distribution is the advantage: the stack reaches 500M+ M365 users.
 
 ### Migration from AutoGen / Semantic Kernel
 

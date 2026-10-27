@@ -50,10 +50,10 @@ Observation: attention weights on the first tokens ("attention sinks") regardles
 Formula: 2 x H x D x L x N x sizeof(dtype)
 
 LLaMA-70B (64 KV heads / MHA, dim=128, 80 layers), per request:
-- 4K tokens: 13.4 GB
-- 128K tokens: 419 GB (larger than the model!)
+- 4K tokens: 10.7 GB
+- 128K tokens: 343 GB (larger than the model!)
 
-Note: these are per-request figures with full MHA (64 KV heads). With GQA (8 KV heads, as in LLaMA-2-70B), sizes drop ~10x. For batched serving, multiply by concurrent requests, see Module 15, KV-Cache Quantization for production batched calculations.
+Note: these are per-request figures with full MHA (64 KV heads). With GQA (8 KV heads, as in LLaMA-2-70B), sizes drop 8x. For batched serving, multiply by concurrent requests; the KV-Cache Quantization section of Module 15, Quantization: Model Compression Without Quality Loss works through a batched example.
 
 **Optimizations:**
 
@@ -63,13 +63,13 @@ Multi-Query Attention (MQA): all heads share a single K,V, dramatic reduction of
 
 Grouped-Query Attention (GQA): G groups, each with shared K,V. Trade-off between MHA and MQA. LLaMA-2 and Mistral use GQA.
 
-LLaMA-2-70B with 8 KV heads (instead of 80): 128K cache 419 GB to 42 GB (10x reduction).
+LLaMA-2-70B with 8 KV heads (instead of 64): 128K cache 343 GB to 43 GB (8x reduction).
 
 ## The Cost of Long Context
 
 Long context is not free. Understanding the cost structure helps decide when it is justified and when RAG is cheaper.
 
-**Attention cost scales quadratically, but measured prefill does not.** The attention term is quadratic in sequence length while the feed-forward term is linear, and at the lengths most systems actually run the feed-forward work still dominates. So doubling the context quadruples one component and doubles the other, and what you observe is growth between linear and quadratic: about 800 ms at 32K, 2 seconds at 64K, and 3 to 4 seconds at 128K on an A100. The quadratic term takes over as length grows, which is why the gap widens at the top of the range rather than at the bottom. Quoting either "linear" or "quadratic" alone will mislead a capacity estimate; measure at your own lengths.
+**Attention cost scales quadratically, but measured prefill does not.** The attention term is quadratic in sequence length while the feed-forward term is linear, and at the lengths most systems actually run the feed-forward work still dominates. So doubling the context quadruples one component and doubles the other, and what you observe is growth between linear and quadratic: about 800 ms at 32K, 2 seconds at 64K, and 4 to 5 seconds at 128K on an A100. The quadratic term takes over as length grows, which is why the gap widens at the top of the range rather than at the bottom. Quoting either "linear" or "quadratic" alone will mislead a capacity estimate; measure at your own lengths.
 
 For an interactive product this is the number that hurts. A 4-second time to first token is the user's whole impression of the system, and it arrives before a single output token has been generated.
 
@@ -120,7 +120,7 @@ Hierarchical: summarize documents, retrieve summaries, expand as needed.
 - 128K+: 160+ GB (Multi-GPU tensor parallelism)
 
 **Latency:**
-Prefill grows faster than linearly and slower than quadratically over this range: 4K ~100ms on A100, 32K ~800ms, 128K ~3-4s. Decode stays roughly constant per token, since it is bound by memory bandwidth rather than by context length.
+Prefill grows faster than linearly and slower than quadratically over this range: 4K ~100ms on A100, 32K ~800ms, 128K ~4-5s. Decode stays roughly constant per token, since it is bound by memory bandwidth rather than by context length.
 
 ## Prompt Caching Changes the Arithmetic
 

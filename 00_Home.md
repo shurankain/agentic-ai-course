@@ -19,7 +19,7 @@ This page is the coarse map: seven parts, 21 modules, each link opening that mod
 - [06. Retrieval-Augmented Generation (RAG)](06_RAG/01_RAG_Basics.md)
 
 ### Part IV: Development Tools
-- [07. Frameworks and Libraries](07_Frameworks/01_LangChain4j.md)
+- [07. Frameworks and Libraries](07_Frameworks/00_Frameworks_Overview.md)
 - [08. Structured Outputs and Data Extraction](08_Structured_Outputs/01_Structured_Output_Techniques.md)
 
 ### Part V: Applied Domains

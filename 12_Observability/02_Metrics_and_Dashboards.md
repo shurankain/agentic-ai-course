@@ -18,7 +18,7 @@ At the top: business metrics: conversion, customer satisfaction, problem resolut
 
 Tokenization algorithms create uneven splitting. English text: ~4 characters or 0.75 words per token. Non-Latin scripts are less efficient: for example, a word in Cyrillic or CJK may take 2-3 tokens, while the English "Hello" takes one. Code is denser: ~3 characters per token.
 
-A support system operating in a non-Latin-script language consumes 30-50% more tokens than an English-language one. RAG with multilingual documents requires different chunking strategies.
+A support system operating in a non-Latin-script language consumes 50-200% more tokens than an English-language one, depending on the script (see the multiplier table below). RAG with multilingual documents requires different chunking strategies.
 
 Cost is calculated as: input tokens x input price + output tokens x output price (prices are quoted per 1M tokens by most providers).
 
@@ -139,7 +139,7 @@ Tokenization algorithms create uneven cost distributions across languages. This 
 
 **Practical impact.** A customer support system operating in Japanese consumes 2-3x more tokens than the same system in English. At 100K queries/day with an average of 500 tokens per query, the annual cost difference between English and Japanese deployments can exceed $200K for a frontier model. System prompts (which repeat on every request) should be in English where possible. They benefit from prompt caching (up to 90% savings) and lower tokenization overhead. User-facing responses are generated in the user's language.
 
-**Monitoring recommendation.** Add "tokens per semantic unit" as a metric, not just raw token count, but token count normalized by the semantic content length. Track this by language to identify tokenization inefficiency and inform model selection (some models handle CJK/Cyrillic better than others).
+**Monitoring recommendation.** Add "tokens per semantic unit" as a metric next to raw token count: token count normalized by the semantic content length. Track this by language to identify tokenization inefficiency and inform model selection (some models handle CJK/Cyrillic better than others).
 
 ## Production Quality Monitoring
 

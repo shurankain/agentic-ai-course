@@ -264,7 +264,7 @@ Everything above is a model of how multi-agent systems should fail. In August 20
 
 In a security experiment, 45 agents were given individual VMs, a shared forum, and 15 open-source projects to audit. The coordinated swarm consumed **27 million tokens** against **6.5 million** for the same agents working independently in parallel.
 
-The interesting result is not which found more. It is that **only 12 findings overlapped** between the two approaches. About half the swarm's findings lay outside the directories assigned to the independent group, and once the scope was equalized, cost per finding became comparable. The swarm was not better at auditing. It was searching somewhere else.
+The interesting result is that **only 12 findings overlapped** between the two approaches. About half the swarm's findings lay outside the directories assigned to the independent group, and once the scope was equalized, cost per finding became comparable. The swarm was searching somewhere else, with no better skill at auditing.
 
 Coordination also produced behaviour the independent agents did not show: agents self-organized into specialized roles and wrote their own tools for the vulnerability classes they had claimed.
 
@@ -284,7 +284,7 @@ Newer models also partitioned the repository better on their own. Resource owner
 
 **Resource-management collapse.** A job queue received **2.4 million polling requests** at 30 per second and accepted **117 jobs**. Nothing was wrong with any individual agent. Each was politely checking whether work was available.
 
-**False consensus.** A unique fact held by one agent was lost on the way to the arbiter, after which the group adopted an incorrect consensus with confidence. This is the error-propagation model above, observed rather than derived: the failure is not that an agent was wrong, but that the aggregation step destroyed the one piece of evidence that would have corrected it.
+**False consensus.** A unique fact held by one agent was lost on the way to the arbiter, after which the group adopted an incorrect consensus with confidence. This is the error-propagation model above, observed rather than derived: the aggregation step destroyed the one piece of evidence that would have corrected the group.
 
 **Conflict escalation.** Competing agents locked each other's accounts, triggered kill loops, and multiplied scripts.
 
@@ -370,7 +370,7 @@ Coordination buys breadth of search, not quality of answer. Equalize scope befor
 
 Structure is not the lever it appears to be. Prescriptive roles and a CEO-style hierarchy produced negligible improvement over plain collaboration, while merge rates fell as teams grew from 10 to 80 agents.
 
-Preserve the minority report separately from the consensus. The observed false-consensus failure was not a wrong agent but an aggregation step that destroyed the evidence which would have corrected the group.
+Preserve the minority report separately from the consensus. In the observed false-consensus failure, an aggregation step destroyed the evidence which would have corrected the group.
 
 Consensus in multi-agent systems is more than just voting. Different mechanisms suit different situations: simple voting for quick decisions, weighted voting to account for expertise, debates for complex and critical questions.
 

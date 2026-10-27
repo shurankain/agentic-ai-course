@@ -78,7 +78,7 @@ Pick on four criteria rather than on a name, because the specific models turn ov
 
 **Around 2B to 3B** is for edge and mobile, where the model has to fit on the device. It fine-tunes fast and gives up real capability, so validate against your task before committing to the form factor.
 
-Check the current open-weight field in Module 01, LLM Providers and APIs before choosing, since that lesson tracks which releases lead and, more importantly, which of them carry custom licences rather than MIT or Apache 2.0. A model that cannot be used commercially is not a candidate no matter how it benchmarks.
+Check the current open-weight field in Module 01, LLM Providers and APIs before choosing, since that lesson tracks which releases lead and which of them carry custom licences rather than MIT or Apache 2.0. A model that cannot be used commercially is not a candidate no matter how it benchmarks.
 
 ### LoRA Configuration
 
@@ -152,7 +152,7 @@ Latency (P50, P95, P99), Throughput (requests/second), Error rate (failed genera
 
 An end-to-end pipeline requires attention to every stage. Data quality matters more than quantity.
 
-Modern base models (Llama 3.1, Qwen 2.5) provide stronger starting points: fine-tuning yields better results with less data than older models.
+Recent base models (Qwen 3, Llama 3.x and later) provide stronger starting points: fine-tuning yields better results with less data than older models.
 
 Multi-level filtering (basic, then quality, then diversity) produces better datasets than naive collection.
 

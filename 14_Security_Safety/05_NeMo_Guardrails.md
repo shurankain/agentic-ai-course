@@ -38,7 +38,7 @@ The prompt-based approach has systemic limitations:
 
 ### Rails Architecture: Programmatic Control
 
-NeMo Guardrails adds four types of programmatic "barriers" that form a protective perimeter around the LLM. The architecture works like a filter system: user input passes through Input Rails, then reaches the LLM, the generated response is filtered through Output Rails, while Dialog Rails (controlling the overall conversation flow) and Retrieval Rails (filtering data from the knowledge base) operate in parallel.
+NeMo Guardrails adds five types of programmatic "barriers" that form a protective perimeter around the LLM. The architecture works like a filter system: user input passes through Input Rails, then reaches the LLM, the generated response is filtered through Output Rails, while Dialog Rails (controlling the overall conversation flow), Retrieval Rails (filtering data from the knowledge base), and Execution Rails (checking the inputs and outputs of tool and action calls) operate alongside.
 
 **Input Rails** check the incoming request before sending it to the LLM. They block jailbreak attempts, toxic content, and requests on sensitive topics. They function like a firewall, malicious traffic never reaches the application. The first line of defense, cutting off obviously harmful requests without spending tokens.
 
@@ -399,7 +399,7 @@ Rails should be tested like any security-critical code:
 
 **Programmatic control vs probabilistic:** NeMo Guardrails implements deterministic runtime enforcement, unlike prompt-based safety that relies on LLM "memory" and is easily bypassed by jailbreaks.
 
-**Four rail types cover the full request lifecycle:** Input Rails block harmful requests before the LLM, Output Rails filter responses, Dialog Rails manage conversation flow, Retrieval Rails control knowledge access.
+**Five rail types cover the full request lifecycle:** Input Rails block harmful requests before the LLM, Output Rails filter responses, Dialog Rails manage conversation flow, Retrieval Rails control knowledge access, Execution Rails check tool and action calls.
 
 **Colang as a safety DSL:** Colang 2.0 brings Python-like syntax, event-driven programming, and improved expressiveness. As of early 2026, Colang 2.0 is recommended for new projects, though Colang 1.0 remains supported. The declarative language separates security policies from code and prompts, simplifying auditing, versioning, and testing.
 
@@ -503,7 +503,7 @@ rails:
   retrieval:
     flows: [check document access]
 
-self_check_input: {enabled: true, llm: {model: gpt-4.1-mini, temperature: 0.0}}
+self_check_input: {enabled: true, llm: {model: gpt-6-luna, temperature: 0.0}}
 jailbreak_detection: {enabled: true, threshold: 0.85}
 ```
 

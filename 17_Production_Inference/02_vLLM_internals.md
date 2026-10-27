@@ -53,7 +53,7 @@ The scheduler balances memory management (whether there are enough blocks, wheth
 
 Chunked prefill splits long prompts into parts to reduce processing time variance.
 
-**Disaggregated prefill/decode:** An established best practice in modern inference engines. Prefill (processing the prompt) and decode (generating tokens) have fundamentally different compute characteristics: prefill is compute-bound (parallel processing of many tokens), while decode is memory-bandwidth-bound (sequential token generation). Disaggregated serving separates them onto different GPU pools, each optimized for its workload. Prefill GPUs maximize throughput with large batch sizes; decode GPUs maximize memory efficiency with continuous batching. Communication between pools transfers KV-cache state. This improves overall throughput by 30-60% compared to co-located prefill/decode.
+**Disaggregated prefill/decode:** An established best practice in modern inference engines. Prefill (processing the prompt) and decode (generating tokens) have fundamentally different compute characteristics: prefill is compute-bound (parallel processing of many tokens), while decode is memory-bandwidth-bound (sequential token generation). Disaggregated serving separates them onto different GPU pools, each optimized for its workload. Prefill GPUs maximize throughput with large batch sizes; decode GPUs maximize memory efficiency with continuous batching. Communication between pools transfers KV-cache state. Early implementations improved throughput by 30-60% over co-located prefill/decode, and mature ones report up to 6.4x (see below).
 
 ## Tensor Parallelism
 

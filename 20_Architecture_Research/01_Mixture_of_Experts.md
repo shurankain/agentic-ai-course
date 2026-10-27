@@ -4,11 +4,11 @@
 
 Scaling laws demonstrated a direct relationship: more parameters equals better quality. However, dense models, where every parameter participates in every computation, hit a fundamental limitation: compute grows linearly with the number of parameters.
 
-GPT-3 with 175B parameters requires approximately 350 PFLOP per forward pass. GPT-4 with an estimated 1.8T parameters (unconfirmed) has correspondingly astronomical inference and training costs.
+GPT-3 with 175B parameters requires approximately 350 GFLOP for every token it processes (about 2 FLOPs per parameter). GPT-4 with an estimated 1.8T parameters (unconfirmed) has correspondingly astronomical inference and training costs.
 
-Mixture of Experts offers a revolutionary solution: increase the number of parameters without a proportional increase in compute. Instead of using all parameters for every token, MoE activates only a small subset: specialized "experts."
+Mixture of Experts offers a way out: increase the number of parameters without a proportional increase in compute. Instead of using all parameters for every token, MoE activates only a small subset: specialized "experts."
 
-Mixtral 8x7B demonstrates the power of this approach: the model has 47B parameters but uses only approximately 13B per token: equivalent to a 7B dense model in compute. Meanwhile, quality is comparable to LLaMA 2 70B. A 5x compute savings while maintaining quality.
+Mixtral 8x7B demonstrates the power of this approach: the model has 47B parameters but uses only approximately 13B per token: equivalent to a 13B dense model in compute. Meanwhile, quality is comparable to LLaMA 2 70B. A 5x compute savings while maintaining quality.
 
 ## MoE Architecture
 
@@ -226,7 +226,7 @@ By 2025, MoE has transitioned from a promising approach to the dominant architec
 
 DeepSeek R1 (January 2025) combined the MoE architecture of DeepSeek V3 (671B total, 37B active) with GRPO (Group Relative Policy Optimization) to create a reasoning model that competes with OpenAI o1.
 
-**Key insight:** MoE provides the capacity (671B parameters of knowledge), while GRPO provides the reasoning capability through pure RL training. R1 demonstrated that MoE models can reason at the frontier level: MoE is not just about efficiency but also about enabling new capabilities.
+**Key insight:** MoE provides the capacity (671B parameters of knowledge), while GRPO provides the reasoning capability through pure RL training. R1 demonstrated that MoE models can reason at the frontier level: MoE also enables new capabilities.
 
 **R1-Zero:** Applying GRPO to the base MoE model without SFT on reasoning traces led to spontaneous emergence of chain-of-thought reasoning. The MoE architecture's large parameter count (knowledge capacity) combined with RL incentives produced reasoning without explicit teaching.
 
@@ -276,7 +276,7 @@ MoE decouples parameters and compute. More parameters does not mean proportional
 
 The router is a critical component. Routing quality determines MoE efficiency. Poor routing equals wasted parameters.
 
-Load balancing is essential. Without auxiliary losses, experts collapse. Balance loss is a mandatory part of training.
+Load balancing is essential. Without a balancing mechanism, experts collapse: either an auxiliary balance loss or the auxiliary-loss-free bias adjustment introduced with DeepSeek V3.
 
 Capacity factor is a trade-off. More capacity equals less overflow but more memory. Typical choice: 1.25-2.0.
 

@@ -150,7 +150,7 @@ Red Flags in answers: "we" without "I" (your role is unclear), no specific numbe
 
 1. **The STAR framework (Situation, Task, Action, Result) is non-negotiable.** Every behavioral answer must follow this structure to be clear, specific, and evaluable; unstructured answers are the fastest way to lose a behavioral round.
 
-2. **Staff+ expectations center on organizational impact, not individual output.** Interviewers want evidence of cross-team influence, setting technical direction, and defining which problems to solve -- not just solving assigned tasks well.
+2. **Staff+ expectations center on organizational impact, not individual output.** Interviewers want evidence of cross-team influence, setting technical direction, and defining which problems to solve, on top of solving assigned tasks well.
 
 3. **Prepare five to seven stories that each cover multiple question types.** A single well-chosen project story can address leadership, conflict, ambiguity, and cross-functional collaboration depending on which facet you emphasize.
 

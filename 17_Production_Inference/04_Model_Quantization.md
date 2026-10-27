@@ -43,7 +43,7 @@ Activation-aware Weight Quantization. Identifies and protects "salient" weights 
 **GGUF:**
 Format for CPU and hybrid inference (llama.cpp). Supports mixed precision and efficient memory mapping. Q4_K_M (4-bit) is the most popular variant for local deployment.
 
-For mathematical foundations and algorithm internals of these methods, see Module 15, Quantization Deep Dive.
+For mathematical foundations and algorithm internals of these methods, see Module 15, Quantization: Model Compression Without Quality Loss.
 
 ## Trade-offs
 
@@ -60,7 +60,7 @@ Perplexity increase FP16 to INT4: ~2-3%. On most tasks, <1% accuracy drop.
 Low: text generation, classification, simple Q&A. Medium: summarization, translation, complex reasoning. High: mathematical reasoning, code generation, precise factual recall. For high-sensitivity tasks, INT8/FP8 is recommended over INT4.
 
 **Hardware considerations:**
-Consumer GPUs (RTX): INT4 allows fitting larger models, AWQ/GPTQ optimized, ~50-100 tok/s for 70B INT4. Datacenter (A100/H100): FP8 on H100 offers the best balance, INT8 on A100 is mature and stable. Blackwell (B200/GB200): native FP4 support enables 4-bit inference with minimal quality loss and ~2x throughput improvement over H100 FP8.
+Consumer GPUs (RTX): INT4 lets a 32B model fit on a 24GB card at roughly 30-40 tok/s; a 70B INT4 model (35 GB) needs two cards or a 48GB workstation GPU. Datacenter (A100/H100): FP8 on H100 offers the best balance, INT8 on A100 is mature and stable. Blackwell (B200/GB200): native FP4 support enables 4-bit inference with minimal quality loss and ~2x throughput improvement over H100 FP8.
 
 ## Practical Selection
 
@@ -120,7 +120,7 @@ GGUF IQ (Importance Quantization) methods in llama.cpp go beyond standard k-quan
 
 **How IQ works:** Weights are vector-quantized using codebooks derived from lattice structures (E8 lattice for IQ2). The codebook entries are optimized for the actual weight distribution rather than being uniformly spaced. Importance weighting ensures that more critical layers receive higher precision.
 
-**Practical impact:** IQ methods enable running 70B models on 16 GB RAM (IQ2). This makes frontier models accessible on consumer hardware. Quality degrades gracefully: IQ4_XS ≈ Q4_K_M quality at slightly smaller size, IQ3_XXS enables running models that otherwise wouldn't fit.
+**Practical impact:** IQ methods bring a 70B model to about 18-20 GB (IQ2_XXS, about 2.06 bits per weight). This makes frontier models accessible on consumer hardware. Quality degrades gracefully: IQ4_XS ≈ Q4_K_M quality at slightly smaller size, IQ3_XXS enables running models that otherwise wouldn't fit.
 
 ## Marlin Kernels
 
@@ -144,7 +144,7 @@ KV-cache quantization (INT8/FP8) doubles concurrent users or context length, one
 
 Method matters: GPTQ, AWQ are better than naive quantization. Marlin kernels extract near-ideal speedup from INT4 weights.
 
-GGUF IQ methods push the frontier to 2-bit quantization for consumer hardware. IQ2 enables 70B models on 16 GB RAM.
+GGUF IQ methods push the frontier to 2-bit quantization for consumer hardware. IQ2 brings 70B models to about 20 GB of memory.
 
 Test on your task: sensitivity varies, benchmark on your use cases.
 

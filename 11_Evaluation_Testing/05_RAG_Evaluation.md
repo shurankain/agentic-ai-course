@@ -8,7 +8,7 @@
 - Single domain: only web search queries, not representative for RAG
 - Outdated: created in 2016, does not account for modern use cases
 
-**Problems with synthetic benchmarks:** SQuAD is too simple for modern models, NaturalQuestions, benchmark data contaminating training corpora, HotpotQA, artificial multi-hop queries.
+**Problems with synthetic benchmarks:** SQuAD is too simple for modern models, NaturalQuestions has leaked into training corpora, and HotpotQA relies on artificial multi-hop queries.
 
 ## BEIR Benchmark
 
@@ -35,7 +35,7 @@ New benchmark addressing the temporal bias problem.
 - Recent data: documents from 2023-2024
 - Real queries: from real users
 - Multi-domain: diverse categories
-- Anti-leakage: guaranteed not in training
+- Anti-leakage: built after the training cutoffs of the models it launched against; models with 2025 or later cutoffs may have seen it
 
 **Why it matters:**
 
@@ -180,11 +180,11 @@ Success criteria for production:
 
 ## Key Takeaways
 
-- **RAG evaluation spans four dimensions: retrieval precision, retrieval recall, generation faithfulness, and answer relevance.** Weak performance in any single dimension undermines the entire system.
+- **RAG evaluation spans four dimensions: retrieval quality, generation faithfulness, answer correctness, and latency and cost.** Weak performance in any single dimension undermines the entire system.
 
 - **RAGAS provides the standard framework for automated RAG evaluation.** Its core metrics (faithfulness, answer relevance, context precision, and context recall) cover the full RAG pipeline from retrieval to generation.
 
-- **BEIR and FreshStack are the key retrieval benchmarks.** BEIR tests zero-shot generalization across 18 diverse domains; FreshStack addresses temporal bias with recent data guaranteed absent from training corpora.
+- **BEIR and FreshStack are the key retrieval benchmarks.** BEIR tests zero-shot generalization across 18 diverse domains; FreshStack addresses temporal bias with data newer than the training cutoffs of its launch-era models.
 
 - **Test 8 scenarios before production, not just the happy path.** Out-of-scope queries, ambiguous inputs, multi-hop reasoning, temporal questions, adversarial inputs, and edge cases all reveal failure modes that happy-path testing misses.
 

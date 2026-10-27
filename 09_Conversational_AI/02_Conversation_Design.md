@@ -2,7 +2,7 @@
 
 ## The Art of Dialogue
 
-Technology is only half the equation. You can build a flawless infrastructure, but if the conversations are poorly designed, users will be frustrated. Conversation design is the art of creating pleasant, efficient, and human-like interactions. It is not programming but scriptwriting. Not algorithms but empathy.
+Technology is only half the equation. You can build a flawless infrastructure, but if the conversations are poorly designed, users will be frustrated. Conversation design is the art of creating pleasant, efficient, and human-like interactions. It has more in common with scriptwriting than with programming, and it depends on empathy for the user.
 
 ## Conversation Flows
 
@@ -63,7 +63,7 @@ If the voice channel is not working, offer text. If chat cannot handle it, provi
 
 ## Persona Design: The System Prompt as Personality
 
-An AI assistant is not merely a function but a character. The system prompt defines this character, not just what the agent knows, but how it communicates, what it refuses to discuss, and how it handles edge cases. Persona design is the conversational equivalent of UX design.
+An AI assistant has a character as well as a function. The system prompt defines this character: how the agent communicates, what it refuses to discuss, and how it handles edge cases. Persona design is the conversational equivalent of UX design.
 
 ### Building a Persona Through the System Prompt
 

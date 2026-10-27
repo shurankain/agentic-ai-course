@@ -2,7 +2,7 @@
 
 ## Why Alignment Is the Central Problem of AI
 
-Alignment is not simply a technical task of making a model "obedient." It is a fundamental question of how to create systems that understand our intentions, share our values, and act in our interests even in situations we did not foresee. As AI systems become more powerful, the cost of alignment failures grows exponentially.
+Alignment asks how to create systems that understand our intentions, share our values, and act in our interests even in situations we did not foresee. As AI systems become more powerful, the cost of alignment failures grows exponentially.
 
 The history of AI already contains cautionary examples. Amazon's recruiting tool learned to discriminate against women because it was trained on historical hiring data that reflected biases. Microsoft's Tay became racist within a day by optimizing for engagement. GPT-4 demonstrates "sycophancy", agreeing with the user even when they are wrong, because that yields higher reward from human feedback. Each of these cases is a result of misalignment between what we wanted and what the model optimized for.
 
@@ -101,7 +101,7 @@ RLHF (see Module 10, RLHF and Alignment for the technical details) works as long
 
 As model capabilities grow, human evaluators become the bottleneck. They cannot reliably evaluate output quality in domains where the model surpasses them. This is the **scalable oversight problem**: how can supervision scale with growing capabilities?
 
-The problem is not just about expertise. Even if experts are assembled, their time is limited and expensive. Training a frontier model requires millions of comparisons. Obtaining millions of expert-level evaluations is economically infeasible.
+Finding experts is only the first obstacle. Even if experts are assembled, their time is limited and expensive. Training a frontier model requires millions of comparisons. Obtaining millions of expert-level evaluations is economically infeasible.
 
 ### Current Approaches and Their Limitations
 
@@ -229,7 +229,7 @@ OpenAI showed that PRM outperforms outcome-based reward models (ORM) for math re
 
 ### From Principles to Implementation
 
-Constitutional AI is not simply "give the model a list of rules." It is a framework for alignment that addresses several problems simultaneously.
+Constitutional AI is a framework for alignment that addresses several problems at once.
 
 **Problem 1: RLHF requires massive human feedback**
 

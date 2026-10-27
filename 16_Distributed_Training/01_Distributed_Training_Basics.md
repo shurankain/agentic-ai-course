@@ -115,7 +115,7 @@ Without overlap: 1200ms (1000ms compute + 200ms comm). With overlap: 1000ms. Spe
 
 ### Connectivity Hierarchy
 
-The performance of distributed training is fundamentally constrained by the bandwidth available between GPUs. The table below ranks interconnect technologies from fastest (on-chip memory) to slowest (inter-node networking), illustrating why parallelism strategy must be matched to the physical topology of the cluster.
+The performance of distributed training is fundamentally constrained by the bandwidth available between GPUs. The table below ranks interconnect technologies from fastest (on-chip memory) to slowest (inter-node networking), and the parallelism strategy has to match that physical topology.
 
 | Interconnect | Bandwidth | Generation | Notes |
 |-------------|-----------|------------|-------|
@@ -150,8 +150,8 @@ Effective batch = micro_batch x accumulation x num_gpus. Equivalent to a large b
 ### Decision Framework
 
 **Model size vs memory:**
-- 7B parameters: ~84GB. A100/H100 80GB is sufficient to DDP.
-- 70B parameters: ~840GB. Model Parallelism required (FSDP/Tensor/Pipeline).
+- 7B parameters: ~112GB of weights, gradients, and AdamW states at 16 bytes per parameter, before activations. That exceeds one 80GB GPU, so plain DDP needs an 8-bit optimizer or ZeRO-1/2 sharding; FSDP fits it comfortably on 8 GPUs.
+- 70B parameters: ~1.1TB. Sharding across many GPUs required (FSDP/Tensor/Pipeline).
 
 **Topology:**
 - Single node 8 GPU NVLink: TP=8 or TP=2-4 + DP.

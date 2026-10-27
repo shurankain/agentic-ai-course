@@ -163,7 +163,7 @@ This makes the agent resilient to the unexpected. It does not give up at the fir
 
 ### Philosophy
 
-Reflexion adds a capability to the agent that distinguishes experts from novices: the ability to learn from mistakes. This is not simply retrying. It is deep analysis of what went wrong and how to fix it.
+Reflexion adds a capability to the agent that distinguishes experts from novices: the ability to learn from mistakes. A reflecting agent analyzes what went wrong and how to fix it before it tries again.
 
 Consider a student preparing for an exam. An inexperienced student who receives a poor grade simply rereads the textbook. An experienced student analyzes their mistakes: "I did not understand topic X, confused concepts Y and Z, did not spend enough time on practice." This analysis guides further preparation.
 
@@ -210,7 +210,7 @@ Reflexion delivers the best results in specific scenarios:
 
 ### Reflexion's Connection to Meta-Learning: Learning to Learn
 
-Reflexion is not just an architectural pattern but an implementation of **meta-learning** (learning to learn) in the context of LLM agents.
+Reflexion implements **meta-learning** (learning to learn) for LLM agents.
 
 **What is Meta-Learning:** In traditional machine learning, a model learns to solve a specific task. In meta-learning, the model learns **how to learn**, it acquires the ability to quickly adapt to new tasks.
 
@@ -747,7 +747,7 @@ The following table summarizes the key characteristics of each architecture disc
 
 ## Key Takeaways
 
-1. **The execution plane is a separate layer from the model plane.** The architectures below describe how an agent decides; none of them says where its commands run. Choosing the runtime per operation rather than per session lets a short edit skip container startup, pushes a dangerous command into stricter isolation, and lets the model change without an infrastructure change. Cloudflare's target of containers covering under 10% of an agent's work is a useful calibration for how skewed that distribution is.
+1. **The execution plane is a separate layer from the model plane.** The architectures in this lesson describe how an agent decides; none of them says where its commands run. Choosing the runtime per operation rather than per session lets a short edit skip container startup, pushes a dangerous command into stricter isolation, and lets the model change without an infrastructure change. Cloudflare's target of containers covering under 10% of an agent's work is a useful calibration for how skewed that distribution is.
 
 2. **Reproducing an agent failure means reproducing the run, not the prompt.** Behaviour depends on model version, prompt, tools, external state, permissions, and the order actions happened in. Anything less than the whole trace is a guess.
 

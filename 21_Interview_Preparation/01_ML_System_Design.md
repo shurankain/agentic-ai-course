@@ -50,9 +50,9 @@ Constraints: data cannot leave the region (GDPR), some documents are confidentia
 
 With 10 million documents at an average size of 10 kilobytes after text extraction, we get 100 gigabytes of text data. Splitting into chunks of 500 tokens on average, we get approximately 5 chunks per document, totaling 50 million chunks.
 
-Using a model with dimensionality of 1536 (e.g., text-embedding-3-large), each embedding occupies 6 kilobytes when stored in float32 format. The total embedding volume will be 300 gigabytes for all chunks.
+Using a model with dimensionality of 1536 (e.g., text-embedding-3-small), each embedding occupies 6 kilobytes when stored in float32 format. The total embedding volume will be 300 gigabytes for all chunks.
 
-At 1000 QPS with an average query of 500 input tokens plus 500 output tokens (response generation), the required LLM throughput is on the order of 1 million tokens per second. This is equivalent to approximately 4-8 GPUs for inference depending on the model.
+At 1000 QPS with an average query of 500 input tokens plus 500 output tokens (response generation), the required LLM throughput is on the order of 1 million tokens per second. At the roughly 12-16K tokens per second an H100 sustains on an 8B model (Module 17, SGLang and Alternatives), that is 60-80 GPUs, and several hundred for a 70B model.
 
 ### High-Level Architecture
 
@@ -76,7 +76,7 @@ Extraction: Apache Tika or similar tools are used to extract text from formats (
 
 Chunking: semantic chunking is applied with awareness of document structure. Optimal chunk size is 500 tokens with an overlap of 50 tokens to preserve context at boundaries. For long documents, hierarchical chunking is used, creating both fine and coarse chunks for multi-level retrieval.
 
-Embedding: each chunk is converted into a vector representation using an embedding model (e.g., text-embedding-3-large with dimensionality of 1536). These vectors represent the semantic meaning of the text.
+Embedding: each chunk is converted into a vector representation using an embedding model (e.g., text-embedding-3-small with dimensionality of 1536). These vectors represent the semantic meaning of the text.
 
 Indexing: vectors are stored in a vector database with enriched metadata (title, section, date, author, access control labels). This allows filtering results based on metadata and access permissions.
 

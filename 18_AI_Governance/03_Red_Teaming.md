@@ -267,7 +267,7 @@ AI agents with tool access introduce attack surfaces beyond traditional LLM vuln
 
 ## OWASP Top 10 for LLM Applications (2025)
 
-The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-standard threat taxonomy. See Module 14, Prompt Injection for the full list. Key items for red-team test plans: Prompt Injection (LLM01), Sensitive Information Disclosure (LLM06), Excessive Agency (LLM08), and Unbounded Consumption (LLM10).
+The **OWASP Top 10 for LLM Applications v2.0 (2025)** provides the industry-standard threat taxonomy. See Module 14, Prompt Injection for the full list. Key items for red-team test plans: Prompt Injection (LLM01), Sensitive Information Disclosure (LLM02), Excessive Agency (LLM06), and Unbounded Consumption (LLM10).
 
 **Use in red teaming:** Map your test plan to OWASP categories for coverage. Report findings using OWASP categories for standardized communication with security teams.
 

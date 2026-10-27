@@ -4,7 +4,7 @@
 
 A fundamental shift has occurred in the world of artificial intelligence. While the first LLM applications were "smart chatbots", systems that answer questions in a "question becomes answer" format: modern AI agents are something fundamentally different. These are autonomous software systems capable of planning, acting, observing results, and adjusting their behavior.
 
-An **AI agent** is a software system that uses a large language model for autonomous task execution through perceiving the environment. This makes decisions, and performing actions to achieve specified goals.
+An **AI agent** is a software system that uses a large language model to execute tasks autonomously: it perceives the environment, makes decisions, and performs actions to achieve specified goals.
 
 ### Formal Definition of Agency: The BDI Model
 

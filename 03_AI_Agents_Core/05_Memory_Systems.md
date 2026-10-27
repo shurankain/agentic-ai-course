@@ -130,7 +130,7 @@ The MemGPT concept described above was influential but saw limited direct adopti
 
 **Core Memory** consists of named blocks (persona, human, goals, preferences) that are version-controlled. The agent modifies these blocks as it learns. For example, after discovering a user prefers concise answers, the agent updates its "human" block. This update persists across sessions and influences all future interactions.
 
-**Production validation:** Letta-based agents ranked #1 among open-source agents on Terminal-Bench and #4 overall (as of early 2026), demonstrating that self-directed memory translates to measurable task performance.
+**Production validation:** Letta-based agents ranked #1 among open-source agents on Terminal-Bench and #4 overall (as of early 2026), a measurable result for self-directed memory.
 
 **Letta Code** (launched February 2026) is a coding agent built on Letta's memory architecture. Its distinguishing feature is the **Skill Library**: the agent saves learned coding patterns as `.md` files (Markdown skill descriptions) and reuses them in future tasks. This is a practical implementation of Karpathy's LLM-as-OS concept: the agent builds its own knowledge base through experience, without model retraining. The three-tier memory (Core Memory in context, Recall Memory as searchable history, Archival Memory as long-term vector-indexed storage) provides the foundation for this learning loop.
 

@@ -55,7 +55,7 @@ The core loop of a Computer Use agent is built on continuous interaction between
 - GPT-4V (2024): 7.7%
 - Human baseline: ~72%
 
-The progression from 14.9% to above 80% in two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies by task category. Two cautions when comparing these rows. Vendors increasingly report on OSWorld 2.1 or an offline subset of it rather than the original, so numbers from different rows are not on one scale. And the small-model jump is the more consequential result for architecture: a model at a tenth of a cent per thousand input tokens scoring 72% means computer use no longer requires a frontier-tier model for routine tasks.
+The progression from 14.9% to above 80% in two years is remarkable. Top agents now exceed the human baseline on OSWorld, though human performance varies by task category. Two cautions when comparing these rows. Vendors increasingly report on OSWorld 2.1 or an offline subset of it rather than the original, so numbers from different rows are not on one scale. And the small-model jump is the more consequential result for architecture: a model at ten cents per million input tokens scoring 72% means computer use no longer requires a frontier-tier model for routine tasks.
 
 **Effort settings move small models more than large ones.** Anthropic reports Haiku 5.5 at 39.2% on Terminal-Bench 4.0 at maximum effort and about 20% at the default medium setting. A benchmark score quoted without its effort level can therefore be off by a factor of two for the configuration you will actually run, and the cheaper the model, the more of its capability sits behind the effort dial.
 
@@ -116,7 +116,7 @@ There are several fundamental sources of error when working with coordinates:
 
 2. **Resolution Mismatch**: The screenshot is scaled to fit the model's input size (e.g., 1920x1080 to 1024x768), requiring coordinate recalculation. Rounding errors during this recalculation accumulate.
 
-3. **Coordinate Representation**: The model generates numbers as a sequence of tokens. The number "523" is three separate tokens ("5", "2", "3"), and each can be predicted incorrectly.
+3. **Coordinate Representation**: The model generates numbers as a sequence of tokens. A coordinate such as "1523" is split into pieces (most modern tokenizers chunk digits in groups of up to three, so "152" and "3"), and each piece can be predicted incorrectly.
 
 4. **Variability in UI**: The same element can be at different positions depending on DPI scaling, window size, browser zoom. This makes generalization harder.
 
@@ -356,7 +356,7 @@ The computer use landscape has expanded beyond Claude's initial launch, with mul
 
 ### Claude Computer Use: Evolution
 
-Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4, and now the 4.6 generation) and the computer use infrastructure pushed scores to 61.4%. In February 2026, Anthropic acquired **Vercept**, a computer vision startup, to accelerate Computer Use capabilities.
+Claude Computer Use has evolved through several generations. The initial October 2024 launch demonstrated the concept with Claude 3.5 Sonnet (14.9% OSWorld). Through 2025, improvements in the underlying models (Claude Sonnet 4, Claude Opus 4, and then the 4.6 generation) and the computer use infrastructure pushed scores to 61.4%. In February 2026, Anthropic acquired **Vercept**, a computer vision startup, to accelerate Computer Use capabilities.
 
 **Claude for Chrome**: a browser extension providing computer use capabilities directly in the browser, without requiring a full desktop environment. Optimized for web workflows with access to the DOM and accessibility tree alongside visual understanding.
 
@@ -452,7 +452,7 @@ Choosing between computer use agents and traditional automation tools involves t
 
 ## Key Takeaways
 
-1. **Computer Use has matured rapidly**: from 14.9% to 76%+ on OSWorld in under two years, with top agents now exceeding the 72% human baseline
+1. **Computer Use has matured rapidly**: from 14.9% to above 80% on OSWorld in two years (83.9% for Claude Sonnet 5.5 on the OSWorld 2.1 offline subset, vendor-reported), with top agents now exceeding the 72% human baseline
 
 2. **Security requires a dedicated environment**: never run on production systems without isolation
 

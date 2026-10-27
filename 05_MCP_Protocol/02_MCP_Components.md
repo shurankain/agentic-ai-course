@@ -24,7 +24,7 @@ MCP supports two types of resource content: text and binary. Text content is tra
 
 ### URI Design for Resources
 
-Choosing a URI scheme is not merely a technical decision but an architectural one. MCP follows the principles of RFC 3986 but adapts them for the needs of AI integrations.
+A URI scheme is an architectural decision, since clients and servers both depend on it. MCP follows the principles of RFC 3986 but adapts them for the needs of AI integrations.
 
 **URI Design Principles:**
 
@@ -260,7 +260,7 @@ Tasks transform MCP from a synchronous request-response protocol into an asynchr
 - **Human-in-the-loop for long operations:** Tasks can pause for approval at critical checkpoints (e.g., before deploying to production), resuming when the human approves via Elicitation
 - **Partial result streaming:** A data processing task returns intermediate results (e.g., rows processed so far). This allows the agent to start analysis before the full dataset is ready
 
-Tasks, combined with Elicitation for human checkpoints and Sampling for AI-driven decisions, give MCP servers the building blocks for sophisticated autonomous workflows.
+Tasks, combined with Elicitation for human checkpoints, give MCP servers the building blocks for long-running workflows. Since the 2026-07-28 specification both checkpoints and model calls travel through MRTR results instead of server-initiated requests, and a server that needs a model calls a provider API directly.
 
 ## OAuth 2.1 Authorization
 
@@ -274,7 +274,7 @@ The MCP specification includes an OAuth 2.1 authorization framework as a standar
 
 **PKCE (Proof Key for Code Exchange):** All authorization code flows require PKCE, preventing authorization code interception attacks. This is mandatory, not optional.
 
-**Dynamic Client Registration (RFC 7591):** Clients can register with the authorization server dynamically, without pre-registration. This is essential for the MCP ecosystem where new clients frequently appear.
+**Dynamic Client Registration (RFC 7591):** Clients can register with the authorization server dynamically, without pre-registration. It solved the problem of new clients appearing constantly, and the 2026-07-28 specification deprecated it in favour of Client ID Metadata Documents, where the client ID is an HTTPS URL pointing to the client's own metadata.
 
 **Third-Party Authorization:** MCP supports delegated authorization where the authorization server is separate from the MCP server. This allows enterprises to use their existing identity providers (Okta, Auth0, Azure AD) for MCP server access control.
 
@@ -342,7 +342,7 @@ Use tools for operations with side effects or dynamic queries with parameters. C
 
 Use prompts to standardize typical scenarios. If users frequently perform similar tasks, a prompt will save their time and ensure quality.
 
-Use Sampling cautiously. Each Sampling call is a request to a language model, which can be slow and costly. Sampling is justified when the server genuinely needs intellectual capabilities.
+Sampling is deprecated, so treat this as guidance for maintaining existing servers. Each Sampling call is a request to a language model, which can be slow and costly, and new servers that need a model should call a provider API directly.
 
 ## Lifecycle and Discovery
 

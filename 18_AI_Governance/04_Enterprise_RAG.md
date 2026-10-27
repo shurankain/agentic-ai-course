@@ -4,7 +4,7 @@
 
 Building a working RAG prototype is a weekend project: load documents into a vector store, connect an LLM, get answers to questions. But between a prototype and an enterprise-ready system lies a chasm filled with questions of security, compliance, and governance.
 
-In an enterprise context, a RAG system operates on confidential documents: financial reports, legal contracts, employee personal data, trade secrets. Leaking any of these documents is not just an inconvenience but a potential catastrophe with legal, financial, and reputational consequences.
+In an enterprise context, a RAG system operates on confidential documents: financial reports, legal contracts, employee personal data, trade secrets. Leaking any of these documents carries legal, financial, and reputational consequences.
 
 Enterprise RAG must serve multiple users with different access levels. A sales manager should not see HR documents about colleagues' salaries. A junior developer should not gain access to architectural documents of client projects under NDA. The system must not just "know" these restrictions. It must enforce them on every request.
 

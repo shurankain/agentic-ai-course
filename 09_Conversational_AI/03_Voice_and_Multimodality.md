@@ -56,7 +56,7 @@ The API uses a **session-based model**: create a session with configuration (voi
 
 **OpenAI Translate (May 7, 2026, GA):** Real-time speech translation API. 70+ input languages, 13 output languages. Pricing: $0.034/min. Designed for call centers and international business communication.
 
-**Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min: the cheapest production STT available from a frontier provider.
+**Whisper Streaming STT (May 7, 2026, GA):** Streaming speech-to-text with sub-second latency. Pricing: $0.017/min at launch. By October, Microsoft's MAI-Transcribe-2 undercut it about tenfold (see below).
 
 **Pricing (as of late May 2026):** `gpt-realtime-2`: $32/$64 per 1M audio tokens (~$0.04/$0.08 per minute). A cheaper `gpt-4o-mini-realtime-preview` variant existed during the beta period but was deprecated with the Realtime API Beta (May 12, 2026). No waitlist: available to all developers.
 
@@ -68,7 +68,7 @@ The API uses a **session-based model**: create a session with configuration (voi
 
 At the bottom of the market, Alibaba's **Qwen-Audio 3.1** (September 25) cut speech-recognition prices by about 95%, synthesis by about 70%, and realtime by about 85%, and Microsoft's **MAI-Transcribe-2** priced transcription at $0.10 per audio hour (all vendor figures, as of October 2026). Transcription is close to free, which moves the cost of a voice agent almost entirely into reasoning and synthesis.
 
-**Google Gemini Live (December 2024):** Google's real-time conversational API, leveraging Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously: a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
+**Google Gemini Live (December 2024):** Google's real-time conversational API, built on Gemini's native multimodal capabilities. Processes audio, video, and text simultaneously: a user can talk while sharing their screen, and the model understands both streams. **Practical constraints:** The Live API uses a 128K token context window (not Gemini's headline 1M+), supporting roughly 60-85 minutes of audio before filling. Audio-only sessions default to 15 minutes (audio+video: 2 minutes), though context window compression enables longer sessions at the cost of discarding earlier context. Sessions can be resumed via resumption tokens (valid 24 hours). The 1M+ context applies to the standard (non-live) Gemini API for batch audio file processing. Pricing is dramatically lower than OpenAI: ~$0.50/1M audio input tokens on the paid tier.
 
 **Anthropic Claude voice:** Claude processes audio input through transcription but excels at understanding the *content* of conversations, meeting recordings, and spoken instructions. While not natively speech-to-speech, Claude's strength is in deep reasoning about audio-derived content.
 
@@ -132,7 +132,7 @@ Minimization strategies:
 
 ### From Text to Multimodal Understanding
 
-Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. GPT-5.5, Claude Opus 4.8 (with high-resolution vision), and Gemini 3.5 Flash open new possibilities. Users can describe a problem and show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
+Vision-language models (VLMs) are models that perceive and analyze images and text simultaneously. By mid-2026, GPT-5.5, Claude Opus 4.8 (with high-resolution vision), and Gemini 3.5 Flash all took images as input. Users can describe a problem and show a screenshot of an error, a photo of a broken device, or a diagram. An agent capable of seeing analyzes visual information and provides accurate and relevant answers.
 
 Typical scenarios: screenshot analysis for technical support, document recognition and processing, product identification from photos, chart and diagram analysis, design assistance.
 
@@ -154,7 +154,7 @@ Image generation requires caution: models can create unwanted content, violate c
 
 ### Modality Integration
 
-True multimodality is not merely having channels but integrating them. A user explains a problem with words, then shows a screenshot, then asks by voice "do you see this button on the right?" The agent connects information from different modalities into a unified understanding.
+Multimodality pays off when the channels are integrated. A user explains a problem with words, then shows a screenshot, then asks by voice "do you see this button on the right?" The agent connects information from different modalities into a unified understanding.
 
 Cross-modal reference resolution is the understanding of references between modalities. "This" refers to an object in the image. "As I already said" refers to text from a previous message. "Right here" refers to a location indicated by a gesture.
 
@@ -269,7 +269,7 @@ One row of that shape broke in October 2026, which is the reason to write cost m
 
 The rest of the range has held at about an order of magnitude across several rounds of price cuts even as every absolute figure in it changed. Three factors decide where you land: voice quality requirements, where premium providers lead in blind tests; volume, where a self-assembled stack wins once you are large enough to operate it; and compliance, where the enterprise telephony vendors earn their premium through certification rather than technology.
 
-**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 10-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard, consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
+**Unit economics comparison:** Human contact center agent: $15-40 per resolution. Voice AI agent: $0.50-2.00 per resolution. The 7.5-80x cost difference is driving rapid enterprise adoption, with the hybrid model (AI for routine, human for complex) emerging as the standard, consistent with the Klarna case study pattern. See Module 18, Enterprise AI Adoption for production case studies.
 
 **Cost optimization thresholds:** Below 10K minutes/month, use a managed orchestration service (Vapi). Above 50K minutes/month, a custom stack built on LiveKit becomes cost-effective. The crossover point is 30-50K minutes/month: evaluate build effort vs managed pricing.
 
@@ -295,4 +295,4 @@ Safety and ethics gain a new dimension. Voice and images are biometric data requ
 
 The platform landscape shifted dramatically in June 2026. Apple's Siri AI rebuild on Gemini and iOS 27 Extensions enabling third-party AI assistants mark the transition to a multi-model world where users choose their AI, not platforms.
 
-Technical challenges: minimizing latency. This ensures operation in noisy conditions, adapting to accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.
+Technical challenges: minimizing latency, operating in noisy conditions, adapting to accents and speech styles, and efficiently storing and retrieving multimodal context. Solving these challenges determines the quality of user experience.

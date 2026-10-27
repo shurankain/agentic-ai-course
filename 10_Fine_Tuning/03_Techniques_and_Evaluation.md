@@ -14,7 +14,7 @@ LoRA is the most popular PEFT method. Its idea is mathematically elegant and pra
 
 Instead of directly updating the weight matrix W of size 4096x4096, LoRA adds the product of two small matrices: ΔW = A x B, where A has size 4096xr, and B has size rx4096. The rank parameter r is typically chosen to be small: 8, 16, 32, or 64.
 
-The number of parameters at rank 16 decreases from 16 million to 131 thousand, 125 times fewer.
+The number of parameters at rank 16 decreases from 16 million to 131 thousand, 128 times fewer.
 
 In practice: fine-tuning a 7B model, which requires 100+ GB VRAM for full training, becomes feasible on a GPU with 16GB of memory.
 
@@ -36,13 +36,13 @@ QLoRA goes further in reducing memory requirements. The base model is stored in 
 
 **NF4** is a specialized quantization format optimized for normally distributed neural network weights.
 
-QLoRA enables fine-tuning 7B models on GPUs with 4-8GB of memory, and 70B models on consumer GPUs with 24GB.
+QLoRA enables fine-tuning 7B models on GPUs with 4-8GB of memory, and 65-70B models on a single 48GB GPU.
 
 ## DoRA and GaLore
 
 **DoRA** decomposes weights into magnitude and direction, applying LoRA only to the directional component. Result: +2.6 to +3.7% improvement over standard LoRA at the same rank.
 
-**GaLore** projects gradients into a low-rank subspace instead of weights. Enables training all parameters with memory efficiency comparable to LoRA. Requires more memory than LoRA but less than full fine-tuning.
+**GaLore** projects gradients into a low-rank subspace instead of weights. Enables training all parameters while cutting optimizer memory to near LoRA levels. Total memory stays above LoRA's and well below full fine-tuning.
 
 ### PEFT Comparison Table
 

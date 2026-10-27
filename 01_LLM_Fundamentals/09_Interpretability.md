@@ -2,7 +2,7 @@
 
 Imagine you hired a brilliant consultant who solves the most complex problems but categorically refuses to explain his reasoning. You do not know whether he bases decisions on deep analysis or on spurious correlations. You cannot predict when he will make a mistake. This is exactly the situation we face with modern language models.
 
-Interpretability is a research field aimed at understanding *how* and *why* neural networks make decisions. For LLMs, this is not merely academic interest: understanding internal mechanisms is critical for safety, reliability, and targeted model improvement.
+Interpretability is a research field aimed at understanding *how* and *why* neural networks make decisions. For LLMs, understanding internal mechanisms is critical for safety, reliability, and targeted model improvement.
 
 ---
 
@@ -269,7 +269,7 @@ The step-by-step causal analysis process precisely identifies which model compon
 
 **Step 1: Preparing contrastive examples**
 
-Create a pair of examples differing at a critical point. Clean input: "John gave Mary a book. John gave her a flower". Corrupted input: "John gave Bob a book. John gave her a flower". The only difference is the name (Mary becomes Bob). The goal: the prediction of "flower" should change. This allows us to trace which components transmit name information.
+Create a pair of examples differing at a critical point. Clean input: "When Mary and John went to the store, John gave a drink to", where the model predicts "Mary". Corrupted input: "When Mary and John went to the store, Mary gave a drink to", where the answer becomes "John". The only difference is one name, so the components that restore "Mary" when patched into the corrupted run are the ones carrying name information.
 
 **Step 2: Choosing granularity**
 
@@ -391,7 +391,7 @@ This is a powerful tool, but it requires caution: careless modification can brea
 
 5. **Probing** shows what information is encoded. Syntax, semantics, facts: all are extractable from representations.
 
-6. **Activation patching** establishes causality. Not just correlation, but understanding which components actually influence the output.
+6. **Activation patching** establishes causality: it shows which components actually influence the output.
 
 7. **For safety this is critical**: detecting deception, verifying alignment, surgical correction. All require interpretability.
 

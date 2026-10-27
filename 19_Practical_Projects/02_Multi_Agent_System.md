@@ -58,7 +58,7 @@ Specialized review agents benefit from external tools accessed via MCP:
 
 Before writing code, the critical decisions are architectural. A multi-agent code review system requires answering three questions that determine the entire implementation.
 
-**How many agents and what specializations?** Start with the minimum viable set: Security + Performance + Style + Orchestrator = 4 agents. Add Architecture and Test Coverage reviewers only if the team explicitly values these dimensions and is willing to pay the token cost. Each additional agent multiplies cost by ~1.3x (not 2x: the orchestrator and synthesis overhead is shared). A 4-agent system costs approximately 4x a single-agent review; a 6-agent system costs approximately 5.5x.
+**How many agents and what specializations?** Start with the minimum viable set: Security + Performance + Style + Orchestrator = 4 agents. Add Architecture and Test Coverage reviewers only if the team explicitly values these dimensions and is willing to pay the token cost. Each additional agent adds roughly three quarters of a single-agent review's cost, since the orchestrator and synthesis overhead is shared. A 4-agent system costs approximately 4x a single-agent review; a 6-agent system costs approximately 5.5x.
 
 **Which communication pattern?** For code review, the Fan-Out/Fan-In pattern is optimal (see Module 04, MAS Patterns). The orchestrator fans out the PR to all reviewers in parallel, then fans in the results for synthesis. This is preferred over sequential (too slow. Each reviewer adds 10-30 seconds) or debate (unnecessary, reviewers analyze different dimensions, not opposing positions). The parallel execution means total latency equals the slowest reviewer, not the sum.
 
@@ -66,7 +66,7 @@ Before writing code, the critical decisions are architectural. A multi-agent cod
 
 **Budget for overlap, because you will get it.** The tempting assumption is that four reviewers with four different briefs produce four disjoint sets of findings. Measured behaviour says otherwise: agents drawn from the same base model converge on the same answer rather than exploring independently, which Module 04, Consensus and Reliability documents with numbers. A null-pointer risk in a new function will be reported by the security reviewer as an unhandled input, by the performance reviewer as a hot-path branch, and by the style reviewer as a missing guard clause. Three comments, one defect, and a developer who stops reading the bot.
 
-Two things follow for this project. The synthesis step is not optional formatting, it is deduplication, and it needs to match findings by file and line span rather than by text, since the three descriptions above share no wording. And the model tiering below is doing double duty: assigning different models to different reviewers is the cheapest available reduction in overlap, because two agents on the same weights make correlated judgements while two on different weights do not.
+Two things follow for this project. The synthesis step does deduplication, and it needs to match findings by file and line span rather than by text, since the three descriptions above share no wording. And the model tiering below is doing double duty: assigning different models to different reviewers is the cheapest available reduction in overlap, because two agents on the same weights make correlated judgements while two on different weights do not.
 
 **Model selection per agent.** Not all reviewers need the same model. The Security Reviewer benefits from a frontier model (Claude Opus 5.5) because security analysis requires deep reasoning about attack vectors. The Style Reviewer works well with a cheaper model (Claude Sonnet 5.5 or Haiku 5.5) because style checks are pattern-matching. The Orchestrator can use a fast model (Haiku): it routes and synthesizes, it does not analyze. This tiered approach reduces cost by 40-60% compared to using a frontier model for all agents.
 
@@ -121,7 +121,7 @@ Strategies for contradictions:
 
 Workflow: PR created/updated, then webhook triggers review, then agents analyze, then results posted as PR comments, then status check updated (pass/fail blocks merge).
 
-Comment formatting: severity indicator (🔒 Security, ⚡ Performance), severity level, location, CWE ID, description, recommended fix with examples.
+Comment formatting: category label (Security, Performance), severity level, location, CWE ID, description, recommended fix with examples.
 
 ### Incremental Review
 
