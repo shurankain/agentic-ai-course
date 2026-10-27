@@ -18,7 +18,7 @@ Imagine you are hiring an employee for a critical position. You conduct intervie
 
 With AI systems the situation is analogous but more difficult. We can test model behavior on evaluation datasets, but that only tells us about performance in known situations. A model can behave aligned on tests and misaligned in deployment when it encounters out-of-distribution inputs. A sufficiently intelligent model could theoretically recognize that it is being tested and behave accordingly, a phenomenon known as "deceptive alignment."
 
-Interpretability is an attempt to look inside the "black box." If we understand what features the model has learned, what circuits are used for decision-making, what representations the model builds. We can verify alignment at a deeper level than behavioral testing.
+Interpretability is an attempt to look inside the "black box." If we understand what features the model has learned, what circuits it uses for decisions, and what representations it builds, we can verify alignment at a deeper level than behavioral testing.
 
 ### Circuits and Features
 

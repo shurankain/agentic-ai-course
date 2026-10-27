@@ -13,7 +13,7 @@ Probability of preferring A over B = sigma(r_A - r_B), where r is log-strength, 
 - DPO implicitly uses Bradley-Terry, but without explicitly training a reward model
 
 **Model assumptions:**
-- Transitivity: A > B and B > C to A > C
+- Transitivity: if A > B and B > C, then A > C
 - Independence: preference of A vs B does not depend on other items
 - Stability: item strength does not change
 
@@ -61,7 +61,7 @@ Collecting preference data is expensive. Active learning selects the most inform
 
 ## Data Quality and Its Impact
 
-**Garbage in, garbage out:** 10% noise, then noticeable degradation, 30% noise, then no better than random, systematic bias is worse than random noise.
+**Garbage in, garbage out:** 10% label noise causes noticeable degradation, at 30% the model is no better than random, and systematic bias does more damage than random noise.
 
 **Types of problems:**
 - Label noise: random annotator errors

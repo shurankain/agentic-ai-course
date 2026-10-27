@@ -268,4 +268,4 @@ For documents with visual content:
    - Complex documents
    - Resources available for multi-vector storage
 
-5. **Production pattern:** Dense retrieval (recall) to Late Interaction (precision)
+5. **Production pattern:** dense retrieval for recall, then late interaction reranking for precision

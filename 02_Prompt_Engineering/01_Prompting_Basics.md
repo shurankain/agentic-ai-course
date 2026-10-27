@@ -33,7 +33,7 @@ RLHF creates several key behavioral patterns:
 
 1. The model "wants" to help: no need to persuade it, just clearly explain what is needed
 2. Explicit instructions work better than hints
-3. Format in the prompt to format in the response
+3. The format of the prompt shapes the format of the response
 4. Conflict between safety and helpfulness: sometimes the model refuses when it should not
 
 ---

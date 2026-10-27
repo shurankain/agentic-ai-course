@@ -257,10 +257,10 @@ AI21 Labs introduced Jamba (March 2024), the first production-ready hybrid model
 ### Architecture Selection: A Practical Approach
 
 **Simple starting rule:**
-- Long context (>32K) dominates? to SSM or Hybrid
-- Precise in-context retrieval is critical? to Transformer
-- Inference cost is the primary concern? to MoE
-- Need a balance of everything? to Hybrid (if engineering capacity is available)
+- Long context (>32K) dominates? Use SSM or Hybrid.
+- Precise in-context retrieval is critical? Use Transformer.
+- Inference cost is the primary concern? Use MoE.
+- Need a balance of everything? Use Hybrid (if engineering capacity is available).
 
 **Going deeper: task characteristics determine the choice**
 

@@ -98,10 +98,10 @@ Ring AllReduce: GPUs in a ring, two phases over 2(N-1) steps. Each GPU transfers
 
 ### Gradient Compression
 
-FP32 to FP16: 2x compression, minimal quality loss.
-FP32 to INT8: 4x compression, requires scaling.
-Top-K sparsification: transfer K% of gradients with maximum magnitude, error feedback accumulates the rest.
-PowerSGD: low-rank approximation, 10-50x compression for large matrices.
+- FP32 to FP16: 2x compression, minimal quality loss.
+- FP32 to INT8: 4x compression, requires scaling.
+- Top-K sparsification: transfer K% of gradients with maximum magnitude, error feedback accumulates the rest.
+- PowerSGD: low-rank approximation, 10-50x compression for large matrices.
 
 ### Communication-Computation Overlap
 

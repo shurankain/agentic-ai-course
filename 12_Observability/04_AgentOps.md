@@ -4,19 +4,17 @@
 
 AgentOps is a maturing discipline that combines DevOps and MLOps practices for AI agent systems. It addresses the unique challenges of operationalizing systems where behavior is determined by code and by the model, prompts, tools, and dynamic context.
 
-**Evolution:** 2000s DevOps (Code, then Deployment), 2010s MLOps (Models, then Production), 2020s LLMOps (LLM APIs, then Applications), 2024+ AgentOps (Agents, then Autonomous systems).
+**Evolution:** DevOps in the 2000s took code to deployment, MLOps in the 2010s took models to production, LLMOps in the early 2020s took LLM APIs into applications, and AgentOps from 2024 takes agents into autonomous systems.
 
-**Why AgentOps ≠ MLOps:**
+**How AgentOps differs from MLOps.** The unit being operated changes from a model file to a model wrapped in prompts and tools, and every practice downstream changes with it.
 
-Artifact: MLOps: trained model, AgentOps, agent (model + prompt + tools).
-
-Behavior: MLOps: deterministic inference, AgentOps: stochastic reasoning loops.
-
-Debugging: MLOps: Input to Output, AgentOps, Multi-step traces.
-
-Metrics: MLOps: Accuracy/latency, AgentOps: Session success/task completion.
-
-Rollback: MLOps: model version, AgentOps: prompt + tools + guardrails.
+| Aspect | MLOps | AgentOps |
+|---|---|---|
+| Artifact | Trained model | Agent (model + prompt + tools) |
+| Behavior | Deterministic inference | Stochastic reasoning loops |
+| Debugging | Single input and output | Multi-step traces |
+| Metrics | Accuracy, latency | Session success, task completion |
+| Rollback | Model version | Prompt + tools + guardrails |
 
 ## Agent Lifecycle
 
@@ -112,17 +110,15 @@ Triggered evaluations: after each prompt change, after tool updates, after model
 
 ## Incident Response for Agents
 
-**Typical Incidents:**
+**Typical incidents.** Each common agent incident has a default first response that buys time before the root cause is known.
 
-Prompt leak (system prompt in responses) to Immediate rollback.
-
-Tool abuse (anomalous tool usage) to Rate limit + investigate.
-
-Safety violation (harmful content) to Block + review.
-
-Cost spike (10x+ cost increase) to Throttle + audit.
-
-Hallucination surge (grounding score decline) to Shadow mode + fix.
+| Incident | First response |
+|---|---|
+| Prompt leak (system prompt in responses) | Immediate rollback |
+| Tool abuse (anomalous tool usage) | Rate limit and investigate |
+| Safety violation (harmful content) | Block and review |
+| Cost spike (10x+ cost increase) | Throttle and audit |
+| Hallucination surge (grounding score decline) | Shadow mode, then fix |
 
 **Runbook structure:** Detection (how to detect), Triage (severity assessment), Mitigation (immediate actions), Resolution (long-term fix), Post-mortem (root cause analysis).
 

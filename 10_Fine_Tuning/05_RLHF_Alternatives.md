@@ -102,22 +102,22 @@ The alignment methods described above differ in their data requirements, memory 
 
 ### Performance
 
-RLHF ≈ DPO when properly tuned.
-KTO ≈ DPO even without paired data.
-ORPO ≈ DPO at lower cost.
-SimPO ≥ DPO on many benchmarks.
-GRPO excels on reasoning tasks: enabled R1-level performance.
+- RLHF roughly matches DPO when properly tuned.
+- KTO roughly matches DPO even without paired data.
+- ORPO roughly matches DPO at lower cost.
+- SimPO matches or beats DPO on many benchmarks.
+- GRPO excels on reasoning tasks and produced R1-level performance.
 
 ### Decision Framework
 
 Start by analyzing the task and available data.
 
-Reasoning tasks with verifiable answers (math, code) to GRPO (with rule-based verifiers).
-Paired comparisons available to DPO/SimPO/ORPO.
-Binary feedback only to KTO.
-Need API-based RL without infrastructure to OpenAI RFT.
+- Reasoning tasks with verifiable answers (math, code): GRPO with rule-based verifiers.
+- Paired comparisons available: DPO, SimPO, or ORPO.
+- Binary feedback only: KTO.
+- API-based RL without your own infrastructure: OpenAI RFT.
 
-For paired data: need control, then DPO/SimPO. Maximum efficiency, then ORPO.
+For paired data, DPO or SimPO gives more control, and ORPO is the most efficient because it folds SFT and preference optimization into one stage.
 
 Production deployment: start with DPO (most proven), then experiment with SimPO, ORPO, or GRPO depending on the task.
 

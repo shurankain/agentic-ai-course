@@ -256,7 +256,7 @@ AI projects require specific product management. A traditional PM may not unders
 - Works with probabilistic outputs (not deterministic features)
 - Understands evaluation metrics (precision/recall, not just NPS)
 - Knows about data requirements and pipeline complexity
-- Manages expectations (AI ≠ magic)
+- Manages expectations (AI is not magic)
 
 ---
 
@@ -278,7 +278,7 @@ AI projects require specific product management. A traditional PM may not unders
 
 8. **The talent gap is real**: 73% use AI, only 29% understand it
 
-9. **Pilot ≠ production**: scaling requires a different approach
+9. **A pilot is not production**: scaling requires a different approach
 
 10. **Measure ROI from day one**: baseline metrics before adoption
 
@@ -328,7 +328,7 @@ AI projects require specific product management. A traditional PM may not unders
 
 The enterprise agent platform market has consolidated into three tiers. For most enterprises, platform choice is determined by existing ecosystem, not technical merit.
 
-**The BYOAI shift (June 2026):** Apple's WWDC announcement of iOS 27 Extensions. This enables users to select Claude, Gemini, or ChatGPT as their default assistant: signals a paradigm shift. Model choice is becoming a user preference, not an IT policy decision. This is the "Bring Your Own AI" moment, analogous to the BYOD movement a decade ago. For enterprise architects, the implication is clear: design for model-agnostic systems. The application that hard-codes a single provider will be at a disadvantage when employees, and customers: expect to use their preferred AI. Google gains billions of Apple devices through the Siri AI deal (~$1B/year). Apple is not building a frontier model; it is becoming a multi-model platform. Microsoft builds its own MAI models while ending OpenAI exclusivity. The era of single-provider lock-in is ending.
+**The BYOAI shift (June 2026):** At WWDC Apple announced iOS 27 Extensions, which let users select Claude, Gemini, or ChatGPT as their default assistant. Model choice moves from IT policy to user preference. This is the "Bring Your Own AI" moment, analogous to the BYOD movement a decade ago. For enterprise architects, the implication is clear: design for model-agnostic systems. The application that hard-codes a single provider will be at a disadvantage when employees, and customers: expect to use their preferred AI. Google gains billions of Apple devices through the Siri AI deal (~$1B/year). Apple is not building a frontier model; it is becoming a multi-model platform. Microsoft builds its own MAI models while ending OpenAI exclusivity. The era of single-provider lock-in is ending.
 
 ### What enterprise usage actually looks like
 

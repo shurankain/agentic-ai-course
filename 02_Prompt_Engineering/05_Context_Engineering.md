@@ -20,10 +20,10 @@ The new name tracks a real shift in where failures come from. Research shows tha
 
 Karpathy proposed a powerful analogy for understanding LLMs:
 
-- **CPU (processor)** to **LLM (model weights)**, processing
-- **RAM (random-access memory)** to **Context Window**, working memory
-- **HDD/SSD (storage)** to **Vector DB**: long-term storage
-- **OS (operating system)** to **Agent Loop**: resource management
+- **CPU (processor)** corresponds to the **LLM (model weights)**: processing
+- **RAM (random-access memory)** corresponds to the **Context Window**: working memory
+- **HDD/SSD (storage)** corresponds to the **Vector DB**: long-term storage
+- **OS (operating system)** corresponds to the **Agent Loop**: resource management
 
 ### Key Insight
 
@@ -130,14 +130,14 @@ Depending on available space in the context, the appropriate level of detail is 
 
 ### Customer Support Agent
 
-- **WRITE**: Preferences, then Vector DB, History, then Redis
+- **WRITE**: preferences to a vector DB, history to Redis
 - **SELECT**: Hybrid search over FAQ + Customer history
 - **COMPRESS**: Sliding window of last 10 messages
 - **ISOLATE**: Intent, then Retrieval, then Response, then QA
 
 ### Code Assistant
 
-- **WRITE**: Changes, then Git, Decisions, then Scratchpad
+- **WRITE**: changes to Git, decisions to a scratchpad
 - **SELECT**: Semantic + Keyword over codebase index
 - **COMPRESS**: Signatures + Docstrings (without function bodies)
 - **ISOLATE**: Planner, then Coder, then Tester, then Reviewer
@@ -146,11 +146,11 @@ Depending on available space in the context, the appropriate level of detail is 
 
 ## Context Engineering Metrics
 
-- **Context Utilization**: % of context window used to target 70-90%
-- **Relevance Score**: relevance of retrieved context to above 0.8
-- **Memory Hit Rate**: % of queries where memory helped to above 60%
-- **Compression Ratio**: compression without quality loss to 3-5x
-- **Token Efficiency**: useful tokens / total tokens to above 0.7
+- **Context Utilization**: % of context window used; target 70-90%
+- **Relevance Score**: relevance of retrieved context; target above 0.8
+- **Memory Hit Rate**: % of queries where memory helped; target above 60%
+- **Compression Ratio**: compression without quality loss; target 3-5x
+- **Token Efficiency**: useful tokens / total tokens; target above 0.7
 
 ---
 

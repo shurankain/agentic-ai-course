@@ -18,9 +18,9 @@ The EU AI Act classifies AI systems into four risk levels:
 
 ### Enforcement Timeline (Updated May 2026, Digital Omnibus)
 
-- **August 2024**: the law entered into force, correct
-- **February 2025**: ban on unacceptable risk practices yes (NOW ENFORCED: social scoring, real-time public biometrics, emotion recognition in workplaces/schools are actively prohibited with fines)
-- **August 2025**: obligations for GPAI models yes (NOW ENFORCED. All GPAI providers must provide technical documentation, training data summaries, copyright compliance)
+- **August 2024**: the law entered into force
+- **February 2025**: ban on unacceptable-risk practices, now enforced: social scoring, real-time public biometrics, and emotion recognition in workplaces and schools are prohibited with fines
+- **August 2025**: obligations for GPAI models, now enforced: all GPAI providers must provide technical documentation, training data summaries, and copyright compliance
 - **August 2, 2026**: Article 50 transparency obligations took effect and are **now being enforced** by the Commission's AI Office together with national authorities. GPAI penalty powers activated the same day
 - **December 2, 2026**: new Article 5 prohibitions (AI-generated NCII and CSAM), and the end of the marking grace period for systems already on the market
 - **December 2, 2027**: standalone high-risk systems (Annex III): moved from August 2026 by the Digital Omnibus. Covers HR, credit scoring, law enforcement, healthcare AI

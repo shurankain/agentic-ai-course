@@ -4,7 +4,7 @@
 
 Optimization without measurement is guesswork. Intuition fails even experienced developers: an operation that seems slow may account for a fraction of a percent of total time, while "fast" code may be the bottleneck of the entire pipeline.
 
-GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, instruction mix: factors affect performance.
+GPU profiling is harder than CPU profiling. Asynchronous execution masks the true duration of operations. Thousands of parallel threads create non-trivial resource utilization patterns. Memory bandwidth, occupancy, and instruction mix all affect performance.
 
 The modern toolkit spans several levels: from the high-level PyTorch profiler to the low-level NVIDIA Nsight. Each tool provides its own view of performance, and the ability to combine them is a key skill for an optimization engineer.
 
@@ -38,7 +38,7 @@ The on_trace_ready parameter accepts a callback function. tensorboard_trace_hand
 
 ### Interpreting Results
 
-**Large percentage of time in a single operation**: an obvious optimization target. If 50% of time is spent on attention. This is the place for Flash Attention.
+**Large percentage of time in a single operation**: an obvious optimization target. If 50% of time is spent on attention, that is the place for Flash Attention.
 
 **Many small operations**: a sign of fragmentation. Hundreds of operations at 0.1ms each create overhead from kernel launch. Solution: fusion, torch.compile.
 
@@ -130,7 +130,7 @@ The intersection point is the "ridge point." Operations to its left are memory-b
 
 The position of your kernel on the roofline shows:
 - If far from the roof: there is optimization potential
-- If close to the sloped part. You need to reduce memory traffic
+- If close to the sloped part: you need to reduce memory traffic
 - If close to the horizontal part: you need to reduce compute or it is already at the limit
 
 ### Metrics for Analysis
@@ -142,7 +142,7 @@ The position of your kernel on the roofline shows:
 
 **Memory Throughput**: how much data per second is read/written. Compare with the GPU's peak bandwidth. If lower: non-coalesced access or other issues.
 
-**Compute Throughput**: how many operations per second. For FP16 on H100, the peak is ~1000 TFLOPS. If your kernel shows 100 TFLOPS. It is far from optimal.
+**Compute Throughput**: how many operations per second. For FP16 on H100, the peak is ~1000 TFLOPS. A kernel at 100 TFLOPS is far from optimal.
 
 **Warp Execution Efficiency**: the percentage of active lanes in a warp. < 100% means branch divergence: different threads in the warp took different if/else paths.
 

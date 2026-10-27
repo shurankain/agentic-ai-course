@@ -64,7 +64,7 @@ Extraction is no longer limited to text. Vision-language models (GPT-6, Claude O
 
 **The OCR problem:** Traditional document processing pipelines depend on OCR (Optical Character Recognition) to convert images to text before extraction. OCR fails on complex layouts: multi-column documents, tables with merged cells, forms with handwriting, documents with mixed text/diagram content. Each failure propagates downstream, if OCR misreads a number, the entire extraction is wrong.
 
-**The ColPali approach** (2024-2025) eliminates OCR entirely. Instead of converting the document to text, it treats each page as an image and uses a vision encoder for both retrieval and understanding. The pipeline: vision encoder processes the document image to LLM extracts structured data directly from the visual representation. On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines.
+**The ColPali approach** (2024-2025) eliminates OCR entirely. Instead of converting the document to text, it treats each page as an image and uses a vision encoder for both retrieval and understanding. The pipeline: a vision encoder processes the document image, and the LLM extracts structured data directly from that visual representation. On document retrieval benchmarks, ColPali achieves +20% nDCG@5 over OCR-based pipelines.
 
 **Practical applications:** Invoice processing (extracting line items, totals, vendor info from scanned invoices), form data extraction (insurance claims, government forms), table extraction from PDFs where the table structure is visual rather than semantic. In all cases, the vision model "sees" the layout as a human would, rather than trying to reconstruct it from OCR text.
 

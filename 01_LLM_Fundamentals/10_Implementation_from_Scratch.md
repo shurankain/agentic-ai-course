@@ -40,8 +40,10 @@ A Transformer without positional encoding cannot distinguish token order, "the c
 
 ### Sinusoidal Encoding (Original Transformer)
 
-PE(pos, 2i) = sin(pos / 10000^(2i/d))
+```text
+PE(pos, 2i)   = sin(pos / 10000^(2i/d))
 PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
+```
 
 Advantages: fixed, requires no training, can theoretically extrapolate to lengths beyond those seen during training.
 

@@ -41,8 +41,8 @@ For a model with N parameters on W workers: each stores N/W parameters.
 
 FSDP splits the model into "units", groups of parameters that are sharded and gathered together.
 
-Too large units: minimal AllGather, but peak memory approaches full model.
-Too small units: many AllGather operations with small volumes, overhead from launching operations.
+- Units too large: few AllGather calls, but peak memory approaches the full model.
+- Units too small: many AllGather operations with small volumes, overhead from launching operations.
 
 **Best practice for Transformers:** one unit = one transformer block. Sufficient size for efficient AllGather (~2-4B parameters), logical grouping, predictable memory footprint.
 

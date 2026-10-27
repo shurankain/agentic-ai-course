@@ -260,7 +260,7 @@ n8n deserves special attention as a bridge between no-code and code approaches. 
 
 7. **Choose by task, not by hype**: a simple RAG does not require complex agent frameworks, and a complex multi-agent system cannot be built on basic chains.
 
-8. **The framework landscape is consolidating.** Microsoft unified AutoGen + Semantic Kernel into Agent Framework 1.0 GA. Google ADK is the only Big Tech framework on 4 languages. Mistral launched hosted remote agents. The choice for new projects: Java, then LangChain4j/Spring AI; TypeScript, then Vercel AI SDK/Mastra; Python type-safe, then Pydantic AI; minimal, then OpenAI Agents SDK; auto prompt optimization, then DSPy.
+8. **The framework landscape is consolidating.** Microsoft unified AutoGen + Semantic Kernel into Agent Framework 1.0 GA. Google ADK is the only Big Tech framework on 4 languages. Mistral launched hosted remote agents. The choice for new projects: LangChain4j or Spring AI for Java; Vercel AI SDK or Mastra for TypeScript; Pydantic AI for type-safe Python; OpenAI Agents SDK for a minimal setup; DSPy for automatic prompt optimization.
 
 ---
 

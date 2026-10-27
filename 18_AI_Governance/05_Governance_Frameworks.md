@@ -207,31 +207,31 @@ Each AI initiative passes through defined gates:
 - Is this aligned with AI principles?
 - Is the data available and appropriate?
 - Initial risk assessment
-- to Proceed to exploration?
+- Decision: proceed to exploration?
 
 **Gate 1: Feasibility**
 - Technical feasibility confirmed
 - Data quality sufficient
 - Preliminary fairness analysis
-- to Proceed to development?
+- Decision: proceed to development?
 
 **Gate 2: Development Complete**
 - All testing passed
 - Documentation complete
 - Security review passed
-- to Proceed to pilot?
+- Decision: proceed to pilot?
 
 **Gate 3: Pilot Complete**
 - Pilot success criteria met
 - User feedback incorporated
 - Monitoring working
-- to Proceed to production?
+- Decision: proceed to production?
 
 **Gate 4: Production**
 - All operational requirements met
 - Training complete
 - Support procedures in place
-- to Approved for general availability
+- Decision: approve for general availability
 
 ### Exception Handling
 

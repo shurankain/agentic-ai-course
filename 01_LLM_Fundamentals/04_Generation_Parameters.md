@@ -138,11 +138,11 @@ With top_p = 0.9, we consider the minimal set of tokens covering 90% of the prob
 Here is why top-p is "smarter" than temperature:
 
 **Model is confident** (one token with probability 0.95):
-- Top-p = 0.9 to only 1 token is considered
+- With top-p = 0.9, only 1 token is considered
 - Randomness is minimal, as it should be
 
 **Model is uncertain** (five tokens at 0.18-0.20 each):
-- Top-p = 0.9 to all 5 tokens are considered
+- With top-p = 0.9, all 5 tokens are considered
 - Randomness is high, reflecting the actual uncertainty
 
 Top-p automatically adapts to the model's confidence, whereas temperature operates the same way in all situations.

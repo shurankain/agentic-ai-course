@@ -22,7 +22,7 @@ Example of a strong answer: "At company X, the support team was spending forty p
 
 Senior operates at the project/team level with feature-level impact, solves defined problems, influences within the team. Staff operates at the multi-team/organization level with product/platform-level impact, defines which problems to solve, influences across the organization, and has deep expertise plus breadth.
 
-At Staff+, they look for: organizational impact (changing processes, influencing strategy, raising the bar), dealing with ambiguity (turning an unclear problem into a plan. This makes decisions without complete information), technical leadership (setting direction, convincing without authority, mentorship), cross-functional work (working with PM/Design/Business, navigating conflicts).
+At Staff+, they look for: organizational impact (changing processes, influencing strategy, raising the bar), dealing with ambiguity (turning an unclear problem into a plan and making decisions without complete information), technical leadership (setting direction, convincing without authority, mentorship), cross-functional work (working with PM/Design/Business, navigating conflicts).
 
 ---
 

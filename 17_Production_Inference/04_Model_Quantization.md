@@ -128,7 +128,7 @@ GGUF IQ (Importance Quantization) methods in llama.cpp go beyond standard k-quan
 
 **Why Marlin matters:** Standard dequantization-based INT4 inference leaves performance on the table. Marlin fuses dequantization into the matrix multiplication kernel, achieving near-ideal (4x) speedup over FP16 inference.
 
-**Technical approach:** Marlin uses an asynchronous global-to-shared memory pipeline, perfectly overlapping data loading with computation. It exploits the Tensor Core pipeline structure to perform INT4 becomes FP16 dequantization "for free" within the existing data movement.
+**Technical approach:** Marlin uses an asynchronous global-to-shared memory pipeline, perfectly overlapping data loading with computation. It exploits the Tensor Core pipeline structure to perform INT4-to-FP16 dequantization "for free" within the existing data movement.
 
 **Benchmarks:** On A100, Marlin achieves ~3.7x speedup over FP16 for batch_size=1 (near the theoretical 4x). At larger batches, the speedup narrows as inference becomes compute-bound rather than memory-bound.
 

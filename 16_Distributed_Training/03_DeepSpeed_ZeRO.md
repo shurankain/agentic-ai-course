@@ -96,7 +96,7 @@ In practice: models ~10x larger than GPU memory, but slowdown 2-5x.
 
 The next step: offload to NVMe SSD. Terabytes of storage for training.
 
-Architecture: parameters and optimizer states on NVMe, hierarchical GPU from CPU from NVMe, async prefetch hides latency.
+Architecture: parameters and optimizer states on NVMe, a GPU, CPU, NVMe memory hierarchy, and async prefetch that hides the latency of the slower tiers.
 
 Requirements: fast NVMe PCIe 4.0+, efficient async I/O, careful tuning.
 

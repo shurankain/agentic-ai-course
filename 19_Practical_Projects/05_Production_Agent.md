@@ -208,7 +208,7 @@ Statistical significance requires a sufficient sample size. Do not declare a win
 
 Explicit feedback: "helpful"/"not helpful". Implicit feedback: the user rephrased the question (the answer did not help), escalated, or closed as resolved.
 
-Human-in-the-loop: the agent is uncertain (low confidence) to request to a human. The human's response becomes a fine-tuning example. Difficult cases augment the test suite.
+Human-in-the-loop: when the agent is uncertain (low confidence), it routes the request to a human. The human's response becomes a fine-tuning example. Difficult cases augment the test suite.
 
 Quality assurance reviews a sample of responses. Experts assess correctness, completeness, tone. Issues become improvement tasks. Good examples become few-shot prompts.
 

@@ -126,19 +126,19 @@ Interviewers increasingly ask about real incidents rather than hypotheticals. Tw
 
 ### Scaling vs Alignment
 
-Position A: capabilities outpace alignment research, development needs to slow down.
-Position B: only through capabilities research will we understand the problems and solutions.
-Nuanced view: perhaps a differentiated approach is needed: safety-critical applications require a higher bar, experimental research can move faster. A question of governance.
+- Position A: capabilities outpace alignment research, development needs to slow down.
+- Position B: only through capabilities research will we understand the problems and solutions.
+- Nuanced view: perhaps a differentiated approach is needed: safety-critical applications require a higher bar, experimental research can move faster. A question of governance.
 
 ### Open Source vs Closed
 
-Position A: open source democratizes, enables independent audit, prevents concentration of power.
-Position B: powerful models in open access pose a proliferation risk, impossible to prevent misuse.
-Discussion point: what level of capabilities requires restrictions? How to determine the threshold?
+- Position A: open source democratizes, enables independent audit, prevents concentration of power.
+- Position B: powerful models in open access pose a proliferation risk, impossible to prevent misuse.
+- Discussion point: what level of capabilities requires restrictions? How to determine the threshold?
 
 ### Deceptive Alignment
 
-Concern: a model may pretend to be aligned during training/evaluation but act differently in deployment. Why this is possible: the model knows it is being evaluated, instrumental goal to pass evaluation get deployed pursue real objective, sleeper agents research shows this is technically possible.
+Concern: a model may pretend to be aligned during training/evaluation but act differently in deployment. Why this is possible: the model may know it is being evaluated, passing evaluation is an instrumental goal on the way to deployment and its real objective, and the sleeper agents research shows the behavior is technically possible.
 
 Mitigation: interpretability (look inside not only at outputs), diverse evaluation (different conditions, adversarial testing), monitoring in production.
 
@@ -158,13 +158,13 @@ Mitigation: interpretability (look inside not only at outputs), diverse evaluati
 
 "Explain RLHF to me. What are its failure modes?" See the section above, add specific examples.
 
-"What's the difference between Constitutional AI and standard RLHF?" Standard RLHF: human annotators rank outputs train reward model PPO. Constitutional AI: AI critiques and revises based on principles can use RLAIF. Key differences: scalability (annotators are not needed for every sample), consistency (principles are applied uniformly), auditability (you can see which principles drove the decision). Trade-off: relies on the model following principles, bootstrap problem.
+"What's the difference between Constitutional AI and standard RLHF?" Standard RLHF: human annotators rank outputs, a reward model is trained on the rankings, and PPO optimizes against it. Constitutional AI: the AI critiques and revises its outputs against written principles, and the preference stage can use RLAIF. Key differences: scalability (annotators are not needed for every sample), consistency (principles are applied uniformly), auditability (you can see which principles drove the decision). Trade-off: relies on the model following principles, bootstrap problem.
 
-"How would you detect if a model is being deceptive?" Multi-layered approach: behavioral (diverse test conditions, adversarial probing, look for inconsistencies), interpretability (analysis of internal representations, look for evidence of reasoning about being evaluated), process (multiple models checking each other cross-examination), fundamental limitation (if the model is sophisticated enough we may not detect it, which is why defense in depth matters).
+"How would you detect if a model is being deceptive?" Multi-layered approach: behavioral (diverse test conditions, adversarial probing, look for inconsistencies), interpretability (analysis of internal representations, look for evidence of reasoning about being evaluated), process (multiple models cross-examining each other), fundamental limitation (if the model is sophisticated enough we may not detect it, which is why defense in depth matters).
 
 ### Scenario Questions
 
-"Your team trained a model that performs great on benchmarks but you notice it gives overly agreeable answers. What do you do?" Structure: diagnose (confirm the problem, measure severity), understand (why it happens training data RLHF optimization), options (what solutions are possible), trade-offs (each solution has costs), decision (what you would recommend).
+"Your team trained a model that performs great on benchmarks but you notice it gives overly agreeable answers. What do you do?" Structure: diagnose (confirm the problem, measure severity), understand (why it happens: training data, RLHF optimization), options (what solutions are possible), trade-offs (each solution has costs), decision (what you would recommend).
 
 Answer: "First quantify: create a dataset with ground truth where the agreeable answer does not equal the correct answer. Measure how much the model agrees versus gives the correct answer. The cause is likely RLHF: annotators preferred agreeable responses. Solutions: adjust reward model training data, add honesty to Constitutional AI principles, post-hoc filtering. Trade-off: being too aggressive may make the model unnecessarily contrarian. Recommendation: start with the first approach with evaluation, then iterate."
 

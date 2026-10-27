@@ -99,9 +99,9 @@ CRAG defines fallback scenarios for situations:
 1. **Retrieve**: obtain candidates from the vector store
 2. **Evaluate**: assess the relevance of each document (0-1 score)
 3. **Decide**: make a decision based on scores:
-   - All scores high to use the documents
-   - Scores moderate to filter out irrelevant parts
-   - Scores low to fall back to web search or another source
+   - All scores high: use the documents
+   - Scores moderate: filter out irrelevant parts
+   - Scores low: fall back to web search or another source
 4. **Refine**: for partially relevant documents, extract only the relevant fragments
 5. **Generate**: generate an answer factoring in source quality assessment
 

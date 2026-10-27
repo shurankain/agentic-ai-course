@@ -328,7 +328,7 @@ Full INT8 quantization:
 
 Quantization is critical for production serving:
 
-**Memory savings to larger batches**:
+**Memory savings, larger batches**:
 A 4-bit model uses 4x less memory for weights, which leaves room for more concurrent requests and higher throughput.
 
 **Faster decode**:

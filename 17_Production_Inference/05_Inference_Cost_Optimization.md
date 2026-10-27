@@ -245,9 +245,9 @@ If you have 10 requests per second and each takes 3 seconds to process, then L =
 The classic queueing model helps determine system utilization using the formula `Utilization (ρ) = λ / (c x μ)`, where μ is the service rate (requests per second per worker), and c is the number of workers.
 
 **Utilization rules:**
-- ρ > 1 to the queue grows infinitely (system is overloaded)
-- ρ > 0.8 to sharp latency increase (danger zone)
-- ρ = 0.6-0.7 to optimal load
+- ρ > 1: the queue grows without bound (system is overloaded)
+- ρ > 0.8: latency rises sharply (danger zone)
+- ρ = 0.6-0.7: optimal load
 
 **Practical capacity planning:**
 

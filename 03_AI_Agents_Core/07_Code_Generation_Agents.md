@@ -374,9 +374,9 @@ Before examining the components, it is important to understand the fundamental c
 ### Critical Decisions in the Loop
 
 **When to stop?**
-- All tests pass to success
-- Iteration limit reached to partial success or failure
-- Stuck in a loop (repeating errors) to human assistance needed
+- All tests pass: success
+- Iteration limit reached: partial success or failure
+- Stuck in a loop (repeating errors): human assistance needed
 
 **How to avoid infinite loops?**
 - Tracking attempts and error patterns

@@ -155,19 +155,19 @@ Start simple. Add complexity only when the current approach fails. Each step on 
 | Level | Approach | When to Escalate |
 |-------|----------|-----------------|
 | 1 | **Sliding window** | Default starting point - keep last N messages |
-| 2 | **Conversation summarization** | When conversations exceed context limits to compress older turns |
+| 2 | **Conversation summarization** | When conversations exceed context limits, so older turns need compressing |
 | 3 | **Mem0** (auto-fact extraction) | When users complain the system "doesn't remember" across sessions |
 | 4 | **Letta** (agent-editable memory) | When the agent repeats mistakes or fails to learn from experience |
 | 5 | **Agentic RAG** (active research) | When accuracy drops below 50% on complex multi-source queries |
 | 6 | **Graph RAG** (entity relationships) | When users ask about relationships between entities ("how is X connected to Y?") |
 
 **Escalation signals in production:**
-- Users complain "you forgot" or "we already discussed this" becomes move from Level 1 to Level 3
-- Agent makes the same mistake twice on similar inputs to move to Level 4 (agent needs to learn from experience)
-- Accuracy on multi-hop questions is below 50% to move to Level 5 (retrieval is not adaptive enough)
-- Domain is relationship-heavy (legal, healthcare, finance) to consider Level 6
+- Users complain "you forgot" or "we already discussed this": move from Level 1 to Level 3
+- Agent makes the same mistake twice on similar inputs: move to Level 4 (agent needs to learn from experience)
+- Accuracy on multi-hop questions is below 50%: move to Level 5 (retrieval is not adaptive enough)
+- Domain is relationship-heavy (legal, healthcare, finance): consider Level 6
 
-This is not a hierarchy of quality. It is a hierarchy of complexity. Level 1 is correct for many production agents. Escalate only when you have evidence that the current level is insufficient.
+The ladder ranks complexity, and higher levels are not better in themselves. Level 1 is correct for many production agents. Escalate only when you have evidence that the current level is insufficient.
 
 ---
 

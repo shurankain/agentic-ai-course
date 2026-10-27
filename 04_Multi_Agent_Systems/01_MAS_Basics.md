@@ -197,7 +197,7 @@ Theory and practice diverge in multi-agent adoption. The LangChain "State of Age
 
 Multi-agent systems overcome single-agent limitations through specialization, load distribution, and scaling, but at 3-15x token cost. The decision framework: prototype with a single agent first, add multi-agent only when single-agent hits clear capability boundaries.
 
-Multi-agent is justified for: distinct expertise domains (security ≠ performance review), parallel independent tasks (5 searches simultaneously), and adversarial validation (generator + critic for high-stakes decisions). Single-agent dominates 57% of production deployments (2026 data) and handles the bulk of real-world use cases.
+Multi-agent is justified for: distinct expertise domains (security review and performance review need different expertise), parallel independent tasks (5 searches simultaneously), and adversarial validation (generator + critic for high-stakes decisions). Single-agent dominates 57% of production deployments (2026 data) and handles the bulk of real-world use cases.
 
 Communication mechanisms range from tightly coupled (direct messages) to loosely coupled (event bus, A2A). Modern production systems use MCP for tool access and A2A for cross-framework agent coordination. Hierarchy is natural but creates single points of failure. Flat structures are more resilient but harder to coordinate.
 

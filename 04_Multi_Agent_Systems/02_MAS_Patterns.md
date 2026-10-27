@@ -17,10 +17,10 @@ Patterns are proven architectural solutions that can be combined for specific ta
 
 ### Algorithm
 
-Fixed steps? to Handoff
-Known domains? to Mixture of Experts
-Central coordination acceptable? to Supervisor/Hierarchical
-No to Peer-to-Peer
+- Fixed steps? Use Handoff.
+- Known domains? Use Mixture of Experts.
+- Central coordination acceptable? Use Supervisor/Hierarchical.
+- None of the above? Use Peer-to-Peer.
 
 ### Metrics
 
@@ -116,7 +116,7 @@ Example: parser (text extraction), then analyzer (entities, facts), then enriche
 
 Advantages: clear separation of responsibilities, independent development/testing, easy to add/replace stages, lowest debugging complexity of all multi-agent patterns.
 
-Limitations: sequential nature (failure/delay in one stage becomes blocks the entire chain), poor support for feedback loops (late-stage results requiring revision of earlier stages), total latency is the sum of all stages. To add feedback loops, combine with the debate pattern or add a "quality gate" agent that can route back to previous stages.
+Limitations: sequential nature (a failure or delay in one stage blocks the entire chain), poor support for feedback loops (late-stage results requiring revision of earlier stages), total latency is the sum of all stages. To add feedback loops, combine with the debate pattern or add a "quality gate" agent that can route back to previous stages.
 
 ## Fan-Out/Fan-In
 

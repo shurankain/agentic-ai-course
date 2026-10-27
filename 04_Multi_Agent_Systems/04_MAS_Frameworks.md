@@ -283,13 +283,13 @@ Selecting a framework requires weighing pattern expressiveness, ecosystem maturi
 | **Best for** | Complex flows, checkpointing | Role-based teams, fast prototyping | Handoff routing on OpenAI | Enterprise MS ecosystem | GCP + Gemini |
 
 **Quick decision guide:**
-- Need checkpointing/resumability? to LangGraph
-- Need fast prototype with role-based agents? to CrewAI
-- Need simple routing on OpenAI models? to OpenAI Agents SDK
-- Enterprise Microsoft stack? to Microsoft Agent Framework
-- GCP + Gemini + A2A? to Google ADK
-- Type-safe Python? to Pydantic AI
-- Go infrastructure team? to Google ADK for Go
+- Need checkpointing/resumability? Use LangGraph.
+- Need fast prototype with role-based agents? Use CrewAI.
+- Need simple routing on OpenAI models? Use OpenAI Agents SDK.
+- Enterprise Microsoft stack? Use Microsoft Agent Framework.
+- GCP + Gemini + A2A? Use Google ADK.
+- Type-safe Python? Use Pydantic AI.
+- Go infrastructure team? Use Google ADK for Go.
 
 ## Key Takeaways
 

@@ -101,8 +101,8 @@ If features are in superposition, we can attempt to disentangle them. **Sparse A
 An SAE is trained to reconstruct activations through an intermediate layer with a larger number of neurons, subject to a sparsity constraint (most neurons must be zero).
 
 Architecture:
-1. **Encoder**: x to ReLU(Wx + b): expands into a higher-dimensional space
-2. **Decoder**: z to W'z + b': compresses back
+1. **Encoder**: z = ReLU(Wx + b), which expands x into a higher-dimensional space
+2. **Decoder**: x' = W'z + b', which compresses z back to the original dimension
 3. **Sparsity loss**: penalty for the number of non-zero activations
 
 After training, each SAE neuron should correspond to one interpretable feature.
@@ -229,7 +229,7 @@ Research has revealed rich representational structure:
 
 ### Probing Limitations
 
-**Correlation ≠ causation**: the presence of information does not mean the model uses it.
+**Correlation is not causation**: the presence of information does not mean the model uses it.
 
 **Linear probes can be weak**: if information is encoded nonlinearly, a linear probe will not find it.
 
@@ -253,8 +253,8 @@ If the substitution restores the output, that component is critical for the task
 
 ### Example: Indirect Object Identification
 
-Task: "John gave the book to Mary. John gave it to ___"
-Correct answer: Mary
+- Task: "John gave the book to Mary. John gave it to ___"
+- Correct answer: Mary
 
 Using activation patching, one can determine:
 - Which attention heads find "Mary" in the context

@@ -464,10 +464,10 @@ A self-correction cycle with diagnosis, fixing, and an iteration limit to preven
 Action: {ACTION} | Result: {RESULT}
 
 ## 1. VERIFICATION
-yes Is the format correct?
-yes Is the information complete?
-yes Are there no errors?
-yes Is it logical?
+[ ] Is the format correct?
+[ ] Is the information complete?
+[ ] Is it free of errors?
+[ ] Is it logical?
 
 All OK -> continue. Problem found -> diagnose.
 

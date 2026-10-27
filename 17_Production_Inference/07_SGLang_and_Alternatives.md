@@ -108,13 +108,13 @@ Rated 1 to 5, where 5 is the best of these four for that dimension rather than a
 
 ## Decision Framework
 
-**Step 1:** Multi-turn chatbot or agent? to **SGLang** (RadixAttention)
+**Step 1:** Multi-turn chatbot or agent? Use **SGLang** (RadixAttention).
 
-**Step 2:** Maximum performance is critical? to **TensorRT-LLM** (especially Hopper FP8)
+**Step 2:** Maximum performance is critical? Use **TensorRT-LLM** (especially Hopper FP8).
 
-**Step 3:** Need structured output? to **SGLang** (constrained decoding)
+**Step 3:** Need structured output? Use **SGLang** (constrained decoding).
 
-**Step 4:** General use case? to **vLLM** (universal, reliable)
+**Step 4:** General use case? Use **vLLM** (universal, reliable).
 
 **Quick Guide:**
 - General batch inference: vLLM
@@ -198,7 +198,7 @@ This has direct implications for agent loops: use `reasoning_effort` (OpenAI) or
 Prometheus endpoints with request/token counters, latency histograms, queue depths. Monitor queue depth: growth signals the need to scale.
 
 **Scaling:**
-Kubernetes HorizontalPodAutoscaler with custom metrics (llm_queue_depth). Queue depth >10 to add pods. Account for cold start (minutes): aggressive scale-up, conservative scale-down.
+Kubernetes HorizontalPodAutoscaler with custom metrics (llm_queue_depth). Queue depth >10: add pods. Account for cold start (minutes): aggressive scale-up, conservative scale-down.
 
 **Fallback:**
 Primary service (SGLang) with a short timeout (5s), then fallback to backup (vLLM) with increased timeout, then last resort external API (OpenAI, Anthropic). High availability at reasonable cost.
