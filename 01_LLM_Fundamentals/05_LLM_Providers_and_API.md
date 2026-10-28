@@ -793,7 +793,7 @@ LangChain4j is a popular Java framework that abstracts working with different LL
 
 ### Benefits of a Unified Interface
 
-Instead of learning each provider's API separately, you work with a single `ChatLanguageModel` interface. Switching between providers means changing a single configuration line. The code remains the same.
+Instead of learning each provider's API separately, you work with a single `ChatModel` interface. Switching between providers means changing a single configuration line. The code remains the same.
 
 ### Supported Providers
 

@@ -115,23 +115,45 @@ Optimizes per-request latency, may reduce aggregate throughput in batch serving.
 Mathematically preserves output distribution: identical quality is guaranteed.
 
 **System constraints:**
-Tokenizer compatibility (identical vocabulary is mandatory), hardware requirements (additional memory), implementation complexity.
+Tokenizer compatibility (a shared vocabulary, or a configured vocabulary intersection), hardware requirements (additional memory), implementation complexity.
 
 ## Practice in vLLM
 
-Launch with parameters: --model (target), --speculative-model (draft), --num-speculative-tokens (usually 3-5), --tensor-parallel-size for target.
+Current vLLM releases take every speculative setting in one JSON object, `--speculative-config` on the command line and `speculative_config` in the Python API. The older `--speculative-model` and `--num-speculative-tokens` flags belong to the pre-V1 engine.
+
+```bash
+vllm serve meta-llama/Llama-3.1-70B-Instruct \
+  --tensor-parallel-size 4 \
+  --speculative-config '{
+    "method": "draft_model",
+    "model": "meta-llama/Llama-3.2-1B-Instruct",
+    "num_speculative_tokens": 4,
+    "draft_tensor_parallel_size": 1
+  }'
+```
+
+```python
+from vllm import LLM, SamplingParams
+
+llm = LLM(
+    model="meta-llama/Llama-3.1-70B-Instruct",
+    tensor_parallel_size=4,
+    speculative_config={
+        "method": "draft_model",
+        "model": "meta-llama/Llama-3.2-1B-Instruct",
+        "num_speculative_tokens": 4,
+    },
+)
+outputs = llm.generate(["Explain speculative decoding."], SamplingParams(max_tokens=256))
+```
 
 Key parameters:
-- speculative-model: path to draft, identical tokenizer is mandatory
-- num-speculative-tokens: 3-5 is optimal, determined experimentally
-- speculative-draft-tensor-parallel-size: usually 1
+- `method`: `draft_model` for a separate small model; `eagle3`, `mtp`, `ngram`, and `suffix` select the draftless or head-based methods covered above
+- `model`: the draft model or EAGLE head; it should share the target's tokenizer, and a mismatched vocabulary needs `use_heterogeneous_vocab`, which only `draft_model` supports
+- `num_speculative_tokens`: 3-5 is the usual range, determined experimentally
+- `draft_tensor_parallel_size`: usually 1
 
-Monitoring via Prometheus:
-- spec_decode_draft_acceptance_rate (>70% is good)
-- spec_decode_efficiency (actual speedup factor)
-- num_spec_tokens (average number of accepted tokens)
-
-Python API is transparent, when initializing LLM, specify speculative_model and num_speculative_tokens, then use standard generation.
+Monitoring: the `/metrics` endpoint exports the `vllm:spec_decode_num_draft_tokens_total` and `vllm:spec_decode_num_accepted_tokens_total` counters, and their ratio is the acceptance rate (above 70% is good for a draft model). Starting the server with `--per-request-spec-decode-metrics summary` also adds `mean_acceptance_length` and `draft_acceptance_rate` to each response, an experimental field whose shape may change between releases.
 
 ## Key Takeaways
 

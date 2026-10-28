@@ -371,16 +371,12 @@ print(f"Attention weights:\n{weights}")
 ### 2. BPE Tokenizer Basic Implementation
 
 ```python
+import re
 from collections import defaultdict, Counter
 
-def get_pairs(word):
-    """Get all adjacent character pairs in a word"""
-    pairs = set()
-    prev_char = word[0]
-    for char in word[1:]:
-        pairs.add((prev_char, char))
-        prev_char = char
-    return pairs
+def get_pairs(symbols):
+    """Get all adjacent symbol pairs, one entry per occurrence"""
+    return list(zip(symbols, symbols[1:]))
 
 def train_bpe(corpus, num_merges):
     """
@@ -421,16 +417,12 @@ def train_bpe(corpus, num_merges):
     return merges
 
 def merge_vocab(pair, vocab):
-    """Merge a character pair in all words"""
-    new_vocab = {}
-    bigram = ' '.join(pair)
+    """Merge a symbol pair in all words, only at symbol boundaries"""
+    bigram = re.escape(' '.join(pair))
+    # Lookarounds stop the pair ("o", "w") from matching inside "lo w" or "o we"
+    pattern = re.compile(r'(?<!\S)' + bigram + r'(?!\S)')
     replacement = ''.join(pair)
-
-    for word in vocab:
-        new_word = word.replace(bigram, replacement)
-        new_vocab[new_word] = vocab[word]
-
-    return new_vocab
+    return {pattern.sub(replacement, word): freq for word, freq in vocab.items()}
 
 # Usage example
 corpus = ['low', 'low', 'low', 'lower', 'lower', 'lowest']

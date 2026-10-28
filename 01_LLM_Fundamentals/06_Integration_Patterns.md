@@ -96,7 +96,7 @@ All major providers support streaming via Server-Sent Events (SSE):
 3. The connection remains open until the response is complete
 4. Each token is a separate SSE event
 
-LangChain4j provides `StreamingChatLanguageModel` with a callback interface for token processing.
+LangChain4j provides `StreamingChatModel` with a callback interface for token processing.
 
 ### Streaming in Web Applications
 

@@ -165,11 +165,14 @@ Support for multiple programming languages and model providers ensures flexibili
 ### Kernel Creation and Configuration
 
 ```java
-import com.microsoft.semantickernel.Kernel;
-import com.microsoft.semantickernel.orchestration.InvocationContext;
-import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
 import com.azure.ai.openai.OpenAIAsyncClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
+import com.azure.core.credential.AzureKeyCredential;
+import com.microsoft.semantickernel.Kernel;
+import com.microsoft.semantickernel.aiservices.openai.chatcompletion.OpenAIChatCompletion;
+import com.microsoft.semantickernel.plugin.KernelPlugin;
+import com.microsoft.semantickernel.plugin.KernelPluginFactory;
+import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
 
 // Create Azure OpenAI client
 OpenAIAsyncClient client = new OpenAIClientBuilder()
@@ -180,12 +183,19 @@ OpenAIAsyncClient client = new OpenAIClientBuilder()
 // Create chat completion service
 ChatCompletionService chatService = OpenAIChatCompletion.builder()
     .withOpenAIAsyncClient(client)
-    .withModelId("gpt-5.6")
+    // On Azure the model ID is your deployment name, so read it from configuration
+    .withModelId(System.getenv("AZURE_OPENAI_DEPLOYMENT"))
     .build();
 
-// Build Kernel with service registration
+// Turn annotated classes into plugins (TimePlugin and WeatherPlugin are defined below)
+KernelPlugin timePlugin = KernelPluginFactory.createFromObject(new TimePlugin(), "TimePlugin");
+KernelPlugin weatherPlugin = KernelPluginFactory.createFromObject(new WeatherPlugin(), "WeatherPlugin");
+
+// Build Kernel with service and plugin registration
 Kernel kernel = Kernel.builder()
     .withAIService(ChatCompletionService.class, chatService)
+    .withPlugin(timePlugin)
+    .withPlugin(weatherPlugin)
     .build();
 ```
 
@@ -194,6 +204,11 @@ Kernel kernel = Kernel.builder()
 ```java
 import com.microsoft.semantickernel.semanticfunctions.annotations.DefineKernelFunction;
 import com.microsoft.semantickernel.semanticfunctions.annotations.KernelFunctionParameter;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class TimePlugin {
 
@@ -243,9 +258,11 @@ public class TimePlugin {
 ### Registering and Invoking Plugins
 
 ```java
-// Import plugin into Kernel
-TimePlugin timePlugin = new TimePlugin();
-// Plugin registered at build time via Kernel.builder().withPlugin(...)
+import com.microsoft.semantickernel.orchestration.FunctionResult;
+import com.microsoft.semantickernel.semanticfunctions.KernelFunction;
+import com.microsoft.semantickernel.semanticfunctions.KernelFunctionArguments;
+
+// The plugin was registered when the kernel was built (see above)
 
 // Create function arguments
 KernelFunctionArguments arguments = KernelFunctionArguments.builder()
@@ -253,28 +270,30 @@ KernelFunctionArguments arguments = KernelFunctionArguments.builder()
     .build();
 
 // Get function from Kernel
-KernelFunction<?> timeFunction = kernel
+KernelFunction<String> timeFunction = kernel
     .getFunction("TimePlugin", "getCurrentTime");
 
-// Synchronous function invocation
-FunctionResult<Object> result = timeFunction.invoke(kernel, arguments, null);
+// invokeAsync returns a Reactor-based invocation: block() waits for the result
+FunctionResult<String> result = kernel.invokeAsync(timeFunction)
+    .withArguments(arguments)
+    .block();
 System.out.println("Current time: " + result.getResult());
 
-// Asynchronous function invocation
-CompletableFuture<FunctionResult<Object>> asyncResult =
-    timeFunction.invokeAsync(kernel, arguments, null);
-
-asyncResult.thenAccept(res -> {
-    System.out.println("Current time (async): " + res.getResult());
-});
+// Non-blocking variant: subscribe instead of block
+kernel.invokeAsync(timeFunction)
+    .withArguments(arguments)
+    .subscribe(res -> System.out.println("Current time (async): " + res.getResult()));
 ```
 
 ### Working with Prompts and Automatic Function Calling
 
 ```java
+import com.microsoft.semantickernel.orchestration.FunctionResult;
+import com.microsoft.semantickernel.orchestration.InvocationContext;
 import com.microsoft.semantickernel.orchestration.PromptExecutionSettings;
+import com.microsoft.semantickernel.orchestration.ToolCallBehavior;
 
-// Register a plugin with business logic
+// A plugin with business logic, registered on the kernel at build time
 public class WeatherPlugin {
 
     @DefineKernelFunction(
@@ -288,37 +307,31 @@ public class WeatherPlugin {
         ) String city
     ) {
         // Simulating a weather API call
-        return String.format("In %s it is currently +15°C, cloudy", city);
+        return String.format("In %s it is currently +15 C, cloudy", city);
     }
 }
 
-// Register the plugin
-WeatherPlugin weatherPlugin = new WeatherPlugin();
-// Plugin registered at build time via Kernel.builder().withPlugin(...)
-
-// Configure automatic function calling
+// Generation settings
 PromptExecutionSettings settings = PromptExecutionSettings.builder()
-    .withTemperature(0.7)
     .withMaxTokens(500)
-    .withFunctionChoiceBehavior(
-        FunctionChoiceBehavior.auto(true)
-    )
     .build();
 
-// Execute prompt with automatic function calling
-String userPrompt = "What is the current weather in Kyiv?";
-
+// Expose every kernel function to the model and let SK execute the calls
 InvocationContext context = InvocationContext.builder()
     .withPromptExecutionSettings(settings)
+    .withToolCallBehavior(ToolCallBehavior.allowAllKernelFunctions(true))
     .build();
 
+String userPrompt = "What is the current weather in Kyiv?";
+
 // The model will automatically determine the need to call getWeather
-FunctionResult<Object> answer = kernel.invokePromptAsync(userPrompt)
+FunctionResult<String> answer = kernel.invokePromptAsync(userPrompt)
+    .withResultType(String.class)
     .withInvocationContext(context)
     .block();
 
 System.out.println("Answer: " + answer.getResult());
-// Output: "Answer: In Kyiv it is currently +15°C, cloudy"
+// Output: "Answer: In Kyiv it is currently +15 C, cloudy"
 ```
 
 These examples demonstrate the key capabilities of the Semantic Kernel Java SDK: kernel creation and configuration, defining reusable plugins with detailed function descriptions, and explicit and automatic function invocation through the model. The `@DefineKernelFunction` and `@KernelFunctionParameter` annotations provide the metadata required for function calling.

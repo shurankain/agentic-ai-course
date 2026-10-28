@@ -12,7 +12,7 @@ Third, the project actively integrates with the Spring ecosystem. This gives aut
 
 ### Models and Providers
 
-The central element of LangChain4j is the language model abstraction. The ChatLanguageModel interface defines the contract for interacting with any model that supports the chat-completion API.
+The central element of LangChain4j is the language model abstraction. The ChatModel interface (called ChatLanguageModel before 1.0) defines the contract for interacting with any model that supports the chat-completion API.
 
 The framework provides implementations for providers: OpenAI, Azure OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Mistral, Hugging Face, Ollama, and others. Each implementation adapts the provider's specifics to a unified interface.
 
@@ -112,7 +112,7 @@ The starter supports all major model providers, vector stores, and embedding mod
 
 The Spring Boot auto-configuration mechanism allows LangChain4j to adapt to the environment. When certain dependencies are present, the corresponding beans are automatically created.
 
-If the PostgreSQL driver is on the classpath and a connection is configured: a pgvector EmbeddingStore is created. If an OpenAI API key is configured: an OpenAI ChatLanguageModel is created.
+If the PostgreSQL driver is on the classpath and a connection is configured: a pgvector EmbeddingStore is created. If an OpenAI API key is configured: an OpenAI ChatModel is created.
 
 ### Dependency Injection
 
@@ -277,11 +277,11 @@ public class AgentTools {
 }
 ```
 
-### 3. Full Integration with ChatLanguageModel
+### 3. Full Integration with ChatModel
 
 ```java
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 
@@ -291,12 +291,12 @@ import dev.langchain4j.service.AiServices;
 public class LangChain4jDemo {
 
     public static void main(String[] args) {
-        // 1. Creating a model with settings
-        ChatLanguageModel model = OpenAiChatModel.builder()
+        // 1. Creating a model. The model ID comes from configuration,
+        //    because provider IDs change with every release.
+        ChatModel model = OpenAiChatModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
-                .modelName("gpt-5.6")
-                .temperature(0.7)
-                .maxTokens(1000)
+                .modelName(System.getenv().getOrDefault("OPENAI_MODEL", "gpt-6-sol"))
+                .maxCompletionTokens(1000)   // reasoning models reject maxTokens
                 .logRequests(true)
                 .logResponses(true)
                 .build();
@@ -304,17 +304,15 @@ public class LangChain4jDemo {
         // 2. Creating tools
         AgentTools tools = new AgentTools();
 
-        // 3. Configuring memory (last 10 messages)
-        MessageWindowChatMemory memory = MessageWindowChatMemory.withMaxMessages(10);
-
-        // 4. Building the AI Service
+        // 3. Building the AI Service. SupportAssistant takes a @MemoryId,
+        //    so each user gets a separate window of the last 10 messages.
         SupportAssistant assistant = AiServices.builder(SupportAssistant.class)
-                .chatLanguageModel(model)
-                .chatMemory(memory)
+                .chatModel(model)
+                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                 .tools(tools)
                 .build();
 
-        // 5. Using the assistant
+        // 4. Using the assistant
         String userId = "user123";
 
         // First request - the agent will use the getCurrentDateTime tool
@@ -332,16 +330,16 @@ public class LangChain4jDemo {
             "How much would the laptop cost with a 15% discount?");
         System.out.println("Assistant: " + response3);
 
-        // 6. Example of extracting structured data
+        // 5. Example of extracting structured data
         demonstrateStructuredOutput(model);
     }
 
     /**
      * Demonstration of extracting structured data
      */
-    private static void demonstrateStructuredOutput(ChatLanguageModel model) {
+    private static void demonstrateStructuredOutput(ChatModel model) {
         DataExtractor extractor = AiServices.builder(DataExtractor.class)
-                .chatLanguageModel(model)
+                .chatModel(model)
                 .build();
 
         String text = """

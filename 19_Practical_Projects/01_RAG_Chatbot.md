@@ -160,17 +160,14 @@ Streaming responses improve perceived latency. The user sees progress and does n
 
 ```java
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
@@ -178,7 +175,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -190,16 +187,23 @@ public class RagChatbotService {
 
     private static final Logger log = LoggerFactory.getLogger(RagChatbotService.class);
 
-    @Autowired
-    private ChatClient chatClient;
+    private static final String SYSTEM_PROMPT = """
+        You are an assistant for working with enterprise documentation.
 
-    @Autowired
-    private EmbeddingModel embeddingModel;
+        RULES:
+        1. Answer ONLY based on the provided context
+        2. If the information is not in the context, honestly state that
+        3. ALWAYS cite sources in the format [Source: file_name]
+        4. Be concise yet informative
+        5. Use bulleted lists for better readability
+        """;
 
-    private VectorStore vectorStore;
+    private final ChatClient chatClient;
+    private final VectorStore vectorStore;
 
-    public RagChatbotService(EmbeddingModel embeddingModel) {
-        // Initialize in-memory vector store
+    public RagChatbotService(ChatClient.Builder chatClientBuilder, EmbeddingModel embeddingModel) {
+        this.chatClient = chatClientBuilder.defaultSystem(SYSTEM_PROMPT).build();
+        // In-memory vector store; the Qdrant version follows below
         this.vectorStore = SimpleVectorStore.builder(embeddingModel).build();
     }
 
@@ -209,14 +213,14 @@ public class RagChatbotService {
      * @param documentPaths list of document paths
      */
     public void indexDocuments(List<Path> documentPaths) {
-        // Configure text splitting strategy
-        // 512 tokens per chunk, overlap of 64 tokens (12.5%)
+        // 512 tokens per chunk. TokenTextSplitter has no overlap setting,
+        // so a 64-token overlap needs a custom splitter.
         TokenTextSplitter textSplitter = TokenTextSplitter.builder().withChunkSize(512).build();
 
         for (Path path : documentPaths) {
             try {
                 // Load document
-                TextReader reader = new TextReader(path.toString());
+                TextReader reader = new TextReader(new FileSystemResource(path));
                 List<Document> documents = reader.get();
 
                 // Enrich with metadata for citation
@@ -225,8 +229,8 @@ public class RagChatbotService {
                     doc.getMetadata().put("file_path", path.toString());
                 });
 
-                // Split into chunks while preserving context
-                List<Document> chunks = textSplitter.split(documents);
+                // Split into chunks; metadata is copied to every chunk
+                List<Document> chunks = textSplitter.apply(documents);
 
                 // Generate embeddings and save to vector store
                 vectorStore.add(chunks);
@@ -269,59 +273,18 @@ public class RagChatbotService {
         // Stage 2: Build context with metadata for citation
         String context = buildContextWithSources(relevantDocs);
 
-        // Stage 3: Generation - create prompt for LLM
-        String systemPrompt = """
-            You are an assistant for working with enterprise documentation.
-
-            RULES:
-            1. Answer ONLY based on the provided context
-            2. If the information is not in the context, honestly state that
-            3. ALWAYS cite sources in the format [Source: file_name]
-            4. Be concise yet informative
-            5. Use bulleted lists for better readability
-            """;
-
-        String userPrompt = String.format("""
-            CONTEXT:
-            %s
-
-            USER QUESTION:
-            %s
-
-            Provide an answer with mandatory source citations.
-            """, context, userQuery);
-
-        // Create prompt with system and user messages
-        Message systemMessage = new org.springframework.ai.chat.messages.SystemMessage(systemPrompt);
-        Message userMessage = new UserMessage(userPrompt);
-
-        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
-
-        // Call LLM
-        ChatResponse response = chatClient.call(prompt);
-
-        return response.getResult().getOutput().getContent();
-    }
-
-    /**
-     * Build context with source information.
-     */
-    private String buildContextWithSources(List<Document> documents) {
-        return documents.stream()
-            .map(doc -> {
-                String content = doc.getContent();
-                String source = (String) doc.getMetadata().get("source");
-
-                return String.format("--- Source: %s ---\n%s\n", source, content);
-            })
-            .collect(Collectors.joining("\n"));
+        // Stage 3: Generation - the system prompt is set as the client default
+        return chatClient.prompt()
+            .user(buildUserPrompt(context, userQuery))
+            .call()
+            .content();
     }
 
     /**
      * Streaming answer for responsive UX.
      *
      * @param userQuery user question
-     * @return stream of response tokens
+     * @param callback receives tokens as they arrive
      */
     public void streamAnswer(String userQuery, StreamCallback callback) {
         Objects.requireNonNull(callback, "StreamCallback must not be null");
@@ -335,25 +298,38 @@ public class RagChatbotService {
 
         String context = buildContextWithSources(relevantDocs);
 
-        // Create prompt with system and user messages (consistent with sync version)
-        Message systemMessage = new org.springframework.ai.chat.messages.SystemMessage(
-            "Answer only based on the context. Cite sources.");
-        Message userMessage = new UserMessage(String.format("""
-            Context:
+        // Same prompt as the synchronous version, delivered as a Flux<String>
+        chatClient.prompt()
+            .user(buildUserPrompt(context, userQuery))
+            .stream()
+            .content()
+            .subscribe(
+                callback::onToken,
+                callback::onError,
+                callback::onComplete
+            );
+    }
+
+    private String buildUserPrompt(String context, String userQuery) {
+        return String.format("""
+            CONTEXT:
             %s
 
-            Question: %s
-            """, context, userQuery));
+            USER QUESTION:
+            %s
 
-        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
+            Provide an answer with mandatory source citations.
+            """, context, userQuery);
+    }
 
-        // Streaming response via callback
-        chatClient.stream(prompt)
-            .subscribe(
-                response -> callback.onToken(response.getResult().getOutput().getContent()),
-                error -> callback.onError(error),
-                () -> callback.onComplete()
-            );
+    /**
+     * Build context with source information.
+     */
+    private String buildContextWithSources(List<Document> documents) {
+        return documents.stream()
+            .map(doc -> String.format("--- Source: %s ---\n%s\n",
+                doc.getMetadata().get("source"), doc.getText()))
+            .collect(Collectors.joining("\n"));
     }
 
     // Callback interface for streaming
@@ -370,33 +346,47 @@ public class RagChatbotService {
 ```java
 import io.qdrant.client.QdrantClient;
 import io.qdrant.client.QdrantGrpcClient;
-import io.qdrant.client.grpc.Collections.*;
-import io.qdrant.client.grpc.Points.*;
+import io.qdrant.client.grpc.Collections.Distance;
+import io.qdrant.client.grpc.Collections.VectorParams;
+import io.qdrant.client.grpc.Points.Filter;
+import io.qdrant.client.grpc.Points.PointStruct;
+import io.qdrant.client.grpc.Points.ScoredPoint;
+import io.qdrant.client.grpc.Points.SearchPoints;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import static io.qdrant.client.ConditionFactory.matchKeyword;
+import static io.qdrant.client.PointIdFactory.id;
+import static io.qdrant.client.ValueFactory.value;
+import static io.qdrant.client.VectorsFactory.vectors;
+import static io.qdrant.client.WithPayloadSelectorFactory.enable;
+
 /**
- * Production-ready Vector Store using Qdrant.
- * Supports hybrid search and metadata filtering.
+ * Production vector store on Qdrant with metadata filtering.
+ * Named QdrantDocumentStore to avoid clashing with Spring AI's own QdrantVectorStore,
+ * which is the simpler choice when you do not need the raw client.
  */
 @Component
-public class QdrantVectorStore {
+public class QdrantDocumentStore {
 
-    private static final Logger log = LoggerFactory.getLogger(QdrantVectorStore.class);
+    private static final Logger log = LoggerFactory.getLogger(QdrantDocumentStore.class);
+    private static final String COLLECTION_NAME = "documents";
 
     private final QdrantClient client;
     private final EmbeddingModel embeddingModel;
-    private static final String COLLECTION_NAME = "documents";
 
-    public QdrantVectorStore(EmbeddingModel embeddingModel) {
-        // Connect to Qdrant (Docker: localhost:6334)
+    public QdrantDocumentStore(EmbeddingModel embeddingModel)
+            throws ExecutionException, InterruptedException {
+        // Connect to Qdrant (Docker: localhost:6334, gRPC port)
         this.client = new QdrantClient(
             QdrantGrpcClient.newBuilder("localhost", 6334, false).build()
         );
@@ -406,62 +396,42 @@ public class QdrantVectorStore {
     }
 
     /**
-     * Initialize collection with required parameters.
+     * Create the collection once; vector size must match the embedding model.
      */
-    private void initializeCollection() {
-        try {
-            // Create collection with vector size = 1536 (text-embedding-3-small)
-            VectorParams vectorParams = VectorParams.newBuilder()
-                .setSize(1536)
-                .setDistance(Distance.Cosine)
-                .build();
-
-            CreateCollection createCollection = CreateCollection.newBuilder()
-                .setCollectionName(COLLECTION_NAME)
-                .setVectorsConfig(VectorsConfig.newBuilder()
-                    .setParams(vectorParams)
-                    .build())
-                .build();
-
-            client.createCollectionAsync(createCollection).get();
-            log.info("Qdrant collection created: {}", COLLECTION_NAME);
-
-        } catch (ExecutionException | InterruptedException e) {
-            log.info("Collection already exists or error: {}", e.getMessage());
+    private void initializeCollection() throws ExecutionException, InterruptedException {
+        if (client.collectionExistsAsync(COLLECTION_NAME).get()) {
+            return;
         }
+        client.createCollectionAsync(COLLECTION_NAME,
+            VectorParams.newBuilder()
+                .setSize(1536)                  // text-embedding-3-small
+                .setDistance(Distance.Cosine)
+                .build())
+            .get();
+        log.info("Qdrant collection created: {}", COLLECTION_NAME);
     }
 
     /**
      * Add documents to the vector store with metadata.
      */
-    public void addDocuments(List<Document> documents) {
-        documents.forEach(doc -> {
-            try {
-                // Generate embedding for the document
-                float[] embedding = embeddingModel.embed(doc.getContent());
+    public void addDocuments(List<Document> documents)
+            throws ExecutionException, InterruptedException {
+        List<PointStruct> points = new ArrayList<>();
+        for (Document doc : documents) {
+            float[] embedding = embeddingModel.embed(doc.getText());
+            Object source = doc.getMetadata().getOrDefault("source", "unknown");
 
-                // Prepare point with metadata for filtering
-                PointStruct point = PointStruct.newBuilder()
-                    .setId(PointId.newBuilder().setUuid(UUID.randomUUID().toString()))
-                    .setVectors(Vectors.newBuilder().setVector(
-                        io.qdrant.client.grpc.Points.Vector.newBuilder()
-                            .addAllData(embedding.stream().map(Double::floatValue).toList())
-                    ))
-                    .putAllPayload(Map.of(
-                        "content", Value.newBuilder().setStringValue(doc.getContent()).build(),
-                        "source", Value.newBuilder().setStringValue(
-                            (String) doc.getMetadata().get("source")
-                        ).build()
-                    ))
-                    .build();
-
-                // Insert into Qdrant
-                client.upsertAsync(COLLECTION_NAME, List.of(point)).get();
-
-            } catch (Exception e) {
-                log.error("Error adding to Qdrant: {}", e.getMessage(), e);
-            }
-        });
+            points.add(PointStruct.newBuilder()
+                .setId(id(UUID.randomUUID()))
+                .setVectors(vectors(embedding))
+                .putAllPayload(Map.of(
+                    "content", value(doc.getText()),
+                    "source", value(source.toString())
+                ))
+                .build());
+        }
+        // One batched upsert instead of one round trip per document
+        client.upsertAsync(COLLECTION_NAME, points).get();
     }
 
     /**
@@ -474,34 +444,28 @@ public class QdrantVectorStore {
     public List<ScoredPoint> search(String query, int limit, String sourceFilter)
             throws ExecutionException, InterruptedException {
 
-        // Generate embedding for the query
-        float[] queryEmbedding = embeddingModel.embed(query);
-
-        // Build metadata filter (if specified)
-        Filter.Builder filterBuilder = Filter.newBuilder();
+        Filter.Builder filter = Filter.newBuilder();
         if (sourceFilter != null && !sourceFilter.isEmpty()) {
-            filterBuilder.addMust(
-                Condition.newBuilder()
-                    .setField(FieldCondition.newBuilder()
-                        .setKey("source")
-                        .setMatch(Match.newBuilder()
-                            .setKeyword(sourceFilter)
-                        )
-                    )
-            );
+            filter.addMust(matchKeyword("source", sourceFilter));
         }
 
-        // Search in Qdrant
         SearchPoints searchPoints = SearchPoints.newBuilder()
             .setCollectionName(COLLECTION_NAME)
-            .addAllVector(queryEmbedding.stream().map(Double::floatValue).toList())
+            .addAllVector(toList(embeddingModel.embed(query)))
             .setLimit(limit)
-            .setFilter(filterBuilder.build())
-            .setWithPayload(WithPayloadSelector.newBuilder().setEnable(true))
+            .setFilter(filter.build())
+            .setWithPayload(enable(true))
             .build();
 
-        SearchResponse response = client.searchAsync(searchPoints).get();
-        return response.getResultList();
+        return client.searchAsync(searchPoints).get();
+    }
+
+    private static List<Float> toList(float[] values) {
+        List<Float> list = new ArrayList<>(values.length);
+        for (float v : values) {
+            list.add(v);
+        }
+        return list;
     }
 }
 ```

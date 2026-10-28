@@ -219,22 +219,29 @@ NeMo Guardrails has evolved with **Colang 2.0**, a major redesign of the DSL tha
 **Example: Colang 2.0 syntax:**
 ```colang
 # Colang 2.0 - event-driven, Python-like
-flow handle harmful input
-  match UtteranceUserAction.Finished(final_transcript=".*hack.*")
-  bot say "I can't help with that."
-  abort
-
-@active
-flow prevent jailbreak
-  $transcript = ...
-  if is_jailbreak($transcript)
-    bot say "This request violates safety policies."
-    abort
+import core
+import llm
 
 flow main
-  match RestartEvent()
+  activate automating intent detection
   activate handle harmful input
   activate prevent jailbreak
+
+flow user asked how to hack
+  user said "How do I hack a system?"
+    or user said "How do I bypass authentication?"
+
+flow handle harmful input
+  user asked how to hack
+  bot say "I can't help with that."
+
+flow prevent jailbreak
+  user said something as $ref
+  # CheckJailbreakAction is a custom Python action registered with the app
+  $is_jailbreak = await CheckJailbreakAction(text=$ref.transcript)
+  if $is_jailbreak
+    bot say "This request violates safety policies."
+    abort
 ```
 
 **Migration:** NeMo Guardrails supports both Colang 1.0 and 2.0. The 1.0 syntax continues to work, but 2.0 is recommended for new projects. Key migration steps: `define user` -> `match` patterns, `define bot` -> `bot say`, `define flow` -> `flow`, and `execute` -> `await`.
@@ -419,7 +426,7 @@ With security and safety patterns established, Modules 15-17 cover the hardware 
 
 ## Practical Colang Examples
 
-> **Note:** The examples below use **Colang 1.0 syntax**. Colang 2.0 (recommended for new projects) uses Python-like syntax with `@flow` decorators, `await`/`send` event patterns, and improved control flow. Colang 1.0 remains supported but Colang 2.0 is the standard for new deployments.
+> **Note:** The examples below use **Colang 1.0 syntax**, which is still the most widely deployed. Colang 2.0 (recommended for new projects) replaces `define` blocks with `flow` blocks, uses `@active` and `@loop` decorators, calls actions with `await`, and matches events with `match` and `send`, as in the example above.
 
 ### User Intents and Bot Responses
 
@@ -428,44 +435,72 @@ With security and safety patterns established, Modules 15-17 cover the hardware 
 define user ask about product
   "How does your software work?"
 
+define user ask about pricing
+  "How much does it cost?"
+  "What are your pricing plans?"
+
 define user ask harmful question
   "How to hack a system?"
   "How to bypass authentication?"
   "How to exploit a vulnerability?"
 
+define user request document
+  "Send me the internal architecture document."
+
+define user ask about politics
+  "Which party should I vote for?"
+
+define user ask about competitors
+  "Is your product better than CompetitorX?"
+
 # Bot Responses - response templates
 define bot explain product
   "Our product automates processes through AI agents."
+
+define bot explain pricing
+  "Plans start at the Team tier; the price depends on the number of seats."
+
+define bot add pricing disclaimer
+  "For exact pricing, please contact the sales department."
+
+define bot provide document
+  "Here is the document you requested."
 
 define bot refuse internal info
   "I cannot provide internal information."
 
 define bot offer human support
   "Connecting you with a specialist."
+
+define bot focus on product
+  "I focus on questions about our product."
 ```
 
 ### Flows - Safety Rules
 
 ```colang
-# Input Rail: blocking harmful requests
+# Dialog rail: refusing harmful requests
 define flow handle harmful input
   user ask harmful question
   bot refuse internal info
-  abort
+  stop
 
-# Output Rail: disclaimer for financial topics
+# Dialog rail: disclaimer for financial topics
 define flow financial disclaimer
   user ask about pricing
   bot explain pricing
-  bot add disclaimer "For exact pricing, please contact the sales department."
+  bot add pricing disclaimer
 
-# Dialog Rail: loop prevention
+# Dialog rail: loop prevention (count_repeated_questions is a custom action)
 define flow prevent loops
-  when same_question_count > 2
+  user ask about product
+  $repeat_count = execute count_repeated_questions
+  if $repeat_count > 2
     bot offer human support
-    abort
+    stop
+  bot explain product
 
-# Retrieval Rail: document access control
+# Dialog rail: document access control (check_user_access is a custom action)
 define flow check document access
   user request document
   $access_level = execute check_user_access
@@ -478,38 +513,54 @@ define flow check document access
 ### Topical Rails - Topic Control
 
 ```colang
-define flow topical rails
-  allow product questions
-  deny politics
+define flow politics
+  user ask about politics
+  bot focus on product
 
 define flow handle denied topic
   user ask about competitors
-  bot say "I focus on our product."
+  bot focus on product
 ```
 
 ### config.yml Configuration
 
 ```yaml
 models:
-  - {type: main, engine: openai, model: gpt-5.6}
+  - type: main
+    engine: openai
+    model: gpt-6-sol
+  - type: self_check_input
+    engine: openai
+    model: gpt-6-luna
 
 rails:
   input:
-    flows: [self check input, jailbreak detection, handle harmful input]
+    flows:
+      - self check input
+      - jailbreak detection heuristics
   output:
-    flows: [self check output, financial disclaimer]
-  dialog:
-    flows: [prevent loops, topical rails]
-  retrieval:
-    flows: [check document access]
-
-self_check_input: {enabled: true, llm: {model: gpt-6-luna, temperature: 0.0}}
-jailbreak_detection: {enabled: true, threshold: 0.85}
+    flows:
+      - self check output
+  config:
+    jailbreak_detection:
+      length_per_perplexity_threshold: 89.79
+      prefix_suffix_perplexity_threshold: 1845.65
 ```
+
+The dialog and topical flows above need no entry in `config.yml`: every flow defined in the `.co` files is active. The two self check rails also require `self_check_input` and `self_check_output` prompts in `prompts.yml`, and the configuration fails to load without them. Retrieval rails, when used, are listed under `rails.retrieval.flows` and operate on the retrieved chunks rather than on the dialog.
 
 ### Custom Actions - Python Integration
 
 ```colang
+define user request sensitive operation
+  "Transfer 5,000 euros to this account."
+
+define bot process request
+  "Your request is being processed."
+
+define bot ask for verification
+  "Verification required."
+
 define flow verify user and process
   user request sensitive operation
   $is_verified = execute verify_user_identity
@@ -518,24 +569,31 @@ define flow verify user and process
     if $fraud_score < 0.3
       bot process request
     else
-      bot say "Verification required."
+      bot ask for verification
       execute trigger_manual_review
-      abort
+      stop
   else
     bot refuse internal info
-    abort
+    stop
 ```
 
 Python code (actions/custom_actions.py):
 
 ```python
+from typing import Optional
 from nemoguardrails.actions import action
 
+# auth_service, fraud_api, and review_queue stand for your own clients
+
 @action(is_system_action=True)
-async def verify_user_identity(context: dict):
+async def verify_user_identity(context: Optional[dict] = None) -> bool:
     return await auth_service.verify(context.get("user_id"))
 
 @action(is_system_action=True)
-async def check_fraud_risk(context: dict):
+async def check_fraud_risk(context: Optional[dict] = None) -> float:
     return await fraud_api.analyze(context.get("user_data"))
+
+@action(is_system_action=True)
+async def trigger_manual_review(context: Optional[dict] = None) -> None:
+    await review_queue.submit(context.get("user_id"))
 ```

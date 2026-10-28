@@ -132,15 +132,15 @@ This allows fine-tuning clients, adding interceptors, and modifying behavior.
 
 ### Defining Functions
 
-Spring AI provides an elegant mechanism for defining functions for models. Functions are Spring beans marked with an annotation or implementing a specific interface.
+Spring AI turns ordinary methods into tools. A method annotated with `@Tool` carries a description for the model, and `@ToolParam` describes each argument.
 
-The function description is extracted from metadata and passed to the model. The model can invoke a function by passing arguments as JSON. Spring AI deserializes the arguments and calls the method.
+The tool description is taken from the annotation and passed to the model. The model can invoke a function by passing arguments as JSON. Spring AI deserializes the arguments and calls the method.
 
-### Automatic Discovery
+### Registration
 
-Functions are discovered automatically through bean scanning. Simply defining a bean is enough. It becomes available to the model.
+Tools are registered explicitly. Pass a `@Tool`-annotated object to `defaultTools()` on the `ChatClient` builder to make it available on every request, or to `tools()` for a single call; per-call tools are added to the defaults. Defining the class as a Spring bean is not enough on its own, which keeps destructive tools out of requests that should not see them.
 
-This supports the Spring approach to development: functions are grouped into services, tested in isolation, and composed through DI.
+This still fits the Spring approach to development: tools are grouped into components, tested in isolation, and injected through DI.
 
 ### Execution Control
 
@@ -192,7 +192,7 @@ This is critical for understanding behavior in production, where AI is part of a
 
 A full-fledged Spring AI application combines several key components into a unified system. At the configuration level, a ChatClient is created with an advisor chain that includes QuestionAnswerAdvisor for RAG integration. This provides automatic prompt enrichment with context from the vector store.
 
-Function calling is implemented through Spring beans annotated with @Description. Each function is a regular Spring component, automatically discovered and available to the model. For example, a weather retrieval function is defined as a bean returning a Function with typed record classes for request and response. The model can invoke this function by passing arguments as JSON, and Spring AI automatically deserializes and executes the call.
+Tool calling is implemented through methods annotated with `@Tool` on a regular Spring component, registered on the `ChatClient` with `defaultTools()` or per call with `tools()`. For example, a weather retrieval tool is a method with typed parameters that returns a record. The model invokes it by passing arguments as JSON, and Spring AI deserializes them, executes the call, and returns the result to the model.
 
 The REST API is implemented using a standard Spring MVC controller. A basic chat endpoint accepts text, passes it to the ChatClient, and returns the response. A structured output endpoint uses the entity() method for automatic deserialization of the response into a typed class.
 
@@ -286,13 +286,12 @@ public class RagConfiguration {
             VectorStore vectorStore) {
 
         // Creating a QuestionAnswerAdvisor for automatic context enrichment
-        QuestionAnswerAdvisor qaAdvisor = new QuestionAnswerAdvisor(
-            vectorStore,
-            SearchRequest.builder()
+        QuestionAnswerAdvisor qaAdvisor = QuestionAnswerAdvisor.builder(vectorStore)
+            .searchRequest(SearchRequest.builder()
                 .topK(5)                    // Top 5 most relevant documents
                 .similarityThreshold(0.7)   // Similarity threshold of 0.7
-                .build()
-        );
+                .build())
+            .build();
 
         return builder
             .defaultAdvisors(qaAdvisor)  // Adding the advisor to the chain
@@ -336,54 +335,43 @@ public class KnowledgeBaseService {
 }
 ```
 
-### Example 3: Function Calling - Invoking External Functions
+### Example 3: Tool Calling - Invoking External Functions
 
 ```java
-@Configuration
-public class FunctionConfiguration {
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
 
-    @Bean
-    @Description("Gets the current weather for the specified city")
-    public Function<WeatherRequest, WeatherResponse> getCurrentWeather() {
-        return request -> {
-            // Simulating a real Weather API call
-            return new WeatherResponse(
-                request.city(),
-                22.5,
-                "Sunny",
-                65
-            );
-        };
+@Component
+public class AssistantTools {
+
+    @Tool(description = "Gets the current weather for the specified city")
+    public WeatherResponse getCurrentWeather(
+            @ToolParam(description = "City name") String city,
+            @ToolParam(description = "Country code, for example DE") String country) {
+        // Simulating a real Weather API call
+        return new WeatherResponse(city, 22.5, "Sunny", 65);
     }
 
-    @Bean
-    @Description("Converts currency at the current exchange rate")
-    public Function<CurrencyRequest, CurrencyResponse> convertCurrency() {
-        return request -> {
-            // Simulating a currency converter
-            double rate = getExchangeRate(request.from(), request.to());
-            double result = request.amount() * rate;
-            return new CurrencyResponse(
-                request.amount(),
-                request.from(),
-                result,
-                request.to(),
-                rate
-            );
-        };
+    @Tool(description = "Converts currency at the current exchange rate")
+    public CurrencyResponse convertCurrency(
+            @ToolParam(description = "Amount to convert") double amount,
+            @ToolParam(description = "Source currency code, for example EUR") String from,
+            @ToolParam(description = "Target currency code, for example USD") String to) {
+        double rate = getExchangeRate(from, to);
+        return new CurrencyResponse(amount, from, amount * rate, to, rate);
     }
 
     private double getExchangeRate(String from, String to) {
-        // Stub for the example
-        return 1.08; // EUR -> USD
+        // Stub for the example: EUR to USD
+        return 1.08;
     }
 }
 
-// Record classes for typed function arguments
-record WeatherRequest(String city, String country) {}
+// Record classes for typed tool results
 record WeatherResponse(String city, double temperature, String condition, int humidity) {}
-
-record CurrencyRequest(double amount, String from, String to) {}
 record CurrencyResponse(double originalAmount, String fromCurrency,
                        double convertedAmount, String toCurrency, double rate) {}
 
@@ -393,17 +381,18 @@ public class AssistantController {
 
     private final ChatClient chatClient;
 
-    public AssistantController(ChatClient.Builder builder) {
+    public AssistantController(ChatClient.Builder builder, AssistantTools tools) {
         this.chatClient = builder
-            .defaultSystem("You are a helpful assistant with access to weather and currency conversion functions.")
-            // Functions are automatically discovered as Spring beans
+            .defaultSystem("You are a helpful assistant with access to weather and currency conversion tools.")
+            // Tools are registered explicitly; a bean on the classpath is not enough
+            .defaultTools(tools)
             .build();
     }
 
     @PostMapping("/query")
     public String processQuery(@RequestBody String userQuery) {
-        // The model automatically determines whether functions need to be called
-        // and executes them if necessary
+        // The model decides whether a tool call is needed,
+        // and Spring AI executes it and returns the result to the model
         return chatClient.prompt()
             .user(userQuery)
             .call()

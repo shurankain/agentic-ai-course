@@ -494,8 +494,15 @@ Below are full implementation examples of tools in Java using LangChain4j. The e
 ```java
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.agent.tool.P;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+// SearchApiClient, SearchResult, and ApiException stand for your search provider's SDK.
 public class WebSearchTools {
+
+    private static final Logger logger = LoggerFactory.getLogger(WebSearchTools.class);
 
     private final SearchApiClient searchClient;
 
@@ -504,7 +511,7 @@ public class WebSearchTools {
     }
 
     @Tool("Searches for up-to-date information on the internet. Use for fresh news, " +
-          "current prices, events after 2025. Do NOT use for historical facts.")
+          "current prices, events after the model's training cutoff. Do NOT use for historical facts.")
     public String searchWeb(
             @P("Search query in English, specific and concise")
             String query,
@@ -561,8 +568,13 @@ import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.agent.tool.P;
 import java.sql.*;
 import java.util.*;
+import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DatabaseTools {
+
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseTools.class);
 
     private final DataSource dataSource;
     private final Set<String> allowedTables = Set.of("users", "orders", "products");
@@ -748,18 +760,21 @@ public class FileTools {
 ### Tool Registration and Usage
 
 ```java
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.service.AiServices;
+import javax.sql.DataSource;
 
 public class AgentApplication {
 
     public static void main(String[] args) {
-        // Initialize the language model
-        ChatLanguageModel model = OpenAiChatModel.builder()
+        // Initialize the language model; the model ID comes from configuration
+        ChatModel model = OpenAiChatModel.builder()
             .apiKey(System.getenv("OPENAI_API_KEY"))
-            .modelName("gpt-5.6")
-            .temperature(0.7)
+            .modelName(System.getenv().getOrDefault("OPENAI_MODEL", "gpt-6-sol"))
             .build();
 
         // Create tools
@@ -769,7 +784,7 @@ public class AgentApplication {
 
         // Register the agent with tools
         Assistant assistant = AiServices.builder(Assistant.class)
-            .chatLanguageModel(model)
+            .chatModel(model)
             .tools(webTools, dbTools, fileTools)
             .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
             .build();
@@ -780,6 +795,16 @@ public class AgentApplication {
         );
 
         System.out.println(response);
+    }
+
+    // A read-only database role backs up the SELECT-only check in DatabaseTools
+    private static DataSource createDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(System.getenv("DB_URL"));
+        config.setUsername(System.getenv("DB_READONLY_USER"));
+        config.setPassword(System.getenv("DB_READONLY_PASSWORD"));
+        config.setReadOnly(true);
+        return new HikariDataSource(config);
     }
 
     interface Assistant {
